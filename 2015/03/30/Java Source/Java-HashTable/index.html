@@ -1,0 +1,600 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java 源码学习之java.util.Hashtable | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Hashtable是Java编程中较为常用的容器类之一，在面试时常常被与HashMap作比较！
+
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;为什么要常与HashMap作比较呢?因为他们的源码是极其相似啊，网上也常常有人说HashMap是基于Hashtable实现的吧，因为Hashtable在Java1.0中就有了，但是HashMap在Java1.2才出现。&amp;#160; &amp;#160; &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 源码学习之java.util.Hashtable">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/03/30/Java Source/Java-HashTable/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Hashtable是Java编程中较为常用的容器类之一，在面试时常常被与HashMap作比较！
+
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;为什么要常与HashMap作比较呢?因为他们的源码是极其相似啊，网上也常常有人说HashMap是基于Hashtable实现的吧，因为Hashtable在Java1.0中就有了，但是HashMap在Java1.2才出现。&amp;#160; &amp;#160; &amp;">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 源码学习之java.util.Hashtable">
+<meta name="twitter:description" content="Hashtable是Java编程中较为常用的容器类之一，在面试时常常被与HashMap作比较！
+
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;为什么要常与HashMap作比较呢?因为他们的源码是极其相似啊，网上也常常有人说HashMap是基于Hashtable实现的吧，因为Hashtable在Java1.0中就有了，但是HashMap在Java1.2才出现。&amp;#160; &amp;#160; &amp;">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/30/Java Source/Java-HashTable/" title="Java 源码学习之java.util.Hashtable" itemprop="url">Java 源码学习之java.util.Hashtable</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-30T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-03-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#不支持null"><span class="toc-number">1.</span> <span class="toc-text">不支持null</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程安全"><span class="toc-number">2.</span> <span class="toc-text">线程安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#求余取桶号"><span class="toc-number">3.</span> <span class="toc-text">求余取桶号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p><code>Hashtable</code>是<code>Java</code>编程中较为常用的容器类之一，在面试时常常被与<code>HashMap</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;为什么要常与<code>HashMap</code>作比较呢?因为他们的源码是极其相似啊，网上也常常有人说<code>HashMap</code>是基于<code>Hashtable</code>实现的吧，因为<code>Hashtable</code>在<code>Java1.0</code>中就有了，但是<code>HashMap</code>在<code>Java1.2</code>才出现。<br>&#160; &#160; &#160; &#160;本文讲解<code>Hashtable</code>时不再累赘，实现的原理大致都和<a href="http://kubicode.me/2015/03/27/Java-HashMap/" target="_blank" rel="external">HashMap</a>一样，这里主要讲<code>Hashtable</code>与<code>HashMap</code>几个不同点。</p>
+<h2 id="不支持null">不支持null</h2><p>&#160; &#160; &#160; &#160;我们知道<code>HashMap</code>是支持<code>null</code>的键和值的，每次遇到<code>null</code>时直接用0来作桶号，来看下<code>Hashtable</code>对<code>null</code>的处理<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Maps the specified &lt;code&gt;key&lt;/code&gt; to the specified</span><br><span class="line"> * &lt;code&gt;value&lt;/code&gt; in this Hashtable. Neither the key nor the</span><br><span class="line"> * value can be &lt;code&gt;null&lt;/code&gt;. &lt;p&gt;</span><br><span class="line"> *</span><br><span class="line"> * The value can be retrieved by calling the &lt;code&gt;get&lt;/code&gt; method</span><br><span class="line"> * with a key that is equal to the original key.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span>      key     the Hashtable key</span><br><span class="line"> *<span class="javadoctag"> @param</span>      value   the value</span><br><span class="line"> *<span class="javadoctag"> @return</span>     the previous value of the specified key in this Hashtable,</span><br><span class="line"> *             or &lt;code&gt;null&lt;/code&gt; if it did not have one</span><br><span class="line"> *<span class="javadoctag"> @exception</span>  NullPointerException  if the key or value is//当键和值为null时会抛NPE</span><br><span class="line"> *               &lt;code&gt;null&lt;/code&gt;</span><br><span class="line"> *<span class="javadoctag"> @see</span>     Object#equals(Object)</span><br><span class="line"> *<span class="javadoctag"> @see</span>     #get(Object)</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Make sure the value is not null</span></span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//to do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&#160; &#160; &#160; &#160;可以很显眼的看到当<code>value == null</code>会抛NPE异常，那<code>key == null</code>源码中可没写上，其实该判断时在<code>key.hashCode()</code>，而<code>Object.hashCode</code>是不支持<code>null</code>的，也就自然而来得<code>Hashtable</code>不支持<code>null</code>的键和值了</p>
+<h2 id="线程安全">线程安全</h2><p>&#160; &#160; &#160; &#160;在<code>Hashtable</code>中的绝大部分方法都是使用<code>synchronized</code>进行修饰的，这一点和<code>HashMap</code>有较大的不同，虽然说<code>Hashtable</code>的方法在多线程是安全的，但是和<a href="http://kubicode.me/2015/03/25/Java-Vector/#线程安全" target="_blank" rel="external">Vector</a>一样，在多线程下使用时也要再看是否还额外需要<code>synchronized</code>再修饰。</p>
+<h2 id="求余取桶号">求余取桶号</h2><p>&#160; &#160; &#160; &#160;在<code>HashMap</code>中是根据<code>key</code>的<code>hash</code>值和<code>table.length</code>进行与操作来求桶号的，并且要求table.length必须是2的幂次方，但是在<code>HashMap</code>中的实现是使用<code>hash</code>和<code>table.length</code>求余来实现，在对<code>table.length</code>的值并无其他要求，这种方法实现简单，但是效率没有<code>HashMap</code>的高，毕竟求余除法操作要比与操作慢。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> index = (hash &amp; <span class="number">0x7FFFFFFF</span>) % tab.length;</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结">总结</h2><p>&#160; &#160; &#160; &#160;其实要总结的都在上面说了,<code>Hashtable</code>与<code>HashMap</code>主要的几个不同就是：</p>
+<ul>
+<li><code>Hashtable</code>不支持<code>null</code>的键和值</li>
+<li><code>Hashtable</code>是线程安全的</li>
+<li><code>Hashtable</code>是用过求余来取桶号的</li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/03/30/Java Source/Java-HashTable/" data-title="Java 源码学习之java.util.Hashtable | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/31/Algorithm/abcSort/" title="一个字符数组，里面的字符可能是a-z、A-Z、0-9.现在要求对数组进行排序">
+  <strong>上一篇：</strong><br/>
+  <span>
+  一个字符数组，里面的字符可能是a-z、A-Z、0-9.现在要求对数组进行排序</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/29/Algorithm/InsertionSort/"  title="2014阿里巴巴实习生笔试题-插入排序基于链表的实现">
+ <strong>下一篇：</strong><br/> 
+ <span>2014阿里巴巴实习生笔试题-插入排序基于链表的实现
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/03/30/Java Source/Java-HashTable/" data-title="Java 源码学习之java.util.Hashtable" data-url="http://yyl8781697.github.io/2015/03/30/Java Source/Java-HashTable/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#不支持null"><span class="toc-number">1.</span> <span class="toc-text">不支持null</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程安全"><span class="toc-number">2.</span> <span class="toc-text">线程安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#求余取桶号"><span class="toc-number">3.</span> <span class="toc-text">求余取桶号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ajax/" title="Ajax">Ajax<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

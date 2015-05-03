@@ -1,0 +1,797 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用OSGi进行动态加载更新模块-实现Hello world | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="OSGI
+OSGi是Open Services Gateway initiative的缩写，叫做开放服务网关协议。OSGI是用于定义Java动态化组件系统的标准，这些标准通过为大型分布式系统以及嵌入式系统提供一种模块化架构减少了软件的复杂度，基于OSGI比较成功的项目有Equinox,felix,Knopflerfish，关于OSGI的详情参考http://osgi.com.cn/article/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用OSGi进行动态加载更新模块-实现Hello world">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/04/02/OSGi/OSGi-HelloWorld/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="OSGI
+OSGi是Open Services Gateway initiative的缩写，叫做开放服务网关协议。OSGI是用于定义Java动态化组件系统的标准，这些标准通过为大型分布式系统以及嵌入式系统提供一种模块化架构减少了软件的复杂度，基于OSGI比较成功的项目有Equinox,felix,Knopflerfish，关于OSGI的详情参考http://osgi.com.cn/article/">
+<meta property="og:image" content="/img/osgo-helloworld/osgiDemoService.png">
+<meta property="og:image" content="/img/osgo-helloworld/osgiDemoServiceContent.png">
+<meta property="og:image" content="/img/osgo-helloworld/runConfigurations.png">
+<meta property="og:image" content="/img/osgo-helloworld/export.png">
+<meta property="og:image" content="/img/osgo-helloworld/osgi_framework.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用OSGi进行动态加载更新模块-实现Hello world">
+<meta name="twitter:description" content="OSGI
+OSGi是Open Services Gateway initiative的缩写，叫做开放服务网关协议。OSGI是用于定义Java动态化组件系统的标准，这些标准通过为大型分布式系统以及嵌入式系统提供一种模块化架构减少了软件的复杂度，基于OSGI比较成功的项目有Equinox,felix,Knopflerfish，关于OSGI的详情参考http://osgi.com.cn/article/">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/02/OSGi/OSGi-HelloWorld/" title="使用OSGi进行动态加载更新模块-实现Hello world" itemprop="url">使用OSGi进行动态加载更新模块-实现Hello world</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-02T13:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI"><span class="toc-number">1.</span> <span class="toc-text">OSGI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发环境"><span class="toc-number">2.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI服务的创建"><span class="toc-number">3.</span> <span class="toc-text">OSGI服务的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI服务的实现"><span class="toc-number">4.</span> <span class="toc-text">OSGI服务的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI服务的使用"><span class="toc-number">5.</span> <span class="toc-text">OSGI服务的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在Eclipse中运行"><span class="toc-number">6.</span> <span class="toc-text">在Eclipse中运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态加载"><span class="toc-number">7.</span> <span class="toc-text">动态加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态更新"><span class="toc-number">8.</span> <span class="toc-text">动态更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="OSGI">OSGI</h2><blockquote>
+<p>OSGi是<strong>Open Services Gateway initiative</strong>的缩写，叫做开放服务网关协议。OSGI是用于定义Java动态化组件系统的标准，这些标准通过为大型分布式系统以及嵌入式系统提供一种模块化架构减少了软件的复杂度，基于OSGI比较成功的项目有<a href="http://download.eclipse.org/equinox/" target="_blank" rel="external">Equinox</a>,<a href="http://felix.apache.org/" target="_blank" rel="external">felix</a>,<a href="http://www.knopflerfish.org/" target="_blank" rel="external">Knopflerfish</a>，关于OSGI的详情参考<a href="http://osgi.com.cn/article/7289226" target="_blank" rel="external">http://osgi.com.cn/article/7289226</a>，接下来使用OSGI来演示我们最熟悉的Hello world</p>
+</blockquote>
+<h2 id="开发环境">开发环境</h2><blockquote>
+<p>Eclipse4.2.2 (他是基于Equinox实现的，已经自带osgi framework)，jre1.7</p>
+</blockquote>
+<h2 id="OSGI服务的创建">OSGI服务的创建</h2><p>首先新建名称为osgiDemoService的一个OSGI项目：File-&gt;New-&gt;Project-&gt;Plug-in Project<br><img src="/img/osgo-helloworld/osgiDemoService.png" alt=""><br><br>该项目为服务层，不需要生成Actviator<br><img src="/img/osgo-helloworld/osgiDemoServiceContent.png" alt=""><br>在该项目中新建一个接口osgi.demo.impl.Hello</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> osgi.demo.service;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">	<span class="function">String <span class="title">sayHello</span><span class="params">(String str)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后的MANIFEST.MF文件为</p>
+<pre><code><span class="attribute">Manifest-Version</span>: <span class="string">1.0</span>
+<span class="attribute">Bundle-ManifestVersion</span>: <span class="string">2</span>
+<span class="attribute">Bundle-Name</span>: <span class="string">OsgiDemoService</span>
+<span class="attribute">Bundle-SymbolicName</span>: <span class="string">osgiDemoService</span>
+<span class="attribute">Bundle-Version</span>: <span class="string">1.0.0.qualifier</span>
+<span class="attribute">Bundle-RequiredExecutionEnvironment</span>: <span class="string">JavaSE-1.7</span>
+<span class="attribute">Export-Package</span>: <span class="string">osgi.demo.service;version="1.0.0"</span>
+</code></pre><h2 id="OSGI服务的实现">OSGI服务的实现</h2><p>新建名称为osgiDemoImpl的一个OSGI项目，此时需要勾选生成<strong>Actviator</strong><br><br>在该项目中添加一个实现类：osgi.demo.impl.HelloImpl，该类需要继承osgi.demo.service.Hello接口，但是默认是没有osgi.demo.servi包的，所以需要添加osgiDemoService的Bundlle的依赖，以及导入Package：osgi.demo.service，这个可以通过MANIFEST.MF文件的Dependencies界面来完成，也可以直接改它的XML源文件。<br><br>实现接口的代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> osgi.demo.impl;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> osgi.demo.service.Hello;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloImpl</span> <span class="keyword">implements</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"hello"</span>+str;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Actviator中进行服务的注册</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> osgidemoimpl;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> org.osgi.framework.BundleActivator;</span><br><span class="line"><span class="keyword">import</span> org.osgi.framework.BundleContext;</span><br><span class="line"><span class="keyword">import</span> osgi.demo.impl.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> osgi.demo.service.Hello;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Activator</span> <span class="keyword">implements</span> <span class="title">BundleActivator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> BundleContext context;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">static</span> BundleContext <span class="title">getContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> context;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span><br><span class="line">	 * (non-Javadoc)</span><br><span class="line">	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">(BundleContext bundleContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"implement hello interface"</span>);</span><br><span class="line">		bundleContext.registerService(Hello.class, <span class="keyword">new</span> HelloImpl(), <span class="keyword">null</span>);</span><br><span class="line">		Activator.context = bundleContext;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span><br><span class="line">	 * (non-Javadoc)</span><br><span class="line">	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">(BundleContext bundleContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		bundleContext.ungetService(bundleContext.getServiceReference(Hello.class));</span><br><span class="line">		Activator.context = <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该项目最终的MANIFEST.MF文件为：</p>
+<pre><code><span class="attribute">Manifest-Version</span>: <span class="string">1.0</span>
+<span class="attribute">Bundle-ManifestVersion</span>: <span class="string">2</span>
+<span class="attribute">Bundle-Name</span>: <span class="string">OsgiDemoImpl</span>
+<span class="attribute">Bundle-SymbolicName</span>: <span class="string">osgiDemoImpl</span>
+<span class="attribute">Bundle-Version</span>: <span class="string">1.0.0.qualifier</span>
+<span class="attribute">Bundle-Activator</span>: <span class="string">osgidemoimpl.Activator</span>
+<span class="attribute">Import-Package</span>: <span class="string">org.osgi.framework;version="1.3.0";osgi.demo.service</span>
+<span class="attribute">Bundle-RequiredExecutionEnvironment</span>: <span class="string">JavaSE-1.7</span>
+<span class="attribute">Require-Bundle</span>: <span class="string">osgiDemoService;bundle-version="1.0.0"</span>
+</code></pre><h2 id="OSGI服务的使用">OSGI服务的使用</h2><p>新建名称为osgiDemoClient的一个OSGI项目，此时需要勾选生成<strong>Actviator</strong><br><br>在使用的项目中需要添加Service的Bundle的依赖，同时导入osgi.demo.service包<br><br>在Activator中调用服务的代码为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> osgidemoclient;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> org.osgi.framework.BundleActivator;</span><br><span class="line"><span class="keyword">import</span> org.osgi.framework.BundleContext;</span><br><span class="line"><span class="keyword">import</span> org.osgi.framework.ServiceReference;</span><br><span class="line"><span class="keyword">import</span> osgi.demo.service.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Activator</span> <span class="keyword">implements</span> <span class="title">BundleActivator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> BundleContext context;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">static</span> BundleContext <span class="title">getContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> context;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span><br><span class="line">	 * (non-Javadoc)</span><br><span class="line">	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">(BundleContext ctx)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		ServiceReference ref = ctx.getServiceReference(Hello.class.getName());</span><br><span class="line">	    <span class="keyword">if</span> (ref != <span class="keyword">null</span>) &#123;</span><br><span class="line">	        Hello hello = <span class="keyword">null</span>;</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            hello = (Hello) ctx.getService(ref);</span><br><span class="line">	            <span class="keyword">if</span> (hello != <span class="keyword">null</span>)</span><br><span class="line">	                System.out.println(hello.sayHello(<span class="string">"world"</span>));</span><br><span class="line">	            <span class="keyword">else</span></span><br><span class="line">	                System.out.println(<span class="string">"Service:Hello---object null"</span>);</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">	            e.printStackTrace();</span><br><span class="line">	        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">	            ctx.ungetService(ref);</span><br><span class="line">	            hello = <span class="keyword">null</span>;</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	        System.out.println(<span class="string">"Service:Hello---not exists"</span>);</span><br><span class="line">	    &#125;</span><br><span class="line">		System.out.println(<span class="string">"clinet"</span>);</span><br><span class="line">		Activator.context = ctx;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span><br><span class="line">	 * (non-Javadoc)</span><br><span class="line">	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">(BundleContext bundleContext)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		Activator.context = <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>该项目最终的MANIFEST.MF文件为：</p>
+<pre><code><span class="attribute">Manifest-Version</span>: <span class="string">1.0</span>
+<span class="attribute">Bundle-ManifestVersion</span>: <span class="string">2</span>
+<span class="attribute">Bundle-Name</span>: <span class="string">OsgiDemoClient</span>
+<span class="attribute">Bundle-SymbolicName</span>: <span class="string">osgiDemoClient</span>
+<span class="attribute">Bundle-Version</span>: <span class="string">1.0.0.qualifier</span>
+<span class="attribute">Bundle-Activator</span>: <span class="string">osgidemoclient.Activator</span>
+<span class="attribute">Import-Package</span>: <span class="string">org.osgi.framework;version="1.3.0";osgi.demo.service</span>
+<span class="attribute">Bundle-RequiredExecutionEnvironment</span>: <span class="string">JavaSE-1.7</span>
+<span class="attribute">Require-Bundle</span>: <span class="string">osgiDemoService;bundle-version="1.0.0"</span>
+</code></pre><h2 id="在Eclipse中运行">在Eclipse中运行</h2><p>点击:run -&gt; run Configurations-&gt;OSGI Framework-&gt;new 新建一个<br><img src="/img/osgo-helloworld/runConfigurations.png" alt=""><br>点击该界面的run就开始跑起来的</p>
+<pre><code>implement hello <span class="class"><span class="keyword">interface</span></span>
+hello world
+clinet
+osgi&gt; 
+</code></pre><p>输入ss命令查看状态</p>
+<pre><code>osgi&gt; ss
+<span class="string">"Framework is launched."</span>
+
+id    State       Bundle
+<span class="number">0</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.osgi_3</span>.<span class="number">8.2</span><span class="class">.v20130124-134944</span>
+<span class="number">1</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.equinox</span><span class="class">.console_1</span>.<span class="number">0.0</span><span class="class">.v20120522-1841</span>
+<span class="number">3</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.command_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">4</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.runtime_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">6</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.shell_0</span>.<span class="number">8.0</span><span class="class">.v201110170705</span>
+<span class="number">9</span>    ACTIVE      osgiDemoClient_1.<span class="number">0.0</span><span class="class">.qualifier</span>
+<span class="number">10</span>    ACTIVE      osgiDemoService_1.<span class="number">0.0</span><span class="class">.qualifier</span>
+<span class="number">11</span>    ACTIVE      osgiDemoImpl_1.<span class="number">0.0</span><span class="class">.qualifier</span>
+<span class="number">12</span>    ACTIVE      javax<span class="class">.servlet</span><span class="class">.jsp_2</span>.<span class="number">2.0</span><span class="class">.v201112011158</span>
+<span class="number">13</span>    ACTIVE      javax<span class="class">.servlet_3</span>.<span class="number">0.0</span><span class="class">.v201112011016</span>
+<span class="number">14</span>    ACTIVE      javax<span class="class">.el_2</span>.<span class="number">2.0</span><span class="class">.v201108011116</span>
+osgi&gt; 
+</code></pre><p>这几个服务都已经ACTIVE状态了</p>
+<blockquote>
+<p>小心,felix和console这几个bundle一定要勾选上，还有demo种几个bundle的运行顺序service-&gt;impl-&gt;client，不然很可能跑不起来</p>
+</blockquote>
+<h2 id="动态加载">动态加载</h2><p>将刚刚新建的三个项目导出到本地：Export-&gt;Plug-in Development-&gt;Deployable pulg-ins and fragments<br><img src="/img/osgo-helloworld/export.png" alt=""></p>
+<p>然后在run Configurations-&gt;OSGI Framework-&gt;new 新建一个只带osgi.framework的configuration<br><img src="/img/osgo-helloworld/osgi_framework.png" alt=""><br>将他run起来，执行ss之后可以发现只有他自带的几个bundle</p>
+<pre><code>osgi&gt; ss
+<span class="string">"Framework is launched."</span>
+
+
+id    State       Bundle
+<span class="number">0</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.osgi_3</span>.<span class="number">8.2</span><span class="class">.v20130124-134944</span>
+<span class="number">1</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.equinox</span><span class="class">.console_1</span>.<span class="number">0.0</span><span class="class">.v20120522-1841</span>
+<span class="number">2</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.command_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">3</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.runtime_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">4</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.shell_0</span>.<span class="number">8.0</span><span class="class">.v201110170705</span>
+osgi&gt; 
+</code></pre><p>现在动态安装刚刚导出的bundle</p>
+<pre><code>osgi&gt; install <span class="symbol">file:</span>/<span class="regexp">//</span><span class="constant">C</span><span class="symbol">:/Users/</span>你的用户名/<span class="constant">Desktop</span>/plugins/osgiDemoService_1.<span class="number">0</span>.<span class="number">0</span>.<span class="number">201504021042</span>.jar
+<span class="constant">Bundle</span> id is <span class="number">10</span>
+<span class="constant">ClassLoader</span>          null
+<span class="constant">RegisteredServices</span>   null
+<span class="constant">ServicesInUse</span>        null
+<span class="constant">Fragments</span>            null
+<span class="constant">LoaderProxy</span>          osgiDemoService; bundle-version=<span class="string">"1.0.0.201504021042"</span>
+<span class="constant">Key</span>                  <span class="number">10</span>
+<span class="constant">ProtectionDomain</span>     null
+<span class="constant">Location</span>             <span class="symbol">file:</span>/<span class="regexp">//</span><span class="constant">C</span><span class="symbol">:/Users/IBM_ADMIN/Desktop/plugins/osgiDemoService_1</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">201504021042</span>.jar
+<span class="constant">State</span>                <span class="number">2</span>
+<span class="constant">Bundle</span>                  <span class="number">10</span>|<span class="constant">Installed</span>  |    <span class="number">1</span>|osgiDemoService (<span class="number">1.0</span>.<span class="number">0</span>.<span class="number">201504021042</span>)
+<span class="constant">Version</span>              <span class="number">1.0</span>.<span class="number">0</span>.<span class="number">201504021042</span>
+<span class="constant">BundleData</span>           osgiDemoService_1.<span class="number">0</span>.<span class="number">0</span>.<span class="number">201504021042</span>
+<span class="constant">LastModified</span>         <span class="number">1427942820117</span>
+<span class="constant">Headers</span>               <span class="constant">Bundle</span>-<span class="constant">ManifestVersion</span> = <span class="number">2</span>
+ <span class="constant">Bundle</span>-<span class="constant">Name</span> = <span class="constant">OsgiDemoService</span>
+ <span class="constant">Bundle</span>-<span class="constant">RequiredExecutionEnvironment</span> = <span class="constant">JavaSE</span>-<span class="number">1.7</span>
+ <span class="constant">Bundle</span>-<span class="constant">SymbolicName</span> = osgiDemoService
+ <span class="constant">Bundle</span>-<span class="constant">Version</span> = <span class="number">1.0</span>.<span class="number">0</span>.<span class="number">201504021042</span>
+ <span class="constant">Export</span>-<span class="constant">Package</span> = osgi.demo.service;version=<span class="string">"1.0.0"</span>
+ <span class="constant">Manifest</span>-<span class="constant">Version</span> = <span class="number">1.0</span>
+
+
+<span class="constant">StartLevel</span>           <span class="number">1</span>
+<span class="constant">BundleId</span>             <span class="number">10</span>
+<span class="constant">BundleContext</span>        null
+<span class="constant">SymbolicName</span>         osgiDemoService
+<span class="constant">KeyHashCode</span>          <span class="number">10</span>
+<span class="constant">Framework</span>            org.eclipse.osgi.framework.internal.core.<span class="constant">Framework</span><span class="variable">@2b6cc7c7</span>
+<span class="constant">Revisions</span>            [osgiDemoService_1.<span class="number">0</span>.<span class="number">0</span>.<span class="number">201504021042</span>]
+<span class="constant">StateChanging</span>        null
+<span class="constant">BundleDescription</span>    osgiDemoService_1.<span class="number">0</span>.<span class="number">0</span>.<span class="number">201504021042</span>
+<span class="constant">ResolutionFailureException</span> org.osgi.framework.<span class="constant">BundleException</span><span class="symbol">:</span> <span class="constant">The</span> bundle <span class="string">"osgiDemoService_1.0.0.201504021042 [10]"</span> could <span class="keyword">not</span> be resolved
+</code></pre><p>将起来两个也安装起来</p>
+<pre><code>install <span class="symbol">file:</span>/<span class="regexp">//</span><span class="constant">C</span><span class="symbol">:/Users/</span>你的用户名/<span class="constant">Desktop</span>/plugins/osgiDemoImpl_1.<span class="number">0</span>.<span class="number">0</span>.<span class="number">201504021042</span>.jar
+install <span class="symbol">file:</span>/<span class="regexp">//</span><span class="constant">C</span><span class="symbol">:/Users/</span>你的用户名/<span class="constant">Desktop</span>/plugins/osgiDemoClient_1.<span class="number">0</span>.<span class="number">0</span>.<span class="number">201504021042</span>.jar
+</code></pre><blockquote>
+<p>注意 安装的时候路径前面要加file:///</p>
+</blockquote>
+<p>然后执行ss查看状态</p>
+<pre><code>osgi&gt; ss
+<span class="string">"Framework is launched."</span>
+
+
+id    State       Bundle
+<span class="number">0</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.osgi_3</span>.<span class="number">8.2</span><span class="class">.v20130124-134944</span>
+<span class="number">1</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.equinox</span><span class="class">.console_1</span>.<span class="number">0.0</span><span class="class">.v20120522-1841</span>
+<span class="number">2</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.command_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">3</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.runtime_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">4</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.shell_0</span>.<span class="number">8.0</span><span class="class">.v201110170705</span>
+<span class="number">10</span>    INSTALLED   osgiDemoService_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">11</span>    INSTALLED   osgiDemoImpl_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">12</span>    INSTALLED   osgiDemoClient_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+osgi&gt; 
+</code></pre><p>可以发现自己新建的3个bundle已经成功安装，但是尚未解析，所以再执行以下resolve命令，在ss：</p>
+<pre><code>osgi&gt; resolve
+osgi&gt; ss
+<span class="string">"Framework is launched."</span>
+
+
+id    State       Bundle
+<span class="number">0</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.osgi_3</span>.<span class="number">8.2</span><span class="class">.v20130124-134944</span>
+<span class="number">1</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.equinox</span><span class="class">.console_1</span>.<span class="number">0.0</span><span class="class">.v20120522-1841</span>
+<span class="number">2</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.command_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">3</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.runtime_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">4</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.shell_0</span>.<span class="number">8.0</span><span class="class">.v201110170705</span>
+<span class="number">10</span>    RESOLVED    osgiDemoService_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">11</span>    RESOLVED    osgiDemoImpl_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">12</span>    RESOLVED    osgiDemoClient_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+osgi&gt; 
+</code></pre><p>可以看到他们已经解析（因为在安装的时候是逐个安装的，某些bundle的依赖并没有满足，所以不能解析）<br>已RESOLVED状态了之后就可以跑起来了</p>
+<pre><code>id    State       Bundle
+<span class="number">0</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.osgi_3</span>.<span class="number">8.2</span><span class="class">.v20130124-134944</span>
+<span class="number">1</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.equinox</span><span class="class">.console_1</span>.<span class="number">0.0</span><span class="class">.v20120522-1841</span>
+<span class="number">2</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.command_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">3</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.runtime_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">4</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.shell_0</span>.<span class="number">8.0</span><span class="class">.v201110170705</span>
+<span class="number">10</span>    RESOLVED    osgiDemoService_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">11</span>    RESOLVED    osgiDemoImpl_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">12</span>    RESOLVED    osgiDemoClient_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+osgi&gt; start <span class="number">9</span>
+gogo: IllegalArgumentException: Cannot coerce <span class="function"><span class="title">start</span><span class="params">(String)</span></span> to any of [(Bundle[])]
+osgi&gt; start <span class="number">12</span>
+Service:Hello---not exists
+clinet
+osgi&gt; 
+</code></pre><p>发现没有找到服务，再看一下状态</p>
+<pre><code>osgi&gt; ss
+<span class="string">"Framework is launched."</span>
+
+
+id    State       Bundle
+<span class="number">0</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.osgi_3</span>.<span class="number">8.2</span><span class="class">.v20130124-134944</span>
+<span class="number">1</span>    ACTIVE      org<span class="class">.eclipse</span><span class="class">.equinox</span><span class="class">.console_1</span>.<span class="number">0.0</span><span class="class">.v20120522-1841</span>
+<span class="number">2</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.command_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">3</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.runtime_0</span>.<span class="number">8.0</span><span class="class">.v201108120515</span>
+<span class="number">4</span>    ACTIVE      org<span class="class">.apache</span><span class="class">.felix</span><span class="class">.gogo</span><span class="class">.shell_0</span>.<span class="number">8.0</span><span class="class">.v201110170705</span>
+<span class="number">10</span>    RESOLVED    osgiDemoService_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">11</span>    RESOLVED    osgiDemoImpl_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+<span class="number">12</span>    ACTIVE      osgiDemoClient_1.<span class="number">0.0</span>.<span class="number">201504021042</span>
+osgi&gt; 
+</code></pre><p>服务和实现的bundle还没有开起来，所以将这两个逐个启动之后：</p>
+<pre><code>osgi&gt; <span class="literal">start</span> <span class="number">10</span>
+osgi&gt; <span class="literal">start</span> <span class="number">11</span>
+implement hello <span class="keyword">interface</span>
+osgi&gt; <span class="literal">refresh</span> <span class="number">12</span>
+osgi&gt; hello world
+clinet
+</code></pre><p>最后运行的结果就是我们所需要的</p>
+<h2 id="动态更新">动态更新</h2><blockquote>
+<p>OSGI除了可以动态加载服务以外还可以动态进行更新</p>
+</blockquote>
+<p>现将osgi.demo.impl.HelloImpl进行相应的修改<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> osgi.demo.impl;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> osgi.demo.service.Hello;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloImpl</span> <span class="keyword">implements</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"updated:hello "</span>+str;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将该bundle进行导出，然后将osgiDemoImpl的bundle进行update，再刷新osgiDemoClient即可看到：</p>
+<pre><code>osgi&gt; update <span class="number">11</span>
+implement hello <span class="class"><span class="keyword">interface</span></span>
+osgi&gt; refresh <span class="number">12</span>
+osgi&gt; updated:hello world
+clinet
+</code></pre><p>发现输出的已经是刷新后的效果了</p>
+<blockquote>
+<p>小提醒：在导出之后会发现jar后面会跟上导出的时候，所以在更新时需要将原来的jar包删除，将新导出的jar包重命名为原来的jar的文件名</p>
+</blockquote>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://osgi.com.cn/article/7289228" target="_blank" rel="external">http://osgi.com.cn/article/7289228</a></li>
+<li><a href="http://blog.csdn.net/vwpolo/article/details/2088759" target="_blank" rel="external">http://blog.csdn.net/vwpolo/article/details/2088759</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/OSGi/">OSGi</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/04/02/OSGi/OSGi-HelloWorld/" data-title="使用OSGi进行动态加载更新模块-实现Hello world | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/04/04/OSGi/OSGi-Modularity/" title="（译）OSGi-Modularity，OSGi-模块化">
+  <strong>上一篇：</strong><br/>
+  <span>
+  （译）OSGi-Modularity，OSGi-模块化</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/03/31/Algorithm/abcSort/"  title="一个字符数组，里面的字符可能是a-z、A-Z、0-9.现在要求对数组进行排序">
+ <strong>下一篇：</strong><br/> 
+ <span>一个字符数组，里面的字符可能是a-z、A-Z、0-9.现在要求对数组进行排序
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/04/02/OSGi/OSGi-HelloWorld/" data-title="使用OSGi进行动态加载更新模块-实现Hello world" data-url="http://yyl8781697.github.io/2015/04/02/OSGi/OSGi-HelloWorld/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI"><span class="toc-number">1.</span> <span class="toc-text">OSGI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发环境"><span class="toc-number">2.</span> <span class="toc-text">开发环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI服务的创建"><span class="toc-number">3.</span> <span class="toc-text">OSGI服务的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI服务的实现"><span class="toc-number">4.</span> <span class="toc-text">OSGI服务的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSGI服务的使用"><span class="toc-number">5.</span> <span class="toc-text">OSGI服务的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在Eclipse中运行"><span class="toc-number">6.</span> <span class="toc-text">在Eclipse中运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态加载"><span class="toc-number">7.</span> <span class="toc-text">动态加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态更新"><span class="toc-number">8.</span> <span class="toc-text">动态更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ajax/" title="Ajax">Ajax<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

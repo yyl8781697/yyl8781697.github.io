@@ -1,0 +1,645 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>基于.Net 写我自己的Ajax后台框架AjaxFramework | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="为什么要写自己的Ajax后台框架&amp;#160; &amp;#160; &amp;#160; &amp;#160;现在Ajax在web应用方面已经用的稀巴烂了，如果你做一个网站没有用到ajax都不好意思拿出手，虽然面对ajax的潮流下，在.net开放方向，微软已经做了很多工作了，比如推出了ajax的服务器端控件，但是他不够灵活，用的人多吗？不多！
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;在.Net环境下与aja">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于.Net 写我自己的Ajax后台框架AjaxFramework">
+<meta property="og:url" content="http://yyl8781697.github.io/2013/05/09/Asp.Net/ajaxframework/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="为什么要写自己的Ajax后台框架&amp;#160; &amp;#160; &amp;#160; &amp;#160;现在Ajax在web应用方面已经用的稀巴烂了，如果你做一个网站没有用到ajax都不好意思拿出手，虽然面对ajax的潮流下，在.net开放方向，微软已经做了很多工作了，比如推出了ajax的服务器端控件，但是他不够灵活，用的人多吗？不多！
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;在.Net环境下与aja">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09215147-2a9484946b55453ca24504bc71d6e590.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09220411-efb0e7a0ee11444ab503375f55cec5e3.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09223547-3c37fa426be24d49b60c4a039befd674.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09223619-e7f968d563064f82b8dc85beab3bee1c.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09223818-67050f086bfb403bb29d0df480581b02.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09223916-bf6123c8c8494dc79e5b5937038d6db4.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09224009-d26b3f1b3fab4a7ea438bfed0686f9cd.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/09224116-6f4b0f5aa1bd4f9f8c8719467b2e64d0.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于.Net 写我自己的Ajax后台框架AjaxFramework">
+<meta name="twitter:description" content="为什么要写自己的Ajax后台框架&amp;#160; &amp;#160; &amp;#160; &amp;#160;现在Ajax在web应用方面已经用的稀巴烂了，如果你做一个网站没有用到ajax都不好意思拿出手，虽然面对ajax的潮流下，在.net开放方向，微软已经做了很多工作了，比如推出了ajax的服务器端控件，但是他不够灵活，用的人多吗？不多！
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;在.Net环境下与aja">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2013/05/09/Asp.Net/ajaxframework/" title="基于.Net 写我自己的Ajax后台框架AjaxFramework" itemprop="url">基于.Net 写我自己的Ajax后台框架AjaxFramework</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2013-05-09T15:01:59.000Z" itemprop="datePublished"> 发表于 2013-05-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要写自己的Ajax后台框架"><span class="toc-number">1.</span> <span class="toc-text">为什么要写自己的Ajax后台框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架的简单设计说明"><span class="toc-number">2.</span> <span class="toc-text">框架的简单设计说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架如何使用"><span class="toc-number">3.</span> <span class="toc-text">框架如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架使用效果图"><span class="toc-number">4.</span> <span class="toc-text">框架使用效果图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架的优缺点"><span class="toc-number">5.</span> <span class="toc-text">框架的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码下载"><span class="toc-number">6.</span> <span class="toc-text">源码下载</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="为什么要写自己的Ajax后台框架">为什么要写自己的Ajax后台框架</h2><p>&#160; &#160; &#160; &#160;现在Ajax在web应用方面已经用的稀巴烂了，如果你做一个网站没有用到ajax都不好意思拿出手，虽然面对ajax的潮流下，在.net开放方向，微软已经做了很多工作了，比如推出了ajax的服务器端控件，但是他不够灵活，用的人多吗？不多！</p>
+<p>&#160; &#160; &#160; &#160;在.Net环境下与ajax配合的几种情况（主要是针对webform，因为.net mvc你只要写action就可以将方法给发布出来，实现ajax的调用）：</p>
+<ol>
+<li><p>用ajax访问aspx页面：直接在page_load中输出html代码并且End掉多余标签的输出，但是他还要走生命周期，一个好好的aspx页面只用这个功能怪怪的，当然还可以直接在aspx.cs上面的方法上加上[webMethod]特性来标记ajax访问，但是必须该方法为静态，用起来也不是很爽。</p>
+</li>
+<li><p>用ajax访问ashx一般处理程序：这个是在.net的ajax开发中一种常见明确推荐的方式，他输出页面少，不冗余代码，调用灵活，但是他通常一个ashx页面只提供一个功能，但是市面上有可以通过switch方法的参数或者用委托或者反射的方法来实现一个ashx页面提供多个ajax访问的功能，但是没发现这样也挺乱的吗，我之前一直用这个，慢慢的 慢慢的开始讨厌这种写好写法!</p>
+</li>
+<li><p>用ajax直接调用webservice服务：这样的好处是在一个普通的webserive类中可以使用多个对外ajax访问点的发布，用起来很灵活，但是你一般的小网站为了ajax的访问还是部署webservice还是比较烦的吧！</p>
+</li>
+<li><p>用ajax去调用wcf：微软推出了wcf，并且现在公认为他是一种可以替代webservice的新产品，并且他还支持奖wcf部署在web服务器上，以url形式发布，当然了，这样就可以用ajax来访问调用，但是同上，小网站小应用还要去弄wcf，也是挺烦的一件事情！</p>
+</li>
+</ol>
+<p>&#160; &#160; &#160; &#160;不知道大家发现没有，第一二中方法其实终于还是访问了业务类里面的方法，是否感觉ajax调ashx，aspx有些多余？还有第三四中方法其实可以看做业务类里面的方法，但是需要发布才可以使用，挺烦！那有没有可能让ajax直接去访问cs类里面的方法呢？</p>
+<p>&#160; &#160; &#160; &#160;我就开始查资料，看看网上别人的一些做法和看法,之前在.net方面有个叫做ajaxpro的dll可以实现cs发布成ajax，但是感觉使用起来还是有点复杂，就自己琢磨着自己能否开发一个.net的ajax后台框架，在普通cs类的方法上面稍加修饰，不改变方法原有功能，但是能将方法发布出来？</p>
+<h2 id="框架的简单设计说明">框架的简单设计说明</h2><p>&#160; &#160; &#160; &#160;经过几点的奋战，终于有了一个初步可以用的版本，先贴上设计的类图：<br><img src="http://images.cnitblog.com/blog/240080/201305/09215147-2a9484946b55453ca24504bc71d6e590.jpg" alt=""><br>&#160; &#160; &#160; &#160;看了这个图是不是看上出还是比较繁琐?那接下来再来看下这个框架运行的泳道图应该就比较明了：<br><img src="http://images.cnitblog.com/blog/240080/201305/09220411-efb0e7a0ee11444ab503375f55cec5e3.jpg" alt=""></p>
+<p>&#160; &#160; &#160; &#160;他其实就分让相应的url进入指定的handlerfactory里面，这个factory去指定调用相应的handler（你可以看做ashx文件），然后去解析地址栏的url，得到具体的方法，再去动态执行，最后输出结果即可，大致流程就是这样，现在我来说一些细节：</p>
+<ul>
+<li>url的一些解析问题：本次设计的url例如：<a href="http://domain.com/classname/method.ajax?param...，从url里面可以解析得到此次请求的class类名以及具体的method方法名，当然所属的程序集是需要配置的好的，这样就可以通过反射具体得到方法" target="_blank" rel="external">http://domain.com/classname/method.ajax?param...，从url里面可以解析得到此次请求的class类名以及具体的method方法名，当然所属的程序集是需要配置的好的，这样就可以通过反射具体得到方法</a></li>
+<li>如何得到方法：由于得到的类名，方法名都是字符串，我们知道可以使用.Net里面的反射功能来实现通过字符串去调用相应的方法，但是反射消耗的性能还是很大的，所以我做了缓存，在一个方法成功请求之后我就将该方法缓存起来，以便下一次的时候不需要再反射直接调用缓存.<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">region</span> 获取该方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (_idictMethod.Keys.Contains(<span class="keyword">this</span>.DictKey))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="preprocessor">#<span class="keyword">region</span> 存在缓存中 直接从缓存中取得</span></span><br><span class="line">    <span class="comment">//如果该方法被访问过 存在该字典中</span></span><br><span class="line">    customMethodInfo = _idictMethod[<span class="keyword">this</span>.DictKey];</span><br><span class="line">    <span class="comment">//更新执行时间</span></span><br><span class="line">    customMethodInfo.LastUpdateTime = DateTime.Now;</span><br><span class="line">    <span class="comment">//访问次数加1</span></span><br><span class="line">    customMethodInfo.Count++;</span><br><span class="line">    <span class="comment">//将调用后的信息反写进去</span></span><br><span class="line">    _idictMethod[<span class="keyword">this</span>.DictKey] = customMethodInfo;</span><br><span class="line">    <span class="preprocessor">#<span class="keyword">endregion</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="preprocessor">#<span class="keyword">region</span> 如果缓存中不存在 将会反射重新获取方法信息 并且记录缓存</span></span><br><span class="line">    customMethodInfo = <span class="keyword">this</span>.GetMethodBaseInfo();</span><br><span class="line">    <span class="keyword">if</span> (customMethodInfo == <span class="keyword">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> MethodNotFoundOrInvalidException(<span class="keyword">string</span>.Format(<span class="string">"没有找到方法&#123;0&#125;"</span>, <span class="keyword">this</span>._methodPathInfo.MethodName));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="preprocessor">#<span class="keyword">region</span> 初始化方法的一些信息</span></span><br><span class="line">        <span class="comment">//特性列表</span></span><br><span class="line">        customMethodInfo.AttrList = ReflectionHelper.GetAttributes&lt;ValidateAttr&gt;(customMethodInfo.Method);</span><br><span class="line">        <span class="comment">//参数列表</span></span><br><span class="line">        customMethodInfo.ParamterInfos = customMethodInfo.Method.GetParameters();</span><br><span class="line">        <span class="comment">//返回值类型</span></span><br><span class="line">        </span><br><span class="line">        customMethodInfo.RetureType = customMethodInfo.Method.ReturnType;</span><br><span class="line">        <span class="comment">//方法最后的更新时间</span></span><br><span class="line">        customMethodInfo.LastUpdateTime = DateTime.Now;</span><br><span class="line">        <span class="comment">//方法的执行次数</span></span><br><span class="line">        customMethodInfo.Count = <span class="number">1</span>;</span><br><span class="line">        <span class="preprocessor">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">        <span class="preprocessor">#<span class="keyword">region</span> 加了双重锁  防止死锁掉 将该方法加入缓存</span></span><br><span class="line">        <span class="comment">//通过了特性的检测</span></span><br><span class="line">        <span class="keyword">if</span> (!_idictMethod.Keys.Contains(<span class="keyword">this</span>.DictKey))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">lock</span> (obj)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//防止在锁的时候 其他用户已经添加了键值</span></span><br><span class="line">                <span class="keyword">if</span> (!_idictMethod.Keys.Contains(<span class="keyword">this</span>.DictKey))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//将 此方法的信息记录到静态字典中 以便下次从内存中调用</span></span><br><span class="line">                    _idictMethod.Add(<span class="keyword">this</span>.DictKey, customMethodInfo);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="preprocessor">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="preprocessor">#<span class="keyword">endregion</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;并且为了尽量少反射，减少用户请求时间，在第一次程序运行的时候，我就将可能为标记ajax的方法给预缓存了起来（用静态构造方法可以实现该功能，该构造方法仅仅在第一次使用该类的时候运行，并且只运行一次）<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">region</span> 初始化缓存</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 初始化缓存</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">private</span>  <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">InitCache</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    ICollection assemblies = BuildManager.GetReferencedAssemblies();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (Assembly assembly <span class="keyword">in</span> assemblies)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (UrlConfig.ASSEMBLY.Equals(assembly))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//如果在指定的ajax的业务的程序集中</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">//添加到程序集的缓存中</span></span><br><span class="line">            <span class="keyword">if</span> (!_idictAssemby.Keys.Contains(GetAssemblyName(assembly)))</span><br><span class="line">            &#123;</span><br><span class="line">                _idictAssemby.Add(GetAssemblyName(assembly), assembly);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">foreach</span> (Type t <span class="keyword">in</span> assembly.GetExportedTypes())</span><br><span class="line">                &#123;</span><br><span class="line">                    Type[] allInterface = t.GetInterfaces();</span><br><span class="line">                    <span class="keyword">foreach</span> (Type interfaceName <span class="keyword">in</span> allInterface)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span> (<span class="string">"IAjax"</span>.Equals(interfaceName.Name))</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="comment">// 该类有IAjax的接口 则默认添加进缓存 添加到类的缓存中</span></span><br><span class="line">                            <span class="keyword">if</span> (!_idictClass.Keys.Contains(t.FullName))</span><br><span class="line">                            &#123;</span><br><span class="line">                                _idictClass.Add(t.FullName, t);</span><br><span class="line">                            &#125;</span><br><span class="line">                            </span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> &#123; &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//针对方法添加缓存</span></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">string</span> className <span class="keyword">in</span> _idictClass.Keys)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (MethodInfo methodInfo <span class="keyword">in</span> _idictClass[className].GetMethods(_bindingAttr))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                List&lt;ValidateAttr&gt; attrList = ReflectionHelper.GetAttributes&lt;ValidateAttr&gt;(methodInfo);</span><br><span class="line"></span><br><span class="line">                <span class="comment">//有标志的WebMethodAttr属性  添加进方法的缓存</span></span><br><span class="line">                WebMethodAttr webMethodAttr = attrList.Find(x =&gt; x <span class="keyword">is</span> WebMethodAttr) <span class="keyword">as</span> WebMethodAttr;</span><br><span class="line">                <span class="keyword">if</span> (webMethodAttr == <span class="keyword">null</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//没有该特性</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                CustomMethodInfo customMethonfInfo = <span class="keyword">new</span> CustomMethodInfo()</span><br><span class="line">                &#123;</span><br><span class="line">                    AttrList = attrList,</span><br><span class="line">                    Count = <span class="number">0</span>,</span><br><span class="line">                    LastUpdateTime = DateTime.Now,</span><br><span class="line">                    Method = methodInfo,</span><br><span class="line">                    RetureType = methodInfo.ReturnType,</span><br><span class="line">                    ParamterInfos = methodInfo.GetParameters(),</span><br><span class="line">                    Instance = Activator.CreateInstance(_idictClass[className]),</span><br><span class="line">                    Assembly = _idictClass[className].Assembly</span><br><span class="line"></span><br><span class="line">                &#125;;</span><br><span class="line">                <span class="comment">//添加进方法的缓存里面去</span></span><br><span class="line">                <span class="keyword">if</span> (!_idictMethod.Keys.Contains(className+<span class="string">"."</span>+methodInfo.Name))</span><br><span class="line">                &#123;</span><br><span class="line">                    _idictMethod.Add(className + <span class="string">"."</span> + methodInfo.Name, customMethonfInfo);</span><br><span class="line">                &#125;</span><br><span class="line">               </span><br><span class="line">            &#125;<span class="keyword">catch</span>&#123;&#125;</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 得到程序集的名称  不带版本信息的</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="assembly"&gt;</span><span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetAssemblyName</span><span class="params">(Assembly assembly)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> assembly.FullName.Split(<span class="string">','</span>)[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure></p>
+<p>&#160; &#160; &#160; &#160;这样就可以尽可能得降低反射因为消耗的性能而带来产生的效率问题！<br>&#160; &#160; &#160; &#160;本框架在方法特性上作了扩展，以标记特性的方式可以对ajax方法做一些操作，比如参数的验证，缓存的输出等，并且该特性都是很容易扩展的，只要继承ValidateAttr类即可实现接口的扩展，为以后比如用户权限认证，访问量限制等需要提供很好的解决方案<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">region</span> 检查方法的特性 （未完善）</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 检查方法的特性  （未完善）</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 现在主要是请求权限的验证 参数的验证</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="methodInfo"&gt;</span><span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="errMsg"&gt;</span>验证失败时带出的消息<span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">bool</span> <span class="title">CheckAttribute</span><span class="params">(List&lt;ValidateAttr&gt; attrList)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">bool</span> ret = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (attrList.Count &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (ValidateAttr attr <span class="keyword">in</span> attrList)</span><br><span class="line">        &#123;</span><br><span class="line">            attr.CurrentHttpRequest = <span class="keyword">this</span>._httpRequestDescription;</span><br><span class="line">            <span class="preprocessor">#<span class="keyword">region</span> 判断此特性是否能通过验证</span></span><br><span class="line">            <span class="keyword">if</span> (!attr.IsValidate())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//特性的验证规则失败</span></span><br><span class="line">                ret = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="preprocessor">#<span class="keyword">endregion</span></span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> MethodNotFoundOrInvalidException(<span class="string">"此方法并不是网络方法，无法直接访问"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure></p>
+<p>&#160; &#160; &#160; &#160;在不可或缺的参数验证特性上面简单的使用了策略模式，可以低耦合的实现其他一些参数类型扩展<br>&#160; &#160; &#160; &#160;最后在页面输出方面，使用了一个简单的输出帮助以，以AjaxResult结果寄存类和json的一个序列化类就行输出<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span>  </span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="returnValue"&gt;</span>返回值<span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="returnType"&gt;</span>返回类型<span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span>返回字符串<span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetResponseString</span><span class="params">(<span class="keyword">object</span> returnValue,Type returnType)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">string</span> ret = <span class="keyword">string</span>.Empty;</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (returnType.IsSampleType())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//返回的是简单类型</span></span><br><span class="line">            AjaxResult ajaxResult = <span class="keyword">new</span> AjaxResult()</span><br><span class="line">            &#123;</span><br><span class="line">                Flag = <span class="string">"1"</span>,</span><br><span class="line">                Data = Convert.ToString(returnValue)</span><br><span class="line">            &#125;;</span><br><span class="line">            ret = ajaxResult.ToString();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            ret = JsonConvert.SerializeObject(returnValue);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//遇到异常</span></span><br><span class="line">        AjaxResult errResult = <span class="keyword">new</span> AjaxResult()</span><br><span class="line">        &#123;</span><br><span class="line">            Flag = <span class="string">"0"</span>,</span><br><span class="line">            ErrorMsg = ex.Message</span><br><span class="line">        &#125;;</span><br><span class="line">        ret = errResult.ToString();</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 返回错误</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="errorMessge"&gt;</span><span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">ResponseError</span><span class="params">(<span class="keyword">string</span> errorMessge)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="comment">//返回错误</span></span><br><span class="line">    AjaxResult errResult = <span class="keyword">new</span> AjaxResult()</span><br><span class="line">    &#123;</span><br><span class="line">        Flag = <span class="string">"0"</span>,</span><br><span class="line">        ErrorMsg = errorMessge</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> errResult.ToString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="框架如何使用">框架如何使用</h2><p>&#160; &#160; &#160; &#160;本框架暂时命名为AjaxFramework，所以你在使用本框架时只需要引用该dll，然后在webconfig里面针对不同的IIS版本配置好相应的HttpHandler<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">httpHandlers</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--针对IIS6  再这里配置handler 以支持ajax后缀的扩展--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">add</span> <span class="attribute">verb</span>=<span class="value">"*"</span> <span class="attribute">path</span>=<span class="value">"*.ajax"</span> <span class="attribute">validate</span>=<span class="value">"true"</span> <span class="attribute">type</span>=<span class="value">"AjaxFramework.AjaxHandlerFactory,AjaxFramework"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">httpHandlers</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="title">handlers</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--针对IIS7  再这里配置handler 以支持ajax后缀的扩展--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">add</span> <span class="attribute">name</span>=<span class="value">"ajaxhandler"</span> <span class="attribute">verb</span>=<span class="value">"*"</span> <span class="attribute">preCondition</span>=<span class="value">"integratedMode"</span> <span class="attribute">path</span>=<span class="value">"*.ajax"</span>  <span class="attribute">type</span>=<span class="value">"AjaxFramework.AjaxHandlerFactory,AjaxFramework"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">handlers</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&#160; &#160; &#160; &#160;这里的.ajax后缀根据你的需求修改，比如你可以修改成.json,以后以相应的后缀访问就可以了<br>&#160; &#160; &#160; &#160;再配置好你需要公布的命名空间<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">appSettings</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--在此处配置ajax后台框架所需映射的项目--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">add</span> <span class="attribute">key</span>=<span class="value">"AjaxFramewok"</span> <span class="attribute">value</span>=<span class="value">"TestBLL"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">appSettings</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&#160; &#160; &#160; &#160;至此，配置已经完成，是不是还算简单！</p>
+<p>&#160; &#160; &#160; &#160;用法就如下了<br>&#160; &#160; &#160; &#160;这标明TestBLL空间里面的Data类里面的Add方法被发布了出来，是不是很简单，只需要添加相应的特性即可完成发布网络方法的操作</p>
+<p>然后你可以用<a href="http://domain.com/data/add.ajax?a=4&amp;b=6.787的url形式就行访问了" target="_blank" rel="external">http://domain.com/data/add.ajax?a=4&amp;b=6.787的url形式就行访问了</a></p>
+<h2 id="框架使用效果图">框架使用效果图</h2><p>&#160; &#160; &#160; &#160;先来看一下上面一个章节里面那个发布方法的效果图：<br> <img src="http://images.cnitblog.com/blog/240080/201305/09223547-3c37fa426be24d49b60c4a039befd674.jpg" alt=""><br> <img src="http://images.cnitblog.com/blog/240080/201305/09223619-e7f968d563064f82b8dc85beab3bee1c.jpg" alt=""><br> 我们来看下用Get方式去访问Post标记方法的情况<br> <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 这个方法只有Post请求才可以</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line">[WebMethodAttr(RequestType.Post)]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">Get_Pat</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="string">"pat"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> <img src="http://images.cnitblog.com/blog/240080/201305/09223818-67050f086bfb403bb29d0df480581b02.jpg" alt=""><br>&#160; &#160; &#160; &#160;我们来看下普通类型返回的情况<br> <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 返回普通的字符串 会加上一个json的外壳</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line">[WebMethodAttr(RequestType.Get)]</span><br><span class="line">[OutputCacheAttr(<span class="number">20</span>)]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">Get_Pat2</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"pat"</span> + DateTime.Now.ToString(<span class="string">"yyyyMMddHHmmssfff"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://images.cnitblog.com/blog/240080/201305/09223916-bf6123c8c8494dc79e5b5937038d6db4.jpg" alt=""><br>&#160; &#160; &#160; &#160;但是如果返回的是DataTable，会怎么样呢？<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/// &#60;summary&#62;&#10;/// &#36820;&#22238;DataTable&#30340;&#25968;&#25454;&#10;/// &#60;/summary&#62;&#10;/// &#60;returns&#62;&#60;/returns&#62;&#10;[WebMethodAttr(RequestType.Get)]&#10;public DataTable Get_Data()&#10;&#123;&#10;    DataTable dt = new DataTable(&#34;dt&#34;);&#10;    dt.Columns.Add(&#34;id&#34;);&#10;    dt.Columns.Add(&#34;name&#34;);&#10;&#10;    DataRow row = dt.NewRow();&#10;    row[&#34;id&#34;] = 1;&#10;    row[&#34;name&#34;] = &#34;tom&#34;;&#10;    dt.Rows.Add(row);&#10;&#10;    DataRow row2 = dt.NewRow();&#10;    row2[&#34;id&#34;] = 2;&#10;    row2[&#34;name&#34;] = &#34;peter&#34;;&#10;    dt.Rows.Add(row2);&#10;&#10;    return dt;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://images.cnitblog.com/blog/240080/201305/09224009-d26b3f1b3fab4a7ea438bfed0686f9cd.jpg" alt=""><br>&#160; &#160; &#160; &#160;那么如果方法的参数是实体类型，我们该如何传呢？<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 这个方法是用来测试传实体的</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="user"&gt;</span><span class="xmlDocTag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line">[WebMethodAttr(RequestType.Get)]</span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">Insert_User</span><span class="params">(User user)</span></span><br><span class="line"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://images.cnitblog.com/blog/240080/201305/09224116-6f4b0f5aa1bd4f9f8c8719467b2e64d0.jpg" alt=""><br>&#160; &#160; &#160; &#160;估计方法+配图，大家应该看的很明白了吧！</p>
+<p>&#160; &#160; &#160; &#160;在这里提一下，由于现在ajax的请求返回类型基本都是json格式，所以本框架暂时只支持json格式！</p>
+<h2 id="框架的优缺点">框架的优缺点</h2><p>&#160; &#160; &#160; &#160;先来说优点吧：</p>
+<ol>
+<li>你以后在使用ajax的时候不需要再加各种ashx，aspx页面，加上相应的特性即可将你业务层里面的方法给发布出来</li>
+<li>利用特性扩展这一特点可以很方便的满足你其他的要求</li>
+<li>运用了各种方式的缓存，效率应该不会将到哪里去</li>
+<li>整体框架还算简单，运行思路明了，相对wcf，webservice这些复杂的框架，以后出错可以手动调试源码<br>&#160; &#160; &#160; &#160;估计缺点也有很多：</li>
+<li>由于是通过反射来运行方法的，某些时候效率可能会不怎么高</li>
+<li>在参数动态赋值模块对于其他的一些参数可能会有问题</li>
+<li>发布方法无法重载</li>
+<li>只是刚刚写出来，没有投入到实际项目中，可用性还有待商榷</li>
+</ol>
+<p>&#160; &#160; &#160; &#160;这个框架可以用哪里？</p>
+<blockquote>
+<p>一般的小OA，ERP，个人博客站，小的CMS站，普通企业站个人觉得这个框架还是可以应付的，如果需要在其他类型的网站上使用你就自己看着办吧！</p>
+</blockquote>
+<h2 id="源码下载">源码下载</h2><p>&#160; &#160; &#160; &#160;我厚着脸皮的发到了Github上面去，点我去Github下载<a href="https://github.com/yyl8781697/AjaxFramework" target="_blank" rel="external">AjaxFramework</a>（json类库在lib文件夹中，可能需要重新引用一遍），希望有兴趣的同学可以加入进来一些开发哦，有问题留言吧，很期待您的指导！</p>
+<blockquote>
+<p>注：此文来自我的<a href="http://www.cnblogs.com/yyl8781697/archive/2013/05/09/ajaxframework.html" target="_blank" rel="external">博客园</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Asp-Net/">Asp.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Ajax/">Ajax</a><a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2013/05/09/Asp.Net/ajaxframework/" data-title="基于.Net 写我自己的Ajax后台框架AjaxFramework | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/01/17/Search Engine/search-engine/" title="读《这就是搜索引擎：核心技术详解》有感总结">
+  <strong>上一篇：</strong><br/>
+  <span>
+  读《这就是搜索引擎：核心技术详解》有感总结</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2013/05/06/CSharp/Mongodb-Pager/"  title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码">
+ <strong>下一篇：</strong><br/> 
+ <span>基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2013/05/09/Asp.Net/ajaxframework/" data-title="基于.Net 写我自己的Ajax后台框架AjaxFramework" data-url="http://yyl8781697.github.io/2013/05/09/Asp.Net/ajaxframework/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要写自己的Ajax后台框架"><span class="toc-number">1.</span> <span class="toc-text">为什么要写自己的Ajax后台框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架的简单设计说明"><span class="toc-number">2.</span> <span class="toc-text">框架的简单设计说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架如何使用"><span class="toc-number">3.</span> <span class="toc-text">框架如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架使用效果图"><span class="toc-number">4.</span> <span class="toc-text">框架使用效果图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#框架的优缺点"><span class="toc-number">5.</span> <span class="toc-text">框架的优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码下载"><span class="toc-number">6.</span> <span class="toc-text">源码下载</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ajax/" title="Ajax">Ajax<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

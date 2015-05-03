@@ -1,0 +1,741 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>（译）OSGi-Modularity，OSGi-模块化 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="1.OSGI 概述1.1. 什么是OSGIOGSI是一种规范，OSGi 规范的核心定义 Java 组件和服务模型，组件和服务可以动态地安装、 激活、 取消激活、 更新以及卸载。软件中的每个组件在OSGI中称为Bundle。OSGi 的一个非常实用的优点是每一个Bundle都必须定义其导出的 Java 包和所需的依赖项。通过这种方式可以有效地控制提供的 API 和插件的依赖项。
+1.2. Bundl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="（译）OSGi-Modularity，OSGi-模块化">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/04/04/OSGi/OSGi-Modularity/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="1.OSGI 概述1.1. 什么是OSGIOGSI是一种规范，OSGi 规范的核心定义 Java 组件和服务模型，组件和服务可以动态地安装、 激活、 取消激活、 更新以及卸载。软件中的每个组件在OSGI中称为Bundle。OSGi 的一个非常实用的优点是每一个Bundle都必须定义其导出的 Java 包和所需的依赖项。通过这种方式可以有效地控制提供的 API 和插件的依赖项。
+1.2. Bundl">
+<meta property="og:image" content="/img/OSGi_Modularity/xx-internal10.png.pagespeed.ic.9wMehMIifW.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xx-internal30.png.pagespeed.ic.7U3IrH5ssb.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xosgi_livecycle10.png.pagespeed.ic.-M5HNvcZ1X.png">
+<meta property="og:image" content="/img/OSGi_Modularity/findplugin08.png">
+<meta property="og:image" content="/img/OSGi_Modularity/findplugin10.png">
+<meta property="og:image" content="/img/OSGi_Modularity/findplugin09.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xosgi_simpleplugin10.png.pagespeed.ic.4xu_n0pJ1r.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xosgi_model_settergetter10.png.pagespeed.ic.vhB9DWwg7z.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xosgi_model_exportedapi.png.pagespeed.ic.U-HEUGq_6L.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xtutorial_servicepackage10.png.pagespeed.ic.JqIPNtDU_Q.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xfirstbundle30.gif.pagespeed.ic.payxZ9XMO5.png">
+<meta property="og:image" content="/img/OSGi_Modularity/yizhe_osgi_framework.png">
+<meta property="og:image" content="/img/OSGi_Modularity/9Zyc.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xfirstbundle50.gif.pagespeed.ic.0xZ8Rlc9zq.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xfirstbundle60.gif.pagespeed.ic.1VFJwpaRoH.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xfirstbundle65.gif.pagespeed.ic.L5oEBD-2sD.png">
+<meta property="og:image" content="/img/OSGi_Modularity/xfirstbundle70.png.pagespeed.ic.iABkb7xQN1.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="（译）OSGi-Modularity，OSGi-模块化">
+<meta name="twitter:description" content="1.OSGI 概述1.1. 什么是OSGIOGSI是一种规范，OSGi 规范的核心定义 Java 组件和服务模型，组件和服务可以动态地安装、 激活、 取消激活、 更新以及卸载。软件中的每个组件在OSGI中称为Bundle。OSGi 的一个非常实用的优点是每一个Bundle都必须定义其导出的 Java 包和所需的依赖项。通过这种方式可以有效地控制提供的 API 和插件的依赖项。
+1.2. Bundl">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/04/OSGi/OSGi-Modularity/" title="（译）OSGi-Modularity，OSGi-模块化" itemprop="url">（译）OSGi-Modularity，OSGi-模块化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-04T14:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-OSGI_概述"><span class="toc-number">1.</span> <span class="toc-text">1.OSGI 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-_什么是OSGI"><span class="toc-number">1.1.</span> <span class="toc-text">1.1. 什么是OSGI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-_Bundle与插件"><span class="toc-number">1.2.</span> <span class="toc-text">1.2. Bundle与插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-_实现"><span class="toc-number">1.3.</span> <span class="toc-text">1.3. 实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-_Eclipse的Equinox"><span class="toc-number">1.4.</span> <span class="toc-text">1.4. Eclipse的Equinox</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_OSGI_Bundle和依赖管理"><span class="toc-number">2.</span> <span class="toc-text">2. OSGI Bundle和依赖管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-_OSGI_Bundle"><span class="toc-number">2.1.</span> <span class="toc-text">2.1. OSGI Bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-_Bundle-标志名称_和_版本"><span class="toc-number">2.2.</span> <span class="toc-text">2.2. Bundle-标志名称 和 版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-_OSGI版本号的语义"><span class="toc-number">2.3.</span> <span class="toc-text">2.3. OSGI版本号的语义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-_MANIFEST-MF中的标识符"><span class="toc-number">2.4.</span> <span class="toc-text">2.4. MANIFEST.MF中的标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-_bundle的依赖关系和公共的API"><span class="toc-number">2.5.</span> <span class="toc-text">2.5. bundle的依赖关系和公共的API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-_临时的API和友好的API"><span class="toc-number">2.6.</span> <span class="toc-text">2.6. 临时的API和友好的API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-_动态导入包"><span class="toc-number">2.7.</span> <span class="toc-text">2.7. 动态导入包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-_依赖关系管理"><span class="toc-number">2.8.</span> <span class="toc-text">2.8. 依赖关系管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-_bundle的生命周期"><span class="toc-number">2.9.</span> <span class="toc-text">2.9. bundle的生命周期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-_确定类的插件查找"><span class="toc-number">3.</span> <span class="toc-text">3. 确定类的插件查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-_OSGI控制台"><span class="toc-number">4.</span> <span class="toc-text">4. OSGI控制台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1_OSGI控制台"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 OSGI控制台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2_必需的bundle"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 必需的bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-_Telnet"><span class="toc-number">4.3.</span> <span class="toc-text">4.3. Telnet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-_进入Eclipse_OSGi控制台"><span class="toc-number">4.4.</span> <span class="toc-text">4.4. 进入Eclipse OSGi控制台</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-下载Eclipse标准版"><span class="toc-number">5.</span> <span class="toc-text">5.下载Eclipse标准版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-_数据模型和服务bundle"><span class="toc-number">6.</span> <span class="toc-text">6. 数据模型和服务bundle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-_练习的目标"><span class="toc-number">6.1.</span> <span class="toc-text">6.1. 练习的目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-_命名约定：简单的插件/bundle"><span class="toc-number">6.2.</span> <span class="toc-text">6.2. 命名约定：简单的插件/bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-_创建插件"><span class="toc-number">6.3.</span> <span class="toc-text">6.3. 创建插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-_创建基础类"><span class="toc-number">6.4.</span> <span class="toc-text">6.4. 创建基础类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-_生成构造函数"><span class="toc-number">6.5.</span> <span class="toc-text">6.4. 生成构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-_创建_setter和getter方法"><span class="toc-number">6.6.</span> <span class="toc-text">6.5. 创建 setter和getter方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-_验证"><span class="toc-number">6.7.</span> <span class="toc-text">6.7. 验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-8-_生成toString,_hashCode_以及_equals_方法"><span class="toc-number">6.8.</span> <span class="toc-text">6.8. 生成toString, hashCode 以及 equals 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-9-_编写一个copy方法"><span class="toc-number">6.9.</span> <span class="toc-text">6.9. 编写一个copy方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-10-_创建模型的接口"><span class="toc-number">6.10.</span> <span class="toc-text">6.10. 创建模型的接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-11-_导出模型"><span class="toc-number">6.11.</span> <span class="toc-text">6.11. 导出模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-12-_创建数据模型提供者插件（服务插件）"><span class="toc-number">6.12.</span> <span class="toc-text">6.12. 创建数据模型提供者插件（服务插件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-12-_准备服务插件"><span class="toc-number">6.13.</span> <span class="toc-text">6.12. 准备服务插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-14-1-_创建工厂和导出包"><span class="toc-number">6.14.</span> <span class="toc-text">6.14.1. 创建工厂和导出包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-_教程：使用Activator以及导出你的bundle"><span class="toc-number">7.</span> <span class="toc-text">7. 教程：使用Activator以及导出你的bundle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-_创建一个新的bundle"><span class="toc-number">7.1.</span> <span class="toc-text">7.1. 创建一个新的bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-_编写代码"><span class="toc-number">7.2.</span> <span class="toc-text">7.2. 编写代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-_运行"><span class="toc-number">7.3.</span> <span class="toc-text">7.3. 运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-_导出你的bundle"><span class="toc-number">7.4.</span> <span class="toc-text">7.4. 导出你的bundle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-在独立的OSGI_Server中运行"><span class="toc-number">8.</span> <span class="toc-text">8.在独立的OSGI Server中运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-_原文链接"><span class="toc-number">9.</span> <span class="toc-text">9. 原文链接</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="1-OSGI_概述">1.OSGI 概述</h2><h3 id="1-1-_什么是OSGI">1.1. 什么是OSGI</h3><p>OGSI是一种规范，OSGi 规范的核心定义 Java 组件和服务模型，组件和服务可以动态地安装、 激活、 取消激活、 更新以及卸载。软件中的每个组件在OSGI中称为<strong>Bundle</strong>。<br><br>OSGi 的一个非常实用的优点是每一个<strong>Bundle</strong>都必须定义其导出的 Java 包和所需的依赖项。通过这种方式可以有效地控制提供的 API 和插件的依赖项。</p>
+<h3 id="1-2-_Bundle与插件">1.2. Bundle与插件</h3><p>插件是Eclipse中的最小模块单元，<strong>Bundle</strong>与插件几乎是可以互换的，一个插件也是一个OSGI <strong>Bundle</strong>，反之亦然。</p>
+<h3 id="1-3-_实现">1.3. 实现</h3><p>OSGI已经有很多实现，例如Equinox, Knopflerfish OSGi or Apache Felix.</p>
+<h3 id="1-4-_Eclipse的Equinox">1.4. Eclipse的Equinox</h3><p>Eclipse的Equinox是基于OSGI规范的实现，也这是Eclipse程序的运行时环境，Eclipse的扩展点是基于OSGI的<strong>Bundle</strong>和<strong>Service</strong>的概念来进行的。</p>
+<h2 id="2-_OSGI_Bundle和依赖管理">2. OSGI Bundle和依赖管理</h2><h3 id="2-1-_OSGI_Bundle">2.1. OSGI Bundle</h3><p>OSGI规范定义了OSGI <strong>Bundle</strong>为模块化的单元。<br>一个<b>Bundle</b>是一个紧密结合的、自包含的单元，它明确定义了对其他模块的依赖关系和服务，同时还定义了对外开放的API。<br><br>从技术上讲<b>Bundle</b>是一个带有额外元数据的.jar文件，这个元数据存储在<em>META-INF/MANIFEST.MF</em>中，<i>META-INF/MANIFEST.MF</i>文件是Java规范的一部分，任何非 OSGi 得运行时将忽略 OSGi 的元数据。因此 OSGi <strong>Bundle</strong>可以不受限制的在非 OSGi Java 环境中使用。<br></p>
+<h3 id="2-2-_Bundle-标志名称_和_版本">2.2. Bundle-标志名称 和 版本</h3><p>每个<strong>Bundle</strong>通过<code>Bundle-SymbolicName</code>来定义它的标志名称属性，名称一般以<strong>Bundle</strong>作者的反向域名来定义，如果你有一个名为”example.com”的域名，那么标志名称将一般以”com.example”作为开头。<br><br>每个<strong>Bundle</strong>通过<code>Bundle-Version</code>都有一个版本号。<br><br><code>Bundle-SymbolicName</code>和<code>Bundle-Version</code>可以唯一标识在OSGI中的一个<strong>Bundle</strong>，这两个属性都是在<i>META-INF/MANIFEST.MF</i>中定义的。</p>
+<h3 id="2-3-_OSGI版本号的语义">2.3. OSGI版本号的语义</h3><p>OSGI推荐使用<code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code>语法来定义你的版本号。</p>
+<ul>
+<li>当所有改变都是向后兼容，增加<code>&lt;patch&gt;</code> 。</li>
+<li>当公共 API 已经更改，但所有改变都是向后兼容。，增加<code>&lt;minor&gt;</code></li>
+<li>当更改不是向后兼容，增加<code>&lt;major&gt;</code> 。</li>
+</ul>
+<h3 id="2-4-_MANIFEST-MF中的标识符">2.4. <em>MANIFEST.M</em>F中的标识符</h3><p>下面是一个<em>MANIFEST.MF</em>文件的样例：</p>
+<pre><code><span class="attribute">Manifest-Version</span>: <span class="string">1.0</span>
+<span class="attribute">Bundle-ManifestVersion</span>: <span class="string">2</span>
+<span class="attribute">Bundle-Name</span>: <span class="string">Popup Plug-in</span>
+<span class="attribute">Bundle-SymbolicName</span>: <span class="string">com.example.myosgi; singleton:=true</span>
+<span class="attribute">Bundle-Version</span>: <span class="string">1.0.0</span>
+<span class="attribute">Bundle-Activator</span>: <span class="string">com.example.myosgi.Activator</span>
+<span class="attribute">Require-Bundle</span>: <span class="string">org.eclipse.ui,org.eclipse.core.runtime</span>
+<span class="attribute">Bundle-ActivationPolicy</span>: <span class="string">lazy</span>
+<span class="attribute">Bundle-RequiredExecutionEnvironment</span>: <span class="string">JavaSE-1.6 </span>
+</code></pre><p>下面的表格是<em>MANIFEST.MF</em>文件中各个标识符的解释：</p>
+<div><br><table width="100%"><br>    <tr><br>        <th width="25%">标识符</th><br>        <th>描述</th><br>    </tr><br>    <tr><br>        <td>Bundle-Name</td><br>        <td>Bundle的简短描述</td><br>    </tr><br>    <tr><br>        <td>Bundle-SymbolicName</td><br>        <td>Bundle的唯一标识符，如果这个Bundle使用了Eclipse中的扩展点功能，则必需将其标志为单例，你只需在<code>Bundle-SymbolicName</code>后面添加<code>singleton:=true</code>即可。</td><br>    </tr><br>    <tr><br>        <td>Bundle-Version</td><br>        <td>定义bundle的版本号，如果发布了一个新的版本则这个版本号必须增加。</td><br>    </tr><br>    <tr><br>        <td>Bundle-Activator</td><br>        <td>定义实现BundleActivator接口的一个activator类[可选]。bundle在激活时，将会创建一个activator类的实例，每当启动或者停止bundle时都会调用该实例的<code>start()</code>和<code>stop()</code>方法，一个OSGI的activator是配置bundle启动期间典型的使用（译者：这句不知道怎么翻译了-<em>-，你懂就好了）</em></td><br>    </tr><br>    <tr><br>        <td>Bundle-RequiredExecutionEnvironment (BREE)</td><br>        <td>指定运行包所需的 Java 版本。如果不满足这一要求，OSGi 运行时将不会加载bundle。</td><br>    </tr><br>    <tr><br>        <td>Bundle-ActivationPolicy</td><br>        <td>将它设置为<code>lazy</code>，OSGI运行时将会延迟加载这个bundle，当它只有被用到时才会开始加载(译者：原文描述的不好翻译啊，就按自己的理解来了--)。如果没有设置这个值，OSGI将会使用它的规范使用默认的方式进行加载。在Equinox中如果没有设置则根据<code>config.ini</code>来决定这个bundle是否自动启动。</td><br>    </tr><br>    <tr><br>        <td>Bundle-ClassPath</td><br>        <td>bundle加载的类路径，默认是”.”，从bundle所在的根目录进行加载，你也可以自己添加jar文件，这些jar文件称为嵌入的的jar文件。</td><br>    </tr><br></table><br></div>
+
+
+<h3 id="2-5-_bundle的依赖关系和公共的API">2.5. bundle的依赖关系和公共的API</h3><p>通过MANIFEST.MF文件包可以定义其他包或包及其依赖项。OSGI在试图访问一个类的时候并没有定义对他的依赖则会抛出一个<code>ClassNotFoundException </code>的异常，它抛出的异常都是标准java虚拟机中定义的包，这些包往往都是可用的，这些可用的类都是可以在Java虚拟机中通过Jre配置文件进行配置，但是这些配置并不在本文档的讲解范围之内。<br><br><strong>bundle</strong>在<em>MANIFEST.MF </em>文件中通过<code>Export-Package</code>来定义它的API，如果包不进行显式导出则对其他<strong>bundle</strong>均为不可见。<br><br>这些所有的限制都是通过OSGI规范中的<code>classloader</code>进行强制执行的，每个<strong>bundle</strong>都有它自己的加载强，访问受限制的类是不允许的。</p>
+<blockquote>
+<p><strong>警告</strong>：不幸的是 OSGi不能阻止使用 Java 反射来访问这些类。这是因为 OSGi 基于 Java 运行时，尚不支持模块化层。</p>
+</blockquote>
+<p>一个<strong>bundle</strong>可以定义依赖其他包的具体一个版本或者一个范围的版本，例如，<strong>bundle A</strong>中定义它依赖于<strong>bundle C</strong>的2.0版本，而<strong>bundle B</strong>定义它依赖于<strong>bundle C</strong>的1.0版本</p>
+<h3 id="2-6-_临时的API和友好的API">2.6. 临时的API和友好的API</h3><p>Equinox支持通过<code>x-internal</code>标志来导出一个临时性的包，下面的截屏展示了<code>x-internal</code>在<em>MANIFEST.MF</em>编辑器中的设置。<br><img src="/img/OSGi_Modularity/xx-internal10.png.pagespeed.ic.9wMehMIifW.png" alt=""><br><br><em>MANIFEST.MF</em>文件中的结果如下：</p>
+<pre><code><span class="attribute">Manifest-Version</span>: <span class="string">1.0</span>
+<span class="attribute">Bundle-ManifestVersion</span>: <span class="string">2</span>
+<span class="attribute">Bundle-Name</span>: <span class="string">Provider</span>
+<span class="attribute">Bundle-SymbolicName</span>: <span class="string">de.vogella.osgi.xinternal.provider</span>
+<span class="attribute">Bundle-Version</span>: <span class="string">1.0.0.qualifier</span>
+<span class="attribute">Bundle-RequiredExecutionEnvironment</span>: <span class="string">JavaSE-1.6</span>
+<span class="attribute">Export-Package</span>: <span class="string">de.vogella.osgi.xinternal.provider;x-internal:=true </span>
+</code></pre><p>使用这个API在Eclipse中会显示错误、警告或者忽略将会取决于如下的设置：Window → Preferences → Java → Compiler → Errors/Warnings<br><img src="/img/OSGi_Modularity/xx-internal30.png.pagespeed.ic.7U3IrH5ssb.png" alt=""><br><br>你还可以通过<code>x-friends</code>来导出一个特定<strong>bundle</strong>使用的包，这个标志也可以在<em>MANIFEST.MF</em>编辑器中对Package Visibility添加一个插件来增加。</p>
+<pre><code><span class="attribute">Manifest-Version</span>: <span class="string">1.0</span>
+<span class="attribute">Bundle-ManifestVersion</span>: <span class="string">2</span>
+<span class="attribute">Bundle-Name</span>: <span class="string">Provider</span>
+<span class="attribute">Bundle-SymbolicName</span>: <span class="string">de.vogella.osgi.xinternal.provider</span>
+<span class="attribute">Bundle-Version</span>: <span class="string">1.0.0.qualifier</span>
+<span class="attribute">Bundle-RequiredExecutionEnvironment</span>: <span class="string">JavaSE-1.6</span>
+<span class="attribute">Export-Package</span>: <span class="string">de.vogella.osgi.xinternal.provider;x-friends:="another.bundle" </span>
+</code></pre><p><code>x-friends</code>是类似于<code>x-internal</code>，但插件定义为<code>x-friends</code>使用 API 时不会得到警告。</p>
+<blockquote>
+<p><strong>警告</strong>：在可能的情况下尽量不要使用<code>x-friends</code>,因为它被认为是一个不好的实践在你创建你的模块层的特殊情况时。</p>
+</blockquote>
+<h3 id="2-7-_动态导入包">2.7. 动态导入包</h3><p>由于遗留原因 OSGi 还支持动态导入的软件包。详细信息，请参阅<a href="http://wiki.osgi.org/wiki/DynamicImport-Package" target="_blank" rel="external">动态导入的OSGi</a> 。</p>
+<blockquote>
+<p><strong>警告</strong>：你不应该使用此功能，它是一个非模块化的设计。</p>
+</blockquote>
+<h3 id="2-8-_依赖关系管理">2.8. 依赖关系管理</h3><p>OSGI是负责<strong>bundles</strong>之间的依赖管理,OSGI将会在安装期间读取<em>MANIFEST.MF</em>文件，确保在<em>bundle</em>激活之前他所有的依赖<em>bundles</em>都被解析或者激活。<br><br>如果依赖没有得到满足，那么这个<strong>bundle</strong>将不会被激活。</p>
+<h3 id="2-9-_bundle的生命周期">2.9. bundle的生命周期</h3><p>在<strong>bundle</strong>的安装时将会将它持续化到一个本地的<strong>bundle</strong>缓存，在OSGI运行时将会尝试解析它所有依赖的<strong>bundle</strong>。<br><br>如果所有的依赖都被解析，那么这个<strong>bundle</strong>将会进入<code>RESOLVED</code>,否则为<code>INSTALLED</code>状态。<br><br>如果存在被依赖的<strong>bundle</strong>同时存在多个<strong>bundles</strong>，则会使用最高的<strong>bundle</strong>版本，如果这几个版本都一样，则会使用最低的<strong>bundle id</strong>（在框架安装过程中<strong>bundle</strong>将会得到一个唯一的标识号，即<strong>bundle id</strong>），如果一个<strong>bundle</strong>被启动了，则他会经历<code>STARTING</code>状态，然而进入<code>ACTIVE</code>状态。<br><br>生命周期的描述如下图：<br><img src="/img/OSGi_Modularity/xosgi_livecycle10.png.pagespeed.ic.-M5HNvcZ1X.png" alt=""><br></p>
+<h2 id="3-_确定类的插件查找">3. 确定类的插件查找</h2><p>你可能频繁的去查找一个给定类的插件/<strong>bundle</strong>，Eclipse编辑器对于确定类的插件查找非常简单，在preferences中开启<code>Include all plug-ins from target into Java Search</code>之后（译者：我怎么没找到-_-，但是还是可以用<code>Ctrl+Shift+t</code>），使用<code>Ctrl+Shift+t</code>就可以弹出对话框进行查找查找，显示在对话框中的jar文件就是通过输入jar文件的前缀得到的。<br><br><img src="/img/OSGi_Modularity/findplugin08.png" alt=""><br><br><img src="/img/OSGi_Modularity/findplugin10.png" alt=""><br></p>
+<h2 id="4-_OSGI控制台">4. OSGI控制台</h2><h3 id="4-1_OSGI控制台">4.1 OSGI控制台</h3><p>OSGi 控制台就像命令行的 shell。在此控制台，你可以输入命令来执行 OSGi 某些操作。这个功能在你应用程序的OSGI层上进行问题分析会非常有用。<br><br>最有用的命令是<code>ss</code>可以得到所有<strong>bundle</strong>的状态和<strong>bundleId</strong>,下面的表是OSGI中最长用命令的几个参考：</p>
+<table width="100%"><br>    <tr><br>        <th width="25%">命令</th><br>        <th>描述</th><br>    </tr><br>    <tr><br>        <td>help</td><br>        <td>列出所有可用的命令</td><br>    </tr><br>    <tr><br>        <td>ss</td><br>        <td>列出所有已安装的<b>bundle</b>和它的状态</td><br>    </tr><br>    <tr><br>        <td>ss <i>vogella</i></td><br>        <td>列出所有已安装的、并且名字中带<i>vogella</i>的<b>bundle</b>和它的状态</td><br>    </tr><br>    <tr><br>        <td>start <i>id</i></td><br>        <td>启动对应<i>id</i>的<b>bundle<b></b></b></td><br>    </tr><br>    <tr><br>        <td>stop <i>id</i></td><br>        <td>停止对应<i>id</i>的<b>bundle</b></td><br>    </tr><br>    <tr><br>        <td>diag &lt;bundle-id&gt;</td><br>        <td>诊断一个<b>bundle</b>，列出它所有缺失的依赖</td><br>    </tr><br>    <tr><br>        <td>install URL</td><br>        <td>从一个URL安装一个<b>bundle</b>。</td><br>    </tr><br>    <tr><br>        <td>uninstall &lt;bundle-id&gt;</td><br>        <td>将指定的&lt;bundle-id&gt;进行卸载</td><br>    </tr><br>    <tr><br>        <td>bundle &lt;bundle-id&gt;</td><br>        <td>显示&lt;bundle-id&gt;的<b>bundle</b>的详细信息，包括他的注册和服务</td><br>    </tr><br>    <tr><br>        <td>bundle &lt;bundle-id&gt;</td><br>        <td>显示&lt;bundle-id&gt;的<b>bundle</b>的<i>MANIFST.MF</i>文件信息</td><br>    </tr><br>    <tr><br>        <td>services <i>filter</i></td><br>        <td>显示所有可用的服务和他们的消费者，过滤器是一个可选的LDAP ，例如：为了查看ManagedService 的实现的服务可以用”services (objectclass=*ManagedService)”明令。</td><br>    </tr><br></table>
+
+<h3 id="4-2_必需的bundle">4.2 必需的bundle</h3><p>你不得不将下面的<strong>bundle</strong>添加到你的运行时配置，以便于使用控制台：</p>
+<ul>
+<li>org.eclipse.equinox.console</li>
+<li>org.apache.felix.gogo.command</li>
+<li>org.apache.felix.gogo.runtime</li>
+<li>org.apache.felix.gogo.shell</li>
+</ul>
+<p>Equinox也包含一个简单的内置控制台可，通过-Dosgi.console.enable.builtin=true参数来激活。</p>
+<h3 id="4-3-_Telnet">4.3. Telnet</h3><p>如果你在运行的Eclipse环境中指定<code>-console</code>参数，就可以使用交互的OSGI控制台，一般情况下载OSGI运行配置创建时Eclipse IDE会自动添加上这个参数。通过<code>-console 5555</code>你可以打开一个用于Telnet连接的端口，如果你远程连接到OSGI控制台你就可以使用类似Bash Linux中的tab快捷键和历史功能。</p>
+<h3 id="4-4-_进入Eclipse_OSGi控制台">4.4. 进入Eclipse OSGi控制台</h3><p>你也可以通过正在运行的Eclipse进入OSGI控制台，进入<code>plug-in Development</code>开发环境，然后通过Window-&gt;show view-&gt;console来打开控制台，在控制台上选择<code>HOST OSGI Console</code>即可打开OSGI控制台。（译者：这段我是按照我自己在Eclipse上的操作来的，应该和原作者的意图是一样的，但是可能表述上不同而已-|-）</p>
+<blockquote>
+<p>请注意你如果通过OSGI控制台来干扰Eclipse的运行，可能会损坏Eelipse的环境。</p>
+</blockquote>
+<h2 id="5-下载Eclipse标准版">5.下载Eclipse标准版</h2><p>Eclipse提供了许多不同的版本，你可以安装所需要的工具在任何的版本中，但是在Eclipse的标准中可以更加简单的安装所需要的工具。<br><br>浏览<a href="http://www.eclipse.org/downloads" target="_blank" rel="external">Eclipse download site</a>进行标准版的下载。<br><img src="/img/OSGi_Modularity/findplugin09.png" alt=""><br><br>自己用软件包将他们解压缩</p>
+<blockquote>
+<p>注意，在Eclipse中的安装路径中避免出现任何的特殊字符和空格。</p>
+</blockquote>
+<h2 id="6-_数据模型和服务bundle">6. 数据模型和服务bundle</h2><h3 id="6-1-_练习的目标">6.1. 练习的目标</h3><p>在章节的练习中，你将会为你的数据模型创建一个<strong>bundle</strong>（相等于插件），你也可以将这个数据模型开放给其他插件。<br></p>
+<h3 id="6-2-_命名约定：简单的插件/bundle">6.2. 命名约定：简单的插件/bundle</h3><p>一个插件/bundle可以在Eclipse中通过<code>new plug-in general</code>向导来进行创建，如果你按如下配置创建插件，本文中将称此为简单的插件或者简单的bundle。</p>
+<ul>
+<li>没有Activator</li>
+<li>没有提供其他用户接口</li>
+<li>没有一个3.x版本的富客户端程序</li>
+<li>没有使用模板生成</li>
+</ul>
+<p>在插件创建的向导中如下图（直接按<em>Finish</em>按钮可以避免使用模板）：<br><img src="/img/OSGi_Modularity/xosgi_simpleplugin10.png.pagespeed.ic.4xu_n0pJ1r.png" alt=""><br><br>（现在界面好像稍微有点区别了，不过大致相同）</p>
+<h3 id="6-3-_创建插件">6.3. 创建插件</h3><p>创建一个简单的插件项目叫做<em>com.example.e4.rcp.todo.model</em></p>
+<h3 id="6-4-_创建基础类">6.4. 创建基础类</h3><p>创建名称为<code>com.example.e4.rcp.todo.model</code>的包，同时添加下面的类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.e4.rcp.todo.model;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Todo</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> id;</span><br><span class="line">  <span class="keyword">private</span> String summary = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> String description = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> done = <span class="keyword">false</span>;</span><br><span class="line">  <span class="keyword">private</span> Date dueDate;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="6-4-_生成构造函数">6.4. 生成构造函数</h3><p>通过Source → Generate Constructor using Fields来创建带所有字段的构造函数，使用相同的方法创建一个只带<code>id</code>字段的构造函数以及一个不带任何字段你的构造器。</p>
+<blockquote>
+<p>确保你已经创建了这三个构造函数因为他们在下面的练习中都要用到。</p>
+</blockquote>
+<h3 id="6-5-_创建_setter和getter方法">6.5. 创建 setter和getter方法</h3><p>使用Source → Generate Getter and Setter来创建所有字段的<code>setter</code>和<code>getter</code>方法，除了<code>id</code>的<code>setter</code>方法，因为这个<code>id</code>字段在被创建之后最好不要再被改变。<br><img src="/img/OSGi_Modularity/xosgi_model_settergetter10.png.pagespeed.ic.vhB9DWwg7z.png" alt=""><br><br>最后的文件代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.e4.rcp.todo.model;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Todo</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> id;</span><br><span class="line">  <span class="keyword">private</span> String summary = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> String description = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">boolean</span> done = <span class="keyword">false</span>;</span><br><span class="line">  <span class="keyword">private</span> Date dueDate;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Todo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Todo</span><span class="params">(<span class="keyword">long</span> id)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.id = id;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Todo</span><span class="params">(<span class="keyword">long</span> id, String summary, String description, <span class="keyword">boolean</span> done,</span><br><span class="line">      Date dueDate)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.id = id;</span><br><span class="line">    <span class="keyword">this</span>.summary = summary;</span><br><span class="line">    <span class="keyword">this</span>.description = description;</span><br><span class="line">    <span class="keyword">this</span>.done = done;</span><br><span class="line">    <span class="keyword">this</span>.dueDate = dueDate;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> id;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">getSummary</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> summary;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSummary</span><span class="params">(String summary)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.summary = summary;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> description;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDescription</span><span class="params">(String description)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.description = description;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isDone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> done;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDone</span><span class="params">(<span class="keyword">boolean</span> done)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.done = done;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Date <span class="title">getDueDate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> dueDate;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDueDate</span><span class="params">(Date dueDate)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.dueDate = dueDate;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意，因为<code>id</code>字段在之后练习的<code>equals</code>和<code>hashCode</code>方法中使用，因此它应该是不可变的。</p>
+</blockquote>
+<h3 id="6-7-_验证">6.7. 验证</h3><blockquote>
+<p>警告：确保你已经生成了这是三个构造函数，并且没有生成<code>id</code>的<code>setter</code>方法。</p>
+</blockquote>
+<h3 id="6-8-_生成toString,_hashCode_以及_equals_方法">6.8. 生成toString, hashCode 以及 equals 方法</h3><p>你可以在Eclipse中通过Source → Generate toString()来生成基于<code>id</code>和<code>summary</code>字段的<code>toString</code>方法。<br><br>你还可以通过Source → Generate hashCode() and equals()来生成基于<code>id</code>字段的<code>hashCode</code>和<code>equals</code>方法。</p>
+<h3 id="6-9-_编写一个copy方法">6.9. 编写一个copy方法</h3><p>你可以在那个类中添加如下内容的<code>copy()</code>方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.e4.rcp.todo.model;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ITodoService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function">Todo <span class="title">getTodo</span><span class="params">(<span class="keyword">long</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">saveTodo</span><span class="params">(Todo todo)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">deleteTodo</span><span class="params">(<span class="keyword">long</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function">List&lt;Todo&gt; <span class="title">getTodos</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="6-10-_创建模型的接口">6.10. 创建模型的接口</h3><p>按照下面创建模型的接口<code>ITodoService</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.e4.rcp.todo.model;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ITodoService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function">Todo <span class="title">getTodo</span><span class="params">(<span class="keyword">long</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">saveTodo</span><span class="params">(Todo todo)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">deleteTodo</span><span class="params">(<span class="keyword">long</span> id)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="function">List&lt;Todo&gt; <span class="title">getTodos</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="6-11-_导出模型">6.11. 导出模型</h3><p>导出<code>com.example.e4.rcp.todo.model</code>包。打开<em>MANIFEST.MF</em>文件，选择<em>Runtime</em>选项卡，添加<code>com.example.e4.rcp.todo.model</code>到exported packages。<br><img src="/img/OSGi_Modularity/xosgi_model_exportedapi.png.pagespeed.ic.U-HEUGq_6L.png" alt=""><br></p>
+<h3 id="6-12-_创建数据模型提供者插件（服务插件）">6.12. 创建数据模型提供者插件（服务插件）</h3><p>创建一个新的简单的plug-in project项目叫做<em>com.example.e4.rcp.todo.service</em>。这个插件叫做<em>todo service</em>服务插件。</p>
+<blockquote>
+<p>技巧：Mac OS系统用户应该使用一个不同于<em>.service</em>的名称（<em>.service</em>在Mac OS会被特殊对待）</p>
+</blockquote>
+<h3 id="6-12-_准备服务插件">6.12. 准备服务插件</h3><p>在你的服务插件中添加对<code>com.example.e4.rcp.todo.model</code>插件的依赖，打开<em>MANIFEST.MF</em>文件，选择<em>Dependencies</em>选项卡，在中<em>Imported Packages</em>添加<code>com.example.e4.rcp.todo.model</code><br></p>
+<p>在你的服务插件中新建<code>com.example.e4.rcp.todo.service.internal</code>包以及添加如下内容的类。<br><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.e4.rcp.todo.service.internal;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.e4.rcp.todo.model.ITodoService;</span><br><span class="line"><span class="keyword">import</span> com.example.e4.rcp.todo.model.Todo;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Example service impl, data is not persisted</span><br><span class="line"> * between application restarts</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTodoServiceImpl</span> <span class="keyword">implements</span> <span class="title">ITodoService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> current = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">private</span> List&lt;Todo&gt; todos;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MyTodoServiceImpl</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    todos = createInitialModel();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// always return a new copy of the data</span></span><br><span class="line">  <span class="annotation">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> List&lt;Todo&gt; <span class="title">getTodos</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Todo&gt; list = <span class="keyword">new</span> ArrayList&lt;Todo&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Todo todo : todos) &#123;</span><br><span class="line">      list.add(todo.copy());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// create new or update existing Todo object</span></span><br><span class="line">  <span class="annotation">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">saveTodo</span><span class="params">(Todo newTodo)</span> </span>&#123;</span><br><span class="line">    Todo updateTodo = findById(newTodo.getId());</span><br><span class="line">    <span class="keyword">if</span> (updateTodo == <span class="keyword">null</span>) &#123;</span><br><span class="line">      updateTodo= <span class="keyword">new</span> Todo(current++);</span><br><span class="line">      todos.add(updateTodo);</span><br><span class="line">    &#125; </span><br><span class="line">    updateTodo.setSummary(newTodo.getSummary());</span><br><span class="line">    updateTodo.setDescription(newTodo.getDescription());</span><br><span class="line">    updateTodo.setDone(newTodo.isDone());</span><br><span class="line">    updateTodo.setDueDate(newTodo.getDueDate());</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">  &#125;  </span><br><span class="line"></span><br><span class="line">  <span class="annotation">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Todo <span class="title">getTodo</span><span class="params">(<span class="keyword">long</span> id)</span> </span>&#123;</span><br><span class="line">    Todo todo = findById(id);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (todo != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> todo.copy();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="annotation">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">deleteTodo</span><span class="params">(<span class="keyword">long</span> id)</span> </span>&#123;</span><br><span class="line">    Todo deleteTodo = findById(id);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (deleteTodo != <span class="keyword">null</span>) &#123;</span><br><span class="line">      todos.remove(deleteTodo);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// example data, change if you like</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> List&lt;Todo&gt; <span class="title">createInitialModel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;Todo&gt; list = <span class="keyword">new</span> ArrayList&lt;Todo&gt;();</span><br><span class="line">    list.add(createTodo(<span class="string">"Application model"</span>, <span class="string">"Flexible and extensible"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"DI"</span>, <span class="string">"@Inject as programming mode"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"OSGi"</span>, <span class="string">"Services"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"SWT"</span>, <span class="string">"Widgets"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"JFace"</span>, <span class="string">"Especially Viewers!"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"CSS Styling"</span>,<span class="string">"Style your application"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"Eclipse services"</span>,<span class="string">"Selection, model, Part"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"Renderer"</span>,<span class="string">"Different UI toolkit"</span>));</span><br><span class="line">    list.add(createTodo(<span class="string">"Compatibility Layer"</span>, <span class="string">"Run Eclipse 3.x"</span>));</span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> Todo <span class="title">createTodo</span><span class="params">(String summary, String description)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Todo(current++, summary, description, <span class="keyword">false</span>, <span class="keyword">new</span> Date());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> Todo <span class="title">findById</span><span class="params">(<span class="keyword">long</span> id)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Todo todo : todos) &#123;</span><br><span class="line">      <span class="keyword">if</span> (id == todo.getId()) &#123;</span><br><span class="line">        <span class="keyword">return</span> todo;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：这个接口使用易变的类存储，数据在应用程序启动时并没有进行持久化，如果你想持久化这个类的数据可以将他们放入数据库或者文件系统。因为这些存储并不是专门针对Eclipse富客户端程序的，所以本书也没有覆盖这些内容。</p>
+</blockquote>
+<h3 id="6-14-1-_创建工厂和导出包">6.14.1. 创建工厂和导出包</h3><p>你现在将会在<code>com.example.e4.rcp.todo.service</code>中创建一个类，针对此你可以参照如下技巧：</p>
+<blockquote>
+<p>技巧：在Eclipse中如果父级包没有类文件，则这些包将会被隐藏。在你创建这些类的时候就你定义这些包，这些描述可以在下面的图片中展示出来：<br><img src="/img/OSGi_Modularity/xtutorial_servicepackage10.png.pagespeed.ic.JqIPNtDU_Q.png" alt=""></p>
+</blockquote>
+<p>在<code>com.example.e4.rcp.todo.service</code>包中创建如下类文件：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.e4.rcp.todo.service;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> com.example.e4.rcp.todo.model.ITodoService;</span><br><span class="line"><span class="keyword">import</span> com.example.e4.rcp.todo.service.internal.MyTodoServiceImpl;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Factory provides access to the todo service provider</span><br><span class="line"> * </span><br><span class="line"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TodoServiceFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> ITodoService todoService = <span class="keyword">new</span> MyTodoServiceImpl();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ITodoService <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> todoService;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个<code>TodoServiceFactory</code>可以产生访问服务的提供者的<code>ITodoService</code>接口，这个类可以被当做<code>ITodoService</code>的一个工厂，一个工厂隐藏创建一个接口的具体实例。<br>导出<code>com.example.e4.rcp.todo.service</code>这个包以开放给其他插件。</p>
+<blockquote>
+<p>注意：Eclipse工具不支持导出空包，你必须在你导出包之前创建一个类。</p>
+</blockquote>
+<h2 id="7-_教程：使用Activator以及导出你的bundle">7. 教程：使用Activator以及导出你的bundle</h2><p>本章节的练习是创建另一个<strong>bundle</strong>来使用<code>Activator</code>，在本章节的末尾的代码你可以在Eclipse中运行，你也可以将其导出在单独的OSGI Server中运行。</p>
+<h3 id="7-1-_创建一个新的bundle">7.1. 创建一个新的bundle</h3><p>通过 File → New → Other… → Plug-in Development → Plug-in Project来创建一个新的简单的插件<em>com.vogella.osgi.firstbundle.internal</em></p>
+<h3 id="7-2-_编写代码">7.2. 编写代码</h3><p>创建如下的线程类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.vogella.osgi.firstbundle.internal;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> active = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (active) &#123;</span><br><span class="line">      System.out.println(<span class="string">"Hello OSGi console"</span>);</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        Thread.sleep(<span class="number">5000</span>);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        System.out.println(<span class="string">"Thread interrupted "</span> + e.getMessage());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stopThread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    active = <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>按如下的方式修改<code>Activation</code>（译者：这里的Activation应该在创建项目时候就创建该类）：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.vogella.osgi.firstbundle;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">import</span> org.osgi.framework.BundleActivator;</span><br><span class="line"><span class="keyword">import</span> org.osgi.framework.BundleContext;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> de.vogella.osgi.firstbundle.internal.MyThread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Activator</span> <span class="keyword">implements</span> <span class="title">BundleActivator</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> MyThread myThread;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">(BundleContext context)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Starting com.vogella.osgi.firstbundle"</span>);</span><br><span class="line">    myThread = <span class="keyword">new</span> MyThread();</span><br><span class="line">    myThread.start();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">(BundleContext context)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"Stopping com.vogella.osgi.firstbundle"</span>);</span><br><span class="line">    myThread.stopThread();</span><br><span class="line">    myThread.join();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>译者：上面原文件中的<code>import de.vogella.osgi.firstbundle.internal.MyThread</code>应该更改为<code>import com.vogella.osgi.firstbundle.internal.MyThread</code></p>
+<h3 id="7-3-_运行">7.3. 运行</h3><p>选择<em>MANIFEST.MF</em>文件，右击并选择<em>Run As → Run Configuration</em>，创建一个OSGI框架的运行环境，除了你的<code><s>de</s>com.vogella.osgi.firstbundle</code>包其他都取消选择。之后在将<code>org.eclipse.osgi</code>添加到你的运行配置中。<br><br><img src="/img/OSGi_Modularity/xfirstbundle30.gif.pagespeed.ic.payxZ9XMO5.png" alt=""><br><br>译者：现在貌似只有<code>org.eclipse.osgi</code>这个bundle会报缺少依赖的异常，现在贴出我的实验配置图，希望对大家有帮助：<br><img src="/img/OSGi_Modularity/yizhe_osgi_framework.png" alt=""><br><br>运行这个配置，每隔5秒钟就会有消息输出到控制台。<br><br><img src="/img/OSGi_Modularity/9Zyc.png" alt=""><br></p>
+<h3 id="7-4-_导出你的bundle">7.4. 导出你的bundle</h3><p>这将允许你将导出的<strong>bundle</strong>在OSGI的运行时进行安装，选中你的<strong>bundle</strong>然后选择<br>File -&gt; Export -&gt; Plug-in Development -&gt; “Deployable plug-ins and fragment”<br><br><img src="/img/OSGi_Modularity/xfirstbundle50.gif.pagespeed.ic.0xZ8Rlc9zq.png" alt=""><br><br><img src="/img/OSGi_Modularity/xfirstbundle60.gif.pagespeed.ic.1VFJwpaRoH.png" alt=""><br><br>取消选项中的export the source标记<br><br><img src="/img/OSGi_Modularity/xfirstbundle65.gif.pagespeed.ic.L5oEBD-2sD.png" alt=""></p>
+<h2 id="8-在独立的OSGI_Server中运行">8.在独立的OSGI Server中运行</h2><p>这章节将展示如何将Equinox作为独立的OSGI运行时进行运行。<br><br>在你的Eclipse安装目录中将<code>org.eclipse.osgi<em>.jar</em></code>进行标记，这个jar文件一般你plugin<em>目录中，拷贝这个文件到一个新的位置，例如：</em>c:\temp\osgi-server*，将这个文件重命名为<code>org.eclipse.osgi.jar</code><br><br>通过下面的命令启动的OSGI服务器：</p>
+<pre><code>java -jar org<span class="class">.eclipse</span><span class="class">.osgi</span><span class="class">.jar</span> -console 
+</code></pre><p>你可以通过”install URL”的方式根据确定的URL进行bundle的安装，例如你在安装”c:\temp\bundles”这个bundle的用法为：</p>
+<pre><code>install file:c:\temp\bundles\plugins\de<span class="class">.vogella</span><span class="class">.osgi</span><span class="class">.firstbundle_1</span>.<span class="number">0.0</span><span class="class">.jar</span> 
+</code></pre><blockquote>
+<p>技巧：你可能需要正确的路径和bundle名称</p>
+</blockquote>
+<p>你可以使用<code>start &lt;bundle-id&gt;</code>进行启动<br><img src="/img/OSGi_Modularity/xfirstbundle70.png.pagespeed.ic.iABkb7xQN1.png" alt=""><br><br>译者：我按这种方式尝试了好久都没成功，因为启动OSGI需要4.2中的依赖，最后在Eclipse中才能正常运行，各位如果将这种独立的方式运行成功，请在评论中进行指导</p>
+<h2 id="9-_原文链接">9. 原文链接</h2><p>参考的原文为<a href="http://www.vogella.com/tutorials/OSGi/article.html" target="_blank" rel="external">OSGi Modularity - Tutorial</a></p>
+<blockquote>
+<p>其实这里在原文中本来是版权协议的，我当然是没必要翻译了-<em>-!，<br>关于本文表格，原本是在markdownpad上排版好了，哪知在hexo渲染之后会多加好多换行符，各位就忍着点看吧，下次有空把表格改好-</em>-!，</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/OSGi/">OSGi</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/04/04/OSGi/OSGi-Modularity/" data-title="（译）OSGi-Modularity，OSGi-模块化 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/04/07/OSGi/OSGi-Services/" title="（译）OSGi-Services，OSGI-服务">
+  <strong>上一篇：</strong><br/>
+  <span>
+  （译）OSGi-Services，OSGI-服务</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/02/OSGi/OSGi-HelloWorld/"  title="使用OSGi进行动态加载更新模块-实现Hello world">
+ <strong>下一篇：</strong><br/> 
+ <span>使用OSGi进行动态加载更新模块-实现Hello world
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/04/04/OSGi/OSGi-Modularity/" data-title="（译）OSGi-Modularity，OSGi-模块化" data-url="http://yyl8781697.github.io/2015/04/04/OSGi/OSGi-Modularity/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-OSGI_概述"><span class="toc-number">1.</span> <span class="toc-text">1.OSGI 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-_什么是OSGI"><span class="toc-number">1.1.</span> <span class="toc-text">1.1. 什么是OSGI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-_Bundle与插件"><span class="toc-number">1.2.</span> <span class="toc-text">1.2. Bundle与插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-_实现"><span class="toc-number">1.3.</span> <span class="toc-text">1.3. 实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-_Eclipse的Equinox"><span class="toc-number">1.4.</span> <span class="toc-text">1.4. Eclipse的Equinox</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_OSGI_Bundle和依赖管理"><span class="toc-number">2.</span> <span class="toc-text">2. OSGI Bundle和依赖管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-_OSGI_Bundle"><span class="toc-number">2.1.</span> <span class="toc-text">2.1. OSGI Bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-_Bundle-标志名称_和_版本"><span class="toc-number">2.2.</span> <span class="toc-text">2.2. Bundle-标志名称 和 版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-_OSGI版本号的语义"><span class="toc-number">2.3.</span> <span class="toc-text">2.3. OSGI版本号的语义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-_MANIFEST-MF中的标识符"><span class="toc-number">2.4.</span> <span class="toc-text">2.4. MANIFEST.MF中的标识符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-_bundle的依赖关系和公共的API"><span class="toc-number">2.5.</span> <span class="toc-text">2.5. bundle的依赖关系和公共的API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-_临时的API和友好的API"><span class="toc-number">2.6.</span> <span class="toc-text">2.6. 临时的API和友好的API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-_动态导入包"><span class="toc-number">2.7.</span> <span class="toc-text">2.7. 动态导入包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-_依赖关系管理"><span class="toc-number">2.8.</span> <span class="toc-text">2.8. 依赖关系管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-_bundle的生命周期"><span class="toc-number">2.9.</span> <span class="toc-text">2.9. bundle的生命周期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-_确定类的插件查找"><span class="toc-number">3.</span> <span class="toc-text">3. 确定类的插件查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-_OSGI控制台"><span class="toc-number">4.</span> <span class="toc-text">4. OSGI控制台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1_OSGI控制台"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 OSGI控制台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2_必需的bundle"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 必需的bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-_Telnet"><span class="toc-number">4.3.</span> <span class="toc-text">4.3. Telnet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-_进入Eclipse_OSGi控制台"><span class="toc-number">4.4.</span> <span class="toc-text">4.4. 进入Eclipse OSGi控制台</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-下载Eclipse标准版"><span class="toc-number">5.</span> <span class="toc-text">5.下载Eclipse标准版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-_数据模型和服务bundle"><span class="toc-number">6.</span> <span class="toc-text">6. 数据模型和服务bundle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-_练习的目标"><span class="toc-number">6.1.</span> <span class="toc-text">6.1. 练习的目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-_命名约定：简单的插件/bundle"><span class="toc-number">6.2.</span> <span class="toc-text">6.2. 命名约定：简单的插件/bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-_创建插件"><span class="toc-number">6.3.</span> <span class="toc-text">6.3. 创建插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-_创建基础类"><span class="toc-number">6.4.</span> <span class="toc-text">6.4. 创建基础类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-_生成构造函数"><span class="toc-number">6.5.</span> <span class="toc-text">6.4. 生成构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-_创建_setter和getter方法"><span class="toc-number">6.6.</span> <span class="toc-text">6.5. 创建 setter和getter方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-_验证"><span class="toc-number">6.7.</span> <span class="toc-text">6.7. 验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-8-_生成toString,_hashCode_以及_equals_方法"><span class="toc-number">6.8.</span> <span class="toc-text">6.8. 生成toString, hashCode 以及 equals 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-9-_编写一个copy方法"><span class="toc-number">6.9.</span> <span class="toc-text">6.9. 编写一个copy方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-10-_创建模型的接口"><span class="toc-number">6.10.</span> <span class="toc-text">6.10. 创建模型的接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-11-_导出模型"><span class="toc-number">6.11.</span> <span class="toc-text">6.11. 导出模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-12-_创建数据模型提供者插件（服务插件）"><span class="toc-number">6.12.</span> <span class="toc-text">6.12. 创建数据模型提供者插件（服务插件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-12-_准备服务插件"><span class="toc-number">6.13.</span> <span class="toc-text">6.12. 准备服务插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-14-1-_创建工厂和导出包"><span class="toc-number">6.14.</span> <span class="toc-text">6.14.1. 创建工厂和导出包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-_教程：使用Activator以及导出你的bundle"><span class="toc-number">7.</span> <span class="toc-text">7. 教程：使用Activator以及导出你的bundle</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-_创建一个新的bundle"><span class="toc-number">7.1.</span> <span class="toc-text">7.1. 创建一个新的bundle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-_编写代码"><span class="toc-number">7.2.</span> <span class="toc-text">7.2. 编写代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-_运行"><span class="toc-number">7.3.</span> <span class="toc-text">7.3. 运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-_导出你的bundle"><span class="toc-number">7.4.</span> <span class="toc-text">7.4. 导出你的bundle</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-在独立的OSGI_Server中运行"><span class="toc-number">8.</span> <span class="toc-text">8.在独立的OSGI Server中运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-_原文链接"><span class="toc-number">9.</span> <span class="toc-text">9. 原文链接</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ajax/" title="Ajax">Ajax<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

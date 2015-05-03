@@ -1,0 +1,655 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>读《这就是搜索引擎：核心技术详解》有感总结 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;搜索引擎的使用对于我们来说不陌生，对于一个正常的搜索流程，比如用户输入查询“搜索引擎 技术”，搜索引擎需要分别将存储的磁盘上的两个单词的倒排序索引读入内存，之后进行解压缩，然后求两个单词对应倒排序列表的搅基，找到所有包含两个单词的文档集合，根据排序算法来对每个文档的相关性进行打分，按照相关度输入相关最高的搜索结果。
+&amp;#160; &amp;#160;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读《这就是搜索引擎：核心技术详解》有感总结">
+<meta property="og:url" content="http://yyl8781697.github.io/2014/01/17/Search Engine/search-engine/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;搜索引擎的使用对于我们来说不陌生，对于一个正常的搜索流程，比如用户输入查询“搜索引擎 技术”，搜索引擎需要分别将存储的磁盘上的两个单词的倒排序索引读入内存，之后进行解压缩，然后求两个单词对应倒排序列表的搅基，找到所有包含两个单词的文档集合，根据排序算法来对每个文档的相关性进行打分，按照相关度输入相关最高的搜索结果。
+&amp;#160; &amp;#160;">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171644500955.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171646145177.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171648497985.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171649029862.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171650074866.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171650295335.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171650498778.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/blog/240080/201401/171651278779.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="读《这就是搜索引擎：核心技术详解》有感总结">
+<meta name="twitter:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;搜索引擎的使用对于我们来说不陌生，对于一个正常的搜索流程，比如用户输入查询“搜索引擎 技术”，搜索引擎需要分别将存储的磁盘上的两个单词的倒排序索引读入内存，之后进行解压缩，然后求两个单词对应倒排序列表的搅基，找到所有包含两个单词的文档集合，根据排序算法来对每个文档的相关性进行打分，按照相关度输入相关最高的搜索结果。
+&amp;#160; &amp;#160;">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/01/17/Search Engine/search-engine/" title="读《这就是搜索引擎：核心技术详解》有感总结" itemprop="url">读《这就是搜索引擎：核心技术详解》有感总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-01-17T09:10:52.000Z" itemprop="datePublished"> 发表于 2014-01-17</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络爬虫"><span class="toc-number">1.</span> <span class="toc-text">网络爬虫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索引擎索引"><span class="toc-number">2.</span> <span class="toc-text">搜索引擎索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#检索模型"><span class="toc-number">3.</span> <span class="toc-text">检索模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链接分析算法"><span class="toc-number">4.</span> <span class="toc-text">链接分析算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储与计算"><span class="toc-number">5.</span> <span class="toc-text">存储与计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索引擎缓存机制"><span class="toc-number">6.</span> <span class="toc-text">搜索引擎缓存机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在后面："><span class="toc-number">7.</span> <span class="toc-text">写在后面：</span></a></li></ol>
+		
+		</div>
+		
+		<p>&#160; &#160; &#160; &#160;搜索引擎的使用对于我们来说不陌生，对于一个正常的搜索流程，比如用户输入查询“搜索引擎 技术”，搜索引擎需要分别将存储的磁盘上的两个单词的倒排序索引读入内存，之后进行解压缩，然后求两个单词对应倒排序列表的搅基，找到所有包含两个单词的文档集合，根据排序算法来对每个文档的相关性进行打分，按照相关度输入相关最高的搜索结果。</p>
+<p>&#160; &#160; &#160; &#160;但是对于这系列步骤中海量文档数据的来源，存储，查找的技术又是如何的呢？下面是我最近看了《这就是搜索引擎：核心技术详解》这书的大致总结：</p>
+<h2 id="网络爬虫">网络爬虫</h2><blockquote>
+<p>首先，搜索引擎的文档数据从何而来？</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;站长们通用的一个常识就是当自己部署了一个网站之后，会向Google、百度、bing等搜索引擎的 提交收录页面进行自己页面的提交，以便于他们的爬虫更快的抓取到提交网站的页面。<br>啥，不知道爬虫？不了解的点我<a href="http://baike.baidu.com/link?url=DoVYhBb3ezyzSqe6igrcnzxhg8xxVjVRgZkM0WHUAWBmAt7QCgBf7F1xfaAi6wRl" target="_blank" rel="external">科普</a><br><img src="http://images.cnitblog.com/blog/240080/201401/171644500955.jpg" alt=""><br>现在的爬虫大多为分布式爬虫了，在抓取策略中有：</p>
+<ul>
+<li>宽度优先遍历策略（Breath First）</li>
+<li>非完全PageRank策略</li>
+<li>OCIP策略（Online Page Importance Compution）</li>
+<li>大站优先策略（Larger Sites First）</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;但是在垂直领域的网站，比如携程网的机票数据，京东的商品等页面很难有显示的链接去指向，还是需要通过用户去输入关键词搜索而得，这样的话按照爬虫的规则很难抓取到这种页面，所以就出现了暗网抓取，简单的说就是爬虫在搜索页面提交查询的组合，再搜录目标网站提交查询后的页面，基于暗网抓取，百度提出了“<strong>阿拉丁计划</strong>”，<a href="http://www.baidu.com/s?wd=2*12365%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9&amp;rsv_spt=1&amp;issp=1&amp;rsv_bp=0&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_sug3=19&amp;rsv_sug=1&amp;rsv_sug1=18&amp;rsv_sug4=343" target="_blank" rel="external">示例</a>，Google的<strong>Onebox</strong>，<a href="https://www.google.com.hk/search?q=2*12365%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9&amp;oq=2*12365%E7%9A%84%E5%B9%B3%E6%96%B9%E6%A0%B9&amp;aqs=chrome..69i57j69i60.254j0j4&amp;sourceid=chrome&amp;espv=210&amp;es_sm=93&amp;ie=UTF-8" target="_blank" rel="external">示例</a></p>
+<p>不过现在想一下，在互联网上最方便的事情就是拷贝抄袭了，统计结果表明，近似重复网页的数量占网页总数量的比例高达%29，而完全相同相同的页面大约占全部页面的%22，即互联网页面中有相当大比例的内容是完全相同或者大体相近的。比如新闻主题内容是几乎完全相同的，但是两个页面的网页布局有较大的差异，为解决这样的问题需要网页去重，尽量不给用户呈现重复的搜索结果,体现原创性，提供用户搜索体验。</p>
+<p>主要的网页去重算法有：<a href="http://blog.sina.com.cn/s/blog_65a748970100idnd.html" target="_blank" rel="external">Shingling</a>, <a href="http://baike.baidu.com/link?url=7Ub8M2FfFlVK8ZY7gFu8Xadb39V3kpNdC6TXQRSvObBfMWA5P9Z5H_L5cCZumZdJTvtb9Tq-EXhyE5fQiPRgr_" target="_blank" rel="external">I-Match</a>, <a href="http://baike.baidu.com/link?url=0d7O55JMGSMswPFUjFiH-UoayXe8jCR7AQwbqaT5iPZwacJzEjlWTU5rmasj9OmEtFOBZeyK3U7zV83rqSDbXK" target="_blank" rel="external">Simhash</a>，<a href="http://blog.sina.com.cn/s/blog_67914f2901019xdt.html" target="_blank" rel="external">SpotSig</a>等。</p>
+<h2 id="搜索引擎索引">搜索引擎索引</h2><blockquote>
+<p>对于海量的网页文档内容，得用索引才能快速找到查询的网页。</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;为了应对海量的文档以及各类查询，搜索引擎常用倒排索引作为单词到文档的映射。<br><img src="http://images.cnitblog.com/blog/240080/201401/171646145177.jpg" alt=""><br>倒排索引主要包含单词词典和对应的倒排列列表，并其相关技术选择：</p>
+<ul>
+<li>存储时常用哈希加列表或树形结构</li>
+<li>新建索引时使用并归法效率较高</li>
+<li>在更新索引时采用原地更新和再合并的混合策略最有效</li>
+<li>在查询时把短语索引、位置索引、双词索引混合起来，发挥各自的长处</li>
+<li>在分布式方面有按文档和按单词两种划分方法，前者在扩展性、负载均衡性、容错性上均有优势。</li>
+<li>在压缩方面，用单词连续存储以及相邻词典项指向同一指针的方式来省出指针信息，以达到词典压缩，用PForDelta算法来实现倒排序索引的压缩。</li>
+</ul>
+<h2 id="检索模型">检索模型</h2><blockquote>
+<p>有了海量数据文档以及对其作了相应的排序之后，如何找出搜索的相关文档呢？</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;判断网页内容是否与用户查询有关，这依赖于搜索引擎所采用的检索模型</p>
+<p><red><strong>布尔模型</strong></red>：使用简单的“与/或/非”这些逻辑关系来判断文档与查询词是否相关，根据此模型得出的搜索结果过于粗糙，无法满足用户需求。</p>
+<p><red><strong>向量空间模型</strong></red>：将查询词和文档中关键词转为特性向量，然后使用余弦公式</p>
+<p><img src="http://images.cnitblog.com/blog/240080/201401/171648497985.jpg" alt=""><br>&#160; &#160; &#160; &#160;来计算文档与查询的相关度并排序输出结果。关于其中的特征向量权值计算，也称TF*IDF框架，词频TF表示一个单词在文档中出现的次数，IDF表示查询词在所以文档中出现频率的反值：<br><img src="http://images.cnitblog.com/blog/240080/201401/171649029862.jpg" alt=""><br>&#160; &#160; &#160; &#160;特征权重值即他们的乘积，用具体的中文解释描述为：</p>
+<ul>
+<li>如果文档中某个查询词的词频很高，而且这个单词在其他的文档集合中很少出现，那么这个单词的权重值很高。</li>
+<li>如何文档中某个查询词的词频也很高，但是这个单词在文档集合中的其他文档中经常出现，或者是词频不高，但是在其他的文档中经常出现，那么这个单词的权值一般。</li>
+<li>如何文档中某个查询词的词频很低，同时这个单词在其他的文档中经常出现，那么这个单词的权值很低</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;概率检索模型：对于某个文档D来说，如果其属于相关文档子集的概率大于不属于不相关子集的概率，那么这个文档就是与用户查询相关的，即  <img src="http://images.cnitblog.com/blog/240080/201401/171650074866.jpg" alt=""></p>
+<p>&#160; &#160; &#160; &#160;其具体算法就是使用MB25模型来计算：<br><img src="http://images.cnitblog.com/blog/240080/201401/171650295335.jpg" alt=""><br>&#160; &#160; &#160; &#160;该模型已经是一个非常成功的概率模型方法，当然后人也有对其的其他改进。</p>
+<h2 id="链接分析算法">链接分析算法</h2><blockquote>
+<p>搜索引擎的最终搜索结果不仅仅根据文档相关性，同时还得考虑网页的重要性。</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;搜索引擎在查找能够满足用户请求的网页时，主要考虑两方面的因素：一方面使用户发出的查询与网页内容的相似性得分，另一方面 就是通过链接分析方法计算获得的得分，即网页的重要性，搜索引擎融合两者，共同拟合出相似性评分函数，来对搜索进行排序。<br><img src="http://images.cnitblog.com/blog/240080/201401/171650498778.jpg" alt=""></p>
+<p>&#160; &#160; &#160; &#160;搜索引擎中常常使用链接分析算法来进行网页间的重要性排名，比较基础又著名的为<a href="http://en.wikipedia.org/wiki/Pagerank" target="_blank" rel="external">PageRank</a>和<a href="http://en.wikipedia.org/wiki/HITS_algorithm" target="_blank" rel="external">Hits</a>算法，前者主要以随机游走模型来计算法，后者则以子集传播模型为理论基础，当然后来为弥补其算法的缺点又产生了很多类型的改进，比如“<a href="http://en.wikipedia.org/wiki/Topic-Sensitive_PageRank" target="_blank" rel="external">主题敏感的PageRank</a>”算法来改善原始Pagerank的主题偏离，<a href="http://en.wikipedia.org/wiki/Hilltop_algorithm" target="_blank" rel="external">Hilltop</a>结合Hits和pagerank等。</p>
+<p>&#160; &#160; &#160; &#160;但是出于商业利益驱使，很多网站站长会针对搜索引擎排名进行分析，并采取一些手段来提高网站排名，但是也存在恶意优化的行为，严重影响搜索搜索引擎用户的体验，所以也提出了一些算法来应对各种恶意作弊：TrustRank，BadRank，SpamRank等。并且这些反作弊算法的结果权重占搜索占了很大的比重。</p>
+<h2 id="存储与计算">存储与计算</h2><p>&#160; &#160; &#160; &#160;搜索引擎需要存储和计算的数据 数以亿记，而且觉得部分都是无结构或者半结构化的数据，如何构建存储平台和计算平台，使得存储和管理简单化成为了重要问题。以Google为代表的提出了他的三驾马车：GFS/BingTable/MapReduce，Google曾发布了这三驾马车的相关技术详解论文，成就了现在云计算新宠“<a href="http://hadoop.apache.org/" target="_blank" rel="external">Hadoop</a>”的诞生。<br><img src="http://images.cnitblog.com/blog/240080/201401/171651278779.jpg" alt=""></p>
+<ul>
+<li>GFS：Google的分布式文件系统，由大量PC构成，机器出现故障时常态，并且支持水平增量扩展，可以存储百亿计的海量网页信息。(HDFS被认为GFS的开源实现)</li>
+<li>BigTable：是一种针对海量结构化或者半结构化存储的存储模型，以GFS为基础，其存储模型介于关系型数据和NoSql存储系统之间，特别适合一次写入，多次读取，很少修改的业务需求。(HBase被认为是BigTable的开源实现)</li>
+<li>Map/Reduce：它是一种分布式云计算模型，本质上是通过分而治之的思想实现，往往是多个MapRduce子任务的先后串联，前面的Map阶段往往作为后续的Reduce阶段的输入进行一些列复杂任务的计算。(使用该模型最著名的开源代表就是Hadoop)</li>
+<li><p>Pregel：基于BSP的同步计算模型，用来解决大规模分布式图计算问题，弥补Map/Reduce在图计算上的不足，一次迭代计算被陈伟一个超步，系统从一个超级不迈向另一个超级不，直达达到算法的终止条件，Google前期的PageRank算法主要使用Pregel平台进行计算.( Giraph则被认为Pregel的开源实现，后来卡耐基梅隆大学发明了另一种分布式图处理模型：GraphLab)</p>
+<p>&#160; &#160; &#160; &#160;由于开源Hadoop的出现，驾驭Google这三架马车也变得越来越简单，当前Hadoop也已经成功的投入的商业，并且有Facebook，阿里，腾讯这些巨头的支持。</p>
+</li>
+</ul>
+<h2 id="搜索引擎缓存机制">搜索引擎缓存机制</h2><blockquote>
+<p>现在大家应该都意识到搜索引擎已经成为了进入各大网站的主要入口，点击“百度一下”，经常上面复杂的计算搜索结果将会很快呈现的浏览器上，这么快的速度还主要是靠缓存的功劳。</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;搜索引擎的缓存设计主要以缓存搜索结果和缓存搜索单词的倒排序索引为主，前者响应速度快，但是命中率不高，后者取得缓存之后还得重计算得分，响应速度相对慢，但是命中率比较高。所以现在常用的缓存将两者结合起来，先使用结果缓存，再使用单词的到排列列表缓存，并且该缓存还分为倒排列单词的组合计算得分缓存和独立倒排列两级缓存，集合用户响应速度和命中率高两个优点。</p>
+<h2 id="写在后面：">写在后面：</h2><p>&#160; &#160; &#160; &#160;上述总结主要是针对搜索引擎的大致流程，仅为个人大致读完该书之后的看法，现在技术的发展比我们看的东西要快的多，所以文中有不当之处请各位指点，共同学习，共同进步。<br>&#160; &#160; &#160; &#160;<em>文中的插图主要来源于该书本。</em></p>
+<blockquote>
+<p>注：此文来自我的<a href="http://www.cnblogs.com/yyl8781697/p/search-engine.html" target="_blank" rel="external">博客园</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2014/01/17/Search Engine/search-engine/" data-title="读《这就是搜索引擎：核心技术详解》有感总结 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/03/26/LeetCode/LeetCode-3Sum/" title="LeetCode-3Sum">
+  <strong>上一篇：</strong><br/>
+  <span>
+  LeetCode-3Sum</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2013/05/09/Asp.Net/ajaxframework/"  title="基于.Net 写我自己的Ajax后台框架AjaxFramework">
+ <strong>下一篇：</strong><br/> 
+ <span>基于.Net 写我自己的Ajax后台框架AjaxFramework
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2014/01/17/Search Engine/search-engine/" data-title="读《这就是搜索引擎：核心技术详解》有感总结" data-url="http://yyl8781697.github.io/2014/01/17/Search Engine/search-engine/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络爬虫"><span class="toc-number">1.</span> <span class="toc-text">网络爬虫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索引擎索引"><span class="toc-number">2.</span> <span class="toc-text">搜索引擎索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#检索模型"><span class="toc-number">3.</span> <span class="toc-text">检索模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#链接分析算法"><span class="toc-number">4.</span> <span class="toc-text">链接分析算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#存储与计算"><span class="toc-number">5.</span> <span class="toc-text">存储与计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搜索引擎缓存机制"><span class="toc-number">6.</span> <span class="toc-text">搜索引擎缓存机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在后面："><span class="toc-number">7.</span> <span class="toc-text">写在后面：</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ajax/" title="Ajax">Ajax<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

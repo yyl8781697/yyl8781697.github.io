@@ -1,0 +1,624 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java 源码学习之java.util.LinkedHashMap | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="LinkedHashMap是基于HashMap实现的，但是与之不同的是LinkedHashMap在遍历取值时可以保序，这是通过双向链表来实现的。
+
+我们知道HashMap在增删改查方面非常高效，但是遗憾的时候在迭代遍历HashMap时是不保序的，常常我们有时候即需要这种高效的操作，同时还希望在遍历数据集时要保序的需求，所以这个时候LinkedHashMap就出来了，接下来文本讲解LinkedHas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 源码学习之java.util.LinkedHashMap">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/04/15/Java Source/Java-LinkedHashMap/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="LinkedHashMap是基于HashMap实现的，但是与之不同的是LinkedHashMap在遍历取值时可以保序，这是通过双向链表来实现的。
+
+我们知道HashMap在增删改查方面非常高效，但是遗憾的时候在迭代遍历HashMap时是不保序的，常常我们有时候即需要这种高效的操作，同时还希望在遍历数据集时要保序的需求，所以这个时候LinkedHashMap就出来了，接下来文本讲解LinkedHas">
+<meta property="og:image" content="/img/Java-LinkedHashMap/init_head.png">
+<meta property="og:image" content="/img/Java-LinkedHashMap/double_link.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java 源码学习之java.util.LinkedHashMap">
+<meta name="twitter:description" content="LinkedHashMap是基于HashMap实现的，但是与之不同的是LinkedHashMap在遍历取值时可以保序，这是通过双向链表来实现的。
+
+我们知道HashMap在增删改查方面非常高效，但是遗憾的时候在迭代遍历HashMap时是不保序的，常常我们有时候即需要这种高效的操作，同时还希望在遍历数据集时要保序的需求，所以这个时候LinkedHashMap就出来了，接下来文本讲解LinkedHas">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/15/Java Source/Java-LinkedHashMap/" title="Java 源码学习之java.util.LinkedHashMap" itemprop="url">Java 源码学习之java.util.LinkedHashMap</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-15T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-04-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashMap的定义"><span class="toc-number">1.</span> <span class="toc-text">LinkedHashMap的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#私有变量"><span class="toc-number">2.</span> <span class="toc-text">私有变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造函数"><span class="toc-number">3.</span> <span class="toc-text">构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#containsValue"><span class="toc-number">4.</span> <span class="toc-text">containsValue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashMap-Entry"><span class="toc-number">5.</span> <span class="toc-text">LinkedHashMap.Entry</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashIterator"><span class="toc-number">6.</span> <span class="toc-text">LinkedHashIterator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现LRUCache"><span class="toc-number">7.</span> <span class="toc-text">实现LRUCache</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p><code>LinkedHashMap</code>是基于<code>HashMap</code>实现的，但是与之不同的是<code>LinkedHashMap</code>在遍历取值时可以保序，这是通过双向链表来实现的。</p>
+</blockquote>
+<p>我们知道<code>HashMap</code>在增删改查方面非常高效，但是遗憾的时候在迭代遍历<code>HashMap</code>时是不保序的，常常我们有时候即需要这种高效的操作，同时还希望在遍历数据集时要保序的需求，所以这个时候<code>LinkedHashMap</code>就出来了，接下来文本讲解<code>LinkedHashMap</code>是如何基于<code>HashMap</code>来完成遍历保序的功能。</p>
+<h2 id="LinkedHashMap的定义">LinkedHashMap的定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedHashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span><br><span class="line">    <span class="keyword">extends</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span><br><span class="line">    <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>从<code>LinkedHashMap</code>的定义中可以很清晰的看到它就是基于<code>HashMap</code>来进行实现的，但是这里不理解的是为何它还要继承<code>Map</code>接口？因为<code>HashMap</code>已经继承了<code>Map</code>接口了，<code>LinkedHashMap</code>这样干是不是没必要，后来我也查了资料，也没有明确得答案，也有人说<code>LinkedHashMap</code>这样继承没有为什么，你懂就好了。-_-</p>
+<h2 id="私有变量">私有变量</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * The head of the doubly linked list.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> Entry&lt;K,V&gt; header;<span class="comment">//双向链表的头部</span></span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * The iteration ordering method for this linked hash map: &lt;tt&gt;true&lt;/tt&gt;</span><br><span class="line"> * for access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order.</span><br><span class="line"> * 定义LinkedHashMap遍历时的顺序,</span><br><span class="line"> *<span class="javadoctag"> @serial</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> accessOrder;</span><br></pre></td></tr></table></figure>
+<p>上面源码中是<code>LinkedHashMpa</code>的两个比较重要的私有变量：</p>
+<ul>
+<li>header：该变量是双向链表的头部，<code>LinkedHashMap</code>是通过维护这个双向链表来实现保序的，该变量是一个<code>Entry</code>类型，在下文是详细讲解。</li>
+<li>accessOrder：当accessOrder为true时遍历使用访问顺序（基于此可以实现LRU缓存），当accessOrder为false时使用插入顺序（默认）。</li>
+</ul>
+<h2 id="构造函数">构造函数</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Constructs an empty insertion-ordered &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance</span><br><span class="line"> * with the specified initial capacity and load factor.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span>  initialCapacity the initial capacity</span><br><span class="line"> *<span class="javadoctag"> @param</span>  loadFactor      the load factor</span><br><span class="line"> *<span class="javadoctag"> @throws</span> IllegalArgumentException if the initial capacity is negative</span><br><span class="line"> *         or the load factor is nonpositive</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedHashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(initialCapacity, loadFactor);</span><br><span class="line">    accessOrder = <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Constructs an empty insertion-ordered &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance</span><br><span class="line"> * with the specified initial capacity and a default load factor (0.75).</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span>  initialCapacity the initial capacity</span><br><span class="line"> *<span class="javadoctag"> @throws</span> IllegalArgumentException if the initial capacity is negative</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedHashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(initialCapacity);</span><br><span class="line">    accessOrder = <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Constructs an empty insertion-ordered &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance</span><br><span class="line"> * with the default initial capacity (16) and load factor (0.75).</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedHashMap</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    accessOrder = <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Constructs an insertion-ordered &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance with</span><br><span class="line"> * the same mappings as the specified map.  The &lt;tt&gt;LinkedHashMap&lt;/tt&gt;</span><br><span class="line"> * instance is created with a default load factor (0.75) and an initial</span><br><span class="line"> * capacity sufficient to hold the mappings in the specified map.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span>  m the map whose mappings are to be placed in this map</span><br><span class="line"> *<span class="javadoctag"> @throws</span> NullPointerException if the specified map is null</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedHashMap</span><span class="params">(Map&lt;? extends K, ? extends V&gt; m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(m);</span><br><span class="line">    accessOrder = <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Constructs an empty &lt;tt&gt;LinkedHashMap&lt;/tt&gt; instance with the</span><br><span class="line"> * specified initial capacity, load factor and ordering mode.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span>  initialCapacity the initial capacity</span><br><span class="line"> *<span class="javadoctag"> @param</span>  loadFactor      the load factor</span><br><span class="line"> *<span class="javadoctag"> @param</span>  accessOrder     the ordering mode - &lt;tt&gt;true&lt;/tt&gt; for</span><br><span class="line"> *         access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order</span><br><span class="line"> *<span class="javadoctag"> @throws</span> IllegalArgumentException if the initial capacity is negative</span><br><span class="line"> *         or the load factor is nonpositive</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedHashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity,</span><br><span class="line">                     <span class="keyword">float</span> loadFactor,</span><br><span class="line">                     <span class="keyword">boolean</span> accessOrder)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(initialCapacity, loadFactor);</span><br><span class="line">    <span class="keyword">this</span>.accessOrder = accessOrder;<span class="comment">//只有这里才能显示的将accessOrder置为true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从<code>LinkedHashMap</code>的构造函数中可以了解到：</p>
+<ul>
+<li>一般都是直接调用了父类<code>HashMap</code>的构造函数</li>
+<li>绝大部门构造函数中将accessOrder默认为false，只有在最后一个构造函数中可以显示得将accessOrder置为你所需要的属性。</li>
+</ul>
+<p>注意，在初始化父类<code>HashMap</code>的构造函数的时会调用一个<code>init()</code>的方法，在<code>LinkedHashMap</code>重写了该方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Called by superclass constructors and pseudoconstructors (clone,</span><br><span class="line"> * readObject) before any entries are inserted into the map.  Initializes</span><br><span class="line"> * the chain.</span><br><span class="line"> */</span></span><br><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    header = <span class="keyword">new</span> Entry&lt;&gt;(-<span class="number">1</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    header.before = header.after = header;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以发现该方法额外初始化了双向链表的表头：<br><br><img src="/img/Java-LinkedHashMap/init_head.png" alt=""></p>
+<h2 id="containsValue">containsValue</h2><p>为什么要讲这个不起眼的方法呢？因为在<code>LinkedHashMap</code>中利用自己双向链表来优化这个是否包含值的方法。<br><br><code>HashMap</code>:<br><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Returns &lt;tt&gt;true&lt;/tt&gt; if this map maps one or more keys to the</span><br><span class="line"> * specified value.</span><br><span class="line"> *</span><br><span class="line"> * @param value value whose presence in this map is to be tested</span><br><span class="line"> * @return &lt;tt&gt;true&lt;/tt&gt; if this map maps one or more keys to the</span><br><span class="line"> *         specified value</span><br><span class="line"> */</span><br><span class="line">public boolean containsValue(Object value) &#123;</span><br><span class="line">    if (value == null)</span><br><span class="line">        return containsNullValue();</span><br><span class="line"></span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    for (int i = 0; i &lt; tab.length ; i++)</span><br><span class="line">        for (Entry e = tab[i] ; e != null ; e = e.next)</span><br><span class="line">            if (value.equals(e.value))</span><br><span class="line">                return true;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;code&gt;LinkedHashMap&lt;/code&gt;:&lt;br /&gt;</span><br><span class="line"></span><br><span class="line">	/**</span><br><span class="line"> * Returns &lt;tt&gt;true&lt;/tt&gt; if this map maps one or more keys to the</span><br><span class="line"> * specified value.</span><br><span class="line"> *</span><br><span class="line"> * @param value value whose presence in this map is to be tested</span><br><span class="line"> * @return &lt;tt&gt;true&lt;/tt&gt; if this map maps one or more keys to the</span><br><span class="line"> *         specified value</span><br><span class="line"> */</span><br><span class="line">public boolean containsValue(Object value) &#123;</span><br><span class="line">    // Overridden to take advantage of faster iterator</span><br><span class="line">	//重写了HashMap中的方法，直接使用遍历双向链表来做</span><br><span class="line">    if (value==null) &#123;</span><br><span class="line">        for (Entry e = header.after; e != header; e = e.after)</span><br><span class="line">            if (e.value==null)</span><br><span class="line">                return true;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        for (Entry e = header.after; e != header; e = e.after)</span><br><span class="line">            if (value.equals(e.value))</span><br><span class="line">                return true;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从两者的源码中更可以看出，虽然两者最坏都是需要进行<code>table.size</code>次的<code>equals</code>比较，但是在<code>HashMap</code>中会遍历整个<code>table</code>，我们知道有<code>loadFactor</code>的存在，所以<code>table</code>中还是比较稀疏的，那这样的话<code>HashMap</code>会进行很多无谓的遍历，而在<code>LinkedHashMap</code>中里面是都是紧凑的，使用这种方法来遍历要比<code>HashMap</code>的性能提升了不少。</p>
+<h2 id="LinkedHashMap-Entry">LinkedHashMap.Entry</h2><p>该<code>Entry</code>从<code>HashMap</code>继承而来，也正是因为有它才可以完整的实现双向链表。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * LinkedHashMap entry.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">HashMap</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// These fields comprise the doubly linked list used for iteration.</span></span><br><span class="line">    Entry&lt;K,V&gt; before, after;</span><br><span class="line"></span><br><span class="line">    Entry(<span class="keyword">int</span> hash, K key, V value, HashMap.Entry&lt;K,V&gt; next) &#123;</span><br><span class="line">        <span class="keyword">super</span>(hash, key, value, next);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * Removes this entry from the linked list.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;<span class="comment">//it will be invoked while user use the remove(Obj) method</span></span><br><span class="line">        before.after = after;</span><br><span class="line">        after.before = before;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * Inserts this entry before the specified existing entry in the list.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addBefore</span><span class="params">(Entry&lt;K,V&gt; existingEntry)</span> </span>&#123;<span class="comment">//if the existngEntry is head</span></span><br><span class="line">        after  = existingEntry;</span><br><span class="line">        before = existingEntry.before;</span><br><span class="line">        before.after = <span class="keyword">this</span>;</span><br><span class="line">        after.before = <span class="keyword">this</span>;<span class="comment">//insert the this node to the first head</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * This method is invoked by the superclass whenever the value</span><br><span class="line">     * of a pre-existing entry is read by Map.get or modified by Map.set.</span><br><span class="line">     * If the enclosing Map is access-ordered, it moves the entry</span><br><span class="line">     * to the end of the list; otherwise, it does nothing.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">recordAccess</span><span class="params">(HashMap&lt;K,V&gt; m)</span> </span>&#123;</span><br><span class="line">        LinkedHashMap&lt;K,V&gt; lm = (LinkedHashMap&lt;K,V&gt;)m;</span><br><span class="line">        <span class="keyword">if</span> (lm.accessOrder) &#123;</span><br><span class="line">            lm.modCount++;</span><br><span class="line">            remove();</span><br><span class="line">            addBefore(lm.header);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">recordRemoval</span><span class="params">(HashMap&lt;K,V&gt; m)</span> </span>&#123;</span><br><span class="line">        remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>从<code>Entry</code>中可以看到，它自己定义了两个变量<code>before</code>,<code>after</code>，分别是指向双向链表的两端。<br></li>
+<li><code>addBefore</code>是实现链表的核心，它是在<code>createEntry</code>的重写方法中被调用，传的<em>existingEntry</em>参数总是<code>header</code>其实该链表是一个收尾相连的链表，每次添加的新元素都是连接到<code>header</code>的前面：如下图（其中绿色的线表示下一次插入时会修改该指向）<br>  <img src="/img/Java-LinkedHashMap/double_link.png" alt=""></li>
+<li><code>recordAccess</code>方法就是实现<code>LinkedHashMap</code>有以访问顺序遍历的功能，每次使用<code>put</code>和<code>get</code>都是调用它，当开启<code>accessOrder</code>时，首先会讲当前元素移除，但是会讲它再次插入到<code>header</code>的后面。</li>
+<li>在说一下关于双向链表的删除，我们知道平常都是调用<code>HashMap.remove(obj)</code>来进行键值对的删除的，看过我之前写的<a href="http://kubicode.me/2015/03/27/Java-HashMap/" target="_blank" rel="external">HashMap</a>的小伙伴都知道其实是调用了<code>removeEntryForKey</code>方法才进行真正的查找删除，该删除时又会调用<code>recordRemoval</code>方法，该方法在<code>HashMap.Entry</code>中是一个没有任何实现的方法，在<code>LinkedHashMap.Entry</code>中进行重写，直接调用<code>remove</code>方法进行链表节点的删除。</li>
+</ul>
+<h2 id="LinkedHashIterator">LinkedHashIterator</h2><p>不用多说，经历了上面层层的重写之后，<code>LinkedHashMap</code>最终是靠这个迭代器来实现保序遍历的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedHashIterator</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Iterator</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    Entry&lt;K,V&gt; nextEntry    = header.after;</span><br><span class="line">    Entry&lt;K,V&gt; lastReturned = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * The modCount value that the iterator believes that the backing</span><br><span class="line">     * List should have.  If this expectation is violated, the iterator</span><br><span class="line">     * has detected concurrent modification.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">int</span> expectedModCount = modCount;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nextEntry != header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lastReturned == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException();</span><br><span class="line">        <span class="keyword">if</span> (modCount != expectedModCount)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br><span class="line"></span><br><span class="line">        LinkedHashMap.<span class="keyword">this</span>.remove(lastReturned.key);</span><br><span class="line">        lastReturned = <span class="keyword">null</span>;</span><br><span class="line">        expectedModCount = modCount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Entry&lt;K,V&gt; nextEntry() &#123;</span><br><span class="line">        <span class="keyword">if</span> (modCount != expectedModCount)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ConcurrentModificationException();</span><br><span class="line">        <span class="keyword">if</span> (nextEntry == header)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException();</span><br><span class="line"></span><br><span class="line">        Entry&lt;K,V&gt; e = lastReturned = nextEntry;</span><br><span class="line">        nextEntry = e.after;</span><br><span class="line">        <span class="keyword">return</span> e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>有了上面维护的双向链表之后，保序的迭代器也变得异常简单了，从上面的源码中可以很清晰的看到该迭代器每次都是使用<code>e.after</code>作为<code>next</code>的值，而这个双向链表是有序的（默认是插入序，也可以设置成访问序），所以在遍历<code>LinkedHashMap</code>时可以保序取值。</p>
+<h2 id="实现LRUCache">实现LRUCache</h2><p><a href="http://baike.baidu.com/link?url=tS6nKqjNDes0mdnSwehA1oGo4XcKRcrI3wzunHLRa0VUTf9ByHj4E6AF4hKOtrxnBhm9qaPCvcjX59mSChOxIq" target="_blank" rel="external">LRUCache</a>是一种常用的缓存策略，该策略的原理就是当缓存容量满时删除掉最少使用的缓存，这个算法可以使用<code>LinkedHashMap</code>来很方便的实现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 实现基于LinkedHashMap的LRUCache</span><br><span class="line"> *<span class="javadoctag"> @author</span> yyl</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span> &lt;K&gt;</span><br><span class="line"> *<span class="javadoctag"> @param</span> &lt;V&gt;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">LinkedHashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> maxCacheNum=<span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> length)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(<span class="number">10</span>,<span class="number">0.75f</span>,<span class="keyword">true</span>);<span class="comment">//这里第三个参数一定要为true，这样就表示该LinkedHashMap是使用了访问速度来链表</span></span><br><span class="line">		<span class="keyword">this</span>.maxCacheNum=length;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 重写删除最少用元素的方法</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="annotation">@Override</span> </span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry&lt;K,V&gt; eldest)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.size()&gt;maxCacheNum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里只需要重写<code>removeEldestEntry</code>这个方法即可，该方法在添加元素的时候会被调用，如果当前链表中的元素个数大于设定的最大个数，则删除最少使用的元素。注意 这个缓存在构造<code>LinkedHashMap</code>的时候一定要将<code>accessOrder</code>设置为<code>true</code>，这样<code>LinkedHashMap</code>的双向链表就会维护一个访问顺序的链表。</p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://tomyz0223.iteye.com/blog/1035686" target="_blank" rel="external">http://tomyz0223.iteye.com/blog/1035686</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/04/15/Java Source/Java-LinkedHashMap/" data-title="Java 源码学习之java.util.LinkedHashMap | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/" title="org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem">
+  <strong>上一篇：</strong><br/>
+  <span>
+  org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/04/14/Java Source/Java-HashSet/"  title="Java 源码学习之java.util.HashSet">
+ <strong>下一篇：</strong><br/> 
+ <span>Java 源码学习之java.util.HashSet
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/04/15/Java Source/Java-LinkedHashMap/" data-title="Java 源码学习之java.util.LinkedHashMap" data-url="http://yyl8781697.github.io/2015/04/15/Java Source/Java-LinkedHashMap/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashMap的定义"><span class="toc-number">1.</span> <span class="toc-text">LinkedHashMap的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#私有变量"><span class="toc-number">2.</span> <span class="toc-text">私有变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构造函数"><span class="toc-number">3.</span> <span class="toc-text">构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#containsValue"><span class="toc-number">4.</span> <span class="toc-text">containsValue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashMap-Entry"><span class="toc-number">5.</span> <span class="toc-text">LinkedHashMap.Entry</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LinkedHashIterator"><span class="toc-number">6.</span> <span class="toc-text">LinkedHashIterator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现LRUCache"><span class="toc-number">7.</span> <span class="toc-text">实现LRUCache</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ajax/" title="Ajax">Ajax<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
