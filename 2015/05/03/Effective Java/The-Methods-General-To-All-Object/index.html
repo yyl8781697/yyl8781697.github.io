@@ -189,7 +189,7 @@ equals方法">
 <li>如果是线程安全的类要实现<code>clone()</code>，那些这个<code>clone()</code>也必须进行同步。</li>
 <li>关于自身域的修正如果是遇到<code>final</code>类型的，那么这两者是不兼容的。</li>
 <li>另一个实现对象拷贝的方式就是提供一个拷贝构造器，该构造器比<code>clone()</code>方法的一个优势就是它可以传参数。</li>
-<li>当当前类没有继承<code>Cloneable</code>接口时，如果掉<code>clone()</code>方法里面调用了<code>super.clone()</code>方法就是抛出<code>CloneNotSupportedException</code>异常。</li>
+<li>当前类没有继承<code>Cloneable</code>接口时，如果掉<code>clone()</code>方法里面调用了<code>super.clone()</code>方法就会抛出<code>CloneNotSupportedException</code>异常。</li>
 </ul>
 <h2 id="第12条：考虑实现Comparable接口">第12条：考虑实现Comparable接口</h2><blockquote>
 <p><code>compareTo</code>方法是<code>Compareable</code>接口中唯一的方法，它不但可以进行简单的等同性比较外，而且允许执行顺序比较。</p>
