@@ -4,31 +4,46 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Linked List Cycle II | Kubi Code&#39;Blog</title>
+    <title>《Effective Java》第四章：类和接口 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="LeetCode地址：https://leetcode.com/problems/linked-list-cycle-ii/
+    <meta name="description" content="类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。
+第13条：使类和成员的可访问性最小化
+尽可能使每个类或者成员不被外界访问。
 
-Problem:Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
-Follow up:Can you solve it witho">
+Java的4种访问级别：
+
+私有的private：只有在申明该成员的类的内部才可以访问。
+包级私有的package-private：包内的任何类都可以访问这个成员，（这个是默认的访问级别）
+受保护的protected：子类可以访问超类的prote">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Linked List Cycle II">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/index.html">
+<meta property="og:title" content="《Effective Java》第四章：类和接口">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/05/08/Effective Java/Class-And-Interface/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="LeetCode地址：https://leetcode.com/problems/linked-list-cycle-ii/
+<meta property="og:description" content="类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。
+第13条：使类和成员的可访问性最小化
+尽可能使每个类或者成员不被外界访问。
 
-Problem:Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
-Follow up:Can you solve it witho">
+Java的4种访问级别：
+
+私有的private：只有在申明该成员的类的内部才可以访问。
+包级私有的package-private：包内的任何类都可以访问这个成员，（这个是默认的访问级别）
+受保护的protected：子类可以访问超类的prote">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Linked List Cycle II">
-<meta name="twitter:description" content="LeetCode地址：https://leetcode.com/problems/linked-list-cycle-ii/
+<meta name="twitter:title" content="《Effective Java》第四章：类和接口">
+<meta name="twitter:description" content="类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。
+第13条：使类和成员的可访问性最小化
+尽可能使每个类或者成员不被外界访问。
 
-Problem:Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
-Follow up:Can you solve it witho">
+Java的4种访问级别：
+
+私有的private：只有在申明该成员的类的内部才可以访问。
+包级私有的package-private：包内的任何类都可以访问这个成员，（这个是默认的访问级别）
+受保护的protected：子类可以访问超类的prote">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +104,14 @@ Follow up:Can you solve it witho">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" title="LeetCode-Linked List Cycle II" itemprop="url">LeetCode-Linked List Cycle II</a>
+      <a href="/2015/05/08/Effective Java/Class-And-Interface/" title="《Effective Java》第四章：类和接口" itemprop="url">《Effective Java》第四章：类和接口</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-10T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-10</time>
+    <time datetime="2015-05-08T14:39:56.000Z" itemprop="datePublished"> 发表于 2015-05-08</time>
     
   </p>
 </header>
@@ -105,20 +120,52 @@ Follow up:Can you solve it witho">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第13条：使类和成员的可访问性最小化"><span class="toc-number">1.</span> <span class="toc-text">第13条：使类和成员的可访问性最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第14条：在类中使用访问方法而非公有域"><span class="toc-number">2.</span> <span class="toc-text">第14条：在类中使用访问方法而非公有域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第15条：使可变最小化"><span class="toc-number">3.</span> <span class="toc-text">第15条：使可变最小化</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/linked-list-cycle-ii/" target="_blank" rel="external">https://leetcode.com/problems/linked-list-cycle-ii/</a></p>
+		<p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
+<h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
+<p>尽可能使每个类或者成员不被外界访问。</p>
 </blockquote>
-<p>Problem:<br>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.</p>
-<p>Follow up:<br>Can you solve it without using extra space?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">detectCycle</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        ListNode cycleStart=<span class="keyword">null</span>,</span><br><span class="line">                singleStepNode=<span class="keyword">null</span>,</span><br><span class="line">                doubleStepNode=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> isCycle=<span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> cycleStart;</span><br><span class="line">        </span><br><span class="line">        singleStepNode =head;</span><br><span class="line">        doubleStepNode=head;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(singleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode.next!=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=singleStepNode.next;</span><br><span class="line"></span><br><span class="line">            doubleStepNode=doubleStepNode.next.next;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(singleStepNode==doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                isCycle=<span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(isCycle)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=head;</span><br><span class="line">            <span class="keyword">while</span>(singleStepNode != doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                singleStepNode=singleStepNode.next;</span><br><span class="line">                doubleStepNode=doubleStepNode.next;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            cycleStart=singleStepNode;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> cycleStart;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
+<p><code>Java</code>的4种访问级别：</p>
+<ul>
+<li>私有的<code>private</code>：只有在申明该成员的类的内部才可以访问。</li>
+<li>包级私有的<code>package-private</code>：包内的任何类都可以访问这个成员，（<strong>这个是默认的访问级别</strong>）</li>
+<li>受保护的<code>protected</code>：子类可以访问超类的<code>protected</code>成员，<strong>但是还有这个<code>protected</code>成员类的包内的任何类也可以访问</strong>。</li>
+<li>公有的<code>public</code>：任何地方都可以访问这个成员。</li>
+</ul>
 <blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+<p>如何方法覆盖了超类中的中的一个方法，子类中的访问级别就不允许低于超类的访问级别。</p>
 </blockquote>
+<p>这样可以确保使用超类的实例的地方也可以使用子类的实例。</p>
+<blockquote>
+<p>实例域是不能公有的。</p>
+</blockquote>
+<p>其实就是建议类里面只暴露<code>final</code>修饰的变量成员，其他变量一律不要暴露。</p>
+<blockquote>
+<p>长度非零的数组总是可变的。</p>
+</blockquote>
+<p>就算你使用<code>static final</code>关键字将一个数组成员暴露出来，但是这个数组成员的内容还是可以被外部给修改的。你可以使用</p>
+<ul>
+<li>创建不可变量列表</li>
+<li>克隆这个对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 这里暴露的变量别看是 static final修饰的，但是数组里面的内容还是可以修改的。</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] DATA=&#123;<span class="string">"tom"</span>,<span class="string">"peter"</span>,<span class="string">"lily"</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 创建不可变量列表</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> List&lt;String&gt; VDATA=Collections.unmodifiableList(Arrays.asList(DATA));</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 直接使用克隆</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] CDATA()&#123;</span><br><span class="line">	<span class="keyword">return</span> DATA.clone();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 我更加推荐这种  这里需要将DATA的访问级别设置为private</span><br><span class="line"> *<span class="javadoctag"> @param</span> i</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">get</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> DATA[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>总而言之，你应该始终尽可能的降低可访问性，除了公有<span class="keyword">static</span> <span class="keyword">final</span>域的特殊情形之外，公有的类都不应该包含公有域，并且要确保公有<span class="keyword">static</span> <span class="keyword">final</span>所引用的对象时不可变的。
+</code></pre><h2 id="第14条：在类中使用访问方法而非公有域">第14条：在类中使用访问方法而非公有域</h2><p>这条其实就是对应上面第13条中的公有域解说那部分，除了不要暴露可变的对象外，还有：</p>
+<ul>
+<li>如果有成员需要公开，最好使用<code>getter</code>和<code>setter</code>方法。</li>
+<li>暴露不可变对象的有有域时可以在设置值时加入一些约束条件。</li>
+</ul>
+<h2 id="第15条：使可变最小化">第15条：使可变最小化</h2><ul>
+<li>不要提供任何会修改对象状态的方法</li>
+<li>保证类不可被扩展</li>
+<li>所使用的域都是<code>final</code>的</li>
+<li>所使用的域都是私有的</li>
+<li>确保对于任何可变组件的互斥访问(如果类具有指向可变对象的域，则必须保证)。</li>
+<li></li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -126,13 +173,13 @@ Follow up:Can you solve it witho">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -141,7 +188,7 @@ Follow up:Can you solve it witho">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" data-title="LeetCode-Linked List Cycle II | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/05/08/Effective Java/Class-And-Interface/" data-title="《Effective Java》第四章：类和接口 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -155,18 +202,18 @@ Follow up:Can you solve it witho">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/07/10/LeetCode/LeetCode-Single-Number/" title="LeetCode-Single Number">
+ <a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/" title="记录在Hadoop2.2.0中剔除一个DataNode">
   <strong>上一篇：</strong><br/>
   <span>
-  LeetCode-Single Number</span>
+  记录在Hadoop2.2.0中剔除一个DataNode</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/"  title="LeetCode-Clone Graph">
+<a href="/2015/05/03/Java Base/You-Donnot-Kown-About-The-Clone/"  title="You-Donnot-Kown-About-The-Clone">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-Clone Graph
+ <span>You-Donnot-Kown-About-The-Clone
 </span>
 </a>
 </div>
@@ -175,7 +222,7 @@ Follow up:Can you solve it witho">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" data-title="LeetCode-Linked List Cycle II" data-url="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/"></div>
+	<div class="ds-thread" data-thread-key="2015/05/08/Effective Java/Class-And-Interface/" data-title="《Effective Java》第四章：类和接口" data-url="http://yyl8781697.github.io/2015/05/08/Effective Java/Class-And-Interface/"></div>
 </section>
 
 
@@ -185,7 +232,7 @@ Follow up:Can you solve it witho">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第13条：使类和成员的可访问性最小化"><span class="toc-number">1.</span> <span class="toc-text">第13条：使类和成员的可访问性最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第14条：在类中使用访问方法而非公有域"><span class="toc-number">2.</span> <span class="toc-text">第14条：在类中使用访问方法而非公有域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第15条：使可变最小化"><span class="toc-number">3.</span> <span class="toc-text">第15条：使可变最小化</span></a></li></ol>
  
   </div>
 

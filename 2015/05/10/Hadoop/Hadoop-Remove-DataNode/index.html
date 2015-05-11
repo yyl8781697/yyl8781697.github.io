@@ -4,31 +4,39 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Linked List Cycle II | Kubi Code&#39;Blog</title>
+    <title>记录在Hadoop2.2.0中剔除一个DataNode | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="LeetCode地址：https://leetcode.com/problems/linked-list-cycle-ii/
+    <meta name="description" content="最近在Haddop环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现Job Failed的问题，看日志就是其中一台机器Connect Timeout了，在WebUI上点击这台机器IP的各种UI界面也是开不了，HDFS还连不上-_-|，之前也遇到过这种问题，解决方法简单粗暴：
 
-Problem:Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
-Follow up:Can you solve it witho">
+重启Haddop集群：一般重启一下还正好了
+
+
+停Haddop集群，然后重启每台物理机，然后再开启Hadoop集群">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Linked List Cycle II">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/index.html">
+<meta property="og:title" content="记录在Hadoop2.2.0中剔除一个DataNode">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/05/10/Hadoop/Hadoop-Remove-DataNode/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="LeetCode地址：https://leetcode.com/problems/linked-list-cycle-ii/
+<meta property="og:description" content="最近在Haddop环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现Job Failed的问题，看日志就是其中一台机器Connect Timeout了，在WebUI上点击这台机器IP的各种UI界面也是开不了，HDFS还连不上-_-|，之前也遇到过这种问题，解决方法简单粗暴：
 
-Problem:Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
-Follow up:Can you solve it witho">
+重启Haddop集群：一般重启一下还正好了
+
+
+停Haddop集群，然后重启每台物理机，然后再开启Hadoop集群">
+<meta property="og:image" content="/img/hadoop-remove-datanode/process.jpg">
+<meta property="og:image" content="/img/hadoop-remove-datanode/dead.jpg">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Linked List Cycle II">
-<meta name="twitter:description" content="LeetCode地址：https://leetcode.com/problems/linked-list-cycle-ii/
+<meta name="twitter:title" content="记录在Hadoop2.2.0中剔除一个DataNode">
+<meta name="twitter:description" content="最近在Haddop环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现Job Failed的问题，看日志就是其中一台机器Connect Timeout了，在WebUI上点击这台机器IP的各种UI界面也是开不了，HDFS还连不上-_-|，之前也遇到过这种问题，解决方法简单粗暴：
 
-Problem:Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
-Follow up:Can you solve it witho">
+重启Haddop集群：一般重启一下还正好了
+
+
+停Haddop集群，然后重启每台物理机，然后再开启Hadoop集群">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +97,14 @@ Follow up:Can you solve it witho">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" title="LeetCode-Linked List Cycle II" itemprop="url">LeetCode-Linked List Cycle II</a>
+      <a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/" title="记录在Hadoop2.2.0中剔除一个DataNode" itemprop="url">记录在Hadoop2.2.0中剔除一个DataNode</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-10T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-10</time>
+    <time datetime="2015-05-10T14:33:45.000Z" itemprop="datePublished"> 发表于 2015-05-10</time>
     
   </p>
 </header>
@@ -109,15 +117,28 @@ Follow up:Can you solve it witho">
 		
 		</div>
 		
-		<blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/linked-list-cycle-ii/" target="_blank" rel="external">https://leetcode.com/problems/linked-list-cycle-ii/</a></p>
-</blockquote>
-<p>Problem:<br>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.</p>
-<p>Follow up:<br>Can you solve it without using extra space?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">detectCycle</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        ListNode cycleStart=<span class="keyword">null</span>,</span><br><span class="line">                singleStepNode=<span class="keyword">null</span>,</span><br><span class="line">                doubleStepNode=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> isCycle=<span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> cycleStart;</span><br><span class="line">        </span><br><span class="line">        singleStepNode =head;</span><br><span class="line">        doubleStepNode=head;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(singleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode.next!=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=singleStepNode.next;</span><br><span class="line"></span><br><span class="line">            doubleStepNode=doubleStepNode.next.next;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(singleStepNode==doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                isCycle=<span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(isCycle)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=head;</span><br><span class="line">            <span class="keyword">while</span>(singleStepNode != doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                singleStepNode=singleStepNode.next;</span><br><span class="line">                doubleStepNode=doubleStepNode.next;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            cycleStart=singleStepNode;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> cycleStart;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
+		<p>最近在<code>Haddop</code>环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现<strong>Job Failed</strong>的问题，看日志就是其中一台机器<strong>Connect Timeout</strong>了，在WebUI上点击这台机器IP的各种UI界面也是开不了，<code>HDFS</code>还连不上-_-|，之前也遇到过这种问题，解决方法简单粗暴：</p>
+<ol>
+<li>重启<code>Haddop</code>集群：一般重启一下还正好了</li>
+</ol>
+<ul>
+<li>停<code>Haddop</code>集群，然后重启每台物理机，然后再开启<code>Hadoop</code>集群：这么做一般问题就可以解决-_-|</li>
+<li>还有一种就是直接去<code>Linux</code>上删除<code>dfs</code>文件目录，重新初始化<code>HDFS</code>：这么做效果虽达到了，但是。。。向<code>HDFS</code>传数据还很久一段时间。。</li>
+</ul>
+<p>今天第1、2种方法试了都不行，第三种方法也太麻烦了（集群有15台<code>DataNode</code>+1台<code>NameNode</code>，重新初始化每次都要去每个机器上删除文件夹再新建），由于时间受限，就想尝试去动态的直接把那个老是异常的节点去掉得了，赶紧查了下面一些资料：</p>
+<ul>
+<li><a href="http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527" target="_blank" rel="external">http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527</a></li>
+<li><a href="http://www.itpub.net/thread-1866448-1-1.html" target="_blank" rel="external">http://www.itpub.net/thread-1866448-1-1.html</a></li>
+<li><a href="http://www.programgo.com/article/9436398293/" target="_blank" rel="external">http://www.programgo.com/article/9436398293/</a></li>
+</ul>
+<p>按参考上得现在hdfs-site.xml中添加：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">property</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--要摘除的datanode--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.hosts.exclude<span class="tag">&lt;/<span class="title">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/nbu/hadoop2.2.0/etc/hadoop/exclude<span class="tag">&lt;/<span class="title">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">property</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后自己再相应目录下新建exclude文件并添加我要去掉的节点IP<br><br>再执行执行<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -refreshNodes</span><br></pre></td></tr></table></figure></p>
+<p>然后再需要摘除节点上去执行<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop-daemon.sh stop datanode</span><br></pre></td></tr></table></figure></p>
+<p>接下来就可以在WebUI中看到我要去掉节点的状态为<strong>Decmission in Progress</strong></p>
+<p><img src="/img/hadoop-remove-datanode/process.jpg" alt=""></p>
+<p>他们都说这个状态是正在将摘除节点的数据拷贝到其他可用节点，拷贝完之后不会变为我也就信了，可是我过了好几分钟我的状态一直是这个，当前可用集群的节点数量也是大于拷贝数量的，但是Last Contact的值一直在增加，不知道是不是那台机器上出问题了，然后与<code>NameNode</code>的心跳不正常导致的。十几分钟之后，这个节点没有出现在<code>Live Nodes</code>中了，但是他变为<code>Dead Node</code>里边去了，这回估计是直接超时了。<br><br><img src="/img/hadoop-remove-datanode/dead.jpg" alt=""><br>那怎么办？好像动态移除失败了？没辙，直接去<code>NameNode</code>机器上将<code>slaves</code>文件中将那个摘除的IP去掉，拷贝到各个<code>DataNode</code>上去。然后再重新启动<code>Hadoop</code>，这回重启了之后集群的hdfs上的数据皆正常^_^，那个需要移除的节点也不在集群中了，我又可以欢快得跑程序了。</p>
 <blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+<p>不知道刚刚摘除的过程哪一步错了，不过最终还是达到我需要的摘除目的^_^，下次有时间再好好尝试尝试~</p>
 </blockquote>
   
 	</div>
@@ -126,13 +147,13 @@ Follow up:Can you solve it witho">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
   </div>
 
 </div>
@@ -141,7 +162,7 @@ Follow up:Can you solve it witho">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" data-title="LeetCode-Linked List Cycle II | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/05/10/Hadoop/Hadoop-Remove-DataNode/" data-title="记录在Hadoop2.2.0中剔除一个DataNode | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -154,19 +175,11 @@ Follow up:Can you solve it witho">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/07/10/LeetCode/LeetCode-Single-Number/" title="LeetCode-Single Number">
-  <strong>上一篇：</strong><br/>
-  <span>
-  LeetCode-Single Number</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/"  title="LeetCode-Clone Graph">
+<a href="/2015/05/08/Effective Java/Class-And-Interface/"  title="《Effective Java》第四章：类和接口">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-Clone Graph
+ <span>《Effective Java》第四章：类和接口
 </span>
 </a>
 </div>
@@ -175,7 +188,7 @@ Follow up:Can you solve it witho">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" data-title="LeetCode-Linked List Cycle II" data-url="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/"></div>
+	<div class="ds-thread" data-thread-key="2015/05/10/Hadoop/Hadoop-Remove-DataNode/" data-title="记录在Hadoop2.2.0中剔除一个DataNode" data-url="http://yyl8781697.github.io/2015/05/10/Hadoop/Hadoop-Remove-DataNode/"></div>
 </section>
 
 
