@@ -1,0 +1,798 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Vim命令合集(转载) | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="命令历史以:和/开头的命令都有历史纪录，可以首先键入:或/然后按上下箭头来选择某个历史命令。
+启动vim在命令行窗口中输入以下命令即可
+
+vim 直接启动vim
+vim filename 打开vim并创建名为filename的文件
+
+文件命令
+vim file  打开单个文件
+vim file1 file2 file3 …  同时打开多个文件
+:open file  在vim窗口中打开一个新文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim命令合集(转载)">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/05/14/Vim/Vim-Command-List/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="命令历史以:和/开头的命令都有历史纪录，可以首先键入:或/然后按上下箭头来选择某个历史命令。
+启动vim在命令行窗口中输入以下命令即可
+
+vim 直接启动vim
+vim filename 打开vim并创建名为filename的文件
+
+文件命令
+vim file  打开单个文件
+vim file1 file2 file3 …  同时打开多个文件
+:open file  在vim窗口中打开一个新文件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vim命令合集(转载)">
+<meta name="twitter:description" content="命令历史以:和/开头的命令都有历史纪录，可以首先键入:或/然后按上下箭头来选择某个历史命令。
+启动vim在命令行窗口中输入以下命令即可
+
+vim 直接启动vim
+vim filename 打开vim并创建名为filename的文件
+
+文件命令
+vim file  打开单个文件
+vim file1 file2 file3 …  同时打开多个文件
+:open file  在vim窗口中打开一个新文件">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/14/Vim/Vim-Command-List/" title="Vim命令合集(转载)" itemprop="url">Vim命令合集(转载)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-14T13:32:08.000Z" itemprop="datePublished"> 发表于 2015-05-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#命令历史"><span class="toc-number">1.</span> <span class="toc-text">命令历史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动vim"><span class="toc-number">2.</span> <span class="toc-text">启动vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件命令"><span class="toc-number">3.</span> <span class="toc-text">文件命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vim的模式"><span class="toc-number">4.</span> <span class="toc-text">vim的模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导航命令"><span class="toc-number">5.</span> <span class="toc-text">导航命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入命令"><span class="toc-number">6.</span> <span class="toc-text">插入命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找命令"><span class="toc-number">7.</span> <span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换命令"><span class="toc-number">8.</span> <span class="toc-text">替换命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#移动命令"><span class="toc-number">9.</span> <span class="toc-text">移动命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撤销和重做"><span class="toc-number">10.</span> <span class="toc-text">撤销和重做</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除命令"><span class="toc-number">11.</span> <span class="toc-text">删除命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拷贝和粘贴"><span class="toc-number">12.</span> <span class="toc-text">拷贝和粘贴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#剪切命令"><span class="toc-number">13.</span> <span class="toc-text">剪切命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#退出命令"><span class="toc-number">14.</span> <span class="toc-text">退出命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#窗口命令"><span class="toc-number">15.</span> <span class="toc-text">窗口命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行shell命令"><span class="toc-number">16.</span> <span class="toc-text">执行shell命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释命令"><span class="toc-number">17.</span> <span class="toc-text">注释命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#帮助命令"><span class="toc-number">18.</span> <span class="toc-text">帮助命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他非编辑命令"><span class="toc-number">19.</span> <span class="toc-text">其他非编辑命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载说明"><span class="toc-number">20.</span> <span class="toc-text">转载说明</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="命令历史">命令历史</h2><p>以<code>:</code>和<code>/</code>开头的命令都有历史纪录，可以首先键入<code>:</code>或<code>/</code>然后按上下箭头来选择某个历史命令。</p>
+<h2 id="启动vim">启动vim</h2><p>在命令行窗口中输入以下命令即可</p>
+<ul>
+<li><code>vim</code> 直接启动vim</li>
+<li><code>vim filename</code> 打开vim并创建名为filename的文件</li>
+</ul>
+<h2 id="文件命令">文件命令</h2><ul>
+<li><code>vim file</code>  打开单个文件</li>
+<li><code>vim file1 file2 file3 …</code>  同时打开多个文件</li>
+<li><code>:open file</code>  在vim窗口中打开一个新文件</li>
+<li><code>:split file</code>  在新窗口中打开文件</li>
+<li><code>:bn</code>  切换到下一个文件</li>
+<li><code>:bp</code>  切换到上一个文件</li>
+<li><code>:args</code>  查看当前打开的文件列表，当前正在编辑的文件会用[]括起来。</li>
+<li>打开远程文件，比如ftp或者share folder<br><code>:e ftp://192.168.10.76/abc.txt</code><br><code>:e \qadrive\test\1.txt</code></li>
+</ul>
+<h2 id="vim的模式">vim的模式</h2><ul>
+<li>正常模式（按<code>Esc</code>或<code>Ctrl+[</code>进入） 左下角显示文件名或为空</li>
+<li>插入模式（按<code>i</code>键进入） 左下角显示—INSERT—</li>
+<li>可视模式（不知道如何进入） 左下角显示—VISUAL—</li>
+</ul>
+<h2 id="导航命令">导航命令</h2><ul>
+<li><code>%</code> 括号匹配</li>
+</ul>
+<h2 id="插入命令">插入命令</h2><ul>
+<li><code>i</code> 在当前位置生前插入</li>
+<li><code>I</code> 在当前行首插入</li>
+<li><code>a</code> 在当前位置后插入</li>
+<li><code>A</code> 在当前行尾插入</li>
+<li><code>o</code> 在当前行之后插入一行</li>
+<li><code>O</code> 在当前行之前插入一行</li>
+</ul>
+<h2 id="查找命令">查找命令</h2><ul>
+<li><code>/text</code>　　查找text，按n健查找下一个，按N健查找前一个。</li>
+<li><code>?text</code>　　查找text，反向查找，按n健查找下一个，按N健查找前一个。</li>
+<li>vim中有一些特殊字符在查找时需要转义　　.*[]^%/?~$</li>
+<li><code>:set ignorecase</code>　　忽略大小写的查找</li>
+<li><code>:set noignorecase</code>　　不忽略大小写的查找</li>
+<li>查找很长的词，如果一个词很长，键入麻烦，可以将光标移动到该词上，按*或#键即可以该单词进行搜索，相当于/搜索。而#命令相当于?搜索。</li>
+<li><code>:set hlsearch</code>　　高亮搜索结果，所有结果都高亮显示，而不是只显示一个匹配。</li>
+<li><code>:set nohlsearch</code>　　关闭高亮搜索显示</li>
+<li><code>:nohlsearch</code>　　关闭当前的高亮显示，如果再次搜索或者按下n或N键，则会再次高亮。</li>
+<li><code>:set incsearch</code>　　逐步搜索模式，对当前键入的字符进行搜索而不必等待键入完成。</li>
+<li><code>:set wrapscan</code>　　重新搜索，在搜索到文件头或尾时，返回继续搜索，默认开启。</li>
+</ul>
+<h2 id="替换命令">替换命令</h2><ul>
+<li><code>ra</code> 将当前字符替换为a，当期字符即光标所在字符。</li>
+<li><code>s/old/new/</code> 用old替换new，替换当前行的第一个匹配</li>
+<li><code>s/old/new/g</code> 用old替换new，替换当前行的所有匹配</li>
+<li><code>%s/old/new/</code> 用old替换new，替换所有行的第一个匹配</li>
+<li><code>%s/old/new/g</code> 用old替换new，替换整个文件的所有匹配</li>
+<li><code>:10,20 s/^/</code>    /g 在第10行知第20行每行前面加四个空格，用于缩进。</li>
+<li><code>ddp</code> 交换光标所在行和其下紧邻的一行。</li>
+</ul>
+<h2 id="移动命令">移动命令</h2><ul>
+<li><code>h</code> 左移一个字符</li>
+<li><code>l</code> 右移一个字符，这个命令很少用，一般用<code>w</code>代替。</li>
+<li><code>k</code> 上移一个字符</li>
+<li><code>j</code> 下移一个字符</li>
+</ul>
+<p>以上四个命令可以配合数字使用，比如20j就是向下移动20行，5h就是向左移动5个字符，在Vim中，很多命令都可以配合数字使用，比如删除10个字符10x，在当前位置后插入3个！，3a！<esc>，这里的Esc是必须的，否则命令不生效。</esc></p>
+<ul>
+<li><code>w</code> 向前移动一个单词（光标停在单词首部），如果已到行尾，则转至下一行行首。此命令快，可以代替l命令。</li>
+<li><code>b</code> 向后移动一个单词 2b 向后移动2个单词</li>
+<li><code>e</code>，同w，只不过是光标停在单词尾部</li>
+<li><code>ge</code>，同b，光标停在单词尾部。</li>
+<li><code>^</code> 移动到本行第一个非空白字符上。</li>
+<li><code>0</code>（数字0）移动到本行第一个字符上，</li>
+<li><code>&lt;HOME&gt;</code> 移动到本行第一个字符。同0健。</li>
+<li><code>$</code> 移动到行尾 3$ 移动到下面3行的行尾</li>
+<li><code>gg</code> 移动到文件头。 = <code>[[</code></li>
+<li><code>G</code>（shift + g） 移动到文件尾。 = <code>]]</code></li>
+<li><code>f</code>（find）命令也可以用于移动，fx将找到光标后第一个为x的字符，3fd将找到第三个为d的字符。</li>
+<li><code>F</code> 同f，反向查找。</li>
+<li>跳到指定行，冒号+行号，回车，比如跳到240行就是 :240回车。另一个方法是行号+G，比如230G跳到230行。</li>
+<li><code>Ctrl + e</code> 向下滚动一行</li>
+<li><code>Ctrl + y</code> 向上滚动一行</li>
+<li><code>Ctrl + d</code> 向下滚动半屏</li>
+<li><code>Ctrl + u</code> 向上滚动半屏</li>
+<li><code>Ctrl + f</code> 向下滚动一屏</li>
+<li><code>Ctrl + b</code> 向上滚动一屏</li>
+</ul>
+<h2 id="撤销和重做">撤销和重做</h2><ul>
+<li><code>u</code> 撤销（Undo）</li>
+<li><code>U</code> 撤销对整行的操作</li>
+<li><code>Ctrl + r</code> 重做（Redo），即撤销的撤销。</li>
+</ul>
+<h2 id="删除命令">删除命令</h2><ul>
+<li><code>x</code> 删除当前字符</li>
+<li><code>3x</code> 删除当前光标开始向后三个字符</li>
+<li><code>X</code> 删除当前字符的前一个字符。<code>X</code>=<code>dh</code></li>
+<li><code>dl</code> 删除当前字符， <code>dl</code>=<code>x</code></li>
+<li><code>dh</code> 删除前一个字符</li>
+<li><code>dd</code> 删除当前行</li>
+<li><code>dj</code> 删除上一行</li>
+<li><code>dk</code> 删除下一行</li>
+<li><code>10d</code> 删除当前行开始的10行。</li>
+<li><code>D</code> 删除当前字符至行尾。<code>D</code>=<code>d$</code></li>
+<li><code>d$</code> 删除当前字符之后的所有字符（本行）</li>
+<li><code>kdgg</code> 删除当前行之前所有行（不包括当前行）</li>
+<li><code>jdG</code>（jd shift + g）   删除当前行之后所有行（不包括当前行）</li>
+<li><code>:1,10d</code> 删除1-10行</li>
+<li><code>:11,$d</code> 删除11行及以后所有的行</li>
+<li><code>:1,$d</code> 删除所有行</li>
+<li><code>J</code>(shift + j)　　删除两行之间的空行，实际上是合并两行。</li>
+</ul>
+<h2 id="拷贝和粘贴">拷贝和粘贴</h2><ul>
+<li><code>yy</code> 拷贝当前行</li>
+<li><code>nyy</code> 拷贝当前后开始的n行，比如2yy拷贝当前行及其下一行。</li>
+<li><code>p</code>  在当前光标后粘贴,如果之前使用了yy命令来复制一行，那么就在当前行的下一行粘贴。</li>
+<li><code>shift+p</code> 在当前行前粘贴</li>
+<li><code>:1,10 co 20</code> 将1-10行插入到第20行之后。</li>
+<li><code>:1,$ co $</code> 将整个文件复制一份并添加到文件尾部。</li>
+<li>正常模式下按v（逐字）或V（逐行）进入可视模式，然后用jklh命令移动即可选择某些行或字符，再按y即可复制</li>
+<li><code>ddp</code>交换当前行和其下一行</li>
+<li><code>xp</code>交换当前字符和其后一个字符</li>
+</ul>
+<h2 id="剪切命令">剪切命令</h2><ul>
+<li>正常模式下按<code>v</code>（逐字）或<code>V</code>（逐行）进入可视模式，然后用<code>jklh</code>命令移动即可选择某些行或字符，再按d即可剪切</li>
+<li><code>ndd</code> 剪切当前行之后的n行。利用p命令可以对剪切的内容进行粘贴</li>
+<li><code>:1,10d</code> 将1-10行剪切。利用p命令可将剪切后的内容进行粘贴。</li>
+<li><code>:1, 10 m 20</code> 将第1-10行移动到第20行之后。</li>
+</ul>
+<h2 id="退出命令">退出命令</h2><ul>
+<li><code>:wq</code> 保存并退出</li>
+<li><code>ZZ</code> 保存并退出</li>
+<li><code>:q!</code> 强制退出并忽略所有更改</li>
+<li><code>:e!</code> 放弃所有修改，并打开原来文件。</li>
+</ul>
+<h2 id="窗口命令">窗口命令</h2><ul>
+<li><code>:split</code>或<code>new</code> 打开一个新窗口，光标停在顶层的窗口上</li>
+<li><code>:split file</code>或<code>:new file</code> 用新窗口打开文件</li>
+<li><code>split</code>打开的窗口都是横向的，使用<code>vsplit</code>可以纵向打开窗口。</li>
+<li><code>Ctrl+ww</code> 移动到下一个窗口</li>
+<li><code>Ctrl+wj</code> 移动到下方的窗口</li>
+<li><code>Ctrl+wk</code> 移动到上方的窗口</li>
+</ul>
+<blockquote>
+<p>关闭窗口</p>
+</blockquote>
+<ul>
+<li><code>:close</code> 最后一个窗口不能使用此命令，可以防止意外退出vim。</li>
+<li><code>:q</code> 如果是最后一个被关闭的窗口，那么将退出vim。</li>
+<li><code>ZZ</code> 保存并退出。</li>
+</ul>
+<blockquote>
+<p>关闭所有窗口，只保留当前窗口</p>
+</blockquote>
+<ul>
+<li><code>:only</code></li>
+</ul>
+<blockquote>
+<p>录制宏</p>
+</blockquote>
+<ul>
+<li>按<code>q</code>键加任意字母开始录制，再按<code>q</code>键结束录制（这意味着vim中的宏不可嵌套），使用的时候@加宏名，比如qa。。。q录制名为a的宏，@a使用这个宏。</li>
+</ul>
+<h2 id="执行shell命令">执行shell命令</h2><ul>
+<li><code>:!command</code></li>
+<li><code>:!ls</code> 列出当前目录下文件</li>
+<li><code>:!perl -c script.pl</code> 检查perl脚本语法，可以不用退出vim，非常方便。</li>
+<li><code>:!perl script.pl</code> 执行perl脚本，可以不用退出vim，非常方便。</li>
+<li><code>:suspend</code>或<code>Ctrl - Z</code> 挂起vim，回到shell，按fg可以返回vim。</li>
+</ul>
+<h2 id="注释命令">注释命令</h2><ul>
+<li>perl程序中#开始的行为注释，所以要注释某些行，只需在行首加入#</li>
+<li><code>3,5 s/^/#/g</code> 注释第3-5行</li>
+<li><code>3,5 s/^#//g</code> 解除3-5行的注释</li>
+<li><code>1,$ s/^/#/g</code> 注释整个文档。</li>
+<li><code>:%s/^/#/g</code> 注释整个文档，此法更快。</li>
+</ul>
+<h2 id="帮助命令">帮助命令</h2><ul>
+<li><code>:help</code> or <code>F1</code> 显示整个帮助</li>
+<li><code>:help xxx</code> 显示xxx的帮助，比如 <code>:help i</code>, <code>:help CTRL-[</code>（即<code>Ctrl+[</code>的帮助）。</li>
+<li><code>:help ‘number’</code> Vim选项的帮助用单引号括起</li>
+<li><code>:help &lt;Esc&gt;</code> 特殊键的帮助用<code>&lt;&gt;<code>扩起</code></code></li>
+<li><code>:help -t</code> Vim启动参数的帮助用-</li>
+<li><code>:help i<em>&lt;Esc&gt;</em></code> 插入模式下Esc的帮助，某个模式下的帮助用模式主题的模式</li>
+<li>帮助文件中位于<code>||</code>之间的内容是超链接，可以用<code>Ctrl+]</code>进入链接，<code>Ctrl+o</code>（<code>Ctrl + t</code>）返回</li>
+</ul>
+<h2 id="其他非编辑命令">其他非编辑命令</h2><ul>
+<li><code>.</code> 重复前一次命令</li>
+<li><code>:set ruler?</code>　　查看是否设置了ruler，在.vimrc中，使用set命令设制的选项都可以通过这个命令查看</li>
+<li><code>:scriptnames</code>　　查看vim脚本文件的位置，比如.vimrc文件，语法文件及plugin等。</li>
+<li><p><code>:set list</code> 显示非打印字符，如tab，空格，行尾等。如果tab无法显示，请确定用set lcs=tab:&gt;-命令设置了.vimrc文件，并确保你的文件中的确有tab，如果开启了expendtab，那么tab将被扩展为空格。</p>
+</li>
+<li><p>Vim教程<br>在Unix系统上 $ vimtutor<br>在Windows系统上 :help tutor</p>
+</li>
+<li><p><code>:syntax</code> 列出已经定义的语法项</p>
+</li>
+<li><code>:syntax clear</code> 清除已定义的语法规则</li>
+<li><code>:syntax case match</code> 大小写敏感，int和Int将视为不同的语法元素</li>
+<li><code>:syntax case ignore</code> 大小写无关，int和Int将视为相同的语法元素，并使用同样的配色方案</li>
+</ul>
+<h2 id="转载说明">转载说明</h2><p>转载说明：这篇文章是我从<a href="http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html" target="_blank">http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html</a>转载过来，它的确写得很清晰，希望转载过来以后自己可以当字典来用。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Vim/">Vim</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Vim/">Vim</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/05/14/Vim/Vim-Command-List/" data-title="Vim命令合集(转载) | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/"  title="记录在Hadoop2.2.0中剔除一个DataNode">
+ <strong>下一篇：</strong><br/> 
+ <span>记录在Hadoop2.2.0中剔除一个DataNode
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/14/Vim/Vim-Command-List/" data-title="Vim命令合集(转载)" data-url="http://yyl8781697.github.io/2015/05/14/Vim/Vim-Command-List/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#命令历史"><span class="toc-number">1.</span> <span class="toc-text">命令历史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动vim"><span class="toc-number">2.</span> <span class="toc-text">启动vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件命令"><span class="toc-number">3.</span> <span class="toc-text">文件命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vim的模式"><span class="toc-number">4.</span> <span class="toc-text">vim的模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#导航命令"><span class="toc-number">5.</span> <span class="toc-text">导航命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入命令"><span class="toc-number">6.</span> <span class="toc-text">插入命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找命令"><span class="toc-number">7.</span> <span class="toc-text">查找命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#替换命令"><span class="toc-number">8.</span> <span class="toc-text">替换命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#移动命令"><span class="toc-number">9.</span> <span class="toc-text">移动命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#撤销和重做"><span class="toc-number">10.</span> <span class="toc-text">撤销和重做</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除命令"><span class="toc-number">11.</span> <span class="toc-text">删除命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#拷贝和粘贴"><span class="toc-number">12.</span> <span class="toc-text">拷贝和粘贴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#剪切命令"><span class="toc-number">13.</span> <span class="toc-text">剪切命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#退出命令"><span class="toc-number">14.</span> <span class="toc-text">退出命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#窗口命令"><span class="toc-number">15.</span> <span class="toc-text">窗口命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行shell命令"><span class="toc-number">16.</span> <span class="toc-text">执行shell命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释命令"><span class="toc-number">17.</span> <span class="toc-text">注释命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#帮助命令"><span class="toc-number">18.</span> <span class="toc-text">帮助命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他非编辑命令"><span class="toc-number">19.</span> <span class="toc-text">其他非编辑命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载说明"><span class="toc-number">20.</span> <span class="toc-text">转载说明</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ajax/" title="Ajax">Ajax<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

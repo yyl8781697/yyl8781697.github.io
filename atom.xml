@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-05-11T15:40:54.000Z</updated>
+  <updated>2015-05-14T15:30:40.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,219 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Vim命令合集(转载)]]></title>
+    <link href="http://yyl8781697.github.io/2015/05/14/Vim/Vim-Command-List/"/>
+    <id>http://yyl8781697.github.io/2015/05/14/Vim/Vim-Command-List/</id>
+    <published>2015-05-14T13:32:08.000Z</published>
+    <updated>2015-05-14T15:30:40.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="命令历史">命令历史</h2><p>以<code>:</code>和<code>/</code>开头的命令都有历史纪录，可以首先键入<code>:</code>或<code>/</code>然后按上下箭头来选择某个历史命令。</p>
+<h2 id="启动vim">启动vim</h2><p>在命令行窗口中输入以下命令即可</p>
+<ul>
+<li><code>vim</code> 直接启动vim</li>
+<li><code>vim filename</code> 打开vim并创建名为filename的文件</li>
+</ul>
+<h2 id="文件命令">文件命令</h2><ul>
+<li><code>vim file</code>  打开单个文件</li>
+<li><code>vim file1 file2 file3 …</code>  同时打开多个文件</li>
+<li><code>:open file</code>  在vim窗口中打开一个新文件</li>
+<li><code>:split file</code>  在新窗口中打开文件</li>
+<li><code>:bn</code>  切换到下一个文件</li>
+<li><code>:bp</code>  切换到上一个文件</li>
+<li><code>:args</code>  查看当前打开的文件列表，当前正在编辑的文件会用[]括起来。</li>
+<li>打开远程文件，比如ftp或者share folder<br><code>:e ftp://192.168.10.76/abc.txt</code><br><code>:e \qadrive\test\1.txt</code></li>
+</ul>
+<h2 id="vim的模式">vim的模式</h2><ul>
+<li>正常模式（按<code>Esc</code>或<code>Ctrl+[</code>进入） 左下角显示文件名或为空</li>
+<li>插入模式（按<code>i</code>键进入） 左下角显示—INSERT—</li>
+<li>可视模式（不知道如何进入） 左下角显示—VISUAL—</li>
+</ul>
+<h2 id="导航命令">导航命令</h2><ul>
+<li><code>%</code> 括号匹配</li>
+</ul>
+<h2 id="插入命令">插入命令</h2><ul>
+<li><code>i</code> 在当前位置生前插入</li>
+<li><code>I</code> 在当前行首插入</li>
+<li><code>a</code> 在当前位置后插入</li>
+<li><code>A</code> 在当前行尾插入</li>
+<li><code>o</code> 在当前行之后插入一行</li>
+<li><code>O</code> 在当前行之前插入一行</li>
+</ul>
+<h2 id="查找命令">查找命令</h2><ul>
+<li><code>/text</code>　　查找text，按n健查找下一个，按N健查找前一个。</li>
+<li><code>?text</code>　　查找text，反向查找，按n健查找下一个，按N健查找前一个。</li>
+<li>vim中有一些特殊字符在查找时需要转义　　.*[]^%/?~$</li>
+<li><code>:set ignorecase</code>　　忽略大小写的查找</li>
+<li><code>:set noignorecase</code>　　不忽略大小写的查找</li>
+<li>查找很长的词，如果一个词很长，键入麻烦，可以将光标移动到该词上，按*或#键即可以该单词进行搜索，相当于/搜索。而#命令相当于?搜索。</li>
+<li><code>:set hlsearch</code>　　高亮搜索结果，所有结果都高亮显示，而不是只显示一个匹配。</li>
+<li><code>:set nohlsearch</code>　　关闭高亮搜索显示</li>
+<li><code>:nohlsearch</code>　　关闭当前的高亮显示，如果再次搜索或者按下n或N键，则会再次高亮。</li>
+<li><code>:set incsearch</code>　　逐步搜索模式，对当前键入的字符进行搜索而不必等待键入完成。</li>
+<li><code>:set wrapscan</code>　　重新搜索，在搜索到文件头或尾时，返回继续搜索，默认开启。</li>
+</ul>
+<h2 id="替换命令">替换命令</h2><ul>
+<li><code>ra</code> 将当前字符替换为a，当期字符即光标所在字符。</li>
+<li><code>s/old/new/</code> 用old替换new，替换当前行的第一个匹配</li>
+<li><code>s/old/new/g</code> 用old替换new，替换当前行的所有匹配</li>
+<li><code>%s/old/new/</code> 用old替换new，替换所有行的第一个匹配</li>
+<li><code>%s/old/new/g</code> 用old替换new，替换整个文件的所有匹配</li>
+<li><code>:10,20 s/^/</code>    /g 在第10行知第20行每行前面加四个空格，用于缩进。</li>
+<li><code>ddp</code> 交换光标所在行和其下紧邻的一行。</li>
+</ul>
+<h2 id="移动命令">移动命令</h2><ul>
+<li><code>h</code> 左移一个字符</li>
+<li><code>l</code> 右移一个字符，这个命令很少用，一般用<code>w</code>代替。</li>
+<li><code>k</code> 上移一个字符</li>
+<li><code>j</code> 下移一个字符</li>
+</ul>
+<p>以上四个命令可以配合数字使用，比如20j就是向下移动20行，5h就是向左移动5个字符，在Vim中，很多命令都可以配合数字使用，比如删除10个字符10x，在当前位置后插入3个！，3a！<esc>，这里的Esc是必须的，否则命令不生效。</esc></p>
+<ul>
+<li><code>w</code> 向前移动一个单词（光标停在单词首部），如果已到行尾，则转至下一行行首。此命令快，可以代替l命令。</li>
+<li><code>b</code> 向后移动一个单词 2b 向后移动2个单词</li>
+<li><code>e</code>，同w，只不过是光标停在单词尾部</li>
+<li><code>ge</code>，同b，光标停在单词尾部。</li>
+<li><code>^</code> 移动到本行第一个非空白字符上。</li>
+<li><code>0</code>（数字0）移动到本行第一个字符上，</li>
+<li><code>&lt;HOME&gt;</code> 移动到本行第一个字符。同0健。</li>
+<li><code>$</code> 移动到行尾 3$ 移动到下面3行的行尾</li>
+<li><code>gg</code> 移动到文件头。 = <code>[[</code></li>
+<li><code>G</code>（shift + g） 移动到文件尾。 = <code>]]</code></li>
+<li><code>f</code>（find）命令也可以用于移动，fx将找到光标后第一个为x的字符，3fd将找到第三个为d的字符。</li>
+<li><code>F</code> 同f，反向查找。</li>
+<li>跳到指定行，冒号+行号，回车，比如跳到240行就是 :240回车。另一个方法是行号+G，比如230G跳到230行。</li>
+<li><code>Ctrl + e</code> 向下滚动一行</li>
+<li><code>Ctrl + y</code> 向上滚动一行</li>
+<li><code>Ctrl + d</code> 向下滚动半屏</li>
+<li><code>Ctrl + u</code> 向上滚动半屏</li>
+<li><code>Ctrl + f</code> 向下滚动一屏</li>
+<li><code>Ctrl + b</code> 向上滚动一屏</li>
+</ul>
+<h2 id="撤销和重做">撤销和重做</h2><ul>
+<li><code>u</code> 撤销（Undo）</li>
+<li><code>U</code> 撤销对整行的操作</li>
+<li><code>Ctrl + r</code> 重做（Redo），即撤销的撤销。</li>
+</ul>
+<h2 id="删除命令">删除命令</h2><ul>
+<li><code>x</code> 删除当前字符</li>
+<li><code>3x</code> 删除当前光标开始向后三个字符</li>
+<li><code>X</code> 删除当前字符的前一个字符。<code>X</code>=<code>dh</code></li>
+<li><code>dl</code> 删除当前字符， <code>dl</code>=<code>x</code></li>
+<li><code>dh</code> 删除前一个字符</li>
+<li><code>dd</code> 删除当前行</li>
+<li><code>dj</code> 删除上一行</li>
+<li><code>dk</code> 删除下一行</li>
+<li><code>10d</code> 删除当前行开始的10行。</li>
+<li><code>D</code> 删除当前字符至行尾。<code>D</code>=<code>d$</code></li>
+<li><code>d$</code> 删除当前字符之后的所有字符（本行）</li>
+<li><code>kdgg</code> 删除当前行之前所有行（不包括当前行）</li>
+<li><code>jdG</code>（jd shift + g）   删除当前行之后所有行（不包括当前行）</li>
+<li><code>:1,10d</code> 删除1-10行</li>
+<li><code>:11,$d</code> 删除11行及以后所有的行</li>
+<li><code>:1,$d</code> 删除所有行</li>
+<li><code>J</code>(shift + j)　　删除两行之间的空行，实际上是合并两行。</li>
+</ul>
+<h2 id="拷贝和粘贴">拷贝和粘贴</h2><ul>
+<li><code>yy</code> 拷贝当前行</li>
+<li><code>nyy</code> 拷贝当前后开始的n行，比如2yy拷贝当前行及其下一行。</li>
+<li><code>p</code>  在当前光标后粘贴,如果之前使用了yy命令来复制一行，那么就在当前行的下一行粘贴。</li>
+<li><code>shift+p</code> 在当前行前粘贴</li>
+<li><code>:1,10 co 20</code> 将1-10行插入到第20行之后。</li>
+<li><code>:1,$ co $</code> 将整个文件复制一份并添加到文件尾部。</li>
+<li>正常模式下按v（逐字）或V（逐行）进入可视模式，然后用jklh命令移动即可选择某些行或字符，再按y即可复制</li>
+<li><code>ddp</code>交换当前行和其下一行</li>
+<li><code>xp</code>交换当前字符和其后一个字符</li>
+</ul>
+<h2 id="剪切命令">剪切命令</h2><ul>
+<li>正常模式下按<code>v</code>（逐字）或<code>V</code>（逐行）进入可视模式，然后用<code>jklh</code>命令移动即可选择某些行或字符，再按d即可剪切</li>
+<li><code>ndd</code> 剪切当前行之后的n行。利用p命令可以对剪切的内容进行粘贴</li>
+<li><code>:1,10d</code> 将1-10行剪切。利用p命令可将剪切后的内容进行粘贴。</li>
+<li><code>:1, 10 m 20</code> 将第1-10行移动到第20行之后。</li>
+</ul>
+<h2 id="退出命令">退出命令</h2><ul>
+<li><code>:wq</code> 保存并退出</li>
+<li><code>ZZ</code> 保存并退出</li>
+<li><code>:q!</code> 强制退出并忽略所有更改</li>
+<li><code>:e!</code> 放弃所有修改，并打开原来文件。</li>
+</ul>
+<h2 id="窗口命令">窗口命令</h2><ul>
+<li><code>:split</code>或<code>new</code> 打开一个新窗口，光标停在顶层的窗口上</li>
+<li><code>:split file</code>或<code>:new file</code> 用新窗口打开文件</li>
+<li><code>split</code>打开的窗口都是横向的，使用<code>vsplit</code>可以纵向打开窗口。</li>
+<li><code>Ctrl+ww</code> 移动到下一个窗口</li>
+<li><code>Ctrl+wj</code> 移动到下方的窗口</li>
+<li><code>Ctrl+wk</code> 移动到上方的窗口</li>
+</ul>
+<blockquote>
+<p>关闭窗口</p>
+</blockquote>
+<ul>
+<li><code>:close</code> 最后一个窗口不能使用此命令，可以防止意外退出vim。</li>
+<li><code>:q</code> 如果是最后一个被关闭的窗口，那么将退出vim。</li>
+<li><code>ZZ</code> 保存并退出。</li>
+</ul>
+<blockquote>
+<p>关闭所有窗口，只保留当前窗口</p>
+</blockquote>
+<ul>
+<li><code>:only</code></li>
+</ul>
+<blockquote>
+<p>录制宏</p>
+</blockquote>
+<ul>
+<li>按<code>q</code>键加任意字母开始录制，再按<code>q</code>键结束录制（这意味着vim中的宏不可嵌套），使用的时候@加宏名，比如qa。。。q录制名为a的宏，@a使用这个宏。</li>
+</ul>
+<h2 id="执行shell命令">执行shell命令</h2><ul>
+<li><code>:!command</code></li>
+<li><code>:!ls</code> 列出当前目录下文件</li>
+<li><code>:!perl -c script.pl</code> 检查perl脚本语法，可以不用退出vim，非常方便。</li>
+<li><code>:!perl script.pl</code> 执行perl脚本，可以不用退出vim，非常方便。</li>
+<li><code>:suspend</code>或<code>Ctrl - Z</code> 挂起vim，回到shell，按fg可以返回vim。</li>
+</ul>
+<h2 id="注释命令">注释命令</h2><ul>
+<li>perl程序中#开始的行为注释，所以要注释某些行，只需在行首加入#</li>
+<li><code>3,5 s/^/#/g</code> 注释第3-5行</li>
+<li><code>3,5 s/^#//g</code> 解除3-5行的注释</li>
+<li><code>1,$ s/^/#/g</code> 注释整个文档。</li>
+<li><code>:%s/^/#/g</code> 注释整个文档，此法更快。</li>
+</ul>
+<h2 id="帮助命令">帮助命令</h2><ul>
+<li><code>:help</code> or <code>F1</code> 显示整个帮助</li>
+<li><code>:help xxx</code> 显示xxx的帮助，比如 <code>:help i</code>, <code>:help CTRL-[</code>（即<code>Ctrl+[</code>的帮助）。</li>
+<li><code>:help ‘number’</code> Vim选项的帮助用单引号括起</li>
+<li><code>:help &lt;Esc&gt;</code> 特殊键的帮助用<code>&lt;&gt;<code>扩起</code></code></li>
+<li><code>:help -t</code> Vim启动参数的帮助用-</li>
+<li><code>:help i<em>&lt;Esc&gt;</em></code> 插入模式下Esc的帮助，某个模式下的帮助用模式主题的模式</li>
+<li>帮助文件中位于<code>||</code>之间的内容是超链接，可以用<code>Ctrl+]</code>进入链接，<code>Ctrl+o</code>（<code>Ctrl + t</code>）返回</li>
+</ul>
+<h2 id="其他非编辑命令">其他非编辑命令</h2><ul>
+<li><code>.</code> 重复前一次命令</li>
+<li><code>:set ruler?</code>　　查看是否设置了ruler，在.vimrc中，使用set命令设制的选项都可以通过这个命令查看</li>
+<li><code>:scriptnames</code>　　查看vim脚本文件的位置，比如.vimrc文件，语法文件及plugin等。</li>
+<li><p><code>:set list</code> 显示非打印字符，如tab，空格，行尾等。如果tab无法显示，请确定用set lcs=tab:&gt;-命令设置了.vimrc文件，并确保你的文件中的确有tab，如果开启了expendtab，那么tab将被扩展为空格。</p>
+</li>
+<li><p>Vim教程<br>在Unix系统上 $ vimtutor<br>在Windows系统上 :help tutor</p>
+</li>
+<li><p><code>:syntax</code> 列出已经定义的语法项</p>
+</li>
+<li><code>:syntax clear</code> 清除已定义的语法规则</li>
+<li><code>:syntax case match</code> 大小写敏感，int和Int将视为不同的语法元素</li>
+<li><code>:syntax case ignore</code> 大小写无关，int和Int将视为相同的语法元素，并使用同样的配色方案</li>
+</ul>
+<h2 id="转载说明">转载说明</h2><p>转载说明：这篇文章是我从<a href="http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html" target="_blank">http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html</a>转载过来，它的确写得很清晰，希望转载过来以后自己可以当字典来用。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="命令历史">命令历史</h2><p>以<code>:</code>和<code>/</code>开头的命令都有历史纪录，可以首先键入<code>:</code>或<code>/</code>然后按上下箭头来选择某个历史命令。</p>
+<h2 id="启动vim">]]>
+    </summary>
+    
+      <category term="Vim" scheme="http://yyl8781697.github.io/tags/Vim/"/>
+    
+      <category term="Vim" scheme="http://yyl8781697.github.io/categories/Vim/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[记录在Hadoop2.2.0中剔除一个DataNode]]></title>
@@ -1659,52 +1872,6 @@ B.冒泡排序
 <p><code>LinkedList</code>是<code>Java</code>编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
 </blockquote>
 <p>&#]]>
-    </summary>
-    
-      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
-    
-      <category term="Java Source" scheme="http://yyl8781697.github.io/categories/Java-Source/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Java 源码学习之java.util.Vector]]></title>
-    <link href="http://yyl8781697.github.io/2015/03/25/Java%20Source/Java-Vector/"/>
-    <id>http://yyl8781697.github.io/2015/03/25/Java Source/Java-Vector/</id>
-    <published>2015-03-25T06:10:21.000Z</published>
-    <updated>2015-04-25T07:19:36.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>Vector</code>是<code>Java</code>编程中最常用的容器类之一，它是基于动态的数组实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;看过源码的小伙伴可能有相同的感觉：进入<code>Vector.Java</code>会顿一会儿，还以为自己点错进去<code>ArrayList</code>的源码文件了呢！是的，<code>Vector</code>与<code>ArrayList</code>的实现基本相似，同样是基于动态数组，同样是需要扩容，本文在接下来的源码分析中与<code>ArraryList</code>重复的部分不再累赘，如需要了解的同学请点入进<a href="http://kubicode.me/2015/03/24/Java-ArrayList/" target="_blank" rel="external">ArrarList源码分析</a></p>
-<h2 id="Vertor的1倍扩容">Vertor的1倍扩容</h2><blockquote>
-<p>还记得<code>ArrayList</code>每次扩容为元数组的0.5倍不？<code>Vector</code>在进行扩容操作时与<code>ArrayList</code>略微不同</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * The amount by which the capacity of the vector is automatically</span><br><span class="line"> * incremented when its size becomes greater than its capacity.  If</span><br><span class="line"> * the capacity increment is less than or equal to zero, the capacity</span><br><span class="line"> * of the vector is doubled each time it needs to grow.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @serial</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> capacityIncrement;<span class="comment">//用于指定每次扩容的容量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">grow</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// overflow-conscious code</span></span><br><span class="line">    <span class="keyword">int</span> oldCapacity = elementData.length;</span><br><span class="line">    <span class="keyword">int</span> newCapacity = oldCapacity + ((capacityIncrement &gt; <span class="number">0</span>) ?</span><br><span class="line">                                     capacityIncrement : oldCapacity);<span class="comment">//如不指定capacityIncrement，默认扩容的容量为原数组的容量</span></span><br><span class="line">    <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        newCapacity = minCapacity;</span><br><span class="line">    <span class="keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)</span><br><span class="line">        newCapacity = hugeCapacity(minCapacity);</span><br><span class="line">    elementData = Arrays.copyOf(elementData, newCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>&#160; &#160; &#160; &#160;细心的小伙伴可以发现<code>Vector</code>中多了一个<code>capacityIncrement</code>变量，该变量是用于指定每次扩容的增量，如果不指定该变量，在<code>grow</code>中可以发现<code>Vector</code>默认就扩容为原数组的1倍</p>
-<h2 id="线程安全">线程安全</h2><blockquote>
-<p><code>Vertor</code>是线程安全的</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;<code>Vertor</code>源码中另一个比较显眼的地方就是绝大部分方法都有<code>synchronized</code>关键字，大家都知道这个关键字是用于线程同步的，所以<code>Vector</code>类是线程安全的！<br>但是即使它所有的方法都被修饰成同步，也不意味着调用它的时候永远都不需要同步手段了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Vector&lt;Integer&gt; vector=<span class="keyword">new</span> Vector&lt;Integer&gt;();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;  </span><br><span class="line">	<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			vector.add(i);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		Thread removeThread=<span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">			<span class="annotation">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span><br><span class="line">			</span>&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;vector.size();i++)</span><br><span class="line">				&#123;</span><br><span class="line">					vector.remove(i);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">		</span><br><span class="line">		Thread printThread=<span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">			<span class="annotation">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span><br><span class="line">			</span>&#123;</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;vector.size();i++)</span><br><span class="line">				&#123;</span><br><span class="line">					System.out.println(vector.get(i));</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">		</span><br><span class="line">		removeThread.start();</span><br><span class="line">		printThread.start();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>(Thread.activeCount()&gt;<span class="number">20</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&#160; &#160; &#160; &#160;大家运行此段代码时 跑了一小段时间之后会发现有ArrayIndexOutOfBoundsException异常，这里<code>Vector</code>的get,remove,size方法尽管有<code>synchronized</code>修饰，但是在多线程环境中，如果不在方法端额外做同步措施的话，这段代码仍然是不安全的，如果一个线程删除了序号i的元素之后，另一个线程去访问这个i的话就直接回抛异常，所以保证这段代码安全还需要再<code>run</code>里面再添加<br><code>synchronized</code>修饰</p>
-<h2 id="总结">总结</h2><ol>
-<li><code>Vector</code>的实现与<code>ArrayList</code>基本一致</li>
-<li><code>Vector</code>在扩容时可以指定每次扩容的增长，如果不指定则默认增加1倍</li>
-<li><code>Vector</code>是线程安全的，但是在多线程环境下可能还是需要用<code>synchronized</code>关键词才能保证真正的安全</li>
-</ol>
-<h2 id="参考">参考</h2><ul>
-<li>《深入理解Java虚拟机》.周志明，第十三章，Page388-389</li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>Vector</code>是<code>Java</code>编程中最常用的容器类之一，它是基于动态的数组实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
-</blockquote>
-<p>&#160]]>
     </summary>
     
       <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
