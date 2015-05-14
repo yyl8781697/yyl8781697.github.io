@@ -59,7 +59,7 @@
     <link href="http://yyl8781697.github.io/2015/05/08/Effective%20Java/Class-And-Interface/"/>
     <id>http://yyl8781697.github.io/2015/05/08/Effective Java/Class-And-Interface/</id>
     <published>2015-05-08T14:39:56.000Z</published>
-    <updated>2015-05-09T15:33:02.000Z</updated>
+    <updated>2015-05-14T12:59:07.000Z</updated>
     <content type="html"><![CDATA[<p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
 <h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
 <p>尽可能使每个类或者成员不被外界访问。</p>
@@ -94,15 +94,42 @@
 <li>如果有成员需要公开，最好使用<code>getter</code>和<code>setter</code>方法。</li>
 <li>暴露不可变对象的有有域时可以在设置值时加入一些约束条件。</li>
 </ul>
-<h2 id="第15条：使可变最小化">第15条：使可变最小化</h2><ul>
+<h2 id="第15条：使可变最小化">第15条：使可变最小化</h2><blockquote>
+<p>不可变类比可变类更加易于设计、实现和使用，它们不容易出错，且更加安全。</p>
+</blockquote>
+<p>成为不可变类，要遵循下面五条规则：</p>
+<ul>
 <li>不要提供任何会修改对象状态的方法</li>
 <li>保证类不可被扩展</li>
 <li>所使用的域都是<code>final</code>的</li>
 <li>所使用的域都是私有的</li>
 <li>确保对于任何可变组件的互斥访问(如果类具有指向可变对象的域，则必须保证)。</li>
-<li></li>
 </ul>
-]]></content>
+<p>不可变对象的优点：</p>
+<ol>
+<li>不可变对象只有一种状态，即被创建时的状态。</li>
+<li>不可变对象本质上是线程安全的，可以被自由的共享。</li>
+<li>不可变对象还可以共享它们的内部信息。</li>
+<li>不可变对象为其他对象提供了大量的构件。</li>
+</ol>
+<p>不可变类真正唯一的缺点是：对于每个不同的值都需要一个单独的对象（这样创建对象的代价就会很高啊~-_-!!）</p>
+<blockquote>
+<p>为了确保类的不可变性，该类绝对不允许自身被子类化</p>
+</blockquote>
+<ul>
+<li><p>将类用<code>final</code>关键字标记</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 我肯定不能被继承了</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">	<span class="comment">//ToDo</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将构造设置为<code>private</code>访问权限,然后开放一个公有的静态工厂来代替构造器。（256个赞，推荐^_^）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 你看我还能被继承嘛？^_^</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 我不让外人调用</span><br><span class="line"> *<span class="javadoctag"> @param</span> str</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Test</span><span class="params">(String str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">//ToDo</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Test <span class="title">valueOf</span><span class="params">(String str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 在这里进行构造函数的调用</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Test(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还有：</p>
+<ul>
+<li>坚决不要为每个<code>get</code>方法编写一个相应的<code>set</code>方法。</li>
+<li>除非令人有信服的理由使会变成非<code>final</code>的，否则每个域都是<code>final</code>（恩，总之多用<code>final</code>没错）</li>
+</ul>
+<h2 id="第16条：符合优于继承">第16条：符合优于继承</h2>]]></content>
     <summary type="html">
     <![CDATA[<p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
 <h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
