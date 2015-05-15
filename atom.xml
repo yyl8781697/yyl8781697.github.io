@@ -272,7 +272,7 @@
     <link href="http://yyl8781697.github.io/2015/05/08/Effective%20Java/Class-And-Interface/"/>
     <id>http://yyl8781697.github.io/2015/05/08/Effective Java/Class-And-Interface/</id>
     <published>2015-05-08T14:39:56.000Z</published>
-    <updated>2015-05-14T12:59:07.000Z</updated>
+    <updated>2015-05-14T15:50:20.000Z</updated>
     <content type="html"><![CDATA[<p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
 <h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
 <p>尽可能使每个类或者成员不被外界访问。</p>
@@ -342,7 +342,14 @@
 <li>坚决不要为每个<code>get</code>方法编写一个相应的<code>set</code>方法。</li>
 <li>除非令人有信服的理由使会变成非<code>final</code>的，否则每个域都是<code>final</code>（恩，总之多用<code>final</code>没错）</li>
 </ul>
-<h2 id="第16条：符合优于继承">第16条：符合优于继承</h2>]]></content>
+<h2 id="第16条：符合优于继承">第16条：符合优于继承</h2><ul>
+<li>这里不推荐继承的主要原因是子类必须跟着其超类改变而改变，因而打破了封装性。。。-_-||</li>
+<li>不用扩展现有类，而是在新的类里面增加一个私有域，它引用现有类的一个实力。在新类中主要去实现转发功能。</li>
+</ul>
+<blockquote>
+<p>这里我想说如果是使用符合实现相同的功能将大大增加代码量。</p>
+</blockquote>
+]]></content>
     <summary type="html">
     <![CDATA[<p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
 <h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>

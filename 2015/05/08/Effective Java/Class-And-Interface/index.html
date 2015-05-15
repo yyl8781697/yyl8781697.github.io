@@ -193,7 +193,14 @@ Java的4种访问级别：
 <li>坚决不要为每个<code>get</code>方法编写一个相应的<code>set</code>方法。</li>
 <li>除非令人有信服的理由使会变成非<code>final</code>的，否则每个域都是<code>final</code>（恩，总之多用<code>final</code>没错）</li>
 </ul>
-<h2 id="第16条：符合优于继承">第16条：符合优于继承</h2>  
+<h2 id="第16条：符合优于继承">第16条：符合优于继承</h2><ul>
+<li>这里不推荐继承的主要原因是子类必须跟着其超类改变而改变，因而打破了封装性。。。-_-||</li>
+<li>不用扩展现有类，而是在新的类里面增加一个私有域，它引用现有类的一个实力。在新类中主要去实现转发功能。</li>
+</ul>
+<blockquote>
+<p>这里我想说如果是使用符合实现相同的功能将大大增加代码量。</p>
+</blockquote>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
