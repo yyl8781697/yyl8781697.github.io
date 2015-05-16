@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-05-14T15:30:40.000Z</updated>
+  <updated>2015-05-16T02:12:34.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -16,10 +16,10 @@
   
   <entry>
     <title><![CDATA[Vim命令合集(转载)]]></title>
-    <link href="http://yyl8781697.github.io/2015/05/14/Vim/Vim-Command-List/"/>
-    <id>http://yyl8781697.github.io/2015/05/14/Vim/Vim-Command-List/</id>
+    <link href="http://yyl8781697.github.io/2015/05/14/Linux/Vim-Command-List/"/>
+    <id>http://yyl8781697.github.io/2015/05/14/Linux/Vim-Command-List/</id>
     <published>2015-05-14T13:32:08.000Z</published>
-    <updated>2015-05-14T15:30:40.000Z</updated>
+    <updated>2015-05-16T02:12:34.000Z</updated>
     <content type="html"><![CDATA[<h2 id="命令历史">命令历史</h2><p>以<code>:</code>和<code>/</code>开头的命令都有历史纪录，可以首先键入<code>:</code>或<code>/</code>然后按上下箭头来选择某个历史命令。</p>
 <h2 id="启动vim">启动vim</h2><p>在命令行窗口中输入以下命令即可</p>
 <ul>
@@ -221,9 +221,11 @@
 <h2 id="启动vim">]]>
     </summary>
     
+      <category term="Linux" scheme="http://yyl8781697.github.io/tags/Linux/"/>
+    
       <category term="Vim" scheme="http://yyl8781697.github.io/tags/Vim/"/>
     
-      <category term="Vim" scheme="http://yyl8781697.github.io/categories/Vim/"/>
+      <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
     
   </entry>
   
