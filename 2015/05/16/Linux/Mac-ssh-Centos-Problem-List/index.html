@@ -4,31 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Number of 1 Bits | Kubi Code&#39;Blog</title>
+    <title>Mac通过ssh连接到Centos时一些问题的解决 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="LeetCode地址：https://leetcode.com/problems/number-of-1-bits/
-
-Problem:Write a function that takes an unsigned integer and returns the number of ’1’ bits it has (also known as the Hamming weight).
-For ex">
+    <meta name="description" content="Linux版本：Centos6.5Mac版本：OS X Yosemite 10.10.2
+LC_CTYPE: cannot change locale (UTF-8)通过ssh连接到linux，会出现如下警告：
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Number of 1 Bits">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/index.html">
+<meta property="og:title" content="Mac通过ssh连接到Centos时一些问题的解决">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="LeetCode地址：https://leetcode.com/problems/number-of-1-bits/
-
-Problem:Write a function that takes an unsigned integer and returns the number of ’1’ bits it has (also known as the Hamming weight).
-For ex">
+<meta property="og:description" content="Linux版本：Centos6.5Mac版本：OS X Yosemite 10.10.2
+LC_CTYPE: cannot change locale (UTF-8)通过ssh连接到linux，会出现如下警告：
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+这">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Number of 1 Bits">
-<meta name="twitter:description" content="LeetCode地址：https://leetcode.com/problems/number-of-1-bits/
-
-Problem:Write a function that takes an unsigned integer and returns the number of ’1’ bits it has (also known as the Hamming weight).
-For ex">
+<meta name="twitter:title" content="Mac通过ssh连接到Centos时一些问题的解决">
+<meta name="twitter:description" content="Linux版本：Centos6.5Mac版本：OS X Yosemite 10.10.2
+LC_CTYPE: cannot change locale (UTF-8)通过ssh连接到linux，会出现如下警告：
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+这">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +89,14 @@ For ex">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" title="LeetCode-Number of 1 Bits" itemprop="url">LeetCode-Number of 1 Bits</a>
+      <a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" title="Mac通过ssh连接到Centos时一些问题的解决" itemprop="url">Mac通过ssh连接到Centos时一些问题的解决</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-14T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-14</time>
+    <time datetime="2015-05-16T02:26:53.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
     
   </p>
 </header>
@@ -105,28 +105,23 @@ For ex">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LC_CTYPE:_cannot_change_locale_(UTF-8)"><span class="toc-number">1.</span> <span class="toc-text">LC_CTYPE: cannot change locale (UTF-8)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Write_failed:_Broken_pipe"><span class="toc-number">2.</span> <span class="toc-text">Write failed: Broken pipe</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
-</blockquote>
-<p>Problem:<br>Write a function that takes an unsigned integer and returns the number of ’1’ bits it has (also known as the Hamming weight).</p>
-<p>For example, the 32-bit integer ’11’ has binary representation <code>00000000000000000000000000001011</code>, so the function should return 3.</p>
-<p>思路</p>
-<ul>
-<li>使用移位操作，每次将最后的最低位累加</li>
-<li>我想说一模一样的代码，<code>Java</code>和<code>C++</code>的执行效率真的相差挺大</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">uint32_t</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>the Runetime is <code>10ms</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">// you need to treat n as an unsigned value</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>the Runtime is <code>239ms</code><br></p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
+		<p>Linux版本：Centos6.5<br>Mac版本：OS X Yosemite 10.10.2</p>
+<h2 id="LC_CTYPE:_cannot_change_locale_(UTF-8)">LC_CTYPE: cannot change locale (UTF-8)</h2><p>通过ssh连接到linux，会出现如下警告：</p>
+<pre><code>-<span class="string">bash:</span> <span class="string">warning:</span> <span class="string">setlocale:</span> <span class="string">LC_CTYPE:</span> cannot change locale (UTF-<span class="number">8</span>): No such file or directory
+</code></pre><p>这是由于没有找到对应的语言环境导致的：<br>按一下命令步骤操作即可修复：<br>首先</p>
+<pre><code>sudo vi <span class="regexp">/etc/</span>ssh_cofig
+</code></pre><p>然后将该文件中的SendEnv LANG LC_*这一行用#进行注释</p>
+<pre><code><span class="id">#SendEnv</span> LANG LC_*
+</code></pre><p>参考:<a href="http://www.cyberciti.biz/faq/os-x-terminal-bash-warning-setlocale-lc_ctype-cannot-change-locale/" target="_blank" rel="external">OS X Terminal: -bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory Fix</a></p>
+<h2 id="Write_failed:_Broken_pipe">Write failed: Broken pipe</h2><p>通过ssh连接到linux，有时候会莫名其妙的出现错误：</p>
+<pre><code><span class="tag">Write</span> <span class="rule"><span class="attribute">failed</span>:<span class="value"> Broken pipe</span></span>
+</code></pre><p>看资料说的是由于长时间未操作造成的，解决方法为在Mac端的~/.ssh/config文件中添加：</p>
+<pre><code><span class="title">ServerAliveInterval</span> <span class="number">60</span>
+</code></pre><p>参考：<a href="http://www.cnblogs.com/dudu/archive/2013/02/07/ssh-write-failed-broken-pipe.html" target="_blank" rel="external">解决ssh的”Write failed: Broken pipe”问题</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -134,13 +129,13 @@ For ex">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ssh/">ssh</a>
   </div>
 
 </div>
@@ -149,7 +144,7 @@ For ex">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" data-title="LeetCode-Number of 1 Bits | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" data-title="Mac通过ssh连接到Centos时一些问题的解决 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -162,19 +157,11 @@ For ex">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/" title="LeetCode-Rotate Array">
-  <strong>上一篇：</strong><br/>
-  <span>
-  LeetCode-Rotate Array</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/"  title="LeetCode-Single Number II">
+<a href="/2015/05/14/Linux/Vim-Command-List/"  title="Vim命令合集(转载)">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-Single Number II
+ <span>Vim命令合集(转载)
 </span>
 </a>
 </div>
@@ -183,7 +170,7 @@ For ex">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" data-title="LeetCode-Number of 1 Bits" data-url="http://yyl8781697.github.io/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/"></div>
+	<div class="ds-thread" data-thread-key="2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" data-title="Mac通过ssh连接到Centos时一些问题的解决" data-url="http://yyl8781697.github.io/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/"></div>
 </section>
 
 
@@ -193,7 +180,7 @@ For ex">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LC_CTYPE:_cannot_change_locale_(UTF-8)"><span class="toc-number">1.</span> <span class="toc-text">LC_CTYPE: cannot change locale (UTF-8)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Write_failed:_Broken_pipe"><span class="toc-number">2.</span> <span class="toc-text">Write failed: Broken pipe</span></a></li></ol>
  
   </div>
 
