@@ -1,0 +1,758 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>学习和使用Scala的Json解析类库-JSON4S | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="介绍在Scala环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(AST),而JSON4S这个项目的目标就是提供一个单一的AST树供其他Scala类库来使用。
+
+JSON4S的features：
+
+快速的JSON解析
+LINQ 风格的查询
+可以紧密结合样例类
+差别比较和合并
+使用DSL来生成有效格式的JSON
+支持XPATH
+优雅的打印
+支持XML的转换
+序列化
+
+下载JSON4S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习和使用Scala的Json解析类库-JSON4S">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/05/24/Scala/Study-And-User-JSON4S/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="介绍在Scala环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(AST),而JSON4S这个项目的目标就是提供一个单一的AST树供其他Scala类库来使用。
+
+JSON4S的features：
+
+快速的JSON解析
+LINQ 风格的查询
+可以紧密结合样例类
+差别比较和合并
+使用DSL来生成有效格式的JSON
+支持XPATH
+优雅的打印
+支持XML的转换
+序列化
+
+下载JSON4S">
+<meta property="og:image" content="https://camo.githubusercontent.com/67e5a0a48c91139ac30d2ecbfd6d6b020e8688a2/68747470733a2f2f7261772e6769746875622e636f6d2f6a736f6e34732f6a736f6e34732f332e332f636f72652f6a736f6e2e706e67">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学习和使用Scala的Json解析类库-JSON4S">
+<meta name="twitter:description" content="介绍在Scala环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(AST),而JSON4S这个项目的目标就是提供一个单一的AST树供其他Scala类库来使用。
+
+JSON4S的features：
+
+快速的JSON解析
+LINQ 风格的查询
+可以紧密结合样例类
+差别比较和合并
+使用DSL来生成有效格式的JSON
+支持XPATH
+优雅的打印
+支持XML的转换
+序列化
+
+下载JSON4S">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/24/Scala/Study-And-User-JSON4S/" title="学习和使用Scala的Json解析类库-JSON4S" itemprop="url">学习和使用Scala的Json解析类库-JSON4S</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-24T02:12:14.000Z" itemprop="datePublished"> 发表于 2015-05-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#下载JSON4S"><span class="toc-number">2.</span> <span class="toc-text">下载JSON4S</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#需导入的核心包介绍"><span class="toc-number">3.</span> <span class="toc-text">需导入的核心包介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON字符串转对象"><span class="toc-number">4.</span> <span class="toc-text">JSON字符串转对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象转JSON字符串"><span class="toc-number">5.</span> <span class="toc-text">对象转JSON字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合并和差异化对比"><span class="toc-number">6.</span> <span class="toc-text">合并和差异化对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XML的支持"><span class="toc-number">7.</span> <span class="toc-text">XML的支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="介绍">介绍</h2><p>在<code>Scala</code>环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(<em>AST</em>),而<code>JSON4S</code>这个项目的目标就是提供一个单一的<em>AST</em>树供其他<code>Scala</code>类库来使用。</p>
+<p><img src="https://camo.githubusercontent.com/67e5a0a48c91139ac30d2ecbfd6d6b020e8688a2/68747470733a2f2f7261772e6769746875622e636f6d2f6a736f6e34732f6a736f6e34732f332e332f636f72652f6a736f6e2e706e67" alt="JSON4S工作原理"></p>
+<p><code>JSON4S</code>的features：</p>
+<ul>
+<li>快速的<code>JSON</code>解析</li>
+<li><code>LINQ</code> 风格的查询</li>
+<li>可以紧密结合样例类</li>
+<li>差别比较和合并</li>
+<li>使用<code>DSL</code>来生成有效格式的<code>JSON</code></li>
+<li>支持<code>XPATH</code></li>
+<li>优雅的打印</li>
+<li>支持<code>XML</code>的转换</li>
+<li>序列化</li>
+</ul>
+<h2 id="下载JSON4S">下载JSON4S</h2><blockquote>
+<p>作者使用的是<code>json4s-native_*.jar</code>（与<code>lift-json</code>相同的实现）。下载的时候注意将版本号进行替换。</p>
+</blockquote>
+<ul>
+<li><p><code>SBT</code>用户</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val json4sNative = <span class="string">"org.json4s"</span> %% <span class="string">"json4s-native"</span> % <span class="string">"3.2.11"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>MAVEN</code>用户</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.json4s<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>json4s-native_$&#123;scala.version&#125;<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.2.11<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其他：</p>
+<ul>
+<li><a href="http://repo1.maven.org/maven2/org/json4s/json4s-core_2.11/3.2.11/json4s-core_2.11-3.2.11.jar" target="_blank" rel="external">http://repo1.maven.org/maven2/org/json4s/json4s-core_2.11/3.2.11/json4s-core_2.11-3.2.11.jar</a></li>
+<li><a href="http://repo1.maven.org/maven2/org/json4s/json4s-native_2.11/3.2.11/json4s-native_2.11-3.2.11.jar" target="_blank" rel="external">http://repo1.maven.org/maven2/org/json4s/json4s-native_2.11/3.2.11/json4s-native_2.11-3.2.11.jar</a></li>
+<li><a href="http://mirrors.ibiblio.org/pub/mirrors/maven2/com/thoughtworks/paranamer/paranamer/2.5.6/paranamer-2.5.6.jar" target="_blank" rel="external">http://mirrors.ibiblio.org/pub/mirrors/maven2/com/thoughtworks/paranamer/paranamer/2.5.6/paranamer-2.5.6.jar</a></li>
+</ul>
+</li>
+<li>IEAD(我使用的)<br>  File-&gt;Project Structure-&gt;Modules-&gt;Dependencies-&gt;+-&gt;From Maven，然后输入json4s即可搜索，选择最新的json4s-natvie进行下载。</li>
+</ul>
+<h2 id="需导入的核心包介绍">需导入的核心包介绍</h2><ul>
+<li><code>import org.json4s._</code><br>  不用多说，解析都是通过它来完成的。</li>
+<li><p><code>import org.json4s.native.JsonMethods._</code><br>  <code>Scala</code>对象与外部<code>JSON</code>资源(字符串，流，文件等)相互转换的开放接口，代码不多，这里可以贴一下：</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">JsonMethods</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">org</span>.<span class="title">json4s</span>.<span class="title">JsonMethods</span>[</span><span class="type">Document</span>] &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//外部JSON资源转Scala对象</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">parse</span>(</span>in: <span class="type">JsonInput</span>, useBigDecimalForDouble: <span class="type">Boolean</span> = <span class="literal">false</span>): <span class="type">JValue</span> = in <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StringInput</span>(s) =&gt; <span class="type">JsonParser</span>.parse(s, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">ReaderInput</span>(rdr) =&gt; <span class="type">JsonParser</span>.parse(rdr, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StreamInput</span>(stream) =&gt; <span class="type">JsonParser</span>.parse(<span class="type">Source</span>.fromInputStream(stream).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">FileInput</span>(file) =&gt; <span class="type">JsonParser</span>.parse(<span class="type">Source</span>.fromFile(file).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//外部JSON资源转Scala对象(返回值可选)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">parseOpt</span>(</span>in: <span class="type">JsonInput</span>, useBigDecimalForDouble: <span class="type">Boolean</span> = <span class="literal">false</span>): <span class="type">Option</span>[<span class="type">JValue</span>] = in <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StringInput</span>(s) =&gt; <span class="type">JsonParser</span>.parseOpt(s, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">ReaderInput</span>(rdr) =&gt; <span class="type">JsonParser</span>.parseOpt(rdr, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StreamInput</span>(stream) =&gt; <span class="type">JsonParser</span>.parseOpt(<span class="type">Source</span>.fromInputStream(stream).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">FileInput</span>(file) =&gt; <span class="type">JsonParser</span>.parseOpt(<span class="type">Source</span>.fromFile(file).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Renders JSON.</span><br><span class="line">   * Scala对象转外部JSON&lt;资源</span><br><span class="line">   * @see Printer#compact</span><br><span class="line">   * @see Printer#pretty</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">render</span>(</span>value: <span class="type">JValue</span>): <span class="type">Document</span> = value <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="literal">null</span>          =&gt; text(<span class="string">"null"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JBool</span>(<span class="literal">true</span>)   =&gt; text(<span class="string">"true"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JBool</span>(<span class="literal">false</span>)  =&gt; text(<span class="string">"false"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JDouble</span>(n)    =&gt; text(n.toString)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JDecimal</span>(n)   =&gt; text(n.toString)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JInt</span>(n)       =&gt; text(n.toString)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JNull</span>         =&gt; text(<span class="string">"null"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JNothing</span>      =&gt; sys.error(<span class="string">"can't render 'nothing'"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JString</span>(<span class="literal">null</span>) =&gt; text(<span class="string">"null"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JString</span>(s)    =&gt; text(<span class="string">"\""</span>+<span class="type">JsonAST</span>.quote(s)+<span class="string">"\""</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JArray</span>(arr)   =&gt; text(<span class="string">"["</span>) :: series(trimArr(arr).map(render)) :: text(<span class="string">"]"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JObject</span>(obj)  =&gt;</span><br><span class="line">      <span class="function"><span class="keyword">val</span> <span class="title">nested</span> =</span> <span class="keyword">break</span> :: fields(trimObj(obj).map(&#123;<span class="keyword">case</span> (n,v) =&gt; text(<span class="string">"\""</span>+<span class="type">JsonAST</span>.quote(n)+<span class="string">"\":"</span>) :: render(v)&#125;))</span><br><span class="line">      text(<span class="string">"&#123;"</span>) :: nest(<span class="number">2</span>, nested) :: <span class="keyword">break</span> :: text(<span class="string">"&#125;"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">trimArr</span>(</span>xs: <span class="type">List</span>[<span class="type">JValue</span>]) = xs.filter(_ != <span class="type">JNothing</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">trimObj</span>(</span>xs: <span class="type">List</span>[<span class="type">JField</span>]) = xs.filter(_._2 != <span class="type">JNothing</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">series</span>(</span>docs: <span class="type">List</span>[<span class="type">Document</span>]) = punctuate(text(<span class="string">","</span>), docs)</span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">fields</span>(</span>docs: <span class="type">List</span>[<span class="type">Document</span>]) = punctuate(text(<span class="string">","</span>) :: <span class="keyword">break</span>, docs)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">punctuate</span>(</span>p: <span class="type">Document</span>, docs: <span class="type">List</span>[<span class="type">Document</span>]): <span class="type">Document</span> =</span><br><span class="line">    <span class="keyword">if</span> (docs.length == <span class="number">0</span>) empty</span><br><span class="line">    <span class="keyword">else</span> docs.reduceLeft((d1, d2) =&gt; d1 :: p :: d2)</span><br><span class="line"></span><br><span class="line">  <span class="comment">//紧凑和漂亮的打印</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">compact</span>(</span>d: <span class="type">Document</span>): <span class="type">String</span> = <span class="type">Printer</span>.compact(d)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">pretty</span>(</span>d: <span class="type">Document</span>): <span class="type">String</span> = <span class="type">Printer</span>.pretty(d)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">JsonMethods</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">native</span>.<span class="title">JsonMethods</span></span></span><br></pre></td></tr></table></figure>
+<p>  可以发现<code>json4s</code>提供了<code>parse</code>和<code>render</code>两大方法来进行<code>JSON</code>的转换。</p>
+</li>
+<li><code>import org.json4s.JsonDSL._</code><br>  <code>render</code>方法需要传入的是<code>JValue</code>类型的值，它并不是<code>Scala</code>的原生对象，所以需要通过转换而为之。<code>JsonDSL</code>这个特质就是提供了这些隐式转换：  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">  <span class="class"><span class="keyword">trait</span> <span class="title">JsonDSL</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Object</span> <span class="keyword"><span class="keyword">with</span></span> <span class="title">org</span>.<span class="title">json4s</span>.<span class="title">Implicits</span> &#123;</span></span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">seq2jvalue</span>[</span><span class="type">A</span>](s : scala.<span class="type">Traversable</span>[<span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">1</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JArray</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">map2jvalue</span>[</span><span class="type">A</span>](m : scala.<span class="type">Predef</span>.<span class="type">Map</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">2</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">option2jvalue</span>[</span><span class="type">A</span>](opt : scala.<span class="type">Option</span>[<span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">3</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">symbol2jvalue</span>(</span>x : scala.<span class="type">Symbol</span>) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JString</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">pair2jvalue</span>[</span><span class="type">A</span>](t : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">4</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">list2jvalue</span>(</span>l : scala.<span class="type">List</span>[org.json4s.<span class="type">JsonAST</span>.<span class="type">JField</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">jobject2assoc</span>(</span>o : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span>) : <span class="type">JsonDSL</span>.<span class="keyword">this</span>.<span class="type">JsonListAssoc</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">JsonListAssoc</span>(</span>left : scala.<span class="type">List</span>[org.json4s.<span class="type">JsonAST</span>.<span class="type">JField</span>]) <span class="keyword">extends</span> java.lang.<span class="type">Object</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>(</span>right : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>(</span>right : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span>) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">pair2Assoc</span>[</span><span class="type">A</span>](t : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">5</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : <span class="type">JsonDSL</span>.<span class="keyword">this</span>.<span class="type">JsonAssoc</span>[<span class="type">A</span>] = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">JsonAssoc</span>[</span><span class="type">A</span>](left : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">6</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) <span class="keyword">extends</span> java.lang.<span class="type">Object</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>[</span><span class="type">B</span>](right : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">B</span>])(<span class="keyword">implicit</span> evidence$<span class="number">7</span> : scala.<span class="type">Function1</span>[<span class="type">B</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>(</span>right : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span>) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="JSON字符串转对象">JSON字符串转对象</h2><p>可以使用<code>parse</code>方法将<code>JSON</code>字符串进行转换<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t=parse</span>(</span><span class="string">""" &#123; "name" : "tom","age":23,"number":[1,2,3,4] &#125; """</span>)</span><br><span class="line">println(t)</span><br></pre></td></tr></table></figure></p>
+<p>最终打印的结果为：</p>
+<pre><code>JObject<span class="list">(<span class="keyword">List</span><span class="list">(<span class="list">(<span class="keyword">name</span>,JString<span class="list">(<span class="keyword">tom</span>)</span>)</span>, <span class="list">(<span class="keyword">age</span>,JInt<span class="list">(<span class="number">23</span>)</span>)</span>, <span class="list">(<span class="keyword">number</span>,JArray<span class="list">(<span class="keyword">List</span><span class="list">(<span class="keyword">JInt</span><span class="list">(<span class="number">1</span>)</span>, JInt<span class="list">(<span class="number">2</span>)</span>, JInt<span class="list">(<span class="number">3</span>)</span>, JInt<span class="list">(<span class="number">4</span>)</span>)</span>)</span>)</span>)</span>)</span>
+</code></pre><p>根据打印结果可以发现转换之后的并不是<code>Scala</code>的原生对象，那么如何取得它的原生对象呢？它其实是一个<code>Map[String,_]</code>类型的转换<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>((k,v)&lt;-t.values.asInstanceOf[<span class="type">Map</span>[<span class="type">String</span>,_]])</span><br><span class="line">&#123;</span><br><span class="line">println(k,<span class="string">"-&gt;"</span>,v,v.getClass)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将<code>Map</code>遍历输出之后</p>
+<pre><code>(name,-&gt;,tom,class java<span class="class">.lang</span><span class="class">.String</span>)
+(age,-&gt;,<span class="number">23</span>,class scala<span class="class">.math</span><span class="class">.BigInt</span>)
+(number,-&gt;,<span class="function"><span class="title">List</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span></span>,class scala<span class="class">.collection</span><span class="class">.immutable</span>.<span class="variable">$colon</span><span class="variable">$colon</span>)
+</code></pre><p>可以发现<code>parse</code>之后仍旧保留着语言来字符串中可识别的类型，那么还有其他方式取值吗？其实它还支持使用反斜杠(\)的方式进行在顶级目录下取值：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="string">"name"</span>,(t \ <span class="string">"name"</span>).values)</span><br><span class="line">println(<span class="string">"age"</span>,(t \ <span class="string">"age"</span>).values)</span><br><span class="line">println(<span class="string">"number"</span>,(t \ <span class="string">"number"</span>).values)</span><br></pre></td></tr></table></figure></p>
+<p>取到得结果为</p>
+<pre><code><span class="list">(<span class="keyword"><span class="built_in">name</span></span>,tom)</span>
+<span class="list">(<span class="keyword">age</span>,<span class="number">23</span>)</span>
+<span class="list">(<span class="keyword">number</span>,List<span class="list">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span>)</span>
+</code></pre><p>这个功能是不是略显惊讶，特别方法，恩，的确很方便。<br><br>同时该对象还可以直接转换为样例类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>(</span>name:<span class="type">String</span>,age:<span class="type">Int</span>)<span class="comment">//注意这个样例类不要放方法里面，放在外部可访问的地方即可</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">val</span> <span class="title">formats</span> =</span> <span class="type">DefaultFormats</span><span class="comment">//这个日期转换的隐式导入不要忘了，如果有特殊格式还需要自己写</span></span><br><span class="line">println(t.extract[<span class="type">Student</span>])<span class="comment">//这里即可取的对应的样例类数据</span></span><br></pre></td></tr></table></figure></p>
+<p>输出为：</p>
+<pre><code><span class="function"><span class="title">Student</span><span class="params">(tom,<span class="number">23</span>)</span></span>
+</code></pre><p>这个转换功能特别方法，果然,<code>Scala</code>下得<code>JSON</code>转换类库还是有很多自己的特色的^_^。</p>
+<h2 id="对象转JSON字符串">对象转JSON字符串</h2><blockquote>
+<p>注意在打印的时候一定要添加<code>compact()</code>方法，这样才能将字符串紧凑的表示，不然都是<code>Doc</code>对象。</p>
+</blockquote>
+<ul>
+<li><p>集合类的序列化</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">println(compact(render(<span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>))))</span><br><span class="line"><span class="comment">//结果：[1,2,3,4]</span></span><br><span class="line">println(compact(render(<span class="type">Map</span>(<span class="string">"name"</span>-&gt;<span class="string">"tom"</span>,<span class="string">"age"</span>-&gt;<span class="string">"23"</span>))))</span><br><span class="line"><span class="comment">//结果：&#123;"name":"tom","age":"23"&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>只支持<code>Seq</code>和<code>List</code></p>
+</blockquote>
+</li>
+<li><p>元组的序列化</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">tuple=</span>(</span><span class="string">"name"</span>,<span class="string">"tom"</span>)</span><br><span class="line">   println(compact(render(tuple)))</span><br><span class="line">   <span class="comment">//结果：&#123;"name":"tom"&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：这里只支持<code>Tuple2[String,A]</code>这种格式的元组，将会序列化成键值对</p>
+</blockquote>
+</li>
+<li><p>可以使用<code>~</code>将两个字段进行连接操作</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">tuple=</span>(</span><span class="string">"name"</span>,<span class="string">"tom"</span>)~(<span class="string">"age"</span>,<span class="number">23</span>)</span><br><span class="line">println(tuple)</span><br><span class="line">println(compact(render(tuple)))</span><br><span class="line"><span class="comment">//结果：</span></span><br><span class="line"><span class="comment">//JObject(List((name,JString(tom)), (age,JInt(23))))</span></span><br><span class="line"><span class="comment">//&#123;"name":"tom","age":23&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>任何键的值可以为可选的，为<code>None</code>时将不会被序列化</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">tuple=</span>(</span><span class="string">"name"</span>,<span class="string">"tom"</span>)~(<span class="string">"age"</span>,<span class="type">None</span>:<span class="type">Option</span>[<span class="type">Int</span>])</span><br><span class="line">println(tuple)                                   </span><br><span class="line">println(compact(render(tuple)))</span><br><span class="line"><span class="comment">//结果：</span></span><br><span class="line"><span class="comment">//JObject(List((name,JString(tom)), (age,JNothing)))</span></span><br><span class="line"><span class="comment">//&#123;"name":"tom"&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一个复杂一点的列子</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Winner</span>(</span>id: <span class="type">Long</span>, numbers: <span class="type">List</span>[<span class="type">Int</span>])</span><br><span class="line">   <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Lotto</span>(</span>id: <span class="type">Long</span>, winningNumbers: <span class="type">List</span>[<span class="type">Int</span>], winners: <span class="type">List</span>[<span class="type">Winner</span>], drawDate: <span class="type">Option</span>[java.util.<span class="type">Date</span>])</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">val</span> <span class="title">winners</span> =</span> <span class="type">List</span>(<span class="type">Winner</span>(<span class="number">23</span>, <span class="type">List</span>(<span class="number">2</span>, <span class="number">45</span>, <span class="number">34</span>, <span class="number">23</span>, <span class="number">3</span>, <span class="number">5</span>)), <span class="type">Winner</span>(<span class="number">54</span>, <span class="type">List</span>(<span class="number">52</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">11</span>, <span class="number">18</span>, <span class="number">22</span>)))</span><br><span class="line">   <span class="function"><span class="keyword">val</span> <span class="title">lotto</span> =</span> <span class="type">Lotto</span>(<span class="number">5</span>, <span class="type">List</span>(<span class="number">2</span>, <span class="number">45</span>, <span class="number">34</span>, <span class="number">23</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">3</span>), winners, <span class="type">Option</span>(<span class="keyword">new</span> java.util.<span class="type">Date</span>()))</span><br><span class="line">   <span class="function"><span class="keyword">val</span> <span class="title">json</span> =</span></span><br><span class="line">     (<span class="string">"lotto"</span> -&gt;</span><br><span class="line">       (<span class="string">"lotto-id"</span> -&gt; lotto.id) ~</span><br><span class="line">         (<span class="string">"winning-numbers"</span> -&gt; lotto.winningNumbers) ~</span><br><span class="line">         (<span class="string">"draw-date"</span> -&gt; lotto.drawDate.map(_.toString)) ~</span><br><span class="line">         (<span class="string">"winners"</span> -&gt;</span><br><span class="line">           lotto.winners.map &#123; w =&gt;</span><br><span class="line">             ((<span class="string">"winner-id"</span> -&gt; w.id) ~</span><br><span class="line">               (<span class="string">"numbers"</span> -&gt; w.numbers))</span><br><span class="line">           &#125;))</span><br><span class="line"></span><br><span class="line">   println(pretty(render(json)))</span><br></pre></td></tr></table></figure>
+<p>  打印的结果为:</p>
+<pre><code>{"<span class="attribute">lotto</span>":<span class="value">{"<span class="attribute">lotto-id</span>":<span class="value"><span class="number">5</span></span>,"<span class="attribute">winning-numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">7</span>,<span class="number">5</span>,<span class="number">3</span>]</span>,"<span class="attribute">draw-date</span>":<span class="value"><span class="string">"Sun May 24 15:41:29 CST 2015"</span></span>,"<span class="attribute">winners</span>":<span class="value">[{"<span class="attribute">winner-id</span>":<span class="value"><span class="number">23</span></span>,"<span class="attribute">numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">3</span>,<span class="number">5</span>]</span>},{"<span class="attribute">winner-id</span>":<span class="value"><span class="number">54</span></span>,"<span class="attribute">numbers</span>":<span class="value">[<span class="number">52</span>,<span class="number">3</span>,<span class="number">12</span>,<span class="number">11</span>,<span class="number">18</span>,<span class="number">22</span>]</span>}]</span>}</span>}
+</code></pre><p>  如果你使用<code>pretty()</code>方法来组织<code>JSON</code>:</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println(pretty(render(json)))</span><br></pre></td></tr></table></figure>
+<p>  就可以得到：</p>
+<pre><code>{
+  "<span class="attribute">lotto</span>":<span class="value">{
+    "<span class="attribute">lotto-id</span>":<span class="value"><span class="number">5</span></span>,
+    "<span class="attribute">winning-numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">7</span>,<span class="number">5</span>,<span class="number">3</span>]</span>,
+    "<span class="attribute">draw-date</span>":<span class="value"><span class="string">"Sun May 24 15:43:01 CST 2015"</span></span>,
+    "<span class="attribute">winners</span>":<span class="value">[{
+      "<span class="attribute">winner-id</span>":<span class="value"><span class="number">23</span></span>,
+      "<span class="attribute">numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">3</span>,<span class="number">5</span>]
+    </span>},{
+      "<span class="attribute">winner-id</span>":<span class="value"><span class="number">54</span></span>,
+      "<span class="attribute">numbers</span>":<span class="value">[<span class="number">52</span>,<span class="number">3</span>,<span class="number">12</span>,<span class="number">11</span>,<span class="number">18</span>,<span class="number">22</span>]
+    </span>}]
+  </span>}
+</span>}
+</code></pre><p>  这样可读性明显提高多了。</p>
+</li>
+</ul>
+<h2 id="合并和差异化对比">合并和差异化对比</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t1=parse</span>(</span></span><br><span class="line">  <span class="string">"""</span><br><span class="line">    &#123;"name":"tom",</span><br><span class="line">       "age":23,</span><br><span class="line">       "class":["xiaoerban"]</span><br><span class="line">    &#125;</span><br><span class="line">  """</span>)</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t2=parse</span>(</span></span><br><span class="line">  <span class="string">"""</span><br><span class="line">    &#123;"name":"tom",</span><br><span class="line">       "age":23,</span><br><span class="line">       "class":["xiaosanban"]</span><br><span class="line">    &#125;</span><br><span class="line">  """</span>)</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t3=t1</span> <span class="title">merge</span> <span class="title">t2</span></span><br><span class="line"></span>println(pretty(render(t3)))</span><br></pre></td></tr></table></figure>
+<p>合并之后的结果为</p>
+<pre><code>{
+  "<span class="attribute">name</span>":<span class="value"><span class="string">"tom"</span></span>,
+  "<span class="attribute">age</span>":<span class="value"><span class="number">23</span></span>,
+  "<span class="attribute">class</span>":<span class="value">[<span class="string">"xiaoerban"</span>,<span class="string">"xiaosanban"</span>]
+</span>}
+</code></pre><p>接下来咱们对比一下合并之后的差异化：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">Diff</span>(</span>changed,added,deleted)=t3 diff t1</span><br><span class="line">println(<span class="string">"changed"</span>,changed)</span><br><span class="line">println(<span class="string">"added"</span>,added)</span><br><span class="line">println(<span class="string">"deleted"</span>,deleted)</span><br></pre></td></tr></table></figure></p>
+<p>输出的差异化为：</p>
+<pre><code><span class="list">(<span class="keyword">changed</span>,JNothing)</span>
+<span class="list">(<span class="keyword">added</span>,JNothing)</span>
+<span class="list">(<span class="keyword">deleted</span>,JObject<span class="list">(<span class="keyword">List</span><span class="list">(<span class="list">(<span class="keyword"><span class="built_in">class</span></span>,JArray<span class="list">(<span class="keyword">List</span><span class="list">(<span class="keyword">JString</span><span class="list">(<span class="keyword">xiaosanban</span>)</span>)</span>)</span>)</span>)</span>)</span>)</span>
+</code></pre><h2 id="XML的支持">XML的支持</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.json4s.<span class="type">Xml</span>.&#123;toJson, toXml&#125;</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">xml</span> =</span></span><br><span class="line">  &lt;users&gt;</span><br><span class="line">    &lt;user&gt;</span><br><span class="line">      &lt;id&gt;<span class="number">1</span>&lt;/id&gt;</span><br><span class="line">      &lt;name&gt;<span class="type">Harry</span>&lt;/name&gt;</span><br><span class="line">    &lt;/user&gt;</span><br><span class="line">    &lt;user&gt;</span><br><span class="line">      &lt;id&gt;<span class="number">2</span>&lt;/id&gt;</span><br><span class="line">      &lt;name&gt;<span class="type">David</span>&lt;/name&gt;</span><br><span class="line">    &lt;/user&gt;</span><br><span class="line">  &lt;/users&gt;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">json</span> =</span> toJson(xml)</span><br><span class="line">println(pretty(render(json)))</span><br></pre></td></tr></table></figure>
+<p>输出的结果为：</p>
+<pre><code>{
+  "<span class="attribute">users</span>":<span class="value">{
+    "<span class="attribute">user</span>":<span class="value">[{
+      "<span class="attribute">id</span>":<span class="value"><span class="string">"1"</span></span>,
+      "<span class="attribute">name</span>":<span class="value"><span class="string">"Harry"</span>
+    </span>},{
+      "<span class="attribute">id</span>":<span class="value"><span class="string">"2"</span></span>,
+      "<span class="attribute">name</span>":<span class="value"><span class="string">"David"</span>
+    </span>}]
+  </span>}
+</span>}
+</code></pre><h2 id="总结">总结</h2><p><code>JSON4S</code>很好很强大，其他功能请参考1。</p>
+<p>虽然<code>Scala</code>可以无缝的直接访问<code>java</code>版本的<code>JSON</code>解析类库，但是由于<code>Scala</code>有它自己的语法简洁性，所以在<code>Scala</code>环境下强烈推荐使用<code>JSON4S</code>.^_^</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="https://github.com/json4s/json4s" target="_blank" rel="external">https://github.com/json4s/json4s</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external"></a></p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Json4s/">Json4s</a><a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/05/24/Scala/Study-And-User-JSON4S/" data-title="学习和使用Scala的Json解析类库-JSON4S | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/05/23/Effective Java/Generic/"  title="第5章：泛型">
+ <strong>下一篇：</strong><br/> 
+ <span>第5章：泛型
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/05/24/Scala/Study-And-User-JSON4S/" data-title="学习和使用Scala的Json解析类库-JSON4S" data-url="http://yyl8781697.github.io/2015/05/24/Scala/Study-And-User-JSON4S/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#下载JSON4S"><span class="toc-number">2.</span> <span class="toc-text">下载JSON4S</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#需导入的核心包介绍"><span class="toc-number">3.</span> <span class="toc-text">需导入的核心包介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSON字符串转对象"><span class="toc-number">4.</span> <span class="toc-text">JSON字符串转对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对象转JSON字符串"><span class="toc-number">5.</span> <span class="toc-text">对象转JSON字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合并和差异化对比"><span class="toc-number">6.</span> <span class="toc-text">合并和差异化对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XML的支持"><span class="toc-number">7.</span> <span class="toc-text">XML的支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mongodb/" title="Mongodb">Mongodb<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
