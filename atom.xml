@@ -98,11 +98,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[枚举和注解]]></title>
+    <title><![CDATA[《Effective Java》第六章：枚举和注解]]></title>
     <link href="http://yyl8781697.github.io/2015/05/30/Effective%20Java/Enum-And-Annotation/"/>
     <id>http://yyl8781697.github.io/2015/05/30/Effective Java/Enum-And-Annotation/</id>
     <published>2015-05-30T15:57:33.000Z</published>
-    <updated>2015-05-30T16:51:12.000Z</updated>
+    <updated>2015-05-31T15:33:03.000Z</updated>
     <content type="html"><![CDATA[<h2 id="第30条：用枚举代替int常量">第30条：用枚举代替int常量</h2><p>在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式就是声明一组具名的<code>int</code>常量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_FUJI			=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_PIPPIN		=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_GRANNY_SMITH	=<span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
 <p>但是它又诸多的缺点：</p>
 <ul>
@@ -296,11 +296,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[第5章：泛型]]></title>
+    <title><![CDATA[《Effective Java》第五章：泛型]]></title>
     <link href="http://yyl8781697.github.io/2015/05/23/Effective%20Java/Generic/"/>
     <id>http://yyl8781697.github.io/2015/05/23/Effective Java/Generic/</id>
     <published>2015-05-23T15:05:33.000Z</published>
-    <updated>2015-05-25T15:50:50.000Z</updated>
+    <updated>2015-05-31T15:32:49.000Z</updated>
     <content type="html"><![CDATA[<p>泛型，可以告诉编译器每个集合中接受哪些对象类型，编译器会自动地为你的插入进行转化，并在编译时告知是否插入了类型错误的对象。(貌似<code>Java</code>里面的泛型都是<strong>伪泛型</strong>吧-_-|)</p>
 <h2 id="第23条：请不要再新代码中使用原生态类型">第23条：请不要再新代码中使用原生态类型</h2><blockquote>
 <p>什么是原生态类型？</p>
