@@ -59,8 +59,8 @@
     <link href="http://yyl8781697.github.io/2015/05/31/Spark/Build-Spark-Source-And-Compile/"/>
     <id>http://yyl8781697.github.io/2015/05/31/Spark/Build-Spark-Source-And-Compile/</id>
     <published>2015-05-31T05:57:05.000Z</published>
-    <updated>2015-05-31T15:26:11.000Z</updated>
-    <content type="html"><![CDATA[<p>之前在看网上使用Eclipse搭建<code>Spark</code>的源码环境各种复杂，所以我只会spark source code下载下来，然后Import到Eclipse中，各种报错，各种包没有，还有我只是看看源码而已，不运行它报错也无所谓啦，人懒没办法..<br><br>但是现在想深入得学习一下<code>Spark</code>的源码环,就不得不搭建完整地环境，所以使用号称开发神器的IDEA来搭建<code>Spark</code>的源码环境，果然很方便^_^</p>
+    <updated>2015-05-31T15:29:00.000Z</updated>
+    <content type="html"><![CDATA[<p>之前在看网上使用Eclipse搭建<code>Spark</code>的源码环境各种复杂，所以我只会spark source code下载下来，然后Import到Eclipse中，各种报错，各种包没有，还好我只是看看源码而已，不运行它报错也无所谓啦，人懒没办法..-<em>-<br><br>但是现在想深入得学习一下<code>Spark</code>的源码环,就不得不搭建完整地环境，所以使用号称开发神器的IDEA来搭建<code>Spark</code>的源码环境，果然很方便^</em>^</p>
 <h2 id="准备工作">准备工作</h2><ul>
 <li><code>JDK1.7+</code></li>
 <li><code>Scala2.10.4</code>(最好用这个版本，不然用最新版可能导致Spark出各种错误，点<a href="http://www.scala-lang.org/download/2.10.4.html" target="_blank" rel="external">这里</a>下载)</li>
@@ -88,7 +88,7 @@
 </blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p>之前在看网上使用Eclipse搭建<code>Spark</code>的源码环境各种复杂，所以我只会spark source code下载下来，然后Import到Eclipse中，各种报错，各种包没有，还有我只是看看源码而已，不运行它报错也无所谓啦，人懒没办法..<br><]]>
+    <![CDATA[<p>之前在看网上使用Eclipse搭建<code>Spark</code>的源码环境各种复杂，所以我只会spark source code下载下来，然后Import到Eclipse中，各种报错，各种包没有，还好我只是看看源码而已，不运行它报错也无所谓啦，人懒没办法..-<em>]]>
     </summary>
     
       <category term="Spark" scheme="http://yyl8781697.github.io/tags/Spark/"/>
