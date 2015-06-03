@@ -99,7 +99,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第30条：用枚举代替int常量"><span class="toc-number">1.</span> <span class="toc-text">第30条：用枚举代替int常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第31条：用实例域代替序数"><span class="toc-number">2.</span> <span class="toc-text">第31条：用实例域代替序数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第32条：用EnumSet代替位域"><span class="toc-number">3.</span> <span class="toc-text">第32条：用EnumSet代替位域</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第30条：用枚举代替int常量"><span class="toc-number">1.</span> <span class="toc-text">第30条：用枚举代替int常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第31条：用实例域代替序数"><span class="toc-number">2.</span> <span class="toc-text">第31条：用实例域代替序数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第32条：用EnumSet代替位域"><span class="toc-number">3.</span> <span class="toc-text">第32条：用EnumSet代替位域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第33条：用EnumMap代替序数索引"><span class="toc-number">4.</span> <span class="toc-text">第33条：用EnumMap代替序数索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第34条：用接口模拟可伸缩的枚举"><span class="toc-number">5.</span> <span class="toc-text">第34条：用接口模拟可伸缩的枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第35条：注解优于命名模式"><span class="toc-number">6.</span> <span class="toc-text">第35条：注解优于命名模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第36条：坚持使用Override注解"><span class="toc-number">7.</span> <span class="toc-text">第36条：坚持使用Override注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第37条：用标记接口定义类型"><span class="toc-number">8.</span> <span class="toc-text">第37条：用标记接口定义类型</span></a></li></ol>
 		
 		</div>
 		
@@ -138,8 +138,61 @@
 <pre><code>[BOLD, ITALIC]
 </code></pre><p>这种打印显示的总比单纯的数字要美好的多。</p>
 <blockquote>
-<p>总而言之，正式因为枚举类型要用集合，所以没有理由用位域来表示它。</p>
+<p>总而言之，正式因为枚举类型要用集合，所以没有理由用位域来表示它。<br>其实我觉得用<code>EnumSet</code>应该没有位域快啊，估计高手还是会去用位域的把</p>
 </blockquote>
+<h2 id="第33条：用EnumMap代替序数索引">第33条：用EnumMap代替序数索引</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Herb</span></span>&#123;</span><br><span class="line">		<span class="keyword">public</span> <span class="keyword">enum</span> Type &#123;ANNUL,PERENNIAL,BIENNIAL&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当你需要将上面类的实例根据<code>Type</code>枚举类型来存储起来是，它推荐这么做：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Herb.Type,Set&lt;Herb&gt;&gt; enumMap=<span class="keyword">new</span> EnumMap&lt;Herb.Type,Set&lt;Herb&gt;&gt;(Herb.Type.class);</span><br></pre></td></tr></table></figure></p>
+<p>但是我觉得何必这么麻烦,用下面的写得表示也很方便嘛，也还不需要记那么多东西<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Set&lt;Herb&gt;&gt; map=<span class="keyword">new</span> HashMap&lt;Integer,Set&lt;Herb&gt;&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>每次使用<code>Type.ordinal()</code>的索引即可。</p>
+<h2 id="第34条：用接口模拟可伸缩的枚举">第34条：用接口模拟可伸缩的枚举</h2><p>前面几条讲了使用<code>Enum</code>的便利性，安全性，但是它的可伸缩性比较弱，因为枚举无法再继承类或者枚举，比较幸运地时枚举支持接口的实现。<br>例如第30条中的四则运算我需要扩展其他的运算：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ExtendOperation implements Calc&#123;</span><br><span class="line">	EXP(<span class="string">"^"</span>)&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> Math.pow(x,y);&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	REMAINDER(<span class="string">"%"</span>)&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x%y;&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String symbol;</span><br><span class="line">	ExtendOperation(String symbol)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>.symbol=symbol;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.symbol;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后你就可以这么使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	System.out.println(test(Operation.PLUS,<span class="number">2</span>,<span class="number">3</span>));<span class="comment">//调用加法</span></span><br><span class="line">	System.out.println(test(ExtendOperation.EXP,<span class="number">2</span>,<span class="number">3</span>));<span class="comment">//调用求幂</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Enum&lt;T&gt; &amp; Calc&gt; <span class="function"><span class="keyword">double</span> <span class="title">test</span><span class="params">(T opt,<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> opt.apply(x, y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最终会输出</p>
+<pre><code>5.0
+8.0
+</code></pre><p>总而言之，虽然无法编写可扩展的枚举类型，却可以通过编写接口以及实现该接口的基础枚举类型，对它进行模拟。</p>
+<h2 id="第35条：注解优于命名模式">第35条：注解优于命名模式</h2><p>以<code>JUnit</code>为例，命名模式的3大缺陷：</p>
+<ol>
+<li>文字拼写错误会导致失败，并且没有任何提示</li>
+<li>无法确保他们只用于相应的程序元素上</li>
+<li>它们都没有提供将参数值与程序元素关联起来的好方法</li>
+</ol>
+<p>你这通过这种方式简单的来创建一个自己的注解<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="annotation">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="keyword">public</span> <span class="annotation">@interface</span> MyTest &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>MyTest</code>注解类型的声明就是它自身的<code>Retention</code>和<code>Targer</code>注解进行了注解，这些注解类型称为元注解，其中：</p>
+<ul>
+<li><code>@Retention(RetentionPolicy.RUNTIME)</code>表示<code>MyTest</code>注解应该在运行时保留</li>
+<li><code>@Target(ElementType.METHOD)</code>表示该注解仅用于方法上</li>
+</ul>
+<p>我们有了这个注解之后可以这么使用它<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@MyTest</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@MyTest</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@MyTest</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"i am error test4"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那我们如何调用这个注解呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunTests</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">int</span> tests=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">int</span> passed=<span class="number">0</span>;</span><br><span class="line">		Class testClass=Class.forName(<span class="string">"yyl.java.study.test.HelloWorld"</span>);</span><br><span class="line">		Object testClassInstance=testClass.newInstance();</span><br><span class="line">		<span class="keyword">for</span>(Method m:testClass.getDeclaredMethods())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(m.isAnnotationPresent(MyTest.class))</span><br><span class="line">			&#123;</span><br><span class="line">				tests++;</span><br><span class="line">				<span class="keyword">try</span></span><br><span class="line">				&#123;</span><br><span class="line">					m.invoke(testClassInstance,<span class="keyword">null</span>);<span class="comment">//对实例的方法进行调用</span></span><br><span class="line">					passed++;</span><br><span class="line">					System.out.println(<span class="string">"PASSED:"</span>+m.getName());</span><br><span class="line">				&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">				&#123;</span><br><span class="line">					System.out.println(<span class="string">"FAILD:"</span>+m.getName());</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		System.out.println(String.format(<span class="string">"PASSED:%s,FAILED:%s"</span>,passed,tests-passed));</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动这个<code>RunTests</code>会得到</p>
+<pre><code><span class="string">PASSED:</span>test3
+<span class="string">FAILD:</span>test4
+<span class="string">PASSED:</span>test1
+<span class="string">PASSED:</span><span class="number">2</span>,<span class="string">FAILED:</span><span class="number">1</span>
+</code></pre><p>一个简易版的测试框架就完成了，该书中的其他内容是讲你如何完善这个自制的测试框架，比如添加异常的注解，最终判断失败的机制等，我个人觉得只要把上述的简易框架看懂其他都不是问题。^_^</p>
+<blockquote>
+<p>既然有了注解，那么完全没有理由再使用命名模式了。</p>
+</blockquote>
+<h2 id="第36条：坚持使用Override注解">第36条：坚持使用Override注解</h2><p>估计<code>Override</code>注解是在<code>Java</code>中最常见也是常用的一种注解了吧，它标志方法被重写，但是在<code>java</code>中你重写方法时不加<code>Override</code>也是可以正常运行的，所以我相信很多人会懒掉这个注解，关于这个注解书中有下面几个推荐理由：</p>
+<ul>
+<li>你再重写得定义上出错时如果有<code>Override</code>，编译器就会帮你检查错误</li>
+<li>IDE具有自动检查功能，当你没有用<code>Override</code>但是却覆盖了超类的方法时，IDE就是产生一条警告，提醒确认。</li>
+<li>还可以让程序员清晰地看到这条方式是否是重写方法，在看代码的找起来比较方便啊（我自己觉得的）</li>
+</ul>
+<p>总而言之，如果在你想要的每个方法声明中使用<code>Override</code>注解来覆盖超类声明，编译器就可以替你防止大量的错误（在继承抽象类时可以不加。。但是我觉得还是加的好）</p>
+<h2 id="第37条：用标记接口定义类型">第37条：用标记接口定义类型</h2><p>标记接口是没有包含方法声明的接口，而只是指明一个类实现了具有某种属性的接口，比如<code>Serializable</code></p>
+<p>关于标记接口与标记注解的争论：</p>
+<p>标记接口的优势：</p>
+<ul>
+<li>标记接口定义的类型是由被标记类的实例实现的；标记注解则没有定义这样的类型</li>
+<li>标记接口可以更加精确地进行锁定</li>
+</ul>
+<p>标记注解的优势：</p>
+<ul>
+<li>它可以通过默认的方式添加一个或者多个注解类型的元素</li>
+<li>标记注解作为变成元素之一的框架中同样具有一致性。</li>
+</ul>
+<p>总而言之，标记接口和标记注解都各有用处，如果想要定义一个任何新的方法都不会与之关联的类型，标记接口是最好的选择。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -206,7 +259,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第30条：用枚举代替int常量"><span class="toc-number">1.</span> <span class="toc-text">第30条：用枚举代替int常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第31条：用实例域代替序数"><span class="toc-number">2.</span> <span class="toc-text">第31条：用实例域代替序数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第32条：用EnumSet代替位域"><span class="toc-number">3.</span> <span class="toc-text">第32条：用EnumSet代替位域</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第30条：用枚举代替int常量"><span class="toc-number">1.</span> <span class="toc-text">第30条：用枚举代替int常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第31条：用实例域代替序数"><span class="toc-number">2.</span> <span class="toc-text">第31条：用实例域代替序数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第32条：用EnumSet代替位域"><span class="toc-number">3.</span> <span class="toc-text">第32条：用EnumSet代替位域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第33条：用EnumMap代替序数索引"><span class="toc-number">4.</span> <span class="toc-text">第33条：用EnumMap代替序数索引</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第34条：用接口模拟可伸缩的枚举"><span class="toc-number">5.</span> <span class="toc-text">第34条：用接口模拟可伸缩的枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第35条：注解优于命名模式"><span class="toc-number">6.</span> <span class="toc-text">第35条：注解优于命名模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第36条：坚持使用Override注解"><span class="toc-number">7.</span> <span class="toc-text">第36条：坚持使用Override注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第37条：用标记接口定义类型"><span class="toc-number">8.</span> <span class="toc-text">第37条：用标记接口定义类型</span></a></li></ol>
  
   </div>
 
@@ -292,7 +345,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Spark/" title="Spark">Spark<sup>1</sup></a></li>
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>2</sup></a></li>
 		  
 		
 		</ul>
@@ -321,7 +374,7 @@
 			
 		
 			
-				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
 			
 		
 			
@@ -329,19 +382,7 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
 			
 		
 			
@@ -349,7 +390,23 @@
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>1</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			
@@ -357,11 +414,7 @@
 			
 		
 			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
 			
 		
 			
@@ -369,15 +422,15 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
 			
 		
 			
