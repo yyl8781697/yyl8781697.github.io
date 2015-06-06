@@ -2,6 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yyl8781697.github.io/2015/06/04/AKKA/Study-AKKA-First/</loc>
+    <lastmod>2015-06-06T04:21:49.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/06/06/Scala/Enum-in-Scala/</loc>
+    <lastmod>2015-06-06T04:19:56.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/books/index.html</loc>
+    <lastmod>2015-06-04T15:48:22.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yyl8781697.github.io/2015/05/03/Java%20Base/You-Donnot-Kown-About-The-Clone/</loc>
     <lastmod>2015-06-03T16:38:49.000Z</lastmod>
   </url>
@@ -54,11 +69,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/05/14/Linux/Vim-Command-List/</loc>
     <lastmod>2015-05-16T02:12:34.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/books/index.html</loc>
-    <lastmod>2015-05-15T13:55:55.000Z</lastmod>
   </url>
   
   <url>

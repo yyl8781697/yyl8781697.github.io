@@ -1,0 +1,691 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>谈谈Scala中的枚举 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="先谈Java中的枚举将Scala的枚举之前，我们先来讲讲关于Java里面的枚举（相信对于广大程序猿来说都是很熟悉）：
+
+使用enum关键词定义
+  1public enum WeekDay&amp;#123;...&amp;#125;
+
+无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了java.lang.Enum
+
+无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）
+枚举">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谈谈Scala中的枚举">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/06/Scala/Enum-in-Scala/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="先谈Java中的枚举将Scala的枚举之前，我们先来讲讲关于Java里面的枚举（相信对于广大程序猿来说都是很熟悉）：
+
+使用enum关键词定义
+  1public enum WeekDay&amp;#123;...&amp;#125;
+
+无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了java.lang.Enum
+
+无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）
+枚举">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="谈谈Scala中的枚举">
+<meta name="twitter:description" content="先谈Java中的枚举将Scala的枚举之前，我们先来讲讲关于Java里面的枚举（相信对于广大程序猿来说都是很熟悉）：
+
+使用enum关键词定义
+  1public enum WeekDay&amp;#123;...&amp;#125;
+
+无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了java.lang.Enum
+
+无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）
+枚举">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举" itemprop="url">谈谈Scala中的枚举</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-06T01:56:03.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#先谈Java中的枚举"><span class="toc-number">1.</span> <span class="toc-text">先谈Java中的枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#再看Scala中的枚举"><span class="toc-number">2.</span> <span class="toc-text">再看Scala中的枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration源码分析"><span class="toc-number">3.</span> <span class="toc-text">Enumeration源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数以有变量"><span class="toc-number">3.1.</span> <span class="toc-text">构造函数以有变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Value类的相关定义"><span class="toc-number">3.2.</span> <span class="toc-text">Value类的相关定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Value方法的定义"><span class="toc-number">3.3.</span> <span class="toc-text">Value方法的定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scala中枚举的简单使用"><span class="toc-number">4.</span> <span class="toc-text">Scala中枚举的简单使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="先谈Java中的枚举">先谈Java中的枚举</h2><p>将<code>Scala</code>的枚举之前，我们先来讲讲关于<code>Java</code>里面的枚举（相信对于广大程序猿来说都是很熟悉）：</p>
+<ul>
+<li><p>使用<code>enum</code>关键词定义</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;...&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了<code>java.lang.Enum</code></p>
+</li>
+<li>无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）</li>
+<li>枚举其实是一组<code>int</code>常量（当初它就是因为使用<code>int</code>常量的需求很大才又了枚举），它还可以在<code>swtich</code>中很方便的使用</li>
+<li><p>每个枚举变量还可以重写枚举类或者实现接口中的方法（这个蛮好用）</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;</span><br><span class="line">Mon&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"monday"</span>;&#125;</span><br><span class="line">&#125;,</span><br><span class="line">Tue&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"tuesday"</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">""</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>…（我也不知道了-_-）</p>
+</li>
+</ul>
+<h2 id="再看Scala中的枚举">再看Scala中的枚举</h2><blockquote>
+<p>你会发现，上面说的一切在<code>Scala</code>中其实并没有甚么卵用-_-，因为在<code>Scala</code>中压根就么有<code>enum</code>这个关键词，但是当初发明<code>Scala</code>大神兼<code>Java</code>的创始人并没有落下枚举。</p>
+</blockquote>
+<p><code>Scala</code>不用关注枚举的特别语法，取而代之的是标准库中的类:<code>scala.Enumeration</code><br><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">App</span> &#123;</span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">object</span> <span class="title">WeekDay</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Enumeration</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">WeekDay</span> =</span> <span class="type">Value</span></span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">Mon</span>, <span class="title">Tue</span>, <span class="title">Wed</span>, <span class="title">Thu</span>, <span class="title">Fri</span>, <span class="title">Sat</span>, <span class="title">Sun</span> =</span> <span class="type">Value</span><span class="comment">//在这里定义具体的枚举实例</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">import</span> <span class="type">WeekDay</span>._</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isWorkingDay</span>(</span>d: <span class="type">WeekDay</span>) = ! (d == <span class="type">Sat</span> || d == <span class="type">Sun</span>)</span><br><span class="line"></span><br><span class="line">  <span class="type">WeekDay</span>.values filter isWorkingDay foreach println<span class="comment">//使用语法糖进行输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上述是源码中给的一个枚举Example，可以发现：</p>
+<ul>
+<li>它是一个伴随对象</li>
+<li>需要显式得继承<code>Enumeration</code></li>
+<li>具体的枚举实例都是需要赋值成<code>Value</code>这个对象（它是在超类中定义）</li>
+</ul>
+<h2 id="Enumeration源码分析">Enumeration源码分析</h2><h3 id="构造函数以有变量">构造函数以有变量</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Defines a finite set of values specific to the enumeration. Typically</span><br><span class="line"> *  these values enumerate all possible forms something can take and provide</span><br><span class="line"> *  a lightweight alternative to case classes.</span><br><span class="line"> *</span><br><span class="line"> *  Each call to a `Value` method adds a new unique value to the enumeration.</span><br><span class="line"> *  To be accessible, these values are usually defined as `val` members of</span><br><span class="line"> *  the evaluation.</span><br><span class="line"> *</span><br><span class="line"> *  All values in an enumeration share a common, unique type defined as the</span><br><span class="line"> *  `Value` type member of the enumeration (`Value` selected on the stable</span><br><span class="line"> *  identifier path of the enumeration instance).</span><br><span class="line"> *</span><br><span class="line"> *  @param initial The initial value from which to count the integers that</span><br><span class="line"> *                 identifies values at run-time.</span><br><span class="line"> *  @author  Matthias Zenger</span><br><span class="line"> */</span></span><br><span class="line"><span class="annotation">@SerialVersionUID</span>(<span class="number">8476000850333817230</span>L)</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Enumeration</span> (</span>initial: <span class="type">Int</span>) <span class="keyword">extends</span> <span class="type">Serializable</span> &#123;</span><br><span class="line">  thisenum =&gt;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>) = <span class="keyword">this</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** The mapping from the integer used to identify values to the actual</span><br><span class="line">    * values. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">vmap</span>:</span> mutable.<span class="type">Map</span>[<span class="type">Int</span>, <span class="type">Value</span>] = <span class="keyword">new</span> mutable.<span class="type">HashMap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The cache listing all values of this enumeration. */</span></span><br><span class="line">  <span class="annotation">@transient</span> <span class="keyword">private</span> <span class="keyword">var</span> vset: <span class="type">ValueSet</span> = <span class="literal">null</span></span><br><span class="line">  <span class="annotation">@transient</span> <span class="annotation">@volatile</span> <span class="keyword">private</span> <span class="keyword">var</span> vsetDefined = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The mapping from the integer used to identify values to their</span><br><span class="line">    * names. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">nmap</span>:</span> mutable.<span class="type">Map</span>[<span class="type">Int</span>, <span class="type">String</span>] = <span class="keyword">new</span> mutable.<span class="type">HashMap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The values of this enumeration as a set.</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">values</span>:</span> <span class="type">ValueSet</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (!vsetDefined) &#123;</span><br><span class="line">      vset = (<span class="type">ValueSet</span>.newBuilder ++= vmap.values).result()</span><br><span class="line">      vsetDefined = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    vset</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The integer to use to identify the next created value. */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">var</span> nextId: <span class="type">Int</span> = initial</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The string to use to name the next created value. */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">var</span> nextName: <span class="type">Iterator</span>[<span class="type">String</span>] = _</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">nextNameOrNull</span> =</span></span><br><span class="line">    <span class="keyword">if</span> (nextName != <span class="literal">null</span> &amp;&amp; nextName.hasNext) nextName.next <span class="keyword">else</span> <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The highest integer amongst those used to identify values in this</span><br><span class="line">    * enumeration. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">var</span> topId = initial</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The lowest integer amongst those used to identify values in this</span><br><span class="line">    * enumeration, but no higher than 0. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">var</span> bottomId = <span class="keyword">if</span>(initial &lt; <span class="number">0</span>) initial <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The one higher than the highest integer amongst those used to identify</span><br><span class="line">    *  values in this enumeration. */</span></span><br><span class="line">  <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">maxId</span> =</span> topId</span><br></pre></td></tr></table></figure>
+<p>上面是洋洋洒洒贴了<code>Enumeration</code>类在<code>Scala</code>中的部分源码，从中大致可以看到这么几个关键点：</p>
+<ul>
+<li>它提供了一个轻量级的枚举类</li>
+<li><code>initial</code>初始化变量为整个枚举实例的容量，但是它在运行时可以变化</li>
+<li><code>vmap</code>：非常重要的一个变量，它是存储了枚举id和枚举值之间的映射容器。</li>
+<li><code>nmap</code>：也是蛮重要的一个变量，存储了枚举id和枚举名称的容器</li>
+<li><code>**Id</code>：所有带Id后缀的变量都是为了维护整个枚举的序号</li>
+<li>其他就是提供了各种迭代器，用于取值的东西</li>
+</ul>
+<h3 id="Value类的相关定义">Value类的相关定义</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The type of the enumerated values. */</span></span><br><span class="line"><span class="annotation">@SerialVersionUID</span>(<span class="number">7091335633555234129</span>L)</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Value</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Ordered</span>[</span><span class="type">Value</span>] <span class="keyword">with</span> <span class="type">Serializable</span> &#123;</span><br><span class="line"><span class="comment">/** the id and bit location of this enumeration value */</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">id</span>:</span> <span class="type">Int</span></span><br><span class="line"><span class="comment">/** a marker so we can tell whose values belong to whom come reflective-naming time */</span></span><br><span class="line"><span class="keyword">private</span>[<span class="type">Enumeration</span>] <span class="function"><span class="keyword">val</span> <span class="title">outerEnum</span> =</span> thisenum</span><br><span class="line"></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span>(</span>that: <span class="type">Value</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.id &lt; that.id) -<span class="number">1</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.id == that.id) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">equals</span>(</span>other: <span class="type">Any</span>) = other <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> that: <span class="type">Enumeration</span>#<span class="type">Value</span>  =&gt; (outerEnum eq that.outerEnum) &amp;&amp; (id == that.id)</span><br><span class="line">  <span class="keyword">case</span> _                        =&gt; <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">hashCode</span>:</span> <span class="type">Int</span> = id.##</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Create a ValueSet which contains this value and another one */</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">+</span> (</span>v: <span class="type">Value</span>) = <span class="type">ValueSet</span>(<span class="keyword">this</span>, v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在源码的Example中可以看到所有的枚举都是被赋值为<code>Value</code>类型，从上面的源码中可以看到<code>Value</code>类是一个抽象类，看它的内容只是提供了枚举值比较以及id的获取，在<code>Enumeration</code>源码中提供了一个叫<code>Val</code>的类对<code>Value</code>实现，重要是重写了整数命名和id的识别。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** A class implementing the [[scala.Enumeration.Value]] type. This class</span><br><span class="line">*  can be overridden to change the enumeration's naming and integer</span><br><span class="line">*  identification behaviour.</span><br><span class="line">*/</span></span><br><span class="line"><span class="annotation">@SerialVersionUID</span>(<span class="number">0</span> - <span class="number">3501153230598116017</span>L)</span><br><span class="line"><span class="keyword">protected</span> <span class="class"><span class="keyword">class</span> <span class="title">Val</span>(</span>i: <span class="type">Int</span>, name: <span class="type">String</span>) <span class="keyword">extends</span> <span class="type">Value</span> <span class="keyword">with</span> <span class="type">Serializable</span> &#123;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>i: <span class="type">Int</span>)       = <span class="keyword">this</span>(i, nextNameOrNull)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>name: <span class="type">String</span>) = <span class="keyword">this</span>(nextId, name)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>)             = <span class="keyword">this</span>(nextId)</span><br><span class="line"><span class="comment">//to do many things.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Value方法的定义">Value方法的定义</h3><blockquote>
+<p>请注意，请注意，Example中的第4行、第5行的<code>Value</code>，前者是类，后者是方法(括号省略了而已)</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration. */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>:</span> <span class="type">Value</span> = <span class="type">Value</span>(nextId)</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration, identified by the</span><br><span class="line">*  integer `i`.</span><br><span class="line">*</span><br><span class="line">*  @param i An integer that identifies this value at run-time. It must be</span><br><span class="line">*           unique amongst all values of the enumeration.</span><br><span class="line">*  @return  Fresh value identified by `i`.</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>(</span>i: <span class="type">Int</span>): <span class="type">Value</span> = <span class="type">Value</span>(i, nextNameOrNull)</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration, called `name`.</span><br><span class="line">*</span><br><span class="line">*  @param name A human-readable name for that value.</span><br><span class="line">*  @return  Fresh value called `name`.</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>(</span>name: <span class="type">String</span>): <span class="type">Value</span> = <span class="type">Value</span>(nextId, name)</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration, called `name`</span><br><span class="line">*  and identified by the integer `i`.</span><br><span class="line">*</span><br><span class="line">* @param i    An integer that identifies this value at run-time. It must be</span><br><span class="line">*             unique amongst all values of the enumeration.</span><br><span class="line">* @param name A human-readable name for that value.</span><br><span class="line">* @return     Fresh value with the provided identifier `i` and name `name`.</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>(</span>i: <span class="type">Int</span>, name: <span class="type">String</span>): <span class="type">Value</span> = <span class="keyword">new</span> <span class="type">Val</span>(i, name)</span><br></pre></td></tr></table></figure>
+<p>上面提供了各种<code>Value</code>的重载方法均是返回了<code>Val</code>类，所以说嘛，你有需要完全可以自己再实现一个<code>Value</code>类。</p>
+<h2 id="Scala中枚举的简单使用">Scala中枚举的简单使用</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="type">WeekDay</span>.<span class="type">Wed</span>)<span class="comment">//直接取枚举值</span></span><br><span class="line">println(<span class="type">WeekDay</span>.<span class="type">Wed</span>.id)<span class="comment">//取枚举值所在序号</span></span><br><span class="line">println(<span class="type">WeekDay</span>.maxId)<span class="comment">//枚举值的个数</span></span><br><span class="line">println(<span class="type">WeekDay</span>.withName(<span class="string">"Wed"</span>))<span class="comment">//通过字符串获取枚举（这里是不需要反射的）</span></span><br></pre></td></tr></table></figure>
+<p>获取枚举的具体信息还是非常方便的</p>
+<pre><code><span class="title">Wed</span>
+<span class="number">2</span>
+<span class="number">7</span>
+Wed
+</code></pre><p>获取全部的枚举值进行输出<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">WeekDay</span>.values.foreach(println(_))</span><br></pre></td></tr></table></figure></p>
+<pre><code><span class="title">Mon</span>
+Tue
+Wed
+Thu
+Fri
+Sat
+Sun
+</code></pre><p>枚举也可以用在匹配</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">matchTest(WeekDay.Wed)</span><br><span class="line">matchTest(WeekDay.Sat)</span><br><span class="line"></span><br><span class="line">def matchTest=(week:WeekDay.Value) =&gt;week match&#123;<span class="comment">//注意，这里枚举的类型都是Value</span></span><br><span class="line"><span class="keyword">case</span> w <span class="keyword">if</span> w.compare(WeekDay.Fri)&lt;=<span class="number">0</span> =&gt;println(<span class="string">"sorry,please working"</span>)</span><br><span class="line"><span class="keyword">case</span> WeekDay.Sat=&gt;println((<span class="string">"go shopping"</span>))</span><br><span class="line"><span class="keyword">case</span> WeekDay.Sun=&gt;println((<span class="string">"sleeping"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到输出</p>
+<pre><code>sorry,please working
+<span class="keyword">go</span> shopping
+</code></pre><blockquote>
+<p>这里的枚举值的比较其实就是对比他们的Id是否相等。</p>
+</blockquote>
+<h2 id="总结">总结</h2><ul>
+<li><code>Java</code>中的那套枚举并不能直接使用到<code>Scala</code>中</li>
+<li><code>Scala</code>中的枚举使用轻量级<code>Enumeration</code>进行实现</li>
+<li><code>Scala</code>中的枚举其实是一个伴随对象</li>
+<li><code>Scala</code>中的枚举没有方法重写功能</li>
+<li><code>Scala</code>中的枚举其实都是<code>Enumeration.Value</code>这个对象</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://www.cnblogs.com/gnivor/p/4191017.html" target="_blank" rel="external">http://www.cnblogs.com/gnivor/p/4191017.html</a></li>
+<li><code>Enumeration.scala</code></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/06/06/Scala/Enum-in-Scala/" data-title="谈谈Scala中的枚举 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/04/AKKA/Study-AKKA-First/"  title="初识AKKA">
+ <strong>下一篇：</strong><br/> 
+ <span>初识AKKA
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/06/Scala/Enum-in-Scala/" data-title="谈谈Scala中的枚举" data-url="http://yyl8781697.github.io/2015/06/06/Scala/Enum-in-Scala/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#先谈Java中的枚举"><span class="toc-number">1.</span> <span class="toc-text">先谈Java中的枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#再看Scala中的枚举"><span class="toc-number">2.</span> <span class="toc-text">再看Scala中的枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration源码分析"><span class="toc-number">3.</span> <span class="toc-text">Enumeration源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数以有变量"><span class="toc-number">3.1.</span> <span class="toc-text">构造函数以有变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Value类的相关定义"><span class="toc-number">3.2.</span> <span class="toc-text">Value类的相关定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Value方法的定义"><span class="toc-number">3.3.</span> <span class="toc-text">Value方法的定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scala中枚举的简单使用"><span class="toc-number">4.</span> <span class="toc-text">Scala中枚举的简单使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/AKKA/" title="AKKA">AKKA<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>14</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
