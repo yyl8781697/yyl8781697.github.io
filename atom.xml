@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-06-06T04:19:56.000Z</updated>
+  <updated>2015-06-06T13:13:50.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[自己煮：麻辣鱼]]></title>
+    <link href="http://yyl8781697.github.io/2015/06/06/Food/Spicy-fish/"/>
+    <id>http://yyl8781697.github.io/2015/06/06/Food/Spicy-fish/</id>
+    <published>2015-06-06T12:46:54.000Z</published>
+    <updated>2015-06-06T13:13:50.000Z</updated>
+    <content type="html"><![CDATA[<p>麻辣鱼简直就是大餐啊，油而不腻，并且鱼的腥味直接被重口味的油辣给冲掉了-_-，可惜我做的还不到火候。<br>又是一个周五，所以要给自己一个大餐，哈哈！</p>
+<h2 id="食材">食材</h2><ul>
+<li>鱼：最好是黑鱼，并且要切片（自己切麻烦，可以在买菜的时候直接叫师傅给切了）</li>
+<li>油、料酒~~~~</li>
+<li>生姜、大蒜：适量，再来一点点葱</li>
+<li>大量大量的辣椒</li>
+</ul>
+<p><img src="/img/Spicy-fish/1.jpg" alt=""></p>
+<h2 id="预煮鱼片">预煮鱼片</h2><p>将已经洗干净的鱼片直接放入水中煮3~5分钟，主要最好加一些料酒，去腥味<br><img src="/img/Spicy-fish/2.jpg" alt=""><br>拍得有点迟，水都已经煮浑浊了，然后将煮熟了的鱼片捞起来<br><img src="/img/Spicy-fish/3.jpg" alt=""></p>
+<h2 id="炒油辣椒">炒油辣椒</h2><p>将葱、姜、大蒜和大量大量的辣椒爆炒<br><img src="/img/Spicy-fish/4.jpg" alt=""><br>记得炒得时候直接要放盐进去，还要多放一点，重口味嘛^_^</p>
+<p>辣椒炒黑了之后可以直接关火，将炒好的油辣椒直接倒到你刚刚捞起来的鱼上就好了</p>
+<h2 id="开吃">开吃</h2><p>倒完之后样纸是这样的<br><img src="/img/Spicy-fish/5.jpg" alt=""></p>
+<p>开吃得时候记得搅拌一下，并且要蘸着油吃才有味道^_^<br><img src="/img/Spicy-fish/6.jpg" alt=""></p>
+<blockquote>
+<p>我直到吃完之后才想起来，应该要放点芹菜之类的辅料的，这样无论从色泽还是味道上，无疑都会更加好。-_-</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>麻辣鱼简直就是大餐啊，油而不腻，并且鱼的腥味直接被重口味的油辣给冲掉了-_-，可惜我做的还不到火候。<br>又是一个周五，所以要给自己一个大餐，哈哈！</p>
+<h2 id="食材">食材</h2><ul>
+<li>鱼：最好是黑鱼，并且要切片（自己切麻烦，可以在买菜的时候直]]>
+    </summary>
+    
+      <category term="Food" scheme="http://yyl8781697.github.io/tags/Food/"/>
+    
+      <category term="Food" scheme="http://yyl8781697.github.io/categories/Food/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[谈谈Scala中的枚举]]></title>
@@ -183,6 +218,24 @@ Sun
       <category term="Spark" scheme="http://yyl8781697.github.io/tags/Spark/"/>
     
       <category term="Spark" scheme="http://yyl8781697.github.io/categories/Spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[自己煮：红烧鸡爪]]></title>
+    <link href="http://yyl8781697.github.io/2015/05/31/Food/Braised-chicken-claw/"/>
+    <id>http://yyl8781697.github.io/2015/05/31/Food/Braised-chicken-claw/</id>
+    <published>2015-05-31T12:46:20.000Z</published>
+    <updated>2015-06-06T12:58:19.000Z</updated>
+    <content type="html"><![CDATA[<p>具体煮的步骤和<a href="http://kubicode.me/2015/04/19/Food/Coke-Chicken-feet/" target="_blank" rel="external">自己煮：可口又美味的可乐鸡翅</a>一样，无法是增加了酱油的分量以及在最后煮的时候放得时水，可以看到这样煮出来的颜色会比较浓一下，直接看成品图吧：^_^<br><img src="/img/jizhua/8.jpg" alt=""></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>具体煮的步骤和<a href="http://kubicode.me/2015/04/19/Food/Coke-Chicken-feet/" target="_blank" rel="external">自己煮：可口又美味的可乐鸡翅</a>一样，无法是增加了酱油的分量以及在]]>
+    </summary>
+    
+      <category term="Food" scheme="http://yyl8781697.github.io/tags/Food/"/>
+    
+      <category term="Food" scheme="http://yyl8781697.github.io/categories/Food/"/>
     
   </entry>
   
@@ -612,7 +665,7 @@ Sun
     <link href="http://yyl8781697.github.io/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/"/>
     <id>http://yyl8781697.github.io/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/</id>
     <published>2015-05-16T14:38:59.000Z</published>
-    <updated>2015-05-16T15:02:45.000Z</updated>
+    <updated>2015-06-06T13:04:30.000Z</updated>
     <content type="html"><![CDATA[<pre><code>泡椒牛蛙是一道色香味俱全的汉族名菜，属于川菜系。最常见又易烹制，成菜后味咸鲜，肉细嫩，色红亮，泡菜香气浓郁。
 </code></pre><h2 id="食材">食材</h2><ul>
 <li>牛蛙：2只</li>
@@ -1618,81 +1671,6 @@ account.getBalance50.0
       <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
     
       <category term="Java Base" scheme="http://yyl8781697.github.io/categories/Java-Base/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[自己煮：可口又美味的可乐鸡翅]]></title>
-    <link href="http://yyl8781697.github.io/2015/04/19/Food/Coke-Chicken-feet/"/>
-    <id>http://yyl8781697.github.io/2015/04/19/Food/Coke-Chicken-feet/</id>
-    <published>2015-04-19T12:23:47.000Z</published>
-    <updated>2015-04-24T12:35:32.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>喜欢啃鸡爪，喜欢各种做法的鸡爪，包括泡椒凤爪，鸡爪煲，红烧鸡爪等。<br>咱这次做了一次可乐鸡爪，哈哈</p>
-</blockquote>
-<h2 id="食材">食材</h2><ul>
-<li>鸡爪：10个</li>
-<li>油、料酒、酱油~~~~</li>
-<li>生姜、大蒜：适量</li>
-<li>八角、香叶：适量</li>
-<li>辣椒：一点点就好了</li>
-<li>可乐（别太少了，估计3.5元的小瓶装可能不够）</li>
-</ul>
-<h2 id="步骤">步骤</h2><h3 id="准备">准备</h3><p><img src="/img/Coke-Chicken-feet/1.ready.jpg" alt=""><br><br>首先每个鸡爪切成两半，这是为什么呢？</p>
-<ul>
-<li>一个是方便煮熟</li>
-<li>另一个是方便啃（不然整个鸡爪啃的时候很容易把汁碰到脸）</li>
-<li>当然，如果你喜欢啃整个就跳过这一步</li>
-</ul>
-<h3 id="预煮">预煮</h3><p><img src="/img/Coke-Chicken-feet/2.ruguo.jpg" alt=""><br><br>将切好的鸡爪丢进清水中煮，这个时候可以放一点点生姜和少许料酒，大概煮十分钟左右，如果不煮的话也可以把鸡爪先放进电饭煲中蒸一下（正好煮饭）。<br><br>如果不经过预煮的话很难讲鸡爪煮熟（第一次我就遇到了这种情况）<br><img src="/img/Coke-Chicken-foot/3.zhenghao.jpg" alt=""><br><br>将鸡爪煮到5分熟之后是这样的</p>
-<h3 id="爆炒">爆炒</h3><p><img src="/img/Coke-Chicken-feet/4.baochao.jpg" alt=""><br><br>在锅里面放入少许油，等油热了之后把生姜、大蒜、辣椒丢进去把油炒香，然后放预煮之后的鸡爪。<br>注意这里千万要把火开小，因为预煮捞出来的鸡爪带有水分，很容易将油爆起来-_-|<br><br>爆炒几十秒之后放入少许酱油和料酒，接下来就可以放可乐了。<br><img src="/img/Coke-Chicken-feet/5.fangkele.jpg" alt=""><br></p>
-<blockquote>
-<p>注意：放的可乐一定要将全部的鸡爪淹没掉，这样味道才好。<br>此时可以放一片八角和香叶。</p>
-</blockquote>
-<h3 id="正煮Ing_&amp;_收汁">正煮Ing &amp; 收汁</h3><p>接下来就是等待的煮，水开之后可以把火适当的关小一点，还有关于口味此时可以稍微放一些盐</p>
-<blockquote>
-<p>别放太多，因为之前已经放过酱油了<br>大概20~30分钟之后就会慢慢收汁了，香味也都出来了。</p>
-</blockquote>
-<p><img src="/img/Coke-Chicken-feet/6.shouzhi.jpg" alt=""><br></p>
-<hr>
-<h3 id="出锅">出锅</h3><p>出锅之前放一点点味精，如果有胡椒粉的话也可以适当稍微倒一点点进去，这样比较香<br><img src="/img/Coke-Chicken-feet/7.chuguo.jpg" alt=""><br></p>
-<p>洗锅开吃~~~~哈哈！</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>喜欢啃鸡爪，喜欢各种做法的鸡爪，包括泡椒凤爪，鸡爪煲，红烧鸡爪等。<br>咱这次做了一次可乐鸡爪，哈哈</p>
-</blockquote>
-<h2 id="食材">食材</h2><ul>
-<li>鸡爪：10个</li>
-<li>油、料酒、酱油~~~]]>
-    </summary>
-    
-      <category term="Food" scheme="http://yyl8781697.github.io/tags/Food/"/>
-    
-      <category term="Food" scheme="http://yyl8781697.github.io/categories/Food/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem]]></title>
-    <link href="http://yyl8781697.github.io/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/"/>
-    <id>http://yyl8781697.github.io/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/</id>
-    <published>2015-04-16T13:24:55.000Z</published>
-    <updated>2015-04-25T07:18:46.000Z</updated>
-    <content type="html"><![CDATA[<p>将自己之前写好的hadoop程序拷贝给师弟时候总是会报下面的错：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassCastException: org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.common.HdfsHelper.&lt;clinit&gt;(HdfsHelper.java:<span class="number">25</span>)</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.LogisticRegression.LRProgram.run(LRProgram.java:<span class="number">53</span>)</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.LogisticRegression.LRProgram.main(LRProgram.java:<span class="number">23</span>)</span><br></pre></td></tr></table></figure></p>
-<p><strong>字面自已上就是本地文件不能转为分布式文件</strong>，自己在输入文件上加hdfs前缀也是无济于事，搜索关键字了半天也没找到匹配的方案，后来终于在一个博客找到了解决方案：<br><br>将<code>hadoop/conf/</code>下面的<code>core-site.xml</code>和<code>hdfs-site.xml</code>复制到工程文件的<code>/bin/</code>目录下面就可以了（使用的是Eclipse的IDE），坑爹。</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>将自己之前写好的hadoop程序拷贝给师弟时候总是会报下面的错：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><spa]]>
-    </summary>
-    
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
-    
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
     
   </entry>
   
