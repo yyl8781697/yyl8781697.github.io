@@ -142,7 +142,7 @@
 <h2 id="再看Scala中的枚举">再看Scala中的枚举</h2><blockquote>
 <p>你会发现，上面说的一切在<code>Scala</code>中其实并没有甚么卵用-_-，因为在<code>Scala</code>中压根就么有<code>enum</code>这个关键词，但是当初发明<code>Scala</code>大神兼<code>Java</code>的创始人并没有落下枚举。</p>
 </blockquote>
-<p><code>Scala</code>不用关注枚举的特别语法，取而代之的是标准库中的类:<code>scala.Enumeration</code><br><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">App</span> &#123;</span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">object</span> <span class="title">WeekDay</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Enumeration</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">WeekDay</span> =</span> <span class="type">Value</span></span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">Mon</span>, <span class="title">Tue</span>, <span class="title">Wed</span>, <span class="title">Thu</span>, <span class="title">Fri</span>, <span class="title">Sat</span>, <span class="title">Sun</span> =</span> <span class="type">Value</span><span class="comment">//在这里定义具体的枚举实例</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">import</span> <span class="type">WeekDay</span>._</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isWorkingDay</span>(</span>d: <span class="type">WeekDay</span>) = ! (d == <span class="type">Sat</span> || d == <span class="type">Sun</span>)</span><br><span class="line"></span><br><span class="line">  <span class="type">WeekDay</span>.values filter isWorkingDay foreach println<span class="comment">//使用语法糖进行输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Scala</code>不用关注枚举的特别语法，取而代之的是标准库中的类:<code>scala.Enumeration</code><br><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">App</span> &#123;</span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">object</span> <span class="title">WeekDay</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Enumeration</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">WeekDay</span> =</span> <span class="type">Value</span><span class="comment">//这里仅仅是为了将Enumration.Value的类型暴露出来给外界使用而已</span></span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">Mon</span>, <span class="title">Tue</span>, <span class="title">Wed</span>, <span class="title">Thu</span>, <span class="title">Fri</span>, <span class="title">Sat</span>, <span class="title">Sun</span> =</span> <span class="type">Value</span><span class="comment">//在这里定义具体的枚举实例</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">import</span> <span class="type">WeekDay</span>._</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isWorkingDay</span>(</span>d: <span class="type">WeekDay</span>) = ! (d == <span class="type">Sat</span> || d == <span class="type">Sun</span>)</span><br><span class="line"></span><br><span class="line">  <span class="type">WeekDay</span>.values filter isWorkingDay foreach println<span class="comment">//使用语法糖进行输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上述是源码中给的一个枚举Example，可以发现：</p>
 <ul>
 <li>它是一个伴随对象</li>
@@ -248,9 +248,9 @@ Sun
 
 
 <div class="next">
-<a href="/2015/06/04/AKKA/Study-AKKA-First/"  title="初识AKKA">
+<a href="/2015/06/04/Akka/Study-Akka-First/"  title="初识Akka">
  <strong>下一篇：</strong><br/> 
- <span>初识AKKA
+ <span>初识Akka
 </span>
 </a>
 </div>
@@ -283,7 +283,7 @@ Sun
 		<ul>
 		
 		  
-			<li><a href="/categories/AKKA/" title="AKKA">AKKA<sup>1</sup></a></li>
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>3</sup></a></li>
 		  
 		
 		  
@@ -392,7 +392,7 @@ Sun
 			
 		
 			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>3</sup></a></li>
 			
 		
 			
@@ -400,11 +400,15 @@ Sun
 			
 		
 			
-				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
 			
 		
 			
@@ -412,15 +416,15 @@ Sun
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
 			
 		
 			
@@ -428,15 +432,11 @@ Sun
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
 			
 		
 			
@@ -444,11 +444,11 @@ Sun
 			
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
 			
 		
 		</ul>

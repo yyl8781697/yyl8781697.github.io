@@ -4,16 +4,16 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>初识AKKA | Kubi Code&#39;Blog</title>
+    <title>初识Akka | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要AKKA压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
+    <meta name="description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要Akka压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
 
-AKKA介绍AKKA是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
+AKKA介绍Akka是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
 
 并发和分布式
 弹性设计
@@ -24,12 +24,12 @@ AKKA介绍AKKA是一个基于JVM的用于构建高并发、分布式、弹性的
 可以基于AKKA构建高并发的web框架，也可以构建分布式系统（Spark）
 AKKA的引用如果你是Maven用户">
 <meta property="og:type" content="article">
-<meta property="og:title" content="初识AKKA">
-<meta property="og:url" content="http://yyl8781697.github.io/2015/06/04/AKKA/Study-AKKA-First/index.html">
+<meta property="og:title" content="初识Akka">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要AKKA压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
+<meta property="og:description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要Akka压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
 
-AKKA介绍AKKA是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
+AKKA介绍Akka是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
 
 并发和分布式
 弹性设计
@@ -40,10 +40,10 @@ AKKA介绍AKKA是一个基于JVM的用于构建高并发、分布式、弹性的
 可以基于AKKA构建高并发的web框架，也可以构建分布式系统（Spark）
 AKKA的引用如果你是Maven用户">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="初识AKKA">
-<meta name="twitter:description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要AKKA压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
+<meta name="twitter:title" content="初识Akka">
+<meta name="twitter:description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要Akka压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
 
-AKKA介绍AKKA是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
+AKKA介绍Akka是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
 
 并发和分布式
 弹性设计
@@ -113,7 +113,7 @@ AKKA的引用如果你是Maven用户">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/04/AKKA/Study-AKKA-First/" title="初识AKKA" itemprop="url">初识AKKA</a>
+      <a href="/2015/06/04/Akka/Study-Akka-First/" title="初识Akka" itemprop="url">初识Akka</a>
   </h1>
   <p class="article-author">By
        
@@ -129,14 +129,14 @@ AKKA的引用如果你是Maven用户">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA介绍"><span class="toc-number">1.</span> <span class="toc-text">AKKA介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA的引用"><span class="toc-number">2.</span> <span class="toc-text">AKKA的引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKAA的使用"><span class="toc-number">3.</span> <span class="toc-text">AKAA的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通模式的调用"><span class="toc-number">3.1.</span> <span class="toc-text">普通模式的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA介绍"><span class="toc-number">1.</span> <span class="toc-text">AKKA介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA的引用"><span class="toc-number">2.</span> <span class="toc-text">AKKA的引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKAA的使用"><span class="toc-number">3.</span> <span class="toc-text">AKAA的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通模式的调用"><span class="toc-number">3.1.</span> <span class="toc-text">普通模式的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未完待续。。。"><span class="toc-number">4.</span> <span class="toc-text">未完待续。。。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
 		<blockquote>
-<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843" target="_blank" rel="external">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a href="http://akka.io/" target="_blank" rel="external">AKKA</a>压压惊，当然在<code>Spark</code>中大量的使用了<code>AKKA</code>是主要原因^_^</p>
+<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843" target="_blank" rel="external">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a href="http://akka.io/" target="_blank" rel="external">Akka</a>压压惊，当然在<code>Spark</code>中大量的使用了<code>AKKA</code>是主要原因^_^</p>
 </blockquote>
-<h2 id="AKKA介绍">AKKA介绍</h2><p><a href="http://akka.io/" target="_blank" rel="external">AKKA</a>是一个基于<code>JVM</code>的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：</p>
+<h2 id="AKKA介绍">AKKA介绍</h2><p><a href="http://akka.io/" target="_blank" rel="external">Akka</a>是一个基于<code>JVM</code>的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：</p>
 <ol>
 <li>并发和分布式</li>
 <li>弹性设计</li>
@@ -158,9 +158,10 @@ AKKA的引用如果你是Maven用户">
 <pre><code><span class="tag">i</span> am not tom
 [INFO] [<span class="number">06</span>/<span class="number">05</span>/<span class="number">2015</span> <span class="number">00</span>:<span class="number">56</span>:<span class="number">27.188</span>] [mySystem-akka<span class="class">.actor</span><span class="class">.default-dispatcher-5</span>] [akka:<span class="comment">//mySystem/user/greeter] hellotom</span>
 </code></pre><p>并可以发现这个程序并没有停止，这是因为<code>Actor</code>一直在监听。</p>
-<h2 id="参考">参考</h2><ul>
+<h2 id="未完待续。。。">未完待续。。。</h2><h2 id="参考">参考</h2><ul>
 <li><a href="http://akka.io/" target="_blank" rel="external">http://akka.io/</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.3.11/AkkaScala.pdf?_ga=1.249061252.2036148369.1433248459" target="_blank" rel="external">AKKA doc for scala</a></li>
+<li><a href="http://doc.akka.io/docs/akka/2.3.11/AkkaScala.pdf?_ga=1.249061252.2036148369.1433248459" target="_blank" rel="external">Akka doc for scala</a></li>
+<li><a href="http://www.gtan.com/akka_doc/index.html" target="_blank" rel="external">http://www.gtan.com/akka_doc/index.html</a>  难得的中文文档</li>
 </ul>
   
 	</div>
@@ -169,13 +170,13 @@ AKKA的引用如果你是Maven用户">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/AKKA/">AKKA</a>
+  <a class="article-category-link" href="/categories/Akka/">Akka</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/AKKA/">AKKA</a>
+  <span></span> <a href="/tags/Akka/">Akka</a>
   </div>
 
 </div>
@@ -184,7 +185,7 @@ AKKA的引用如果你是Maven用户">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2015/06/04/AKKA/Study-AKKA-First/" data-title="初识AKKA | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/" data-title="初识Akka | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -218,7 +219,7 @@ AKKA的引用如果你是Maven用户">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/06/04/AKKA/Study-AKKA-First/" data-title="初识AKKA" data-url="http://yyl8781697.github.io/2015/06/04/AKKA/Study-AKKA-First/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/04/Akka/Study-Akka-First/" data-title="初识Akka" data-url="http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/"></div>
 </section>
 
 
@@ -228,7 +229,7 @@ AKKA的引用如果你是Maven用户">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA介绍"><span class="toc-number">1.</span> <span class="toc-text">AKKA介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA的引用"><span class="toc-number">2.</span> <span class="toc-text">AKKA的引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKAA的使用"><span class="toc-number">3.</span> <span class="toc-text">AKAA的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通模式的调用"><span class="toc-number">3.1.</span> <span class="toc-text">普通模式的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA介绍"><span class="toc-number">1.</span> <span class="toc-text">AKKA介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA的引用"><span class="toc-number">2.</span> <span class="toc-text">AKKA的引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKAA的使用"><span class="toc-number">3.</span> <span class="toc-text">AKAA的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通模式的调用"><span class="toc-number">3.1.</span> <span class="toc-text">普通模式的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未完待续。。。"><span class="toc-number">4.</span> <span class="toc-text">未完待续。。。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
@@ -242,7 +243,7 @@ AKKA的引用如果你是Maven用户">
 		<ul>
 		
 		  
-			<li><a href="/categories/AKKA/" title="AKKA">AKKA<sup>1</sup></a></li>
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>3</sup></a></li>
 		  
 		
 		  
@@ -351,7 +352,7 @@ AKKA的引用如果你是Maven用户">
 			
 		
 			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>3</sup></a></li>
 			
 		
 			
@@ -359,11 +360,15 @@ AKKA的引用如果你是Maven用户">
 			
 		
 			
-				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
 			
 		
 			
@@ -371,15 +376,15 @@ AKKA的引用如果你是Maven用户">
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
 			
 		
 			
@@ -387,15 +392,11 @@ AKKA的引用如果你是Maven用户">
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
 			
 		
 			
@@ -403,11 +404,11 @@ AKKA的引用如果你是Maven用户">
 			
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
 			
 		
 		</ul>
