@@ -182,54 +182,6 @@ Sun
   </entry>
   
   <entry>
-    <title><![CDATA[初识Akka]]></title>
-    <link href="http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/"/>
-    <id>http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/</id>
-    <published>2015-06-04T15:45:36.000Z</published>
-    <updated>2015-06-07T05:14:13.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843" target="_blank" rel="external">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a href="http://akka.io/" target="_blank" rel="external">Akka</a>压压惊，当然在<code>Spark</code>中大量的使用了<code>AKKA</code>是主要原因^_^</p>
-</blockquote>
-<h2 id="AKKA介绍">AKKA介绍</h2><p><a href="http://akka.io/" target="_blank" rel="external">Akka</a>是一个基于<code>JVM</code>的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：</p>
-<ol>
-<li>并发和分布式</li>
-<li>弹性设计</li>
-<li>高性能</li>
-<li>去中心化</li>
-<li>高扩展性</li>
-</ol>
-<p>可以基于<code>AKKA</code>构建高并发的web框架，也可以构建分布式系统（<code>Spark</code>）</p>
-<h2 id="AKKA的引用">AKKA的引用</h2><p>如果你是<code>Maven</code>用户，你可以这么添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.typesafe.akka<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>akka-actor_2.10<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>2.3.11<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>如果你是<code>SBT</code>用户，你的<code>build.sbt</code>可以这么写<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name := &#34;My Project&#34;&#10;version := &#34;1.0&#34;&#10;scalaVersion := &#34;2.10.4&#34;&#10;libraryDependencies +=&#10;  &#34;com.typesafe.akka&#34; %% &#34;akka-actor&#34; % &#34;2.3.11&#34;</span><br></pre></td></tr></table></figure></p>
-<p>它还提供了好多其他的其他用法，但是由于天朝连国外网速也是在是太慢了，我直接去<a href="http://akka.io/downloads/" target="_blank" rel="external">http://akka.io/downloads/</a>将压缩包给download下来，然后将已编译的<code>jar</code>添加到IDEA中，简单、粗暴、高效。</p>
-<h2 id="AKAA的使用">AKAA的使用</h2><p><code>AKKA</code>是基于<code>Scala</code>的<code>Actor</code>来实现的，了解<code>Scala</code>的<code>Actor</code>可以参考我之前的一篇文章<a href="http://kubicode.me/2015/04/26/Scala/Scala-In-My-Eyes/#Actor" target="_blank" rel="external">我眼中的Scala-简洁不简单</a>。<br><br>在<code>AKKA</code>中最重要的是<code>ActorSystem</code>，关于<code>ActorSystem</code>在Doc中有这么一句话：</p>
-<blockquote>
-<p>Note: An ActorSystem is a heavyweight structure that will allocate 1…N Threads, so create one per logical application.</p>
-</blockquote>
-<h3 id="普通模式的调用">普通模式的调用</h3><p>首先创建一个类<code>GreetingActor</code>添加以下代码<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> akka.actor._</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Greeting</span>(</span>who:<span class="type">String</span>)</span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Created by yanyl on 6/3/15.</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GreetingActor</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Actor</span> <span class="keyword"><span class="keyword">with</span></span> <span class="title">ActorLogging</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">receive=</span>&#123;</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Greeting</span>(who)=&gt;log.info(<span class="string">"hello"</span>+who);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样就建立了一个标准的<code>Actor</code>，用过<code>receive</code>方法不断地监听，<br><br>然后建立一个<code>Test</code>类向这个<code>Actor</code>发送消息<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> akka.actor._;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Created by yanyl on 6/2/15.</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args:<span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> =&#123;</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">system=ActorSystem</span>(</span><span class="string">"mySystem"</span>);</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">greeter=system</span>.<span class="title">actorOf</span>(</span><span class="type">Props</span>[<span class="type">GreetingActor</span>],name=<span class="string">"greeter"</span>);</span><br><span class="line">    greeter!<span class="type">Greeting</span>(<span class="string">"tom"</span>)</span><br><span class="line">    println(<span class="string">"i am not tom"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>叹号<code>!</code>表示发送非阻塞消息，执行之后你可以在控制台看到</p>
-<pre><code><span class="tag">i</span> am not tom
-[INFO] [<span class="number">06</span>/<span class="number">05</span>/<span class="number">2015</span> <span class="number">00</span>:<span class="number">56</span>:<span class="number">27.188</span>] [mySystem-akka<span class="class">.actor</span><span class="class">.default-dispatcher-5</span>] [akka:<span class="comment">//mySystem/user/greeter] hellotom</span>
-</code></pre><p>并可以发现这个程序并没有停止，这是因为<code>Actor</code>一直在监听。</p>
-<h2 id="未完待续。。。">未完待续。。。</h2><h2 id="参考">参考</h2><ul>
-<li><a href="http://akka.io/" target="_blank" rel="external">http://akka.io/</a></li>
-<li><a href="http://doc.akka.io/docs/akka/2.3.11/AkkaScala.pdf?_ga=1.249061252.2036148369.1433248459" target="_blank" rel="external">Akka doc for scala</a></li>
-<li><a href="http://www.gtan.com/akka_doc/index.html" target="_blank" rel="external">http://www.gtan.com/akka_doc/index.html</a>  难得的中文文档</li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843" target="_blank" rel="external">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a h]]>
-    </summary>
-    
-      <category term="Akka" scheme="http://yyl8781697.github.io/tags/Akka/"/>
-    
-      <category term="Akka" scheme="http://yyl8781697.github.io/categories/Akka/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[Spark源码中所使用的经典数据结构或者设计模式]]></title>
     <link href="http://yyl8781697.github.io/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/"/>
     <id>http://yyl8781697.github.io/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/</id>
@@ -1530,6 +1482,134 @@ account.getBalance50.0
       <category term="Scala" scheme="http://yyl8781697.github.io/tags/Scala/"/>
     
       <category term="Scala" scheme="http://yyl8781697.github.io/categories/Scala/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[《Effective Java》第二章：创建和销毁对象]]></title>
+    <link href="http://yyl8781697.github.io/2015/04/22/Effective%20Java/Create-Destory-Object/"/>
+    <id>http://yyl8781697.github.io/2015/04/22/Effective Java/Create-Destory-Object/</id>
+    <published>2015-04-22T12:33:05.000Z</published>
+    <updated>2015-04-25T08:51:52.000Z</updated>
+    <content type="html"><![CDATA[<p>本章的主题是创建和销毁对象：何时以及如何创建对象，何时以及如何避免创建对象，如何确保它们能够适时得销毁，以及如何管理对象和销毁之前必须进行的各种清理动作。</p>
+<h2 id="第1条：考虑用静态工厂方法代替构造器">第1条：考虑用静态工厂方法代替构造器</h2><blockquote>
+<p>这条感觉就是推荐我们尽量使用静态方法来生成实例对象。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> b?Boolean.TRUE:Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>推荐的理由如下：</p>
+<ol>
+<li>静态构造方法有自己的名称。（这理由是不是有点。。，个人感觉绝大部分程序猿在创建对象时都是首先尝试<code>new Construct()</code>）</li>
+<li>不必在每次调用它们时都创建一个新的对象。(单例中比较常用吧)</li>
+<li>它们可以返回原返回类型的任何子类型的对象。（<strong>这个特征的确是比较有优势一点</strong>）</li>
+<li>在创建参数化类型实例的时候，它们使代码变得更加简洁。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//普通是需要这么干的</span></span><br><span class="line">Map&lt;String,List&lt;String&gt;&gt; m=<span class="keyword">new</span> HashMap&lt;String,List&lt;String&gt;&gt;();</span><br><span class="line"><span class="comment">//使用了第4条直接这么干就好了（但是实际上HashMap也没提供这个功能啊-_-）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span>&lt;K,V&gt; HashMap&lt;K,V&gt; newInstance()&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> HashMap&lt;K,V&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然使用这种静态方法也有缺点：</p>
+<ol>
+<li>类如何不含有公有的或者受保护的构造器，就不能子类化。</li>
+<li>它们与其他的静态方法实际上没有任何区别。</li>
+</ol>
+<p>一些静态工厂方法的惯用名称（也的确常见）：</p>
+<ul>
+<li>ValueOf</li>
+<li>of</li>
+<li>getInstance</li>
+<li>newInstance</li>
+<li>getType</li>
+<li>newType</li>
+</ul>
+<h2 id="第2条：遇到多个构造器参数的时候要考虑用构建器">第2条：遇到多个构造器参数的时候要考虑用构建器</h2><p>当你的<code>Class</code>有多个自定义参数需要初始化的时候-_-</p>
+<h3 id="重叠构造器">重叠构造器</h3><p>你可能会使用重叠构造器来编写代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">	<span class="comment">//field</span></span><br><span class="line">	Test(arg1)<span class="comment">//</span></span><br><span class="line">	Test(arg1,arg2)<span class="comment">//</span></span><br><span class="line">	Test(arg1,arg2,arg3)<span class="comment">//</span></span><br><span class="line">	Test(arg1,arg2,arg3,arg4)<span class="comment">//</span></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是当需要初始化的参数实在太多的时候，这个<code>Class</code>的构造函数很快就会失去控制，而且在调用构造器的时候也会因为要初始化的参数太多而弄混。</p>
+<h3 id="使用setter方法来设置参数">使用setter方法来设置参数</h3><p>即<code>JavaBean</code>模式，在这种模式下调用一个无参构造器来创建对象，然后调用setter方法来设置每个必要的参数，以及每个可选参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">	<span class="comment">//field</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Test</span><span class="params">(arg1)</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg1)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg2)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg3)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg4)</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种模式弥补重叠构造器模式的不足，创建对象实例很容易，并且代码读起来也很容易：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Test test=<span class="keyword">new</span> Test();</span><br><span class="line">test.setArg1(..)</span><br><span class="line">test.setArg2(..)</span><br><span class="line">test.setArg3(..)</span><br><span class="line">test.setArg4(..)</span><br></pre></td></tr></table></figure>
+<p>但是它有一个严重的缺点，就是这个构造过程被分到几个不同的调用中时，该对象可能处于不一致的状态。-_-</p>
+<h3 id="使用Builder模式">使用Builder模式</h3><p>它既能保证那重叠构造器那样安全，也能保证像<code>JavaBean</code>那样有好的可读性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">	<span class="comment">//field</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Test</span><span class="params">(Builder builder)</span></span>&#123;</span><br><span class="line">		<span class="comment">//filed=builder.filed...</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">		<span class="comment">//field</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg1)</span></span>&#123;&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg2)</span></span>&#123;&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg3)</span></span>&#123;&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg4)</span></span>&#123;&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Test <span class="title">build</span><span class="params">()</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> Test(<span class="keyword">this</span>);<span class="comment">//通过内部类构造该类</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种模式其实是生成一个内部类，在内部类中通过<code>setter</code>方法设置相应的字段，然后调用<code>build</code>方法生成真正需要的<code>Class</code>实例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Test test=<span class="keyword">new</span> Test.Builder()</span><br><span class="line">				.setArg1()</span><br><span class="line">				.setArg2()</span><br><span class="line">				.setArg3()</span><br><span class="line">				.setArg4()</span><br><span class="line">				.build()</span><br></pre></td></tr></table></figure>
+<p>这个方法十分灵活，可以通过构建一个builder来构建多个对象，builder的参数可以在构建期间进行调整，也可以随不同的对象而改变。<br><br>此时，我们可以将这个builder定义为一个通用的接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Builder</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">build</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后可以通过创建接口来创建更多的实例对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Builder&lt;Test&gt; builderTest=<span class="keyword">new</span> Test.Builder()</span><br><span class="line">.setArg1()</span><br><span class="line">.setArg2()</span><br><span class="line">.setArg3()</span><br><span class="line">.setArg4()</span><br><span class="line"></span><br><span class="line">builderTest.build()</span><br></pre></td></tr></table></figure>
+<p>Builder模式也有不足之处，为了创建对象，必须创建它的构建器，虽然创建构建器的开销在实践中不是那么明显，但是在某些十分注重性能的情况下，可能会成功问题。<br><br>简而言之，如果累的构造器或者静态工厂中具有多个参数，设计这种类时,Builder模式模式是一个不错的选择。</p>
+<h2 id="第3条：用私有的构造器或者枚举类型强化Singleton属性">第3条：用私有的构造器或者枚举类型强化Singleton属性</h2><p>单例模式估计是大家在《设计模式》中最早接触的一种，也是较为常用的一种模式，从它的线程安全性和运行效率性上考虑，我们所了解的应该有这么几种类型的单例写法<sup>1<sup>：</sup></sup></p>
+<ul>
+<li>懒汉式单例</li>
+<li>饿汉式单例</li>
+<li>登记式单例</li>
+</ul>
+<p>除了上述，书本极力推荐的一种是<strong>单元素枚举类型</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Elvis&#123;</span><br><span class="line">	INSTANCE;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">leaveTheBuilding</span><span class="params">()</span></span>&#123;<span class="comment">//...&#125;;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法无偿的提供了序列化机制，绝对防止多次实例化。但是由于为了使用单例将”类”改为了”枚举”，这样就是导致丢掉一些类的特征，比如说继承，因为枚举是默认继承<code>java.lang.Enum</code>。</p>
+<h2 id="第4条：通过私有构造器强化不可实例化的能力">第4条：通过私有构造器强化不可实例化的能力</h2><p>当你的类里面只包含静态方法和静态变量时（比如说工具类），那么请在该类上添加一个私有的构造器，这样可以保护该类，同时也不会误导用户。<br><br>当然这么写有个副作用就是这个类就不能被继承了，子类就没有访问超类的构造器可用了。</p>
+<h2 id="第5条：避免创建不必要的对象">第5条：避免创建不必要的对象</h2><p>一般来说，最好能重用对象而不是在每次需要的时候就创建一个项目功能的新对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String s=<span class="keyword">new</span> String(<span class="string">"stringette"</span>);<span class="comment">//不要这么做</span></span><br><span class="line">String s=<span class="string">"stringette"</span>;<span class="comment">//在同一台虚拟机中运行时，该对象会被重用</span></span><br></pre></td></tr></table></figure>
+<p>几大重用的关键点：</p>
+<ul>
+<li>对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法，以免创建不必要的对象。</li>
+<li>可以重用那些已知不会被修改的可变对象。</li>
+<li>优先使用基本类型而不是装箱类型。</li>
+</ul>
+<blockquote>
+<p>本条目并不是暗示“创建对象的代价非常昂贵，我们应该要尽量避免对象的创建”</p>
+</blockquote>
+<h2 id="第6条：消除过期的引用">第6条：消除过期的引用</h2><p>这条就是描述过期的引用会存在内存泄露的问题，那我们程序猿该如何处理呢？</p>
+<blockquote>
+<p>类要是自己管理内存，程序猿就应该警惕内存泄露问题。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 简单的栈结构的实现</span><br><span class="line"> *<span class="javadoctag"> @author</span> yyl  form Effective Java</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stack</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object[] elements;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPCAITY=<span class="number">16</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		elements=<span class="keyword">new</span> Object[DEFAULT_INITIAL_CAPCAITY];</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Object e)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		ensureCapacity();<span class="comment">//确保容量足够</span></span><br><span class="line">		elements[size++]=e;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">		<span class="keyword">return</span> elements[--size];<span class="comment">//</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(elements.length==size)</span><br><span class="line">			elements=Arrays.copyOf(elements, <span class="number">2</span>*size+<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码是一个简单的栈结构的实现，但是在元素被多次<code>pop()</code>之后，<code>Object[]</code>里面索引大于<code>size</code>的对象不在可用，但是由于他们还是存储在数组中，所以垃圾回收机制不会处理这些对象，最终会造成内存泄露。<br><br>可以用下面的方法来修复：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">	Object ret=elements[--size];</span><br><span class="line">	elements[size]=<span class="keyword">null</span>;<span class="comment">//清空引用</span></span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述只是一个特征，这条并不是教我们对于每个对象引用不再用到时就将它清空，其实没有这个必要，这样做会把代码弄得很乱，清除过期引用最好的方法是让包含该引用变量结束生命周期。</p>
+<blockquote>
+<p>内存泄露另一种常见的来源是缓存</p>
+</blockquote>
+<p> 当对象放入缓存中很容易被遗忘，然而它会长期存储在内存中，这样可以使用<code>WeakHashMap</code>来代表缓存，当缓存的项过期之后，他们会被自动删除。<br><br>也可以使用<code>LinkedHashMap</code>来实现LRU缓存，当容量满时会删除最久一个没有用过的项。</p>
+<blockquote>
+<p>内存泄露的第三个常见的来源是监听器和其他回调</p>
+</blockquote>
+<p>比如说你注册了某些Api的回调，但是没有显示的取消注册，这样他们会越积越多。~~~~</p>
+<h2 id="第7条：避免终结方法">第7条：避免终结方法</h2><blockquote>
+<p>终结方法（<code>finalizer</code>）通常是不可预测的，也是很危险的，一般情况下是不必要的。</p>
+</blockquote>
+<p>避免的原因有如下几个：</p>
+<ul>
+<li><p>不能保证被及时的执行。<br><br>因为进行<code>gc</code>时终结方法的优先级一般比其他的要低，注重时间的任务不应该用终结方法来完成，比如在<code>finalizer</code>中关闭已打开的文件</p>
+</li>
+<li><p>JVM不会保证他们会被执行。<br><br>不应该依赖终结方法来更新中重要的持久状态。</p>
+</li>
+<li><p>终结方法可能会有非常重要的性能损失。</p>
+</li>
+</ul>
+<p>所以如果在自己的类中真实的需要将对象终止，则自己最好提供一个显示的终止方法，并且要求编码人员再不需要该对象时进行显示掉调用终止方法，比如<code>file.close</code><br></p>
+<p>当然终结方法也不是一无是处：</p>
+<ol>
+<li>当对象的所有者忘记调用前面段落中建议的显示终止方法时，可以用终止方法在日志中记录记录警告或者再显示的调用该终止方法</li>
+<li>与对象的本地对等体有关。大概是普通对象通过<code>native method</code>委托给一个本地对象，而这个本地对象时不受<code>jVM</code>管理的。但是可以使用终结方法来完成必要资源释放，它可以是本地方法，也可以条用本地方法。</li>
+</ol>
+<blockquote>
+<p>注意：<code>finalizer</code>方法链不会自动的执行，所以在自定义<code>finalizer</code>时最好显示得调用<code>super.finalizer()</code></p>
+</blockquote>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://blog.csdn.net/jason0539/article/details/23297037" target="_blank" rel="external">http://blog.csdn.net/jason0539/article/details/23297037</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>本章的主题是创建和销毁对象：何时以及如何创建对象，何时以及如何避免创建对象，如何确保它们能够适时得销毁，以及如何管理对象和销毁之前必须进行的各种清理动作。</p>
+<h2 id="第1条：考虑用静态工厂方法代替构造器">第1条：考虑用静态工厂方法代替构造器</h2><blo]]>
+    </summary>
+    
+      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
+    
+      <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
     
   </entry>
   
