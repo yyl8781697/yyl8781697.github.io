@@ -4,31 +4,55 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Single Number | Kubi Code&#39;Blog</title>
+    <title>初识Akka | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="LeetCode地址：https://leetcode.com/problems/single-number/
+    <meta name="description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要Akka压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
 
-Problem:Given an array of integers, every element appears twice except for one. Find that single one.
-Note:Your algorithm should have a linear">
+AKKA介绍Akka是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
+
+并发和分布式
+弹性设计
+高性能
+去中心化
+高扩展性
+
+可以基于AKKA构建高并发的web框架，也可以构建分布式系统（Spark）
+AKKA的引用如果你是Maven用户">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Single Number">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Single-Number/index.html">
+<meta property="og:title" content="初识Akka">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="LeetCode地址：https://leetcode.com/problems/single-number/
+<meta property="og:description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要Akka压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
 
-Problem:Given an array of integers, every element appears twice except for one. Find that single one.
-Note:Your algorithm should have a linear">
+AKKA介绍Akka是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
+
+并发和分布式
+弹性设计
+高性能
+去中心化
+高扩展性
+
+可以基于AKKA构建高并发的web框架，也可以构建分布式系统（Spark）
+AKKA的引用如果你是Maven用户">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Single Number">
-<meta name="twitter:description" content="LeetCode地址：https://leetcode.com/problems/single-number/
+<meta name="twitter:title" content="初识Akka">
+<meta name="twitter:description" content="这两天微软的分布式系统开发框架rDSN开源出来了，必须要Akka压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
 
-Problem:Given an array of integers, every element appears twice except for one. Find that single one.
-Note:Your algorithm should have a linear">
+AKKA介绍Akka是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
+
+并发和分布式
+弹性设计
+高性能
+去中心化
+高扩展性
+
+可以基于AKKA构建高并发的web框架，也可以构建分布式系统（Spark）
+AKKA的引用如果你是Maven用户">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +113,14 @@ Note:Your algorithm should have a linear">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/10/LeetCode/LeetCode-Single-Number/" title="LeetCode-Single Number" itemprop="url">LeetCode-Single Number</a>
+      <a href="/2015/06/04/Akka/Study-Akka-First/" title="初识Akka" itemprop="url">初识Akka</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-10T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-10</time>
+    <time datetime="2015-06-04T15:45:36.000Z" itemprop="datePublished"> 发表于 2015-06-04</time>
     
   </p>
 </header>
@@ -105,25 +129,40 @@ Note:Your algorithm should have a linear">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA介绍"><span class="toc-number">1.</span> <span class="toc-text">AKKA介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA的引用"><span class="toc-number">2.</span> <span class="toc-text">AKKA的引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKAA的使用"><span class="toc-number">3.</span> <span class="toc-text">AKAA的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通模式的调用"><span class="toc-number">3.1.</span> <span class="toc-text">普通模式的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未完待续。。。"><span class="toc-number">4.</span> <span class="toc-text">未完待续。。。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
 		<blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/single-number/" target="_blank" rel="external">https://leetcode.com/problems/single-number/</a></p>
+<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843" target="_blank" rel="external">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a href="http://akka.io/" target="_blank" rel="external">Akka</a>压压惊，当然在<code>Spark</code>中大量的使用了<code>AKKA</code>是主要原因^_^</p>
 </blockquote>
-<p>Problem:<br>Given an array of integers, every element appears twice except for one. Find that single one.</p>
-<p><strong>Note:</strong><br>Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?</p>
-<p>思路：</p>
-<ul>
-<li>两个相同数据进行异或操作之后为0</li>
-<li>一个数字与0进行异或操作之后还是自己</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="keyword">int</span>[] A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(A==<span class="keyword">null</span> || A.length==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        ret=A[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;A.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            ret=ret^A[i];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
+<h2 id="AKKA介绍">AKKA介绍</h2><p><a href="http://akka.io/" target="_blank" rel="external">Akka</a>是一个基于<code>JVM</code>的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：</p>
+<ol>
+<li>并发和分布式</li>
+<li>弹性设计</li>
+<li>高性能</li>
+<li>去中心化</li>
+<li>高扩展性</li>
+</ol>
+<p>可以基于<code>AKKA</code>构建高并发的web框架，也可以构建分布式系统（<code>Spark</code>）</p>
+<h2 id="AKKA的引用">AKKA的引用</h2><p>如果你是<code>Maven</code>用户，你可以这么添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.typesafe.akka<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>akka-actor_2.10<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>2.3.11<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果你是<code>SBT</code>用户，你的<code>build.sbt</code>可以这么写<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name := &#34;My Project&#34;&#10;version := &#34;1.0&#34;&#10;scalaVersion := &#34;2.10.4&#34;&#10;libraryDependencies +=&#10;  &#34;com.typesafe.akka&#34; %% &#34;akka-actor&#34; % &#34;2.3.11&#34;</span><br></pre></td></tr></table></figure></p>
+<p>它还提供了好多其他的其他用法，但是由于天朝连国外网速也是在是太慢了，我直接去<a href="http://akka.io/downloads/" target="_blank" rel="external">http://akka.io/downloads/</a>将压缩包给download下来，然后将已编译的<code>jar</code>添加到IDEA中，简单、粗暴、高效。</p>
+<h2 id="AKAA的使用">AKAA的使用</h2><p><code>AKKA</code>是基于<code>Scala</code>的<code>Actor</code>来实现的，了解<code>Scala</code>的<code>Actor</code>可以参考我之前的一篇文章<a href="http://kubicode.me/2015/04/26/Scala/Scala-In-My-Eyes/#Actor" target="_blank" rel="external">我眼中的Scala-简洁不简单</a>。<br><br>在<code>AKKA</code>中最重要的是<code>ActorSystem</code>，关于<code>ActorSystem</code>在Doc中有这么一句话：</p>
 <blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+<p>Note: An ActorSystem is a heavyweight structure that will allocate 1…N Threads, so create one per logical application.</p>
 </blockquote>
+<h3 id="普通模式的调用">普通模式的调用</h3><p>首先创建一个类<code>GreetingActor</code>添加以下代码<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> akka.actor._</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Greeting</span>(</span>who:<span class="type">String</span>)</span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Created by yanyl on 6/3/15.</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GreetingActor</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Actor</span> <span class="keyword"><span class="keyword">with</span></span> <span class="title">ActorLogging</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">receive=</span>&#123;</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Greeting</span>(who)=&gt;log.info(<span class="string">"hello"</span>+who);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就建立了一个标准的<code>Actor</code>，用过<code>receive</code>方法不断地监听，<br><br>然后建立一个<code>Test</code>类向这个<code>Actor</code>发送消息<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> akka.actor._;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Created by yanyl on 6/2/15.</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args:<span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> =&#123;</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">system=ActorSystem</span>(</span><span class="string">"mySystem"</span>);</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">greeter=system</span>.<span class="title">actorOf</span>(</span><span class="type">Props</span>[<span class="type">GreetingActor</span>],name=<span class="string">"greeter"</span>);</span><br><span class="line">    greeter!<span class="type">Greeting</span>(<span class="string">"tom"</span>)</span><br><span class="line">    println(<span class="string">"i am not tom"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>叹号<code>!</code>表示发送非阻塞消息，执行之后你可以在控制台看到</p>
+<pre><code><span class="tag">i</span> am not tom
+[INFO] [<span class="number">06</span>/<span class="number">05</span>/<span class="number">2015</span> <span class="number">00</span>:<span class="number">56</span>:<span class="number">27.188</span>] [mySystem-akka<span class="class">.actor</span><span class="class">.default-dispatcher-5</span>] [akka:<span class="comment">//mySystem/user/greeter] hellotom</span>
+</code></pre><p>并可以发现这个程序并没有停止，这是因为<code>Actor</code>一直在监听。</p>
+<h2 id="未完待续。。。">未完待续。。。</h2><h2 id="参考">参考</h2><ul>
+<li><a href="http://akka.io/" target="_blank" rel="external">http://akka.io/</a></li>
+<li><a href="http://doc.akka.io/docs/akka/2.3.11/AkkaScala.pdf?_ga=1.249061252.2036148369.1433248459" target="_blank" rel="external">Akka doc for scala</a></li>
+<li><a href="http://www.gtan.com/akka_doc/index.html" target="_blank" rel="external">http://www.gtan.com/akka_doc/index.html</a>  难得的中文文档</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -131,13 +170,13 @@ Note:Your algorithm should have a linear">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Akka/">Akka</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Akka/">Akka</a>
   </div>
 
 </div>
@@ -146,7 +185,7 @@ Note:Your algorithm should have a linear">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Single-Number/" data-title="LeetCode-Single Number | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/" data-title="初识Akka | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -160,18 +199,18 @@ Note:Your algorithm should have a linear">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/" title="LeetCode-Single Number II">
+ <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举">
   <strong>上一篇：</strong><br/>
   <span>
-  LeetCode-Single Number II</span>
+  谈谈Scala中的枚举</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/"  title="LeetCode-Linked List Cycle II">
+<a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/"  title="Spark源码中所使用的经典数据结构或者设计模式">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-Linked List Cycle II
+ <span>Spark源码中所使用的经典数据结构或者设计模式
 </span>
 </a>
 </div>
@@ -180,7 +219,7 @@ Note:Your algorithm should have a linear">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/10/LeetCode/LeetCode-Single-Number/" data-title="LeetCode-Single Number" data-url="http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Single-Number/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/04/Akka/Study-Akka-First/" data-title="初识Akka" data-url="http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/"></div>
 </section>
 
 
@@ -190,7 +229,7 @@ Note:Your algorithm should have a linear">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA介绍"><span class="toc-number">1.</span> <span class="toc-text">AKKA介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKKA的引用"><span class="toc-number">2.</span> <span class="toc-text">AKKA的引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AKAA的使用"><span class="toc-number">3.</span> <span class="toc-text">AKAA的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#普通模式的调用"><span class="toc-number">3.1.</span> <span class="toc-text">普通模式的调用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#未完待续。。。"><span class="toc-number">4.</span> <span class="toc-text">未完待续。。。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
