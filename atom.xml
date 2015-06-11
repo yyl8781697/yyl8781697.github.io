@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-06-06T13:13:50.000Z</updated>
+  <updated>2015-06-11T16:53:37.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,201 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[《Effective Java》第五章：方法]]></title>
+    <link href="http://yyl8781697.github.io/2015/06/09/Effective%20Java/Method/"/>
+    <id>http://yyl8781697.github.io/2015/06/09/Effective Java/Method/</id>
+    <published>2015-06-09T15:44:24.000Z</published>
+    <updated>2015-06-11T16:53:37.000Z</updated>
+    <content type="html"><![CDATA[<p>本章主要讨论方法设计的几个方面：</p>
+<ul>
+<li>如何处理参数和返回值</li>
+<li>如何设计方法签名</li>
+<li>如何为方法编写文档</li>
+</ul>
+<h2 id="第38条：检查参数的有效性">第38条：检查参数的有效性</h2><p>这条就是教我们对于公有方法，最好在方法体上的开头处加上参数检查，并且在文档中清楚地指出这些限制，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 求模</span><br><span class="line"> *<span class="javadoctag"> @param</span> m</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> *<span class="javadoctag"> @throws</span> ArithmeticException 如何m小于等于0时抛出异常</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigInteger <span class="title">mod</span><span class="params">(BigInteger m)</span> <span class="keyword">throws</span> ArithmeticException</span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(m.signum()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArithmeticException(<span class="string">"Moduls &lt;= 0:"</span>+m);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//do something</span></span><br><span class="line">	<span class="keyword">return</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>假如是对于私有方法，通常使用断言来检查他们的参数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">long</span> a[],<span class="keyword">int</span> offset,<span class="keyword">int</span> length)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">assert</span> a!=<span class="keyword">null</span>:<span class="string">"排序数组不能为空"</span>;</span><br><span class="line">	<span class="keyword">assert</span> offset &gt;= <span class="number">0</span>&amp;&amp; offset&lt;=a.length;</span><br><span class="line">	<span class="keyword">assert</span> length&gt;=<span class="number">0</span> &amp;&amp; length&lt;=a.length-offset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p><code>assert</code>默认是关闭的，需要使用<code>-enableassertions</code>或者<code>-ea</code>的<code>Java</code>参数来显示开启。</p>
+</blockquote>
+<p>其实并不是对任何参数都加限制是件好事，因为参数的有效性检查会带来开销，我们应该在设计方法时，应该使他们尽可能的通用，并符合实际的需要。</p>
+<h2 id="第38条：必要时进行保护性拷贝">第38条：必要时进行保护性拷贝</h2><p>假设类的客户端会尽其所能的破坏这个类的约束条件，因此你必须保护性的设计程序。<br>下面希望设计的是一个不可能修改对象内部状态的类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Perion</span></span>&#123;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">final</span> Date start;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">final</span> Date end;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Period</span><span class="params">(Date start,Date end)</span> <span class="keyword">throws</span> IllegalArgumentException</span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(start.compareTo(end)&gt;<span class="number">0</span>)</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span>  IllegalArgumentException(<span class="string">"开始时间大于结束时间"</span>);</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">this</span>.start=start;</span><br><span class="line">			<span class="keyword">this</span>.end=end;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Date <span class="title">start</span><span class="params">()</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.start;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Date <span class="title">end</span><span class="params">()</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.end;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的类<code>Perion</code>似乎是不可变的，并且还加强了约束条件，<br>但是<code>Date</code>这个类是引用类型，如果是这么使用这个类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Date start=<span class="keyword">new</span> Date();</span><br><span class="line">Date end=<span class="keyword">new</span> Date();</span><br><span class="line">Perion p=<span class="keyword">new</span> Perion(start,end);</span><br><span class="line">start.setYear(<span class="number">78</span>);<span class="comment">//在这里进行了外部对Perion类内部对象的修改</span></span><br></pre></td></tr></table></figure></p>
+<p>你可以发现实例化之后的<code>Date</code>会被修改掉，所以你需要保护性拷贝<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Perion</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Date start;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Date end;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Period</span><span class="params">(Date start,Date end)</span> <span class="keyword">throws</span> IllegalArgumentException</span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="comment">//一定要先赋值 在进行类型检查</span></span><br><span class="line">		<span class="keyword">this</span>.start=<span class="keyword">new</span> Date(start.getTime());</span><br><span class="line">		<span class="keyword">this</span>.end=<span class="keyword">new</span> Date(end.getTime());</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">this</span>.start.compareTo(<span class="keyword">this</span>.end)&gt;<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span>  IllegalArgumentException(<span class="string">"开始时间大于结束时间"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Date <span class="title">start</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="comment">//防止他们使用get方法来获取引用对象</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="keyword">this</span>.start.getTime());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Date <span class="title">end</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Date(<span class="keyword">this</span>.end.getTime());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是可以发现这种方法虽然是安全了，但是代价较大，另一种更好地方法是不要用<code>Date</code>引用对象存储再数据库，而是使用时间戳更加合适<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">long</span> start;<span class="comment">//其他就不多说了</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">long</span> end;</span><br></pre></td></tr></table></figure></p>
+<p>简而言之，如果类具有从客户端得到或者返回到客户端的可变组件，类就必须保护性的拷贝这些组件。</p>
+<h2 id="第40条：谨慎设计方法签名">第40条：谨慎设计方法签名</h2><p>设计方法的时候有下面三个设计原则：</p>
+<ul>
+<li>谨慎地选择方法名称<blockquote>
+<p>方法的名称应该始终遵循标准的命名习惯</p>
+</blockquote>
+</li>
+<li>不要过于追求便利的方法<blockquote>
+<p>每个方法应该尽其所能，方法定义也不要太多，最好文档化，有测试和维护，还有接口优于类</p>
+</blockquote>
+</li>
+<li>避免过长的参数列表<ol>
+<li>把方法分解成多个方法，每个方法只需要这些参数的一个子集</li>
+<li>创建辅助类，其实就是实体类，相信大家都懂的</li>
+<li>采用Builder模式</li>
+</ol>
+</li>
+</ul>
+<h2 id="第41条：慎用重载">第41条：慎用重载</h2><blockquote>
+<p>对于重载方法的选择是静态的，而对于被覆盖方法的选择是动态的。</p>
+</blockquote>
+<p>使用重载方法可能会让你在调用的时候产生混淆，普通用户根本不知道“对于一组给定的参数，其中哪个重载方法会被调用”。</p>
+<p>例如：<code>ArrayList</code>有一个构造器带一个<code>int</code>参数，另一个构造器带<code>Collection</code>参数，难以想象的情况下会不清楚调用哪个参数。</p>
+<p>在Java1.5之前，所有的基本类型都是根本不同于所有的引用类型，但是当自动装箱出现之后，就不再如此了，他会带来真正的麻烦。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Set&lt;Integer&gt; set=<span class="keyword">new</span> TreeSet&lt;Integer&gt;();</span><br><span class="line">	List&lt;Integer&gt; list=<span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=-<span class="number">3</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		set.add(i);</span><br><span class="line">		list.add(i);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		set.remove(i);</span><br><span class="line">		list.remove(i);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	System.out.println(set+<span class="string">" "</span>+list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当初写这段代码的本意可能使希望添加[-3~3]之后再移除[0~2]，但是看结果你会发现</p>
+<pre><code>[-<span class="number">3</span>, -<span class="number">2</span>, -<span class="number">1</span>] [-<span class="number">3</span>, -<span class="number">2</span>, -<span class="number">1</span>]
+</code></pre><p>关于上面的输出：</p>
+<ul>
+<li><code>set.remove(i)</code>调用的是重写方法<code>remove(E)</code>，这里的<code>E</code>集合是<code>Integer</code>的元素类型，将<code>i</code>自动装箱到<code>Integer</code>中</li>
+<li>但是<code>list.remove(i)</code>重载的却是<code>remove(int index)</code>，它是按索引去移除元素，也因此得到了意料之外的结果。</li>
+</ul>
+<p>简而言之：“能够重载的方法”并不意味着就”应该重载方法”，一般情况下，对于读个具有相同参数目的的方法来说，应该重载方法。</p>
+<blockquote>
+<p>我想，其实重载还是很好使的，但是在重载的时候一般要避免可拆装箱类型或者有继承类型的出现，比如上例中的<code>remove(Object o)</code>以及<code>remove(int index)</code>就是非常会让人混淆，你可以写成<code>removeByIndex(int index)</code>  ^_^</p>
+</blockquote>
+<h2 id="第42条：慎用可变参数">第42条：慎用可变参数</h2><p>在Java中，可以使用下面的语法来传递可变参数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> ... args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i:args)</span><br><span class="line">	&#123;</span><br><span class="line">		sum+=i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是该方法可以不传参数调用，但是有时候需要编译1个或者多个参数的传入，而不是0到或者多个，得加上<code>args.length</code>的检查，但是更好地方法是<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> firstArgs,<span class="keyword">int</span> ... args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=firstArgs;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i:args)</span><br><span class="line">	&#123;</span><br><span class="line">		sum+=i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在重视参数性能的情况下，使用可变参数机制要特别小心，可变参数的方法每次调用都会进行一次数组的分配和初始化，所以建议先重载5个参数一下的方法（上一条还建议慎用重载呢-_-）：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> arg1)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> arg1,<span class="keyword">int</span> arg2)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> arg1,<span class="keyword">int</span> arg2,<span class="keyword">int</span> arg3)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> arg1,<span class="keyword">int</span> arg2,<span class="keyword">int</span> arg3,<span class="keyword">int</span> arg4)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>简而言之，在定义参数数目不定的方法时，可变参数方法是一种很方便的方式，但是它们不应该被过度滥用</p>
+<h2 id="第43条：返回长度的数组或者集合，而不是null">第43条：返回长度的数组或者集合，而不是null</h2><p>当函数的返回类型集合类但是却没有集合元素返回时不要返回<code>null</code>，因为开发人员可能会使用返回值来做下一个操作，所以最好你应该返回一个空得集合。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> List&lt;Integer&gt; EMPTY_DATA=<span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">		</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Integer&gt; <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(...)</span><br><span class="line">		<span class="keyword">return</span> EMPTY_DATA;<span class="comment">//而不是null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>对，这个注意好，妈妈再也不用担心我这类方法出来之后有没有检查<code>null</code>了</p>
+</blockquote>
+<h2 id="第44条：为所有导出的API元素编写文档注释">第44条：为所有导出的API元素编写文档注释</h2><p>这还用说嘛，最讨厌使用那么没有提供注释的<code>API</code>了，你叫臣妾怎么顺心的用你的<code>API</code>啊。<br>一般较为友好的注释是这么写的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 这里写你这个方法是干嘛的，有什么特征，或者使用样例、</span><br><span class="line"> *<span class="javadoctag"> @param</span> index  这里写参数的接口</span><br><span class="line"> *<span class="javadoctag"> @return</span> 返回值，一般是一个短语</span><br><span class="line"> *<span class="javadoctag"> @exception</span> 这里就是写方法可能抛出的异常以及原因</span><br><span class="line"> */</span></span><br><span class="line"><span class="function">E <span class="title">get</span><span class="params">(<span class="keyword">int</span> <span class="keyword">int</span>)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>这里的注释支持简单的<code>html</code>标签：</p>
+<ul>
+<li>比如你想换行或者分段可以使用&lt;p&gt;d&lt;/p&gt;</li>
+<li>你想斜体就用&lt;i&gt;d&lt;/i&gt;</li>
+<li>你想保持注释中文本的格式就是用&lt;pre&gt;</li>
+</ul>
+<p>还有：</p>
+<ul>
+<li>使用&lt;pre&gt;{@code,…}&lt;/pre&gt;来在注释中添加代码</li>
+<li>使用&lt;pre&gt;{@link,…}&lt;/pre&gt;跳转到指定类额注释</li>
+<li>还有几个其他的，自己看<code>Eclipse</code>中的提示</li>
+</ul>
+<p>简而言之，要为<code>API</code>编写文档，注释是最好的，最有效的途径</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>本章主要讨论方法设计的几个方面：</p>
+<ul>
+<li>如何处理参数和返回值</li>
+<li>如何设计方法签名</li>
+<li>如何为方法编写文档</li>
+</ul>
+<h2 id="第38条：检查参数的有效性">第38条：检查参数的有效性</h2><p>这条就是]]>
+    </summary>
+    
+      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
+    
+      <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Akka2.3.11文档（中文翻译）-第一章：介绍]]></title>
+    <link href="http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Introduction/"/>
+    <id>http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Introduction/</id>
+    <published>2015-06-07T05:10:26.000Z</published>
+    <updated>2015-06-11T16:55:26.000Z</updated>
+    <content type="html"><![CDATA[<p>准备开始写了。。。-_-</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>准备开始写了。。。-_-</p>
+]]>
+    </summary>
+    
+      <category term="Akka" scheme="http://yyl8781697.github.io/tags/Akka/"/>
+    
+      <category term="Akka" scheme="http://yyl8781697.github.io/categories/Akka/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Akka2.3.11文档（中文翻译）-目录]]></title>
+    <link href="http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Catalog/"/>
+    <id>http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Catalog/</id>
+    <published>2015-06-07T05:09:26.000Z</published>
+    <updated>2015-06-10T14:36:00.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>为了学习<code>Akka</code>,请允许我用蹩脚的英文来翻译一下高大上的<code>Akka2.3.11（scala）</code>文档-_-</p>
+</blockquote>
+<p>目录</p>
+<ol>
+<li>介绍<br> 1.1. 什么是Akka<br> 1.2. 为什么要使用Akka<br> 1.3. 入门<br> 1.4. Hello World<br> 1.5. 使用和部署方案<br> 1.6. Akka的使用样例</li>
+<li>概述<br> 2.1. 术语、概念<br> 2.2. Actor系统<br> 2.3. 什么是Actor<br> 2.4. 监督和监测<br> 2.5. Actor的引用、路径和地址<br> 2.6. 位置透明性<br> 2.7. Akka与Java的内存模型<br> 2.8. 消息传递的可靠性<br> 2.9. 配置</li>
+<li>Actors<br> 3.1. Actors<br> 3.2. Actors类型化<br> 3.3. 容错性<br> 3.4. 调度器<br> 3.5. 邮箱<br> 3.6. 路由<br> 3.7. 有限状态机(FSM)<br> 3.8. 持久化<br> 3.9. Actor系统的测试<br> 3.10. Actor特定领域语言</li>
+<li>特性和代理<br> 4.1. 特性<br> 4.2. 代理</li>
+<li>网络<br> 5.1. 指定集群<br> 5.2. 集群的使用<br> 5.3. 远程<br> 5.4. 序列化<br> 5.5. I/O<br> 5.6. 使用TCP<br> 5.7. 使用UDP<br> 5.8. ZeroMQ<br> 5.9. 骆驼（Camel）</li>
+<li>工具箱<br> 6.1. 事件巴士<br> 6.2. 日志<br> 6.3. 定时器<br> 6.4. 耗时<br> 6.5. 断路器<br> 6.6. Akka扩展<br> 6.7. 微内核</li>
+<li>公共模式<br> 7.1. 节约消息<br> 7.2. 跨节点的复杂均衡<br> 7.3. 使用拉模式和分发工作，可以防止邮箱溢出<br> 7.4. 进行终止<br> 7.5. Akka AMQP代理<br> 7.6. Akka 2中模式的关闭<br> 7.7. 使用Akka进行分布式图处理<br> 7.8. 案例学习：使用Actors进行缓存的自动更新<br> 7.9. 在actor系统中使用爬虫模式进行消息流的挖掘<br> 7.10. 消息的调度<br> 7.11. 模式模板</li>
+<li>实验<br> 8.1. 持久化<pre><code>8.1.1. 在Akka 2.3.4中的变化
+8.1.2. 依赖
+8.1.3. 架构
+8.1.4. 源事件
+8.1.5. 持久化视图
+8.1.6. 快照
+8.1.7. 至少一次的发布
+8.1.8. 存储插件
+8.1.9. 预打包插件
+8.1.10. 自定义序列化
+8.1.11. 测试
+8.1.12. 其他
+8.1.13. 配置
+</code></pre> 8.2. 多节点测试<pre><code>8.2.1. 多节点测试概述
+8.2.2. 测试导体
+8.2.3. 指定多节点
+8.2.4. SbtMultiJvm插件
+8.2.5. 为你的项目准备多节点测试
+8.2.6. 一个多节点测试案例
+8.2.7. 要记住的事
+8.2.8. 配置
+</code></pre> 8.3. Actors(在Java中支持Lambda表达式)<pre><code>8.3.1. 创建Actors
+8.3.2. Actor Api
+8.3.3. 通过actor的选择器来进行actors的选择
+8.3.4. 消息和不可变性
+8.3.5. 发送消息
+8.3.6. 接收消息
+8.3.7. 回复消息
+8.3.8. 接收超时
+8.3.9. 停止Actors
+8.3.10. Become/Unbecome
+8.3.11. 隐藏
+8.3.12. 杀掉一个Actor
+8.3.13. Actors以及异常
+8.3.14. 初始化模式
+8.3.15. Lamdba和性能
+</code></pre> 8.4. FSM(在Java中支持Lambda表达式)<pre><code>8.4.1. 概述
+8.4.2. 一个简单的例子
+8.4.3. 参考
+8.4.4. 测试和调试FSM
+8.4.5. 例子
+</code></pre> 8.5. 额外贡献</li>
+<li>给Akka开发人员的<br> 9.1. 构建Akka<br> 9.2. 多JVM测试<br> 9.3. I/O层的设计<br> 9.4. 开发向导<br> 9.5. 文档向导<br> 9.6. 团队</li>
+<li>项目信息<br>10.1. 迁移向导<br>10.2. 问题追踪<br>10.3. 许可证<br>10.4. 赞助商<br>10.5. 项目</li>
+<li>额外信息<br>11.1. 常见问题<br>11.2. 书籍<br>11.3. 其他语言<br>11.4. 在OSGi中的Akka<br>11.5. Http框架未完成的列表</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>为了学习<code>Akka</code>,请允许我用蹩脚的英文来翻译一下高大上的<code>Akka2.3.11（scala）</code>文档-_-</p>
+</blockquote>
+<p>目录</p>
+<ol>
+<li>介绍<br> 1.1]]>
+    </summary>
+    
+      <category term="Akka" scheme="http://yyl8781697.github.io/tags/Akka/"/>
+    
+      <category term="Akka" scheme="http://yyl8781697.github.io/categories/Akka/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[自己煮：麻辣鱼]]></title>
@@ -1306,372 +1501,6 @@ Sun
       <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
     
       <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[我眼中的Scala-简洁不简单]]></title>
-    <link href="http://yyl8781697.github.io/2015/04/26/Scala/Scala-In-My-Eyes/"/>
-    <id>http://yyl8781697.github.io/2015/04/26/Scala/Scala-In-My-Eyes/</id>
-    <published>2015-04-26T12:53:19.000Z</published>
-    <updated>2015-04-26T02:33:02.000Z</updated>
-    <content type="html"><![CDATA[<p>&#160; &#160; &#160; &#160;由于实验需要在半年前开始接触<code>Scala</code>，之前也学习/使用过<a href="http://www.tiobe.com/content/paperinfo/tpci/tpci_definition.htm" target="_blank" rel="external">TIOBE</a>榜上Top20中一半左右的编程语言，感觉还是<code>Scala</code>给我印象最深，最近没怎么做相关的开发感觉都开始慢慢淡忘了，上周在技术分享时我对<code>Scala</code>作了一些总结，顺便在这里写下。</p>
-<blockquote>
-<p><code>Scala</code>注意，本文主要是描述我所了解的<code>Scala</code>相关的基础语法，和<code>Java</code>相同得在这里就不再累赘。</p>
-</blockquote>
-<h2 id="我眼中的Scala">我眼中的Scala</h2><pre><code><span class="keyword">Scala</span>是一种基于JVM的编程语言，集成了面向对象和函数式编程的特性，既能处理脚本化得临时任务，又能处理高并发场景下分布式大数据应用。
-</code></pre><p>&#160; &#160; &#160; &#160;<code>Java</code>就是因为有<code>JVM</code>虚拟机才成就了现在的辉煌，<code>Scala</code>同样是运行在<code>JVM</code>，大致可以看做Java的升级版，由于现在大数据大势所趋，各种大数据框架的出现导致了<code>Scala</code>强势崛起！<br>&#160; &#160; &#160; &#160;编程初学者最先接触的应该就是”Hello,World”，而WordCount可以看做大数据编程的入门必学技能，所以现在我们在”Hello,World”上实现CharCount：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Scala Application</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">str=</span>"<span class="title">Hello</span>,<span class="title">wrold</span>"</span><br><span class="line"></span><span class="function"><span class="keyword">val</span> <span class="title">data=str</span></span><br><span class="line"></span>	.split(<span class="type">Array</span>(',',' '))</span><br><span class="line">	.flatMap(<span class="keyword">for</span>(c&lt;-_) <span class="keyword">yield</span> (c,<span class="number">1</span>))  <span class="comment">//好Api</span></span><br><span class="line">	.groupBy(_._1)</span><br><span class="line">	.mapValues(_.size)</span><br><span class="line">		</span><br><span class="line">println(data)</span><br></pre></td></tr></table></figure></p>
-<p>&#160; &#160; &#160; &#160;假如你是用<code>Java</code>程序来写，最方便的莫过于<code>HashMap</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Java Application</span></span><br><span class="line">String str=<span class="string">"Hello,World"</span>;</span><br><span class="line">HashMap&lt;Character,Integer&gt; map=<span class="keyword">new</span> HashMap&lt;Character,Integer&gt;();</span><br><span class="line"><span class="keyword">for</span>(Character ch:str.toCharArray())</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(!<span class="string">","</span>.equals(ch))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(!map.containsKey(ch))</span><br><span class="line">		&#123;</span><br><span class="line">			map.put(ch, <span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		map.put(ch, map.get(ch)+<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(map);</span><br></pre></td></tr></table></figure></p>
-<p>其结果为</p>
-<pre><code><span class="built_in">Map</span>(e <span class="subst">-&gt; </span><span class="number">1</span>, l <span class="subst">-&gt; </span><span class="number">3</span>, H <span class="subst">-&gt; </span><span class="number">1</span>, r <span class="subst">-&gt; </span><span class="number">1</span>, w <span class="subst">-&gt; </span><span class="number">1</span>, o <span class="subst">-&gt; </span><span class="number">2</span>, d <span class="subst">-&gt; </span><span class="number">1</span>)
-</code></pre><p>从上面的程序中看出<code>Scala</code>的几大特点：</p>
-<ul>
-<li>链式操作</li>
-<li>变量不变性</li>
-<li>丰富的Api</li>
-<li><strong>简洁不简单</strong>(<em>不需要加分号，返回值时不需要return关键字，还有强大的语法糖</em>)</li>
-</ul>
-<p>现在已经有非常多优秀的项目都是使用<code>Scala</code>来编写的：</p>
-<ul>
-<li><a href="http://spark.apache.org/" target="_blank" rel="external">Spark</a>：不用多说，感觉最近<code>Scala</code>的崛起就是因为该项目的横空出世</li>
-<li><a href="http://akka.io/" target="_blank" rel="external">Akka</a>：分布式、高并发、高可伸缩性的消息驱动模型</li>
-<li><a href="http://akka.io/" target="_blank" rel="external">Kafka</a>：一个高吞吐量的分布式消息系统</li>
-<li><a href="https://www.playframework.com/" target="_blank" rel="external">play</a>：一个高性能的Web框架，据说最近版本用Scala重写了</li>
-<li>据说Twitter公司好多中间件都是使用Scala来编写的</li>
-</ul>
-<h2 id="编程IDE">编程IDE</h2><p>&#160; &#160; &#160; &#160;目前编写<code>Scala</code>程序有两种比较流行的IDE：<a href="http://scala-ide.org/" target="_blank" rel="external">Eclipse for Scala</a>、<a href="http://www.jetbrains.com/idea/download/" target="_blank" rel="external">idea community edition</a>，注意，eclipse版感觉功能没idea强，但是速度要比idea快（可能是自己电脑配置差的原因），还有下载idea时要下载社区版，他是免费的。<br>&#160; &#160; &#160; &#160;当然如果是初学者的话还是建议使用万能sublime text来写，自己添加一个插件就好。Tools-&gt;Build System-&gt;New Build System…，然后输入：</p>
-<pre><code>{
-    "<span class="attribute">cmd</span>": <span class="value">[<span class="string">"scala"</span>,<span class="string">"$file"</span>]</span>,
-    "<span class="attribute">selector</span>": <span class="value">[<span class="string">"source.scala"</span>]</span>,
-    "<span class="attribute">shell</span>": <span class="value"><span class="string">"true"</span>
-</span>}
-</code></pre><p>这样<code>Scala</code>后缀的程序在Sublime中直接使用<code>Ctrl+B</code>即可运行</p>
-<h2 id="变量定义">变量定义</h2><blockquote>
-<p>标准格式：{val|var} 变量名[:类型]=[new]Class</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val a=<span class="number">5</span>   <span class="comment">//推断为Int类型</span></span><br><span class="line">val b:Int=<span class="number">5</span>  <span class="comment">//显示的指定为Int类型</span></span><br><span class="line">val c=<span class="number">5f</span>  <span class="comment">//表示Float类型</span></span><br><span class="line">val str:Option[String]  <span class="comment">//表示可空类型</span></span><br></pre></td></tr></table></figure>
-<h2 id="函数定义">函数定义</h2><blockquote>
-<p>标准格式：def 方法名(参数列表)[:返回类型]={//方法体}</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">////推断返回String</span></span><br><span class="line"><span class="function">def <span class="title">hello</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="string">"Hello"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//指定返回类型</span></span><br><span class="line"><span class="function">def <span class="title">hello</span><span class="params">()</span>:String</span>=</span><br><span class="line">&#123;</span><br><span class="line">	<span class="string">"Hello"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//简写</span></span><br><span class="line"><span class="function">def <span class="title">hello</span><span class="params">()</span>:String</span>=<span class="string">"Hello"</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">//传参数，多个用逗号隔开</span></span><br><span class="line"><span class="function">def <span class="title">hello</span><span class="params">(word:String)</span>:String</span>=<span class="string">"Hello"</span>+word</span><br><span class="line"></span><br><span class="line"><span class="comment">//注意函数返回时不需要写return</span></span><br></pre></td></tr></table></figure>
-<h2 id="变量不变性">变量不变性</h2><p><code>Scala</code>编程最为推崇的就是变量不变性：变量一旦定义了之后不再改变</p>
-<ul>
-<li>符合大数据的思想，比如分布式文件系统上只能进行增和删除操作，并没有修改操作</li>
-<li>在多线程环境下这个变量是安全的</li>
-</ul>
-<p>在<code>Scala</code>中有两种类型的不变性</p>
-<ul>
-<li><code>val</code> vs <code>var</code></li>
-</ul>
-<p>如果用<code>val</code>定义之后这个变量则不能再被其他变量进行赋值，但是可以对其内容进行修改，<code>val</code>定义的变量就没有这个限制。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.collection.mutable.Map  <span class="comment">//显示得先导入可变的Map包</span></span><br><span class="line"></span><br><span class="line">val a=<span class="number">5</span></span><br><span class="line">a=<span class="number">6</span> <span class="comment">//则会报错：reassignment to val</span></span><br><span class="line"><span class="comment">//如果a用var定义则无影响</span></span><br><span class="line"></span><br><span class="line">val map=Map(<span class="number">1</span>-&gt;<span class="number">2</span>)</span><br><span class="line">map.put(<span class="number">2</span>,<span class="number">3</span>) <span class="comment">//这里是修改了变量的内容</span></span><br><span class="line">map.foreach(println(<span class="number">_</span>)) <span class="comment">//会输出(2,3),(1,2)</span></span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><code>immutable</code> vs <code>mutable</code></li>
-</ul>
-<p>如果定义的变量属于<code>immutable</code>包，则定义之后该变量的内容再不能再被修改（不显式导入默认为该包下的类型），<code>mutable</code>包下面的类则无此限制。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val immap=Map(<span class="number">1</span>-&gt;<span class="number">2</span>)<span class="comment">//默认为immutable包下面的类</span></span><br><span class="line">immap.put(<span class="number">2</span>,<span class="number">3</span>) <span class="comment">//这里是修改了变量的内容 ，但是会报错 value put is not a member of scala.collection.immutable.Map</span></span><br><span class="line"></span><br><span class="line">val map=scala.collection.mutable.Map(<span class="number">1</span>-&gt;<span class="number">2</span>) <span class="comment">//显式指定包</span></span><br><span class="line">map.put(<span class="number">2</span>,<span class="number">3</span>) <span class="comment">//可以正常执行</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><code>val x=scala.collection.mutable.Type()</code>可以理解为指针常量，指向的地址不可以重新赋值，但内容可以改变<br><code>var x=scala.collection.immutable.Type()</code>可以理解为常量指针，指向的地址可以变，但内容不可以重新赋值</p>
-</blockquote>
-<h2 id="控制结构和函数">控制结构和函数</h2><h3 id="加强版的if">加强版的if</h3><p><code>if</code>除了正常的逻辑判断外，还可以直接返回相应的值，并且还支持返回不同类型的值</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val a=<span class="keyword">if</span>(<span class="keyword">false</span>) <span class="number">1</span> <span class="keyword">else</span> <span class="string">"2"</span></span><br><span class="line">a match&#123;</span><br><span class="line">	<span class="keyword">case</span> x:Int=&gt;println(<span class="string">"Int"</span>)  <span class="comment">//true时a=1</span></span><br><span class="line">	<span class="keyword">case</span> x:String=&gt;println(<span class="string">"String"</span>) <span class="comment">//false时a="2"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>该功能在实际编程中灰常有用，之前写Java的时候都不得不在if外先定义变量，再在里面赋值-_-</p>
-</blockquote>
-<h3 id="带有守卫条件的for">带有守卫条件的for</h3><p>守卫是什么东东？你可以理解为<code>for</code>里面的条件控制<br>先来看下<code>Scala</code>的<code>for</code>循环（与传统的三层for结构大不相同，不过与传统的foreach有点类似）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i&lt;-<span class="number">0</span> until <span class="number">5</span>) println(i) <span class="comment">//可以输出0,1,2,3,4</span></span><br></pre></td></tr></table></figure>
-<p>那如果我需要双重循环呢?<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i&lt;-<span class="number">0</span> to <span class="number">5</span>;j&lt;-i+<span class="number">1</span> to <span class="number">5</span>) println(i*j) <span class="comment">//大致就是5*5下三角的矩阵相乘值</span></span><br></pre></td></tr></table></figure></p>
-<p>再来看一下守卫<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i&lt;-<span class="number">0</span> to <span class="number">5</span>;<span class="keyword">if</span> i%<span class="number">2</span>==<span class="number">0</span>) println(i) <span class="comment">//输出0,2,4</span></span><br></pre></td></tr></table></figure></p>
-<p>这个守卫表示只有<code>i%2==0</code>的情况下才会进入循环体，这样是不是很方便。</p>
-<h3 id="没有continue、break的while">没有continue、break的while</h3><p>这个我就不吐槽了，<code>Scala</code>作者竟然认为<code>continue</code>、<code>break</code>这两个这么顺手控制循环的功能是没用的，完全可以在守卫中加入条件判断来控制，这叫我们这帮C系狗情何以堪-_-</p>
-<h2 id="数组">数组</h2><p>数组作为绝大多数编程语言中的一个经典类型，在<code>Scala</code>是不支持<code>[]</code>这种定义的，而是用<code>Array</code>来定义。</p>
-<blockquote>
-<p>标准格式：[val|var] 变量名[:Array[数组类型]]=Array(…)|new Array(..)</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">val array:Array[Int]=<span class="keyword">new</span> Array[Int](<span class="number">5</span>)</span><br><span class="line">println(<span class="string">"array.length="</span>+array.length)  <span class="comment">//输出长度为5</span></span><br><span class="line"></span><br><span class="line">val array2=Array(<span class="string">"Mary"</span>,<span class="string">"had"</span>,<span class="string">"a"</span>,<span class="string">"little"</span>,<span class="string">"cat"</span>) <span class="comment">//直接按内容进行初始化</span></span><br><span class="line">println(array2.mkString(<span class="string">"#"</span>))<span class="comment">//</span></span><br><span class="line">println(<span class="string">"the index is 2="</span>+array2(<span class="number">3</span>))<span class="comment">//取索引为3的值</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">val array3:Array[(String,Int)]=Array((<span class="string">"xiaoming"</span>,<span class="number">23</span>),(<span class="string">"xiaohong"</span>,<span class="number">22</span>))<span class="comment">//使用元祖作为数组内容</span></span><br><span class="line">array3.foreach(println(<span class="number">_</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">val matrix =Array.ofDim[Double](<span class="number">3</span>,<span class="number">4</span>)<span class="comment">//定义二维数组</span></span><br></pre></td></tr></table></figure>
-<h2 id="类和伴生对象、特质">类和伴生对象、特质</h2><h3 id="类">类</h3><blockquote>
-<p>定义：class 类名(构造参数列表) extends,with 继承的类或者接口</p>
-</blockquote>
-<p>与其他的面向对眼语言不同，<code>Scala</code>中的类支持直接在类名后跟随构造函数列表</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class Person(name:String)&#123;</span><br><span class="line"></span><br><span class="line">	private var age:Int=0;</span><br><span class="line"></span><br><span class="line">	def this(name:String,age:Int)</span><br><span class="line">	&#123;</span><br><span class="line">		this(name);//一定要调用上一层的构造函数</span><br><span class="line">		this.age=age;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	def getName=this.name//函数如果无参 可以去掉括号</span><br><span class="line"></span><br><span class="line">	def getAge=this.age</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val p1=new Person("tom")</span><br><span class="line">println(p1.getName)</span><br><span class="line">val p2=new Person("tom",25)</span><br><span class="line">println(p2.getAge)</span><br></pre></td></tr></table></figure>
-<h3 id="伴生对象">伴生对象</h3><p>类没有静态方法或者静态字段，需要用<code>Object</code>这个语法结构来达到同样的目的，一个<code>Object</code>一般与对应的类要在同一个文件中（通过<code>Object</code>就可以实现传说中的不用<code>new</code>关键词来实例化对象）</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Student(name:String)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">	def getName()=name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">object Student&#123;</span><br><span class="line"></span><br><span class="line">	//这个伴生对象可以和他的class共享变量</span><br><span class="line">	def apply(name:String):Student=</span><br><span class="line">	&#123;</span><br><span class="line">		new Student(name)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val stu1=new Student("tom");</span><br><span class="line">println(stu1.getName)</span><br><span class="line">val stu2=Student("peter");//这里其实是调用了Object的apply方法  </span><br><span class="line">println(stu2.getName)</span><br></pre></td></tr></table></figure>
-<p>啥都不是说了，没有<code>static</code>是有点奇怪，但是这个<code>Object</code>也不错啊，用习惯就好了(^_^)</p>
-<h3 id="接口的加强版-特质">接口的加强版-特质</h3><p>当然<code>Scala</code>里面也是没有<code>Interface</code>这种东西的，而是用<code>trait</code>特质来代替，这个特质类似接口，但是他可以自己实现方法（惊呆了,-_-），这样一来<code>Scala</code>就支持传说中的多继承了，关于多继承里面的菱形问题<code>Scala</code>是通过最后一个相同名称的方法来解决的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">trait Logger&#123;</span><br><span class="line">	<span class="function">def <span class="title">log</span><span class="params">(msg:String)</span></span>&#123;&#125;<span class="comment">//直接在特质里面实现了方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">trait ConsoleLogger extends Logger &#123;</span><br><span class="line">	<span class="function">override def <span class="title">log</span><span class="params">(msg:String)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		println(msg)<span class="comment">//特质之间能直接继承</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用width来实现多继承</span></span><br><span class="line"><span class="comment">//class ConsoleLogger extends Logger with Cloneable with Serializable</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> var balance:Double=<span class="number">100</span></span><br><span class="line">	def getBalance=balance</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//关于Scala的多继承就是通过继承特征来实现的  with trait 可以一下下去</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SaveingsAccount</span> <span class="keyword">extends</span> <span class="title">Account</span> <span class="title">with</span> <span class="title">Logger</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="function">def <span class="title">withdraw</span><span class="params">(amount:Double)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(amount&gt;balance)</span><br><span class="line">		&#123;</span><br><span class="line">			log(<span class="string">"amount&gt;balance,can't withdraw"</span>)</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			log(<span class="string">"withdraw"</span>+amount)</span><br><span class="line">			balance-=amount;</span><br><span class="line">		&#125;</span><br><span class="line">			</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">println(<span class="string">"s111111111"</span>)</span><br><span class="line">val s=<span class="keyword">new</span> SaveingsAccount();</span><br><span class="line">s.withdraw(<span class="number">101</span>);</span><br><span class="line">s.withdraw(<span class="number">34</span>);</span><br><span class="line">println(<span class="string">"remain"</span>+s.getBalance)</span><br><span class="line"></span><br><span class="line">println(<span class="string">"\r\ns222222222"</span>)</span><br><span class="line">val s2=<span class="keyword">new</span> SaveingsAccount() with ConsoleLogger;<span class="comment">//这个with其实是可以写到SaveingsAccount类上面的，写在这里只是为了说明Scala的灵活，实在是太灵活了。。</span></span><br><span class="line">s2.withdraw(<span class="number">101</span>);</span><br><span class="line">s2.withdraw(<span class="number">34</span>);</span><br><span class="line">println(<span class="string">"remain"</span>+s2.getBalance)</span><br></pre></td></tr></table></figure>
-<p>输出的结果为：</p>
-<pre><code>s111111111
-remain66.0
-
-s222222222
-amount&gt;balance,can<span class="operator">'</span>t withdraw
-withdraw34.0
-remain66.0
-</code></pre><h2 id="柯里化">柯里化</h2><blockquote>
-<p>可以将函数的参数列表使用多个括号分类来调用（在其他地方没见过吧~^_^）</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">def <span class="title">mul</span><span class="params">(x:Int,y:Int)</span></span>=x*y  <span class="comment">//普通青年</span></span><br><span class="line"><span class="function">def <span class="title">mulOneAtATime</span><span class="params">(x:Int)</span></span>=(y:Int)=&gt;x*y  <span class="comment">//2B青年  </span></span><br><span class="line"><span class="function">def <span class="title">mulSample</span><span class="params">(x:Int)</span><span class="params">(y:Int)</span><span class="params">(z:Int)</span></span>=x*y*z<span class="comment">//文艺青年</span></span><br><span class="line"></span><br><span class="line">val x=<span class="number">5</span></span><br><span class="line">val y=<span class="number">6</span></span><br><span class="line">println(<span class="string">"mul"</span>,mul(x,y))</span><br><span class="line">println(<span class="string">"mulOneAtATime"</span>,mulOneAtATime(x)(y))</span><br><span class="line">println(<span class="string">"mulSample"</span>,mulSample(x)(y)(<span class="number">10</span>))</span><br></pre></td></tr></table></figure>
-<p>一般我们在一个函数中如果需要传的参数可以分为几个类别，这样使用柯里化可以让整个函数的调用更加清晰一点。（恩，的确也是）</p>
-<h2 id="模式匹配和样例类">模式匹配和样例类</h2><h3 id="模式匹配">模式匹配</h3><blockquote>
-<p>模式匹配<code>match</code>是一个更好的<code>switch</code></p>
-</blockquote>
-<p><code>Scala</code>的<code>match</code>除了可以匹配确定值以外，他还有：</p>
-<ul>
-<li>可以匹配数组、元祖、样例类等</li>
-<li>可以在匹配时加入守卫（就是匹配的判断条件啦^_^）</li>
-<li>可以在模式匹配之后进行值的返回</li>
-<li>不会有意外掉落到下一个分支问题（也就是没有<code>break</code>）</li>
-<li>如果得不到匹配会跑出异常，所以如果不确保能全部覆盖匹配则再最后用<code>_</code>占位符来匹配所有情况</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">val ch:Char=<span class="string">'-'</span></span><br><span class="line">val sign=<span class="number">5</span>;</span><br><span class="line">val result =ch match&#123;<span class="comment">//有返回值</span></span><br><span class="line">	<span class="keyword">case</span> <span class="string">'+'</span>=&gt;sign+<span class="number">1</span></span><br><span class="line">	<span class="keyword">case</span> <span class="string">'-'</span>=&gt;sign-<span class="number">1</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">_</span>=&gt;sign</span><br><span class="line">&#125;</span><br><span class="line">println(result)</span><br><span class="line"></span><br><span class="line"><span class="comment">//进行是否大于5的判断</span></span><br><span class="line">val flag=<span class="number">5</span></span><br><span class="line">flag match&#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">_</span> <span class="keyword">if</span> flag&gt;<span class="number">5</span>=&gt;println(<span class="string">"&gt;5"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">_</span> <span class="keyword">if</span> flag&lt;<span class="number">5</span>=&gt;println(<span class="string">"&lt;5"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">_</span> =&gt;println(flag)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用类型来进行匹配</span></span><br><span class="line">val obj=<span class="keyword">if</span>(<span class="keyword">false</span>) <span class="number">5</span> <span class="keyword">else</span> <span class="string">"5"</span></span><br><span class="line">obj match&#123;</span><br><span class="line">	<span class="keyword">case</span> obj:Int=&gt;println(<span class="string">"i am Int"</span>)</span><br><span class="line">	<span class="keyword">case</span> obj:String=&gt;println(<span class="string">"i am String"</span>)</span><br><span class="line">	<span class="keyword">case</span> obj:BigInt=&gt;println(<span class="string">"i am bigint"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">_</span>=&gt;println(<span class="string">"i am any"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//匹配数组</span></span><br><span class="line">val arr=Array(<span class="number">0</span>,<span class="number">7</span>)</span><br><span class="line">arr match&#123;</span><br><span class="line">	<span class="function"><span class="keyword">case</span> <span class="title">Array</span><span class="params">(<span class="number">0</span>)</span></span>=&gt;println(<span class="string">"0"</span>) <span class="comment">//匹配只有一个0的数组</span></span><br><span class="line">	<span class="function"><span class="keyword">case</span> <span class="title">Array</span><span class="params">(x,y)</span></span>=&gt;println(x+<span class="string">"+"</span>+y)  <span class="comment">//匹配含有两个元素的数组</span></span><br><span class="line">	<span class="function"><span class="keyword">case</span> <span class="title">Array</span><span class="params">(<span class="number">0</span>,_*)</span></span>=&gt;println(<span class="string">"start 0"</span>) <span class="comment">//匹配以0为第一个元素的数组</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">_</span>=&gt;println(<span class="string">"any"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//匹配元组</span></span><br><span class="line">val tuple=(<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line">tuple match&#123;</span><br><span class="line">	<span class="keyword">case</span> (<span class="number">_</span>,<span class="number">2</span>)=&gt;println(<span class="string">"end2"</span>)<span class="comment">//匹配以2结尾的元组</span></span><br><span class="line">	<span class="keyword">case</span> (<span class="number">1</span>,<span class="number">_</span>)=&gt;println(<span class="string">"start 1"</span>)<span class="comment">//匹配以1开头的元组</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">_</span>=&gt;println(<span class="string">"nothing"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>PS:功能很强大吧，在<code>Scala</code>的程序里面随处都可以看到<code>match</code>，甚至很多情况下使用<code>match</code>来完成<code>if-else</code>的操作</p>
-</blockquote>
-<h3 id="样例类">样例类</h3><blockquote>
-<p>样例类是一种特殊的类，它们经过优化以被用于模式匹配</p>
-</blockquote>
-<p>你可以把样例类看做一个结构体，里面定义数据类型，然后在<code>match</code>操作的时候得以方便得传参</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">abstract class Amount  //定义一个抽象类</span><br><span class="line">case class Dollar(value:Double) extends Amount  //定义一个美元得样例类 继承了Amount</span><br><span class="line">case class Currency(value:Double,unit:String) extends Amount  //顶一个现金的抽象类  也是继承了Amount</span><br><span class="line"></span><br><span class="line">case object Nothing extends Amount</span><br><span class="line"></span><br><span class="line">val amt:Amount=Currency(6,"$") //实例化一个样例类 注意没有new</span><br><span class="line">amt match&#123;//使用样例类进行模式匹配</span><br><span class="line">	case Dollar(x)=&gt;println(x)</span><br><span class="line">	case Currency(value,unit)=&gt;println("oh,i get "+value+unit)//在这里得到了匹配，看到没？可以传参数</span><br><span class="line">	case Nothing=&gt;println("nothing")</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>PS：<code>Scala</code>的框架中样例类也用的特别多，比如说<a href="http://spark.apache.org/" target="_blank" rel="external">Spark</a></p>
-</blockquote>
-<h2 id="Actor">Actor</h2><blockquote>
-<p><code>Actor</code>提供了并发程序中与传统的基于锁结构不同的另一个选择</p>
-</blockquote>
-<p>他有两种发送消息的方式：</p>
-<ul>
-<li><code>actor!message</code>:发送消息之后非阻塞的，也没有返回值</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.actors.Actor</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HiActor</span> <span class="keyword">extends</span> <span class="title">Actor</span></span>&#123; <span class="comment">//自定义一个actor类，它一定是要继承Actor</span></span><br><span class="line">	<span class="function">def <span class="title">act</span><span class="params">()</span><span class="comment">//重写该方法</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			receive &#123;<span class="comment">//在这里接收消息，其实这里就是一个模式匹配</span></span><br><span class="line">				<span class="keyword">case</span> <span class="string">"Hi"</span>=&gt;println(<span class="string">"hello!"</span>)</span><br><span class="line">				<span class="keyword">case</span> <span class="string">"Goodbye"</span>=&gt;println(<span class="string">"bye bye!"</span>)</span><br><span class="line">				<span class="keyword">case</span> <span class="number">_</span> =&gt;println(<span class="string">"i don't know"</span>)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val act=<span class="keyword">new</span> HiActor</span><br><span class="line">act.start <span class="comment">//一定要启动之后才能发送</span></span><br><span class="line"></span><br><span class="line">println(<span class="string">"send Hi"</span>)</span><br><span class="line">act!<span class="string">"Hi"</span></span><br><span class="line">println(<span class="string">"send Goodbye"</span>)</span><br><span class="line">act!<span class="string">"Goodbye"</span></span><br></pre></td></tr></table></figure>
-<p>这样就会输出</p>
-<pre><code>send Hi
-send Goodbye
-hello!
-<span class="built_in">bye</span> <span class="built_in">bye</span>!
-</code></pre><ul>
-<li><code>actor!?message</code>:发送消息之后会阻塞下面代码的执行，而且还是可以得到返回值的</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scala.actors.Actor</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AccountActor</span> <span class="keyword">extends</span> <span class="title">Actor</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> var balance=<span class="number">0.0</span></span><br><span class="line"></span><br><span class="line">	def getBalance=<span class="function">balance</span><br><span class="line">	def <span class="title">act</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//使用样例类来进行匹配</span></span><br><span class="line">			receive &#123;</span><br><span class="line">				<span class="function"><span class="keyword">case</span> <span class="title">Desposit</span><span class="params">(amount)</span></span>=&gt;</span><br><span class="line">					println(<span class="string">"Desposit "</span>+amount)</span><br><span class="line">					balance+=amount</span><br><span class="line">					sender!<span class="function"><span class="keyword">true</span></span><br><span class="line">				<span class="keyword">case</span> <span class="title">WidthDraw</span><span class="params">(amount)</span></span>=&gt;</span><br><span class="line">					<span class="keyword">if</span>(balance&lt;amount)</span><br><span class="line">					&#123;</span><br><span class="line">						println(<span class="string">"the balance less than amount"</span>)</span><br><span class="line">						sender!<span class="keyword">false</span></span><br><span class="line">					&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">						println(<span class="string">"WidthDraw"</span>+amount)</span><br><span class="line">						balance-=amount</span><br><span class="line">						sender!<span class="keyword">true</span></span><br><span class="line">					&#125;	</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">case</span> class <span class="title">Desposit</span><span class="params">(amount:Double)</span>  <span class="comment">//存钱的样例类</span></span><br><span class="line"><span class="keyword">case</span> class <span class="title">WidthDraw</span><span class="params">(amount:Double)</span> <span class="comment">//取钱的样例类</span></span><br><span class="line"></span><br><span class="line">val account</span>=<span class="keyword">new</span> AccountActor</span><br><span class="line">account.start</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 如果使用非阻塞的，整个存取钱的系统会不正常</span><br><span class="line">println(account!WidthDraw(100))</span><br><span class="line">println(account!Desposit(100))</span><br><span class="line">println(account!WidthDraw(50))</span><br><span class="line">println("account.getBalance"+account.getBalance)*/</span></span><br><span class="line"></span><br><span class="line">println(account!?WidthDraw(<span class="number">100</span>))<span class="comment">//取100  会说钱不够，没法取</span></span><br><span class="line">println(account!?Desposit(<span class="number">100</span>))<span class="comment">//存100</span></span><br><span class="line">println(account!?WidthDraw(<span class="number">50</span>))<span class="comment">//再取50</span></span><br><span class="line">println(<span class="string">"account.getBalance"</span>+account.getBalance)<span class="comment">//可以正常取钱</span></span><br></pre></td></tr></table></figure>
-<p>输出的结果为：</p>
-<pre><code><span class="keyword">the</span> balance <span class="keyword">less than</span> amount
-<span class="constant">false</span>
-Desposit <span class="number">100.0</span>
-<span class="constant">true</span>
-WidthDraw50.0
-<span class="constant">true</span>
-account.getBalance50.0
-</code></pre><blockquote>
-<p>PS:大名鼎鼎的<code>AKKA</code>就是基于<code>Actor</code>来实现的，是分布式、高并发的消息驱动框架（听听就是高大上~^_^）</p>
-</blockquote>
-<h2 id="隐式转换">隐式转换</h2><p>你知否曾希望某个类有某个方法，而这个类的作者却没有提供你？</p>
-<blockquote>
-<p>所谓隐式转换函数指的是那种以<code>implicit</code>关键字声明的带有单个参数的函数。</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//定义一个现金转换类</span><br><span class="line">class Currency(val value:Double)&#123;</span><br><span class="line">	def $2y=value*6 //美元转人民币</span><br><span class="line">	def y2$=value/6 //人民币转美元</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//普通用法就是需要自己去实例化一个Currency类再去</span><br><span class="line">val money=new Currency(100.0)</span><br><span class="line">println(money.$2y) //执行去转换的方法</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//这里使用隐式转换</span><br><span class="line">implicit def double2Currency(value:Double)=new Currency(value)</span><br><span class="line">println(100.$2y)//就可以直接在数字上使用该现金转换的方法了</span><br><span class="line">//A：有同学可能要问了，这不是double转为Currency的嘛？怎么Int类型也能用？</span><br><span class="line">//Q：不错，100是Int类型，但是这里默认是带有Int 转 Double的隐式转换</span><br></pre></td></tr></table></figure>
-<p>在使用隐式转换时只需要确保调用之前 已经直接了定义的隐式转换方法即可，而且一般定义转换名称为<code>元类型2目标类型</code>，这样比较好记啊(^_^)</p>
-<blockquote>
-<p>Note:在Scala编写框架时他的功能类往往不会直接暴露出来，而是通过隐式转换的方式来让用调用 （这点可以让你的框架代码结构非常清晰，但是。。。你要看源码实际调用类的时候就很难找到了）</p>
-</blockquote>
-<h2 id="还有还有">还有还有</h2><ul>
-<li>元组：这不是元祖月饼-_-，接触过<code>Python</code>的同学应该都知道吧</li>
-<li><code>List,Map,etc</code>的集合类</li>
-<li>万能占位符<code>_</code>，懒人模式用的，因为有时候懒得想变量</li>
-<li><code>lazy</code> 懒加载，在调用的时候才会加载。。明显有好处嘛^_^</li>
-<li>用索引取值一般用圆括号<code>(i)</code>，定义变量类型、泛型一般用方括号<code>[K,V]</code></li>
-<li>其他的好也好多都不熟悉了 -_-</li>
-</ul>
-<h2 id="参考">参考</h2><ul>
-<li>《快学Scala》</li>
-<li>《Scala编程-中文版》</li>
-<li><a href="http://www.scala-lang.org/" target="_blank" rel="external">Scala</a></li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>&#160; &#160; &#160; &#160;由于实验需要在半年前开始接触<code>Scala</code>，之前也学习/使用过<a href="http://www.tiobe.com/content/paperinfo/tpci/tpci_definition]]>
-    </summary>
-    
-      <category term="Scala" scheme="http://yyl8781697.github.io/tags/Scala/"/>
-    
-      <category term="Scala" scheme="http://yyl8781697.github.io/categories/Scala/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《Effective Java》第二章：创建和销毁对象]]></title>
-    <link href="http://yyl8781697.github.io/2015/04/22/Effective%20Java/Create-Destory-Object/"/>
-    <id>http://yyl8781697.github.io/2015/04/22/Effective Java/Create-Destory-Object/</id>
-    <published>2015-04-22T12:33:05.000Z</published>
-    <updated>2015-04-25T08:51:52.000Z</updated>
-    <content type="html"><![CDATA[<p>本章的主题是创建和销毁对象：何时以及如何创建对象，何时以及如何避免创建对象，如何确保它们能够适时得销毁，以及如何管理对象和销毁之前必须进行的各种清理动作。</p>
-<h2 id="第1条：考虑用静态工厂方法代替构造器">第1条：考虑用静态工厂方法代替构造器</h2><blockquote>
-<p>这条感觉就是推荐我们尽量使用静态方法来生成实例对象。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> b?Boolean.TRUE:Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>推荐的理由如下：</p>
-<ol>
-<li>静态构造方法有自己的名称。（这理由是不是有点。。，个人感觉绝大部分程序猿在创建对象时都是首先尝试<code>new Construct()</code>）</li>
-<li>不必在每次调用它们时都创建一个新的对象。(单例中比较常用吧)</li>
-<li>它们可以返回原返回类型的任何子类型的对象。（<strong>这个特征的确是比较有优势一点</strong>）</li>
-<li>在创建参数化类型实例的时候，它们使代码变得更加简洁。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//普通是需要这么干的</span></span><br><span class="line">Map&lt;String,List&lt;String&gt;&gt; m=<span class="keyword">new</span> HashMap&lt;String,List&lt;String&gt;&gt;();</span><br><span class="line"><span class="comment">//使用了第4条直接这么干就好了（但是实际上HashMap也没提供这个功能啊-_-）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span>&lt;K,V&gt; HashMap&lt;K,V&gt; newInstance()&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> HashMap&lt;K,V&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然使用这种静态方法也有缺点：</p>
-<ol>
-<li>类如何不含有公有的或者受保护的构造器，就不能子类化。</li>
-<li>它们与其他的静态方法实际上没有任何区别。</li>
-</ol>
-<p>一些静态工厂方法的惯用名称（也的确常见）：</p>
-<ul>
-<li>ValueOf</li>
-<li>of</li>
-<li>getInstance</li>
-<li>newInstance</li>
-<li>getType</li>
-<li>newType</li>
-</ul>
-<h2 id="第2条：遇到多个构造器参数的时候要考虑用构建器">第2条：遇到多个构造器参数的时候要考虑用构建器</h2><p>当你的<code>Class</code>有多个自定义参数需要初始化的时候-_-</p>
-<h3 id="重叠构造器">重叠构造器</h3><p>你可能会使用重叠构造器来编写代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">	<span class="comment">//field</span></span><br><span class="line">	Test(arg1)<span class="comment">//</span></span><br><span class="line">	Test(arg1,arg2)<span class="comment">//</span></span><br><span class="line">	Test(arg1,arg2,arg3)<span class="comment">//</span></span><br><span class="line">	Test(arg1,arg2,arg3,arg4)<span class="comment">//</span></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>但是当需要初始化的参数实在太多的时候，这个<code>Class</code>的构造函数很快就会失去控制，而且在调用构造器的时候也会因为要初始化的参数太多而弄混。</p>
-<h3 id="使用setter方法来设置参数">使用setter方法来设置参数</h3><p>即<code>JavaBean</code>模式，在这种模式下调用一个无参构造器来创建对象，然后调用setter方法来设置每个必要的参数，以及每个可选参数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">	<span class="comment">//field</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Test</span><span class="params">(arg1)</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg1)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg2)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg3)</span></span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg4)</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种模式弥补重叠构造器模式的不足，创建对象实例很容易，并且代码读起来也很容易：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Test test=<span class="keyword">new</span> Test();</span><br><span class="line">test.setArg1(..)</span><br><span class="line">test.setArg2(..)</span><br><span class="line">test.setArg3(..)</span><br><span class="line">test.setArg4(..)</span><br></pre></td></tr></table></figure>
-<p>但是它有一个严重的缺点，就是这个构造过程被分到几个不同的调用中时，该对象可能处于不一致的状态。-_-</p>
-<h3 id="使用Builder模式">使用Builder模式</h3><p>它既能保证那重叠构造器那样安全，也能保证像<code>JavaBean</code>那样有好的可读性。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">	<span class="comment">//field</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Test</span><span class="params">(Builder builder)</span></span>&#123;</span><br><span class="line">		<span class="comment">//filed=builder.filed...</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">		<span class="comment">//field</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg1)</span></span>&#123;&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg2)</span></span>&#123;&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg3)</span></span>&#123;&#125;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setArg1</span><span class="params">(arg4)</span></span>&#123;&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Test <span class="title">build</span><span class="params">()</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> Test(<span class="keyword">this</span>);<span class="comment">//通过内部类构造该类</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种模式其实是生成一个内部类，在内部类中通过<code>setter</code>方法设置相应的字段，然后调用<code>build</code>方法生成真正需要的<code>Class</code>实例。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Test test=<span class="keyword">new</span> Test.Builder()</span><br><span class="line">				.setArg1()</span><br><span class="line">				.setArg2()</span><br><span class="line">				.setArg3()</span><br><span class="line">				.setArg4()</span><br><span class="line">				.build()</span><br></pre></td></tr></table></figure>
-<p>这个方法十分灵活，可以通过构建一个builder来构建多个对象，builder的参数可以在构建期间进行调整，也可以随不同的对象而改变。<br><br>此时，我们可以将这个builder定义为一个通用的接口</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Builder</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">build</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后可以通过创建接口来创建更多的实例对象</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Builder&lt;Test&gt; builderTest=<span class="keyword">new</span> Test.Builder()</span><br><span class="line">.setArg1()</span><br><span class="line">.setArg2()</span><br><span class="line">.setArg3()</span><br><span class="line">.setArg4()</span><br><span class="line"></span><br><span class="line">builderTest.build()</span><br></pre></td></tr></table></figure>
-<p>Builder模式也有不足之处，为了创建对象，必须创建它的构建器，虽然创建构建器的开销在实践中不是那么明显，但是在某些十分注重性能的情况下，可能会成功问题。<br><br>简而言之，如果累的构造器或者静态工厂中具有多个参数，设计这种类时,Builder模式模式是一个不错的选择。</p>
-<h2 id="第3条：用私有的构造器或者枚举类型强化Singleton属性">第3条：用私有的构造器或者枚举类型强化Singleton属性</h2><p>单例模式估计是大家在《设计模式》中最早接触的一种，也是较为常用的一种模式，从它的线程安全性和运行效率性上考虑，我们所了解的应该有这么几种类型的单例写法<sup>1<sup>：</sup></sup></p>
-<ul>
-<li>懒汉式单例</li>
-<li>饿汉式单例</li>
-<li>登记式单例</li>
-</ul>
-<p>除了上述，书本极力推荐的一种是<strong>单元素枚举类型</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Elvis&#123;</span><br><span class="line">	INSTANCE;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">leaveTheBuilding</span><span class="params">()</span></span>&#123;<span class="comment">//...&#125;;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该方法无偿的提供了序列化机制，绝对防止多次实例化。但是由于为了使用单例将”类”改为了”枚举”，这样就是导致丢掉一些类的特征，比如说继承，因为枚举是默认继承<code>java.lang.Enum</code>。</p>
-<h2 id="第4条：通过私有构造器强化不可实例化的能力">第4条：通过私有构造器强化不可实例化的能力</h2><p>当你的类里面只包含静态方法和静态变量时（比如说工具类），那么请在该类上添加一个私有的构造器，这样可以保护该类，同时也不会误导用户。<br><br>当然这么写有个副作用就是这个类就不能被继承了，子类就没有访问超类的构造器可用了。</p>
-<h2 id="第5条：避免创建不必要的对象">第5条：避免创建不必要的对象</h2><p>一般来说，最好能重用对象而不是在每次需要的时候就创建一个项目功能的新对象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String s=<span class="keyword">new</span> String(<span class="string">"stringette"</span>);<span class="comment">//不要这么做</span></span><br><span class="line">String s=<span class="string">"stringette"</span>;<span class="comment">//在同一台虚拟机中运行时，该对象会被重用</span></span><br></pre></td></tr></table></figure>
-<p>几大重用的关键点：</p>
-<ul>
-<li>对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法，以免创建不必要的对象。</li>
-<li>可以重用那些已知不会被修改的可变对象。</li>
-<li>优先使用基本类型而不是装箱类型。</li>
-</ul>
-<blockquote>
-<p>本条目并不是暗示“创建对象的代价非常昂贵，我们应该要尽量避免对象的创建”</p>
-</blockquote>
-<h2 id="第6条：消除过期的引用">第6条：消除过期的引用</h2><p>这条就是描述过期的引用会存在内存泄露的问题，那我们程序猿该如何处理呢？</p>
-<blockquote>
-<p>类要是自己管理内存，程序猿就应该警惕内存泄露问题。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 简单的栈结构的实现</span><br><span class="line"> *<span class="javadoctag"> @author</span> yyl  form Effective Java</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stack</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object[] elements;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPCAITY=<span class="number">16</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		elements=<span class="keyword">new</span> Object[DEFAULT_INITIAL_CAPCAITY];</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(Object e)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		ensureCapacity();<span class="comment">//确保容量足够</span></span><br><span class="line">		elements[size++]=e;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">		<span class="keyword">return</span> elements[--size];<span class="comment">//</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(elements.length==size)</span><br><span class="line">			elements=Arrays.copyOf(elements, <span class="number">2</span>*size+<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上述代码是一个简单的栈结构的实现，但是在元素被多次<code>pop()</code>之后，<code>Object[]</code>里面索引大于<code>size</code>的对象不在可用，但是由于他们还是存储在数组中，所以垃圾回收机制不会处理这些对象，最终会造成内存泄露。<br><br>可以用下面的方法来修复：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">pop</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">	Object ret=elements[--size];</span><br><span class="line">	elements[size]=<span class="keyword">null</span>;<span class="comment">//清空引用</span></span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上述只是一个特征，这条并不是教我们对于每个对象引用不再用到时就将它清空，其实没有这个必要，这样做会把代码弄得很乱，清除过期引用最好的方法是让包含该引用变量结束生命周期。</p>
-<blockquote>
-<p>内存泄露另一种常见的来源是缓存</p>
-</blockquote>
-<p> 当对象放入缓存中很容易被遗忘，然而它会长期存储在内存中，这样可以使用<code>WeakHashMap</code>来代表缓存，当缓存的项过期之后，他们会被自动删除。<br><br>也可以使用<code>LinkedHashMap</code>来实现LRU缓存，当容量满时会删除最久一个没有用过的项。</p>
-<blockquote>
-<p>内存泄露的第三个常见的来源是监听器和其他回调</p>
-</blockquote>
-<p>比如说你注册了某些Api的回调，但是没有显示的取消注册，这样他们会越积越多。~~~~</p>
-<h2 id="第7条：避免终结方法">第7条：避免终结方法</h2><blockquote>
-<p>终结方法（<code>finalizer</code>）通常是不可预测的，也是很危险的，一般情况下是不必要的。</p>
-</blockquote>
-<p>避免的原因有如下几个：</p>
-<ul>
-<li><p>不能保证被及时的执行。<br><br>因为进行<code>gc</code>时终结方法的优先级一般比其他的要低，注重时间的任务不应该用终结方法来完成，比如在<code>finalizer</code>中关闭已打开的文件</p>
-</li>
-<li><p>JVM不会保证他们会被执行。<br><br>不应该依赖终结方法来更新中重要的持久状态。</p>
-</li>
-<li><p>终结方法可能会有非常重要的性能损失。</p>
-</li>
-</ul>
-<p>所以如果在自己的类中真实的需要将对象终止，则自己最好提供一个显示的终止方法，并且要求编码人员再不需要该对象时进行显示掉调用终止方法，比如<code>file.close</code><br></p>
-<p>当然终结方法也不是一无是处：</p>
-<ol>
-<li>当对象的所有者忘记调用前面段落中建议的显示终止方法时，可以用终止方法在日志中记录记录警告或者再显示的调用该终止方法</li>
-<li>与对象的本地对等体有关。大概是普通对象通过<code>native method</code>委托给一个本地对象，而这个本地对象时不受<code>jVM</code>管理的。但是可以使用终结方法来完成必要资源释放，它可以是本地方法，也可以条用本地方法。</li>
-</ol>
-<blockquote>
-<p>注意：<code>finalizer</code>方法链不会自动的执行，所以在自定义<code>finalizer</code>时最好显示得调用<code>super.finalizer()</code></p>
-</blockquote>
-<h2 id="参考">参考</h2><ol>
-<li><a href="http://blog.csdn.net/jason0539/article/details/23297037" target="_blank" rel="external">http://blog.csdn.net/jason0539/article/details/23297037</a></li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>本章的主题是创建和销毁对象：何时以及如何创建对象，何时以及如何避免创建对象，如何确保它们能够适时得销毁，以及如何管理对象和销毁之前必须进行的各种清理动作。</p>
-<h2 id="第1条：考虑用静态工厂方法代替构造器">第1条：考虑用静态工厂方法代替构造器</h2><blo]]>
-    </summary>
-    
-      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
-    
-      <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[关于Java枚举的重写]]></title>
-    <link href="http://yyl8781697.github.io/2015/04/21/Java%20Base/Enum-Override/"/>
-    <id>http://yyl8781697.github.io/2015/04/21/Java Base/Enum-Override/</id>
-    <published>2015-04-21T12:34:28.000Z</published>
-    <updated>2015-04-25T07:19:00.000Z</updated>
-    <content type="html"><![CDATA[<p>对于Java枚举我之前所知道的是<sup>1</sup>：</p>
-<ol>
-<li>枚举本身就是一个类。</li>
-<li>它不能有<code>public</code>的构造函数，这样做可以保证客户代码没有办法新建一个enum的实例。     </li>
-<li>所有枚举值都是<code>public static final</code>的。注意这一点只是针对于枚举值，我们可以和在普通类里面定义变量一样定义其它任何类型的非枚举变量，这些变量可以用任何你想用的修饰符。     </li>
-<li>Enum默认实现了<code>java.lang.Comparable</code>接口。     </li>
-<li>Enum覆载了了<code>toString</code>方法，因此我们如果调用<code>Color.Blue.toString()</code>,默认返回字符串”Blue”.</li>
-<li>Enum提供了一个<code>valueOf</code>方法，这个方法和<code>toString</code>方法是相对应的。调用<code>valueOf(“Blue”)</code>将返回<code>Color.Blue</code>.因此我们在自己重写<code>toString</code>方法的时候就要注意到这一点，一般来说应该相对应地重写<code>valueOf</code>方法。     </li>
-<li>Enum还提供了<code>values</code>方法，这个方法使你能够方便的遍历所有的枚举值</li>
-<li>Enum还有一个<code>oridinal</code>的方法，这个方法返回枚举值在枚举类种的顺序。</li>
-</ol>
-<p>《Effective Java》中写着单例模式推荐的方式是使用<strong>单元素的枚举类</strong>实现，在查资料过程中竟然发现枚举值里面还能重写枚举的方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 单元素的枚举类型的 单例</span><br><span class="line"> *<span class="javadoctag"> @author</span> yyl</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Person &#123;</span><br><span class="line">	<span class="comment">//这里每一个枚举项都可以看做一个单例实例</span></span><br><span class="line">	instance,</span><br><span class="line">	him&#123;</span><br><span class="line">		<span class="annotation">@Override</span> </span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"gays:"</span>+str;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	she&#123;</span><br><span class="line">		<span class="annotation">@Override</span> </span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"girls:"</span>+str;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Hello:"</span>+str;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用单例的方式来调用<code>sayHello</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Person.instance.sayHello(<span class="string">"tom"</span>));</span><br><span class="line">System.out.println(Person.him.sayHello(<span class="string">"tom"</span>));</span><br><span class="line">System.out.println(Person.she.sayHello(<span class="string">"tom"</span>));</span><br></pre></td></tr></table></figure>
-<p>可以看到其输出为：</p>
-<pre><code><span class="label">Hello:</span>tom
-<span class="label">gays:</span>tom
-<span class="label">girls:</span>tom
-</code></pre><h2 id="参考">参考</h2><ol>
-<li><a href="http://www.cnblogs.com/rollenholt/archive/2012/11/27/2790402.html" target="_blank" rel="external">http://www.cnblogs.com/rollenholt/archive/2012/11/27/2790402.html</a></li>
-<li><a href="http://www.cnblogs.com/hemingwang0902/archive/2011/12/29/2306263.html" target="_blank" rel="external">http://www.cnblogs.com/hemingwang0902/archive/2011/12/29/2306263.html</a></li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>对于Java枚举我之前所知道的是<sup>1</sup>：</p>
-<ol>
-<li>枚举本身就是一个类。</li>
-<li>它不能有<code>public</code>的构造函数，这样做可以保证客户代码没有办法新建一个enum的实例。     </li>
-<li>所有枚]]>
-    </summary>
-    
-      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
-    
-      <category term="Java Base" scheme="http://yyl8781697.github.io/categories/Java-Base/"/>
     
   </entry>
   
