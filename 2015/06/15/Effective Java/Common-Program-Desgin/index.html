@@ -4,22 +4,49 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Akka2.3.11文档（中文翻译）-第一章：介绍 | Kubi Code&#39;Blog</title>
+    <title>第8章：通用程序设计 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="准备开始写了。。。-_-">
+    <meta name="description" content="第45条：将局部变量的作用域最小化
+将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。
+
+这一条看字面意思应该已经非常明了了，就是教我们在申明局部变量的时候注意其作用域，将其作用域最小化：
+
+比如有些判断的变量在if语句里面完成就好
+还有循环里面for优于while，因为for往往不需要其他的额外局部变量
+另一种就是使方法小而集中
+
+第46条：for-each循环优先于">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Akka2.3.11文档（中文翻译）-第一章：介绍">
-<meta property="og:url" content="http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Introduction/index.html">
+<meta property="og:title" content="第8章：通用程序设计">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/15/Effective Java/Common-Program-Desgin/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="准备开始写了。。。-_-">
+<meta property="og:description" content="第45条：将局部变量的作用域最小化
+将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。
+
+这一条看字面意思应该已经非常明了了，就是教我们在申明局部变量的时候注意其作用域，将其作用域最小化：
+
+比如有些判断的变量在if语句里面完成就好
+还有循环里面for优于while，因为for往往不需要其他的额外局部变量
+另一种就是使方法小而集中
+
+第46条：for-each循环优先于">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Akka2.3.11文档（中文翻译）-第一章：介绍">
-<meta name="twitter:description" content="准备开始写了。。。-_-">
+<meta name="twitter:title" content="第8章：通用程序设计">
+<meta name="twitter:description" content="第45条：将局部变量的作用域最小化
+将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。
+
+这一条看字面意思应该已经非常明了了，就是教我们在申明局部变量的时候注意其作用域，将其作用域最小化：
+
+比如有些判断的变量在if语句里面完成就好
+还有循环里面for优于while，因为for往往不需要其他的额外局部变量
+另一种就是使方法小而集中
+
+第46条：for-each循环优先于">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -80,14 +107,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/06/07/Akka/Akka-Doc-2311-Introduction/" title="Akka2.3.11文档（中文翻译）-第一章：介绍" itemprop="url">Akka2.3.11文档（中文翻译）-第一章：介绍</a>
+      <a href="/2015/06/15/Effective Java/Common-Program-Desgin/" title="第8章：通用程序设计" itemprop="url">第8章：通用程序设计</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2015-06-07T05:10:26.000Z" itemprop="datePublished"> 发表于 2015-06-07</time>
+    <time datetime="2015-06-15T14:56:25.000Z" itemprop="datePublished"> 发表于 2015-06-15</time>
     
   </p>
 </header>
@@ -96,11 +123,31 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第45条：将局部变量的作用域最小化"><span class="toc-number">1.</span> <span class="toc-text">第45条：将局部变量的作用域最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第46条：for-each循环优先于传统的for循环"><span class="toc-number">2.</span> <span class="toc-text">第46条：for-each循环优先于传统的for循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47条：了解和使用类库"><span class="toc-number">3.</span> <span class="toc-text">47条：了解和使用类库</span></a></li></ol>
 		
 		</div>
 		
-		<p>准备开始写了。。。-_-</p>
+		<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
+<p>将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。</p>
+</blockquote>
+<p>这一条看字面意思应该已经非常明了了，就是教我们在申明局部变量的时候注意其作用域，将其作用域最小化：</p>
+<ul>
+<li>比如有些判断的变量在<code>if</code>语句里面完成就好</li>
+<li>还有循环里面<code>for</code>优于<code>while</code>，因为<code>for</code>往往不需要其他的额外局部变量</li>
+<li>另一种就是使方法小而集中</li>
+</ul>
+<h2 id="第46条：for-each循环优先于传统的for循环">第46条：for-each循环优先于传统的for循环</h2><p>利用<code>for-each</code>循环不会有性能损失，甚至用于数组也是一样的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;Integer&gt; c=Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//普通的for循环</span></span><br><span class="line"><span class="keyword">for</span>(Iterator iter=c.iterator();iter.hasNext())</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(iter.next());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用for-each的版本</span></span><br><span class="line"><span class="keyword">for</span>(Integer v:c)</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有一点是如果你使用普通的<code>for</code>，那么它的<code>next</code>会走光所有的元素，也就无法再利用。</p>
+<h2 id="47条：了解和使用类库">47条：了解和使用类库</h2><blockquote>
+<p>程序猿的类库就是武器弹药，没有弹药如何去写出一首好程序</p>
+</blockquote>
+<p>通过使用标准类库：</p>
+<ol>
+<li>可以充分利用这些数据编写标准类库和专家知识，以及在你之前的其他人得使用经验</li>
+<li>就是相当于不必浪费时间去重复造轮子</li>
+<li>它的性能往往回伴随着时间推移而不断提高</li>
+<li>还可以使自己的代码融入主流。</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -108,13 +155,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Akka/">Akka</a>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Akka/">Akka</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -123,7 +170,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Introduction/" data-title="Akka2.3.11文档（中文翻译）-第一章：介绍 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/06/15/Effective Java/Common-Program-Desgin/" data-title="第8章：通用程序设计 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -136,19 +183,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/06/09/Effective Java/Method/" title="《Effective Java》第七章：方法">
-  <strong>上一篇：</strong><br/>
-  <span>
-  《Effective Java》第七章：方法</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/06/07/Akka/Akka-Doc-2311-Catalog/"  title="Akka2.3.11文档（中文翻译）-目录">
+<a href="/2015/06/09/Effective Java/Method/"  title="《Effective Java》第七章：方法">
  <strong>下一篇：</strong><br/> 
- <span>Akka2.3.11文档（中文翻译）-目录
+ <span>《Effective Java》第七章：方法
 </span>
 </a>
 </div>
@@ -157,7 +196,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/06/07/Akka/Akka-Doc-2311-Introduction/" data-title="Akka2.3.11文档（中文翻译）-第一章：介绍" data-url="http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Introduction/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/15/Effective Java/Common-Program-Desgin/" data-title="第8章：通用程序设计" data-url="http://yyl8781697.github.io/2015/06/15/Effective Java/Common-Program-Desgin/"></div>
 </section>
 
 
@@ -167,7 +206,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第45条：将局部变量的作用域最小化"><span class="toc-number">1.</span> <span class="toc-text">第45条：将局部变量的作用域最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第46条：for-each循环优先于传统的for循环"><span class="toc-number">2.</span> <span class="toc-text">第46条：for-each循环优先于传统的for循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47条：了解和使用类库"><span class="toc-number">3.</span> <span class="toc-text">47条：了解和使用类库</span></a></li></ol>
  
   </div>
 
@@ -181,7 +220,7 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Akka/" title="Akka">Akka<sup>3</sup></a></li>
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
 		  
 		
 		  
@@ -197,7 +236,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>6</sup></a></li>
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>7</sup></a></li>
 		  
 		
 		  
@@ -274,7 +313,7 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>15</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>16</sup></a></li>
 			
 		
 			
@@ -290,7 +329,7 @@
 			
 		
 			
-				<li><a href="/tags/Akka/" title="Akka">Akka<sup>3</sup></a></li>
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
@@ -298,15 +337,11 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
 			
 		
 			
@@ -314,15 +349,15 @@
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
 			
 		
 			
@@ -330,15 +365,11 @@
 			
 		
 			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
 			
 		
 			
@@ -346,7 +377,15 @@
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
 			
 		
 		</ul>

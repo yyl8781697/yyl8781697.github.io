@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yyl8781697.github.io/2015/06/15/Effective%20Java/Common-Program-Desgin/</loc>
+    <lastmod>2015-06-15T15:35:23.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/05/08/Effective%20Java/Class-And-Interface/</loc>
+    <lastmod>2015-06-15T01:20:08.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yyl8781697.github.io/books/index.html</loc>
     <lastmod>2015-06-14T01:46:37.000Z</lastmod>
   </url>
@@ -24,16 +34,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/06/09/Effective%20Java/Method/</loc>
     <lastmod>2015-06-12T15:24:18.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Introduction/</loc>
-    <lastmod>2015-06-11T16:55:26.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2015/06/07/Akka/Akka-Doc-2311-Catalog/</loc>
-    <lastmod>2015-06-10T14:36:00.000Z</lastmod>
   </url>
   
   <url>
@@ -94,11 +94,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/05/24/Scala/Study-And-User-JSON4S/</loc>
     <lastmod>2015-05-24T13:06:02.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2015/05/08/Effective%20Java/Class-And-Interface/</loc>
-    <lastmod>2015-05-23T14:31:28.000Z</lastmod>
   </url>
   
   <url>

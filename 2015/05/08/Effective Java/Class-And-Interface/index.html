@@ -120,7 +120,7 @@ Java的4种访问级别：
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第13条：使类和成员的可访问性最小化"><span class="toc-number">1.</span> <span class="toc-text">第13条：使类和成员的可访问性最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第14条：在类中使用访问方法而非公有域"><span class="toc-number">2.</span> <span class="toc-text">第14条：在类中使用访问方法而非公有域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第15条：使可变最小化"><span class="toc-number">3.</span> <span class="toc-text">第15条：使可变最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第16条：符合优于继承"><span class="toc-number">4.</span> <span class="toc-text">第16条：符合优于继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第17条：要么为继承而设计并提供文档，要么禁止继承"><span class="toc-number">5.</span> <span class="toc-text">第17条：要么为继承而设计并提供文档，要么禁止继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第18条：接口优于抽象类"><span class="toc-number">6.</span> <span class="toc-text">第18条：接口优于抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第19条：接口只用于定义类型"><span class="toc-number">7.</span> <span class="toc-text">第19条：接口只用于定义类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第20条：类层次优于标签类"><span class="toc-number">8.</span> <span class="toc-text">第20条：类层次优于标签类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第21条：用函数对象表示策略"><span class="toc-number">9.</span> <span class="toc-text">第21条：用函数对象表示策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第22条：优先考虑静态成员类"><span class="toc-number">10.</span> <span class="toc-text">第22条：优先考虑静态成员类</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第13条：使类和成员的可访问性最小化"><span class="toc-number">1.</span> <span class="toc-text">第13条：使类和成员的可访问性最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第14条：在类中使用访问方法而非公有域"><span class="toc-number">2.</span> <span class="toc-text">第14条：在类中使用访问方法而非公有域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第15条：使可变最小化"><span class="toc-number">3.</span> <span class="toc-text">第15条：使可变最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第16条：组合优于继承"><span class="toc-number">4.</span> <span class="toc-text">第16条：组合优于继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第17条：要么为继承而设计并提供文档，要么禁止继承"><span class="toc-number">5.</span> <span class="toc-text">第17条：要么为继承而设计并提供文档，要么禁止继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第18条：接口优于抽象类"><span class="toc-number">6.</span> <span class="toc-text">第18条：接口优于抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第19条：接口只用于定义类型"><span class="toc-number">7.</span> <span class="toc-text">第19条：接口只用于定义类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第20条：类层次优于标签类"><span class="toc-number">8.</span> <span class="toc-text">第20条：类层次优于标签类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第21条：用函数对象表示策略"><span class="toc-number">9.</span> <span class="toc-text">第21条：用函数对象表示策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第22条：优先考虑静态成员类"><span class="toc-number">10.</span> <span class="toc-text">第22条：优先考虑静态成员类</span></a></li></ol>
 		
 		</div>
 		
@@ -193,7 +193,7 @@ Java的4种访问级别：
 <li>坚决不要为每个<code>get</code>方法编写一个相应的<code>set</code>方法。</li>
 <li>除非令人有信服的理由使会变成非<code>final</code>的，否则每个域都是<code>final</code>（恩，总之多用<code>final</code>没错）</li>
 </ul>
-<h2 id="第16条：符合优于继承">第16条：符合优于继承</h2><ul>
+<h2 id="第16条：组合优于继承">第16条：组合优于继承</h2><ul>
 <li>这里不推荐继承的主要原因是子类必须跟着其超类改变而改变，因而打破了封装性。。。-_-||</li>
 <li>不用扩展现有类，而是在新的类里面增加一个私有域，它引用现有类的一个实力。在新类中主要去实现转发功能。</li>
 </ul>
@@ -310,7 +310,7 @@ Java的4种访问级别：
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第13条：使类和成员的可访问性最小化"><span class="toc-number">1.</span> <span class="toc-text">第13条：使类和成员的可访问性最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第14条：在类中使用访问方法而非公有域"><span class="toc-number">2.</span> <span class="toc-text">第14条：在类中使用访问方法而非公有域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第15条：使可变最小化"><span class="toc-number">3.</span> <span class="toc-text">第15条：使可变最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第16条：符合优于继承"><span class="toc-number">4.</span> <span class="toc-text">第16条：符合优于继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第17条：要么为继承而设计并提供文档，要么禁止继承"><span class="toc-number">5.</span> <span class="toc-text">第17条：要么为继承而设计并提供文档，要么禁止继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第18条：接口优于抽象类"><span class="toc-number">6.</span> <span class="toc-text">第18条：接口优于抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第19条：接口只用于定义类型"><span class="toc-number">7.</span> <span class="toc-text">第19条：接口只用于定义类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第20条：类层次优于标签类"><span class="toc-number">8.</span> <span class="toc-text">第20条：类层次优于标签类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第21条：用函数对象表示策略"><span class="toc-number">9.</span> <span class="toc-text">第21条：用函数对象表示策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第22条：优先考虑静态成员类"><span class="toc-number">10.</span> <span class="toc-text">第22条：优先考虑静态成员类</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第13条：使类和成员的可访问性最小化"><span class="toc-number">1.</span> <span class="toc-text">第13条：使类和成员的可访问性最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第14条：在类中使用访问方法而非公有域"><span class="toc-number">2.</span> <span class="toc-text">第14条：在类中使用访问方法而非公有域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第15条：使可变最小化"><span class="toc-number">3.</span> <span class="toc-text">第15条：使可变最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第16条：组合优于继承"><span class="toc-number">4.</span> <span class="toc-text">第16条：组合优于继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第17条：要么为继承而设计并提供文档，要么禁止继承"><span class="toc-number">5.</span> <span class="toc-text">第17条：要么为继承而设计并提供文档，要么禁止继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第18条：接口优于抽象类"><span class="toc-number">6.</span> <span class="toc-text">第18条：接口优于抽象类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第19条：接口只用于定义类型"><span class="toc-number">7.</span> <span class="toc-text">第19条：接口只用于定义类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第20条：类层次优于标签类"><span class="toc-number">8.</span> <span class="toc-text">第20条：类层次优于标签类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第21条：用函数对象表示策略"><span class="toc-number">9.</span> <span class="toc-text">第21条：用函数对象表示策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第22条：优先考虑静态成员类"><span class="toc-number">10.</span> <span class="toc-text">第22条：优先考虑静态成员类</span></a></li></ol>
  
   </div>
 
@@ -324,7 +324,7 @@ Java的4种访问级别：
 		<ul>
 		
 		  
-			<li><a href="/categories/Akka/" title="Akka">Akka<sup>3</sup></a></li>
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
 		  
 		
 		  
@@ -340,7 +340,7 @@ Java的4种访问级别：
 		  
 		
 		  
-			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>6</sup></a></li>
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>7</sup></a></li>
 		  
 		
 		  
@@ -417,7 +417,7 @@ Java的4种访问级别：
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>15</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>16</sup></a></li>
 			
 		
 			
@@ -433,7 +433,7 @@ Java的4种访问级别：
 			
 		
 			
-				<li><a href="/tags/Akka/" title="Akka">Akka<sup>3</sup></a></li>
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
@@ -441,15 +441,11 @@ Java的4种访问级别：
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
 			
 		
 			
@@ -457,15 +453,15 @@ Java的4种访问级别：
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
 			
 		
 			
@@ -473,15 +469,11 @@ Java的4种访问级别：
 			
 		
 			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
 			
 		
 			
@@ -489,7 +481,15 @@ Java的4种访问级别：
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
 			
 		
 		</ul>
