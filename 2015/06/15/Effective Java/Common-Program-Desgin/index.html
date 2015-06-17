@@ -123,7 +123,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第45条：将局部变量的作用域最小化"><span class="toc-number">1.</span> <span class="toc-text">第45条：将局部变量的作用域最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第46条：for-each循环优先于传统的for循环"><span class="toc-number">2.</span> <span class="toc-text">第46条：for-each循环优先于传统的for循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47条：了解和使用类库"><span class="toc-number">3.</span> <span class="toc-text">47条：了解和使用类库</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第45条：将局部变量的作用域最小化"><span class="toc-number">1.</span> <span class="toc-text">第45条：将局部变量的作用域最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第46条：for-each循环优先于传统的for循环"><span class="toc-number">2.</span> <span class="toc-text">第46条：for-each循环优先于传统的for循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47条：了解和使用类库"><span class="toc-number">3.</span> <span class="toc-text">47条：了解和使用类库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第48条：如果需要精确地答案，请避免使用float和double"><span class="toc-number">4.</span> <span class="toc-text">第48条：如果需要精确地答案，请避免使用float和double</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第49条：基本类型优于装箱的基本类型"><span class="toc-number">5.</span> <span class="toc-text">第49条：基本类型优于装箱的基本类型</span></a></li></ol>
 		
 		</div>
 		
@@ -148,6 +148,42 @@
 <li>它的性能往往回伴随着时间推移而不断提高</li>
 <li>还可以使自己的代码融入主流。</li>
 </ol>
+<h2 id="第48条：如果需要精确地答案，请避免使用float和double">第48条：如果需要精确地答案，请避免使用float和double</h2><blockquote>
+<p><code>float</code>和<code>double</code>为了再广泛地数值范围上提供较为精确地快读近似计算，它们并没有提供完全精确地经过，所以不应该用于需要精确结果的场合。</p>
+</blockquote>
+<p>比如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="number">1.03</span>-<span class="number">.42</span>);</span><br></pre></td></tr></table></figure></p>
+<p>你会惊奇的发现它输出的结果为：</p>
+<pre><code>0.6100000000000001
+</code></pre><p>关于这点可以使用<code>BigDecimal</code>这个类来代替它们<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BigDecimal f=<span class="keyword">new</span> BigDecimal(<span class="string">"1.03"</span>);</span><br><span class="line">System.out.println(f.subtract(<span class="keyword">new</span> BigDecimal(<span class="string">"0.42"</span>)));</span><br></pre></td></tr></table></figure></p>
+<p>这样就能支持得到精确地结果了。</p>
+<blockquote>
+<p>总而言之，对于任何需要精确答案的计算任务，请不要使用<code>float</code>或者<code>double</code>。如果你想让系统记录十进制的小数点，并且不介意因为不使用基本类型而带来的不便，那么就请使用<code>BigDecimal</code></p>
+</blockquote>
+<h2 id="第49条：基本类型优于装箱的基本类型">第49条：基本类型优于装箱的基本类型</h2><p><code>Java</code>的类型系统由两部分组成：</p>
+<ul>
+<li>基本类型：<code>int</code>,<code>double</code>,<code>boolean</code>还有引用类型<code>String</code>，<code>List</code>等。</li>
+<li>装箱基本类型：对应上面的分别为<code>Integer</code>,<code>Double</code>和<code>Boolean</code></li>
+</ul>
+<p>基本类型和基本装箱类型有三个主要区别：</p>
+<ol>
+<li>基本类型只有值，而装箱基本类型则具有与它们的值不同的同一性。</li>
+<li>基本类型只有功能完备的值，而每个装箱类型还具有肺功能值：<code>null</code>。</li>
+<li>基本类型通常比装箱基本类型更加省空间和时间。（我觉得这点才是本条的关键点吧^_^）</li>
+</ol>
+<p>现在先来看一个比较器：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Comparator&lt;Integer&gt; naturalOrder=<span class="keyword">new</span> Comparator&lt;Integer&gt;()&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer first,Integer second)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> first&lt;second?-<span class="number">1</span> :(first==second?<span class="number">0</span>:<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>我们如果使用这个比较器<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(naturalOrder.compare(<span class="keyword">new</span> Integer(<span class="number">42</span>), <span class="keyword">new</span> Integer(<span class="number">42</span>)));</span><br></pre></td></tr></table></figure></p>
+<p>你会发现输出的结果竟然是1（我估计是装箱基本类型同一性的问题）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//直接调用Integer比较的API</span></span><br><span class="line"><span class="keyword">return</span> first.compareTo(second);</span><br><span class="line"><span class="comment">//或者自己进行拆箱</span></span><br><span class="line"><span class="keyword">int</span> f=first;</span><br><span class="line"><span class="keyword">int</span> s=second;</span><br><span class="line"><span class="keyword">return</span> f&lt;s?-<span class="number">1</span> :(f==s?<span class="number">0</span>:<span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<p>还有再来看这个程序<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Integer i;</span><br><span class="line">	</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(i==<span class="number">42</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		System.out.println(<span class="string">"unbelievable"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你会收到一个<code>NPE</code>的异常,因为<code>Integer</code>的默认初始值为<code>null</code>，当然是无法进行拆箱啦。</p>
+<p>再来看一个性能问题：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">long</span> curTime=System.currentTimeMillis();</span><br><span class="line">	Long s1=<span class="number">0L</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">long</span> i=<span class="number">0</span>;i&lt;Integer.MAX_VALUE;i++)</span><br><span class="line">		s1+=i;</span><br><span class="line">	System.out.println(<span class="string">"s1="</span>+s1+<span class="string">",and spend="</span>+(System.currentTimeMillis()-curTime));</span><br><span class="line">	</span><br><span class="line">	curTime=System.currentTimeMillis();</span><br><span class="line">	<span class="keyword">long</span> s2=<span class="number">0L</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">long</span> i=<span class="number">0</span>;i&lt;Integer.MAX_VALUE;i++)</span><br><span class="line">		s2+=i;</span><br><span class="line">	System.out.println(<span class="string">"s2="</span>+s1+<span class="string">",and spend="</span>+(System.currentTimeMillis()-curTime));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你会惊奇的发现</p>
+<pre><code><span class="variable">s1=</span><span class="number">2305843005992468481</span>,<span class="constant">and</span> <span class="variable">spend=</span><span class="number">6286</span>
+<span class="variable">s2=</span><span class="number">2305843005992468481</span>,<span class="constant">and</span> <span class="variable">spend=</span><span class="number">720</span>
+</code></pre><p>使用<code>Long</code>运算的效率要比基本类型慢了很多，这是因为要都要拆箱装箱的缘故。</p>
+<p>所以：基本类型优于装箱的基本类型</p>
+<blockquote>
+<p>但是，比如类型<code>HashMap</code>的定义的类型还真必须是<code>Integer</code>之类的引用</p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -183,6 +219,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/" title="使用Spark求解大图的连通组件（百度面试题）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  使用Spark求解大图的连通组件（百度面试题）</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/06/09/Effective Java/Method/"  title="《Effective Java》第七章：方法">
@@ -206,7 +250,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第45条：将局部变量的作用域最小化"><span class="toc-number">1.</span> <span class="toc-text">第45条：将局部变量的作用域最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第46条：for-each循环优先于传统的for循环"><span class="toc-number">2.</span> <span class="toc-text">第46条：for-each循环优先于传统的for循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47条：了解和使用类库"><span class="toc-number">3.</span> <span class="toc-text">47条：了解和使用类库</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第45条：将局部变量的作用域最小化"><span class="toc-number">1.</span> <span class="toc-text">第45条：将局部变量的作用域最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第46条：for-each循环优先于传统的for循环"><span class="toc-number">2.</span> <span class="toc-text">第46条：for-each循环优先于传统的for循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#47条：了解和使用类库"><span class="toc-number">3.</span> <span class="toc-text">47条：了解和使用类库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第48条：如果需要精确地答案，请避免使用float和double"><span class="toc-number">4.</span> <span class="toc-text">第48条：如果需要精确地答案，请避免使用float和double</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第49条：基本类型优于装箱的基本类型"><span class="toc-number">5.</span> <span class="toc-text">第49条：基本类型优于装箱的基本类型</span></a></li></ol>
  
   </div>
 
@@ -296,7 +340,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Spark/" title="Spark">Spark<sup>2</sup></a></li>
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>3</sup></a></li>
 		  
 		
 		</ul>
@@ -321,15 +365,15 @@
 			
 		
 			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Food/" title="Food">Food<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
@@ -341,11 +385,11 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>3</sup></a></li>
 			
 		
 			
@@ -353,11 +397,11 @@
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>2</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			
@@ -365,7 +409,11 @@
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
 			
 		
 			
@@ -381,11 +429,7 @@
 			
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/socket/" title="socket">socket<sup>1</sup></a></li>
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 		</ul>
