@@ -72,11 +72,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[第8章：通用程序设计]]></title>
+    <title><![CDATA[《Effective Java》第8章：通用程序设计]]></title>
     <link href="http://yyl8781697.github.io/2015/06/15/Effective%20Java/Common-Program-Desgin/"/>
     <id>http://yyl8781697.github.io/2015/06/15/Effective Java/Common-Program-Desgin/</id>
     <published>2015-06-15T14:56:25.000Z</published>
-    <updated>2015-06-17T16:43:14.000Z</updated>
+    <updated>2015-06-17T23:33:09.000Z</updated>
     <content type="html"><![CDATA[<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
 <p>将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。</p>
 </blockquote>
