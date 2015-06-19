@@ -1,0 +1,621 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用Spark求解大图的连通组件(第二版) | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="原因昨天将此题使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：
+
+虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题
+迭代过程中多次对两两标签集合进行合并，还不时的需要clone操作，时间空间开销都是很大
+关于迭代停止是判断两个标签集合里面的内容是否相等，需要O（n）的复杂度
+最后在判断连通子图时，进行Join的key计算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Spark求解大图的连通组件(第二版)">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="原因昨天将此题使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：
+
+虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题
+迭代过程中多次对两两标签集合进行合并，还不时的需要clone操作，时间空间开销都是很大
+关于迭代停止是判断两个标签集合里面的内容是否相等，需要O（n）的复杂度
+最后在判断连通子图时，进行Join的key计算">
+<meta property="og:image" content="/img/Connect-Compoent-V2/result.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Spark求解大图的连通组件(第二版)">
+<meta name="twitter:description" content="原因昨天将此题使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：
+
+虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题
+迭代过程中多次对两两标签集合进行合并，还不时的需要clone操作，时间空间开销都是很大
+关于迭代停止是判断两个标签集合里面的内容是否相等，需要O（n）的复杂度
+最后在判断连通子图时，进行Join的key计算">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/" title="使用Spark求解大图的连通组件(第二版)" itemprop="url">使用Spark求解大图的连通组件(第二版)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-18T13:23:47.000Z" itemprop="datePublished"> 发表于 2015-06-18</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">1.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#所以"><span class="toc-number">2.</span> <span class="toc-text">所以</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">3.</span> <span class="toc-text">实现</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="原因">原因</h2><p>昨天将此题使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：</p>
+<ol>
+<li>虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题</li>
+<li>迭代过程中多次对两两标签集合进行合并，还不时的需要<code>clone</code>操作，时间空间开销都是很大</li>
+<li>关于迭代停止是判断两个标签集合里面的内容是否相等，需要O（n）的复杂度</li>
+<li>最后在判断连通子图时，进行<code>Join</code>的<code>key</code>计算时使用了<code>hashCode</code>，这种方法偷懒的方法很容易造成结果不准确，但是也的确很难用一个唯一的数字来表示一个<code>HashMap</code>了呀</li>
+</ol>
+<h2 id="所以">所以</h2><p>今天想到了这些标签集合完全可以使用集合中标签的最小值的代替，比如（接上文的cookie）cookeiA的最小值是1，cookeB的最小值是1，cookeC的最小值是3，在迭代时cookieB将消息发给cookieC，cookeC将自己的标签由3更新到了1，这样就很判断cookieA，B,C就是一个人了，而且只需要一个<code>int</code>类型就可以了，不需要额外的开销。</p>
+<h2 id="实现">实现</h2><p>今晚修改了一下源码，上面的实现如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">ddef main(args:<span class="type">Array</span>[<span class="type">String</span>])</span><br><span class="line">&#123;</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">conf=new</span> <span class="title">SparkConf</span>(</span>).setAppName(<span class="string">"connect componentV2"</span>)</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc=new</span> <span class="title">SparkContext</span>(</span>conf)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">dataSource=List</span>(</span><span class="string">"1 1"</span>,<span class="string">"2 1"</span>,<span class="string">"2 2"</span>,<span class="string">"3 2"</span>,</span><br><span class="line">      <span class="string">"4 3"</span>,<span class="string">"5 3"</span>,<span class="string">"5 4"</span>,<span class="string">"6 4"</span>,<span class="string">"6 5"</span>,<span class="string">"7 5"</span>,</span><br><span class="line">      <span class="string">"8 7"</span>,<span class="string">"9 7"</span>,<span class="string">"9 8"</span>,<span class="string">"9 9"</span>,<span class="string">"10 8"</span>,<span class="string">"11 9"</span>)</span><br><span class="line">      </span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">rdd=sc</span>.<span class="title">parallelize</span>(</span>dataSource).map &#123; x=&gt;&#123;</span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">data=x</span>.<span class="title">split</span>(</span><span class="string">" "</span>)</span><br><span class="line">  (data(<span class="number">0</span>).toLong,data(<span class="number">1</span>).toInt)</span><br><span class="line">&#125;&#125;.cache()</span><br><span class="line"></span><br><span class="line"><span class="comment">//提取顶点</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">vertexRdd=rdd</span>.<span class="title">groupBy</span>(</span>_._1).map(x=&gt;&#123;(x._1,x._2.unzip._2.min)&#125;)</span><br><span class="line">  </span><br><span class="line"><span class="comment">//提取边</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edgeRdd=rdd</span>.<span class="title">groupBy</span>(</span>_._2).flatMap(x=&gt;&#123;</span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">vertexList=x</span>.<span class="title">_2</span>.<span class="title">toList</span>.<span class="title">unzip</span>.<span class="title">_1</span></span><br><span class="line"></span>  <span class="function"><span class="keyword">val</span> <span class="title">ret=ListBuffer</span>[</span><span class="type">Edge</span>[<span class="type">Option</span>[<span class="type">Int</span>]]]()</span><br><span class="line">  <span class="keyword">for</span>(i&lt;- <span class="number">0</span> until vertexList.size;</span><br><span class="line">      j&lt;-i+<span class="number">1</span> until vertexList.size;</span><br><span class="line">      <span class="keyword">if</span> j&lt;vertexList.size)</span><br><span class="line">  &#123;</span><br><span class="line">    ret.append(<span class="type">Edge</span>(vertexList(i),vertexList(j),<span class="type">None</span>))</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  ret</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//构成图</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">graph=Graph</span>(</span>vertexRdd,edgeRdd)</span><br><span class="line">println(<span class="string">"init graph"</span>)</span><br><span class="line">graph.triplets.collect().foreach(println(_))</span><br><span class="line"></span><br><span class="line"><span class="comment">//进行pregel计算</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">newG=graph</span>.<span class="title">pregel</span>(</span><span class="type">Int</span>.<span class="type">MaxValue</span>, <span class="number">10000</span>, <span class="type">EdgeDirection</span>.<span class="type">Out</span>)(vprog, sendMsg, mergeMsg)</span><br><span class="line">println(<span class="string">"after pregel"</span>)</span><br><span class="line">newG.triplets.collect().foreach(println(_))</span><br><span class="line"></span><br><span class="line">println(<span class="string">"connect component"</span>)</span><br><span class="line">newG.vertices.groupBy(_._2).map(_._2.unzip._1).collect().foreach(println(_))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 节点数据的更新 就是取最小值</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vprog</span>(</span>vid:<span class="type">VertexId</span>,vdata:<span class="type">Int</span>,message:<span class="type">Int</span>):<span class="type">Int</span>=<span class="type">Math</span>.min(vdata,message)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 发送消息</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendMsg</span>(</span>e:<span class="type">EdgeTriplet</span>[<span class="type">Int</span>, <span class="type">Option</span>[<span class="type">Int</span>]])=&#123;</span><br><span class="line"><span class="keyword">if</span>(e.srcAttr==e.dstAttr)</span><br><span class="line">  <span class="type">Iterator</span>.empty<span class="comment">//迭代停止</span></span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="comment">//哎，EdgeDirection.Either好像根本没效果，只能在这里发送双向来模拟无向图</span></span><br><span class="line">  <span class="type">Iterator</span>((e.dstId,e.srcAttr),</span><br><span class="line">      (e.srcId,e.dstAttr))<span class="comment">//将自己发送给邻接顶点</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 合并消息</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mergeMsg</span>(</span>a:<span class="type">Int</span>,b:<span class="type">Int</span>):<span class="type">Int</span>=<span class="type">Math</span>.min(a, b)</span><br></pre></td></tr></table></figure></p>
+<p>光光从代码量上就可以看到精简了很多，也更加好理解了，接下来看下结果</p>
+<p><img src="/img/Connect-Compoent-V2/result.png" height="400px" width="300px"></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/" data-title="使用Spark求解大图的连通组件(第二版) | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/"  title="使用Spark求解大图的连通组件（百度面试题）">
+ <strong>下一篇：</strong><br/> 
+ <span>使用Spark求解大图的连通组件（百度面试题）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/" data-title="使用Spark求解大图的连通组件(第二版)" data-url="http://yyl8781697.github.io/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原因"><span class="toc-number">1.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#所以"><span class="toc-number">2.</span> <span class="toc-text">所以</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现"><span class="toc-number">3.</span> <span class="toc-text">实现</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>16</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

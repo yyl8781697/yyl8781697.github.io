@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-06-17T16:48:06.000Z</updated>
+  <updated>2015-06-18T13:48:49.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[使用Spark求解大图的连通组件(第二版)]]></title>
+    <link href="http://yyl8781697.github.io/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/"/>
+    <id>http://yyl8781697.github.io/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/</id>
+    <published>2015-06-18T13:23:47.000Z</published>
+    <updated>2015-06-18T13:48:49.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="原因">原因</h2><p>昨天将此题使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：</p>
+<ol>
+<li>虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题</li>
+<li>迭代过程中多次对两两标签集合进行合并，还不时的需要<code>clone</code>操作，时间空间开销都是很大</li>
+<li>关于迭代停止是判断两个标签集合里面的内容是否相等，需要O（n）的复杂度</li>
+<li>最后在判断连通子图时，进行<code>Join</code>的<code>key</code>计算时使用了<code>hashCode</code>，这种方法偷懒的方法很容易造成结果不准确，但是也的确很难用一个唯一的数字来表示一个<code>HashMap</code>了呀</li>
+</ol>
+<h2 id="所以">所以</h2><p>今天想到了这些标签集合完全可以使用集合中标签的最小值的代替，比如（接上文的cookie）cookeiA的最小值是1，cookeB的最小值是1，cookeC的最小值是3，在迭代时cookieB将消息发给cookieC，cookeC将自己的标签由3更新到了1，这样就很判断cookieA，B,C就是一个人了，而且只需要一个<code>int</code>类型就可以了，不需要额外的开销。</p>
+<h2 id="实现">实现</h2><p>今晚修改了一下源码，上面的实现如下：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">ddef main(args:<span class="type">Array</span>[<span class="type">String</span>])</span><br><span class="line">&#123;</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">conf=new</span> <span class="title">SparkConf</span>(</span>).setAppName(<span class="string">"connect componentV2"</span>)</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc=new</span> <span class="title">SparkContext</span>(</span>conf)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">dataSource=List</span>(</span><span class="string">"1 1"</span>,<span class="string">"2 1"</span>,<span class="string">"2 2"</span>,<span class="string">"3 2"</span>,</span><br><span class="line">      <span class="string">"4 3"</span>,<span class="string">"5 3"</span>,<span class="string">"5 4"</span>,<span class="string">"6 4"</span>,<span class="string">"6 5"</span>,<span class="string">"7 5"</span>,</span><br><span class="line">      <span class="string">"8 7"</span>,<span class="string">"9 7"</span>,<span class="string">"9 8"</span>,<span class="string">"9 9"</span>,<span class="string">"10 8"</span>,<span class="string">"11 9"</span>)</span><br><span class="line">      </span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">rdd=sc</span>.<span class="title">parallelize</span>(</span>dataSource).map &#123; x=&gt;&#123;</span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">data=x</span>.<span class="title">split</span>(</span><span class="string">" "</span>)</span><br><span class="line">  (data(<span class="number">0</span>).toLong,data(<span class="number">1</span>).toInt)</span><br><span class="line">&#125;&#125;.cache()</span><br><span class="line"></span><br><span class="line"><span class="comment">//提取顶点</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">vertexRdd=rdd</span>.<span class="title">groupBy</span>(</span>_._1).map(x=&gt;&#123;(x._1,x._2.unzip._2.min)&#125;)</span><br><span class="line">  </span><br><span class="line"><span class="comment">//提取边</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edgeRdd=rdd</span>.<span class="title">groupBy</span>(</span>_._2).flatMap(x=&gt;&#123;</span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">vertexList=x</span>.<span class="title">_2</span>.<span class="title">toList</span>.<span class="title">unzip</span>.<span class="title">_1</span></span><br><span class="line"></span>  <span class="function"><span class="keyword">val</span> <span class="title">ret=ListBuffer</span>[</span><span class="type">Edge</span>[<span class="type">Option</span>[<span class="type">Int</span>]]]()</span><br><span class="line">  <span class="keyword">for</span>(i&lt;- <span class="number">0</span> until vertexList.size;</span><br><span class="line">      j&lt;-i+<span class="number">1</span> until vertexList.size;</span><br><span class="line">      <span class="keyword">if</span> j&lt;vertexList.size)</span><br><span class="line">  &#123;</span><br><span class="line">    ret.append(<span class="type">Edge</span>(vertexList(i),vertexList(j),<span class="type">None</span>))</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  ret</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//构成图</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">graph=Graph</span>(</span>vertexRdd,edgeRdd)</span><br><span class="line">println(<span class="string">"init graph"</span>)</span><br><span class="line">graph.triplets.collect().foreach(println(_))</span><br><span class="line"></span><br><span class="line"><span class="comment">//进行pregel计算</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">newG=graph</span>.<span class="title">pregel</span>(</span><span class="type">Int</span>.<span class="type">MaxValue</span>, <span class="number">10000</span>, <span class="type">EdgeDirection</span>.<span class="type">Out</span>)(vprog, sendMsg, mergeMsg)</span><br><span class="line">println(<span class="string">"after pregel"</span>)</span><br><span class="line">newG.triplets.collect().foreach(println(_))</span><br><span class="line"></span><br><span class="line">println(<span class="string">"connect component"</span>)</span><br><span class="line">newG.vertices.groupBy(_._2).map(_._2.unzip._1).collect().foreach(println(_))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 节点数据的更新 就是取最小值</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vprog</span>(</span>vid:<span class="type">VertexId</span>,vdata:<span class="type">Int</span>,message:<span class="type">Int</span>):<span class="type">Int</span>=<span class="type">Math</span>.min(vdata,message)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 发送消息</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendMsg</span>(</span>e:<span class="type">EdgeTriplet</span>[<span class="type">Int</span>, <span class="type">Option</span>[<span class="type">Int</span>]])=&#123;</span><br><span class="line"><span class="keyword">if</span>(e.srcAttr==e.dstAttr)</span><br><span class="line">  <span class="type">Iterator</span>.empty<span class="comment">//迭代停止</span></span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">  <span class="comment">//哎，EdgeDirection.Either好像根本没效果，只能在这里发送双向来模拟无向图</span></span><br><span class="line">  <span class="type">Iterator</span>((e.dstId,e.srcAttr),</span><br><span class="line">      (e.srcId,e.dstAttr))<span class="comment">//将自己发送给邻接顶点</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 合并消息</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mergeMsg</span>(</span>a:<span class="type">Int</span>,b:<span class="type">Int</span>):<span class="type">Int</span>=<span class="type">Math</span>.min(a, b)</span><br></pre></td></tr></table></figure></p>
+<p>光光从代码量上就可以看到精简了很多，也更加好理解了，接下来看下结果</p>
+<p><img src="/img/Connect-Compoent-V2/result.png" height="400px" width="300px"></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="原因">原因</h2><p>昨天将此题使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：</p>
+<ol>
+<li>虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题</li>
+<li>迭代]]>
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
+    
+      <category term="Spark" scheme="http://yyl8781697.github.io/tags/Spark/"/>
+    
+      <category term="Spark" scheme="http://yyl8781697.github.io/categories/Spark/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[使用Spark求解大图的连通组件（百度面试题）]]></title>
@@ -1426,116 +1459,6 @@ Sun
       <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
     
       <category term="Java Base" scheme="http://yyl8781697.github.io/categories/Java-Base/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《Effective Java》第三章：对于所有对象都通用的方法]]></title>
-    <link href="http://yyl8781697.github.io/2015/05/03/Effective%20Java/The-Methods-General-To-All-Object/"/>
-    <id>http://yyl8781697.github.io/2015/05/03/Effective Java/The-Methods-General-To-All-Object/</id>
-    <published>2015-05-03T14:59:34.000Z</published>
-    <updated>2015-05-04T14:47:39.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="对于所有对象都通用的方法">对于所有对象都通用的方法</h1><p>类在继承时，它的所有非<code>final</code>方法都用明确得通用约定，他们都是被设计为要被覆盖的，对于任何一个类，在覆盖这些方法的时候，都需要遵循这些通用的约定，如果做不到这一点，其他依赖于这些约定的类将无法结合该类一起工作。</p>
-<h2 id="第8条：覆盖equals时请遵守通用约定">第8条：覆盖equals时请遵守通用约定</h2><blockquote>
-<p>我们都知道<code>equals</code>方法称被用于判断两个对象是否相等（除地址外），那你知道该方法应该被如何设计呢？</p>
-</blockquote>
-<p><code>equals</code>方法需要遵循的约定：</p>
-<ul>
-<li><strong>自反性</strong>：对于任何非<code>null</code>的引用值<code>x</code>，<code>x.equals(x)</code>必须要<code>true</code>，也就是自己一定要和自己相等啊。</li>
-<li><strong>对称性</strong>：对于任何非<code>null</code>的引用值<code>x</code>和<code>y</code>，当前仅当<code>y.equals(x)=true</code>时，<code>x.equals(y)=true</code>一定成立。</li>
-<li><strong>传递性</strong>：对于任何非<code>null</code>的引用值<code>x</code>、<code>y</code>和<code>z</code>，如果<code>x.equals(y)=true</code>、<code>y.equals(z)=true</code>，则<code>x.equals(z)=true</code>一定成立，关于这点，写代码时难点主要是在有子类、超类同时存在的情况下比较难搞。。</li>
-<li><strong>一致性</strong>：对于任何非<code>null</code>的引用值<code>x</code>和<code>y</code>，只要<code>equals</code>的比较操作在对象中所用的信息没有被修改，多次调用<code>x.equals(y)</code>返回的值一定相等。</li>
-<li>对于任何非<code>null</code>的引用值<code>x</code>，<code>x.equals(null)</code>一定为<code>false</code>，关于这一条，不必要在<code>equals</code>方法是使用<code>null</code>的判断。</li>
-</ul>
-<p>对于这些约束，编写<code>equals</code>有下面几个诀窍：</p>
-<ol>
-<li><strong>使用<code>==</code>操作符检查“参数是否为这个对象的引用”</strong>（就是判断对象是否地址相等）</li>
-<li><strong>使用<code>instanceof</code>操作符检查“参数是否为正确的类型”</strong>（判断对比的参数是否为本类或者超类，同时可以判断null值）</li>
-<li><strong>把参数转为正确的类型</strong>（强转了之后才能进行下一步的具体值的判断^_^）</li>
-<li><strong>对于该类中的每个关键域，检查参数中的域是否与该对象中对应域相匹配</strong>（说实话，这个没怎么看懂-_-）</li>
-<li><strong>当编写完<code>equals</code>方法之后、应该问自己三个问题：他们是否是对称的、传递的、一致性的</strong>（这不是常见的几个约束嘛？最好是需要满足，同时最好还得有单元测试去确保）</li>
-</ol>
-<p>一般<code>equals</code>一般通用的写法是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span><span class="comment">//注意这里传的是Object类型，不是具体的类型，不然就是重载了，而不是重写</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">//这一步很重要，一个是可以判断当前o是否为本类型或者他的超类，另外这里如果o为null的话会直接返回false</span></span><br><span class="line">	<span class="keyword">if</span>(!(o <span class="keyword">instanceof</span> MyType))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	MyType mt=(MyType)<span class="number">0</span>;<span class="comment">//将obj转为本类型之后再操作</span></span><br><span class="line"> 	</span><br><span class="line">	<span class="comment">//Todo 根据自己业务写的实际的判断情况、如果涉及子类超类的可以使用递归调用，完了之后进行布尔值的返回</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>建议：如果你无法确保你自己写的<code>equals</code>满足上述约束，那就不要去重写这个<code>equals</code>方法的，因为超类的该方法一般也是适用于子类的（懒人模式）。</p>
-</blockquote>
-<h2 id="第9条：覆盖equals时总要覆盖hashCode">第9条：覆盖equals时总要覆盖hashCode</h2><blockquote>
-<p>地球人都知道调用<code>hashCode</code>方法可以得到该对象的散列值（Hash值）</p>
-</blockquote>
-<p>先来看一下<code>hashCode</code>方法的相关通用约束：</p>
-<ol>
-<li>在程序执行时，只要<code>equals</code>方法所用到的对象没有被修改，得到的<code>hashCode</code>的值一定还是原来的值。</li>
-<li>相等的对象必须具有相等散列码。</li>
-</ol>
-<ul>
-<li>不相等的对象他们的散列码一定不相等。</li>
-</ul>
-<p>所以，为了不违反第2条约束，在覆盖了<code>equals</code>方法之后一定要覆盖<code>hashCode</code>。</p>
-<p>一个好的散列函数通常倾向于“为不相等的对象产生不相等的散列码”，散列函数应该把集合中不相等的实例均匀的分不到所有的可能额散列值上，如果想完全达到这样的效果是非常困难的，但是可以使用相对接近的理想情形并不困难（具体散列步骤请移步原文去参考-_-）</p>
-<h2 id="第10条：始终要覆盖toString">第10条：始终要覆盖toString</h2><p>我们在打印一个类时，是不是会经常看到一个类的名称，以及一个@符号，接着是散列码的无符号十六进制数，列如：“PhoneNumber<br>@163b91”，这样的打印信息对于开发者来说几乎是无意义的，所以“建议所有的子类都要覆盖这个<code>toString</code>”方法。</p>
-<p><code>toString</code>在编写时没有那么多的通用约束，但是尽量能表达该类的信息，当然也可以编写含有你特征格式的<code>toString</code>返回值，比如<code>XML</code>格式，这种方式需要在注释里面特别说明。</p>
-<blockquote>
-<p>PS：建议是好的，但是每写一个类都去覆盖他的<code>toString</code>方法会不会太累？个人觉得如果没有用到<code>println</code>,<code>printf</code>之类的方法不去覆盖也是ok的^_^</p>
-</blockquote>
-<h2 id="第11条：谨慎地覆盖clone">第11条：谨慎地覆盖clone</h2><blockquote>
-<p><code>Cloneable</code>接口并不含任何方法，但是实现它的时候<code>Object</code>的<code>clone</code>方法就会返回该对象的逐域拷贝，否则就会抛出<code>CloneNotSupportedException</code>异常</p>
-</blockquote>
-<p>创建和返回对象的拷贝需要满足(这几点其实在<code>Object.clone()</code>的源码中)：</p>
-<ol>
-<li><code>x.clone()!=x</code>  （拷贝返回的东西不能用原来的地址啊~^_^）</li>
-<li><code>x.clone().getClass==x.getClass()</code> </li>
-<li><code>x.clone().equals(x)</code>  （拷贝了之后当然两个对象时相等的~）</li>
-</ol>
-<blockquote>
-<p>注意，在java1.5以后的版本中<code>clone()</code>引入了协变返回类型，额可以直接直接支持指定类的返回，不必必须返回<code>Object</code></p>
-</blockquote>
-<p><code>clone()</code>的原则就是必须确保不会伤害到原始的对象，并确保正确地创建被克隆中的约束条件。<br>实现克隆最基本的方法是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CloneTest</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span>[] elements=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 进行数组的打印</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"\r\nprint"</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="keyword">this</span>.elements.length;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			System.out.print(elements[i]+<span class="string">"#"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> CloneTest <span class="title">clone</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		CloneTest ret=<span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			ret=(CloneTest)<span class="keyword">super</span>.clone();<span class="comment">//调用超类的clone</span></span><br><span class="line">		&#125;<span class="keyword">catch</span>(CloneNotSupportedException cs)</span><br><span class="line">		&#123;</span><br><span class="line">			cs.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> ret;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>但是他会破坏原有对象：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CloneTest t1=<span class="keyword">new</span> CloneTest();</span><br><span class="line">t1.elements[<span class="number">0</span>]=<span class="number">4</span>;</span><br><span class="line">t1.elements[<span class="number">1</span>]=<span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">CloneTest t2=t1.clone();</span><br><span class="line">t2.elements[<span class="number">1</span>]=<span class="number">6</span>;</span><br><span class="line"></span><br><span class="line">t1.print();</span><br><span class="line">t2.print();</span><br></pre></td></tr></table></figure>
-<p>返回的是：</p>
-<pre><code><span class="id">print</span>
-<span class="number">4#6#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span>
-<span class="id">print</span>
-<span class="number">4#6#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span>
-</code></pre><p>这是因为该方法仅仅只是调用了超类的克隆方法，完了之后克隆出来的对象的<code>elements</code>元素还是与原对象一样。</p>
-<p>所以一般在编写<code>clone()</code>之后，再在克隆出的对象上添加自己当前类所需要的元素，上述可以这么修改:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> CloneTest <span class="title">clone</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	CloneTest ret=<span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		ret=(CloneTest)<span class="keyword">super</span>.clone();</span><br><span class="line">		ret.elements=<span class="keyword">this</span>.elements.clone();<span class="comment">//复制出来一个新的副本</span></span><br><span class="line">	&#125;<span class="keyword">catch</span>(CloneNotSupportedException cs)</span><br><span class="line">	&#123;</span><br><span class="line">		cs.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在先前的测试代码之后得到的是</p>
-<pre><code><span class="id">print</span>
-<span class="number">4#5#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span>
-<span class="id">print</span>
-<span class="number">4#6#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span><span class="number">0#0#</span>
-</code></pre><p>简而言之，所有实现了<code>Cloneable</code>的类都应该调用一个共有的方法覆盖<code>clone</code>，此公有的方法首先调用<code>super.clone()</code>，然后修正任何需要修正的域（其实就是对当前自己类上的元素单独<code>clone()</code>）。</p>
-<p>最后，关于<code>clone()</code>方法有以下几个注意点：</p>
-<ul>
-<li>将出现递归<code>clone()</code>的时候尽量使用循环迭代来代替。</li>
-<li>如果是线程安全的类要实现<code>clone()</code>，那些这个<code>clone()</code>也必须进行同步。</li>
-<li>关于自身域的修正如果是遇到<code>final</code>类型的，那么这两者是不兼容的。</li>
-<li>另一个实现对象拷贝的方式就是提供一个拷贝构造器，该构造器比<code>clone()</code>方法的一个优势就是它可以传参数。</li>
-<li>当前类没有继承<code>Cloneable</code>接口时，如果掉<code>clone()</code>方法里面调用了<code>super.clone()</code>方法就会抛出<code>CloneNotSupportedException</code>异常。</li>
-</ul>
-<h2 id="第12条：考虑实现Comparable接口">第12条：考虑实现Comparable接口</h2><blockquote>
-<p><code>compareTo</code>方法是<code>Compareable</code>接口中唯一的方法，它不但可以进行简单的等同性比较外，而且允许执行顺序比较。</p>
-</blockquote>
-<p>其实<code>Comparable</code>与<code>equals</code>的约定是极其像的：</p>
-<ul>
-<li>自反性</li>
-<li>对称性</li>
-<li>传递性</li>
-</ul>
-<p>与<code>equals</code>不同的是，在跨域不同类的时候，<code>compareTo</code>可以不做比较，如果两个待比较的对象时不同引用的对象，<code>compareTo</code>可以抛出<code>ClassCastExcetpion</code>异常。</p>
-<blockquote>
-<p><code>compareTo</code>方法在执行时，如果小于被比值，返回-1（也可以其他负数），或者等于比较值，此时返回0，否则都是大于0的情况就返回false。</p>
-</blockquote>
-<p>关于在有多个关键域都需要进行对比时，可以使用减法差值来减少编码的代码量。</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h1 id="对于所有对象都通用的方法">对于所有对象都通用的方法</h1><p>类在继承时，它的所有非<code>final</code>方法都用明确得通用约定，他们都是被设计为要被覆盖的，对于任何一个类，在覆盖这些方法的时候，都需要遵循这些通用的约定，如果做不到这一点，其他]]>
-    </summary>
-    
-      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
-    
-      <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
     
   </entry>
   
