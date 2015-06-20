@@ -109,7 +109,7 @@
     <link href="http://yyl8781697.github.io/2015/06/15/Effective%20Java/Common-Program-Desgin/"/>
     <id>http://yyl8781697.github.io/2015/06/15/Effective Java/Common-Program-Desgin/</id>
     <published>2015-06-15T14:56:25.000Z</published>
-    <updated>2015-06-17T23:33:09.000Z</updated>
+    <updated>2015-06-20T16:37:53.000Z</updated>
     <content type="html"><![CDATA[<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
 <p>将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。</p>
 </blockquote>
@@ -121,7 +121,7 @@
 </ul>
 <h2 id="第46条：for-each循环优先于传统的for循环">第46条：for-each循环优先于传统的for循环</h2><p>利用<code>for-each</code>循环不会有性能损失，甚至用于数组也是一样的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;Integer&gt; c=Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//普通的for循环</span></span><br><span class="line"><span class="keyword">for</span>(Iterator iter=c.iterator();iter.hasNext())</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(iter.next());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用for-each的版本</span></span><br><span class="line"><span class="keyword">for</span>(Integer v:c)</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>还有一点是如果你使用普通的<code>for</code>，那么它的<code>next</code>会走光所有的元素，也就无法再利用。</p>
-<h2 id="47条：了解和使用类库">47条：了解和使用类库</h2><blockquote>
+<h2 id="第47条：了解和使用类库">第47条：了解和使用类库</h2><blockquote>
 <p>程序猿的类库就是武器弹药，没有弹药如何去写出一首好程序</p>
 </blockquote>
 <p>通过使用标准类库：</p>
@@ -167,6 +167,38 @@
 <blockquote>
 <p>但是，比如类型<code>HashMap</code>的定义的类型还真必须是<code>Integer</code>之类的引用</p>
 </blockquote>
+<h2 id="第50条：如果其他类型更合适，则尽量避免使用字符串">第50条：如果其他类型更合适，则尽量避免使用字符串</h2><blockquote>
+<p>字符串，我们都知道，这个很好用。。。</p>
+</blockquote>
+<p>但是其实很多情况下，有比用字符串更加好的解决方案：</p>
+<ul>
+<li>字符串不适合代替其他的值类型</li>
+<li>字符串不适合代替聚集类型</li>
+<li>字符串不适合代替枚举类型</li>
+<li>字符串也不适合代替能力表</li>
+</ul>
+<p>总之，如果可以使用更加合适的数据类型，或者可以编写更加适当的数据类型，就应该避免用字符串来表示对象。</p>
+<h2 id="第51条：当心字符串连接的性能">第51条：当心字符串连接的性能</h2><p>这条是面试常问的问题，众所周知，字符串的连接性能很差，因为字符串是不可变，也就是说没连接一下次就会重新生成一个新的更大的字符串，所以推荐使用<code>StringBuilder</code></p>
+<h2 id="第52条：通过接口引用对象">第52条：通过接口引用对象</h2><blockquote>
+<p>对应第40条建议：<a href="http://kubicode.me/2015/06/09/Effective%20Java/Method/#第40条：谨慎设计方法签名" target="_blank" rel="external">应该使用接口而不是类作为参数的类型</a>，这条的建议是应该优先使用接口而不是类做做引用对象。</p>
+</blockquote>
+<p>现在来看这个<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Subscriber&gt; subscribers=<span class="keyword">new</span> Vector&lt;Subscriber&gt;();<span class="comment">//好的写法</span></span><br><span class="line">Vector&lt;Subscriber&gt; subscribers=<span class="keyword">new</span> Vector&lt;Subscriber&gt;();<span class="comment">//这个写法不好，太不灵活了</span></span><br><span class="line">List&lt;Subscriber&gt; subscribers=<span class="keyword">new</span> ArrayList&lt;Subscriber&gt;();<span class="comment">//这个写法也好，可以直接与第一种替代</span></span><br></pre></td></tr></table></figure></p>
+<p>如果没有合适的接口存在，可以考虑是否有基类可以用来定义类型，否则完全可以使用实现类来引用对象。</p>
+<h2 id="第53条：接口优于反射机制">第53条：接口优于反射机制</h2><p>核心反射机制提供了“通过程序了访问已装载的类的信息”（反射大家应该都懂的）</p>
+<p>虽然反射使用起来很方法，并且也很灵活，但是使用它的代价很大：</p>
+<ul>
+<li>丧失了编译时类型检查的好处</li>
+<li>执行反射访问所需要的代码非常笨拙和冗余</li>
+<li>性能损失很大</li>
+</ul>
+<p>来看一下  下面的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义一个接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Base</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将该接口进行实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> <span class="keyword">implements</span> <span class="title">Base</span></span>&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"hello~~~~~~~~~~~"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//开始调用sayHello</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span><br><span class="line"></span>&#123;</span><br><span class="line">	System.out.println(System.currentTimeMillis());</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++)</span><br><span class="line">		say(<span class="keyword">new</span> Hello());</span><br><span class="line">	System.out.println(System.currentTimeMillis());</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++)</span><br><span class="line">		say(<span class="string">"yyl.java.study.Hello"</span>);</span><br><span class="line">	System.out.println(System.currentTimeMillis());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用接口方法来调用</span><br><span class="line"> *<span class="javadoctag"> @param</span> hello</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">(Base hello)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	hello.sayHello();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用反射的方法来调用</span><br><span class="line"> *<span class="javadoctag"> @param</span> className</span><br><span class="line"> *<span class="javadoctag"> @throws</span> Exception</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">(String className)</span> <span class="keyword">throws</span> Exception</span><br><span class="line"></span>&#123;</span><br><span class="line">	Class cl=Class.forName(className);</span><br><span class="line">	Object obj=cl.newInstance();</span><br><span class="line">	Method m=cl.getMethod(<span class="string">"sayHello"</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(m!=<span class="keyword">null</span>)</span><br><span class="line">		m.invoke(obj);<span class="comment">//方法的调用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最终的输出结果为：</p>
+<pre><code><span class="number">1434817643669</span>
+<span class="comment">//....</span>
+<span class="number">1434817643672</span>
+<span class="comment">//....</span>
+<span class="number">1434817643681</span>
+</code></pre><p>从上面的小实验中可以发现，使用接口比使用反射速度要快3倍左右，但是这其实并不意味着将反射抛弃，然而反射的释放很灵活，比如className可以是当初编译时不存在类，并且反射主要用于组件的开发，一般情况下都是记录缓存，并不是很次方法都是用反射方法来做。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
