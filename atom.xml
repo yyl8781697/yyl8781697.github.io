@@ -109,7 +109,7 @@
     <link href="http://yyl8781697.github.io/2015/06/15/Effective%20Java/Common-Program-Desgin/"/>
     <id>http://yyl8781697.github.io/2015/06/15/Effective Java/Common-Program-Desgin/</id>
     <published>2015-06-15T14:56:25.000Z</published>
-    <updated>2015-06-20T16:37:53.000Z</updated>
+    <updated>2015-06-21T00:41:50.000Z</updated>
     <content type="html"><![CDATA[<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
 <p>将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。</p>
 </blockquote>
@@ -198,7 +198,7 @@
 <span class="number">1434817643672</span>
 <span class="comment">//....</span>
 <span class="number">1434817643681</span>
-</code></pre><p>从上面的小实验中可以发现，使用接口比使用反射速度要快3倍左右，但是这其实并不意味着将反射抛弃，然而反射的释放很灵活，比如className可以是当初编译时不存在类，并且反射主要用于组件的开发，一般情况下都是记录缓存，并不是很次方法都是用反射方法来做。</p>
+</code></pre><p>从上面的小实验中可以发现，使用接口比使用反射速度要快3倍左右，但是这其实并不意味着将反射抛弃，然而反射的特点很灵活，比如className可以是当初编译时不存在类，并且反射主要用于组件的开发，一般情况下都是记录缓存，并不是会多次调用反射来取到可执行方法。</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
