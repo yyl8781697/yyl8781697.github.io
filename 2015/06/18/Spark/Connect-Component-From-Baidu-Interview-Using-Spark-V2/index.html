@@ -116,7 +116,7 @@
 		
 		</div>
 		
-		<h2 id="原因">原因</h2><p>昨天将此题使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：</p>
+		<h2 id="原因">原因</h2><p>昨天将<a href="http://kubicode.me/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/" target="_blank" rel="external">此题</a>使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：</p>
 <ol>
 <li>虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题</li>
 <li>迭代过程中多次对两两标签集合进行合并，还不时的需要<code>clone</code>操作，时间空间开销都是很大</li>
@@ -162,6 +162,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/" title="Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/"  title="使用Spark求解大图的连通组件（百度面试题）">
@@ -223,7 +231,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>3</sup></a></li>
 		  
 		
 		  
@@ -320,6 +328,10 @@
 			
 		
 			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
 			
 		
@@ -329,10 +341,6 @@
 		
 			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>2</sup></a></li>
 			
 		
 			
