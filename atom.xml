@@ -161,7 +161,7 @@
     <link href="http://yyl8781697.github.io/2015/06/15/Effective%20Java/Common-Program-Desgin/"/>
     <id>http://yyl8781697.github.io/2015/06/15/Effective Java/Common-Program-Desgin/</id>
     <published>2015-06-15T14:56:25.000Z</published>
-    <updated>2015-06-21T00:41:50.000Z</updated>
+    <updated>2015-06-21T05:33:33.000Z</updated>
     <content type="html"><![CDATA[<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
 <p>将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。</p>
 </blockquote>
@@ -251,6 +251,51 @@
 <span class="comment">//....</span>
 <span class="number">1434817643681</span>
 </code></pre><p>从上面的小实验中可以发现，使用接口比使用反射速度要快3倍左右，但是这其实并不意味着将反射抛弃，然而反射的特点很灵活，比如className可以是当初编译时不存在类，并且反射主要用于组件的开发，一般情况下都是记录缓存，并不是会多次调用反射来取到可执行方法。</p>
+<h2 id="第54条：谨慎的使用本地方法">第54条：谨慎的使用本地方法</h2><p><code>JNI</code>准许<code>Java</code>应用程序可以调用本地方法（比如c/c++）编写的，主要是因为本地方法可以</p>
+<ul>
+<li>访问注册表、文件锁</li>
+<li>访问遗留代码库</li>
+<li>最重要的还是提升性能啊</li>
+</ul>
+<p>但是随着<code>JVM</code>的发展，这些功能应该add到最近的<code>JVM</code>中了，并且其本地代码的性能优势也应该没有之前那么明显了，比如<code>BigInteger</code>已经完全用<code>Java</code>重写了。</p>
+<p>然而，使用本地方法有一些重要的缺点：</p>
+<ul>
+<li>本地方法的语言不是安全的</li>
+<li>本地方法语言与平台有关，可移植性不高</li>
+<li>本地方法更难调试，如果写得不好，性能也许反而会降低</li>
+</ul>
+<p>所以，慎用本地方法</p>
+<blockquote>
+<p>当然，我觉得在某些地方还是得用，<code>Java</code>中的<code>system.arraycopy</code>不就是一个本地方法嘛。</p>
+</blockquote>
+<h2 id="第55条：谨慎的进行优化">第55条：谨慎的进行优化</h2><blockquote>
+<p>优化利大于弊，特别是不成熟的优化   赞同^_^</p>
+</blockquote>
+<p> 那难道就不优化嘛？不！这条是建议我们不要费力去编写快速的程序，而应该努力去编写好的程序，速度自然会随之而来（这并不是先思考，再下手嘛）<br> 如果是实在不行，这个优化得专家来做，并且要经常进行性能测试，直到满意。-_-</p>
+<h2 id="第56条：遵守普遍接受的命名惯例">第56条：遵守普遍接受的命名惯例</h2><p> <code>Java</code>平台建立了一套很好的命名规范，这些规范可以大大让你的团队更好地开展活动</p>
+<p> 字面上的命名</p>
+<ul>
+<li>包<ul>
+<li>包得名称应该是层次状的，用句号分割每个部分</li>
+<li>包名称的其余部分应该包括一个或者多个描述的组成部分</li>
+</ul>
+</li>
+<li>类和接口名称，包括枚举和注解，都应该包括一个或者多个单词，每个单词的首字母大写</li>
+<li>方法和域的名称一般使用小驼峰法，整个名称的第一个字母小写，以后每个单词的首字母大写</li>
+<li>域常量一般全部字母都大写，每个单词使用下划线作为分割</li>
+<li>局部变量允许缩写</li>
+<li>类型参数名一般由单个大写字母表示，比如<code>T</code>,<code>E</code>,<code>K</code>,<code>V</code>.</li>
+</ul>
+<p> 语法上的命名</p>
+<ul>
+<li>接口建议以<code>able</code>结尾，比如<code>Runnable</code></li>
+<li>执行某个东西的方法根据动作命名，比如返回布尔值的方法一般以<code>is</code>开头</li>
+<li>如果被调用方法返回一个非布尔值，一般以<code>get</code>开头</li>
+<li>类型转换的方法一般以<code>to</code>开头</li>
+</ul>
+<blockquote>
+<p>这些命名规则一般都是约定俗成了，看着也习惯。</p>
+</blockquote>
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
