@@ -4,31 +4,43 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Best Time to Buy and Sell Stock | Kubi Code&#39;Blog</title>
+    <title>最大子矩阵和的问题 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="LeetCode地址：https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
-
-Problem:Say you have an array for which the ith element is the price of a given stock on day i.
-If you were only permitted to">
+    <meta name="description" content="题目现有矩阵：
+0, -2, -7,  0, 3
+9,  2, -6,  2, 5
+-4, 1, -4,  1, 6
+-1, 8,  0, -2, 2
+求该矩阵的一个子矩阵，使子矩阵所有元素的和最大
+最大子序列在看最大子矩阵之前，先来看一下最大子序列的求解：
+给定一个长度为n的一维数组a，请找出此数组的一个子数组,使得此子数组的和sum＝a[i]+a[i+1]+……+a[j]最大（0&amp;lt;=i&amp;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Best Time to Buy and Sell Stock">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/index.html">
+<meta property="og:title" content="最大子矩阵和的问题">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="LeetCode地址：https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
-
-Problem:Say you have an array for which the ith element is the price of a given stock on day i.
-If you were only permitted to">
+<meta property="og:description" content="题目现有矩阵：
+0, -2, -7,  0, 3
+9,  2, -6,  2, 5
+-4, 1, -4,  1, 6
+-1, 8,  0, -2, 2
+求该矩阵的一个子矩阵，使子矩阵所有元素的和最大
+最大子序列在看最大子矩阵之前，先来看一下最大子序列的求解：
+给定一个长度为n的一维数组a，请找出此数组的一个子数组,使得此子数组的和sum＝a[i]+a[i+1]+……+a[j]最大（0&amp;lt;=i&amp;">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Best Time to Buy and Sell Stock">
-<meta name="twitter:description" content="LeetCode地址：https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
-
-Problem:Say you have an array for which the ith element is the price of a given stock on day i.
-If you were only permitted to">
+<meta name="twitter:title" content="最大子矩阵和的问题">
+<meta name="twitter:description" content="题目现有矩阵：
+0, -2, -7,  0, 3
+9,  2, -6,  2, 5
+-4, 1, -4,  1, 6
+-1, 8,  0, -2, 2
+求该矩阵的一个子矩阵，使子矩阵所有元素的和最大
+最大子序列在看最大子矩阵之前，先来看一下最大子序列的求解：
+给定一个长度为n的一维数组a，请找出此数组的一个子数组,使得此子数组的和sum＝a[i]+a[i+1]+……+a[j]最大（0&amp;lt;=i&amp;">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +101,14 @@ If you were only permitted to">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/" title="LeetCode-Best Time to Buy and Sell Stock" itemprop="url">LeetCode-Best Time to Buy and Sell Stock</a>
+      <a href="/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/" title="最大子矩阵和的问题" itemprop="url">最大子矩阵和的问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-03T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-03</time>
+    <time datetime="2015-06-23T12:28:16.000Z" itemprop="datePublished"> 发表于 2015-06-23</time>
     
   </p>
 </header>
@@ -105,23 +117,35 @@ If you were only permitted to">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大子序列"><span class="toc-number">2.</span> <span class="toc-text">最大子序列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大子矩阵"><span class="toc-number">3.</span> <span class="toc-text">最大子矩阵</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="external">https://leetcode.com/problems/best-time-to-buy-and-sell-stock/</a></p>
-</blockquote>
-<p>Problem:<br>Say you have an array for which the <em>i</em><sup>th</sup> element is the price of a given stock on day <em>i</em>.</p>
-<p>If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">int</span> ret=<span class="number">0</span>,</span><br><span class="line">            leftValue=Integer.MAX_VALUE,</span><br><span class="line">            rightPos=<span class="number">0</span>,</span><br><span class="line">            length=prices.length;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;length-<span class="number">1</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(prices[i]&gt;leftValue)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;length;j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(prices[j]-prices[i]&gt;ret)</span><br><span class="line">                &#123;</span><br><span class="line">                    ret=prices[j]-prices[i];</span><br><span class="line">                    leftValue=prices[i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>thr runtime is <code>1548ms</code>  -_-!</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,</span><br><span class="line">            buy=<span class="number">0</span>,</span><br><span class="line">            length=prices.length;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(prices.length&lt;<span class="number">2</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        buy=prices[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(prices[i]-buy&gt;ret)</span><br><span class="line">            &#123;</span><br><span class="line">                ret=prices[i]-buy;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(prices[i]&lt;buy)</span><br><span class="line">            &#123;</span><br><span class="line">                buy=prices[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>thr runtime is <code>376ms</code></p>
-<hr>
+		<h2 id="题目">题目</h2><pre><code>现有矩阵：
+0, -2, -7,  0, 3
+9,  2, -6,  2, 5
+-<span class="ruby"><span class="number">4</span>, <span class="number">1</span>, -<span class="number">4</span>,  <span class="number">1</span>, <span class="number">6</span>
+</span>-<span class="ruby"><span class="number">1</span>, <span class="number">8</span>,  <span class="number">0</span>, -<span class="number">2</span>, <span class="number">2</span>
+</span>求该矩阵的一个子矩阵，使子矩阵所有元素的和最大
+</code></pre><h2 id="最大子序列">最大子序列</h2><p>在看最大子矩阵之前，先来看一下最大子序列的求解：</p>
+<pre><code>给定一个长度为n的一维数组a，请找出此数组的一个子数组,使得此子数组的和sum＝<span class="tag">a</span>[i]+<span class="tag">a</span>[i+<span class="number">1</span>]+……+<span class="tag">a</span>[j]最大（<span class="number">0</span>&lt;=i&lt;=j&lt;=n-<span class="number">1</span>）
+比如在序列-<span class="number">2</span>,<span class="number">11</span>,-<span class="number">4</span>,<span class="number">13</span>,-<span class="number">5</span>,-<span class="number">2</span>中，最大子序和为<span class="number">11</span>+(-<span class="number">4</span>)+<span class="number">13</span>=<span class="number">19</span>
+</code></pre><p>求解该方法一般使用动态规划<code>b[j]=max{b[j-1]+a[j],a[j]}</code>，简化后的程序为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSubSum</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> maxSum=<span class="number">0</span>,curSum=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		curSum+=a[i];</span><br><span class="line">		<span class="keyword">if</span>(curSum&gt;maxSum)</span><br><span class="line">		&#123;</span><br><span class="line">			maxSum=curSum;</span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(curSum&lt;<span class="number">0</span>)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			curSum=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> maxSum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+<p>该解法的复杂度为O(n)</p>
 </blockquote>
+<h2 id="最大子矩阵">最大子矩阵</h2><blockquote>
+<p>最大子矩阵可以借鉴或者转为最大子序列</p>
+</blockquote>
+<p>假设已经当前最大子矩阵的行数为1，那么其实就是将矩阵分解为4行分别再用子序列求解即可，<br>那如果子矩阵的行数为2呢？我们可以分解为{0,1}行，{1,2}行，{2,3}行求最大和即可，<br>以{0,1}行为例子：<br>0, -2, -7,  0, 3<br>9,  2, -6,  2, 5<br>再该范围内再求最大子矩阵其实就是按列求和转为一维数组再求最大：<br>9,0,-13,2,8<br>就可以知道第3，4列构成的子矩阵为最大。<br>将此思路扩展开到r行，求解方法为将这r行按列求和转为一维矩阵再求最大和，这里的一维矩阵其实就是子列和<br>所以如果当前矩阵一共有N行，再求子矩阵问题时可能出现行的情况一共有(N^2)/2种，为了计算这些情况的子列和，需要加一个辅助矩阵：全部子列和（totalColSum）<br>0, -2, -7,  0, 3<br>9,  0, -13,  2, 8<br>5, 1, -17,  3, 14<br>4, 9,  -17, 1, 16</p>
+<p>有了该辅助矩阵，我们就可以轻松求出指定列的子列和：</p>
+<ul>
+<li>假如当前的子矩阵是{0,1}行，可直接得到子列和为9,0,-13,2,8</li>
+<li>假如当前的子矩阵是{1,2}行，可通过totalColSum的第2行减去第0行的数据而得5,3,-4,3,11</li>
+</ul>
+<p>所以上述思路的全部程序如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSubSum2D</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> N, <span class="keyword">int</span> M)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=Integer.MIN_VALUE;</span><br><span class="line">	<span class="keyword">int</span>[][] totalColSum = <span class="keyword">new</span> <span class="keyword">int</span>[N][M];<span class="comment">// 所有子列的和</span></span><br><span class="line">	<span class="keyword">int</span>[] subColSum=<span class="keyword">new</span> <span class="keyword">int</span>[M];<span class="comment">//子列的和</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; M; j++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (i == <span class="number">0</span>)</span><br><span class="line">				totalColSum[i][j] = matrix[i][j];</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				totalColSum[i][j] = totalColSum[i - <span class="number">1</span>][j] + matrix[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; N-<span class="number">1</span>; r++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> k = r; k &lt; N; k++) &#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>( r==<span class="number">1</span> &amp;&amp; k==<span class="number">3</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				System.out.println(<span class="string">""</span>);</span><br><span class="line">			&#125;</span><br><span class="line">				</span><br><span class="line">			<span class="comment">//构建子列</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;M;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(r==k)</span><br><span class="line">				&#123;</span><br><span class="line">					subColSum[j]=matrix[r][j];<span class="comment">//是求单行的情况</span></span><br><span class="line">				&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(r==<span class="number">0</span>)</span></span>&#123;</span><br><span class="line">					subColSum[j]=totalColSum[k][j];<span class="comment">//以0为起始行</span></span><br><span class="line">				&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">					subColSum[j]=totalColSum[k][j]-totalColSum[r-<span class="number">1</span>][j];<span class="comment">//以非0为起始行，需要减去前面的</span></span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			sum=Math.max(sum, MaxSubSum.maxSubSum(subColSum));<span class="comment">//转为最大子段和</span></span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>它最终的复杂度为O(N*N*M)</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -129,13 +153,13 @@ If you were only permitted to">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
   </div>
 
 </div>
@@ -144,7 +168,7 @@ If you were only permitted to">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/" data-title="LeetCode-Best Time to Buy and Sell Stock | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/" data-title="最大子矩阵和的问题 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -157,19 +181,11 @@ If you were only permitted to">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/" title="LeetCode-Best Time to Buy and Sell Stock II">
-  <strong>上一篇：</strong><br/>
-  <span>
-  LeetCode-Best Time to Buy and Sell Stock II</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/07/02/LeetCode/LeetCode-Pascal's Triangle/"  title="LeetCode-Pascal&#39;s Triangle">
+<a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/"  title="Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-Pascal&#39;s Triangle
+ <span>Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）
 </span>
 </a>
 </div>
@@ -178,7 +194,7 @@ If you were only permitted to">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/" data-title="LeetCode-Best Time to Buy and Sell Stock" data-url="http://yyl8781697.github.io/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/23/Algorithm/Max-Sum-in-SubMatrix/" data-title="最大子矩阵和的问题" data-url="http://yyl8781697.github.io/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/"></div>
 </section>
 
 
@@ -188,7 +204,7 @@ If you were only permitted to">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大子序列"><span class="toc-number">2.</span> <span class="toc-text">最大子序列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最大子矩阵"><span class="toc-number">3.</span> <span class="toc-text">最大子矩阵</span></a></li></ol>
  
   </div>
 

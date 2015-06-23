@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-06-21T02:53:26.000Z</updated>
+  <updated>2015-06-23T13:03:31.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,51 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[最大子矩阵和的问题]]></title>
+    <link href="http://yyl8781697.github.io/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/"/>
+    <id>http://yyl8781697.github.io/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/</id>
+    <published>2015-06-23T12:28:16.000Z</published>
+    <updated>2015-06-23T13:03:31.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>现有矩阵：
+0, -2, -7,  0, 3
+9,  2, -6,  2, 5
+-<span class="ruby"><span class="number">4</span>, <span class="number">1</span>, -<span class="number">4</span>,  <span class="number">1</span>, <span class="number">6</span>
+</span>-<span class="ruby"><span class="number">1</span>, <span class="number">8</span>,  <span class="number">0</span>, -<span class="number">2</span>, <span class="number">2</span>
+</span>求该矩阵的一个子矩阵，使子矩阵所有元素的和最大
+</code></pre><h2 id="最大子序列">最大子序列</h2><p>在看最大子矩阵之前，先来看一下最大子序列的求解：</p>
+<pre><code>给定一个长度为n的一维数组a，请找出此数组的一个子数组,使得此子数组的和sum＝<span class="tag">a</span>[i]+<span class="tag">a</span>[i+<span class="number">1</span>]+……+<span class="tag">a</span>[j]最大（<span class="number">0</span>&lt;=i&lt;=j&lt;=n-<span class="number">1</span>）
+比如在序列-<span class="number">2</span>,<span class="number">11</span>,-<span class="number">4</span>,<span class="number">13</span>,-<span class="number">5</span>,-<span class="number">2</span>中，最大子序和为<span class="number">11</span>+(-<span class="number">4</span>)+<span class="number">13</span>=<span class="number">19</span>
+</code></pre><p>求解该方法一般使用动态规划<code>b[j]=max{b[j-1]+a[j],a[j]}</code>，简化后的程序为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSubSum</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> maxSum=<span class="number">0</span>,curSum=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		curSum+=a[i];</span><br><span class="line">		<span class="keyword">if</span>(curSum&gt;maxSum)</span><br><span class="line">		&#123;</span><br><span class="line">			maxSum=curSum;</span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(curSum&lt;<span class="number">0</span>)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			curSum=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> maxSum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>该解法的复杂度为O(n)</p>
+</blockquote>
+<h2 id="最大子矩阵">最大子矩阵</h2><blockquote>
+<p>最大子矩阵可以借鉴或者转为最大子序列</p>
+</blockquote>
+<p>假设已经当前最大子矩阵的行数为1，那么其实就是将矩阵分解为4行分别再用子序列求解即可，<br>那如果子矩阵的行数为2呢？我们可以分解为{0,1}行，{1,2}行，{2,3}行求最大和即可，<br>以{0,1}行为例子：<br>0, -2, -7,  0, 3<br>9,  2, -6,  2, 5<br>再该范围内再求最大子矩阵其实就是按列求和转为一维数组再求最大：<br>9,0,-13,2,8<br>就可以知道第3，4列构成的子矩阵为最大。<br>将此思路扩展开到r行，求解方法为将这r行按列求和转为一维矩阵再求最大和，这里的一维矩阵其实就是子列和<br>所以如果当前矩阵一共有N行，再求子矩阵问题时可能出现行的情况一共有(N^2)/2种，为了计算这些情况的子列和，需要加一个辅助矩阵：全部子列和（totalColSum）<br>0, -2, -7,  0, 3<br>9,  0, -13,  2, 8<br>5, 1, -17,  3, 14<br>4, 9,  -17, 1, 16</p>
+<p>有了该辅助矩阵，我们就可以轻松求出指定列的子列和：</p>
+<ul>
+<li>假如当前的子矩阵是{0,1}行，可直接得到子列和为9,0,-13,2,8</li>
+<li>假如当前的子矩阵是{1,2}行，可通过totalColSum的第2行减去第0行的数据而得5,3,-4,3,11</li>
+</ul>
+<p>所以上述思路的全部程序如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSubSum2D</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> N, <span class="keyword">int</span> M)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=Integer.MIN_VALUE;</span><br><span class="line">	<span class="keyword">int</span>[][] totalColSum = <span class="keyword">new</span> <span class="keyword">int</span>[N][M];<span class="comment">// 所有子列的和</span></span><br><span class="line">	<span class="keyword">int</span>[] subColSum=<span class="keyword">new</span> <span class="keyword">int</span>[M];<span class="comment">//子列的和</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; M; j++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (i == <span class="number">0</span>)</span><br><span class="line">				totalColSum[i][j] = matrix[i][j];</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				totalColSum[i][j] = totalColSum[i - <span class="number">1</span>][j] + matrix[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; N-<span class="number">1</span>; r++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> k = r; k &lt; N; k++) &#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>( r==<span class="number">1</span> &amp;&amp; k==<span class="number">3</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				System.out.println(<span class="string">""</span>);</span><br><span class="line">			&#125;</span><br><span class="line">				</span><br><span class="line">			<span class="comment">//构建子列</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;M;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(r==k)</span><br><span class="line">				&#123;</span><br><span class="line">					subColSum[j]=matrix[r][j];<span class="comment">//是求单行的情况</span></span><br><span class="line">				&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(r==<span class="number">0</span>)</span></span>&#123;</span><br><span class="line">					subColSum[j]=totalColSum[k][j];<span class="comment">//以0为起始行</span></span><br><span class="line">				&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">					subColSum[j]=totalColSum[k][j]-totalColSum[r-<span class="number">1</span>][j];<span class="comment">//以非0为起始行，需要减去前面的</span></span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			sum=Math.max(sum, MaxSubSum.maxSubSum(subColSum));<span class="comment">//转为最大子段和</span></span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>它最终的复杂度为O(N*N*M)</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>现有矩阵：
+0, -2, -7,  0, 3
+9,  2, -6,  2, 5
+-<span class="ruby"><span class="number">4</span>, <span class="number]]>
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）]]></title>
@@ -1381,146 +1426,6 @@ Sun
       <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
     
       <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《Effective Java》第四章：类和接口]]></title>
-    <link href="http://yyl8781697.github.io/2015/05/08/Effective%20Java/Class-And-Interface/"/>
-    <id>http://yyl8781697.github.io/2015/05/08/Effective Java/Class-And-Interface/</id>
-    <published>2015-05-08T14:39:56.000Z</published>
-    <updated>2015-06-15T01:20:08.000Z</updated>
-    <content type="html"><![CDATA[<p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
-<h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
-<p>尽可能使每个类或者成员不被外界访问。</p>
-</blockquote>
-<p><code>Java</code>的4种访问级别：</p>
-<ul>
-<li>私有的<code>private</code>：只有在申明该成员的类的内部才可以访问。</li>
-<li>包级私有的<code>package-private</code>：包内的任何类都可以访问这个成员，（<strong>这个是默认的访问级别</strong>）</li>
-<li>受保护的<code>protected</code>：子类可以访问超类的<code>protected</code>成员，<strong>但是还有这个<code>protected</code>成员类的包内的任何类也可以访问</strong>。</li>
-<li>公有的<code>public</code>：任何地方都可以访问这个成员。</li>
-</ul>
-<blockquote>
-<p>如何方法覆盖了超类中的中的一个方法，子类中的访问级别就不允许低于超类的访问级别。</p>
-</blockquote>
-<p>这样可以确保使用超类的实例的地方也可以使用子类的实例。</p>
-<blockquote>
-<p>实例域是不能公有的。</p>
-</blockquote>
-<p>其实就是建议类里面只暴露<code>final</code>修饰的变量成员，其他变量一律不要暴露。</p>
-<blockquote>
-<p>长度非零的数组总是可变的。</p>
-</blockquote>
-<p>就算你使用<code>static final</code>关键字将一个数组成员暴露出来，但是这个数组成员的内容还是可以被外部给修改的。你可以使用</p>
-<ul>
-<li>创建不可变量列表</li>
-<li>克隆这个对象</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 这里暴露的变量别看是 static final修饰的，但是数组里面的内容还是可以修改的。</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] DATA=&#123;<span class="string">"tom"</span>,<span class="string">"peter"</span>,<span class="string">"lily"</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 创建不可变量列表</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> List&lt;String&gt; VDATA=Collections.unmodifiableList(Arrays.asList(DATA));</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 直接使用克隆</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] CDATA()&#123;</span><br><span class="line">	<span class="keyword">return</span> DATA.clone();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 我更加推荐这种  这里需要将DATA的访问级别设置为private</span><br><span class="line"> *<span class="javadoctag"> @param</span> i</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">get</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> DATA[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>总而言之，你应该始终尽可能的降低可访问性，除了公有<span class="keyword">static</span> <span class="keyword">final</span>域的特殊情形之外，公有的类都不应该包含公有域，并且要确保公有<span class="keyword">static</span> <span class="keyword">final</span>所引用的对象时不可变的。
-</code></pre><h2 id="第14条：在类中使用访问方法而非公有域">第14条：在类中使用访问方法而非公有域</h2><p>这条其实就是对应上面第13条中的公有域解说那部分，除了不要暴露可变的对象外，还有：</p>
-<ul>
-<li>如果有成员需要公开，最好使用<code>getter</code>和<code>setter</code>方法。</li>
-<li>暴露不可变对象的有有域时可以在设置值时加入一些约束条件。</li>
-</ul>
-<h2 id="第15条：使可变最小化">第15条：使可变最小化</h2><blockquote>
-<p>不可变类比可变类更加易于设计、实现和使用，它们不容易出错，且更加安全。</p>
-</blockquote>
-<p>成为不可变类，要遵循下面五条规则：</p>
-<ul>
-<li>不要提供任何会修改对象状态的方法</li>
-<li>保证类不可被扩展</li>
-<li>所使用的域都是<code>final</code>的</li>
-<li>所使用的域都是私有的</li>
-<li>确保对于任何可变组件的互斥访问(如果类具有指向可变对象的域，则必须保证)。</li>
-</ul>
-<p>不可变对象的优点：</p>
-<ol>
-<li>不可变对象只有一种状态，即被创建时的状态。</li>
-<li>不可变对象本质上是线程安全的，可以被自由的共享。</li>
-<li>不可变对象还可以共享它们的内部信息。</li>
-<li>不可变对象为其他对象提供了大量的构件。</li>
-</ol>
-<p>不可变类真正唯一的缺点是：对于每个不同的值都需要一个单独的对象（这样创建对象的代价就会很高啊~-_-!!）</p>
-<blockquote>
-<p>为了确保类的不可变性，该类绝对不允许自身被子类化</p>
-</blockquote>
-<ul>
-<li><p>将类用<code>final</code>关键字标记</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 我肯定不能被继承了</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">	<span class="comment">//ToDo</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将构造设置为<code>private</code>访问权限,然后开放一个公有的静态工厂来代替构造器。（256个赞，推荐^_^）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 你看我还能被继承嘛？^_^</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 我不让外人调用</span><br><span class="line"> *<span class="javadoctag"> @param</span> str</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Test</span><span class="params">(String str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">//ToDo</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Test <span class="title">valueOf</span><span class="params">(String str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 在这里进行构造函数的调用</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> Test(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>还有：</p>
-<ul>
-<li>坚决不要为每个<code>get</code>方法编写一个相应的<code>set</code>方法。</li>
-<li>除非令人有信服的理由使会变成非<code>final</code>的，否则每个域都是<code>final</code>（恩，总之多用<code>final</code>没错）</li>
-</ul>
-<h2 id="第16条：组合优于继承">第16条：组合优于继承</h2><ul>
-<li>这里不推荐继承的主要原因是子类必须跟着其超类改变而改变，因而打破了封装性。。。-_-||</li>
-<li>不用扩展现有类，而是在新的类里面增加一个私有域，它引用现有类的一个实力。在新类中主要去实现转发功能。</li>
-</ul>
-<blockquote>
-<p>这里我想说如果是使用符合实现相同的功能将大大增加代码量。</p>
-</blockquote>
-<h2 id="第17条：要么为继承而设计并提供文档，要么禁止继承">第17条：要么为继承而设计并提供文档，要么禁止继承</h2><p>如果该类允许被继承，则最好：</p>
-<ul>
-<li>对允许被重写的类方法添加足够的文档说明，如果覆盖了这个类之后会对其他的方法产生怎么样的影响。</li>
-<li>为了能让子类进入超类的内部工作流中，超类必须通过某种形式提供适当的钩子(钩子),这种形式可以是精心得选择的受保护的类，也可以是受保护的域。</li>
-</ul>
-<h2 id="第18条：接口优于抽象类">第18条：接口优于抽象类</h2><blockquote>
-<p>抽象类只能被单继承，而接口则没有此约束。</p>
-</blockquote>
-<p>使用接口还有以下几个优势：</p>
-<ul>
-<li>现有的类可以很容易实现被更新，以实现新的接口。<br>  只需要定义一个新的接口添加相关方法的声明，然后在该类中<code>implements</code>该接口并实现那些方法即可。</li>
-<li>接口是定义mixin（混合类型）的理想选择。<br>  <code>mixin</code>是指类除了实现它的基本类型之外，还可以实现这个<code>mixin</code>类型，以表明它提供了某种可供选择的行为，比如，<code>Comparable</code>是一个<code>mixin</code>接口.</li>
-<li>接口允许我们构造非层次接口的类型框架（因为接口可以多继承啊）。</li>
-</ul>
-<h2 id="第19条：接口只用于定义类型">第19条：接口只用于定义类型</h2><blockquote>
-<p>接口应该只被用来定义类型，它们不应该被用来导出常量（常量接口是一种不被推荐的用法）。</p>
-</blockquote>
-<h2 id="第20条：类层次优于标签类">第20条：类层次优于标签类</h2><p>什么是标签类？看下面那个类就知道了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Figure</span></span>&#123;</span><br><span class="line">	<span class="keyword">enum</span> Shape&#123;RECTANGLE,CIRCLE&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">final</span> Shape shape;<span class="comment">//当前这个类的标志</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">double</span> length;</span><br><span class="line">	<span class="keyword">double</span> width;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">double</span> radius;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//表示圆</span></span><br><span class="line">	Figure(<span class="keyword">double</span> radius)&#123;</span><br><span class="line">		<span class="keyword">this</span>.shape=Shape.CIRCLE;</span><br><span class="line">		<span class="keyword">this</span>.radius=radius;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//表示矩形</span></span><br><span class="line">	Figure(<span class="keyword">double</span> length,<span class="keyword">double</span> width)&#123;</span><br><span class="line">		<span class="keyword">this</span>.shape=Shape.RECTANGLE;</span><br><span class="line">		<span class="keyword">this</span>.length=length;</span><br><span class="line">		<span class="keyword">this</span>.width=width;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//求面积</span></span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">area</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">switch</span>(<span class="keyword">this</span>.shape)<span class="comment">//只能使用switch类判断</span></span><br><span class="line">		&#123;</span><br><span class="line">		<span class="keyword">case</span> RECTANGLE:<span class="keyword">return</span> length*width;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> CIRCLE:<span class="keyword">return</span> Math.PI*(radius*radius);<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:<span class="keyword">throw</span> AssertionError();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这个类里面其实有求圆的面积和矩形的面积，用一个shape标志类区别，但是这样的类<strong>过于冗长，容易出错，并且效率低下</strong>(这个一般人都知道吧？)<br><br>那如何使用类层次类实现上述功能？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类层次的基类</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Figure</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">area</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//圆形类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">extends</span> <span class="title">Figure</span></span>&#123;</span><br><span class="line">	<span class="keyword">final</span> <span class="keyword">double</span> radius;</span><br><span class="line">	</span><br><span class="line">	Circle(<span class="keyword">double</span> radius)&#123;</span><br><span class="line">		<span class="keyword">this</span>.radius=radius;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">area</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> Math.PI*(radius*radius);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//矩形类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Figure</span></span>&#123;</span><br><span class="line">	<span class="keyword">final</span> <span class="keyword">double</span> length;</span><br><span class="line">	<span class="keyword">final</span> <span class="keyword">double</span> width;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//表示矩形</span></span><br><span class="line">	Rectangle(<span class="keyword">double</span> length,<span class="keyword">double</span> width)&#123;</span><br><span class="line">		<span class="keyword">this</span>.length=length;</span><br><span class="line">		<span class="keyword">this</span>.width=width;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">area</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.length*<span class="keyword">this</span>.width;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用类层次类完成上述功能是不是其结构明显简介了许多，并且它还极其容易扩展：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正方形</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Rectangle</span></span>&#123;</span><br><span class="line">	Square(<span class="keyword">double</span> length,<span class="keyword">double</span> width)&#123;</span><br><span class="line">		<span class="keyword">super</span>(length,width);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>所以，标签类很少有适用的适合，当你想要编写一个包含显式包含标签域的类，就应该考虑使用类层次来代替该类。</p>
-</blockquote>
-<h2 id="第21条：用函数对象表示策略">第21条：用函数对象表示策略</h2><blockquote>
-<p><code>Java</code>里面无法适用函数指针、代理，lambda表达式，当<code>Java</code>需要实现将一个方法作为参数传入方法的功能时往往使用类引用来完成。</p>
-</blockquote>
-<p>它往往是：</p>
-<p>1.定义一个有某个特定方法的对象<code>A</code>。<br>2.<code>B/C/D…</code>去继承A实现该特定方法。<br>3.在方法参数作为传参的功能中去传递对象<code>A</code>，每次都是执行对象<code>A</code>的特定方法。<br>4.在调用该功能方法使用<code>A a=new B/C/D()</code>这种方法实例化并传入。</p>
-<blockquote>
-<p>注：该方式最有代表性的就是<code>java.util.Comparator</code>类的使用。</p>
-</blockquote>
-<h2 id="第22条：优先考虑静态成员类">第22条：优先考虑静态成员类</h2><p>嵌套类是指被定义在另一个类的内部类，它有四种写法：</p>
-<ul>
-<li>静态成员类<br>  可以使用<code>外围类名.静态成员类</code>的形式来进行访问，它可以直接方法外围里面的静态成员。</li>
-<li>非静态成员类<br>  可以使用<code>外围类的实例名.非静态成员类</code>的形式来进行访问，它可以方法外围类实例里面的方法。例如<code>Adapter</code>类。</li>
-<li>匿名类<br>  匿名类可以直接使用没不需要被声明，但是他不能为<code>instantceof</code>，无法将他们实例化等。例如<code>Runnabel</code>、<code>Thread</code>时直接传递的实例。</li>
-<li><p>局部类<br>  （没见过），它可以在“任何声明局部变量”的地方都可以声明局部类，也遵循同样的作用域规则。</p>
-<p>  每种嵌套类都有自己的用途，但是静态成员类相对来说开销较少，功能交全，比较推荐。</p>
-</li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
-<h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
-<p>尽可能使每个类或者成员不被外界访问。</p>
-</blo]]>
-    </summary>
-    
-      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
-    
-      <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
     
   </entry>
   
