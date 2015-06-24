@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-06-23T13:03:31.000Z</updated>
+  <updated>2015-06-24T11:26:38.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,100 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[《Effective Java》第九章：异常]]></title>
+    <link href="http://yyl8781697.github.io/2015/06/24/Effective%20Java/Exception/"/>
+    <id>http://yyl8781697.github.io/2015/06/24/Effective Java/Exception/</id>
+    <published>2015-06-23T23:30:23.000Z</published>
+    <updated>2015-06-24T11:26:38.000Z</updated>
+    <content type="html"><![CDATA[<p>充分发挥异常的优点，可以提高程序的可读性、可靠性和可维护性。如果使用不当，它们也会带来负面影响。</p>
+<h2 id="第57条：只针对异常的情况下使用异常">第57条：只针对异常的情况下使用异常</h2><p>先看下如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">		range[i++].climd();</span><br><span class="line">&#125;<span class="keyword">catch</span>(ArrayIndexOutOfBoundsException e)</span><br><span class="line">&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此代码看的如此蛋疼，使用异常来跳过数组越界，其实完全可以用下面的代码代替<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Mountain m:range)</span><br><span class="line">			m.climb();</span><br></pre></td></tr></table></figure></p>
+<p>简单明了（我想上面的例子大家都能看出孰优孰劣）<br>不推荐第一种写法的原因是：</p>
+<ol>
+<li>因为异常机制的设计初衷是用于不正常情形，所以很少会有<code>JVM</code>实现试图对它们进行优化，使得与显示的测试一样快速</li>
+<li>把代码放在<code>try-catch</code>块中反而阻止了现代<code>JVM</code>实现本来可能要执行的某些特征优化</li>
+<li>对数组进行遍历的标准模式并不会导致冗余检查。有些现代的<code>JVM</code>实现会将它们优化掉</li>
+</ol>
+<blockquote>
+<p>所以，异常应该只用于异常的情况下，它们永远不应该用于正常的控制流</p>
+</blockquote>
+<h2 id="第58条：对可恢复的情况使用首检异常，对编程错误使用运行时异常">第58条：对可恢复的情况使用首检异常，对编程错误使用运行时异常</h2><p>Java提供了三种可抛出的结构：</p>
+<ol>
+<li>受检的异常(checked exception)—<code>Exception</code>的子类</li>
+<li>运行时异常(run-time exception)—<code>RuntimeException</code>的子类</li>
+<li>错误(error)—<code>Error</code>的子类</li>
+</ol>
+<p>如果期望调用者能够适当得恢复，对于这种情况应该使用受检的异常。通过抛出受检的异常，强迫调用者在一个<code>catch</code>子句中处理该异常，或者将其传播出去。</p>
+<p>对于非受检的异常，往往就是属于不可恢复的情形，继续执行下去有害无益。</p>
+<ul>
+<li>大多数运行时异常都表示前提违例，所谓的前提违例是指没有遵循API中规范建立的约定。例如数组访问的约定指明了下标值必须在零到数组长度之间，不然就会抛<code>ArrayIndexOutBoundsException</code>。</li>
+<li>按照惯例，错误往往是表示资源不足、约束失败，或者其他程序无法继续执行的条件。</li>
+</ul>
+<p>总而言之，对于可恢复的情况，使用受检的异常，对于程序错误，使用运行时异常。</p>
+<h2 id="第59条：避免不必须要使用受检的异常">第59条：避免不必须要使用受检的异常</h2><blockquote>
+<p>我只想对作者说，wtf，本条都被你翻译得看不懂了-_-</p>
+</blockquote>
+<p>受检的异常虽好，但是千万别滥用，由于每抛出一个受检的异常，使用者都需要去<code>catch</code>它或者再次抛出去，所以如果能避免这种异常则应该尽量避免，这个时候你可以考虑重构。<br>比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">	obj.action(args);</span><br><span class="line">&#125;<span class="keyword">catch</span>(TheCheckedException e)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//处理异常</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以重构为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(obj.actionpermitted(args))<span class="comment">//进行相关处理检查</span></span><br><span class="line">&#123;</span><br><span class="line">	obj.action(args)</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="comment">//处理异常</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然这个重构只是一个例子，这种重构也并不是万能的。</p>
+<h2 id="第60条：优先使用标准的异常">第60条：优先使用标准的异常</h2><p>本条的意思是就算你再牛，也还是建议使用标准的异常而不是自定义的异常，除非标准的异常真的无法满足你的需求，因为：</p>
+<ul>
+<li>标准的异常已经为广大程序猿熟知</li>
+<li>可以使你的API更加易于学习和使用</li>
+<li>异常类越少，装在这些类的时间开销也越小(这条是不是有点牵强了，一个大项目中应该不会因为几个自定义的异常类而导致性能差吧-_-)</li>
+</ul>
+<p>下面对几个最常使用的异常：</p>
+<ul>
+<li><code>IllegalAargumentException</code>：非<code>null</code>参数值不正确</li>
+<li><code>IllegalStateException</code>：对于方法调用而言，对象状态不合适</li>
+<li><code>NullPointException</code>：在禁止使用<code>null</code>的情况下参数值为<code>null</code></li>
+<li><code>IndexOutOfBoundsException</code>：下标参数值越界</li>
+<li><code>ConcurrentModificationException</code>：在禁止冰法修改的情况下，检测到对象的并发修改（在迭代器里面修改了原始数据的值就会抛）</li>
+<li><code>UnsupportedOperationException</code>：对象不支持用户请求的方法</li>
+</ul>
+<p>这里在使用具体异常中并有精确的标准，只是在选取的时候选一个最合适的^_^</p>
+<h2 id="第61条：抛出与抽象相对应的异常">第61条：抛出与抽象相对应的异常</h2><p>在调用高层的API时不应该抛出低层的异常，否则会使人不知所措，同时会暴露低层里面的相关实现细节，这个时候就需要异常转译，比如以<code>AbstractSequentialList</code><br>实现了<code>List</code>这个接口，它里面的一个<code>get</code>方法就进行了异常转译：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Returns the element at the specified position in this list.</span><br><span class="line"> *</span><br><span class="line"> * &lt;p&gt;This implementation first gets a list iterator pointing to the</span><br><span class="line"> * indexed element (with &lt;tt&gt;listIterator(index)&lt;/tt&gt;).  Then, it gets</span><br><span class="line"> * the element using &lt;tt&gt;ListIterator.next&lt;/tt&gt; and returns it.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @throws</span> IndexOutOfBoundsException &#123;@inheritDoc&#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> listIterator(index).next();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchElementException exc) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"Index: "</span>+index);<span class="comment">//这里抛出了更加高层的异常</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然时候是希望能看到低层的异常，这样可以用于调试，那么你可以使用异常链：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//...to something</span></span><br><span class="line">&#125;<span class="keyword">catch</span>(LowerLevelException cause)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//这里抛出高层的异常中会带有低层异常的信息</span></span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> HighLevelException(cause)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>异常转译和异常链也不能被滥用，如果可能，处理来自低层异常的最好做法就是在调用低层方法之前确保它们会执行成功，从而避免它们抛出异常，比如在执行低层方法之前先对需要传递参数的检查就是一个好的方法。</p>
+<h2 id="第62条：每个方法抛出的异常都要有文档">第62条：每个方法抛出的异常都要有文档</h2><p>这条的名称就是最好的建议^_^</p>
+<ul>
+<li>使用要单独的声明受检的异常，并且利用JavaDoc的@throw标记，准确的记录下抛出异常的每个条件（个人感觉非常重要，用这种文档的API就会非常的舒心）</li>
+<li>使用JavaDoc的@throws标签记录下一个方法可能抛出的一个未受检异常，但是不要使用throws关键字将未受检的异常包含在方法的声明中（注意@throws标签和throws关键字的区别）</li>
+<li>如果一个类中许多方法出于同样的原因而抛出同一个异常，在该类的文档注释中对这个异常建立文档，而不是在每个方法上都去标注（这条不错^_^）</li>
+</ul>
+<h2 id="第63条：在细节消息中包含能捕获失败的信息">第63条：在细节消息中包含能捕获失败的信息</h2><p>异常数据中最有用的是那些导致异常的硬数据，以<code>IndexOutOfBoundsException</code>为例，该异常抛出时就应该有正确的上界，下界以及没有落入界内的下标值，这样就可以非常轻松的让开发人员了解异常出现的原因以及如何去fix它.</p>
+<p>为了确保异常在细节描述中包含足够能捕获失败的信息，最好的方法是在异常的构造器而不是字符串细节中引用这些消息（因为这些字符串细节其实并没有什么卵用），比如<code>IndexOutOfBoundsException</code>就包含了具体参数的构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">IndexOutOfBoundsException</span><span class="params">(<span class="keyword">int</span> lowerBound,<span class="keyword">int</span> upperBound,<span class="keyword">int</span> index)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(<span class="string">"Lower Bound:"</span>+lowerBound+</span><br><span class="line">			<span class="string">",Upper bound:"</span>+upperBound+</span><br><span class="line">			<span class="string">",Index:"</span>+index);</span><br><span class="line">			</span><br><span class="line">	<span class="keyword">this</span>.lowerBound=lowerBound;</span><br><span class="line">	<span class="keyword">this</span>.upperBound=upperBound;</span><br><span class="line">	<span class="keyword">this</span>.index=index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种构造函数相对于接收字符串类型的构造函数来说更加易于描述异常出现的情况。</p>
+<blockquote>
+<p>但是我看了JDK源码，<code>IndexOutOfBoundsException</code>并没有这个构造函数啊-_-</p>
+</blockquote>
+<h2 id="第64条：努力使失败保持原子性">第64条：努力使失败保持原子性</h2><p>当对象抛出异常之后，通常我们期望这个对象仍然保持在一个定义良好的可用状态之中。一般而言，失败的而方法调用应该是对象保持在被调用之前的状态，具有这种属性的方法被称为具有失败原子性。</p>
+<p>如果对象时不可变的，那么在方法失败之后该原子性一定还是保持的。<br>如果对象时可变的，就有如下四种方法可以保持原子性：</p>
+<ol>
+<li>在执行操作之前检查参数的有效性</li>
+<li>调整计算处理过程中的顺序，是的任何可能会失败的计算部分在对象被修改之前发生</li>
+<li>编写一段回复代码，有它来拦截操作过程中发生的失败，以及使对象回到到操作开始之前的状态上（较为麻烦，但可能是最有效的）</li>
+<li>在对象的一份临时拷贝上执行操作，操作完成之后再用临时拷贝代替对象的内容（Collections.sort就是这么干的）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; list)</span> </span>&#123;</span><br><span class="line">    Object[] a = list.toArray();<span class="comment">//拷贝一份</span></span><br><span class="line">    Arrays.sort(a);<span class="comment">//排序</span></span><br><span class="line">    ListIterator&lt;T&gt; i = list.listIterator();<span class="comment">//再替换</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;a.length; j++) &#123;</span><br><span class="line">        i.next();</span><br><span class="line">        i.set((T)a[j]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>作为方法规范的一部分，产生的任何异常都应该让对象保持在该方法调用之前的状态。</p>
+<h2 id="第65条：不要忽略异常">第65条：不要忽略异常</h2><blockquote>
+<p>好比将火警的信号器关掉了，当真正发生火灾的时候，就没有人能看到火警信号了，这结果也许是灾难性的。(形象^_^)</p>
+</blockquote>
+<p>如果一定要忽略异常，你至少要在<code>catch</code>块中解释为什么可以忽略。<br>还有在关闭<code>FileInputStream</code>的时候，你可以忽略它的异常，因为你还没有改变文件的状态，因此不必执行任何回复动作。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>充分发挥异常的优点，可以提高程序的可读性、可靠性和可维护性。如果使用不当，它们也会带来负面影响。</p>
+<h2 id="第57条：只针对异常的情况下使用异常">第57条：只针对异常的情况下使用异常</h2><p>先看下如下代码：<br><figure class="hig]]>
+    </summary>
+    
+      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
+    
+      <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[最大子矩阵和的问题]]></title>
@@ -1382,50 +1476,6 @@ Sun
       <category term="Vim" scheme="http://yyl8781697.github.io/tags/Vim/"/>
     
       <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[记录在Hadoop2.2.0中剔除一个DataNode]]></title>
-    <link href="http://yyl8781697.github.io/2015/05/10/Hadoop/Hadoop-Remove-DataNode/"/>
-    <id>http://yyl8781697.github.io/2015/05/10/Hadoop/Hadoop-Remove-DataNode/</id>
-    <published>2015-05-10T14:33:45.000Z</published>
-    <updated>2015-06-21T02:51:38.000Z</updated>
-    <content type="html"><![CDATA[<p>最近在<code>Haddop</code>环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现<strong>Job Failed</strong>的问题，看日志就是其中一台机器<strong>Connect Timeout</strong>了，在WebUI上点击这台机器IP的各种UI界面也是开不了，<code>HDFS</code>还连不上-_-|，之前也遇到过这种问题，解决方法简单粗暴：</p>
-<ol>
-<li>重启<code>Haddop</code>集群：一般重启一下还正好了</li>
-</ol>
-<ul>
-<li>停<code>Haddop</code>集群，然后重启每台物理机，然后再开启<code>Hadoop</code>集群：这么做一般问题就可以解决-_-|</li>
-<li>还有一种就是直接去<code>Linux</code>上删除<code>dfs</code>文件目录，重新初始化<code>HDFS</code>：这么做效果虽达到了，但是。。。向<code>HDFS</code>传数据还很久一段时间。。</li>
-</ul>
-<p>今天第1、2种方法试了都不行，第三种方法也太麻烦了（集群有15台<code>DataNode</code>+1台<code>NameNode</code>，重新初始化每次都要去每个机器上删除文件夹再新建），由于时间受限，就想尝试去动态的直接把那个老是异常的节点去掉得了，赶紧查了下面一些资料：</p>
-<ul>
-<li><a href="http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527" target="_blank" rel="external">http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527</a></li>
-<li><a href="http://www.itpub.net/thread-1866448-1-1.html" target="_blank" rel="external">http://www.itpub.net/thread-1866448-1-1.html</a></li>
-<li><a href="http://www.programgo.com/article/9436398293/" target="_blank" rel="external">http://www.programgo.com/article/9436398293/</a></li>
-</ul>
-<p>按参考上得现在hdfs-site.xml中添加：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">property</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!--要摘除的datanode--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.hosts.exclude<span class="tag">&lt;/<span class="title">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">value</span>&gt;</span>/home/nbu/hadoop2.2.0/etc/hadoop/exclude<span class="tag">&lt;/<span class="title">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">property</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>然后自己再相应目录下新建exclude文件并添加我要去掉的节点IP<br><br>再执行执行<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfsadmin -refreshNodes</span><br></pre></td></tr></table></figure></p>
-<p>然后再需要摘除节点上去执行<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop-daemon.sh stop datanode</span><br></pre></td></tr></table></figure></p>
-<p>接下来就可以在WebUI中看到我要去掉节点的状态为<strong>Decmission in Progress</strong></p>
-<p><img src="/img/hadoop-remove-datanode/process.jpg" alt=""></p>
-<p>他们都说这个状态是正在将摘除节点的数据拷贝到其他可用节点，拷贝完之后不会变为我也就信了，可是我过了好几分钟我的状态一直是这个，当前可用集群的节点数量也是大于拷贝数量的，但是Last Contact的值一直在增加，不知道是不是那台机器上出问题了，然后与<code>NameNode</code>的心跳不正常导致的。十几分钟之后，这个节点没有出现在<code>Live Nodes</code>中了，但是他变为<code>Dead Node</code>里边去了，这回估计是直接超时了。<br><br><img src="/img/hadoop-remove-datanode/dead.jpg" alt=""><br>那怎么办？好像动态移除失败了？没辙，直接去<code>NameNode</code>机器上将<code>slaves</code>文件中将那个摘除的IP去掉，拷贝到各个<code>DataNode</code>上去。然后再重新启动<code>Hadoop</code>，这回重启了之后集群的hdfs上的数据皆正常^_^，那个需要移除的节点也不在集群中了，我又可以欢快得跑程序了。</p>
-<blockquote>
-<p>不知道刚刚摘除的过程哪一步错了，不过最终还是达到我需要的摘除目的^_^，下次有时间再好好尝试尝试~</p>
-</blockquote>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>最近在<code>Haddop</code>环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现<strong>Job Failed</strong>的问题，看日志就是其中一台机器<strong>Connect Timeout</strong>了，在WebUI上点击这]]>
-    </summary>
-    
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
-    
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
     
   </entry>
   
