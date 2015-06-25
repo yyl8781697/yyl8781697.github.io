@@ -4,31 +4,22 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Best Time to Buy and Sell Stock II | Kubi Code&#39;Blog</title>
+    <title>《Effective Java》第十章：并发 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="LeetCode地址：https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
-
-Problem:Say you have an array for which the ith element is the price of a given stock on day i.
-Design an algorithm to fin">
+    <meta name="description" content="第66条：同步访问共享的可变数据Reading…. ^_^">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Best Time to Buy and Sell Stock II">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/index.html">
+<meta property="og:title" content="《Effective Java》第十章：并发">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/25/Effective Java/Concurrent/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="LeetCode地址：https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
-
-Problem:Say you have an array for which the ith element is the price of a given stock on day i.
-Design an algorithm to fin">
+<meta property="og:description" content="第66条：同步访问共享的可变数据Reading…. ^_^">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Best Time to Buy and Sell Stock II">
-<meta name="twitter:description" content="LeetCode地址：https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
-
-Problem:Say you have an array for which the ith element is the price of a given stock on day i.
-Design an algorithm to fin">
+<meta name="twitter:title" content="《Effective Java》第十章：并发">
+<meta name="twitter:description" content="第66条：同步访问共享的可变数据Reading…. ^_^">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +80,14 @@ Design an algorithm to fin">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/" title="LeetCode-Best Time to Buy and Sell Stock II" itemprop="url">LeetCode-Best Time to Buy and Sell Stock II</a>
+      <a href="/2015/06/25/Effective Java/Concurrent/" title="《Effective Java》第十章：并发" itemprop="url">《Effective Java》第十章：并发</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-04T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-04</time>
+    <time datetime="2015-06-25T02:41:45.000Z" itemprop="datePublished"> 发表于 2015-06-25</time>
     
   </p>
 </header>
@@ -105,20 +96,11 @@ Design an algorithm to fin">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第66条：同步访问共享的可变数据"><span class="toc-number">1.</span> <span class="toc-text">第66条：同步访问共享的可变数据</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" rel="external">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
-</blockquote>
-<p>Problem:<br>Say you have an array for which the <em>i</em><sup>th</sup> element is the price of a given stock on day <em>i</em>.</p>
-<p>Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,</span><br><span class="line">            leftValue=<span class="number">0</span>,</span><br><span class="line">            length=prices.length,</span><br><span class="line">            state=-<span class="number">1</span>;<span class="comment">//-1=buy,1=sale</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(state==-<span class="number">1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span>&lt;length &amp;&amp; prices[i]&lt;prices[i+<span class="number">1</span>])</span><br><span class="line">                &#123;</span><br><span class="line">                    leftValue=prices[i];</span><br><span class="line">                    state=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>((i==length-<span class="number">1</span> &amp;&amp; prices[i]&gt;leftValue) || prices[i]&gt;prices[i+<span class="number">1</span>])</span><br><span class="line">                &#123;</span><br><span class="line">                    ret+=prices[i]-leftValue;</span><br><span class="line">                    state=-<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
+		<h2 id="第66条：同步访问共享的可变数据">第66条：同步访问共享的可变数据</h2><p>Reading…. ^_^</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -126,13 +108,13 @@ Design an algorithm to fin">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -141,7 +123,7 @@ Design an algorithm to fin">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/" data-title="LeetCode-Best Time to Buy and Sell Stock II | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/06/25/Effective Java/Concurrent/" data-title="《Effective Java》第十章：并发 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -154,19 +136,11 @@ Design an algorithm to fin">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/07/05/LeetCode/LeetCode-Linked-List-Cycle/" title="LeetCode-Linked List Cycle">
-  <strong>上一篇：</strong><br/>
-  <span>
-  LeetCode-Linked List Cycle</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/"  title="LeetCode-Best Time to Buy and Sell Stock">
+<a href="/2015/06/24/Effective Java/Exception/"  title="《Effective Java》第九章：异常">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-Best Time to Buy and Sell Stock
+ <span>《Effective Java》第九章：异常
 </span>
 </a>
 </div>
@@ -175,7 +149,7 @@ Design an algorithm to fin">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/" data-title="LeetCode-Best Time to Buy and Sell Stock II" data-url="http://yyl8781697.github.io/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/"></div>
+	<div class="ds-thread" data-thread-key="2015/06/25/Effective Java/Concurrent/" data-title="《Effective Java》第十章：并发" data-url="http://yyl8781697.github.io/2015/06/25/Effective Java/Concurrent/"></div>
 </section>
 
 
@@ -185,7 +159,7 @@ Design an algorithm to fin">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第66条：同步访问共享的可变数据"><span class="toc-number">1.</span> <span class="toc-text">第66条：同步访问共享的可变数据</span></a></li></ol>
  
   </div>
 

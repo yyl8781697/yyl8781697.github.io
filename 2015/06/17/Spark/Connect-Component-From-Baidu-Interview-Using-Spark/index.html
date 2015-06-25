@@ -11,22 +11,16 @@
     
 
     
-    <meta name="description" content="前两天百度面试被虐，对于二面的最后一题，今晚把它用代码实现了一下，幸好当初的回答是正确地^_^
-
-题目在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC">
+    <meta name="description" content="题目在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC就是一个用户而已，但是百度的数据量很大，现需要找出这批大量数据中的所有作弊者，请使用分布式的方法来">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Spark求解大图的连通组件（百度面试题）">
 <meta property="og:url" content="http://yyl8781697.github.io/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="前两天百度面试被虐，对于二面的最后一题，今晚把它用代码实现了一下，幸好当初的回答是正确地^_^
-
-题目在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC">
+<meta property="og:description" content="题目在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC就是一个用户而已，但是百度的数据量很大，现需要找出这批大量数据中的所有作弊者，请使用分布式的方法来">
 <meta property="og:image" content="/img/Connect-Compoent/result.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Spark求解大图的连通组件（百度面试题）">
-<meta name="twitter:description" content="前两天百度面试被虐，对于二面的最后一题，今晚把它用代码实现了一下，幸好当初的回答是正确地^_^
-
-题目在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC">
+<meta name="twitter:description" content="题目在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC就是一个用户而已，但是百度的数据量很大，现需要找出这批大量数据中的所有作弊者，请使用分布式的方法来">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -107,10 +101,7 @@
 		
 		</div>
 		
-		<blockquote>
-<p>前两天百度面试被虐，对于二面的最后一题，今晚把它用代码实现了一下，幸好当初的回答是正确地^_^</p>
-</blockquote>
-<h2 id="题目">题目</h2><p>在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：<br>cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC就是一个用户而已，但是百度的数据量很大，现需要找出这批大量数据中的所有作弊者，请使用分布式的方法来求解此问题（可以使用<code>Hadoop</code>,<code>Spark</code>或者其他的任何一种平台）</p>
+		<h2 id="题目">题目</h2><p>在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：<br>cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC就是一个用户而已，但是百度的数据量很大，现需要找出这批大量数据中的所有作弊者，请使用分布式的方法来求解此问题（可以使用<code>Hadoop</code>,<code>Spark</code>或者其他的任何一种平台）</p>
 <blockquote>
 <p>当时面试官也说了这个其实就是找连通子图问题</p>
 </blockquote>
@@ -238,7 +229,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>8</sup></a></li>
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>9</sup></a></li>
 		  
 		
 		  
@@ -315,7 +306,7 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>17</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
 			
 		
 			
