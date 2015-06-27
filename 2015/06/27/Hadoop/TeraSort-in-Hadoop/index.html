@@ -1,0 +1,647 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>TeraSort在Hadoop中的非常非常非常简单的实现 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="关于TeraSort的思想其实是非常简单的，但是查了网上好多资料，感觉把它的实现复杂化了（指的在Hadoop中），它们要自定义InputFormat，RecordReader等，其实我想说，实现一个TeraSort根本不需要这么麻烦，所以本文就将实现一个非常简单、非常简单、非常简单的实现记录下来，额，重要的事情说三遍。^_^
+
+TeraSort简介1TB排序通常用于衡量分布式数据处理框架的数据处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TeraSort在Hadoop中的非常非常非常简单的实现">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/27/Hadoop/TeraSort-in-Hadoop/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="关于TeraSort的思想其实是非常简单的，但是查了网上好多资料，感觉把它的实现复杂化了（指的在Hadoop中），它们要自定义InputFormat，RecordReader等，其实我想说，实现一个TeraSort根本不需要这么麻烦，所以本文就将实现一个非常简单、非常简单、非常简单的实现记录下来，额，重要的事情说三遍。^_^
+
+TeraSort简介1TB排序通常用于衡量分布式数据处理框架的数据处理">
+<meta property="og:image" content="/img/TeraSort-in-Hadoop/shuffle.gif">
+<meta property="og:image" content="/img/TeraSort-in-Hadoop/sortInOneReduce.jpg">
+<meta property="og:image" content="/img/TeraSort-in-Hadoop/sortInMulReduce.jpg">
+<meta property="og:image" content="/img/TeraSort-in-Hadoop/result1.png">
+<meta property="og:image" content="/img/TeraSort-in-Hadoop/result2.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TeraSort在Hadoop中的非常非常非常简单的实现">
+<meta name="twitter:description" content="关于TeraSort的思想其实是非常简单的，但是查了网上好多资料，感觉把它的实现复杂化了（指的在Hadoop中），它们要自定义InputFormat，RecordReader等，其实我想说，实现一个TeraSort根本不需要这么麻烦，所以本文就将实现一个非常简单、非常简单、非常简单的实现记录下来，额，重要的事情说三遍。^_^
+
+TeraSort简介1TB排序通常用于衡量分布式数据处理框架的数据处理">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/" title="TeraSort在Hadoop中的非常非常非常简单的实现" itemprop="url">TeraSort在Hadoop中的非常非常非常简单的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-27T10:26:12.000Z" itemprop="datePublished"> 发表于 2015-06-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TeraSort简介"><span class="toc-number">1.</span> <span class="toc-text">TeraSort简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TeraSort实现"><span class="toc-number">2.</span> <span class="toc-text">TeraSort实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>关于TeraSort的思想其实是非常简单的，但是查了网上好多资料，感觉把它的实现复杂化了（指的在<code>Hadoop</code>中），它们要自定义<code>InputFormat</code>，<code>RecordReader</code>等，其实我想说，实现一个TeraSort根本不需要这么麻烦，所以本文就将实现一个非常简单、非常简单、非常简单的实现记录下来，额，重要的事情说三遍。^_^</p>
+</blockquote>
+<h2 id="TeraSort简介">TeraSort简介</h2><pre><code><span class="number">1</span>TB排序通常用于衡量分布式数据处理框架的数据处理能力。TeraSort是Hadoop中的的一个排序作业，在<span class="number">2008</span>年，Hadoop在<span class="number">1</span>TB排序基准评估中赢得第一名，耗时<span class="number">209</span>秒。<span class="comment">(其实现在在TeraSort上Spark已将Hadoop甩在后面-_-)</span>
+</code></pre><p>在看排序之前，先来看一下Map-Reduce的一张非常经典的流程图：<br><img src="/img/TeraSort-in-Hadoop/shuffle.gif" alt="Map-Reduce流程图"></p>
+<p>从图种可以了解到Map-Reduce执行的整个过程中会进行两次排序，一次是在Map端的shuffle，另一次是在Reduce端的shuffle，TeraSort正好是利用这种特性来进行排序</p>
+<blockquote>
+<p>注意，这里的排序仅仅是针对<code>key</code>的。</p>
+</blockquote>
+<p>假如现在我只有一个reduce，那么根据上面描述的我们知道在这里reduce里面得到的值都是有序的，这是使用<code>Hadoop</code>最简单的排序方法，执行流程如下图：<br><img src="/img/TeraSort-in-Hadoop/sortInOneReduce.jpg" width="500px"></p>
+<p>这样的实现方式虽然便捷，但是丢失了排序在reduce端的并行度，那么有没有其他更好的方法呢？<br>先来想象一下快速排序的思想，一个基准值的左侧都是小于该值，右侧都是大于基准值，也就是说左侧都是小于右侧的，那如果左侧都是有序的，并且右侧也是有序的，那就可以说整个序列是有序的，把这个思想放到Hadoop中去（一个reduce输出一个partition），我们已经知道二次排序之后得到的每个partition中的数据都是被排序过的，那假如对于两个任意的元素有partiton<sub>i</sub>&lt;partiton<sub>i+1</sub>，那我们就可以说partiton<sub>(i,i+1)</sub>是有序的，把这个推广到全局的partition，就是TeraSort了</p>
+<p><img src="/img/TeraSort-in-Hadoop/sortInMulReduce.jpg" alt=""></p>
+<h2 id="TeraSort实现">TeraSort实现</h2><p>所以，把TeraSort方法用<code>Hadoop</code>来实现，必须要额外做的就是采样和数据划分。</p>
+<ul>
+<li>采样：从输入数据中采取一定的样本比例，将这些样本进行排序，然后按reduce得数量进行夸区间取值，作为分区的划分标志</li>
+<li>数据划分：在采样之后有的划分标志之后，根据划分标志对数据进行分区，确保partiton<sub>i</sub>&lt;partiton<sub>i+1</sub></li>
+</ul>
+<p>例如：当前的输入数据为3，1，6，7，9，5，4，13，2，假设使用3个reduce<br>现采样的数据为3，1，6，7，9，5,则最终计算的划分标志就是3,7<br>也就是说小于等于3的落入第一个分区中，否则小于等于7的落入第二个分区中，其他的落入第三个放入中，则形成<br>{3,1,2},{6,7,5,4},{9,13}，各个分区进行排序之后为{1,2,3},{4,5,6,7},{9,13}，<br>就完成了最终的排序</p>
+<p>好，现在来看这个很简单的程序代码：<br>首先，我们需要实现自己的采样：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 排序之前的采样器</span><br><span class="line"> * 先采样 再排序  再根据reducer数目取值</span><br><span class="line"> *<span class="javadoctag"> @author</span> root</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TearSortSampler</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 分片采样数据的路径</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Path SPLIT_SAMPLE_PATH=<span class="keyword">new</span> Path(<span class="string">"/tmp/splitSample"</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 进行采样  并且会将采样数据放入路径为SPLIT_SAMPLE_PATH的hdfs中</span><br><span class="line">	 *<span class="javadoctag"> @param</span> job</span><br><span class="line">	 *<span class="javadoctag"> @param</span> sampleNum</span><br><span class="line">	 *<span class="javadoctag"> @throws</span> Exception</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sampler</span><span class="params">(Job job,<span class="keyword">int</span> sampleNum)</span> <span class="keyword">throws</span> Exception</span><br><span class="line">	</span>&#123;</span><br><span class="line">		</span><br><span class="line">		InputFormat tif=<span class="keyword">new</span> TextInputFormat();</span><br><span class="line">		</span><br><span class="line">		List&lt;InputSplit&gt; inputSplits=tif.getSplits(job);</span><br><span class="line">		List&lt;Integer&gt; sampleList=<span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">		FileSystem fs=FileSystem.get(job.getConfiguration());</span><br><span class="line">		<span class="keyword">int</span> recordsPerSample=sampleNum/inputSplits.size();<span class="comment">//每个分片的采样数据</span></span><br><span class="line">		<span class="comment">//按分片读取样本</span></span><br><span class="line">		<span class="keyword">for</span>(InputSplit split:inputSplits)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">int</span> sn=<span class="number">0</span>;</span><br><span class="line">			TaskAttemptContext context = <span class="keyword">new</span> TaskAttemptContextImpl(</span><br><span class="line">		              job.getConfiguration(), <span class="keyword">new</span> TaskAttemptID());</span><br><span class="line">			RecordReader&lt;Object,Text&gt; reader=tif.createRecordReader(split, context);</span><br><span class="line">			Text text=<span class="keyword">new</span> Text();</span><br><span class="line">			reader.initialize(split, context);</span><br><span class="line">			<span class="keyword">while</span>(reader.nextKeyValue())</span><br><span class="line">			&#123;</span><br><span class="line">				text=reader.getCurrentValue();</span><br><span class="line">				sampleList.add(Integer.parseInt(text.toString()));</span><br><span class="line">				<span class="keyword">if</span>(sn++&gt;recordsPerSample)</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			reader.close();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		Collections.sort(sampleList);<span class="comment">//进行排序</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//将采样数据写入hdfs</span></span><br><span class="line">		DataOutputStream writer = fs.create(SPLIT_SAMPLE_PATH,<span class="keyword">true</span>);</span><br><span class="line">		<span class="keyword">int</span> span=sampleList.size()/job.getNumReduceTasks(),n=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">int</span> x=job.getNumReduceTasks();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=span;i&lt;sampleList.size();i+=span)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(++n&gt;=job.getNumReduceTasks())</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">new</span> Text(sampleList.get(i)+<span class="string">"\r\n"</span>).write(writer);</span><br><span class="line">		&#125;</span><br><span class="line">		writer.close();</span><br><span class="line">		<span class="comment">//添加缓存 不知道这里有用不 好像我没用到</span></span><br><span class="line">		job.addCacheFile(<span class="keyword">new</span> URI(SPLIT_SAMPLE_PATH.toString()));</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 获取分片标志点</span><br><span class="line">	 *<span class="javadoctag"> @param</span> conf</span><br><span class="line">	 *<span class="javadoctag"> @param</span> splitNum</span><br><span class="line">	 *<span class="javadoctag"> @return</span></span><br><span class="line">	 *<span class="javadoctag"> @throws</span> NumberFormatException</span><br><span class="line">	 *<span class="javadoctag"> @throws</span> IOException</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getSplitPonit(Configuration conf,<span class="keyword">int</span> splitNum)</span><br><span class="line">	&#123;</span><br><span class="line">		FileSystem fs=<span class="keyword">null</span>;</span><br><span class="line">		DataInputStream reader = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">int</span>[] points=<span class="keyword">new</span> <span class="keyword">int</span>[splitNum-<span class="number">1</span>];</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			fs=FileSystem.get(conf);</span><br><span class="line">			reader = fs.open(SPLIT_SAMPLE_PATH);</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;points.length;i++)</span><br><span class="line">			&#123;</span><br><span class="line">				points[i]=Integer.parseInt(reader.readLine().trim());</span><br><span class="line">			&#125;</span><br><span class="line">				</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">		&#123;&#125;</span><br><span class="line">		<span class="keyword">finally</span>&#123;</span><br><span class="line">			<span class="keyword">try</span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(reader!=<span class="keyword">null</span>)</span><br><span class="line">					reader.close();<span class="comment">//关闭异常可以不用理会</span></span><br><span class="line">			&#125;<span class="keyword">catch</span>(Exception e2)&#123;&#125;			</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> points;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 删除采样路径</span><br><span class="line">	 *<span class="javadoctag"> @param</span> job</span><br><span class="line">	 *<span class="javadoctag"> @throws</span> IOException</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteSamplePath</span><span class="params">(Job job)</span> <span class="keyword">throws</span> IOException</span><br><span class="line">	</span>&#123;</span><br><span class="line">		FileSystem fs=FileSystem.get(job.getConfiguration());</span><br><span class="line">		<span class="keyword">if</span>(fs.exists(SPLIT_SAMPLE_PATH))</span><br><span class="line">			fs.delete(SPLIT_SAMPLE_PATH,<span class="keyword">true</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>该采样其中主要包含采样以及划分标志的获取：</p>
+<ul>
+<li>采样：从输入文件中读取各个分片，但是根据采样数量的区别，所以这里只会读取各个分片的top k个值，然后进行汇总排序，则进行跨区间取值，最后才放入自己的Hdfs中。</li>
+<li>获取划分标志：从上一步存储的数据直接读取即可</li>
+</ul>
+<p>再来卡一下简单的数据划分<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TeraSortPartition</span> </span><br><span class="line">				<span class="keyword">extends</span> <span class="title">Partitioner</span>&lt;<span class="title">IntWritable</span>,<span class="title">NullWritable</span>&gt;</span><br><span class="line">				<span class="keyword">implements</span>  <span class="title">Configurable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Configuration conf=<span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span>[] splitPoints=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 根据采样  的样本来划分</span><br><span class="line">	 *<span class="javadoctag"> @param</span> key</span><br><span class="line">	 *<span class="javadoctag"> @param</span> value</span><br><span class="line">	 *<span class="javadoctag"> @param</span> splitNum</span><br><span class="line">	 *<span class="javadoctag"> @return</span></span><br><span class="line">	 */</span></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getPartition</span><span class="params">(IntWritable key, NullWritable value, <span class="keyword">int</span> splitNum)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(splitPoints==<span class="keyword">null</span>)</span><br><span class="line">			splitPoints=TearSortSampler.getSplitPonit(conf,splitNum);</span><br><span class="line">	</span><br><span class="line">		<span class="keyword">int</span> index=-<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;splitPoints.length;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(key.get()&lt;=splitPoints[i])</span><br><span class="line">			&#123;</span><br><span class="line">				index=i;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(index==-<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//key 很大  划分到最后一个分区</span></span><br><span class="line">			index=splitPoints.length;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> index;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initSplitPoints</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span><br><span class="line">	</span>&#123;</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Configuration <span class="title">getConf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.conf;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setConf</span><span class="params">(Configuration conf)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.conf=conf;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此划分就是用到了采样器中的采样标志，然后该标志分别划分到相应的分区中</p>
+<blockquote>
+<p>采样时发生在<code>JobClient端</code>,获取划分标志是在<code>Map</code>端</p>
+</blockquote>
+<p>最后就是实现MR步骤的代码了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TearSortMapper</span> <span class="keyword">extends</span></span><br><span class="line">			<span class="title">Mapper</span>&lt;<span class="title">Object</span>, <span class="title">Text</span>, <span class="title">IntWritable</span>, <span class="title">NullWritable</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> IntWritable num = <span class="keyword">new</span> IntWritable(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(Object key, Text value, Context context)</span></span><br><span class="line">				<span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">			num.set(Integer.valueOf(value.toString()));</span><br><span class="line">			context.write(num, NullWritable.get());</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TearSortReducer</span> <span class="keyword">extends</span></span><br><span class="line">			<span class="title">Reducer</span>&lt;<span class="title">IntWritable</span>, <span class="title">NullWritable</span>, <span class="title">IntWritable</span>, <span class="title">NullWritable</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reduce</span><span class="params">(IntWritable key, Iterable&lt;NullWritable&gt; values,</span><br><span class="line">				Context context)</span> <span class="keyword">throws</span> IOException, InterruptedException </span>&#123;</span><br><span class="line">			context.write(key, NullWritable.get());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(args.length&lt;<span class="number">2</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			System.out.println(<span class="string">"i am so sorry,the input arguments can't less 2"</span>);</span><br><span class="line">			System.exit(-<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		Path input=<span class="keyword">new</span> Path(args[<span class="number">0</span>]);</span><br><span class="line">		Path output=<span class="keyword">new</span> Path(args[<span class="number">1</span>]);</span><br><span class="line">		</span><br><span class="line">		Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">		FileSystem fs=FileSystem.get(conf);</span><br><span class="line">		<span class="keyword">if</span>(fs.exists(output))</span><br><span class="line">			fs.delete(output,<span class="keyword">true</span>);</span><br><span class="line">		</span><br><span class="line">		Job job = Job.getInstance(conf, <span class="string">"terasort"</span>);</span><br><span class="line">		job.setJarByClass(TearSort.class);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">		job.setMapperClass(TearSortMapper.class);</span><br><span class="line">		job.setReducerClass(TearSortReducer.class);</span><br><span class="line">		job.setOutputKeyClass(IntWritable.class);</span><br><span class="line">		job.setOutputValueClass(NullWritable.class);</span><br><span class="line">		FileInputFormat.addInputPath(job, input);</span><br><span class="line">		FileOutputFormat.setOutputPath(job, output);</span><br><span class="line">		job.setNumReduceTasks(<span class="number">2</span>);<span class="comment">//指定对应的redue数量</span></span><br><span class="line">		job.setPartitionerClass(TeraSortPartition.class);<span class="comment">//指定自己的分区划分函数</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进行采样</span></span><br><span class="line">		TearSortSampler.sampler(job, <span class="number">100</span>);</span><br><span class="line">		</span><br><span class="line">		System.exit(job.waitForCompletion(<span class="keyword">true</span>) ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>其实看了上面的程序还真的可以发现，TeraSort最核心的就是采样和划分，在具体的map和reduce只是一个输出而已</p>
+<p>这里的测试输入是一行一个数字，现使用随机1w个数字来进行检测，设置了2个reduce，直接进行排序后的结果为：<br><img src="/img/TeraSort-in-Hadoop/result1.png" alt=""><br><img src="/img/TeraSort-in-Hadoop/result2.png" alt=""></p>
+<p>从上面的结果中可以发现每个partition中都是排序的，而且两个partiton之间也是有序的，则完成了TeraSort</p>
+<blockquote>
+<p>细心的同学可以看到10000个排序最后怎么只有6000来个数据输出了？额。。这是因为<code>shuffle</code>过程中将其重复的key给合并了，所以最终输出量会减少，如果需要弯完整的得到10000个数据，得利用value，将key同步放入value中，然后在reduce阶段迭代输出value就好了，因为这个不是本文的重点，所以也没在意。。。 ^_^</p>
+</blockquote>
+<h2 id="总结">总结</h2><ol>
+<li>其实要完成TeraSort只需要添加采样和数据划分即可</li>
+<li>这次采了不少坑，因为网上现有的好像TeraSort代码都是基于<code>Hadoop1.0</code>的，也就是说用了<code>mapred</code>包里面的类，而<code>Hadoop2.0</code>中都是在<code>mapreduce</code>这个包下面，导致了很多API接口都不一样，最后看了Hadoop中的TeraSort样例才跌跌撞撞写完—_—</li>
+<li>然后这个程序并没有什么卵用，除了能让你更加方便的熟悉TeraSort的流程，如果这的要用TeraSort的话还是建议使用Hadoop样例中的版本，毕竟它考虑的更加全面^_^</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/06/27/Hadoop/TeraSort-in-Hadoop/" data-title="TeraSort在Hadoop中的非常非常非常简单的实现 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/25/Effective Java/Concurrent/"  title="《Effective Java》第十章：并发">
+ <strong>下一篇：</strong><br/> 
+ <span>《Effective Java》第十章：并发
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/27/Hadoop/TeraSort-in-Hadoop/" data-title="TeraSort在Hadoop中的非常非常非常简单的实现" data-url="http://yyl8781697.github.io/2015/06/27/Hadoop/TeraSort-in-Hadoop/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#TeraSort简介"><span class="toc-number">1.</span> <span class="toc-text">TeraSort简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TeraSort实现"><span class="toc-number">2.</span> <span class="toc-text">TeraSort实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>18</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
