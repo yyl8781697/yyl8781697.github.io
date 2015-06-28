@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yyl8781697.github.io/2015/06/28/Effective%20Java/Serialization/</loc>
+    <lastmod>2015-06-28T13:51:40.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yyl8781697.github.io/2015/06/27/Hadoop/TeraSort-in-Hadoop/</loc>
     <lastmod>2015-06-27T16:05:41.000Z</lastmod>
   </url>

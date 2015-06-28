@@ -1,0 +1,676 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《Effective Java》第十一章：序列化 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。
+第74条：谨慎地实现Serializable接口只要添加implements Serializable，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：
+
+一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。
+一旦一个类实现Serializable接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Effective Java》第十一章：序列化">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/28/Effective Java/Serialization/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。
+第74条：谨慎地实现Serializable接口只要添加implements Serializable，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：
+
+一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。
+一旦一个类实现Serializable接">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Effective Java》第十一章：序列化">
+<meta name="twitter:description" content="“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。
+第74条：谨慎地实现Serializable接口只要添加implements Serializable，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：
+
+一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。
+一旦一个类实现Serializable接">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/28/Effective Java/Serialization/" title="《Effective Java》第十一章：序列化" itemprop="url">《Effective Java》第十一章：序列化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-27T16:08:34.000Z" itemprop="datePublished"> 发表于 2015-06-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第74条：谨慎地实现Serializable接口"><span class="toc-number">1.</span> <span class="toc-text">第74条：谨慎地实现Serializable接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第75条：考虑使用自定义的序列化形式"><span class="toc-number">2.</span> <span class="toc-text">第75条：考虑使用自定义的序列化形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第76条：保护性的编写readObject方法"><span class="toc-number">3.</span> <span class="toc-text">第76条：保护性的编写readObject方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第77条：对于实例控制，枚举类型优于readResolve"><span class="toc-number">4.</span> <span class="toc-text">第77条：对于实例控制，枚举类型优于readResolve</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第78条：考虑用序列化代理代替序列化实例"><span class="toc-number">5.</span> <span class="toc-text">第78条：考虑用序列化代理代替序列化实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<p>“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。</p>
+<h2 id="第74条：谨慎地实现Serializable接口">第74条：谨慎地实现Serializable接口</h2><p>只要添加<code>implements Serializable</code>，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：</p>
+<ul>
+<li>一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。<ol>
+<li>一旦一个类实现<code>Serializable</code>接口，它的字节流编码就变成了导出API的一部分，一旦这个类被广泛使用，往往必须永远支持这种序列化形式。</li>
+<li>如果接受了默认的序列化形式，并且以后又要改变这个类的内部实现，结果可能会导致序列化形式不兼容</li>
+<li>序列化会使类的演变受到限制，这种限制与序列化版本UID有关，每个可序列化的类都有一个唯一标识符<code>serialVersionUID</code>，如果没有指定，则系统会根据类的具体实现来进行自动生成，所以你修改了类，并且没有显示的指定UID，那么兼容性就会被破坏。</li>
+</ol>
+</li>
+<li>它增加了Bug和安全漏洞的可能性<br>  序列化机制是一种语言之外的对象创建机制，所以反序列化是一个“隐藏的构造器”，具体与其他构造器相同的特点，所以反序列化过程也必须保证有构造器建立起来的约束关系，并且不允许攻击者在访问构造器过程中的内部对象，所以默认的反序列化机制很容易是对象约束遭到破坏，以及遭受非法的访问。</li>
+<li>随着类发行新的版本，相关测试的负担也增加了<br>  新的版本发布之后，要检查是否可以“在新版本中序列化一个实例，然后在旧版本中依然可以反序列化”，这个测试除了二进制兼容性以外，还要测试语义兼容性。所有测试的难度都是相当大啊！</li>
+</ul>
+<p>下面是关于序列化类的操作：</p>
+<ul>
+<li>如果一个了类将要加入某个框架中，并且该框架依赖于序列化来实现对象传输或者持久化，那么实现<code>Serializable</code>这个接口就是非常有必要的。</li>
+<li>还有为了继承而设计的类尽量少的去实现<code>Serializable</code>接口，用户的接口也应该尽可能烧得继承<code>Serializable</code>接口，不然会对实现这些接口或者类的程序猿增加很多负担</li>
+<li><p>实现一个带有可序列化实例的类时，应该要注意类的约束条件，并且要实现</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObjectNoData</span><span class="params">()</span> <span class="keyword">throws</span> InvalidObjectException</span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> InvalidObjectException(<span class="string">"stream data is required"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于为继承而设计的不可序列化的类，你应该考虑提供一个无参构造器</p>
+</li>
+<li>内部类不应该实现<code>Serializable</code></li>
+</ul>
+<p>简而言之，千万不要认为实现<code>Serializable</code>很容易，里面的坑多着呢。</p>
+<h2 id="第75条：考虑使用自定义的序列化形式">第75条：考虑使用自定义的序列化形式</h2><p>一个对象的默认序列化使将该对象进行物理表示，也就是说，默认序列化描述了该对象内部所包含的数据，以及每一个可以从这个对象到达其他对象的内部数据。</p>
+<blockquote>
+<p>而对于一个对象来说，理想的序列化应该只包含该对象索比表示的逻辑数据，而逻辑数据和物理数据是应该相互独立的。</p>
+</blockquote>
+<p>当对象的物理表示等同于它的路基表示是，使用默认的序列化是合理的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Name</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String lastName;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String firstName;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String middelName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>类似这样的实体类，物理内容的这三个字段也可以很精确的反应它的逻辑内容。</p>
+<p>来看看下面的序列化类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StringList</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> Entry head = <span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">		String data;</span><br><span class="line">		Entry next;</span><br><span class="line">		Entry previous;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从逻辑意义上讲，这个类表示一个字符串的序列，但是从物理意义上讲，把该序列化表示为一个双向链表。所以此时如果使用默认的序列化，那将会镜像除链表中所有的项以及这些项之间的所有双向链表。。-_-，大工程啊</p>
+<p>当一个类的物理表示与它的逻辑内容有区别时，使用默认序列化将会有以下4个缺点：</p>
+<ol>
+<li>它使这个类的导出API永远的束缚在该类的内容（<code>StringList.Entry</code>也会成为公有API的一部分）</li>
+<li>会消耗很多的空间（因为会维护一个双向链表）</li>
+<li>会消耗很多时间（遍历啊）</li>
+<li>会引起栈溢出（递归啊）</li>
+</ol>
+<p>其实类似这种类编写它的自定义序列化需求并不是很麻烦：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StringList</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="comment">//添加“易变”标志防止默认序列化</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">transient</span> Entry head = <span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span></span>&#123;</span><br><span class="line">		String data;</span><br><span class="line">		Entry next;</span><br><span class="line">		Entry previous;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">		<span class="comment">//TO DO</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span><span class="params">(ObjectOutputStream s)</span> <span class="keyword">throws</span> IOException</span><br><span class="line">	</span>&#123;</span><br><span class="line">		s.defaultWriteObject();</span><br><span class="line">		s.writeInt(size);</span><br><span class="line">		<span class="comment">//在这里序列化</span></span><br><span class="line">		<span class="keyword">for</span>(Entry e=head;e != <span class="keyword">null</span> ; e=e.next)</span><br><span class="line">			s.writeObject(e.data);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream s)</span></span><br><span class="line">		<span class="keyword">throws</span> ClassNotFoundException,IOException</span><br><span class="line">	</span>&#123;</span><br><span class="line">		s.defaultReadObject();</span><br><span class="line">		<span class="comment">//在这里进行反序列化</span></span><br><span class="line">		<span class="keyword">int</span> numElements= s.readInt();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;numElements;i++)</span><br><span class="line">			add((String)s.readObject());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里调用默认的<code>readObject()</code>和<code>writeObject()</code>可以影响全类的序列化形式，极大的增强灵活性。</p>
+<p>还有类似<code>key-value</code>的散列表也不适合使用默认的序列化，因为在不同的JVM中最终形成的散列位置可能会不一样。</p>
+<blockquote>
+<p>切记不管使用什么序列化方式，建议都显示的加上序列的唯一版本UID</p>
+</blockquote>
+<p>总而言之，当默认的序列化能合理的描述逻辑内容时，使用默认序列化就好了，否则建议使用自定义的序列化^_^</p>
+<h2 id="第76条：保护性的编写readObject方法">第76条：保护性的编写readObject方法</h2><p>针对第39条的<a href="http://kubicode.me/2015/06/09/Effective%20Java/Method/#第39条：必要时进行保护性拷贝" target="_blank" rel="external">日期类</a>，根据上一条的指导，貌似使用默认的序列化也是蛮合理的，增加<code>implements Serializable</code>即可。但是如果真的这么做，那么这个类将不再保证它的关键约束了。</p>
+<p>因为<code>readObject()</code>方法相当于是一个接受字节流的构造函数，那如果有人伪造了这个字节流的话，反序列化出来的对象时相当危险的。还有一个信号就是反序列化出来对象还可以随意被改动，因为默认的序列化并没有使用保护性拷贝，所以如果增对该日期类实现自己的序列化的化，可以这么干：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream s)</span></span><br><span class="line">		<span class="keyword">throws</span> IOException,ClassNotFoundException</span><br><span class="line"></span>&#123;</span><br><span class="line">	s.defaultReadObject();</span><br><span class="line">	</span><br><span class="line">	start=<span class="keyword">new</span> Date(start.getTime());<span class="comment">//进行保护兴拷贝</span></span><br><span class="line">	end=<span class="keyword">new</span> Date(end.getTime());</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(start.compareTo(end)&gt;<span class="number">0</span>)<span class="comment">//进行安全性检查</span></span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> InvalidObjectException(start +<span class="string">"after"</span>+ end);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面是编写<code>readObject</code>方法的指导方针：</p>
+<ul>
+<li>对于对象引用域必须保持私有的类，要保护性得拷贝这个域中的每个对象。</li>
+<li>对于任何约束条件，如果检查失败，则应该抛出一个<code>InvalidObjectException</code>异常。</li>
+<li>如果整个对象图在被反序列化之后必须进行验证，就应该使用<code>ObjectInputValidation</code>接口</li>
+<li>无论是直接方式还是间接方法，都不要调用类中任何可被覆盖的方法</li>
+</ul>
+<p>总而言之，当你编写<code>readObject</code>方法的时候，都要想：你正在编写一个公有的构造器，无论给他传递什么字节流，都必须产生一个有效的实例。</p>
+<h2 id="第77条：对于实例控制，枚举类型优于readResolve">第77条：对于实例控制，枚举类型优于readResolve</h2><p>一般的单例类，如果添加了<code>implements Serializable</code>之后，它就不再是一个单例，因为反序列化可以看做是另一个构造器，此时你就需要使用<code>readResolve()</code>方法，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> INSTANCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>直接返回这个单例就好了，但是注意的是这个单例需要用<code>transient</code>来标记</p>
+<p>当然说了这么做，然而其实这并没什么卵用，这种方法还不如使用枚举单例 -_-，可以参考<a href="http://kubicode.me/2015/04/22/Effective%20Java/Create-Destory-Object/#第3条：用私有的构造器或者枚举类型强化Singleton属性" target="_blank" rel="external">第3条</a>，它写得简单，用的省心。</p>
+<h2 id="第78条：考虑用序列化代理代替序列化实例">第78条：考虑用序列化代理代替序列化实例</h2><p>序列化代理模式可以解决普通类实现序列化时带来的各种副作用。</p>
+<p>序列化代理模式非常简单：</p>
+<ol>
+<li>为可序列化类设计一个私有的静态嵌套类</li>
+<li>为该嵌套类添加一个构造器，实现外围类的参数的复制<br>3， 这个嵌套类中需要添加一个<code>readResolve()</code>方法进行外围类的返回</li>
+<li>在外围类中添加<code>writeReplace()</code>方法进行外围类的复制</li>
+<li>在外围类中还要添加一个<code>readObject</code>防止被攻击</li>
+</ol>
+<p>根据上述指导，看下<code>EnumSet</code>源码中的序列化代理类的实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * This class is used to serialize all EnumSet instances, regardless of</span><br><span class="line"> * implementation type.  It captures their "logical contents" and they</span><br><span class="line"> * are reconstructed using public static factories.  This is necessary</span><br><span class="line"> * to ensure that the existence of a particular implementation type is</span><br><span class="line"> * an implementation detail.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @serial</span> include</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SerializationProxy</span> &lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Enum</span>&lt;<span class="title">E</span>&gt;&gt;</span><br><span class="line">    <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * The element type of this enum set.</span><br><span class="line">     *</span><br><span class="line">     *<span class="javadoctag"> @serial</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Class&lt;E&gt; elementType;</span><br><span class="line"></span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * The elements contained in this enum set.</span><br><span class="line">     *</span><br><span class="line">     *<span class="javadoctag"> @serial</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Enum[] elements;</span><br><span class="line"></span><br><span class="line">    SerializationProxy(EnumSet&lt;E&gt; set) &#123;</span><br><span class="line">        elementType = set.elementType;<span class="comment">//把数据拷贝进来</span></span><br><span class="line">        elements = set.toArray(ZERO_LENGTH_ENUM_ARRAY);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        EnumSet&lt;E&gt; result = EnumSet.noneOf(elementType);</span><br><span class="line">        <span class="keyword">for</span> (Enum e : elements)</span><br><span class="line">            result.add((E)e);</span><br><span class="line">        <span class="keyword">return</span> result;<span class="comment">//实例化Enumset</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362491234563181265L</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Object <span class="title">writeReplace</span><span class="params">()</span> </span>&#123;<span class="comment">//代理模式的入口</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> SerializationProxy&lt;&gt;(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// readObject method for the serialization proxy pattern</span></span><br><span class="line"><span class="comment">// See Effective Java, Second Ed., Item 78.</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(java.io.ObjectInputStream stream)</span></span><br><span class="line">    <span class="keyword">throws</span> java.io.InvalidObjectException </span>&#123;<span class="comment">//防止被攻击 竟然注释和Effective Java有关</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> java.io.InvalidObjectException(<span class="string">"Proxy required"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>总而言之，推荐使用序列化代理模式！！！^_^</p>
+<h2 id="总结">总结</h2><p>真不容易，这本书终于看完了，这段时间因为工作日要上班，并且还要被老板催着科研论文，真心蛋疼~所以看书的进度还是比较慢啊。<br>不够回顾本书，里面还是提出了蛮多非常经典的建议的，感谢本书，感谢作者。^_^</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/06/28/Effective Java/Serialization/" data-title="《Effective Java》第十一章：序列化 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/"  title="TeraSort在Hadoop中的非常非常非常简单的实现">
+ <strong>下一篇：</strong><br/> 
+ <span>TeraSort在Hadoop中的非常非常非常简单的实现
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/28/Effective Java/Serialization/" data-title="《Effective Java》第十一章：序列化" data-url="http://yyl8781697.github.io/2015/06/28/Effective Java/Serialization/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第74条：谨慎地实现Serializable接口"><span class="toc-number">1.</span> <span class="toc-text">第74条：谨慎地实现Serializable接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第75条：考虑使用自定义的序列化形式"><span class="toc-number">2.</span> <span class="toc-text">第75条：考虑使用自定义的序列化形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第76条：保护性的编写readObject方法"><span class="toc-number">3.</span> <span class="toc-text">第76条：保护性的编写readObject方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第77条：对于实例控制，枚举类型优于readResolve"><span class="toc-number">4.</span> <span class="toc-text">第77条：对于实例控制，枚举类型优于readResolve</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第78条：考虑用序列化代理代替序列化实例"><span class="toc-number">5.</span> <span class="toc-text">第78条：考虑用序列化代理代替序列化实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>19</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
