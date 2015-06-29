@@ -1,0 +1,701 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>二叉查找树 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="介绍二叉查找树（Binary Search Tree），又称二叉搜索树、二叉排序树。它符合这样的特征：
+
+它是一颗二叉树（空树也可以）
+若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值
+若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值
+它的左、右子树也也都是为二叉排序树。
+
+      8    
+    /   \
+   3     10
+ /   \     \
+1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉查找树">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/06/29/Algorithm/Binary-Search-Tree/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="介绍二叉查找树（Binary Search Tree），又称二叉搜索树、二叉排序树。它符合这样的特征：
+
+它是一颗二叉树（空树也可以）
+若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值
+若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值
+它的左、右子树也也都是为二叉排序树。
+
+      8    
+    /   \
+   3     10
+ /   \     \
+1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="二叉查找树">
+<meta name="twitter:description" content="介绍二叉查找树（Binary Search Tree），又称二叉搜索树、二叉排序树。它符合这样的特征：
+
+它是一颗二叉树（空树也可以）
+若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值
+若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值
+它的左、右子树也也都是为二叉排序树。
+
+      8    
+    /   \
+   3     10
+ /   \     \
+1">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yyl8781697.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/29/Algorithm/Binary-Search-Tree/" title="二叉查找树" itemprop="url">二叉查找树</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-29T12:30:58.000Z" itemprop="datePublished"> 发表于 2015-06-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#树的结构"><span class="toc-number">2.</span> <span class="toc-text">树的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找"><span class="toc-number">3.</span> <span class="toc-text">查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入"><span class="toc-number">4.</span> <span class="toc-text">插入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除"><span class="toc-number">5.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实际操练"><span class="toc-number">6.</span> <span class="toc-text">实际操练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="介绍">介绍</h2><p>二叉查找树（Binary Search Tree），又称二叉搜索树、二叉排序树。它符合这样的特征：</p>
+<ul>
+<li>它是一颗二叉树（空树也可以）</li>
+<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值</li>
+<li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值</li>
+<li>它的左、右子树也也都是为二叉排序树。</li>
+</ul>
+<pre><code>      <span class="number">8</span>    
+    /   <span class="string">\</span>
+   <span class="number">3</span>     <span class="number">10</span>
+ /   <span class="string">\</span>     <span class="string">\</span>
+<span class="number">1</span>     <span class="number">6</span>     <span class="number">14</span>
+    /   <span class="string">\</span>  /
+   <span class="number">4</span>    <span class="number">7</span> <span class="number">13</span> 
+</code></pre><blockquote>
+<p>二叉查找树的搜索、插入、删除的时间复杂度等于O(h)，期望O(logn)，最坏O(n)</p>
+</blockquote>
+<h2 id="树的结构">树的结构</h2><p>它的结构和普通的二叉树一样<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 树的结构</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> data=Integer.MIN_VALUE;<span class="comment">//节点数据 </span></span><br><span class="line">	<span class="keyword">public</span> TreeNode left,right;<span class="comment">//左右节点</span></span><br><span class="line">	<span class="keyword">public</span> TreeNode parent;<span class="comment">//父节点  java里面加这个属性方便操作一点^_^</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">()</span></span>&#123;&#125;;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">(<span class="keyword">int</span> data)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>根据上面的定义，有<code>tn.left.data&lt;tn.data&lt;tn.right.data</code></p>
+<h2 id="查找">查找</h2><p>二叉排序树种的查找过程为</p>
+<ol>
+<li>若排序树tree是空树，则查找失败，直接返回，否则：</li>
+<li>若x等于树的根节点的值，则查找成功，返回该节点；否则：</li>
+<li>若x小于树的根节点的值，则搜索左子树；否则：</li>
+<li>查找右子树。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查找操作</span><br><span class="line"> *<span class="javadoctag"> @param</span> T  当前树的节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> x  查询点</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> TreeNode <span class="title">search</span><span class="params">(TreeNode T,<span class="keyword">int</span> x)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(T==<span class="keyword">null</span>)<span class="comment">//当前节点为null时表示没有找到</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">if</span>(T.data==x)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> T;<span class="comment">//表示查找成功</span></span><br><span class="line">	&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(T.data&gt;x)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="comment">//当前节点大于查询值的时候 进行左子节点的查找</span></span><br><span class="line">		<span class="keyword">return</span> search(T.left,x);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;<span class="comment">//否则进行右子节点的查找</span></span><br><span class="line">		<span class="keyword">return</span> search(T.right,x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>假如我现在查找的值为4的节点，则查找的路径为8-&gt;3-&gt;6-&gt;4 最终可以找到值</p>
+<h2 id="插入">插入</h2><p>二叉排序树的插入过程为：</p>
+<ol>
+<li>若排序树为空树，这当前插入节点就是树的根节点，否则</li>
+<li>判断x是否等于树当前节点的值，如果是，则不插入，否则</li>
+<li>若x小于当前节点的值，如果此时当前节点的左子树为空，则直接插入到当前节点的左子树，否则将当前节点置为左子树进行第2步操作</li>
+<li>若x大于当前节点的值，如果此时当前节点的右子树为空，则直接插入到当前节点的右子树，否则将当前节点置为右子树进行第2步操作</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 树的插入操作</span><br><span class="line"> *<span class="javadoctag"> @param</span> T  树的根节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> x  需要插入的节点</span><br><span class="line"> *<span class="javadoctag"> @return</span>  如果插入成功返回true,否则返回false</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">insert</span><span class="params">(TreeNode T,<span class="keyword">int</span> x)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(T.data==Integer.MIN_VALUE)</span><br><span class="line">	&#123;</span><br><span class="line">		T.data=x;<span class="comment">//空节点的时候 插入点就是根节点</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	TreeNode t=T;</span><br><span class="line">	<span class="keyword">while</span>(t!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.data==x)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(t.data&gt;x)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(t.left==<span class="keyword">null</span>)</span><br><span class="line">			&#123;	<span class="comment">//当前对比节点的左子节点为空了 直接插入就好了</span></span><br><span class="line">				t.left=<span class="keyword">new</span> TreeNode(x);</span><br><span class="line">				t.left.parent=t;<span class="comment">//更新父节点</span></span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				t=t.left;<span class="comment">//否则继续进行左子节点的查找</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(t.right == <span class="keyword">null</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				t.right=<span class="keyword">new</span> TreeNode(x);</span><br><span class="line">				t.right.parent=t;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				t=t.right;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其实简单的版本就是先进行插入点得查找，如果找到点节点，则不插入，如果未找到，则直接插入到最后一个判断节点的后边即可。</p>
+</blockquote>
+<p>假如我当前插入的值是5，则进行查找操作了，在找到4之后发现未找到该值的节点，并且5&gt;4，所以5会插入到4的右孩子上</p>
+<pre><code>      <span class="number">8</span>    
+    /   <span class="string">\</span>
+   <span class="number">3</span>     <span class="number">10</span>
+ /   <span class="string">\</span>     <span class="string">\</span>
+<span class="number">1</span>     <span class="number">6</span>     <span class="number">14</span>
+    /   <span class="string">\</span>  /
+   <span class="number">4</span>    <span class="number">7</span> <span class="number">13</span> 
+    <span class="string">\</span>
+     <span class="number">5</span>
+</code></pre><h2 id="删除">删除</h2><p>二叉排序树的删除分为三种情况：</p>
+<ul>
+<li>当前删除的节点为叶子节点，也就是没有孩子节点，此时可以直接删除，将当前删除节点的父节点对应的孩子指向空即可<blockquote>
+<p>比如要删除5，只需要将4的右子树指向空即可</p>
+</blockquote>
+</li>
+<li>当前删除的节点仅含左子树或者右子树，这种情况下也是直接删除该节点即可，只不过是将当前删除的父节点对应的孩子指向删除节点对应的孩子即可<blockquote>
+<p>比如要删除4，只需要将6的左子树指向5即可</p>
+</blockquote>
+</li>
+<li>当前删除的节点的左右子树都存在，此时先查找删除节点的左子树的最大值，然后删除迭代删除该节点，最后将删除节点的值更新为最大值即可（注意这是一个递归过程..）<blockquote>
+<p>比如要删除6，则先找它左子树的最大值为5，这个时候要删除5这个节点，然后将6的值域更新为5即可</p>
+</blockquote>
+</li>
+</ul>
+<p>具体代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 删除节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> T  树的跟</span><br><span class="line"> *<span class="javadoctag"> @param</span> x  需要删除的值</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">delete</span><span class="params">(TreeNode T,<span class="keyword">int</span> x)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	TreeNode t=search(T,x);</span><br><span class="line">	<span class="keyword">if</span>(t!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> isExistLeft=t.left!=<span class="keyword">null</span>?<span class="number">1</span>:<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">int</span> isExistRight=t.right!=<span class="keyword">null</span>?<span class="number">1</span>:<span class="number">0</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">switch</span>(isExistLeft|isExistRight&lt;&lt;<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0</span>:<span class="comment">//the leaf node</span></span><br><span class="line">			deleteMySelf(t);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">1</span>:<span class="comment">//only left</span></span><br><span class="line">			deleteOnlyLeft(t);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">2</span>:<span class="comment">//obly right</span></span><br><span class="line">			deleteOnlyRight(t);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">3</span>:<span class="comment">//both child</span></span><br><span class="line">			TreeNode maxT=findMaxNodeInLeft(t);<span class="comment">//先查找当前节点中左子树中最大的节点</span></span><br><span class="line">			delete(T,maxT.data);<span class="comment">//删除那个节点</span></span><br><span class="line">			t.data=maxT.data;<span class="comment">//然后更新当前节点中的值  即可</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> AssertionError(<span class="string">"no no no,somehing must be wrong!"</span>);</span><br><span class="line">		</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//没有找到该节点</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 删除我自己</span><br><span class="line"> *<span class="javadoctag"> @param</span> t</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteMySelf</span><span class="params">(TreeNode t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t.parent!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.parent.left==t)</span><br><span class="line">		&#123;</span><br><span class="line">			t.parent.left=<span class="keyword">null</span>;<span class="comment">//直接删除我自己</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			t.parent.right=<span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		t.parent.right=<span class="keyword">new</span> TreeNode();<span class="comment">//相当于初始化根节点</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 当前节点仅含左子树的情况下进行删除</span><br><span class="line"> *<span class="javadoctag"> @param</span> t</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteOnlyLeft</span><span class="params">(TreeNode t)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t.parent!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.parent.left==t)</span><br><span class="line">		&#123;</span><br><span class="line">			t.parent.left=t.left;<span class="comment">//直接删除当前节点t</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			t.parent.right=t.left;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="comment">//根节点被删除</span></span><br><span class="line">		t.data=t.left.data;</span><br><span class="line">		t.left=t.left.left;</span><br><span class="line">		t.right=t.left.right;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 当前节点仅含左右树的情况下进行删除</span><br><span class="line"> *<span class="javadoctag"> @param</span> t</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteOnlyRight</span><span class="params">(TreeNode t)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t.parent!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.parent.left==t)</span><br><span class="line">		&#123;</span><br><span class="line">			t.parent.left=t.right;<span class="comment">//直接删除当前节点t</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			t.parent.right=t.right;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="comment">//根节点被删除</span></span><br><span class="line">		t.data=t.right.data;</span><br><span class="line">		t.left=t.left.left;</span><br><span class="line">		t.right=t.left.right;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查找左子树中最大的节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> T</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> TreeNode <span class="title">findMaxNodeInLeft</span><span class="params">(TreeNode T)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	TreeNode t=T.left;</span><br><span class="line">	<span class="keyword">if</span>(t!=<span class="keyword">null</span>)</span><br><span class="line">	<span class="keyword">while</span>(t.right!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		t=t.right;<span class="comment">//因为肯定右子树更加大</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> t;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="实际操练">实际操练</h2><p>最后关于上文中各个操作的操练代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	TreeNode root=<span class="keyword">new</span> TreeNode();</span><br><span class="line">	root.parent=<span class="keyword">new</span> TreeNode(Integer.MAX_VALUE);<span class="comment">//凭空设置一个超级根节点  </span></span><br><span class="line">	root.parent.right=root;<span class="comment">//超级根节点接管根节点</span></span><br><span class="line">	insert(root,<span class="number">8</span>);</span><br><span class="line">	insert(root,<span class="number">3</span>);</span><br><span class="line">	insert(root,<span class="number">10</span>);</span><br><span class="line">	insert(root,<span class="number">1</span>);</span><br><span class="line">	insert(root,<span class="number">6</span>);</span><br><span class="line">	insert(root,<span class="number">14</span>);</span><br><span class="line">	insert(root,<span class="number">4</span>);</span><br><span class="line">	insert(root,<span class="number">7</span>);</span><br><span class="line">	insert(root,<span class="number">13</span>);<span class="comment">//上面的insert是构建排序二叉树</span></span><br><span class="line">	insert(root,<span class="number">5</span>);<span class="comment">//再次进行插入操作</span></span><br><span class="line">	System.out.println(root);</span><br><span class="line">	delete(root,<span class="number">3</span>);<span class="comment">//删除操作</span></span><br><span class="line">	System.out.println(root);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://www.cnblogs.com/zhuyf87/archive/2012/11/09/2763113.html" target="_blank" rel="external">http://www.cnblogs.com/zhuyf87/archive/2012/11/09/2763113.html</a></li>
+<li><a href="http://www.cnblogs.com/vamei/archive/2013/03/17/2962290.html" target="_blank" rel="external">http://www.cnblogs.com/vamei/archive/2013/03/17/2962290.html</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/06/29/Algorithm/Binary-Search-Tree/" data-title="二叉查找树 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/06/28/Food/hongshaorou-dun-tudou/"  title="自己煮：红烧肉炖土豆">
+ <strong>下一篇：</strong><br/> 
+ <span>自己煮：红烧肉炖土豆
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/06/29/Algorithm/Binary-Search-Tree/" data-title="二叉查找树" data-url="http://yyl8781697.github.io/2015/06/29/Algorithm/Binary-Search-Tree/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#树的结构"><span class="toc-number">2.</span> <span class="toc-text">树的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#查找"><span class="toc-number">3.</span> <span class="toc-text">查找</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#插入"><span class="toc-number">4.</span> <span class="toc-text">插入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除"><span class="toc-number">5.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实际操练"><span class="toc-number">6.</span> <span class="toc-text">实际操练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>19</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		</p>
+</div>
+<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+    
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#nothing"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
