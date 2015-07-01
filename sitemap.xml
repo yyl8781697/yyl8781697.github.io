@@ -2,8 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/29/Algorithm/Binary-Search-Tree/</loc>
-    <lastmod>2015-06-29T17:33:05.000Z</lastmod>
+    <loc>http://yyl8781697.github.io/2015/07/01/Algorithm/Binary-Search-Tree-2-Double-LinkedList/</loc>
+    <lastmod>2015-07-01T16:37:53.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/books/index.html</loc>
+    <lastmod>2015-07-01T15:26:48.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/03/24/Data%20Struct/bitTree-traversal/</loc>
+    <lastmod>2015-06-30T23:45:37.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/06/29/Data%20Struct/Binary-Search-Tree/</loc>
+    <lastmod>2015-06-30T23:41:52.000Z</lastmod>
   </url>
   
   <url>
@@ -14,11 +29,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/06/26/Food/zhuti-huangdou-tang/</loc>
     <lastmod>2015-06-28T14:29:01.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/books/index.html</loc>
-    <lastmod>2015-06-28T13:59:58.000Z</lastmod>
   </url>
   
   <url>
@@ -344,11 +354,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/03/29/Algorithm/InsertionSort/</loc>
     <lastmod>2015-04-25T07:17:54.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2015/03/24/Algorithm/bitTree-traversal/</loc>
-    <lastmod>2015-04-25T07:17:50.000Z</lastmod>
   </url>
   
   <url>
