@@ -146,6 +146,10 @@
 </ul>
 <p>所以上述思路的全部程序如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSubSum2D</span><span class="params">(<span class="keyword">int</span>[][] matrix, <span class="keyword">int</span> N, <span class="keyword">int</span> M)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> sum=Integer.MIN_VALUE;</span><br><span class="line">	<span class="keyword">int</span>[][] totalColSum = <span class="keyword">new</span> <span class="keyword">int</span>[N][M];<span class="comment">// 所有子列的和</span></span><br><span class="line">	<span class="keyword">int</span>[] subColSum=<span class="keyword">new</span> <span class="keyword">int</span>[M];<span class="comment">//子列的和</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; M; j++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (i == <span class="number">0</span>)</span><br><span class="line">				totalColSum[i][j] = matrix[i][j];</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				totalColSum[i][j] = totalColSum[i - <span class="number">1</span>][j] + matrix[i][j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; N-<span class="number">1</span>; r++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> k = r; k &lt; N; k++) &#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>( r==<span class="number">1</span> &amp;&amp; k==<span class="number">3</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				System.out.println(<span class="string">""</span>);</span><br><span class="line">			&#125;</span><br><span class="line">				</span><br><span class="line">			<span class="comment">//构建子列</span></span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;M;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(r==k)</span><br><span class="line">				&#123;</span><br><span class="line">					subColSum[j]=matrix[r][j];<span class="comment">//是求单行的情况</span></span><br><span class="line">				&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(r==<span class="number">0</span>)</span></span>&#123;</span><br><span class="line">					subColSum[j]=totalColSum[k][j];<span class="comment">//以0为起始行</span></span><br><span class="line">				&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">					subColSum[j]=totalColSum[k][j]-totalColSum[r-<span class="number">1</span>][j];<span class="comment">//以非0为起始行，需要减去前面的</span></span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			sum=Math.max(sum, MaxSubSum.maxSubSum(subColSum));<span class="comment">//转为最大子段和</span></span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>它最终的复杂度为O(N*N*M)</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -230,7 +234,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>4</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>5</sup></a></li>
 		  
 		
 		  
@@ -327,11 +331,11 @@
 			
 		
 			
-				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>6</sup></a></li>
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
 			
 		
 			
