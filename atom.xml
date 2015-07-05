@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-07-02T17:08:10.000Z</updated>
+  <updated>2015-07-05T15:52:50.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -15,13 +15,45 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的]]></title>
+    <link href="http://yyl8781697.github.io/2015/07/05/Algorithm/1-2-n/"/>
+    <id>http://yyl8781697.github.io/2015/07/05/Algorithm/1-2-n/</id>
+    <published>2015-07-05T15:41:26.000Z</published>
+    <updated>2015-07-05T15:52:50.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>假设你有一个用 <span class="number">1001</span> 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 <span class="number">1</span> 到 <span class="number">1000</span><span class="comment">(包括 1000)</span>之间。此外,除一个数字出现两次外,其他所有数字只出现一 次。假设你只能对这个数组做一次处理,用一种算法找出重复的那个数字。如果你在运算中 使用了辅助的存储方式,那么你能找到不用这种方式的算法吗?
+</code></pre><h2 id="方法1">方法1</h2><p>这里都说1~1000都至少包含一遍了，所以求和在减去1~1000的和即可<br>假设遍历数组之后的求和为sum，则那个数字就是sum-(1000*10001/2)</p>
+<blockquote>
+<p>但是如果这里不是1000，而是这个数字非常的大，求和就可能出现溢出</p>
+</blockquote>
+<h2 id="方法2">方法2</h2><p>还记得有一道经典的<a href="https://leetcode.com/problems/single-number/" target="_blank" rel="external">leetcode题目</a>就是一个数组中每个数出现2次，只有一个数字出现了3次，找出这个数字。<br>该题目的思路是A^A=0,A^0=A</p>
+<p>按这个思路，因为我们知道1~1000已经出现一遍了，那么在遍历的时候自变量i也会从1~1000出现一遍，所以可以利用i来构造每个数字出现两次的情况，所以解题思路就是<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">searchTwiceNum</span><span class="params">(<span class="keyword">int</span> a[])</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> k=a[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		k^=a[i]^i;<span class="comment">//通过i来构造</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样操作就不会出现溢出的情况了</p>
+<h2 id="参考">参考</h2><ul>
+<li>July微软面试题第8题</li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>假设你有一个用 <span class="number">1001</span> 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 <span class="number">1</span> 到 <sp]]>
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[单向列表是否有环，两个链表是否相交，以及交点]]></title>
     <link href="http://yyl8781697.github.io/2015/07/03/Algorithm/Single-Linked-Cycle-Y/"/>
     <id>http://yyl8781697.github.io/2015/07/03/Algorithm/Single-Linked-Cycle-Y/</id>
     <published>2015-07-02T16:49:20.000Z</published>
-    <updated>2015-07-02T17:08:10.000Z</updated>
+    <updated>2015-07-02T17:09:58.000Z</updated>
     <content type="html"><![CDATA[<h2 id="单向链表的结构">单向链表的结构</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Link</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> data;</span><br><span class="line">	<span class="keyword">public</span> Link next;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Link</span><span class="params">(<span class="keyword">int</span> data)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//为了打印方便而加上去的。。</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> String.format(<span class="string">"data:%s"</span>,<span class="keyword">this</span>.data);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="单向链表是否有环">单向链表是否有环</h2><p>这题的思路很简单，先创建两个指针都指向链表的头部，一个fast指针每次走两步，另一个slow指针每次都走一步，如果fast指针能走到null的地方就说明该单链表没有环，否则fast和slow节点一定会走到同一个节点，表示有环<br>具体代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 判断是否有环</span><br><span class="line"> *<span class="javadoctag"> @param</span> head</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isCycle</span><span class="params">(Link head)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">boolean</span> flag=<span class="keyword">false</span>;</span><br><span class="line">	<span class="keyword">if</span>(head!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		Link fast=head,slow=head;</span><br><span class="line">		<span class="keyword">while</span>(fast!=<span class="keyword">null</span> &amp;&amp; fast.next!=<span class="keyword">null</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			slow=slow.next;</span><br><span class="line">			fast=fast.next.next;</span><br><span class="line">			<span class="keyword">if</span>(fast==slow)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">//两个指针指向了同一个节点 表示有环</span></span><br><span class="line">				flag=<span class="keyword">true</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="单向链表是否有环">单向链表是否有环</h2><p>这题的思路很简单，先创建两个指针都指向链表的头部，一个fast指针每次走两步，另一个slow指针每次都走一步，如果fast指针能走到null的地方就说明该单链表没有环，否则fast和slow节点一定会走到同一个节点，表示有环<br>具体代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 判断是否有环</span><br><span class="line"> *<span class="javadoctag"> @param</span> head</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isCycle</span><span class="params">(Link head)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">boolean</span> flag=<span class="keyword">false</span>;</span><br><span class="line">	<span class="keyword">if</span>(head!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		Link fast=head,slow=head;</span><br><span class="line">		<span class="keyword">while</span>(fast!=<span class="keyword">null</span> &amp;&amp; fast.next!=<span class="keyword">null</span>)<span class="comment">//如果走到尾的肯定是fast先 所以这里只需要判断fast即可</span></span><br><span class="line">		&#123;</span><br><span class="line">			slow=slow.next;</span><br><span class="line">			fast=fast.next.next;</span><br><span class="line">			<span class="keyword">if</span>(fast==slow)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">//两个指针指向了同一个节点 表示有环</span></span><br><span class="line">				flag=<span class="keyword">true</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="判断两个单向链表是否相交">判断两个单向链表是否相交</h2><p>这里可以想一下，单向链表的相交是什么情况？<br>那肯定是一个Y字形的，因为两个链表都是单向的嘛^_^，所以有两种解法</p>
 <ol>
 <li>将两个链表都遍历到尾结果，如果这两个尾节点是同一个节点，说明就是相交</li>
@@ -1352,33 +1384,6 @@ Sun
       <category term="Akka" scheme="http://yyl8781697.github.io/tags/Akka/"/>
     
       <category term="Akka" scheme="http://yyl8781697.github.io/categories/Akka/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Spark源码中所使用的经典数据结构或者设计模式]]></title>
-    <link href="http://yyl8781697.github.io/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/"/>
-    <id>http://yyl8781697.github.io/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/</id>
-    <published>2015-06-02T13:32:28.000Z</published>
-    <updated>2015-06-02T13:46:09.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="位域法">位域法</h2><blockquote>
-<p>如果一个枚举类型的元素主要用于在集合中，一般就使用<code>int</code>枚举类型，将2的不同倍数赋予每个常量。<br>这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。</p>
-</blockquote>
-<p>在<code>Spark</code>源码中进入<code>SparkSubmit</code>类中就可以看到<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Cluster managers</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">YARN</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">STANDALONE</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">MESOS</span> =</span> <span class="number">4</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">LOCAL</span> =</span> <span class="number">8</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_CLUSTER_MGRS</span> =</span> <span class="type">YARN</span> | <span class="type">STANDALONE</span> | <span class="type">MESOS</span> | <span class="type">LOCAL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Deploy modes</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLIENT</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLUSTER</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_DEPLOY_MODES</span> =</span> <span class="type">CLIENT</span> | <span class="type">CLUSTER</span></span><br></pre></td></tr></table></figure></p>
-<p>将集群类型和部署模式使用位域法来存储。</p>
-<blockquote>
-<p>在《Effective Java》第32条中提到，但是都不推荐。。<code>Spark</code>都使用了，难道这种结构不好嘛？？^_^</p>
-</blockquote>
-<h1 id="持续更新中。。。。">持续更新中。。。。</h1>]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="位域法">位域法</h2><blockquote>
-<p>如果一个枚举类型的元素主要用于在集合中，一般就使用<code>int</code>枚举类型，将2的不同倍数赋予每个常量。<br>这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。</p>
-<]]>
-    </summary>
-    
-      <category term="Spark" scheme="http://yyl8781697.github.io/tags/Spark/"/>
-    
-      <category term="Spark" scheme="http://yyl8781697.github.io/categories/Spark/"/>
     
   </entry>
   

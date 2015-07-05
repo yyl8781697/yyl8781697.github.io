@@ -4,31 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Triangle | Kubi Code&#39;Blog</title>
+    <title>假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="leetcode地址：https://leetcode.com/problems/triangle/
-
-Problem:Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
-For example, gi">
+    <meta name="description" content="题目假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 1 到 1000(包括 1000)之间。此外,除一个数字出现两次外,其他所有数字只出现一 次。假设你只能对这个数组做一次处理,用一种算法找出重复的那个数字。如果你在运算中 使用了辅助的存储方式,那么你能找到不用这种方式的算法吗?
+方法1这里都说1~1000都至少包含一遍了，所以求和在减去1~1000的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Triangle">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/01/LeetCode/LeetCode-Triangle/index.html">
+<meta property="og:title" content="假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/07/05/Algorithm/1-2-n/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="leetcode地址：https://leetcode.com/problems/triangle/
-
-Problem:Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
-For example, gi">
+<meta property="og:description" content="题目假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 1 到 1000(包括 1000)之间。此外,除一个数字出现两次外,其他所有数字只出现一 次。假设你只能对这个数组做一次处理,用一种算法找出重复的那个数字。如果你在运算中 使用了辅助的存储方式,那么你能找到不用这种方式的算法吗?
+方法1这里都说1~1000都至少包含一遍了，所以求和在减去1~1000的">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Triangle">
-<meta name="twitter:description" content="leetcode地址：https://leetcode.com/problems/triangle/
-
-Problem:Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
-For example, gi">
+<meta name="twitter:title" content="假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的">
+<meta name="twitter:description" content="题目假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 1 到 1000(包括 1000)之间。此外,除一个数字出现两次外,其他所有数字只出现一 次。假设你只能对这个数组做一次处理,用一种算法找出重复的那个数字。如果你在运算中 使用了辅助的存储方式,那么你能找到不用这种方式的算法吗?
+方法1这里都说1~1000都至少包含一遍了，所以求和在减去1~1000的">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +83,14 @@ For example, gi">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/01/LeetCode/LeetCode-Triangle/" title="LeetCode-Triangle" itemprop="url">LeetCode-Triangle</a>
+      <a href="/2015/07/05/Algorithm/1-2-n/" title="假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的" itemprop="url">假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-01T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-01</time>
+    <time datetime="2015-07-05T15:41:26.000Z" itemprop="datePublished"> 发表于 2015-07-05</time>
     
   </p>
 </header>
@@ -105,24 +99,21 @@ For example, gi">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法1"><span class="toc-number">2.</span> <span class="toc-text">方法1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法2"><span class="toc-number">3.</span> <span class="toc-text">方法2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>leetcode地址：<a href="https://leetcode.com/problems/triangle/" target="_blank" rel="external">https://leetcode.com/problems/triangle/</a></p>
+		<h2 id="题目">题目</h2><pre><code>假设你有一个用 <span class="number">1001</span> 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 <span class="number">1</span> 到 <span class="number">1000</span><span class="comment">(包括 1000)</span>之间。此外,除一个数字出现两次外,其他所有数字只出现一 次。假设你只能对这个数组做一次处理,用一种算法找出重复的那个数字。如果你在运算中 使用了辅助的存储方式,那么你能找到不用这种方式的算法吗?
+</code></pre><h2 id="方法1">方法1</h2><p>这里都说1~1000都至少包含一遍了，所以求和在减去1~1000的和即可<br>假设遍历数组之后的求和为sum，则那个数字就是sum-(1000*10001/2)</p>
+<blockquote>
+<p>但是如果这里不是1000，而是这个数字非常的大，求和就可能出现溢出</p>
 </blockquote>
-<p>Problem:<br>Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.</p>
-<p>For example, given the following triangle</p>
-<pre><code>[
-     [<span class="number">2</span>],
-    [<span class="number">3</span>,<span class="number">4</span>],
-   [<span class="number">6</span>,<span class="number">5</span>,<span class="number">7</span>],
-  [<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]
-]
-</code></pre><p>The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).</p>
-<p><strong>Note</strong>:<br>Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; triangle)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span>[][] sums=<span class="keyword">new</span> <span class="keyword">int</span>[triangle.size()][triangle.size()];</span><br><span class="line">		List&lt;Integer&gt; rows;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,column;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(triangle.size()&gt;<span class="number">0</span>)</span><br><span class="line">	    &#123;</span><br><span class="line">        	<span class="keyword">for</span>(<span class="keyword">int</span> i=triangle.size()-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">        	&#123;</span><br><span class="line">        		rows=triangle.get(i);</span><br><span class="line">        		</span><br><span class="line">        		<span class="keyword">if</span>(i==triangle.size()-<span class="number">1</span>)</span><br><span class="line">        		&#123;</span><br><span class="line">        			<span class="comment">//the last rows</span></span><br><span class="line">        			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rows.size();j++)</span><br><span class="line">        			&#123;</span><br><span class="line">        				sums[i][j]=rows.get(j);</span><br><span class="line">        			&#125;</span><br><span class="line">        		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        			</span><br><span class="line">        			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rows.size();j++)</span><br><span class="line">        			&#123;</span><br><span class="line">        				</span><br><span class="line">        				sums[i][j]=<span class="keyword">this</span>.getMin(rows.get(j)+sums[i+<span class="number">1</span>][j],rows.get(j)+sums[i+<span class="number">1</span>][j+<span class="number">1</span>]);</span><br><span class="line">        			&#125;</span><br><span class="line">        		&#125;</span><br><span class="line">        		</span><br><span class="line">        	&#125;</span><br><span class="line">        	</span><br><span class="line">        	ret=sums[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">	    &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getMin</span><span class="params">(Integer a,Integer b)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> a&gt;b?b:a;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="方法2">方法2</h2><p>还记得有一道经典的<a href="https://leetcode.com/problems/single-number/" target="_blank" rel="external">leetcode题目</a>就是一个数组中每个数出现2次，只有一个数字出现了3次，找出这个数字。<br>该题目的思路是A^A=0,A^0=A</p>
+<p>按这个思路，因为我们知道1~1000已经出现一遍了，那么在遍历的时候自变量i也会从1~1000出现一遍，所以可以利用i来构造每个数字出现两次的情况，所以解题思路就是<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">searchTwiceNum</span><span class="params">(<span class="keyword">int</span> a[])</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> k=a[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		k^=a[i]^i;<span class="comment">//通过i来构造</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样操作就不会出现溢出的情况了</p>
+<h2 id="参考">参考</h2><ul>
+<li>July微软面试题第8题</li>
+</ul>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -134,13 +125,13 @@ For example, gi">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
   </div>
 
 </div>
@@ -149,7 +140,7 @@ For example, gi">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/01/LeetCode/LeetCode-Triangle/" data-title="LeetCode-Triangle | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/07/05/Algorithm/1-2-n/" data-title="假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -162,19 +153,11 @@ For example, gi">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/07/01/LeetCode/LeetCode-Pascal's-Triangle-II/" title="LeetCode-Pascal&#39;s Triangle II">
-  <strong>上一篇：</strong><br/>
-  <span>
-  LeetCode-Pascal&#39;s Triangle II</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/06/30/LeetCode/LeetCode-LRU-Cache/"  title="LeetCode-LRU Cache">
+<a href="/2015/07/03/Algorithm/Single-Linked-Cycle-Y/"  title="单向列表是否有环，两个链表是否相交，以及交点">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-LRU Cache
+ <span>单向列表是否有环，两个链表是否相交，以及交点
 </span>
 </a>
 </div>
@@ -183,7 +166,7 @@ For example, gi">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/01/LeetCode/LeetCode-Triangle/" data-title="LeetCode-Triangle" data-url="http://yyl8781697.github.io/2014/07/01/LeetCode/LeetCode-Triangle/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/05/Algorithm/1-2-n/" data-title="假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的" data-url="http://yyl8781697.github.io/2015/07/05/Algorithm/1-2-n/"></div>
 </section>
 
 
@@ -193,7 +176,7 @@ For example, gi">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法1"><span class="toc-number">2.</span> <span class="toc-text">方法1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#方法2"><span class="toc-number">3.</span> <span class="toc-text">方法2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
