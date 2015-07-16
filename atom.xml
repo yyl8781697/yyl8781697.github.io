@@ -132,12 +132,13 @@
     <link href="http://yyl8781697.github.io/2015/07/07/Spark/Graphs-Applications/"/>
     <id>http://yyl8781697.github.io/2015/07/07/Spark/Graphs-Applications/</id>
     <published>2015-07-07T14:59:23.000Z</published>
-    <updated>2015-07-07T15:20:04.000Z</updated>
+    <updated>2015-07-16T23:29:03.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>本文是温习<a href="http://www.csdn.net/article/2014-08-07/2821097" target="_blank" rel="external">快刀初试：Spark GraphX在淘宝的实践</a>这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^</p>
 </blockquote>
 <h2 id="看实验用的图：">看实验用的图：</h2><p><img src="/img/Graphx-Application/sampleG.jpg" alt=""></p>
-<h2 id="度分布">度分布</h2>]]></content>
+<h2 id="度分布">度分布</h2><p>最近忙复习，没时间写-<em>-  还未完待续呢^</em>^</p>
+]]></content>
     <summary type="html">
     <![CDATA[<blockquote>
 <p>本文是温习<a href="http://www.csdn.net/article/2014-08-07/2821097" target="_blank" rel="external">快刀初试：Spark GraphX在淘宝的实践</a>这篇文章]]>
