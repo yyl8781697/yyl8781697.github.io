@@ -15,7 +15,7 @@
 解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归
 关于如何将元素放入栈的尾部？
 将e放到底部
- * 先递归逐个将元素取出来">
+先递归逐个将元素取出来  取至">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用递归的方法将栈颠倒">
 <meta property="og:url" content="http://yyl8781697.github.io/2015/07/18/Algorithm/Put-Upside-Down-Stack/index.html">
@@ -24,14 +24,14 @@
 解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归
 关于如何将元素放入栈的尾部？
 将e放到底部
- * 先递归逐个将元素取出来">
+先递归逐个将元素取出来  取至">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用递归的方法将栈颠倒">
 <meta name="twitter:description" content="题目使用递归的方法将栈颠倒
 解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归
 关于如何将元素放入栈的尾部？
 将e放到底部
- * 先递归逐个将元素取出来">
+先递归逐个将元素取出来  取至">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -115,9 +115,9 @@
 		<h2 id="题目">题目</h2><pre><code>使用递归的方法将栈颠倒
 </code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1<br>先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1<br>那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归</p>
 <p>关于如何将元素放入栈的尾部？</p>
-<pre><code>将<span class="keyword">e</span>放到底部
-<span class="comment"> * 先递归逐个将元素取出来  取至空的时候将e给push进去</span>
-<span class="comment"> * 然后再依次将取出来的元素也给push进去</span>
+<pre><code>将e放到底部
+先递归逐个将元素取出来  取至空的时候将e给<span class="keyword">push</span>进去
+然后再依次将取出来的元素也给<span class="keyword">push</span>进去
 </code></pre><h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 1,2,3,4,5看成1和2,3,4,5</span><br><span class="line"> * 假如已经将2,3,4,5倒转置5,4,3,2  那么只需要将1放到末尾即可</span><br><span class="line"> * 同时关于2,3,4,5的倒置也可以看做3,4,5和2的分离</span><br><span class="line"> * 逐步递归即可</span><br><span class="line"> *<span class="javadoctag"> @param</span> stack</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;E&gt; <span class="function"><span class="keyword">void</span> <span class="title">putUpsideDownStack</span><span class="params">(Stack&lt;E&gt; stack)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(stack.size()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	</span><br><span class="line">	E t=stack.pop();</span><br><span class="line">	putUpsideDownStack(stack);</span><br><span class="line">	addToBottom(stack,t);<span class="comment">//将当前元素放到底部</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 将e放到底部</span><br><span class="line"> * 先递归逐个将元素取出来  取至空的时候将e给push进去</span><br><span class="line"> * 然后再依次将取出来的元素也给push进去</span><br><span class="line"> *<span class="javadoctag"> @param</span> stack</span><br><span class="line"> *<span class="javadoctag"> @param</span> e</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;E&gt; <span class="function"><span class="keyword">void</span> <span class="title">addToBottom</span><span class="params">(Stack&lt;E&gt; stack,E e)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(stack.size()==<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		stack.push(e);<span class="comment">//放到底部</span></span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	E t=stack.pop();</span><br><span class="line">	addToBottom(stack,e);</span><br><span class="line">	stack.push(t);</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>验证结果可以看到<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	Stack&lt;Integer&gt; stack=<span class="keyword">new</span> Stack&lt;Integer&gt;();</span><br><span class="line">	stack.push(<span class="number">1</span>);</span><br><span class="line">	stack.push(<span class="number">2</span>);</span><br><span class="line">	stack.push(<span class="number">3</span>);</span><br><span class="line">	stack.push(<span class="number">4</span>);</span><br><span class="line">	stack.push(<span class="number">5</span>);</span><br><span class="line">	putUpsideDownStack(stack);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span>(stack.size()&gt;<span class="number">0</span>)</span><br><span class="line">		System.out.println(stack.pop());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <pre><code>1
@@ -168,6 +168,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/07/18/Algorithm/CardStraight/" title="从52张牌中随意取5张，看是否能组成顺子">
+  <strong>上一篇：</strong><br/>
+  <span>
+  从52张牌中随意取5张，看是否能组成顺子</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/07/17/Algorithm/DeleteNode-In-O1/"  title="在O(1)时间内删除一个单链表上指定的节点">
@@ -209,7 +217,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>11</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
 		  
 		
 		  
@@ -310,7 +318,7 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>14</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>15</sup></a></li>
 			
 		
 			

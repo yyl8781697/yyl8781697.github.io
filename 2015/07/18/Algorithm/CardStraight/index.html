@@ -4,22 +4,40 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Asp.net 在三层架构中事务的使用 | Kubi Code&#39;Blog</title>
+    <title>从52张牌中随意取5张，看是否能组成顺子 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;在我知道的.net中，执行事务有两种方法，一种是自动事物，使用起来相当简单，但是需要配置服务器，如果你用的是web共享主机，即没有权限配置自己的服务器，那就没必要用这种了，接下来我讲下.net中最普通的事务。&amp;#160; &amp;#160; &amp;#160; &amp;#160;接触3层也有一段时间了，了解水平一般，前段时间在想在三层中怎么使用事务呢，放在哪呢？">
+    <meta name="description" content="题目从52张牌中随意取5张，看是否能组成顺子
+其中1~k 表示1~13  大小王可以代替任意数字
+解题首先可以将牌映射到数组上，然后将数组排序在使用左右两端的指针向中间靠如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个否则判断右指针是否有大小王  有的话右指针左移一位
+现在有牌排序之后的样纸
+1，2，4，5，king
+^           ^
+第一次判断的时候可以发现1=2-1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Asp.net 在三层架构中事务的使用">
-<meta property="og:url" content="http://yyl8781697.github.io/2012/02/01/Asp.Net/SqlTransaction/index.html">
+<meta property="og:title" content="从52张牌中随意取5张，看是否能组成顺子">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/07/18/Algorithm/CardStraight/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;在我知道的.net中，执行事务有两种方法，一种是自动事物，使用起来相当简单，但是需要配置服务器，如果你用的是web共享主机，即没有权限配置自己的服务器，那就没必要用这种了，接下来我讲下.net中最普通的事务。&amp;#160; &amp;#160; &amp;#160; &amp;#160;接触3层也有一段时间了，了解水平一般，前段时间在想在三层中怎么使用事务呢，放在哪呢？">
+<meta property="og:description" content="题目从52张牌中随意取5张，看是否能组成顺子
+其中1~k 表示1~13  大小王可以代替任意数字
+解题首先可以将牌映射到数组上，然后将数组排序在使用左右两端的指针向中间靠如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个否则判断右指针是否有大小王  有的话右指针左移一位
+现在有牌排序之后的样纸
+1，2，4，5，king
+^           ^
+第一次判断的时候可以发现1=2-1">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Asp.net 在三层架构中事务的使用">
-<meta name="twitter:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;在我知道的.net中，执行事务有两种方法，一种是自动事物，使用起来相当简单，但是需要配置服务器，如果你用的是web共享主机，即没有权限配置自己的服务器，那就没必要用这种了，接下来我讲下.net中最普通的事务。&amp;#160; &amp;#160; &amp;#160; &amp;#160;接触3层也有一段时间了，了解水平一般，前段时间在想在三层中怎么使用事务呢，放在哪呢？">
+<meta name="twitter:title" content="从52张牌中随意取5张，看是否能组成顺子">
+<meta name="twitter:description" content="题目从52张牌中随意取5张，看是否能组成顺子
+其中1~k 表示1~13  大小王可以代替任意数字
+解题首先可以将牌映射到数组上，然后将数组排序在使用左右两端的指针向中间靠如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个否则判断右指针是否有大小王  有的话右指针左移一位
+现在有牌排序之后的样纸
+1，2，4，5，king
+^           ^
+第一次判断的时候可以发现1=2-1">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -80,14 +98,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2012/02/01/Asp.Net/SqlTransaction/" title="Asp.net 在三层架构中事务的使用" itemprop="url">Asp.net 在三层架构中事务的使用</a>
+      <a href="/2015/07/18/Algorithm/CardStraight/" title="从52张牌中随意取5张，看是否能组成顺子" itemprop="url">从52张牌中随意取5张，看是否能组成顺子</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2012-02-01T08:07:20.000Z" itemprop="datePublished"> 发表于 2012-02-01</time>
+    <time datetime="2015-07-18T15:23:27.000Z" itemprop="datePublished"> 发表于 2015-07-18</time>
     
   </p>
 </header>
@@ -96,21 +114,36 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解题"><span class="toc-number">2.</span> <span class="toc-text">解题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li></ol>
 		
 		</div>
 		
-		<p>&#160; &#160; &#160; &#160;在我知道的.net中，执行事务有两种方法，一种是自动事物，使用起来相当简单，但是需要配置服务器，如果你用的是web共享主机，即没有权限配置自己的服务器，那就没必要用这种了，接下来我讲下.net中最普通的事务。<br>&#160; &#160; &#160; &#160;接触3层也有一段时间了，了解水平一般，前段时间在想在三层中怎么使用事务呢，放在哪呢？Sqlherper ? AL?BLL?。然后我就疯狂的百度，好几次都是未果（因为做的都是小项目，不用事务也关系不大），今天我再次查时，<br>好好的看了csdn上的以讨论，<a href="http://topic.csdn.net/u/20091101/19/f21697d7-8f0c-4eb3-8e59-d0fe2f0b04b0.html，" target="_blank" rel="external">http://topic.csdn.net/u/20091101/19/f21697d7-8f0c-4eb3-8e59-d0fe2f0b04b0.html，</a><br>结合前辈和高手们的意见，自己改了一个出来。我的想法是将事务逻辑写在业务逻辑层，数据库的处理还都是在SQLHELPER，<br>BLL层通过事务SqlTransaction传值访问DAL，再访问Sqlhelper。接下来是分块的代码。</p>
-<p>Sqlhelper：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> SqlConnection Cnn = <span class="keyword">new</span> SqlConnection(DbConfig.ConnectionString);</span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">region</span> 判读SqlConnection 是否开启连接 并开启</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 判读SqlConnection 是否开启连接 并开启</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span>返回SqlConnection<span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> SqlConnection <span class="title">GetCnn</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Cnn.State == ConnectionState.Closed)</span><br><span class="line">    &#123;</span><br><span class="line">        Cnn.Open();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Cnn;</span><br><span class="line">&#125;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">region</span> 关闭数据库连接</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 关闭数据库连接</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">CloseCnn</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    Cnn.Close();</span><br><span class="line">&#125;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endregion</span></span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor">#<span class="keyword">region</span> 产生一个事务并开始</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 产生一个事务并开始</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span>返回此事务<span class="xmlDocTag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SqlTransaction <span class="title">BeginTransaction</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    SqlTransaction tran = GetCnn().BeginTransaction();</span><br><span class="line">    <span class="keyword">return</span> tran;</span><br><span class="line">&#125;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">endregion</span></span></span><br></pre></td></tr></table></figure></p>
-<p>DAL：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">bool</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> i,SqlTransaction tran)</span></span><br><span class="line"> </span>&#123;</span><br><span class="line">     <span class="keyword">string</span> sql = <span class="string">"insert into [test]([item]) values(@i)"</span>;</span><br><span class="line">     SqlParameter[] paras=<span class="keyword">new</span> SqlParameter[]&#123;<span class="keyword">new</span> SqlParameter(<span class="string">"@i"</span>,i)&#125;;</span><br><span class="line">     <span class="keyword">return</span> sqlhelper.ExecutenQuery(sql, paras, CommandType.Text, tran)&gt;<span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<p>BLL:<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">UserDAO userdao = <span class="keyword">new</span> UserDAO();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">bool</span> <span class="title">test</span><span class="params">()</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    <span class="keyword">using</span> (SqlTransaction tran = SQLHelper.BeginTransaction()) </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="keyword">try</span> </span><br><span class="line">        &#123; </span><br><span class="line">            userdao.test(<span class="number">2</span>, tran); </span><br><span class="line">            userdao.test(<span class="number">3</span>, tran);</span><br><span class="line">            tran.Commit(); <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span></span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            tran.Rollback();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">finally</span></span><br><span class="line">        &#123;</span><br><span class="line">            SQLHelper.CloseCnn();<span class="comment">//关闭数据库连接</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上述代码在此次测试中通过，若要用于真实项目中，请修改后再使用，还有本人水平一般，写的不到之处请大家见谅。欢迎大家指导指正。</p>
+		<h2 id="题目">题目</h2><pre><code>从52张牌中随意取5张，看是否能组成顺子
+其中1~k 表示1~13  大小王可以代替任意数字
+</code></pre><h2 id="解题">解题</h2><p>首先可以将牌映射到数组上，然后将数组排序<br>在使用左右两端的指针向中间靠<br>如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个<br>否则判断右指针是否有大小王  有的话右指针左移一位</p>
+<pre><code>现在有牌排序之后的样纸
+<span class="number">1</span>，<span class="number">2</span>，<span class="number">4</span>，<span class="number">5</span>，king
+^           ^
+第一次判断的时候可以发现<span class="number">1</span>=<span class="number">2</span>-<span class="number">1</span>  正好成顺序
+<span class="number">1</span>，<span class="number">2</span>，<span class="number">4</span>，<span class="number">5</span>，king
+   ^        ^
+但是在第二次迭代中会发现这次<span class="number">2</span>!=<span class="number">4</span>-<span class="number">1</span>
+所以要去判断最后面是否存在<span class="tag">q</span>,如果存在，这右指针前面移动
+<span class="number">1</span>，<span class="number">2</span>，<span class="number">4</span>，<span class="number">5</span>，king
+   ^    ^
+
+然后这里不断迭代即可，直到左右指针碰到一起
+</code></pre><h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 先排序</span><br><span class="line"> * 在使用左右两端的指针向中间靠</span><br><span class="line"> * 如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个</span><br><span class="line"> * 否则判断右指针是否有大小王  有的话右指针左移一位</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">cardStraight</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Arrays.sort(a);<span class="comment">//进行排序 O(nlogn)</span></span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>,j=a.length-<span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">boolean</span> flag=<span class="keyword">true</span>;</span><br><span class="line">	<span class="keyword">int</span> cur=a[i];<span class="comment">//表示当前比较的牌 不是前后两张牌是否是连续的或者是用大小王来代替的 这个cur的计数都会+1</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span>(i&lt;j)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(cur==a[i+<span class="number">1</span>]-<span class="number">1</span>||a[i+<span class="number">1</span>]==Integer.MAX_VALUE)</span><br><span class="line">		&#123;</span><br><span class="line">			i++;<span class="comment">//这里表示上下两张牌连续 后者最后一张可以用的牌位大小王</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[j]==Integer.MAX_VALUE)<span class="comment">//不通过  判断最后一张牌是不是大小王</span></span><br><span class="line">			&#123;</span><br><span class="line">				j--;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				flag=<span class="keyword">false</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cur++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看一下测试代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//这里使用Integer.MAX_VALUE表示大小王</span></span><br><span class="line">	<span class="keyword">int</span>[] a=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line">	System.out.println(cardStraight(a));</span><br><span class="line">	<span class="keyword">int</span>[] b=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>&#125;;</span><br><span class="line">	System.out.println(cardStraight(b));</span><br><span class="line">	<span class="keyword">int</span>[] c=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,Integer.MAX_VALUE&#125;;<span class="comment">//有一个大小王</span></span><br><span class="line">	System.out.println(cardStraight(c));</span><br><span class="line">	<span class="keyword">int</span>[] d=&#123;<span class="number">1</span>,Integer.MAX_VALUE,Integer.MAX_VALUE,<span class="number">4</span>,Integer.MAX_VALUE&#125;;<span class="comment">//有好多大小王</span></span><br><span class="line">	System.out.println(cardStraight(d));</span><br><span class="line">	<span class="keyword">int</span>[] e=&#123;<span class="number">1</span>,Integer.MAX_VALUE,Integer.MAX_VALUE,<span class="number">6</span>,Integer.MAX_VALUE&#125;;<span class="comment">//有好多大小王  但是最大的牌也太大了</span></span><br><span class="line">	System.out.println(cardStraight(e));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最终结果为：</p>
+<pre><code><span class="literal">true</span>
+<span class="literal">false</span>
+<span class="literal">true</span>
+<span class="literal">true</span>
+<span class="literal">false</span>
+</code></pre><hr>
 <blockquote>
-<p>注：此文来自我的<a href="http://www.cnblogs.com/yyl8781697/archive/2012/02/01/SqlTransaction.html" target="_blank" rel="external">博客园</a></p>
-</blockquote>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
 </blockquote>
   
 	</div>
@@ -119,13 +152,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Asp-Net/">Asp.Net</a>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
   </div>
 
 </div>
@@ -134,7 +167,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2012/02/01/Asp.Net/SqlTransaction/" data-title="Asp.net 在三层架构中事务的使用 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/07/18/Algorithm/CardStraight/" data-title="从52张牌中随意取5张，看是否能组成顺子 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -147,20 +180,20 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2012/03/07/Asp.Net/aspnetpager/" title="这两天自己模仿写的一个Asp.Net的显示分页方法 附加实体转换和存储过程 带源码下载">
-  <strong>上一篇：</strong><br/>
-  <span>
-  这两天自己模仿写的一个Asp.Net的显示分页方法 附加实体转换和存储过程 带源码下载</span>
+
+<div class="next">
+<a href="/2015/07/18/Algorithm/Put-Upside-Down-Stack/"  title="使用递归的方法将栈颠倒">
+ <strong>下一篇：</strong><br/> 
+ <span>使用递归的方法将栈颠倒
+</span>
 </a>
 </div>
-
 
 </nav>
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2012/02/01/Asp.Net/SqlTransaction/" data-title="Asp.net 在三层架构中事务的使用" data-url="http://yyl8781697.github.io/2012/02/01/Asp.Net/SqlTransaction/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/18/Algorithm/CardStraight/" data-title="从52张牌中随意取5张，看是否能组成顺子" data-url="http://yyl8781697.github.io/2015/07/18/Algorithm/CardStraight/"></div>
 </section>
 
 
@@ -170,7 +203,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解题"><span class="toc-number">2.</span> <span class="toc-text">解题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li></ol>
  
   </div>
 
