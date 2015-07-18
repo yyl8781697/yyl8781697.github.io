@@ -132,6 +132,10 @@
 </code></pre><p>思路很精妙，就是将p.next作为傀儡，删除它</p>
 <h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * 1-&gt;2-&gt;3-&gt;4-&gt;5</span><br><span class="line"> * 假如现在要删除p.data=3</span><br><span class="line"> * 首先将p.data=p.next.data</span><br><span class="line"> * 1-&gt;2-&gt;4-&gt;4-&gt;5</span><br><span class="line"> * 然后将p.next删除</span><br><span class="line"> * 1-&gt;2-&gt;4-&gt;5</span><br><span class="line"> * </span><br><span class="line"> * 如果是尾节点  需要重新遍历</span><br><span class="line"> * 还有 如果是p==head  则直接得置空  但是在java中这个操作不是很好做。所以。。。</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> *<span class="javadoctag"> @param</span> head</span><br><span class="line"> *<span class="javadoctag"> @param</span> dNode</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteNodeInO1</span><span class="params">(Link head,Link p)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(p==<span class="keyword">null</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(p.next==<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//表示尾部节点</span></span><br><span class="line">		Link q=head;</span><br><span class="line">		<span class="keyword">while</span>(q.next!=p)</span><br><span class="line">			q=q.next;<span class="comment">//找到尾节点的前一个节点</span></span><br><span class="line">		q.next=<span class="keyword">null</span>;<span class="comment">//进行删除</span></span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		p.data=p.next.data;</span><br><span class="line">		p.next=p.next.next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Link head)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Link p=head;</span><br><span class="line">	<span class="keyword">while</span>(p!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		System.out.print(p.data);</span><br><span class="line">		p=p.next;</span><br><span class="line">	&#125;</span><br><span class="line">	System.out.println();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Link</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> data;</span><br><span class="line">	<span class="keyword">public</span> Link next;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Link</span><span class="params">(<span class="keyword">int</span> data)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>只是要删除节点是头部或者尾部的时候需要额外考虑，按遍历的方法删除即可</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -167,6 +171,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/07/18/Algorithm/Put-Upside-Down-Stack/" title="使用递归的方法将栈颠倒">
+  <strong>上一篇：</strong><br/>
+  <span>
+  使用递归的方法将栈颠倒</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/07/16/Algorithm/Print-Tail-Head/"  title="链表的逆序输出">
@@ -208,7 +220,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>10</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>11</sup></a></li>
 		  
 		
 		  
@@ -309,7 +321,7 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>13</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>14</sup></a></li>
 			
 		
 			
