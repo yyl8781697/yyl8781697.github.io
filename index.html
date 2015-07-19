@@ -79,6 +79,72 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2015/07/19/Algorithm/Longest/" title="最长递增子序列" itemprop="url">
+  
+    <h1 itemprop="name">最长递增子序列</h1>
+    
+     
+           <p itemprop="description" >题目
+给定一个长度为N的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为6的数组A{5， 6， 7， 1， 2， 8}，则其最长的单调递增子序列为{5，6，7，8}，长度为4.
+解析
+此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理</p>
+        
+    
+    <time datetime="2015-07-19T08:31:57.000Z" itemprop="datePublished">2015-07-19</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/07/19/Algorithm/SubCollection/" title="打印一个集合所有的子集和" itemprop="url">
+  
+    <h1 itemprop="name">打印一个集合所有的子集和</h1>
+    
+     
+           <p itemprop="description" >题目打印一个集合所有的子集和，比如{a,b,c}的子集和有{a},{b},{c},{a,b},{a,c},{b,c},{a,b,c}以及 空
+解析一个元素个数为n的集合所包含的所有组合的子集个数有2^n个，这样其实就可以将所以集合的情况映射到0~2^n-1个，然后按位取元素即可
+</p>
+        
+    
+    <time datetime="2015-07-19T07:39:20.000Z" itemprop="datePublished">2015-07-19</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2015/07/19/Algorithm/OddEvenSplit/" title="奇数偶数分离 奇数在左侧,偶数在右侧,要求复杂度为O(N)" itemprop="url">
+  
+    <h1 itemprop="name">奇数偶数分离 奇数在左侧,偶数在右侧,要求复杂度为O(N)</h1>
+    
+     
+           <p itemprop="description" >题目奇数偶数分离 奇数在左侧  偶数在右侧 要求复杂度为O(N)
+解析本题的难点主要是在O(N)复杂度的要求，但是想想有没有类似对数组左右分离的操作？对，就是快速排序，在使用快速排序的分区中左边都是小于基准，右边都是大于基准所以，同理，现在按照快排分区的思想，左边都是为奇数，右边</p>
+        
+    
+    <time datetime="2015-07-19T07:20:01.000Z" itemprop="datePublished">2015-07-19</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2015/07/18/Algorithm/CardStraight/" title="从52张牌中随意取5张，看是否能组成顺子" itemprop="url">
   
     <h1 itemprop="name">从52张牌中随意取5张，看是否能组成顺子</h1>
@@ -232,73 +298,6 @@ null-&amp;gt;1-&amp;gt;2-</p>
 
 
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/07/03/Algorithm/Single-Linked-Cycle-Y/" title="单向列表是否有环，两个链表是否相交，以及交点" itemprop="url">
-  
-    <h1 itemprop="name">单向列表是否有环，两个链表是否相交，以及交点</h1>
-    
-     
-           <p itemprop="description" >单向链表的结构123456789101112131415class Link&amp;#123;	public int data;	public Link next;		public Link(int data)	&amp;#123;		this.data=data;	&amp;#125;		//为了打</p>
-        
-    
-    <time datetime="2015-07-02T16:49:20.000Z" itemprop="datePublished">2015-07-03</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/07/02/Algorithm/MinStack/" title="定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素" itemprop="url">
-  
-    <h1 itemprop="name">定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素</h1>
-    
-     
-           <p itemprop="description" >题目定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素。要求函数min、push以及pop的时间复杂度都是O(1)。
-解题这道题目的主要难点就是需要的复杂度为O(1)，也就是说在求最小值的时候无法遍历该栈。正确地解法就是使用一个辅助栈（数组），为维持当前栈容量下地最小</p>
-        
-    
-    <time datetime="2015-07-02T15:11:04.000Z" itemprop="datePublished">2015-07-02</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/07/01/Algorithm/Binary-Search-Tree-2-Double-LinkedList/" title="二叉排序树转为双向链表" itemprop="url">
-  
-    <h1 itemprop="name">二叉排序树转为双向链表</h1>
-    
-     
-           <p itemprop="description" >题目输入一棵排序二叉树，将此树转换成一个排序的双向链表，要求不能创建任何新的借点，只能调整指针的指向.
-分析
-二叉排序树的中序遍历可以得到它的排序元素，但是，但是“它不能创建任何新的节点，只能调整指针的指向”，所以，直接中序法就不可行了。
-
-大致思路是如下的：
-
-如果当前根节点的</p>
-        
-    
-    <time datetime="2015-06-30T23:36:00.000Z" itemprop="datePublished">2015-07-01</time>
-  </a>
-</section>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix unexpand">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -321,7 +320,7 @@ null-&amp;gt;1-&amp;gt;2-</p>
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>12</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>15</sup></a></li>
 		  
 		
 		  
@@ -342,10 +341,6 @@ null-&amp;gt;1-&amp;gt;2-</p>
 		
 		  
 			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/Spark/Graphx/" title="Graphx">Graphx<sup>1</sup></a></li>
 		  
 		
 		  
@@ -422,7 +417,7 @@ null-&amp;gt;1-&amp;gt;2-</p>
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>15</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>18</sup></a></li>
 			
 		
 			

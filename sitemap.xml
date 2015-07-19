@@ -2,6 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yyl8781697.github.io/2015/07/19/Algorithm/Longest/</loc>
+    <lastmod>2015-07-19T12:20:17.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/07/07/Spark/Graphs-Applications/</loc>
+    <lastmod>2015-07-19T08:13:42.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/07/19/Algorithm/OddEvenSplit/</loc>
+    <lastmod>2015-07-19T08:06:22.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/07/19/Algorithm/SubCollection/</loc>
+    <lastmod>2015-07-19T08:04:30.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yyl8781697.github.io/2015/07/18/Algorithm/CardStraight/</loc>
     <lastmod>2015-07-18T15:44:14.000Z</lastmod>
   </url>
@@ -19,11 +39,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/07/17/Algorithm/DeleteNode-In-O1/</loc>
     <lastmod>2015-07-18T08:47:23.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2015/07/07/Spark/Graphs-Applications/</loc>
-    <lastmod>2015-07-16T23:29:03.000Z</lastmod>
   </url>
   
   <url>
