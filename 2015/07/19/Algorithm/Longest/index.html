@@ -120,19 +120,19 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 </code></pre><h2 id="解析">解析</h2><blockquote>
 <p>此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^</p>
 </blockquote>
-<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有b[0]=2,b[1]=1<br>现在来看一个长一点的数组：</p>
+<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br>现在来看一个长一点的数组：</p>
 <pre><code><span class="atom">a</span>={<span class="number">3</span>,<span class="number">18</span>,<span class="number">7</span>,<span class="number">14</span>,<span class="number">10</span>,<span class="number">12</span>,<span class="number">23</span>,<span class="number">41</span>,<span class="number">16</span>,<span class="number">24</span>}
 我们从后往前进行遍历（第一个索引为<span class="number">0</span>）
-<span class="atom">a</span>[<span class="number">9</span>]=<span class="number">24</span>，为最后一个元素，所以辅助数组<span class="atom">b</span>中<span class="atom">b</span>[<span class="number">9</span>]=<span class="number">1</span> 表示它以及它最后可能组成的最长递增子序列为<span class="number">1</span>
+<span class="atom">a</span>[<span class="number">9</span>]=<span class="number">24</span>，为最后一个元素，所以辅助数组<span class="atom">b</span>中<span class="atom">f</span>[<span class="number">9</span>]=<span class="number">1</span> 表示它以及它最后可能组成的最长递增子序列为<span class="number">1</span>
 则有
 <span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">1</span>}
-<span class="atom">a</span>[<span class="number">8</span>]=<span class="number">16</span>，所以<span class="atom">a</span>[<span class="number">8</span>]&lt;<span class="atom">a</span>[<span class="number">9</span>],故<span class="atom">b</span>[<span class="number">8</span>]=<span class="number">2</span>
+<span class="atom">a</span>[<span class="number">8</span>]=<span class="number">16</span>，所以<span class="atom">a</span>[<span class="number">8</span>]&lt;<span class="atom">a</span>[<span class="number">9</span>],故<span class="atom">f</span>[<span class="number">8</span>]=<span class="number">2</span>
 <span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">2</span>,<span class="number">1</span>}
 而<span class="atom">a</span>[<span class="number">7</span>]=<span class="number">41</span>&gt;<span class="atom">a</span>[<span class="number">8</span>]，同时<span class="atom">a</span>[<span class="number">7</span>]&gt;<span class="number">10</span>，所以考虑<span class="atom">a</span>[<span class="number">7</span>]以后的元素它可能的最长递增子序列为<span class="number">1</span>
 <span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>}
-现在来看<span class="atom">a</span>[<span class="number">6</span>]=<span class="number">23</span>&lt;<span class="atom">a</span>[<span class="number">41</span>]，暂时<span class="atom">b</span>[<span class="number">6</span>]=<span class="atom">b</span>[<span class="number">7</span>]+<span class="number">1</span>=<span class="number">2</span> 再来看<span class="atom">a</span>[<span class="number">6</span>]&lt;<span class="atom">a</span>[<span class="number">9</span>] 所以<span class="atom">f</span>[<span class="number">6</span>]=<span class="atom">f</span>[<span class="number">9</span>]+<span class="number">1</span> 还是<span class="number">2</span>
+现在来看<span class="atom">a</span>[<span class="number">6</span>]=<span class="number">23</span>&lt;<span class="atom">a</span>[<span class="number">41</span>]，暂时<span class="atom">f</span>[<span class="number">6</span>]=<span class="atom">f</span>[<span class="number">7</span>]+<span class="number">1</span>=<span class="number">2</span> 再来看<span class="atom">a</span>[<span class="number">6</span>]&lt;<span class="atom">a</span>[<span class="number">9</span>] 所以<span class="atom">f</span>[<span class="number">6</span>]=<span class="atom">f</span>[<span class="number">9</span>]+<span class="number">1</span> 还是<span class="number">2</span>
 <span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>}
-再来看一个<span class="atom">a</span>[<span class="number">5</span>]=<span class="number">12</span>，<span class="atom">a</span>[<span class="number">5</span>]&lt;<span class="atom">a</span>[<span class="number">6</span>] 故<span class="atom">b</span>[<span class="number">5</span>]=<span class="atom">b</span>[<span class="number">6</span>]+<span class="number">1</span>=<span class="number">3</span> 再继续<span class="atom">a</span>[<span class="number">7</span>],<span class="atom">a</span>[<span class="number">8</span>],<span class="atom">a</span>[<span class="number">9</span>]对比之后<span class="atom">b</span>[<span class="number">5</span>]还是等于<span class="number">3</span>
+再来看一个<span class="atom">a</span>[<span class="number">5</span>]=<span class="number">12</span>，<span class="atom">a</span>[<span class="number">5</span>]&lt;<span class="atom">a</span>[<span class="number">6</span>] 故<span class="atom">f</span>[<span class="number">5</span>]=<span class="atom">f</span>[<span class="number">6</span>]+<span class="number">1</span>=<span class="number">3</span> 再继续<span class="atom">a</span>[<span class="number">7</span>],<span class="atom">a</span>[<span class="number">8</span>],<span class="atom">a</span>[<span class="number">9</span>]对比之后<span class="atom">f</span>[<span class="number">5</span>]还是等于<span class="number">3</span>
 <span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>}
 .
 .
@@ -189,6 +189,14 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/07/19/Algorithm/TrainTickets/" title="火车票 查询问题  针对12306设计一个快速的查询系统">
+  <strong>上一篇：</strong><br/>
+  <span>
+  火车票 查询问题  针对12306设计一个快速的查询系统</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/07/19/Algorithm/SubCollection/"  title="打印一个集合所有的子集和">
@@ -230,7 +238,7 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>15</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>16</sup></a></li>
 		  
 		
 		  
@@ -259,6 +267,10 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 		
 		  
 			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/Java-Base/" title="Java Base">Java Base<sup>1</sup></a></li>
 		  
 		
 		  
@@ -323,11 +335,11 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>19</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>19</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>18</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>19</sup></a></li>
 			
 		
 			
@@ -371,11 +383,11 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
 			
 		
 			
