@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-07-19T16:04:52.000Z</updated>
+  <updated>2015-07-19T16:09:45.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yyl8781697.github.io/2015/07/19/Algorithm/TrainTickets/"/>
     <id>http://yyl8781697.github.io/2015/07/19/Algorithm/TrainTickets/</id>
     <published>2015-07-19T14:22:31.000Z</published>
-    <updated>2015-07-19T16:04:52.000Z</updated>
+    <updated>2015-07-19T16:09:45.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>火车票 查询问题  针对12306设计一个快速的查询系统
 </code></pre><blockquote>
 <p>这个网上看到的，好像是百度的一道面试题</p>
@@ -67,11 +67,7 @@
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
     
-      <category term="Java Base" scheme="http://yyl8781697.github.io/tags/Java-Base/"/>
-    
       <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-      <category term="Java Base" scheme="http://yyl8781697.github.io/categories/Algorithm/Java-Base/"/>
     
   </entry>
   
