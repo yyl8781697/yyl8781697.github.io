@@ -4,37 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>最长递增子序列 | Kubi Code&#39;Blog</title>
+    <title>把数组排成最小的数 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="题目
-给定一个长度为N的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为6的数组A{5， 6， 7， 1， 2， 8}，则其最长的单调递增子序列为{5，6，7，8}，长度为4.
-解析
-此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^
-
-N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;1,">
+    <meta name="description" content="题目输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组{32,  321}，则输出这两个能排成的最小数字32132。请给出解决问题的算法，并证明该算法。
+解析假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。如果ab&amp;lt;ba,则会有a&amp;lt;b，所以这题的关键就是构建a,b的比较器
+关于证明：请看这个
+代码123456789101">
 <meta property="og:type" content="article">
-<meta property="og:title" content="最长递增子序列">
-<meta property="og:url" content="http://yyl8781697.github.io/2015/07/19/Algorithm/Longest/index.html">
+<meta property="og:title" content="把数组排成最小的数">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/07/20/Algorithm/Minimum-Combination-in-Array/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="题目
-给定一个长度为N的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为6的数组A{5， 6， 7， 1， 2， 8}，则其最长的单调递增子序列为{5，6，7，8}，长度为4.
-解析
-此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^
-
-N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;1,">
+<meta property="og:description" content="题目输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组{32,  321}，则输出这两个能排成的最小数字32132。请给出解决问题的算法，并证明该算法。
+解析假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。如果ab&amp;lt;ba,则会有a&amp;lt;b，所以这题的关键就是构建a,b的比较器
+关于证明：请看这个
+代码123456789101">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="最长递增子序列">
-<meta name="twitter:description" content="题目
-给定一个长度为N的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为6的数组A{5， 6， 7， 1， 2， 8}，则其最长的单调递增子序列为{5，6，7，8}，长度为4.
-解析
-此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^
-
-N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;1,">
+<meta name="twitter:title" content="把数组排成最小的数">
+<meta name="twitter:description" content="题目输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组{32,  321}，则输出这两个能排成的最小数字32132。请给出解决问题的算法，并证明该算法。
+解析假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。如果ab&amp;lt;ba,则会有a&amp;lt;b，所以这题的关键就是构建a,b的比较器
+关于证明：请看这个
+代码123456789101">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -95,14 +89,14 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/07/19/Algorithm/Longest/" title="最长递增子序列" itemprop="url">最长递增子序列</a>
+      <a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/" title="把数组排成最小的数" itemprop="url">把数组排成最小的数</a>
   </h1>
   <p class="article-author">By
        
 		<a href="http://yyl8781697.github.io/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2015-07-19T08:31:57.000Z" itemprop="datePublished"> 发表于 2015-07-19</time>
+    <time datetime="2015-07-20T12:31:43.000Z" itemprop="datePublished"> 发表于 2015-07-20</time>
     
   </p>
 </header>
@@ -111,45 +105,21 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">1.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">2.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<p>题目</p>
-<pre><code>给定一个长度为<span class="keyword">N</span>的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为<span class="number">6</span>的数组A<span class="list">{5， 6， 7， 1， 2， 8}</span>，则其最长的单调递增子序列为<span class="list">{5，6，7，8}</span>，长度为<span class="number">4.</span>
-</code></pre><h2 id="解析">解析</h2><blockquote>
-<p>此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^</p>
-</blockquote>
-<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br>现在来看一个长一点的数组：</p>
-<pre><code><span class="atom">a</span>={<span class="number">3</span>,<span class="number">18</span>,<span class="number">7</span>,<span class="number">14</span>,<span class="number">10</span>,<span class="number">12</span>,<span class="number">23</span>,<span class="number">41</span>,<span class="number">16</span>,<span class="number">24</span>}
-我们从后往前进行遍历（第一个索引为<span class="number">0</span>）
-<span class="atom">a</span>[<span class="number">9</span>]=<span class="number">24</span>，为最后一个元素，所以辅助数组<span class="atom">b</span>中<span class="atom">f</span>[<span class="number">9</span>]=<span class="number">1</span> 表示它以及它最后可能组成的最长递增子序列为<span class="number">1</span>
-则有
-<span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">1</span>}
-<span class="atom">a</span>[<span class="number">8</span>]=<span class="number">16</span>，所以<span class="atom">a</span>[<span class="number">8</span>]&lt;<span class="atom">a</span>[<span class="number">9</span>],故<span class="atom">f</span>[<span class="number">8</span>]=<span class="number">2</span>
-<span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">2</span>,<span class="number">1</span>}
-而<span class="atom">a</span>[<span class="number">7</span>]=<span class="number">41</span>&gt;<span class="atom">a</span>[<span class="number">8</span>]，同时<span class="atom">a</span>[<span class="number">7</span>]&gt;<span class="number">10</span>，所以考虑<span class="atom">a</span>[<span class="number">7</span>]以后的元素它可能的最长递增子序列为<span class="number">1</span>
-<span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>}
-现在来看<span class="atom">a</span>[<span class="number">6</span>]=<span class="number">23</span>&lt;<span class="atom">a</span>[<span class="number">41</span>]，暂时<span class="atom">f</span>[<span class="number">6</span>]=<span class="atom">f</span>[<span class="number">7</span>]+<span class="number">1</span>=<span class="number">2</span> 再来看<span class="atom">a</span>[<span class="number">6</span>]&lt;<span class="atom">a</span>[<span class="number">9</span>] 所以<span class="atom">f</span>[<span class="number">6</span>]=<span class="atom">f</span>[<span class="number">9</span>]+<span class="number">1</span> 还是<span class="number">2</span>
-<span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>}
-再来看一个<span class="atom">a</span>[<span class="number">5</span>]=<span class="number">12</span>，<span class="atom">a</span>[<span class="number">5</span>]&lt;<span class="atom">a</span>[<span class="number">6</span>] 故<span class="atom">f</span>[<span class="number">5</span>]=<span class="atom">f</span>[<span class="number">6</span>]+<span class="number">1</span>=<span class="number">3</span> 再继续<span class="atom">a</span>[<span class="number">7</span>],<span class="atom">a</span>[<span class="number">8</span>],<span class="atom">a</span>[<span class="number">9</span>]对比之后<span class="atom">f</span>[<span class="number">5</span>]还是等于<span class="number">3</span>
-<span class="atom">f</span>={<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="name">_</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>}
-.
-.
-.
-<span class="atom">f</span>={<span class="number">6</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>}
-
-然后根据数组<span class="atom">b</span>取降序位置的索引<span class="number">6</span>，<span class="number">5</span>，<span class="number">4</span>，<span class="number">3</span>，<span class="number">2</span>，<span class="number">1</span>在<span class="atom">a</span>上打印出来即可
-</code></pre><p>这里主要是介绍动态规划法：<br>貌似还有最大公共子序列法以及一个插入法来求</p>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] a=&#123;<span class="number">3</span>,<span class="number">18</span>,<span class="number">7</span>,<span class="number">14</span>,<span class="number">10</span>,<span class="number">12</span>,<span class="number">23</span>,<span class="number">41</span>,<span class="number">16</span>,<span class="number">24</span>&#125;;</span><br><span class="line">	<span class="keyword">int</span>[] f=<span class="keyword">new</span> <span class="keyword">int</span>[a.length];<span class="comment">//存放当前索引位置上以它为起点可能存在的最长子序列个数</span></span><br><span class="line">	<span class="keyword">int</span> maxIndex=-<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> maxLen=-<span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=a.length-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">	&#123;</span><br><span class="line">		f[i]=<span class="number">1</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(i==a.length-<span class="number">1</span>)</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;a.length;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i]&lt;a[j] &amp;&amp; f[i]&lt;=f[j])</span><br><span class="line">			&#123;</span><br><span class="line">				f[i]=f[j]+<span class="number">1</span>;<span class="comment">//计算当前以当前位置为索引起始点的最长自增字符串个数</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(f[i]&gt;maxLen)</span><br><span class="line">		&#123;</span><br><span class="line">			maxLen=f[i];<span class="comment">//得到最长的标志</span></span><br><span class="line">			maxIndex=i;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=maxIndex;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(f[i]==maxLen)</span><br><span class="line">		&#123;</span><br><span class="line">			System.out.println(a[i]);</span><br><span class="line">			maxLen--;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>打印结果</p>
-<pre><code>3
-7
-10
-12
-23
-41
-</code></pre><h2 id="参考">参考</h2><p><a href="http://qiemengdao.iteye.com/blog/1660229" target="_blank" rel="external">http://qiemengdao.iteye.com/blog/1660229</a></p>
+		<h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="number">32132</span>。请给出解决问题的算法，并证明该算法。
+</code></pre><h2 id="解析">解析</h2><p>假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。<br>如果ab&lt;ba,则会有a&lt;b，所以这题的关键就是构建a,b的比较器</p>
+<p>关于证明：请看<a href="http://blog.csdn.net/cxllyg/article/details/7659525" target="_blank" rel="external">这个</a></p>
+<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 思路是比较ab和ba。。。如果ab&lt;ba,则会有a&lt;b</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">minimumCombination</span><span class="params">(Integer[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Arrays.sort(a, <span class="keyword">new</span> Comparator&lt;Integer&gt;()&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer a,Integer b)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> (a+<span class="string">""</span>+b).compareTo(b+<span class="string">""</span>+a);<span class="comment">//构建ab的比较器</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	StringBuilder sb=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		sb.append(a[i]);<span class="comment">//然后直接连起来就可以了</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> sb.toString();</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	Integer[] a=&#123;<span class="number">32</span>,<span class="number">321</span>,<span class="number">23</span>&#125;; </span><br><span class="line">	System.out.println(minimumCombination(a));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出</p>
+<pre><code>2332132
+</code></pre><h2 id="参考">参考</h2><ul>
+<li>July 微软面试100题系列 第68题</li>
+<li><a href="http://blog.csdn.net/cxllyg/article/details/7659525" target="_blank" rel="external">【百度面试题】把数组排成最小的数</a></li>
+</ul>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
@@ -176,7 +146,7 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2015/07/19/Algorithm/Longest/" data-title="最长递增子序列 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/07/20/Algorithm/Minimum-Combination-in-Array/" data-title="把数组排成最小的数 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -189,19 +159,11 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/07/19/Algorithm/TrainTickets/" title="火车票 查询问题  针对12306设计一个快速的查询系统">
-  <strong>上一篇：</strong><br/>
-  <span>
-  火车票 查询问题  针对12306设计一个快速的查询系统</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/07/19/Algorithm/SubCollection/"  title="打印一个集合所有的子集和">
+<a href="/2015/07/19/Algorithm/TrainTickets/"  title="火车票 查询问题  针对12306设计一个快速的查询系统">
  <strong>下一篇：</strong><br/> 
- <span>打印一个集合所有的子集和
+ <span>火车票 查询问题  针对12306设计一个快速的查询系统
 </span>
 </a>
 </div>
@@ -210,7 +172,7 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/07/19/Algorithm/Longest/" data-title="最长递增子序列" data-url="http://yyl8781697.github.io/2015/07/19/Algorithm/Longest/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/20/Algorithm/Minimum-Combination-in-Array/" data-title="把数组排成最小的数" data-url="http://yyl8781697.github.io/2015/07/20/Algorithm/Minimum-Combination-in-Array/"></div>
 </section>
 
 
@@ -220,7 +182,7 @@ N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&amp;gt;
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">1.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">2.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">2.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
