@@ -13,22 +13,28 @@
     
     <meta name="description" content="题目输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组{32,  321}，则输出这两个能排成的最小数字32132。请给出解决问题的算法，并证明该算法。
 解析假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。如果ab&amp;lt;ba,则会有a&amp;lt;b，所以这题的关键就是构建a,b的比较器
-关于证明：请看这个
-代码123456789101">
+
+不得不说，这个思路太妙了^_^
+
+关于证明：请">
 <meta property="og:type" content="article">
 <meta property="og:title" content="把数组排成最小的数">
 <meta property="og:url" content="http://yyl8781697.github.io/2015/07/20/Algorithm/Minimum-Combination-in-Array/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="题目输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组{32,  321}，则输出这两个能排成的最小数字32132。请给出解决问题的算法，并证明该算法。
 解析假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。如果ab&amp;lt;ba,则会有a&amp;lt;b，所以这题的关键就是构建a,b的比较器
-关于证明：请看这个
-代码123456789101">
+
+不得不说，这个思路太妙了^_^
+
+关于证明：请">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="把数组排成最小的数">
 <meta name="twitter:description" content="题目输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组{32,  321}，则输出这两个能排成的最小数字32132。请给出解决问题的算法，并证明该算法。
 解析假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。如果ab&amp;lt;ba,则会有a&amp;lt;b，所以这题的关键就是构建a,b的比较器
-关于证明：请看这个
-代码123456789101">
+
+不得不说，这个思路太妙了^_^
+
+关于证明：请">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -111,6 +117,9 @@
 		
 		<h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="number">32132</span>。请给出解决问题的算法，并证明该算法。
 </code></pre><h2 id="解析">解析</h2><p>假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。<br>如果ab&lt;ba,则会有a&lt;b，所以这题的关键就是构建a,b的比较器</p>
+<blockquote>
+<p>不得不说，这个思路太妙了^_^</p>
+</blockquote>
 <p>关于证明：请看<a href="http://blog.csdn.net/cxllyg/article/details/7659525" target="_blank" rel="external">这个</a></p>
 <h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 思路是比较ab和ba。。。如果ab&lt;ba,则会有a&lt;b</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">minimumCombination</span><span class="params">(Integer[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Arrays.sort(a, <span class="keyword">new</span> Comparator&lt;Integer&gt;()&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer a,Integer b)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> (a+<span class="string">""</span>+b).compareTo(b+<span class="string">""</span>+a);<span class="comment">//构建ab的比较器</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	StringBuilder sb=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		sb.append(a[i]);<span class="comment">//然后直接连起来就可以了</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> sb.toString();</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	Integer[] a=&#123;<span class="number">32</span>,<span class="number">321</span>,<span class="number">23</span>&#125;; </span><br><span class="line">	System.out.println(minimumCombination(a));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>

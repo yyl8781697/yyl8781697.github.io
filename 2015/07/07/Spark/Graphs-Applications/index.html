@@ -14,7 +14,7 @@
     <meta name="description" content="本文是温习快刀初试：Spark GraphX在淘宝的实践这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^
 
 看实验用的图：
-度分布最近忙复习，没时间写--  还未完待续呢^^">
+该图可以使用如下代码来进行标示123456789101112val sc=new SparkContext();val edge=List(//边的信息    (1,2),(1,3),(2,3),(3,4),(3,5),(3,6),">
 <meta property="og:type" content="article">
 <meta property="og:title" content="graphx上的一些简单应用">
 <meta property="og:url" content="http://yyl8781697.github.io/2015/07/07/Spark/Graphs-Applications/index.html">
@@ -22,14 +22,14 @@
 <meta property="og:description" content="本文是温习快刀初试：Spark GraphX在淘宝的实践这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^
 
 看实验用的图：
-度分布最近忙复习，没时间写--  还未完待续呢^^">
+该图可以使用如下代码来进行标示123456789101112val sc=new SparkContext();val edge=List(//边的信息    (1,2),(1,3),(2,3),(3,4),(3,5),(3,6),">
 <meta property="og:image" content="/img/Graphx-Application/sampleG.jpg">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="graphx上的一些简单应用">
 <meta name="twitter:description" content="本文是温习快刀初试：Spark GraphX在淘宝的实践这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^
 
 看实验用的图：
-度分布最近忙复习，没时间写--  还未完待续呢^^">
+该图可以使用如下代码来进行标示123456789101112val sc=new SparkContext();val edge=List(//边的信息    (1,2),(1,3),(2,3),(3,4),(3,5),(3,6),">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -106,7 +106,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#看实验用的图："><span class="toc-number">1.</span> <span class="toc-text">看实验用的图：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#度分布"><span class="toc-number">2.</span> <span class="toc-text">度分布</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#看实验用的图："><span class="toc-number">1.</span> <span class="toc-text">看实验用的图：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#度分布"><span class="toc-number">2.</span> <span class="toc-text">度分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二跳邻居"><span class="toc-number">3.</span> <span class="toc-text">二跳邻居</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连通图"><span class="toc-number">4.</span> <span class="toc-text">连通图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多图合并工具"><span class="toc-number">5.</span> <span class="toc-text">多图合并工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#能量传播模型"><span class="toc-number">6.</span> <span class="toc-text">能量传播模型</span></a></li></ol>
 		
 		</div>
 		
@@ -114,8 +114,66 @@
 <p>本文是温习<a href="http://www.csdn.net/article/2014-08-07/2821097" target="_blank" rel="external">快刀初试：Spark GraphX在淘宝的实践</a>这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^</p>
 </blockquote>
 <h2 id="看实验用的图：">看实验用的图：</h2><p><img src="/img/Graphx-Application/sampleG.jpg" alt=""></p>
-<h2 id="度分布">度分布</h2><p>最近忙复习，没时间写-<em>-  还未完待续呢^</em>^</p>
-  
+<p>该图可以使用如下代码来进行标示<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc=new</span> <span class="title">SparkContext</span>(</span>);</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edge=List</span>(</span><span class="comment">//边的信息</span></span><br><span class="line">    (<span class="number">1</span>,<span class="number">2</span>),(<span class="number">1</span>,<span class="number">3</span>),(<span class="number">2</span>,<span class="number">3</span>),(<span class="number">3</span>,<span class="number">4</span>),(<span class="number">3</span>,<span class="number">5</span>),(<span class="number">3</span>,<span class="number">6</span>),</span><br><span class="line">    (<span class="number">4</span>,<span class="number">5</span>),(<span class="number">5</span>,<span class="number">6</span>),(<span class="number">7</span>,<span class="number">8</span>),(<span class="number">7</span>,<span class="number">9</span>),(<span class="number">8</span>,<span class="number">9</span>))</span><br><span class="line">   </span><br><span class="line"><span class="comment">//构建边的rdd</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edgeRdd=sc</span>.<span class="title">parallelize</span>(</span>edge).map(x=&gt;&#123;</span><br><span class="line">  <span class="type">Edge</span>(x._1.toLong,x._2.toLong,<span class="type">None</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//构建图 顶点Int类型</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">g=Graph</span>.<span class="title">fromEdges</span>(</span>edgeRdd, <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="度分布">度分布</h2><blockquote>
+<p>可以了解图中“超级节点”的个数和规模，以及所有节点度的分布曲线。</p>
+</blockquote>
+<p>在<code>graphx</code>中求解度分布分享简单，一个<code>API</code>即可<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g.degrees.collect.foreach(println(_))</span><br></pre></td></tr></table></figure></p>
+<p>同时将其度的rdd数据收集到Driver中打印出来,第一列表示顶点id，第二列表示各个顶点的度</p>
+<pre><code><span class="list">(<span class="keyword">4</span>,<span class="number">2</span>)</span>
+<span class="list">(<span class="keyword">6</span>,<span class="number">2</span>)</span>
+<span class="list">(<span class="keyword">8</span>,<span class="number">2</span>)</span>
+<span class="list">(<span class="keyword">2</span>,<span class="number">2</span>)</span>
+<span class="list">(<span class="keyword">1</span>,<span class="number">2</span>)</span>
+<span class="list">(<span class="keyword">3</span>,<span class="number">5</span>)</span>
+<span class="list">(<span class="keyword">7</span>,<span class="number">2</span>)</span>
+<span class="list">(<span class="keyword">9</span>,<span class="number">2</span>)</span>
+<span class="list">(<span class="keyword">5</span>,<span class="number">3</span>)</span>
+</code></pre><h2 id="二跳邻居">二跳邻居</h2><blockquote>
+<p>App中好友的好友的秘密，传播范围更加广，信息更加丰富</p>
+</blockquote>
+<pre><code>使用两次遍历，首先进行初始化的时候将自己的生命值设为<span class="number">2</span>，第一次遍历向邻居节点传播自身带的ID以及生命值为<span class="number">1</span><span class="comment">(2-1)</span>的消息，第二次遍历的时候收到消息的邻居再转发一次，生命值为<span class="number">0</span>，最终汇总统计的时候 只需要对带有消息为<span class="number">0</span>ID的进行统计即可得到二跳邻居
+</code></pre><p>上面的需求使用<code>pregel</code>很方便就能解决，按照最短路径的方法来做，首先是消息的更新、发送和合并方法的定义：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="title">VMap=Map</span>[</span><span class="type">VertexId</span>,<span class="type">Int</span>]</span><br><span class="line">  </span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 节点数据的更新 就是集合的union</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vprog</span>(</span>vid:<span class="type">VertexId</span>,vdata:<span class="type">VMap</span>,message:<span class="type">VMap</span>)</span><br><span class="line">:<span class="type">Map</span>[<span class="type">VertexId</span>,<span class="type">Int</span>]=addMaps(vdata,message)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 发送消息</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendMsg</span>(</span>e:<span class="type">EdgeTriplet</span>[<span class="type">VMap</span>, _])=&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//取两个集合的差集  然后将生命值减1</span></span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">srcMap=</span>(</span>e.dstAttr.keySet -- e.srcAttr.keySet).map &#123; k =&gt; k-&gt;(e.dstAttr(k)-<span class="number">1</span>) &#125;.toMap</span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">dstMap=</span>(</span>e.srcAttr.keySet -- e.dstAttr.keySet).map &#123; k =&gt; k-&gt;(e.srcAttr(k)-<span class="number">1</span>) &#125;.toMap</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>(srcMap.size==<span class="number">0</span> &amp;&amp; dstMap.size==<span class="number">0</span>)</span><br><span class="line">    <span class="type">Iterator</span>.empty</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="type">Iterator</span>((e.dstId,dstMap),(e.srcId,srcMap))</span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line">* 消息的合并</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addMaps</span>(</span>spmap1: <span class="type">VMap</span>, spmap2: <span class="type">VMap</span>): <span class="type">VMap</span> =</span><br><span class="line">(spmap1.keySet ++ spmap2.keySet).map &#123;</span><br><span class="line">  k =&gt; k -&gt; math.min(spmap1.getOrElse(k, <span class="type">Int</span>.<span class="type">MaxValue</span>), spmap2.getOrElse(k, <span class="type">Int</span>.<span class="type">MaxValue</span>))</span><br><span class="line">&#125;.toMap</span><br></pre></td></tr></table></figure></p>
+<p>接着直接使用<code>pregel</code>的接口即可：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">two=2</span>  <span class="title">//这里是二跳邻居</span> <span class="title">所以只需要定义为2即可</span></span><br><span class="line"></span><span class="function"><span class="keyword">val</span> <span class="title">newG=g</span>.<span class="title">mapVertices</span>(</span>(vid,_)=&gt;<span class="type">Map</span>[<span class="type">VertexId</span>,<span class="type">Int</span>](vid-&gt;two))</span><br><span class="line">            .pregel(<span class="type">Map</span>[<span class="type">VertexId</span>,<span class="type">Int</span>](), two, <span class="type">EdgeDirection</span>.<span class="type">Out</span>)(vprog, sendMsg, addMaps)</span><br></pre></td></tr></table></figure></p>
+<p>现在可以看一下二次遍历之后各个顶点的数据：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">newG.vertices.collect().foreach(println(_))</span><br></pre></td></tr></table></figure></p>
+<pre><code>(<span class="number">4</span>,<span class="built_in">Map</span>(<span class="number">5</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">1</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">6</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">2</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">3</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">4</span> <span class="subst">-&gt; </span><span class="number">2</span>))
+(<span class="number">6</span>,<span class="built_in">Map</span>(<span class="number">5</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">1</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">6</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">2</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">3</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">4</span> <span class="subst">-&gt; </span><span class="number">0</span>))
+(<span class="number">8</span>,<span class="built_in">Map</span>(<span class="number">8</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">7</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">9</span> <span class="subst">-&gt; </span><span class="number">1</span>))
+(<span class="number">2</span>,<span class="built_in">Map</span>(<span class="number">5</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">1</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">6</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">2</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">3</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">4</span> <span class="subst">-&gt; </span><span class="number">0</span>))
+(<span class="number">1</span>,<span class="built_in">Map</span>(<span class="number">5</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">1</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">6</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">2</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">3</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">4</span> <span class="subst">-&gt; </span><span class="number">0</span>))
+(<span class="number">3</span>,<span class="built_in">Map</span>(<span class="number">5</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">1</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">6</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">2</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">3</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">4</span> <span class="subst">-&gt; </span><span class="number">1</span>))
+(<span class="number">7</span>,<span class="built_in">Map</span>(<span class="number">7</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">8</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">9</span> <span class="subst">-&gt; </span><span class="number">1</span>))
+(<span class="number">9</span>,<span class="built_in">Map</span>(<span class="number">9</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">7</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">8</span> <span class="subst">-&gt; </span><span class="number">1</span>))
+(<span class="number">5</span>,<span class="built_in">Map</span>(<span class="number">5</span> <span class="subst">-&gt; </span><span class="number">2</span>, <span class="number">1</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">6</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">2</span> <span class="subst">-&gt; </span><span class="number">0</span>, <span class="number">3</span> <span class="subst">-&gt; </span><span class="number">1</span>, <span class="number">4</span> <span class="subst">-&gt; </span><span class="number">1</span>))
+</code></pre><p><code>Map</code>中的key表示周边的顶点id，其value就是对应顶点id的生命值，所以我们现在对该<code>rdd</code>再做一次<code>mapValues</code>处理即可得到最后的二跳邻居<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//过滤得到二跳邻居 就是value=0 的顶点</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">twoJumpFirends=newG</span>.<span class="title">vertices</span></span><br><span class="line"></span>.mapValues(_.filter(_._2==<span class="number">0</span>).keys)</span><br></pre></td></tr></table></figure></p>
+<p>之后将其打印出来<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">twoJumpFirends.collect().foreach(println(_))</span><br></pre></td></tr></table></figure></p>
+<pre><code><span class="list">(<span class="keyword">4</span>,Set<span class="list">(<span class="keyword">1</span>, <span class="number">6</span>, <span class="number">2</span>)</span>)</span>
+<span class="list">(<span class="keyword">6</span>,Set<span class="list">(<span class="keyword">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span>)</span>
+<span class="list">(<span class="keyword">8</span>,Set<span class="list">()</span>)</span>
+<span class="list">(<span class="keyword">2</span>,Set<span class="list">(<span class="keyword">5</span>, <span class="number">6</span>, <span class="number">4</span>)</span>)</span>
+<span class="list">(<span class="keyword">1</span>,Set<span class="list">(<span class="keyword">5</span>, <span class="number">6</span>, <span class="number">4</span>)</span>)</span>
+<span class="list">(<span class="keyword">3</span>,Set<span class="list">()</span>)</span>
+<span class="list">(<span class="keyword">7</span>,Set<span class="list">()</span>)</span>
+<span class="list">(<span class="keyword">9</span>,Set<span class="list">()</span>)</span>
+<span class="list">(<span class="keyword">5</span>,Set<span class="list">(<span class="keyword">1</span>, <span class="number">2</span>)</span>)</span>
+</code></pre><h2 id="连通图">连通图</h2><blockquote>
+<p>连通图的检测可以弄清一个图有多少个连通部分以及每个连通部分有多少个节点，这样可以在小图上进行更加精细的操作</p>
+</blockquote>
+<pre><code>使用<span class="keyword">ConnectedComponents</span>和StronglyConnectedComponents接口即可完成计算，其原理就是使用pregel模型，每次都是向邻居节点发送自己的ID，然后合并消息和更新消息方法都是保留最小的ID即可，在任意两条边需要传播的ID一样时迭代停止。
+</code></pre><blockquote>
+<p>关于连通的Spark实现可以看这个<a href="http://kubicode.me/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/" target="_blank" rel="external">使用Spark求解大图的连通组件(第二版)</a>，当然在graphx源码中<code>org.apache.spark.graphx.lib.ConnectedComponents</code>就是相关源码的实现。</p>
+</blockquote>
+<h2 id="多图合并工具">多图合并工具</h2><pre><code>直接使用outerJoinVertices就可以进行很方便的操作
+</code></pre><h2 id="能量传播模型">能量传播模型</h2><blockquote>
+<p>加权网络是经典的能量传播图模型之一<br></p>
+</blockquote>
+<pre><code>最简单的使用随机游走模型，每次都是将自己的能量值x传播强度传播给邻居，不断迭代。
+</code></pre><p>下面是淘宝的信誉度的检测：<br><br>模型的思路是：物以类聚，人以群分。常和信誉度高的用户进行交易的，信誉度自然较高；常和信誉度差的用户有业务来往的，信誉度自然较低。</p>
+<pre><code>首先以用户为点，买卖关系为边生成图，对选出来的用户分别赋予相同的正负能量值（比如信誉高的种子的<span class="variable">trustRank=</span><span class="number">1</span>，信誉度低的种子<span class="variable">badRank=</span><span class="number">1</span>），然后进行两轮随机游走，一轮是高信誉用户传播trustRank，另一轮是低信誉用户传播badRank，两轮结束之后对每个用户进行<span class="variable">finalRank=</span>trustRank-badRank的计算，finalRank高的即为信誉较好的用户。
+
+下面是淘宝的改进：
+但是这种方法得到的AUC很低（之前初始的传播强度为<span class="number">0.85</span>），需要给每条边加上一个组合权重（比如由交易次数，计算金额等多个特征计算出来的一个权重），通过使用partialDerivativeAUC方法，在训练集上计算AUC，然后对AUC求偏导，得到每个关系维度的独立权重和偏移量（这里不知道怎么得到的-_-），生成新的权重调节器（WeightAdjustor），然后对图上所有的边进行权重更新，再进行一次大的迭代，直到AUC趋于稳定，终止计算。
+</code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -181,7 +239,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#看实验用的图："><span class="toc-number">1.</span> <span class="toc-text">看实验用的图：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#度分布"><span class="toc-number">2.</span> <span class="toc-text">度分布</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#看实验用的图："><span class="toc-number">1.</span> <span class="toc-text">看实验用的图：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#度分布"><span class="toc-number">2.</span> <span class="toc-text">度分布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二跳邻居"><span class="toc-number">3.</span> <span class="toc-text">二跳邻居</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#连通图"><span class="toc-number">4.</span> <span class="toc-text">连通图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多图合并工具"><span class="toc-number">5.</span> <span class="toc-text">多图合并工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#能量传播模型"><span class="toc-number">6.</span> <span class="toc-text">能量传播模型</span></a></li></ol>
  
   </div>
 
