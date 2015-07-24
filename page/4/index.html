@@ -36,7 +36,8 @@
 
   <body>
     <header>
-      <div>
+      
+<div>
 		
 			<div id="imglogo">
 				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
@@ -62,11 +63,10 @@
 					
 					<li>
  					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:yyl8781697.github.io">
-					</form>
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
 					
 					</li>
 				</ul>
@@ -76,237 +76,1088 @@
     <div id="container">
       <div id="main">
 
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举" itemprop="url">
-  
-    <h1 itemprop="name">谈谈Scala中的枚举</h1>
+   
     
-     
-           <p itemprop="description" >先谈Java中的枚举将Scala的枚举之前，我们先来讲讲关于Java里面的枚举（相信对于广大程序猿来说都是很熟悉）：
-
-使用enum关键词定义
-  1public enum WeekDay&amp;#123;...&amp;#125;
-
-无法再继承其他类或者枚举（但是可以实现接口），因为它默认继</p>
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举" itemprop="url">谈谈Scala中的枚举</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-06T01:56:03.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
         
-    
-    <time datetime="2015-06-06T01:56:03.000Z" itemprop="datePublished">2015-06-06</time>
-  </a>
-</section>
+        <h2 id="先谈Java中的枚举">先谈Java中的枚举</h2><p>将<code>Scala</code>的枚举之前，我们先来讲讲关于<code>Java</code>里面的枚举（相信对于广大程序猿来说都是很熟悉）：</p>
+<ul>
+<li><p>使用<code>enum</code>关键词定义</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;...&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了<code>java.lang.Enum</code></p>
+</li>
+<li>无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）</li>
+<li>枚举其实是一组<code>int</code>常量（当初它就是因为使用<code>int</code>常量的需求很大才又了枚举），它还可以在<code>swtich</code>中很方便的使用</li>
+<li><p>每个枚举变量还可以重写枚举类或者实现接口中的方法（这个蛮好用）</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;</span><br><span class="line">Mon&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"monday"</span>;&#125;</span><br><span class="line">&#125;,</span><br><span class="line">Tue&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"tuesday"</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">""</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>…（我也不知道了-_-）</p>
+</li>
+</ul>
+<h2 id="再看Scala中的枚举">再看Scala中的枚举</h2><blockquote>
+<p>你会发现，上面说的一切在<code>Scala</code>中其实并没有甚么卵用-_-，因为在<code>Scala</code>中压根就么有<code>enum</code>这个关键词，但是当初发明<code>Scala</code>大神兼<code>Java</code>的创始人并没有落下枚举。</p>
+</blockquote>
+<p><code>Scala</code>不用关注枚举的特别语法，取而代之的是标准库中的类:<code>scala.Enumeration</code><br><br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">App</span> &#123;</span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">object</span> <span class="title">WeekDay</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Enumeration</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">type</span> <span class="title">WeekDay</span> =</span> <span class="type">Value</span><span class="comment">//这里仅仅是为了将Enumration.Value的类型暴露出来给外界使用而已</span></span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">Mon</span>, <span class="title">Tue</span>, <span class="title">Wed</span>, <span class="title">Thu</span>, <span class="title">Fri</span>, <span class="title">Sat</span>, <span class="title">Sun</span> =</span> <span class="type">Value</span><span class="comment">//在这里定义具体的枚举实例</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">import</span> <span class="type">WeekDay</span>._</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isWorkingDay</span>(</span>d: <span class="type">WeekDay</span>) = ! (d == <span class="type">Sat</span> || d == <span class="type">Sun</span>)</span><br><span class="line"></span><br><span class="line">  <span class="type">WeekDay</span>.values filter isWorkingDay foreach println<span class="comment">//使用语法糖进行输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上述是源码中给的一个枚举Example，可以发现：</p>
+<ul>
+<li>它是一个伴随对象</li>
+<li>需要显式得继承<code>Enumeration</code></li>
+<li>具体的枚举实例都是需要赋值成<code>Value</code>这个对象（它是在超类中定义）</li>
+</ul>
+<h2 id="Enumeration源码分析">Enumeration源码分析</h2><h3 id="构造函数以有变量">构造函数以有变量</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Defines a finite set of values specific to the enumeration. Typically</span><br><span class="line"> *  these values enumerate all possible forms something can take and provide</span><br><span class="line"> *  a lightweight alternative to case classes.</span><br><span class="line"> *</span><br><span class="line"> *  Each call to a `Value` method adds a new unique value to the enumeration.</span><br><span class="line"> *  To be accessible, these values are usually defined as `val` members of</span><br><span class="line"> *  the evaluation.</span><br><span class="line"> *</span><br><span class="line"> *  All values in an enumeration share a common, unique type defined as the</span><br><span class="line"> *  `Value` type member of the enumeration (`Value` selected on the stable</span><br><span class="line"> *  identifier path of the enumeration instance).</span><br><span class="line"> *</span><br><span class="line"> *  @param initial The initial value from which to count the integers that</span><br><span class="line"> *                 identifies values at run-time.</span><br><span class="line"> *  @author  Matthias Zenger</span><br><span class="line"> */</span></span><br><span class="line"><span class="annotation">@SerialVersionUID</span>(<span class="number">8476000850333817230</span>L)</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Enumeration</span> (</span>initial: <span class="type">Int</span>) <span class="keyword">extends</span> <span class="type">Serializable</span> &#123;</span><br><span class="line">  thisenum =&gt;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>) = <span class="keyword">this</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** The mapping from the integer used to identify values to the actual</span><br><span class="line">    * values. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">vmap</span>:</span> mutable.<span class="type">Map</span>[<span class="type">Int</span>, <span class="type">Value</span>] = <span class="keyword">new</span> mutable.<span class="type">HashMap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The cache listing all values of this enumeration. */</span></span><br><span class="line">  <span class="annotation">@transient</span> <span class="keyword">private</span> <span class="keyword">var</span> vset: <span class="type">ValueSet</span> = <span class="literal">null</span></span><br><span class="line">  <span class="annotation">@transient</span> <span class="annotation">@volatile</span> <span class="keyword">private</span> <span class="keyword">var</span> vsetDefined = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The mapping from the integer used to identify values to their</span><br><span class="line">    * names. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">nmap</span>:</span> mutable.<span class="type">Map</span>[<span class="type">Int</span>, <span class="type">String</span>] = <span class="keyword">new</span> mutable.<span class="type">HashMap</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The values of this enumeration as a set.</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">values</span>:</span> <span class="type">ValueSet</span> = &#123;</span><br><span class="line">    <span class="keyword">if</span> (!vsetDefined) &#123;</span><br><span class="line">      vset = (<span class="type">ValueSet</span>.newBuilder ++= vmap.values).result()</span><br><span class="line">      vsetDefined = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    vset</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The integer to use to identify the next created value. */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">var</span> nextId: <span class="type">Int</span> = initial</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The string to use to name the next created value. */</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="keyword">var</span> nextName: <span class="type">Iterator</span>[<span class="type">String</span>] = _</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">nextNameOrNull</span> =</span></span><br><span class="line">    <span class="keyword">if</span> (nextName != <span class="literal">null</span> &amp;&amp; nextName.hasNext) nextName.next <span class="keyword">else</span> <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The highest integer amongst those used to identify values in this</span><br><span class="line">    * enumeration. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">var</span> topId = initial</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The lowest integer amongst those used to identify values in this</span><br><span class="line">    * enumeration, but no higher than 0. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">var</span> bottomId = <span class="keyword">if</span>(initial &lt; <span class="number">0</span>) initial <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** The one higher than the highest integer amongst those used to identify</span><br><span class="line">    *  values in this enumeration. */</span></span><br><span class="line">  <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">maxId</span> =</span> topId</span><br></pre></td></tr></table></figure>
+<p>上面是洋洋洒洒贴了<code>Enumeration</code>类在<code>Scala</code>中的部分源码，从中大致可以看到这么几个关键点：</p>
+<ul>
+<li>它提供了一个轻量级的枚举类</li>
+<li><code>initial</code>初始化变量为整个枚举实例的容量，但是它在运行时可以变化</li>
+<li><code>vmap</code>：非常重要的一个变量，它是存储了枚举id和枚举值之间的映射容器。</li>
+<li><code>nmap</code>：也是蛮重要的一个变量，存储了枚举id和枚举名称的容器</li>
+<li><code>**Id</code>：所有带Id后缀的变量都是为了维护整个枚举的序号</li>
+<li>其他就是提供了各种迭代器，用于取值的东西</li>
+</ul>
+<h3 id="Value类的相关定义">Value类的相关定义</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The type of the enumerated values. */</span></span><br><span class="line"><span class="annotation">@SerialVersionUID</span>(<span class="number">7091335633555234129</span>L)</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Value</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Ordered</span>[</span><span class="type">Value</span>] <span class="keyword">with</span> <span class="type">Serializable</span> &#123;</span><br><span class="line"><span class="comment">/** the id and bit location of this enumeration value */</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">id</span>:</span> <span class="type">Int</span></span><br><span class="line"><span class="comment">/** a marker so we can tell whose values belong to whom come reflective-naming time */</span></span><br><span class="line"><span class="keyword">private</span>[<span class="type">Enumeration</span>] <span class="function"><span class="keyword">val</span> <span class="title">outerEnum</span> =</span> thisenum</span><br><span class="line"></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">compare</span>(</span>that: <span class="type">Value</span>): <span class="type">Int</span> =</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">this</span>.id &lt; that.id) -<span class="number">1</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.id == that.id) <span class="number">0</span></span><br><span class="line">  <span class="keyword">else</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">equals</span>(</span>other: <span class="type">Any</span>) = other <span class="keyword">match</span> &#123;</span><br><span class="line">  <span class="keyword">case</span> that: <span class="type">Enumeration</span>#<span class="type">Value</span>  =&gt; (outerEnum eq that.outerEnum) &amp;&amp; (id == that.id)</span><br><span class="line">  <span class="keyword">case</span> _                        =&gt; <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">hashCode</span>:</span> <span class="type">Int</span> = id.##</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Create a ValueSet which contains this value and another one */</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">+</span> (</span>v: <span class="type">Value</span>) = <span class="type">ValueSet</span>(<span class="keyword">this</span>, v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在源码的Example中可以看到所有的枚举都是被赋值为<code>Value</code>类型，从上面的源码中可以看到<code>Value</code>类是一个抽象类，看它的内容只是提供了枚举值比较以及id的获取，在<code>Enumeration</code>源码中提供了一个叫<code>Val</code>的类对<code>Value</code>实现，重要是重写了整数命名和id的识别。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** A class implementing the [[scala.Enumeration.Value]] type. This class</span><br><span class="line">*  can be overridden to change the enumeration's naming and integer</span><br><span class="line">*  identification behaviour.</span><br><span class="line">*/</span></span><br><span class="line"><span class="annotation">@SerialVersionUID</span>(<span class="number">0</span> - <span class="number">3501153230598116017</span>L)</span><br><span class="line"><span class="keyword">protected</span> <span class="class"><span class="keyword">class</span> <span class="title">Val</span>(</span>i: <span class="type">Int</span>, name: <span class="type">String</span>) <span class="keyword">extends</span> <span class="type">Value</span> <span class="keyword">with</span> <span class="type">Serializable</span> &#123;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>i: <span class="type">Int</span>)       = <span class="keyword">this</span>(i, nextNameOrNull)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>name: <span class="type">String</span>) = <span class="keyword">this</span>(nextId, name)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">this</span>(</span>)             = <span class="keyword">this</span>(nextId)</span><br><span class="line"><span class="comment">//to do many things.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Value方法的定义">Value方法的定义</h3><blockquote>
+<p>请注意，请注意，Example中的第4行、第5行的<code>Value</code>，前者是类，后者是方法(括号省略了而已)</p>
+</blockquote>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration. */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>:</span> <span class="type">Value</span> = <span class="type">Value</span>(nextId)</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration, identified by the</span><br><span class="line">*  integer `i`.</span><br><span class="line">*</span><br><span class="line">*  @param i An integer that identifies this value at run-time. It must be</span><br><span class="line">*           unique amongst all values of the enumeration.</span><br><span class="line">*  @return  Fresh value identified by `i`.</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>(</span>i: <span class="type">Int</span>): <span class="type">Value</span> = <span class="type">Value</span>(i, nextNameOrNull)</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration, called `name`.</span><br><span class="line">*</span><br><span class="line">*  @param name A human-readable name for that value.</span><br><span class="line">*  @return  Fresh value called `name`.</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>(</span>name: <span class="type">String</span>): <span class="type">Value</span> = <span class="type">Value</span>(nextId, name)</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Creates a fresh value, part of this enumeration, called `name`</span><br><span class="line">*  and identified by the integer `i`.</span><br><span class="line">*</span><br><span class="line">* @param i    An integer that identifies this value at run-time. It must be</span><br><span class="line">*             unique amongst all values of the enumeration.</span><br><span class="line">* @param name A human-readable name for that value.</span><br><span class="line">* @return     Fresh value with the provided identifier `i` and name `name`.</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="function"><span class="keyword">def</span> <span class="title">Value</span>(</span>i: <span class="type">Int</span>, name: <span class="type">String</span>): <span class="type">Value</span> = <span class="keyword">new</span> <span class="type">Val</span>(i, name)</span><br></pre></td></tr></table></figure>
+<p>上面提供了各种<code>Value</code>的重载方法均是返回了<code>Val</code>类，所以说嘛，你有需要完全可以自己再实现一个<code>Value</code>类。</p>
+<h2 id="Scala中枚举的简单使用">Scala中枚举的简单使用</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="type">WeekDay</span>.<span class="type">Wed</span>)<span class="comment">//直接取枚举值</span></span><br><span class="line">println(<span class="type">WeekDay</span>.<span class="type">Wed</span>.id)<span class="comment">//取枚举值所在序号</span></span><br><span class="line">println(<span class="type">WeekDay</span>.maxId)<span class="comment">//枚举值的个数</span></span><br><span class="line">println(<span class="type">WeekDay</span>.withName(<span class="string">"Wed"</span>))<span class="comment">//通过字符串获取枚举（这里是不需要反射的）</span></span><br></pre></td></tr></table></figure>
+<p>获取枚举的具体信息还是非常方便的</p>
+<pre><code><span class="title">Wed</span>
+<span class="number">2</span>
+<span class="number">7</span>
+Wed
+</code></pre><p>获取全部的枚举值进行输出<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">WeekDay</span>.values.foreach(println(_))</span><br></pre></td></tr></table></figure></p>
+<pre><code><span class="title">Mon</span>
+Tue
+Wed
+Thu
+Fri
+Sat
+Sun
+</code></pre><p>枚举也可以用在匹配</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">matchTest(WeekDay.Wed)</span><br><span class="line">matchTest(WeekDay.Sat)</span><br><span class="line"></span><br><span class="line">def matchTest=(week:WeekDay.Value) =&gt;week match&#123;<span class="comment">//注意，这里枚举的类型都是Value</span></span><br><span class="line"><span class="keyword">case</span> w <span class="keyword">if</span> w.compare(WeekDay.Fri)&lt;=<span class="number">0</span> =&gt;println(<span class="string">"sorry,please working"</span>)</span><br><span class="line"><span class="keyword">case</span> WeekDay.Sat=&gt;println((<span class="string">"go shopping"</span>))</span><br><span class="line"><span class="keyword">case</span> WeekDay.Sun=&gt;println((<span class="string">"sleeping"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到输出</p>
+<pre><code>sorry,please working
+<span class="keyword">go</span> shopping
+</code></pre><blockquote>
+<p>这里的枚举值的比较其实就是对比他们的Id是否相等。</p>
+</blockquote>
+<h2 id="总结">总结</h2><ul>
+<li><code>Java</code>中的那套枚举并不能直接使用到<code>Scala</code>中</li>
+<li><code>Scala</code>中的枚举使用轻量级<code>Enumeration</code>进行实现</li>
+<li><code>Scala</code>中的枚举其实是一个伴随对象</li>
+<li><code>Scala</code>中的枚举没有方法重写功能</li>
+<li><code>Scala</code>中的枚举其实都是<code>Enumeration.Value</code>这个对象</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://www.cnblogs.com/gnivor/p/4191017.html" target="_blank" rel="external">http://www.cnblogs.com/gnivor/p/4191017.html</a></li>
+<li><code>Enumeration.scala</code></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
 
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/06/04/Akka/Study-Akka-First/" title="初识Akka" itemprop="url">
-  
-    <h1 itemprop="name">初识Akka</h1>
-    
-     
-           <p itemprop="description" >这两天微软的分布式系统开发框架rDSN开源出来了，必须要Akka压压惊，当然在Spark中大量的使用了AKKA是主要原因^_^
-
-AKKA介绍Akka是一个基于JVM的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：
-
-并发和分布式
-弹性设计
-高性能
-去中心化
-高扩</p>
         
-    
-    <time datetime="2015-06-04T15:45:36.000Z" itemprop="datePublished">2015-06-04</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" title="Spark源码中所使用的经典数据结构或者设计模式" itemprop="url">
-  
-    <h1 itemprop="name">Spark源码中所使用的经典数据结构或者设计模式</h1>
-    
-     
-           <p itemprop="description" >位域法
-如果一个枚举类型的元素主要用于在集合中，一般就使用int枚举类型，将2的不同倍数赋予每个常量。这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。
-
-在Spark源码中进入SparkSubmit类中就可以看到1234567891011// Cluster m</p>
         
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/06/Scala/Enum-in-Scala/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/06/Scala/Enum-in-Scala/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
     
-    <time datetime="2015-06-02T13:32:28.000Z" itemprop="datePublished">2015-06-02</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/05/31/Food/Braised-chicken-claw/" title="自己煮：红烧鸡爪" itemprop="url">
-  
-    <h1 itemprop="name">自己煮：红烧鸡爪</h1>
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-     
-           <p itemprop="description" >具体煮的步骤和自己煮：可口又美味的可乐鸡翅一样，无法是增加了酱油的分量以及在最后煮的时候放得时水，可以看到这样煮出来的颜色会比较浓一下，直接看成品图吧：^_^</p>
+      <a href="/2015/06/04/Akka/Study-Akka-First/" title="初识Akka" itemprop="url">初识Akka</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-04T15:45:36.000Z" itemprop="datePublished"> 发表于 2015-06-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
         
-    
-    <time datetime="2015-05-31T12:46:20.000Z" itemprop="datePublished">2015-05-31</time>
-  </a>
-</section>
+        <blockquote>
+<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843" target="_blank" rel="external">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a href="http://akka.io/" target="_blank" rel="external">Akka</a>压压惊，当然在<code>Spark</code>中大量的使用了<code>AKKA</code>是主要原因^_^</p>
+</blockquote>
+<h2 id="AKKA介绍">AKKA介绍</h2><p><a href="http://akka.io/" target="_blank" rel="external">Akka</a>是一个基于<code>JVM</code>的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：</p>
+<ol>
+<li>并发和分布式</li>
+<li>弹性设计</li>
+<li>高性能</li>
+<li>去中心化</li>
+<li>高扩展性</li>
+</ol>
+<p>可以基于<code>AKKA</code>构建高并发的web框架，也可以构建分布式系统（<code>Spark</code>）</p>
+<h2 id="AKKA的引用">AKKA的引用</h2><p>如果你是<code>Maven</code>用户，你可以这么添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.typesafe.akka<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>akka-actor_2.10<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>2.3.11<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果你是<code>SBT</code>用户，你的<code>build.sbt</code>可以这么写<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name := &#34;My Project&#34;&#10;version := &#34;1.0&#34;&#10;scalaVersion := &#34;2.10.4&#34;&#10;libraryDependencies +=&#10;  &#34;com.typesafe.akka&#34; %% &#34;akka-actor&#34; % &#34;2.3.11&#34;</span><br></pre></td></tr></table></figure></p>
+<p>它还提供了好多其他的其他用法，但是由于天朝连国外网速也是在是太慢了，我直接去<a href="http://akka.io/downloads/" target="_blank" rel="external">http://akka.io/downloads/</a>将压缩包给download下来，然后将已编译的<code>jar</code>添加到IDEA中，简单、粗暴、高效。</p>
+<h2 id="AKAA的使用">AKAA的使用</h2><p><code>AKKA</code>是基于<code>Scala</code>的<code>Actor</code>来实现的，了解<code>Scala</code>的<code>Actor</code>可以参考我之前的一篇文章<a href="http://kubicode.me/2015/04/26/Scala/Scala-In-My-Eyes/#Actor" target="_blank" rel="external">我眼中的Scala-简洁不简单</a>。<br><br>在<code>AKKA</code>中最重要的是<code>ActorSystem</code>，关于<code>ActorSystem</code>在Doc中有这么一句话：</p>
+<blockquote>
+<p>Note: An ActorSystem is a heavyweight structure that will allocate 1…N Threads, so create one per logical application.</p>
+</blockquote>
+<h3 id="普通模式的调用">普通模式的调用</h3><p>首先创建一个类<code>GreetingActor</code>添加以下代码<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> akka.actor._</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Greeting</span>(</span>who:<span class="type">String</span>)</span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Created by yanyl on 6/3/15.</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GreetingActor</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Actor</span> <span class="keyword"><span class="keyword">with</span></span> <span class="title">ActorLogging</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">receive=</span>&#123;</span></span><br><span class="line">    <span class="keyword">case</span> <span class="type">Greeting</span>(who)=&gt;log.info(<span class="string">"hello"</span>+who);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就建立了一个标准的<code>Actor</code>，用过<code>receive</code>方法不断地监听，<br><br>然后建立一个<code>Test</code>类向这个<code>Actor</code>发送消息<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> akka.actor._;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Created by yanyl on 6/2/15.</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args:<span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> =&#123;</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">system=ActorSystem</span>(</span><span class="string">"mySystem"</span>);</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">greeter=system</span>.<span class="title">actorOf</span>(</span><span class="type">Props</span>[<span class="type">GreetingActor</span>],name=<span class="string">"greeter"</span>);</span><br><span class="line">    greeter!<span class="type">Greeting</span>(<span class="string">"tom"</span>)</span><br><span class="line">    println(<span class="string">"i am not tom"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>叹号<code>!</code>表示发送非阻塞消息，执行之后你可以在控制台看到</p>
+<pre><code><span class="tag">i</span> am not tom
+[INFO] [<span class="number">06</span>/<span class="number">05</span>/<span class="number">2015</span> <span class="number">00</span>:<span class="number">56</span>:<span class="number">27.188</span>] [mySystem-akka<span class="class">.actor</span><span class="class">.default-dispatcher-5</span>] [akka:<span class="comment">//mySystem/user/greeter] hellotom</span>
+</code></pre><p>并可以发现这个程序并没有停止，这是因为<code>Actor</code>一直在监听。</p>
+<h2 id="未完待续。。。">未完待续。。。</h2><h2 id="参考">参考</h2><ul>
+<li><a href="http://akka.io/" target="_blank" rel="external">http://akka.io/</a></li>
+<li><a href="http://doc.akka.io/docs/akka/2.3.11/AkkaScala.pdf?_ga=1.249061252.2036148369.1433248459" target="_blank" rel="external">Akka doc for scala</a></li>
+<li><a href="http://www.gtan.com/akka_doc/index.html" target="_blank" rel="external">http://www.gtan.com/akka_doc/index.html</a>  难得的中文文档</li>
+</ul>
 
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/05/31/Mac/My-Tools-Used-In-Mac/" title="我在Mac中使用的各种实用工具" itemprop="url">
-  
-    <h1 itemprop="name">我在Mac中使用的各种实用工具</h1>
-    
-     
-           <p itemprop="description" >用Mac一个多月来，已经慢慢习惯，Mac下的软件都比较精致，虽然其数量远不及Windows，但是日常使用的都已经有了。
-office2011 for mac破解版下载地址http://www.macx.cn/thread-2082485-1-1.html穷人Mac使用者首选，可以</p>
         
-    
-    <time datetime="2015-05-31T06:30:53.000Z" itemprop="datePublished">2015-05-31</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/05/31/Spark/Build-Spark-Source-And-Compile/" title="使用IDEA搭建Spark源码环境及编译Spark源码" itemprop="url">
-  
-    <h1 itemprop="name">使用IDEA搭建Spark源码环境及编译Spark源码</h1>
-    
-     
-           <p itemprop="description" >之前在看网上使用Eclipse搭建Spark的源码环境各种复杂，所以我只会spark source code下载下来，然后Import到Eclipse中，各种报错，各种包没有，还好我只是看看源码而已，不运行它报错也无所谓啦，人懒没办法..但是现在想深入得学习一下Spark的源码环</p>
         
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Akka/">Akka</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Akka/">Akka</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/04/Akka/Study-Akka-First/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/04/Akka/Study-Akka-First/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
     
-    <time datetime="2015-05-31T05:57:05.000Z" itemprop="datePublished">2015-05-31</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/05/30/Effective Java/Enum-And-Annotation/" title="《Effective Java》第六章：枚举和注解" itemprop="url">
-  
-    <h1 itemprop="name">《Effective Java》第六章：枚举和注解</h1>
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-     
-           <p itemprop="description" >第30条：用枚举代替int常量在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式就是声明一组具名的int常量123public static final int APPLE_FUJI			=0;public static final int APPLE_PIPPIN		=</p>
+      <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" title="Spark源码中所使用的经典数据结构或者设计模式" itemprop="url">Spark源码中所使用的经典数据结构或者设计模式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-02T13:32:28.000Z" itemprop="datePublished"> 发表于 2015-06-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
         
-    
-    <time datetime="2015-05-30T15:57:33.000Z" itemprop="datePublished">2015-05-30</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/05/24/Scala/Study-And-User-JSON4S/" title="学习和使用Scala的Json解析类库-JSON4S" itemprop="url">
-  
-    <h1 itemprop="name">学习和使用Scala的Json解析类库-JSON4S</h1>
-    
-     
-           <p itemprop="description" >介绍在Scala环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(AST),而JSON4S这个项目的目标就是提供一个单一的AST树供其他Scala类库来使用。
-
-JSON4S的features：
-
-快速的JSON解析
-LINQ 风格的查询
-可以紧密结合样例类
-差别比</p>
+        <h2 id="位域法">位域法</h2><blockquote>
+<p>如果一个枚举类型的元素主要用于在集合中，一般就使用<code>int</code>枚举类型，将2的不同倍数赋予每个常量。<br>这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。</p>
+</blockquote>
+<p>在<code>Spark</code>源码中进入<code>SparkSubmit</code>类中就可以看到<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Cluster managers</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">YARN</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">STANDALONE</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">MESOS</span> =</span> <span class="number">4</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">LOCAL</span> =</span> <span class="number">8</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_CLUSTER_MGRS</span> =</span> <span class="type">YARN</span> | <span class="type">STANDALONE</span> | <span class="type">MESOS</span> | <span class="type">LOCAL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Deploy modes</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLIENT</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLUSTER</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_DEPLOY_MODES</span> =</span> <span class="type">CLIENT</span> | <span class="type">CLUSTER</span></span><br></pre></td></tr></table></figure></p>
+<p>将集群类型和部署模式使用位域法来存储。</p>
+<blockquote>
+<p>在《Effective Java》第32条中提到，但是都不推荐。。<code>Spark</code>都使用了，难道这种结构不好嘛？？^_^</p>
+</blockquote>
+<h1 id="持续更新中。。。。">持续更新中。。。。</h1>
         
-    
-    <time datetime="2015-05-24T02:12:14.000Z" itemprop="datePublished">2015-05-24</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/05/23/Effective Java/Generic/" title="《Effective Java》第五章：泛型" itemprop="url">
-  
-    <h1 itemprop="name">《Effective Java》第五章：泛型</h1>
-    
-     
-           <p itemprop="description" >泛型，可以告诉编译器每个集合中接受哪些对象类型，编译器会自动地为你的插入进行转化，并在编译时告知是否插入了类型错误的对象。(貌似Java里面的泛型都是伪泛型吧-_-|)
-第23条：请不要再新代码中使用原生态类型
-什么是原生态类型？
-
-类似List&amp;lt;E&amp;gt;,Collect</p>
         
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
     
-    <time datetime="2015-05-23T15:05:33.000Z" itemprop="datePublished">2015-05-23</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/" title="自己煮：泡椒牛蛙" itemprop="url">
-  
-    <h1 itemprop="name">自己煮：泡椒牛蛙</h1>
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
     
-     
-           <p itemprop="description" >泡椒牛蛙是一道色香味俱全的汉族名菜，属于川菜系。最常见又易烹制，成菜后味咸鲜，肉细嫩，色红亮，泡菜香气浓郁。
-食材
-牛蛙：2只
-油、料酒~~~~
-生姜、大蒜：适量
-莴笋：适量（炒到牛蛙里面的莴笋特别好吃）
-小米椒：一点点就好了（最好还有红灯笼椒，但是没买到-_-）
-
-
-预煮牛蛙将</p>
+      <a href="/2015/05/31/Food/Braised-chicken-claw/" title="自己煮：红烧鸡爪" itemprop="url">自己煮：红烧鸡爪</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-31T12:46:20.000Z" itemprop="datePublished"> 发表于 2015-05-31</time>
+    
+  </p>
+</header>
+    <div class="article-content">
         
+        <p>具体煮的步骤和<a href="http://kubicode.me/2015/04/19/Food/Coke-Chicken-feet/" target="_blank" rel="external">自己煮：可口又美味的可乐鸡翅</a>一样，无法是增加了酱油的分量以及在最后煮的时候放得时水，可以看到这样煮出来的颜色会比较浓一下，直接看成品图吧：^_^<br><img src="/img/jizhua/8.jpg" alt=""></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Food/">Food</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Food/">Food</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/31/Food/Braised-chicken-claw/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/31/Food/Braised-chicken-claw/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
     
-    <time datetime="2015-05-16T14:38:59.000Z" itemprop="datePublished">2015-05-16</time>
-  </a>
-</section>
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/31/Mac/My-Tools-Used-In-Mac/" title="我在Mac中使用的各种实用工具" itemprop="url">我在Mac中使用的各种实用工具</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-31T06:30:53.000Z" itemprop="datePublished"> 发表于 2015-05-31</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>用Mac一个多月来，已经慢慢习惯，Mac下的软件都比较精致，虽然其数量远不及Windows，但是日常使用的都已经有了。</p>
+<h2 id="office2011_for_mac破解版">office2011 for mac破解版</h2><p>下载地址<a href="http://www.macx.cn/thread-2082485-1-1.html" target="_blank" rel="external">http://www.macx.cn/thread-2082485-1-1.html</a><br>穷人Mac使用者首选，可以和Windows上的office无缝对接，如果你安装完之后发现word很模糊的话 请将office升级到最新版。<br>里面还有一个很强的功能就是Micosoft Connection，用这个软件可以直接在mac端远程到windows端，方便的很。</p>
+<h2 id="chmox">chmox</h2><p>下载地址<a href="http://chmox.sourceforge.net/" target="_blank" rel="external">http://chmox.sourceforge.net/</a><br>chmox可以在mac下查看chm帮助文档,毕竟chm格式的文档很多啊^_^，chmox真实良心产品</p>
+<h2 id="Snip-截屏软件">Snip-截屏软件</h2><p>下载地址<a href="http://www.snip.qq.com/" target="_blank" rel="external">http://www.snip.qq.com/</a><br>它软件属于企鹅出品，质量也还不错，不过安装的时候建议不要绑定QQ邮箱-_-</p>
+<h2 id="iTerm_2">iTerm 2</h2><p>下载地址<a href="http://iterm2.com/" target="_blank" rel="external">http://iterm2.com/</a><br>iTerm 2 的分屏功能让人用着很爽，它们都说和<a href="http://ohmyz.sh/" target="_blank" rel="external">ohmyz</a>配合简直优雅到爆，但是我还是比较习惯原生的.bash -_-</p>
+<h2 id="Sublime_Text2">Sublime Text2</h2><p>下载地址<a href="http://www.sublimetext.com/2" target="_blank" rel="external">http://www.sublimetext.com/2</a><br>和Windows端一样好用，哈哈，因为习惯了这个编辑器。</p>
+<blockquote>
+<p>遗憾的是Notepad++没有Mac版-_-</p>
+</blockquote>
+<h2 id="FileZilla-Ftp_工具">FileZilla-Ftp 工具</h2><p>下载地址<a href="https://filezilla-project.org/" target="_blank" rel="external">https://filezilla-project.org/</a><br>用这个连接ftp很方便，不过由于系统语言是英文的，FileZilla老是对中文乱码，还不知道哪里设置。。。</p>
+<h2 id="VirtualBox虚拟机">VirtualBox虚拟机</h2><p>下载地址<a href="https://www.virtualbox.org/" target="_blank" rel="external">https://www.virtualbox.org/</a><br>小巧，便捷，免费,用着还挺顺手。</p>
+<h2 id="TeamViewer">TeamViewer</h2><p>下载地址<a href="https://www.teamviewer.com/en/index.aspx" target="_blank" rel="external">https://www.teamviewer.com/en/index.aspx</a><br>远程协作工具，该工具在Mac下一样好用</p>
+<h2 id="MPlayer-视频播放器">MPlayer-视频播放器</h2><p>下载地址<a href="http://itunes.apple.com/us/app/mplayerx/id421131143?mt=12" target="_blank" rel="external">http://itunes.apple.com/us/app/mplayerx/id421131143?mt=12</a><br>非常好使的一个视频播放软件，支持较多的格式，比自带的QuickTime好用多了-_-</p>
+<h2 id="Chrome">Chrome</h2><p>下载地址<a href="http://www.google.cn/chrome/" target="_blank" rel="external">http://www.google.cn/chrome/</a><br>还是习惯使用Chrome来上网啊。。。</p>
+<h2 id="Eclipse">Eclipse</h2><p>下载地址<a href="http://www.eclipse.org/downloads/" target="_blank" rel="external">http://www.eclipse.org/downloads/</a><br>跨平台的IDE用起来就是舒服</p>
+<h2 id="IDEA">IDEA</h2><p>下载地址<a href="http://www.jetbrains.com/idea/download/" target="_blank" rel="external">http://www.jetbrains.com/idea/download/</a><br>号称开发神奇，下载来玩玩。。^_^</p>
+<blockquote>
+<p>我喜欢将IDEA的KeyMap设置为Eclipse风格-_-</p>
+</blockquote>
+<h2 id="MacDown">MacDown</h2><p>下载地址<a href="http://macdown.uranusjr.com/" target="_blank" rel="external">http://macdown.uranusjr.com/</a><br>Mac下写Markdown文章的必备工具，免费漂亮。。</p>
+<h2 id="必备常用软件">必备常用软件</h2><p>QQ、迅雷、搜狗输入法等不贴地址了，去各自的官网上都能下载到。蛮好用的。</p>
+<p>持续更新中。。。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Mac/">Mac</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Mac/">Mac</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/31/Mac/My-Tools-Used-In-Mac/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/31/Mac/My-Tools-Used-In-Mac/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/31/Spark/Build-Spark-Source-And-Compile/" title="使用IDEA搭建Spark源码环境及编译Spark源码" itemprop="url">使用IDEA搭建Spark源码环境及编译Spark源码</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-31T05:57:05.000Z" itemprop="datePublished"> 发表于 2015-05-31</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>之前在看网上使用Eclipse搭建<code>Spark</code>的源码环境各种复杂，所以我只会spark source code下载下来，然后Import到Eclipse中，各种报错，各种包没有，还好我只是看看源码而已，不运行它报错也无所谓啦，人懒没办法..<br><br>但是现在想深入得学习一下<code>Spark</code>的源码环,就不得不搭建完整地环境，所以使用号称开发神器的IDEA来搭建<code>Spark</code>的源码环境，果然很方便^_^</p>
+<h2 id="准备工作">准备工作</h2><ul>
+<li><code>JDK1.7+</code></li>
+<li><code>Scala2.10.4</code>(最好用这个版本，不然用最新版可能导致Spark出各种错误，点<a href="http://www.scala-lang.org/download/2.10.4.html" target="_blank" rel="external">这里</a>下载)</li>
+<li><code>IntelliJ IDEA 14 Community Edition</code>(记得下载时选择<a href="http://www.jetbrains.com/idea/download/" target="_blank" rel="external">社区版</a>,它是免费的)</li>
+<li><code>Mac OS X 10.10.2</code> (用其他环境也可以，但是别用windows啊)</li>
+</ul>
+<h2 id="从Github上clone源码">从Github上clone源码</h2><p>打开Idea,在欢迎界面别动！！！<br><br>点击<strong>Check out from version Control-&gt;Git</strong><br><br>在弹出的界面上输入github上spark的托管地址<a href="http://www.jetbrains.com/idea/download/" target="_blank" rel="external">http://www.jetbrains.com/idea/download/</a><br><img src="/img/Build-Spark-Source-And-Compile/clone.png" height="200px" width="400px"></p>
+<p>好了，你可以慢慢等了，我这里clone了半小时-_-网速不好啊。</p>
+<h2 id="pom-xml的依赖包下载"><code>pom.xml</code>的依赖包下载</h2><p>好不容易将<code>Spark</code>源码clone到本地了，这个时候idea会提醒你发现<code>pom.xml</code>，询问你是否下载其中的依赖，这个时候你要点“是”（Idea的强大之处就是会把这里的依赖全部给你下载了）。<br>好了，你又可以慢慢等待了，这个时候进度条在Idea右下角，想看进度的自己去点出来，我这里下载依赖貌似下载了一个多小时-_-</p>
+<p>依赖包下载完成之后你就可以看<code>Spark</code>源码了<br><img src="/img/Build-Spark-Source-And-Compile/codeui.png" alt=""></p>
+<h2 id="编译Spark源码">编译Spark源码</h2><p>编译之前先打开<code>pom.xml</code>看java的版本确保和你本机的版本一样。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">java.version</span>&gt;</span>1.7<span class="tag">&lt;/<span class="title">java.version</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后打开终端iterm，进入sarpk的源码根目录，然后执行<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yans-MacBook-Pro:spark yanyl$build/mvn -DskipTests clean package</span><br></pre></td></tr></table></figure></p>
+<p>进行最终的编译，这里编译也是要花很多时间啊-_-，慢慢等吧，天朝的网络就是没办法。</p>
+<blockquote>
+<p>如果想有其他的编译需求，比如Spark on Yarn：<br> <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">build/mvn -Pyarn -Phadoop-2.4 -Dhadoop.version=2.4.0 -DskipTests clean package</span><br></pre></td></tr></table></figure></p>
+<p>具体看官网<code><a href="http://spark.apache.org/docs/latest/building-spark.html#building-with-sbt" target="_blank" rel="external">http://spark.apache.org/docs/latest/building-spark.html#building-with-sbt</a></code>,也还可以使用<code>Sbt</code>来进行编译，不过推荐使用<code>Maven</code>，因为他会下载<code>Zinc</code>来加速编译，还可以显示依赖的下载进度^_^。</p>
+</blockquote>
+<p>编译完了之后控制台会输出：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Reactor Summary:</span><br><span class="line">[INFO]</span><br><span class="line">[INFO] Spark Project Parent POM ........................... SUCCESS [  5.915 s]</span><br><span class="line">[INFO] Spark Launcher Project ............................. SUCCESS [ 11.219 s]</span><br><span class="line">[INFO] Spark Project Networking ........................... SUCCESS [  9.197 s]</span><br><span class="line">[INFO] Spark Project Shuffle Streaming Service ............ SUCCESS [  4.701 s]</span><br><span class="line">[INFO] Spark Project Unsafe ............................... SUCCESS [  4.131 s]</span><br><span class="line">[INFO] Spark Project Core ................................. SUCCESS [03:29 min]</span><br><span class="line">[INFO] Spark Project Bagel ................................ SUCCESS [  7.715 s]</span><br><span class="line">[INFO] Spark Project GraphX ............................... SUCCESS [ 21.757 s]</span><br><span class="line">[INFO] Spark Project Streaming ............................ SUCCESS [ 40.511 s]</span><br><span class="line">[INFO] Spark Project Catalyst ............................. SUCCESS [ 45.336 s]</span><br><span class="line">[INFO] Spark Project SQL .................................. SUCCESS [ 52.931 s]</span><br><span class="line">[INFO] Spark Project ML Library ........................... SUCCESS [01:10 min]</span><br><span class="line">[INFO] Spark Project Tools ................................ SUCCESS [  3.714 s]</span><br><span class="line">[INFO] Spark Project Hive ................................. SUCCESS [01:02 min]</span><br><span class="line">[INFO] Spark Project REPL ................................. SUCCESS [ 10.813 s]</span><br><span class="line">[INFO] Spark Project YARN ................................. SUCCESS [01:41 min]</span><br><span class="line">[INFO] Spark Project Assembly ............................. SUCCESS [01:25 min]</span><br><span class="line">[INFO] Spark Project External Twitter ..................... SUCCESS [  7.853 s]</span><br><span class="line">[INFO] Spark Project External Flume Sink .................. SUCCESS [  6.082 s]</span><br><span class="line">[INFO] Spark Project External Flume ....................... SUCCESS [  8.545 s]</span><br><span class="line">[INFO] Spark Project External MQTT ........................ SUCCESS [  6.492 s]</span><br><span class="line">[INFO] Spark Project External ZeroMQ ...................... SUCCESS [  6.426 s]</span><br><span class="line">[INFO] Spark Project External Kafka ....................... SUCCESS [  9.914 s]</span><br><span class="line">[INFO] Spark Project Examples ............................. SUCCESS [01:34 min]</span><br><span class="line">[INFO] Spark Project External Kafka Assembly .............. SUCCESS [ 31.930 s]</span><br><span class="line">[INFO] Spark Project YARN Shuffle Service ................. SUCCESS [  7.461 s]</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 15:27 min</span><br><span class="line">[INFO] Finished at: 2015-05-31T22:56:11+08:00</span><br><span class="line">[INFO] Final Memory: 83M/653M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure></p>
+<p>现在你就可以在<code>$SPARK_HOME/assembly/target/scala-2.10/</code>下发现这个<code>spark-assembly-1.4.0-SNAPSHOT-hadoop2.6.0.jar</code>文件了，他可以在IDE中引用来开发<code>Spark</code>程序。</p>
+<h2 id="验证">验证</h2><p>为了验证编译结果，你可以到<code>$SPARK_HOME/bin/</code>目录下取执行<code>spark-shell</code>这个脚本:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scala&#62; val rdd=sc.parallelize(List(1,2,3,5))&#10;rdd: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[0] at parallelize at &#60;console&#62;:21&#10;&#10;scala&#62; rdd.count&#10;//...&#27492;&#22788;&#30465;&#30053;log&#10;res0: Long = 4&#10;scala&#62;</span><br></pre></td></tr></table></figure></p>
+<p>这里就可以运行<code>local</code>模式的<code>Spark</code>了，赶紧去体验吧~^_^</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/31/Spark/Build-Spark-Source-And-Compile/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/31/Spark/Build-Spark-Source-And-Compile/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/30/Effective Java/Enum-And-Annotation/" title="《Effective Java》第六章：枚举和注解" itemprop="url">《Effective Java》第六章：枚举和注解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T15:57:33.000Z" itemprop="datePublished"> 发表于 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="第30条：用枚举代替int常量">第30条：用枚举代替int常量</h2><p>在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式就是声明一组具名的<code>int</code>常量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_FUJI			=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_PIPPIN		=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_GRANNY_SMITH	=<span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
+<p>但是它又诸多的缺点：</p>
+<ul>
+<li>在类型安全性和使用方便性方面没有任何帮助。</li>
+<li>如果关联的<code>int</code>放生了变化，客户端必须得重新编译。</li>
+<li>打印调试的时候只能打印数字</li>
+</ul>
+<p>上述<code>int</code>常量如何使用枚举类实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> APPLE&#123;FUJI,PIPPIN,GRANNY_SMITH&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>除了编码简单之外，枚举的特点还有：</p>
+<ul>
+<li>枚举是类型安全的（所有可以作为单例的泛型化来使用）。</li>
+<li>可以增加或者重新排列枚举类型中的常量，而无需重新编译它的客户端代码。</li>
+<li>可以通过<code>toString</code>方法来打印可视的字符串。</li>
+</ul>
+<p>枚举类型还可以添加任意的方法和域，并实现任意的接口。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Calc</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 具体继承了接口 并重新实现了</span><br><span class="line"> *<span class="javadoctag"> @author</span> yanyl</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Operation implements Calc&#123;</span><br><span class="line">	PLUS(<span class="string">"+"</span>)&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x+y;&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	MINUS(<span class="string">"-"</span>)&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x-y;&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	TIMES(<span class="string">"*"</span>)&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x*y;&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	DIVIDE(<span class="string">"/"</span>)&#123;</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x/y;&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String symbol;</span><br><span class="line">	Operation(String symbol)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>.symbol=symbol;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.symbol;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上述枚举可以这么使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Calc calc=Operation.PLUS;</span><br><span class="line">System.out.println(calc.apply(<span class="number">1</span>, <span class="number">2</span>));</span><br></pre></td></tr></table></figure></p>
+<p>是不是超级方便~</p>
+<blockquote>
+<p>总之而言，与<code>int</code>常量对比，枚举类型的优势是不言而喻的，（当然，当初枚举的出现就是为了解决<code>int</code>常量问题的^_^，所以大家还是多使用枚举吧）</p>
+</blockquote>
+<h2 id="第31条：用实例域代替序数">第31条：用实例域代替序数</h2><p>什么是枚举的序数，你知道吗？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Ensemble&#123;</span><br><span class="line">	SOLO,DUET,TRIO,QUARTET,QUITTET,</span><br><span class="line">	SEXTET,SEPTET,OCTET,NONET,DECTET;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numberOfMusicians</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> ordinal()+<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>每个枚举都有一个<code>ordinal()</code>方法，用于返回当前枚举值的序数，这个见都没见过的方法用起来看似很方便，但是如果你要修改常量的顺序，那么维护起来就是一场噩梦。<br>第30条说过了，枚举里面可以有字段，所以这条就是推荐使用实例域代替序数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Ensemble&#123;</span><br><span class="line">	SOLO(<span class="number">1</span>),DUET(<span class="number">2</span>),TRIO(<span class="number">3</span>),QUARTET(<span class="number">4</span>),QUITTET(<span class="number">5</span>),</span><br><span class="line">	SEXTET(<span class="number">6</span>),SEPTET(<span class="number">7</span>),OCTET(<span class="number">8</span>),NONET(<span class="number">9</span>),DECTET(<span class="number">10</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 使用自定义的一个实例域</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> numberOfMusicians;</span><br><span class="line">	Ensemble(<span class="keyword">int</span> numberOfMusicians)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>.numberOfMusicians=numberOfMusicians;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numberOfMusicians</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> numberOfMusicians+<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个方法实现的修过虽好，然是感觉写起来好麻烦。。。维护起来会很简单吗？？？</p>
+<h2 id="第32条：用EnumSet代替位域">第32条：用EnumSet代替位域</h2><blockquote>
+<p>这个小节讲的其实就是和位图法相关。</p>
+</blockquote>
+<p>如果一个枚举类型的元素主要用于在集合中，一般就使用<code>int</code>枚举类型，将2的不同倍数赋予每个常量。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Text</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STYLE_BOLD			=<span class="number">1</span>&lt;&lt;<span class="number">0</span>;<span class="comment">//1</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STYLE_ITALIC		=<span class="number">1</span>&lt;&lt;<span class="number">1</span>;<span class="comment">//2</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STYLE_UNDERLINE		=<span class="number">1</span>&lt;&lt;<span class="number">2</span>;<span class="comment">//4</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STYLE_STRIKETHROUGH	=<span class="number">1</span>&lt;&lt;<span class="number">3</span>;<span class="comment">//8</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> styles=-<span class="number">1</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">applyStyles</span><span class="params">(<span class="keyword">int</span> styles)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.styles=styles;<span class="comment">//这里其实就是用位图法来保存，取值要用位移来取  int这里只能存32个值</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。<br>然后你可能会使用这或操作种方法来保持状态：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Text().applyStyles(Text.STYLE_BOLD|Text.STYLE_ITALIC);</span><br></pre></td></tr></table></figure></p>
+<p>这种做法一个是打印是来比较难看懂，还有编译表示所有元素时也没好好的办法。</p>
+<p>还好有<code>EnumSet</code>的出现，它实现了<code>Set</code>接口，如果底层枚举类型少于64个，那么这个<code>EnumSet</code>就是用一个<code>long</code>类型来表示，所以性能上也是很高的，上面这个例子用<code>EnumSet</code>来实现就是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Text</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">enum</span> Style&#123;BOLD,ITALIC,UNDERLINE,STRIKETHROUGH&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> EnumSet&lt;Style&gt; styles=<span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">applyStyles</span><span class="params">(EnumSet&lt;Style&gt; styles)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.styles=styles;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用方法就用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Text().applyStyles(EnumSet.of(Text.Style.BOLD, Text.Style.ITALIC));</span><br></pre></td></tr></table></figure></p>
+<p>这是调用之后你打印<code>styles</code>这个变量可以看到</p>
+<pre><code>[BOLD, ITALIC]
+</code></pre><p>这种打印显示的总比单纯的数字要美好的多。</p>
+<blockquote>
+<p>总而言之，正式因为枚举类型要用集合，所以没有理由用位域来表示它。<br>其实我觉得用<code>EnumSet</code>应该没有位域快啊，估计高手还是会去用位域的把</p>
+</blockquote>
+<h2 id="第33条：用EnumMap代替序数索引">第33条：用EnumMap代替序数索引</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Herb</span></span>&#123;</span><br><span class="line">		<span class="keyword">public</span> <span class="keyword">enum</span> Type &#123;ANNUL,PERENNIAL,BIENNIAL&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当你需要将上面类的实例根据<code>Type</code>枚举类型来存储起来是，它推荐这么做：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Herb.Type,Set&lt;Herb&gt;&gt; enumMap=<span class="keyword">new</span> EnumMap&lt;Herb.Type,Set&lt;Herb&gt;&gt;(Herb.Type.class);</span><br></pre></td></tr></table></figure></p>
+<p>但是我觉得何必这么麻烦,用下面的写得表示也很方便嘛，也还不需要记那么多东西<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer,Set&lt;Herb&gt;&gt; map=<span class="keyword">new</span> HashMap&lt;Integer,Set&lt;Herb&gt;&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>每次使用<code>Type.ordinal()</code>的索引即可。</p>
+<h2 id="第34条：用接口模拟可伸缩的枚举">第34条：用接口模拟可伸缩的枚举</h2><p>前面几条讲了使用<code>Enum</code>的便利性，安全性，但是它的可伸缩性比较弱，因为枚举无法再继承类或者枚举，比较幸运地时枚举支持接口的实现。<br>例如第30条中的四则运算我需要扩展其他的运算：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> ExtendOperation implements Calc&#123;</span><br><span class="line">	EXP(<span class="string">"^"</span>)&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> Math.pow(x,y);&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	REMAINDER(<span class="string">"%"</span>)&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">apply</span><span class="params">(<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span>&#123;<span class="keyword">return</span> x%y;&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String symbol;</span><br><span class="line">	ExtendOperation(String symbol)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>.symbol=symbol;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.symbol;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后你就可以这么使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	System.out.println(test(Operation.PLUS,<span class="number">2</span>,<span class="number">3</span>));<span class="comment">//调用加法</span></span><br><span class="line">	System.out.println(test(ExtendOperation.EXP,<span class="number">2</span>,<span class="number">3</span>));<span class="comment">//调用求幂</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Enum&lt;T&gt; &amp; Calc&gt; <span class="function"><span class="keyword">double</span> <span class="title">test</span><span class="params">(T opt,<span class="keyword">double</span> x,<span class="keyword">double</span> y)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> opt.apply(x, y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最终会输出</p>
+<pre><code>5.0
+8.0
+</code></pre><p>总而言之，虽然无法编写可扩展的枚举类型，却可以通过编写接口以及实现该接口的基础枚举类型，对它进行模拟。</p>
+<h2 id="第35条：注解优于命名模式">第35条：注解优于命名模式</h2><p>以<code>JUnit</code>为例，命名模式的3大缺陷：</p>
+<ol>
+<li>文字拼写错误会导致失败，并且没有任何提示</li>
+<li>无法确保他们只用于相应的程序元素上</li>
+<li>它们都没有提供将参数值与程序元素关联起来的好方法</li>
+</ol>
+<p>你这通过这种方式简单的来创建一个自己的注解<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="annotation">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="keyword">public</span> <span class="annotation">@interface</span> MyTest &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>MyTest</code>注解类型的声明就是它自身的<code>Retention</code>和<code>Targer</code>注解进行了注解，这些注解类型称为元注解，其中：</p>
+<ul>
+<li><code>@Retention(RetentionPolicy.RUNTIME)</code>表示<code>MyTest</code>注解应该在运行时保留</li>
+<li><code>@Target(ElementType.METHOD)</code>表示该注解仅用于方法上</li>
+</ul>
+<p>我们有了这个注解之后可以这么使用它<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@MyTest</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@MyTest</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="annotation">@MyTest</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"i am error test4"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那我们如何调用这个注解呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RunTests</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">int</span> tests=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">int</span> passed=<span class="number">0</span>;</span><br><span class="line">		Class testClass=Class.forName(<span class="string">"yyl.java.study.test.HelloWorld"</span>);</span><br><span class="line">		Object testClassInstance=testClass.newInstance();</span><br><span class="line">		<span class="keyword">for</span>(Method m:testClass.getDeclaredMethods())</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(m.isAnnotationPresent(MyTest.class))</span><br><span class="line">			&#123;</span><br><span class="line">				tests++;</span><br><span class="line">				<span class="keyword">try</span></span><br><span class="line">				&#123;</span><br><span class="line">					m.invoke(testClassInstance,<span class="keyword">null</span>);<span class="comment">//对实例的方法进行调用</span></span><br><span class="line">					passed++;</span><br><span class="line">					System.out.println(<span class="string">"PASSED:"</span>+m.getName());</span><br><span class="line">				&#125;<span class="keyword">catch</span>(Exception e)</span><br><span class="line">				&#123;</span><br><span class="line">					System.out.println(<span class="string">"FAILD:"</span>+m.getName());</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		System.out.println(String.format(<span class="string">"PASSED:%s,FAILED:%s"</span>,passed,tests-passed));</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动这个<code>RunTests</code>会得到</p>
+<pre><code><span class="string">PASSED:</span>test3
+<span class="string">FAILD:</span>test4
+<span class="string">PASSED:</span>test1
+<span class="string">PASSED:</span><span class="number">2</span>,<span class="string">FAILED:</span><span class="number">1</span>
+</code></pre><p>一个简易版的测试框架就完成了，该书中的其他内容是讲你如何完善这个自制的测试框架，比如添加异常的注解，最终判断失败的机制等，我个人觉得只要把上述的简易框架看懂其他都不是问题。^_^</p>
+<blockquote>
+<p>既然有了注解，那么完全没有理由再使用命名模式了。</p>
+</blockquote>
+<h2 id="第36条：坚持使用Override注解">第36条：坚持使用Override注解</h2><p>估计<code>Override</code>注解是在<code>Java</code>中最常见也是常用的一种注解了吧，它标志方法被重写，但是在<code>java</code>中你重写方法时不加<code>Override</code>也是可以正常运行的，所以我相信很多人会懒掉这个注解，关于这个注解书中有下面几个推荐理由：</p>
+<ul>
+<li>你再重写得定义上出错时如果有<code>Override</code>，编译器就会帮你检查错误</li>
+<li>IDE具有自动检查功能，当你没有用<code>Override</code>但是却覆盖了超类的方法时，IDE就是产生一条警告，提醒确认。</li>
+<li>还可以让程序员清晰地看到这条方式是否是重写方法，在看代码的找起来比较方便啊（我自己觉得的）</li>
+</ul>
+<p>总而言之，如果在你想要的每个方法声明中使用<code>Override</code>注解来覆盖超类声明，编译器就可以替你防止大量的错误（在继承抽象类时可以不加。。但是我觉得还是加的好）</p>
+<h2 id="第37条：用标记接口定义类型">第37条：用标记接口定义类型</h2><p>标记接口是没有包含方法声明的接口，而只是指明一个类实现了具有某种属性的接口，比如<code>Serializable</code></p>
+<p>关于标记接口与标记注解的争论：</p>
+<p>标记接口的优势：</p>
+<ul>
+<li>标记接口定义的类型是由被标记类的实例实现的；标记注解则没有定义这样的类型</li>
+<li>标记接口可以更加精确地进行锁定</li>
+</ul>
+<p>标记注解的优势：</p>
+<ul>
+<li>它可以通过默认的方式添加一个或者多个注解类型的元素</li>
+<li>标记注解作为变成元素之一的框架中同样具有一致性。</li>
+</ul>
+<p>总而言之，标记接口和标记注解都各有用处，如果想要定义一个任何新的方法都不会与之关联的类型，标记接口是最好的选择。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/Effective Java/Enum-And-Annotation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/Effective Java/Enum-And-Annotation/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/24/Scala/Study-And-User-JSON4S/" title="学习和使用Scala的Json解析类库-JSON4S" itemprop="url">学习和使用Scala的Json解析类库-JSON4S</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-24T02:12:14.000Z" itemprop="datePublished"> 发表于 2015-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="介绍">介绍</h2><p>在<code>Scala</code>环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(<em>AST</em>),而<code>JSON4S</code>这个项目的目标就是提供一个单一的<em>AST</em>树供其他<code>Scala</code>类库来使用。</p>
+<p><img src="https://camo.githubusercontent.com/67e5a0a48c91139ac30d2ecbfd6d6b020e8688a2/68747470733a2f2f7261772e6769746875622e636f6d2f6a736f6e34732f6a736f6e34732f332e332f636f72652f6a736f6e2e706e67" alt="JSON4S工作原理"></p>
+<p><code>JSON4S</code>的features：</p>
+<ul>
+<li>快速的<code>JSON</code>解析</li>
+<li><code>LINQ</code> 风格的查询</li>
+<li>可以紧密结合样例类</li>
+<li>差别比较和合并</li>
+<li>使用<code>DSL</code>来生成有效格式的<code>JSON</code></li>
+<li>支持<code>XPATH</code></li>
+<li>优雅的打印</li>
+<li>支持<code>XML</code>的转换</li>
+<li>序列化</li>
+</ul>
+<h2 id="下载JSON4S">下载JSON4S</h2><blockquote>
+<p>作者使用的是<code>json4s-native_*.jar</code>（与<code>lift-json</code>相同的实现）。下载的时候注意将版本号进行替换。</p>
+</blockquote>
+<ul>
+<li><p><code>SBT</code>用户</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val json4sNative = <span class="string">"org.json4s"</span> %% <span class="string">"json4s-native"</span> % <span class="string">"3.2.11"</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>MAVEN</code>用户</p>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>org.json4s<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>json4s-native_$&#123;scala.version&#125;<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>3.2.11<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其他：</p>
+<ul>
+<li><a href="http://repo1.maven.org/maven2/org/json4s/json4s-core_2.11/3.2.11/json4s-core_2.11-3.2.11.jar" target="_blank" rel="external">http://repo1.maven.org/maven2/org/json4s/json4s-core_2.11/3.2.11/json4s-core_2.11-3.2.11.jar</a></li>
+<li><a href="http://repo1.maven.org/maven2/org/json4s/json4s-native_2.11/3.2.11/json4s-native_2.11-3.2.11.jar" target="_blank" rel="external">http://repo1.maven.org/maven2/org/json4s/json4s-native_2.11/3.2.11/json4s-native_2.11-3.2.11.jar</a></li>
+<li><a href="http://mirrors.ibiblio.org/pub/mirrors/maven2/com/thoughtworks/paranamer/paranamer/2.5.6/paranamer-2.5.6.jar" target="_blank" rel="external">http://mirrors.ibiblio.org/pub/mirrors/maven2/com/thoughtworks/paranamer/paranamer/2.5.6/paranamer-2.5.6.jar</a></li>
+</ul>
+</li>
+<li>IEAD(我使用的)<br>  File-&gt;Project Structure-&gt;Modules-&gt;Dependencies-&gt;+-&gt;From Maven，然后输入json4s即可搜索，选择最新的json4s-natvie进行下载。</li>
+</ul>
+<h2 id="需导入的核心包介绍">需导入的核心包介绍</h2><ul>
+<li><code>import org.json4s._</code><br>  不用多说，解析都是通过它来完成的。</li>
+<li><p><code>import org.json4s.native.JsonMethods._</code><br>  <code>Scala</code>对象与外部<code>JSON</code>资源(字符串，流，文件等)相互转换的开放接口，代码不多，这里可以贴一下：</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">JsonMethods</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">org</span>.<span class="title">json4s</span>.<span class="title">JsonMethods</span>[</span><span class="type">Document</span>] &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//外部JSON资源转Scala对象</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">parse</span>(</span>in: <span class="type">JsonInput</span>, useBigDecimalForDouble: <span class="type">Boolean</span> = <span class="literal">false</span>): <span class="type">JValue</span> = in <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StringInput</span>(s) =&gt; <span class="type">JsonParser</span>.parse(s, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">ReaderInput</span>(rdr) =&gt; <span class="type">JsonParser</span>.parse(rdr, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StreamInput</span>(stream) =&gt; <span class="type">JsonParser</span>.parse(<span class="type">Source</span>.fromInputStream(stream).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">FileInput</span>(file) =&gt; <span class="type">JsonParser</span>.parse(<span class="type">Source</span>.fromFile(file).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//外部JSON资源转Scala对象(返回值可选)</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">parseOpt</span>(</span>in: <span class="type">JsonInput</span>, useBigDecimalForDouble: <span class="type">Boolean</span> = <span class="literal">false</span>): <span class="type">Option</span>[<span class="type">JValue</span>] = in <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StringInput</span>(s) =&gt; <span class="type">JsonParser</span>.parseOpt(s, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">ReaderInput</span>(rdr) =&gt; <span class="type">JsonParser</span>.parseOpt(rdr, useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">StreamInput</span>(stream) =&gt; <span class="type">JsonParser</span>.parseOpt(<span class="type">Source</span>.fromInputStream(stream).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">FileInput</span>(file) =&gt; <span class="type">JsonParser</span>.parseOpt(<span class="type">Source</span>.fromFile(file).bufferedReader(), useBigDecimalForDouble)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Renders JSON.</span><br><span class="line">   * Scala对象转外部JSON&lt;资源</span><br><span class="line">   * @see Printer#compact</span><br><span class="line">   * @see Printer#pretty</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">render</span>(</span>value: <span class="type">JValue</span>): <span class="type">Document</span> = value <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="literal">null</span>          =&gt; text(<span class="string">"null"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JBool</span>(<span class="literal">true</span>)   =&gt; text(<span class="string">"true"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JBool</span>(<span class="literal">false</span>)  =&gt; text(<span class="string">"false"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JDouble</span>(n)    =&gt; text(n.toString)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JDecimal</span>(n)   =&gt; text(n.toString)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JInt</span>(n)       =&gt; text(n.toString)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JNull</span>         =&gt; text(<span class="string">"null"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JNothing</span>      =&gt; sys.error(<span class="string">"can't render 'nothing'"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JString</span>(<span class="literal">null</span>) =&gt; text(<span class="string">"null"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JString</span>(s)    =&gt; text(<span class="string">"\""</span>+<span class="type">JsonAST</span>.quote(s)+<span class="string">"\""</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JArray</span>(arr)   =&gt; text(<span class="string">"["</span>) :: series(trimArr(arr).map(render)) :: text(<span class="string">"]"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="type">JObject</span>(obj)  =&gt;</span><br><span class="line">      <span class="function"><span class="keyword">val</span> <span class="title">nested</span> =</span> <span class="keyword">break</span> :: fields(trimObj(obj).map(&#123;<span class="keyword">case</span> (n,v) =&gt; text(<span class="string">"\""</span>+<span class="type">JsonAST</span>.quote(n)+<span class="string">"\":"</span>) :: render(v)&#125;))</span><br><span class="line">      text(<span class="string">"&#123;"</span>) :: nest(<span class="number">2</span>, nested) :: <span class="keyword">break</span> :: text(<span class="string">"&#125;"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">trimArr</span>(</span>xs: <span class="type">List</span>[<span class="type">JValue</span>]) = xs.filter(_ != <span class="type">JNothing</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">trimObj</span>(</span>xs: <span class="type">List</span>[<span class="type">JField</span>]) = xs.filter(_._2 != <span class="type">JNothing</span>)</span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">series</span>(</span>docs: <span class="type">List</span>[<span class="type">Document</span>]) = punctuate(text(<span class="string">","</span>), docs)</span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">fields</span>(</span>docs: <span class="type">List</span>[<span class="type">Document</span>]) = punctuate(text(<span class="string">","</span>) :: <span class="keyword">break</span>, docs)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">punctuate</span>(</span>p: <span class="type">Document</span>, docs: <span class="type">List</span>[<span class="type">Document</span>]): <span class="type">Document</span> =</span><br><span class="line">    <span class="keyword">if</span> (docs.length == <span class="number">0</span>) empty</span><br><span class="line">    <span class="keyword">else</span> docs.reduceLeft((d1, d2) =&gt; d1 :: p :: d2)</span><br><span class="line"></span><br><span class="line">  <span class="comment">//紧凑和漂亮的打印</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">compact</span>(</span>d: <span class="type">Document</span>): <span class="type">String</span> = <span class="type">Printer</span>.compact(d)</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">pretty</span>(</span>d: <span class="type">Document</span>): <span class="type">String</span> = <span class="type">Printer</span>.pretty(d)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">JsonMethods</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">native</span>.<span class="title">JsonMethods</span></span></span><br></pre></td></tr></table></figure>
+<p>  可以发现<code>json4s</code>提供了<code>parse</code>和<code>render</code>两大方法来进行<code>JSON</code>的转换。</p>
+</li>
+<li><code>import org.json4s.JsonDSL._</code><br>  <code>render</code>方法需要传入的是<code>JValue</code>类型的值，它并不是<code>Scala</code>的原生对象，所以需要通过转换而为之。<code>JsonDSL</code>这个特质就是提供了这些隐式转换：  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">  <span class="class"><span class="keyword">trait</span> <span class="title">JsonDSL</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Object</span> <span class="keyword"><span class="keyword">with</span></span> <span class="title">org</span>.<span class="title">json4s</span>.<span class="title">Implicits</span> &#123;</span></span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">seq2jvalue</span>[</span><span class="type">A</span>](s : scala.<span class="type">Traversable</span>[<span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">1</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JArray</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">map2jvalue</span>[</span><span class="type">A</span>](m : scala.<span class="type">Predef</span>.<span class="type">Map</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">2</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">option2jvalue</span>[</span><span class="type">A</span>](opt : scala.<span class="type">Option</span>[<span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">3</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">symbol2jvalue</span>(</span>x : scala.<span class="type">Symbol</span>) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JString</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">pair2jvalue</span>[</span><span class="type">A</span>](t : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">4</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">list2jvalue</span>(</span>l : scala.<span class="type">List</span>[org.json4s.<span class="type">JsonAST</span>.<span class="type">JField</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">jobject2assoc</span>(</span>o : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span>) : <span class="type">JsonDSL</span>.<span class="keyword">this</span>.<span class="type">JsonListAssoc</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">JsonListAssoc</span>(</span>left : scala.<span class="type">List</span>[org.json4s.<span class="type">JsonAST</span>.<span class="type">JField</span>]) <span class="keyword">extends</span> java.lang.<span class="type">Object</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>(</span>right : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>(</span>right : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span>) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">implicit</span> <span class="function"><span class="keyword">def</span> <span class="title">pair2Assoc</span>[</span><span class="type">A</span>](t : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">5</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : <span class="type">JsonDSL</span>.<span class="keyword">this</span>.<span class="type">JsonAssoc</span>[<span class="type">A</span>] = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">JsonAssoc</span>[</span><span class="type">A</span>](left : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">A</span>])(<span class="keyword">implicit</span> evidence$<span class="number">6</span> : scala.<span class="type">Function1</span>[<span class="type">A</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) <span class="keyword">extends</span> java.lang.<span class="type">Object</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>[</span><span class="type">B</span>](right : scala.<span class="type">Tuple2</span>[scala.<span class="type">Predef</span>.<span class="type">String</span>, <span class="type">B</span>])(<span class="keyword">implicit</span> evidence$<span class="number">7</span> : scala.<span class="type">Function1</span>[<span class="type">B</span>, org.json4s.<span class="type">JsonAST</span>.<span class="type">JValue</span>]) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">~</span>(</span>right : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span>) : org.json4s.<span class="type">JsonAST</span>.<span class="type">JObject</span> = &#123; <span class="comment">/* compiled code */</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="JSON字符串转对象">JSON字符串转对象</h2><p>可以使用<code>parse</code>方法将<code>JSON</code>字符串进行转换<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t=parse</span>(</span><span class="string">""" &#123; "name" : "tom","age":23,"number":[1,2,3,4] &#125; """</span>)</span><br><span class="line">println(t)</span><br></pre></td></tr></table></figure></p>
+<p>最终打印的结果为：</p>
+<pre><code>JObject<span class="list">(<span class="keyword">List</span><span class="list">(<span class="list">(<span class="keyword">name</span>,JString<span class="list">(<span class="keyword">tom</span>)</span>)</span>, <span class="list">(<span class="keyword">age</span>,JInt<span class="list">(<span class="number">23</span>)</span>)</span>, <span class="list">(<span class="keyword">number</span>,JArray<span class="list">(<span class="keyword">List</span><span class="list">(<span class="keyword">JInt</span><span class="list">(<span class="number">1</span>)</span>, JInt<span class="list">(<span class="number">2</span>)</span>, JInt<span class="list">(<span class="number">3</span>)</span>, JInt<span class="list">(<span class="number">4</span>)</span>)</span>)</span>)</span>)</span>)</span>
+</code></pre><p>根据打印结果可以发现转换之后的并不是<code>Scala</code>的原生对象，那么如何取得它的原生对象呢？它其实是一个<code>Map[String,_]</code>类型的转换<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>((k,v)&lt;-t.values.asInstanceOf[<span class="type">Map</span>[<span class="type">String</span>,_]])</span><br><span class="line">&#123;</span><br><span class="line">println(k,<span class="string">"-&gt;"</span>,v,v.getClass)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将<code>Map</code>遍历输出之后</p>
+<pre><code>(name,-&gt;,tom,class java<span class="class">.lang</span><span class="class">.String</span>)
+(age,-&gt;,<span class="number">23</span>,class scala<span class="class">.math</span><span class="class">.BigInt</span>)
+(number,-&gt;,<span class="function"><span class="title">List</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span></span>,class scala<span class="class">.collection</span><span class="class">.immutable</span>.<span class="variable">$colon</span><span class="variable">$colon</span>)
+</code></pre><p>可以发现<code>parse</code>之后仍旧保留着语言来字符串中可识别的类型，那么还有其他方式取值吗？其实它还支持使用反斜杠(\)的方式进行在顶级目录下取值：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">println(<span class="string">"name"</span>,(t \ <span class="string">"name"</span>).values)</span><br><span class="line">println(<span class="string">"age"</span>,(t \ <span class="string">"age"</span>).values)</span><br><span class="line">println(<span class="string">"number"</span>,(t \ <span class="string">"number"</span>).values)</span><br></pre></td></tr></table></figure></p>
+<p>取到得结果为</p>
+<pre><code><span class="list">(<span class="keyword"><span class="built_in">name</span></span>,tom)</span>
+<span class="list">(<span class="keyword">age</span>,<span class="number">23</span>)</span>
+<span class="list">(<span class="keyword">number</span>,List<span class="list">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span>)</span>
+</code></pre><p>这个功能是不是略显惊讶，特别方法，恩，的确很方便。<br><br>同时该对象还可以直接转换为样例类：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>(</span>name:<span class="type">String</span>,age:<span class="type">Int</span>)<span class="comment">//注意这个样例类不要放方法里面，放在外部可访问的地方即可</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">implicit</span> <span class="function"><span class="keyword">val</span> <span class="title">formats</span> =</span> <span class="type">DefaultFormats</span><span class="comment">//这个日期转换的隐式导入不要忘了，如果有特殊格式还需要自己写</span></span><br><span class="line">println(t.extract[<span class="type">Student</span>])<span class="comment">//这里即可取的对应的样例类数据</span></span><br></pre></td></tr></table></figure></p>
+<p>输出为：</p>
+<pre><code><span class="function"><span class="title">Student</span><span class="params">(tom,<span class="number">23</span>)</span></span>
+</code></pre><p>这个转换功能特别方法，果然,<code>Scala</code>下得<code>JSON</code>转换类库还是有很多自己的特色的^_^。</p>
+<h2 id="对象转JSON字符串">对象转JSON字符串</h2><blockquote>
+<p>注意在打印的时候一定要添加<code>compact()</code>方法，这样才能将字符串紧凑的表示，不然都是<code>Doc</code>对象。</p>
+</blockquote>
+<ul>
+<li><p>集合类的序列化</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">println(compact(render(<span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>))))</span><br><span class="line"><span class="comment">//结果：[1,2,3,4]</span></span><br><span class="line">println(compact(render(<span class="type">Map</span>(<span class="string">"name"</span>-&gt;<span class="string">"tom"</span>,<span class="string">"age"</span>-&gt;<span class="string">"23"</span>))))</span><br><span class="line"><span class="comment">//结果：&#123;"name":"tom","age":"23"&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>只支持<code>Seq</code>和<code>List</code></p>
+</blockquote>
+</li>
+<li><p>元组的序列化</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">tuple=</span>(</span><span class="string">"name"</span>,<span class="string">"tom"</span>)</span><br><span class="line">   println(compact(render(tuple)))</span><br><span class="line">   <span class="comment">//结果：&#123;"name":"tom"&#125;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：这里只支持<code>Tuple2[String,A]</code>这种格式的元组，将会序列化成键值对</p>
+</blockquote>
+</li>
+<li><p>可以使用<code>~</code>将两个字段进行连接操作</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">tuple=</span>(</span><span class="string">"name"</span>,<span class="string">"tom"</span>)~(<span class="string">"age"</span>,<span class="number">23</span>)</span><br><span class="line">println(tuple)</span><br><span class="line">println(compact(render(tuple)))</span><br><span class="line"><span class="comment">//结果：</span></span><br><span class="line"><span class="comment">//JObject(List((name,JString(tom)), (age,JInt(23))))</span></span><br><span class="line"><span class="comment">//&#123;"name":"tom","age":23&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>任何键的值可以为可选的，为<code>None</code>时将不会被序列化</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">tuple=</span>(</span><span class="string">"name"</span>,<span class="string">"tom"</span>)~(<span class="string">"age"</span>,<span class="type">None</span>:<span class="type">Option</span>[<span class="type">Int</span>])</span><br><span class="line">println(tuple)                                   </span><br><span class="line">println(compact(render(tuple)))</span><br><span class="line"><span class="comment">//结果：</span></span><br><span class="line"><span class="comment">//JObject(List((name,JString(tom)), (age,JNothing)))</span></span><br><span class="line"><span class="comment">//&#123;"name":"tom"&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一个复杂一点的列子</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Winner</span>(</span>id: <span class="type">Long</span>, numbers: <span class="type">List</span>[<span class="type">Int</span>])</span><br><span class="line">   <span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Lotto</span>(</span>id: <span class="type">Long</span>, winningNumbers: <span class="type">List</span>[<span class="type">Int</span>], winners: <span class="type">List</span>[<span class="type">Winner</span>], drawDate: <span class="type">Option</span>[java.util.<span class="type">Date</span>])</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">val</span> <span class="title">winners</span> =</span> <span class="type">List</span>(<span class="type">Winner</span>(<span class="number">23</span>, <span class="type">List</span>(<span class="number">2</span>, <span class="number">45</span>, <span class="number">34</span>, <span class="number">23</span>, <span class="number">3</span>, <span class="number">5</span>)), <span class="type">Winner</span>(<span class="number">54</span>, <span class="type">List</span>(<span class="number">52</span>, <span class="number">3</span>, <span class="number">12</span>, <span class="number">11</span>, <span class="number">18</span>, <span class="number">22</span>)))</span><br><span class="line">   <span class="function"><span class="keyword">val</span> <span class="title">lotto</span> =</span> <span class="type">Lotto</span>(<span class="number">5</span>, <span class="type">List</span>(<span class="number">2</span>, <span class="number">45</span>, <span class="number">34</span>, <span class="number">23</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">3</span>), winners, <span class="type">Option</span>(<span class="keyword">new</span> java.util.<span class="type">Date</span>()))</span><br><span class="line">   <span class="function"><span class="keyword">val</span> <span class="title">json</span> =</span></span><br><span class="line">     (<span class="string">"lotto"</span> -&gt;</span><br><span class="line">       (<span class="string">"lotto-id"</span> -&gt; lotto.id) ~</span><br><span class="line">         (<span class="string">"winning-numbers"</span> -&gt; lotto.winningNumbers) ~</span><br><span class="line">         (<span class="string">"draw-date"</span> -&gt; lotto.drawDate.map(_.toString)) ~</span><br><span class="line">         (<span class="string">"winners"</span> -&gt;</span><br><span class="line">           lotto.winners.map &#123; w =&gt;</span><br><span class="line">             ((<span class="string">"winner-id"</span> -&gt; w.id) ~</span><br><span class="line">               (<span class="string">"numbers"</span> -&gt; w.numbers))</span><br><span class="line">           &#125;))</span><br><span class="line"></span><br><span class="line">   println(compact(render(json)))</span><br></pre></td></tr></table></figure>
+<p>  打印的结果为:</p>
+<pre><code>{"<span class="attribute">lotto</span>":<span class="value">{"<span class="attribute">lotto-id</span>":<span class="value"><span class="number">5</span></span>,"<span class="attribute">winning-numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">7</span>,<span class="number">5</span>,<span class="number">3</span>]</span>,"<span class="attribute">draw-date</span>":<span class="value"><span class="string">"Sun May 24 15:41:29 CST 2015"</span></span>,"<span class="attribute">winners</span>":<span class="value">[{"<span class="attribute">winner-id</span>":<span class="value"><span class="number">23</span></span>,"<span class="attribute">numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">3</span>,<span class="number">5</span>]</span>},{"<span class="attribute">winner-id</span>":<span class="value"><span class="number">54</span></span>,"<span class="attribute">numbers</span>":<span class="value">[<span class="number">52</span>,<span class="number">3</span>,<span class="number">12</span>,<span class="number">11</span>,<span class="number">18</span>,<span class="number">22</span>]</span>}]</span>}</span>}
+</code></pre><p>  如果你使用<code>pretty()</code>方法来组织<code>JSON</code>:</p>
+  <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println(pretty(render(json)))</span><br></pre></td></tr></table></figure>
+<p>  就可以得到：</p>
+<pre><code>{
+  "<span class="attribute">lotto</span>":<span class="value">{
+    "<span class="attribute">lotto-id</span>":<span class="value"><span class="number">5</span></span>,
+    "<span class="attribute">winning-numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">7</span>,<span class="number">5</span>,<span class="number">3</span>]</span>,
+    "<span class="attribute">draw-date</span>":<span class="value"><span class="string">"Sun May 24 15:43:01 CST 2015"</span></span>,
+    "<span class="attribute">winners</span>":<span class="value">[{
+      "<span class="attribute">winner-id</span>":<span class="value"><span class="number">23</span></span>,
+      "<span class="attribute">numbers</span>":<span class="value">[<span class="number">2</span>,<span class="number">45</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">3</span>,<span class="number">5</span>]
+    </span>},{
+      "<span class="attribute">winner-id</span>":<span class="value"><span class="number">54</span></span>,
+      "<span class="attribute">numbers</span>":<span class="value">[<span class="number">52</span>,<span class="number">3</span>,<span class="number">12</span>,<span class="number">11</span>,<span class="number">18</span>,<span class="number">22</span>]
+    </span>}]
+  </span>}
+</span>}
+</code></pre><p>  这样可读性明显提高多了。</p>
+</li>
+</ul>
+<h2 id="合并和差异化对比">合并和差异化对比</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t1=parse</span>(</span></span><br><span class="line">  <span class="string">"""</span><br><span class="line">    &#123;"name":"tom",</span><br><span class="line">       "age":23,</span><br><span class="line">       "class":["xiaoerban"]</span><br><span class="line">    &#125;</span><br><span class="line">  """</span>)</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t2=parse</span>(</span></span><br><span class="line">  <span class="string">"""</span><br><span class="line">    &#123;"name":"tom",</span><br><span class="line">       "age":23,</span><br><span class="line">       "class":["xiaosanban"]</span><br><span class="line">    &#125;</span><br><span class="line">  """</span>)</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">t3=t1</span> <span class="title">merge</span> <span class="title">t2</span></span><br><span class="line"></span>println(pretty(render(t3)))</span><br></pre></td></tr></table></figure>
+<p>合并之后的结果为</p>
+<pre><code>{
+  "<span class="attribute">name</span>":<span class="value"><span class="string">"tom"</span></span>,
+  "<span class="attribute">age</span>":<span class="value"><span class="number">23</span></span>,
+  "<span class="attribute">class</span>":<span class="value">[<span class="string">"xiaoerban"</span>,<span class="string">"xiaosanban"</span>]
+</span>}
+</code></pre><p>接下来咱们对比一下合并之后的差异化：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">Diff</span>(</span>changed,added,deleted)=t3 diff t1</span><br><span class="line">println(<span class="string">"changed"</span>,changed)</span><br><span class="line">println(<span class="string">"added"</span>,added)</span><br><span class="line">println(<span class="string">"deleted"</span>,deleted)</span><br></pre></td></tr></table></figure></p>
+<p>输出的差异化为：</p>
+<pre><code><span class="list">(<span class="keyword">changed</span>,JNothing)</span>
+<span class="list">(<span class="keyword">added</span>,JNothing)</span>
+<span class="list">(<span class="keyword">deleted</span>,JObject<span class="list">(<span class="keyword">List</span><span class="list">(<span class="list">(<span class="keyword"><span class="built_in">class</span></span>,JArray<span class="list">(<span class="keyword">List</span><span class="list">(<span class="keyword">JString</span><span class="list">(<span class="keyword">xiaosanban</span>)</span>)</span>)</span>)</span>)</span>)</span>)</span>
+</code></pre><h2 id="XML的支持">XML的支持</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.json4s.<span class="type">Xml</span>.&#123;toJson, toXml&#125;</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">xml</span> =</span></span><br><span class="line">  &lt;users&gt;</span><br><span class="line">    &lt;user&gt;</span><br><span class="line">      &lt;id&gt;<span class="number">1</span>&lt;/id&gt;</span><br><span class="line">      &lt;name&gt;<span class="type">Harry</span>&lt;/name&gt;</span><br><span class="line">    &lt;/user&gt;</span><br><span class="line">    &lt;user&gt;</span><br><span class="line">      &lt;id&gt;<span class="number">2</span>&lt;/id&gt;</span><br><span class="line">      &lt;name&gt;<span class="type">David</span>&lt;/name&gt;</span><br><span class="line">    &lt;/user&gt;</span><br><span class="line">  &lt;/users&gt;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">json</span> =</span> toJson(xml)</span><br><span class="line">println(pretty(render(json)))</span><br></pre></td></tr></table></figure>
+<p>输出的结果为：</p>
+<pre><code>{
+  "<span class="attribute">users</span>":<span class="value">{
+    "<span class="attribute">user</span>":<span class="value">[{
+      "<span class="attribute">id</span>":<span class="value"><span class="string">"1"</span></span>,
+      "<span class="attribute">name</span>":<span class="value"><span class="string">"Harry"</span>
+    </span>},{
+      "<span class="attribute">id</span>":<span class="value"><span class="string">"2"</span></span>,
+      "<span class="attribute">name</span>":<span class="value"><span class="string">"David"</span>
+    </span>}]
+  </span>}
+</span>}
+</code></pre><h2 id="总结">总结</h2><p><code>JSON4S</code>很好很强大，其他功能请参考1。</p>
+<p>虽然<code>Scala</code>可以无缝的直接访问<code>java</code>版本的<code>JSON</code>解析类库，但是由于<code>Scala</code>有它自己的语法简洁性，所以在<code>Scala</code>环境下强烈推荐使用<code>JSON4S</code>.^_^</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="https://github.com/json4s/json4s" target="_blank" rel="external">https://github.com/json4s/json4s</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external"></a></p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Json4s/">Json4s</a><a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/24/Scala/Study-And-User-JSON4S/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/24/Scala/Study-And-User-JSON4S/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/23/Effective Java/Generic/" title="《Effective Java》第五章：泛型" itemprop="url">《Effective Java》第五章：泛型</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-23T15:05:33.000Z" itemprop="datePublished"> 发表于 2015-05-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>泛型，可以告诉编译器每个集合中接受哪些对象类型，编译器会自动地为你的插入进行转化，并在编译时告知是否插入了类型错误的对象。(貌似<code>Java</code>里面的泛型都是<strong>伪泛型</strong>吧-_-|)</p>
+<h2 id="第23条：请不要再新代码中使用原生态类型">第23条：请不要再新代码中使用原生态类型</h2><blockquote>
+<p>什么是原生态类型？</p>
+</blockquote>
+<p>类似<code>List&lt;E&gt;</code>,<code>Collection&lt;E&gt;</code>泛型的定义都有一个原生态类型，那就是<code>List</code>,<code>Collection</code>，用他们定义类型也不会出错.</p>
+<blockquote>
+<p>为什么不要使用原生态类型</p>
+</blockquote>
+<p>使用原生态类型的集合类可以插入各种不同的类型，他们在编译时不会进行类型检查，但是运行时遇到错误就会抛出，这样是很不安全的。</p>
+<blockquote>
+<p>我在不确定或者不在乎集合类型的情况下，是不是用原生态类型最好？</p>
+</blockquote>
+<p>还是不要用，可以使用无限制的通配符来替代，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numElementsInCommon</span><span class="params">(Set&lt;?&gt; s1,Set&lt;?&gt; s2)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(Object o:s1)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(s2.contains(o))</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>它是类型安全的，但是无法猜测放入了哪些对象，此时可以使用<strong>泛型</strong>或者<strong>有限制的通配符类型</strong>（下文会描述）。</p>
+<h2 id="第24条：消除非首检警告">第24条：消除非首检警告</h2><blockquote>
+<p>非受检警告很重要，每个警告都表示可能在运行时抛出<code>ClassCastException</code>异常，我们应该在编码时尽量消除编辑器给出的每一条受检警告。如果无法消除非首检警告，同时可证明引起警告的代码是类型安全的，就可以在尽量小得范围中，用<code>@SuppressWarnings(“uncheck”)</code>注解来禁止该警告，并且要把禁止该警告的原因记录下来。</p>
+</blockquote>
+<h2 id="第25条：列表优先于数组">第25条：列表优先于数组</h2><p>数组与泛型相比，有两个重要的不同点:</p>
+<ol>
+<li><p>数组是协变的，泛型则是不可变的<br> 如果<code>Sub</code>为<code>Super</code>的子类，那么数组类型<code>Sub[]</code>就是<code>Super[]</code>的子类，但是<code>List&lt;Sub&gt;</code>与<code>List&lt;Super&gt;</code>并没有什么卵关系。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Object[] objectArray=<span class="keyword">new</span> Long[<span class="number">10</span>];</span><br><span class="line">objectArray[<span class="number">0</span>]=<span class="string">"Hello"</span>;<span class="comment">//运行时会再这里抛ArrayStoreException异常</span></span><br><span class="line"></span><br><span class="line">List&lt;Object&gt; list=<span class="keyword">new</span> List&lt;Long&gt;();<span class="comment">//在编译时就在这里出错了</span></span><br><span class="line">list.add(<span class="string">"Hello"</span>);</span><br></pre></td></tr></table></figure>
+<p> 从上面看出来，它们都不能将<code>String</code>放入<code>Long</code>容器中，但是明显泛型的报错更加合理。</p>
+</li>
+</ol>
+<p>2.数组是具体化的，因此在运行时才会知道并检查它们元素类型的约束，而泛型是通过擦除来实现的，因此泛型时只在编译时强化它们的类信息，并在运行时丢弃。</p>
+<blockquote>
+<p>泛型是数组不能很好的混合使用，使用泛型数组定义式非法的。</p>
+</blockquote>
+<h2 id="第26条：优先考虑泛型">第26条：优先考虑泛型</h2><p>使用泛型简单，但是自己编写泛型还是有一点麻烦的，下面是第6条中的两种泛型版本。<br>1.使用泛型<code>E[]</code>来存储数据，但是用<code>Object[]</code>的数组转换来处理泛型数组的创建错误<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 简单的栈结构的实现 泛型版本-泛型数组转换</span><br><span class="line"> *<span class="javadoctag"> @author</span> yyl  form Effective Java</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> E[] elements;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPCAITY=<span class="number">16</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 这个elements元素只会使用E类型来添加</span><br><span class="line">	 * 所以他是足够安全的</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		elements=(E[])<span class="keyword">new</span> Object[DEFAULT_INITIAL_CAPCAITY];</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		ensureCapacity();<span class="comment">//确保容量足够</span></span><br><span class="line">		elements[size++]=e;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">pop</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">		<span class="keyword">return</span> elements[--size];<span class="comment">//</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(elements.length==size)</span><br><span class="line">			elements=Arrays.copyOf(elements, <span class="number">2</span>*size+<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>使用<code>Object[]</code>来存储，但是返回类型使用<code>Object</code>向泛型类型<code>E</code>去转换<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 简单的栈结构的实现 泛型版本-泛型转换</span><br><span class="line"> *<span class="javadoctag"> @author</span> yyl  form Effective Java</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stack</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object[] elements;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPCAITY=<span class="number">16</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		elements=<span class="keyword">new</span> Object[DEFAULT_INITIAL_CAPCAITY];</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		ensureCapacity();<span class="comment">//确保容量足够</span></span><br><span class="line">		elements[size++]=e;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 这里都是需要返回E</span><br><span class="line">	 * 所以这里的转换是安全的</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="annotation">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> E <span class="title">pop</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(size==<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> EmptyStackException();</span><br><span class="line">		<span class="keyword">return</span> (E)elements[--size];<span class="comment">//</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(elements.length==size)</span><br><span class="line">			elements=Arrays.copyOf(elements, <span class="number">2</span>*size+<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<blockquote>
+<p>上述优先选择的是第二种方案，第一种禁止数组类型的非受检转换比禁止标量类型更加危险，并且它需要多次转换<code>E[]</code>，而第二是是多次转换<code>E</code></p>
+</blockquote>
+<h2 id="第27条：优先考虑泛型方法">第27条：优先考虑泛型方法</h2><p>关于泛型方法和非泛型方法可以见下面：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 原生类型的书写，类型不安全，并且还会产生警告</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Set <span class="title">union2</span><span class="params">(Set s1,Set s2)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Set result=<span class="keyword">new</span> HashSet(s1);</span><br><span class="line">	result.addAll(s2);</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 泛型方法，类型安全</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span>  <span class="keyword">static</span> &lt;E&gt; <span class="function">Set&lt;E&gt; <span class="title">union</span><span class="params">(Set&lt;E&gt; s1,Set&lt;E&gt; s2)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Set&lt;E&gt; result=<span class="keyword">new</span> HashSet&lt;E&gt;(s1);</span><br><span class="line">	result.addAll(s2);</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>很明显，泛型方法更加安全，并且简单易用。</p>
+<blockquote>
+<p>使用泛型方法就像类型异性，还应该将现有的方法泛型化，使新用户使用起来更加轻松，且不会平均破坏现有的客户端。</p>
+</blockquote>
+<h2 id="第28条:利用有限制通配符来提升API的灵活性">第28条:利用有限制通配符来提升API的灵活性</h2><p>针对第26条中泛型<code>Stack</code>的实现方法，如果现在需要添加<code>pushAll</code>和<code>popAll</code>这两个方法，为了让他们用起来更加顺手，那么应该这么写：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 所有E的子类的集合都可以添加进来</span><br><span class="line"> *<span class="javadoctag"> @param</span> iter</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pushAll</span><span class="params">(Iterable&lt;? extends E&gt; iter)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(E e:iter)</span><br><span class="line">		<span class="keyword">this</span>.push(e);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 可以将elements里面的元素全部弹出到E得超类中</span><br><span class="line"> *<span class="javadoctag"> @param</span> dst</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">popAll</span><span class="params">(Collection&lt;? <span class="keyword">super</span> E&gt; dst)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(!isEmpty())</span><br><span class="line">		dst.add(pop());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>使用通配符能让API变得更加灵活，在编写广泛使用的类库时，一定适当地利用通配符类型。</p>
+</blockquote>
+<h2 id="第29条：优先考虑类型安全的异构容器">第29条：优先考虑类型安全的异构容器</h2><blockquote>
+<p>泛型往往会被用户参数化了的容器，每个容器有固定数目的类型参数。但是你可能需要更加灵活地容器，比如数据库的表可以有任意多得列，在<code>Java</code>中，解决这个问题的做法就是将建参数化而不是容器参数化。可以使用类类型<code>Class</code>来作为键值。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Favorites</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Map&lt;Class&lt;?&gt;,Object&gt; favorites=<span class="keyword">new</span> HashMap&lt;Class&lt;?&gt;,Object&gt;();</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 存值 </span><br><span class="line">	 *<span class="javadoctag"> @param</span> type 这个是键，每个键的类型都是不同的</span><br><span class="line">	 *<span class="javadoctag"> @param</span> instance 这个就是值</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="keyword">public</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">putFavorite</span><span class="params">(Class&lt;T&gt; type,T instance)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(type==<span class="keyword">null</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Type is null"</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="javadoc">/**</span><br><span class="line">		 * 这里加上cast可以防止用户恶意改传类型</span><br><span class="line">		 */</span></span><br><span class="line">		favorites.put(type, type.cast(instance));</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getFavorites</span><span class="params">(Class&lt;T&gt; type)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="javadoc">/**</span><br><span class="line">		 * 这里的cast转换是安全的，因为放入的都是对应T的类型的值</span><br><span class="line">		 */</span></span><br><span class="line">		<span class="keyword">return</span> type.cast(favorites.get(type));</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个<code>Favorites</code>类型里面的键都不同类型的，这里将<code>Favorites</code>称为异构容器。</p>
+<p>它又两个局限性：</p>
+<ol>
+<li>用户可以轻松地破坏<code>Favorites</code>的实例安全（可以用<code>put</code>方法中<code>cast</code>来避免）</li>
+<li>它只能用于可具体化的类ing中（比如List<string>这个类型你就不能传过去）</string></li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/23/Effective Java/Generic/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/23/Effective Java/Generic/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/" title="自己煮：泡椒牛蛙" itemprop="url">自己煮：泡椒牛蛙</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-16T14:38:59.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>泡椒牛蛙是一道色香味俱全的汉族名菜，属于川菜系。最常见又易烹制，成菜后味咸鲜，肉细嫩，色红亮，泡菜香气浓郁。
+</code></pre><h2 id="食材">食材</h2><ul>
+<li>牛蛙：2只</li>
+<li>油、料酒~~~~</li>
+<li>生姜、大蒜：适量</li>
+<li>莴笋：适量（炒到牛蛙里面的莴笋特别好吃）</li>
+<li>小米椒：一点点就好了（最好还有红灯笼椒，但是没买到-_-）</li>
+</ul>
+<p><img src="/img/Sauteed-Bullfrog/1cailiao.jpg" alt=""></p>
+<h2 id="预煮牛蛙">预煮牛蛙</h2><p>将洗干净切好的牛蛙倒入热水中煮2~3分钟<br><br><img src="/img/Sauteed-Bullfrog/2yuzhu.jpg" alt=""></p>
+<p>然后直接捞出<br><br><img src="/img/Sauteed-Bullfrog/3yuzhuchuguo.jpg" alt=""></p>
+<h2 id="炒莴笋">炒莴笋</h2><p>先热油锅<br><br><img src="/img/Sauteed-Bullfrog/4reyouguo.jpg" alt=""></p>
+<p>放入生姜大蒜炒出香味之后将莴笋放入油锅爆炒<br><br><img src="/img/Sauteed-Bullfrog/5chaowosun.jpg" alt=""></p>
+<p>然后放入小米椒（注意这个很辣的，所以要看个人口味适量而为之）<br><img src="/img/Sauteed-Bullfrog/6fangxiaomijiao.jpg" alt=""></p>
+<h2 id="炒牛蛙">炒牛蛙</h2><p>莴笋爆炒2分钟之后将之前预煮过的牛蛙倒入油锅一起炒<br><img src="/img/Sauteed-Bullfrog/7yiqichao.jpg" alt=""></p>
+<p>还顺再放点啤酒/料酒，炒出香味之后放入水<br><br><img src="/img/Sauteed-Bullfrog/8fangshui.jpg" alt=""></p>
+<h2 id="出锅">出锅</h2><p>盖上锅盖等几分钟之后放入盐味精以及其他配料即可出锅<br><img src="/img/Sauteed-Bullfrog/9chuguo.jpg" alt=""></p>
+<p>洗锅开吃~~~~哈哈！</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Food/">Food</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Food/">Food</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
 
 
 
@@ -314,7 +1165,7 @@ LINQ 风格的查询
 
 
 
-  <nav id="page-nav" class="clearfix unexpand">
+  <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
   </nav>
 
@@ -557,17 +1408,22 @@ LINQ 风格的查询
 		
 		
 	</div>
-		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+			
 		
-		<a href="http://yyl8781697.github.io/about" target="_blank" title="Kubi Code">Kubi Code</a>
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
 		
 		</p>
 </div>
-<a href="https://github.com/yyl8781697"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
 </footer>
     <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -586,18 +1442,6 @@ $(document).ready(function(){
       a = $('#asidepart'),
       c = $('.closeaside'),
       o = $('.openaside');
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else
-    {
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
-        
-    }
-  });
   c.click(function(){
     a.addClass('fadeOut').css('display', 'none');
     o.css('display', 'block').addClass('fadeIn');
@@ -610,6 +1454,18 @@ $(document).ready(function(){
   });
   $(window).scroll(function(){
     o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
   });
 });
 </script>
@@ -635,21 +1491,32 @@ $(document).ready(function(){
 
 
 
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
 
 
 <!-- Analytics Begin -->
 
 
-
-<script type="text/javascript">
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 
 

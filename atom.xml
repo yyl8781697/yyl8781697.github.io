@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-07-24T12:17:09.000Z</updated>
+  <updated>2015-07-24T13:44:23.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,20 +19,37 @@
     <link href="http://yyl8781697.github.io/2015/07/24/Algorithm/x-exponent/"/>
     <id>http://yyl8781697.github.io/2015/07/24/Algorithm/x-exponent/</id>
     <published>2015-07-24T12:05:12.000Z</published>
-    <updated>2015-07-24T12:17:09.000Z</updated>
+    <updated>2015-07-24T13:44:23.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
 </code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>还需要考虑：</p>
 <ol>
 <li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
 <li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
-<li>复杂度能否小于O(exp)吗？  a^5=a<em>a^4=a</em>(a*a)^2 所以可以使用递归法来做</li>
+<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
 </ol>
+<a id="more"></a>
 <p>考虑了这么多，那么可以直接上完整代码了</p>
 <h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 数值的整数次方 </span><br><span class="line"> * 使用递归来求解，并且同时考虑特殊情况 </span><br><span class="line"> * 复杂度为O(exp)</span><br><span class="line"> *<span class="javadoctag"> @param</span> base</span><br><span class="line"> *<span class="javadoctag"> @param</span> exp</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (exp==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>; <span class="comment">//任何数的0次方都是 1</span></span><br><span class="line">	<span class="keyword">if</span> (exp == <span class="number">1</span>) <span class="keyword">return</span> base;<span class="comment">//任何数的1 都是自己</span></span><br><span class="line">	<span class="keyword">if</span>(base == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(exp&lt;<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">return</span> Double.POSITIVE_INFINITY;<span class="comment">//0的负数次方都是 无穷大</span></span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//0的正数次方都是0</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">double</span> half = power(base, Math.abs(exp) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">	<span class="comment">//这里判断如何当前是奇数次数 还需要再乘以一个自己</span></span><br><span class="line">	<span class="keyword">double</span> ret= (((exp &amp; <span class="number">1</span>) == <span class="number">1</span>) ? base : <span class="number">1.0</span>) * half * half;</span><br><span class="line">	<span class="keyword">if</span>(exp&lt;<span class="number">0</span>)<span class="comment">//如果这个整数是负数的时候  则取倒数</span></span><br><span class="line">		ret=<span class="number">1</span>/ret;</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://www.cnblogs.com/xwdreamer/archive/2012/05/15/2502329.html" target="_blank" rel="external">http://www.cnblogs.com/xwdreamer/archive/2012/05/15/2502329.html</a></li>
+<li>July 微软面试 第71题</li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="pa]]>
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
+</code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还需要考虑：</p>
+<ol>
+<li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
+<li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
+<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
+</ol>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -46,11 +63,11 @@
     <link href="http://yyl8781697.github.io/2015/07/20/Algorithm/Minimum-Combination-in-Array/"/>
     <id>http://yyl8781697.github.io/2015/07/20/Algorithm/Minimum-Combination-in-Array/</id>
     <published>2015-07-20T12:31:43.000Z</published>
-    <updated>2015-07-20T12:54:13.000Z</updated>
+    <updated>2015-07-24T13:43:42.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="number">32132</span>。请给出解决问题的算法，并证明该算法。
 </code></pre><h2 id="解析">解析</h2><p>假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。<br>如果ab&lt;ba,则会有a&lt;b，所以这题的关键就是构建a,b的比较器</p>
 <blockquote>
-<p>不得不说，这个思路太妙了^_^</p>
+<p>不得不说，这个思路太妙了^_^<br><a id="more"></a></p>
 </blockquote>
 <p>关于证明：请看<a href="http://blog.csdn.net/cxllyg/article/details/7659525" target="_blank" rel="external">这个</a></p>
 <h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 思路是比较ab和ba。。。如果ab&lt;ba,则会有a&lt;b</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">minimumCombination</span><span class="params">(Integer[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Arrays.sort(a, <span class="keyword">new</span> Comparator&lt;Integer&gt;()&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer a,Integer b)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> (a+<span class="string">""</span>+b).compareTo(b+<span class="string">""</span>+a);<span class="comment">//构建ab的比较器</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	StringBuilder sb=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		sb.append(a[i]);<span class="comment">//然后直接连起来就可以了</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> sb.toString();</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -67,7 +84,11 @@
 </blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="]]>
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="number">32132</span>。请给出解决问题的算法，并证明该算法。
+</code></pre><h2 id="解析">解析</h2><p>假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。<br>如果ab&lt;ba,则会有a&lt;b，所以这题的关键就是构建a,b的比较器</p>
+<blockquote>
+<p>不得不说，这个思路太妙了^_^<br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -81,7 +102,7 @@
     <link href="http://yyl8781697.github.io/2015/07/19/Algorithm/TrainTickets/"/>
     <id>http://yyl8781697.github.io/2015/07/19/Algorithm/TrainTickets/</id>
     <published>2015-07-19T14:22:31.000Z</published>
-    <updated>2015-07-19T16:10:33.000Z</updated>
+    <updated>2015-07-24T13:43:52.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>火车票 查询问题  针对12306设计一个快速的查询系统
 </code></pre><blockquote>
 <p>这个网上看到的，好像是百度的一道面试题</p>
@@ -89,7 +110,9 @@
 <h2 id="解析">解析</h2><blockquote>
 <p>思想就是将火车票区间的每个站按位映射，然后通过位操作法来查询，这种方式应该比较快，并且存储比较小</p>
 </blockquote>
-<p>比如宁波到上海的高铁G7518有7个站：宁波-&gt;余姚北-&gt;绍兴北-&gt;杭州东-&gt;桐乡-&gt;嘉善南-&gt;上海虹桥<br>那么这趟车的一张票可以用0X7F来存储：01111111，低位表示出发，高位表示终止<br>那么我如果需要查询的话：查宁波到杭州东就为:00000111（第4站杭州东站只作为达到之用，不会占用其他票，所以置0即可），然后这两个数做一个与操作就可以，如果与操作之后的值还是00000111的话，就表示有票<br>还有购买的话 只需要做抑或操作即可,01111111^00000111=01111000，这样就表示余票就只有杭州东到上海虹桥的票了<br>有了，有这种思路之后，可以简单的看几个代码片段</p>
+<p>比如宁波到上海的高铁G7518有7个站：宁波-&gt;余姚北-&gt;绍兴北-&gt;杭州东-&gt;桐乡-&gt;嘉善南-&gt;上海虹桥<br>那么这趟车的一张票可以用0X7F来存储：01111111，低位表示出发，高位表示终止<br>那么我如果需要查询的话：查宁波到杭州东就为:00000111（第4站杭州东站只作为达到之用，不会占用其他票，所以置0即可），然后这两个数做一个与操作就可以，如果与操作之后的值还是00000111的话，就表示有票<br>还有购买的话 只需要做抑或操作即可,01111111^00000111=01111000，这样就表示余票就只有杭州东到上海虹桥的票了</p>
+<a id="more"></a>
+<p>有了，有这种思路之后，可以简单的看几个代码片段</p>
 <h2 id="查询票的构建">查询票的构建</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 根据出发和达到站构建票</span><br><span class="line"> *<span class="javadoctag"> @param</span> start</span><br><span class="line"> *<span class="javadoctag"> @param</span> end</span><br><span class="line"> *<span class="javadoctag"> @return</span> -1表示没有这些站点</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">buildTicket</span><span class="params">(String start,String end)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!STATION_MAP.containsKey(start) || !STATION_MAP.containsKey(end))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> -<span class="number">1</span>;<span class="comment">//表示没有这些站点  或者站点名字出错</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> si=STATION_MAP.get(start),ei=STATION_MAP.get(end);</span><br><span class="line">	<span class="keyword">int</span> qTicket=<span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span>(si&lt;ei)</span><br><span class="line">	&#123;</span><br><span class="line">		qTicket|=<span class="number">0x1</span>&lt;&lt;si;<span class="comment">//在相应的位置上置1  注意  达到站是不置1  </span></span><br><span class="line">		si++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> qTicket;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>查票的时候往往是一个起始站，还有一个到达站，这里我们就要构建乘车区间的位置为1</p>
 <blockquote>
@@ -124,7 +147,11 @@
 </code></pre><blockquote>
 <p>这个网上看到的，好像是百度的一道面试题</p>
 </blockquote>
-<h2 id="解析">解析]]>
+<h2 id="解析">解析</h2><blockquote>
+<p>思想就是将火车票区间的每个站按位映射，然后通过位操作法来查询，这种方式应该比较快，并且存储比较小</p>
+</blockquote>
+<p>比如宁波到上海的高铁G7518有7个站：宁波-&gt;余姚北-&gt;绍兴北-&gt;杭州东-&gt;桐乡-&gt;嘉善南-&gt;上海虹桥<br>那么这趟车的一张票可以用0X7F来存储：01111111，低位表示出发，高位表示终止<br>那么我如果需要查询的话：查宁波到杭州东就为:00000111（第4站杭州东站只作为达到之用，不会占用其他票，所以置0即可），然后这两个数做一个与操作就可以，如果与操作之后的值还是00000111的话，就表示有票<br>还有购买的话 只需要做抑或操作即可,01111111^00000111=01111000，这样就表示余票就只有杭州东到上海虹桥的票了</p>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -140,13 +167,13 @@
     <link href="http://yyl8781697.github.io/2015/07/19/Algorithm/Longest/"/>
     <id>http://yyl8781697.github.io/2015/07/19/Algorithm/Longest/</id>
     <published>2015-07-19T08:31:57.000Z</published>
-    <updated>2015-07-19T12:22:08.000Z</updated>
+    <updated>2015-07-24T13:44:51.000Z</updated>
     <content type="html"><![CDATA[<p>题目</p>
 <pre><code>给定一个长度为<span class="keyword">N</span>的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为<span class="number">6</span>的数组A<span class="list">{5， 6， 7， 1， 2， 8}</span>，则其最长的单调递增子序列为<span class="list">{5，6，7，8}</span>，长度为<span class="number">4.</span>
 </code></pre><h2 id="解析">解析</h2><blockquote>
 <p>此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^</p>
 </blockquote>
-<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br>现在来看一个长一点的数组：</p>
+<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br><a id="more"></a><br>现在来看一个长一点的数组：</p>
 <pre><code><span class="atom">a</span>={<span class="number">3</span>,<span class="number">18</span>,<span class="number">7</span>,<span class="number">14</span>,<span class="number">10</span>,<span class="number">12</span>,<span class="number">23</span>,<span class="number">41</span>,<span class="number">16</span>,<span class="number">24</span>}
 我们从后往前进行遍历（第一个索引为<span class="number">0</span>）
 <span class="atom">a</span>[<span class="number">9</span>]=<span class="number">24</span>，为最后一个元素，所以辅助数组<span class="atom">b</span>中<span class="atom">f</span>[<span class="number">9</span>]=<span class="number">1</span> 表示它以及它最后可能组成的最长递增子序列为<span class="number">1</span>
@@ -183,7 +210,12 @@
 ]]></content>
     <summary type="html">
     <![CDATA[<p>题目</p>
-<pre><code>给定一个长度为<span class="keyword">N</span>的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为<span class="number">6</span>的数组A<span]]>
+<pre><code>给定一个长度为<span class="keyword">N</span>的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为<span class="number">6</span>的数组A<span class="list">{5， 6， 7， 1， 2， 8}</span>，则其最长的单调递增子序列为<span class="list">{5，6，7，8}</span>，长度为<span class="number">4.</span>
+</code></pre><h2 id="解析">解析</h2><blockquote>
+<p>此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^</p>
+</blockquote>
+<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -197,7 +229,7 @@
     <link href="http://yyl8781697.github.io/2015/07/19/Algorithm/SubCollection/"/>
     <id>http://yyl8781697.github.io/2015/07/19/Algorithm/SubCollection/</id>
     <published>2015-07-19T07:39:20.000Z</published>
-    <updated>2015-07-19T08:04:30.000Z</updated>
+    <updated>2015-07-24T13:45:08.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>打印一个集合所有的子集和，比如<span class="list">{a,b,c}</span>的子集和有<span class="list">{a}</span>,<span class="list">{b}</span>,<span class="list">{c}</span>,<span class="list">{a,b}</span>,<span class="list">{a,c}</span>,<span class="list">{b,c}</span>,<span class="list">{a,b,c}</span>以及 空
 </code></pre><h2 id="解析">解析</h2><p>一个元素个数为n的集合所包含的所有组合的子集个数有2^n个，这样其实就可以将所以集合的情况映射到0~2^n-1个，然后按位取元素即可</p>
 <pre><code>比如<span class="list">{a,b,c}</span>这个三元素的集合按位映射
@@ -209,7 +241,8 @@
 .
 .
 <span class="list">{1,1,1}</span>=&gt;<span class="list">{a,b,c}</span>
-</code></pre><h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 将集合映射到位，然后进行与操作,然后一个集合可能含有的子元素最多是2^n个</span><br><span class="line"> *<span class="javadoctag"> @param</span> cs</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">subCollection</span><span class="params">(<span class="keyword">char</span>[] cs)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> len=cs.length,maxNum=<span class="number">1</span>&lt;&lt;len;</span><br><span class="line">	<span class="keyword">int</span> temp=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> mark=<span class="number">0x1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;maxNum;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		temp=i;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;len &amp;&amp; temp!=<span class="number">0</span>;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>((temp&amp;mark)==<span class="number">1</span>)<span class="comment">//取最低位的数字是否为1   </span></span><br><span class="line">			&#123;</span><br><span class="line">				System.out.print(cs[j]);</span><br><span class="line">			&#125;</span><br><span class="line">			temp=temp&gt;&gt;<span class="number">1</span>;<span class="comment">//右移一位</span></span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">""</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><a id="more"></a>
+<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 将集合映射到位，然后进行与操作,然后一个集合可能含有的子元素最多是2^n个</span><br><span class="line"> *<span class="javadoctag"> @param</span> cs</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">subCollection</span><span class="params">(<span class="keyword">char</span>[] cs)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> len=cs.length,maxNum=<span class="number">1</span>&lt;&lt;len;</span><br><span class="line">	<span class="keyword">int</span> temp=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> mark=<span class="number">0x1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;maxNum;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		temp=i;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;len &amp;&amp; temp!=<span class="number">0</span>;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>((temp&amp;mark)==<span class="number">1</span>)<span class="comment">//取最低位的数字是否为1   </span></span><br><span class="line">			&#123;</span><br><span class="line">				System.out.print(cs[j]);</span><br><span class="line">			&#125;</span><br><span class="line">			temp=temp&gt;&gt;<span class="number">1</span>;<span class="comment">//右移一位</span></span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">""</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最终的复杂度为<code>O(n*2^n)</code>，最主要的是这种方式代码写起来很方便<br>其测试代码为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span>[] cs=&#123;<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>&#125;;</span><br><span class="line">	subCollection(cs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>输出的结果为</p>
 <pre><code><span class="tag">a</span>
@@ -226,7 +259,19 @@ abc
 </blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>打印一个集合所有的子集和，比如<span class="list">{a,b,c}</span>的子集和有<span class="list">{a}</span>,<span class="list">{b}</spa]]>
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>打印一个集合所有的子集和，比如<span class="list">{a,b,c}</span>的子集和有<span class="list">{a}</span>,<span class="list">{b}</span>,<span class="list">{c}</span>,<span class="list">{a,b}</span>,<span class="list">{a,c}</span>,<span class="list">{b,c}</span>,<span class="list">{a,b,c}</span>以及 空
+</code></pre><h2 id="解析">解析</h2><p>一个元素个数为n的集合所包含的所有组合的子集个数有2^n个，这样其实就可以将所以集合的情况映射到0~2^n-1个，然后按位取元素即可</p>
+<pre><code>比如<span class="list">{a,b,c}</span>这个三元素的集合按位映射
+<span class="list">{0,0,0}</span>=&gt;空
+<span class="list">{0,0,1}</span>=&gt;<span class="list">{c}</span>
+<span class="list">{0,1,0}</span>=&gt;<span class="list">{b}</span>
+<span class="list">{0,1,1}</span>=&gt;<span class="list">{b,c}</span>
+.
+.
+.
+<span class="list">{1,1,1}</span>=&gt;<span class="list">{a,b,c}</span>
+</code></pre>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -240,9 +285,9 @@ abc
     <link href="http://yyl8781697.github.io/2015/07/19/Algorithm/OddEvenSplit/"/>
     <id>http://yyl8781697.github.io/2015/07/19/Algorithm/OddEvenSplit/</id>
     <published>2015-07-19T07:20:01.000Z</published>
-    <updated>2015-07-19T08:06:22.000Z</updated>
+    <updated>2015-07-24T13:45:23.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>奇数偶数分离 奇数在左侧  偶数在右侧 要求复杂度为<span class="function"><span class="title">O</span><span class="params">(N)</span></span>
-</code></pre><h2 id="解析">解析</h2><p>本题的难点主要是在O(N)复杂度的要求，但是想想有没有类似对数组左右分离的操作？<br>对，就是快速排序，在使用快速排序的分区中左边都是小于基准，右边都是大于基准<br>所以，同理，现在按照快排分区的思想，左边都是为奇数，右边都是为偶数，基数无论为奇偶皆可</p>
+</code></pre><h2 id="解析">解析</h2><p>本题的难点主要是在O(N)复杂度的要求，但是想想有没有类似对数组左右分离的操作？<br>对，就是快速排序，在使用快速排序的分区中左边都是小于基准，右边都是大于基准<br>所以，同理，现在按照快排分区的思想，左边都是为奇数，右边都是为偶数，基数无论为奇偶皆可<br><a id="more"></a></p>
 <h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用快速排序的分区思想，只是&amp;lt;和&amp;gt;变为奇数和偶数而已</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">oddEvenSplit</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(a.length&lt;<span class="number">2</span>)</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> k=a[<span class="number">0</span>],i=<span class="number">0</span>,j=a.length-<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;j)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>((a[j]&amp;<span class="number">1</span>)==<span class="number">0</span> &amp;&amp; i&lt;j)<span class="comment">//从右往左找  直到遇到奇数</span></span><br><span class="line">			j--;</span><br><span class="line">		a[i]=a[j];</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>((a[i]&amp;<span class="number">1</span>)==<span class="number">1</span> &amp;&amp; i&lt;j)<span class="comment">//从左往右找  直到遇到偶数</span></span><br><span class="line">			i++;</span><br><span class="line">		a[j]=a[i];</span><br><span class="line">	&#125;</span><br><span class="line">	a[i]=k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看下测试代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] a=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;;</span><br><span class="line">	oddEvenSplit(a);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">		System.out.print(a[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>输出的结果为：</p>
@@ -255,7 +300,9 @@ abc
 </blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>奇数偶数分离 奇数在左侧  偶数在右侧 要求复杂度为<span class="function"><span class="title">O</span><span class="params">(N)</span></]]>
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>奇数偶数分离 奇数在左侧  偶数在右侧 要求复杂度为<span class="function"><span class="title">O</span><span class="params">(N)</span></span>
+</code></pre><h2 id="解析">解析</h2><p>本题的难点主要是在O(N)复杂度的要求，但是想想有没有类似对数组左右分离的操作？<br>对，就是快速排序，在使用快速排序的分区中左边都是小于基准，右边都是大于基准<br>所以，同理，现在按照快排分区的思想，左边都是为奇数，右边都是为偶数，基数无论为奇偶皆可<br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -269,10 +316,10 @@ abc
     <link href="http://yyl8781697.github.io/2015/07/18/Algorithm/CardStraight/"/>
     <id>http://yyl8781697.github.io/2015/07/18/Algorithm/CardStraight/</id>
     <published>2015-07-18T15:23:27.000Z</published>
-    <updated>2015-07-18T15:44:14.000Z</updated>
+    <updated>2015-07-24T13:45:45.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>从52张牌中随意取5张，看是否能组成顺子
 其中1~k 表示1~13  大小王可以代替任意数字
-</code></pre><h2 id="解题">解题</h2><p>首先可以将牌映射到数组上，然后将数组排序<br>在使用左右两端的指针向中间靠<br>如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个<br>否则判断右指针是否有大小王  有的话右指针左移一位</p>
+</code></pre><h2 id="解题">解题</h2><p>首先可以将牌映射到数组上，然后将数组排序<br>在使用左右两端的指针向中间靠<br>如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个<br>否则判断右指针是否有大小王  有的话右指针左移一位<br><a id="more"></a></p>
 <pre><code>现在有牌排序之后的样纸
 <span class="number">1</span>，<span class="number">2</span>，<span class="number">4</span>，<span class="number">5</span>，king
 ^           ^
@@ -301,7 +348,8 @@ abc
     <summary type="html">
     <![CDATA[<h2 id="题目">题目</h2><pre><code>从52张牌中随意取5张，看是否能组成顺子
 其中1~k 表示1~13  大小王可以代替任意数字
-</code></pre><h2 id="解题">解题</h2><p>首先可以将牌映射到数组上，然后将数组排序<br>在使用左]]>
+</code></pre><h2 id="解题">解题</h2><p>首先可以将牌映射到数组上，然后将数组排序<br>在使用左右两端的指针向中间靠<br>如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个<br>否则判断右指针是否有大小王  有的话右指针左移一位<br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -315,10 +363,9 @@ abc
     <link href="http://yyl8781697.github.io/2015/07/18/Algorithm/Put-Upside-Down-Stack/"/>
     <id>http://yyl8781697.github.io/2015/07/18/Algorithm/Put-Upside-Down-Stack/</id>
     <published>2015-07-17T16:33:15.000Z</published>
-    <updated>2015-07-18T08:49:07.000Z</updated>
+    <updated>2015-07-24T13:45:57.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>使用递归的方法将栈颠倒
-</code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1<br>先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1<br>那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归</p>
-<p>关于如何将元素放入栈的尾部？</p>
+</code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1<br>先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1<br>那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归<br><a id="more"></a><br>关于如何将元素放入栈的尾部？</p>
 <pre><code>将e放到底部
 先递归逐个将元素取出来  取至空的时候将e给<span class="keyword">push</span>进去
 然后再依次将取出来的元素也给<span class="keyword">push</span>进去
@@ -340,7 +387,8 @@ abc
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="题目">题目</h2><pre><code>使用递归的方法将栈颠倒
-</code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1<br>先来看如果将数据搞成了]]>
+</code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1<br>先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1<br>那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归<br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -354,10 +402,10 @@ abc
     <link href="http://yyl8781697.github.io/2015/07/17/Algorithm/DeleteNode-In-O1/"/>
     <id>http://yyl8781697.github.io/2015/07/17/Algorithm/DeleteNode-In-O1/</id>
     <published>2015-07-16T23:19:56.000Z</published>
-    <updated>2015-07-18T08:47:23.000Z</updated>
+    <updated>2015-07-24T13:46:13.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>在<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span></span>时间内删除一个单链表上指定的节点
 </code></pre><h2 id="解题">解题</h2><p>这题主要是需要O(1)的复杂度，我们之前一般删除节点的方法都是找到要删除节点p，然后p.parent.next=p.next就可以了，但是那个复杂度是O(n)</p>
-<p>不过这里有一种我称为狸猫换太子的方法来解决这个问题</p>
+<p>不过这里有一种我称为狸猫换太子的方法来解决这个问题<br><a id="more"></a></p>
 <pre><code><span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>-&gt;<span class="number">5</span>
  假如现在要删除p.<span class="typedef"><span class="keyword">data</span>=3</span>
  首先将p.<span class="typedef"><span class="keyword">data</span>=p.next.<span class="keyword">data</span></span>
@@ -375,7 +423,10 @@ abc
 </blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>在<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span]]>
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>在<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span></span>时间内删除一个单链表上指定的节点
+</code></pre><h2 id="解题">解题</h2><p>这题主要是需要O(1)的复杂度，我们之前一般删除节点的方法都是找到要删除节点p，然后p.parent.next=p.next就可以了，但是那个复杂度是O(n)</p>
+<p>不过这里有一种我称为狸猫换太子的方法来解决这个问题<br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -389,13 +440,13 @@ abc
     <link href="http://yyl8781697.github.io/2015/07/16/Algorithm/Print-Tail-Head/"/>
     <id>http://yyl8781697.github.io/2015/07/16/Algorithm/Print-Tail-Head/</id>
     <published>2015-07-16T15:52:12.000Z</published>
-    <updated>2015-07-16T23:17:01.000Z</updated>
+    <updated>2015-07-24T13:46:25.000Z</updated>
     <content type="html"><![CDATA[<h2 id="问题">问题</h2><pre><code>如何将一个链表进行逆序输出，比如<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>的链表输出为<span class="number">4321</span>
 </code></pre><h2 id="解题">解题</h2><ol>
 <li>最方便可能就是先讲原生链表翻转，再按翻转的输出，这样会破坏原有链表的结构</li>
 <li>第二种就是先遍历存放到一个数组或者栈中，然后从后往前输出即可，就需要额外的O(n)空间。</li>
 </ol>
-<p>这两种方法都是需要额外的复杂度或者空间，网络行流传更好的方法就是使用递归-_-! 神方法啊，递归一次即可。。</p>
+<p>这两种方法都是需要额外的复杂度或者空间，网络行流传更好的方法就是使用递归-_-! 神方法啊，递归一次即可。。<br><a id="more"></a></p>
 <h3 id="代码">代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用递归 不消耗其他的空间</span><br><span class="line"> *<span class="javadoctag"> @param</span> link</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printTail2Head</span><span class="params">(Link link)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(link!=<span class="keyword">null</span> &amp;&amp; link.next!=<span class="keyword">null</span>)</span><br><span class="line">		printTail2Head(link.next);</span><br><span class="line">	System.out.println(link.data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Link</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> data;</span><br><span class="line">	<span class="keyword">public</span> Link next;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Link</span><span class="params">(<span class="keyword">int</span> data)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这种方法固然好，但是注意，如果链表的长度很长，也许会给<code>stackOverflowException</code>的异常。</p>
@@ -406,7 +457,13 @@ abc
 </blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="问题">问题</h2><pre><code>如何将一个链表进行逆序输出，比如<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</sp]]>
+    <![CDATA[<h2 id="问题">问题</h2><pre><code>如何将一个链表进行逆序输出，比如<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>的链表输出为<span class="number">4321</span>
+</code></pre><h2 id="解题">解题</h2><ol>
+<li>最方便可能就是先讲原生链表翻转，再按翻转的输出，这样会破坏原有链表的结构</li>
+<li>第二种就是先遍历存放到一个数组或者栈中，然后从后往前输出即可，就需要额外的O(n)空间。</li>
+</ol>
+<p>这两种方法都是需要额外的复杂度或者空间，网络行流传更好的方法就是使用递归-_-! 神方法啊，递归一次即可。。<br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
