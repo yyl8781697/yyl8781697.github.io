@@ -112,6 +112,7 @@
 <p><code>LinkedHashMap</code>是基于<code>HashMap</code>实现的，但是与之不同的是<code>LinkedHashMap</code>在遍历取值时可以保序，这是通过双向链表来实现的。</p>
 </blockquote>
 <p>我们知道<code>HashMap</code>在增删改查方面非常高效，但是遗憾的时候在迭代遍历<code>HashMap</code>时是不保序的，常常我们有时候即需要这种高效的操作，同时还希望在遍历数据集时要保序的需求，所以这个时候<code>LinkedHashMap</code>就出来了，接下来文本讲解<code>LinkedHashMap</code>是如何基于<code>HashMap</code>来完成遍历保序的功能。</p>
+<a id="more"></a>
 <h2 id="LinkedHashMap的定义">LinkedHashMap的定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedHashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span><br><span class="line">    <span class="keyword">extends</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span><br><span class="line">    <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>从<code>LinkedHashMap</code>的定义中可以很清晰的看到它就是基于<code>HashMap</code>来进行实现的，但是这里不理解的是为何它还要继承<code>Map</code>接口？因为<code>HashMap</code>已经继承了<code>Map</code>接口了，<code>LinkedHashMap</code>这样干是不是没必要，后来我也查了资料，也没有明确得答案，也有人说<code>LinkedHashMap</code>这样继承没有为什么，你懂就好了。-_-</p>
 <h2 id="私有变量">私有变量</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * The head of the doubly linked list.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> Entry&lt;K,V&gt; header;<span class="comment">//双向链表的头部</span></span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * The iteration ordering method for this linked hash map: &lt;tt&gt;true&lt;/tt&gt;</span><br><span class="line"> * for access-order, &lt;tt&gt;false&lt;/tt&gt; for insertion-order.</span><br><span class="line"> * 定义LinkedHashMap遍历时的顺序,</span><br><span class="line"> *<span class="javadoctag"> @serial</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> accessOrder;</span><br></pre></td></tr></table></figure>
@@ -238,15 +239,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -287,10 +284,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -673,3 +666,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

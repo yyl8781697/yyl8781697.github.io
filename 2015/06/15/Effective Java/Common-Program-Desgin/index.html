@@ -138,6 +138,7 @@
 </ul>
 <h2 id="第46条：for-each循环优先于传统的for循环">第46条：for-each循环优先于传统的for循环</h2><p>利用<code>for-each</code>循环不会有性能损失，甚至用于数组也是一样的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;Integer&gt; c=Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//普通的for循环</span></span><br><span class="line"><span class="keyword">for</span>(Iterator iter=c.iterator();iter.hasNext())</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(iter.next());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用for-each的版本</span></span><br><span class="line"><span class="keyword">for</span>(Integer v:c)</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>还有一点是如果你使用普通的<code>for</code>，那么它的<code>next</code>会走光所有的元素，也就无法再利用。</p>
+<a id="more"></a>
 <h2 id="第47条：了解和使用类库">第47条：了解和使用类库</h2><blockquote>
 <p>程序猿的类库就是武器弹药，没有弹药如何去写出一首好程序</p>
 </blockquote>
@@ -349,15 +350,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -398,10 +395,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -784,3 +777,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

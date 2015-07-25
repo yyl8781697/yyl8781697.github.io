@@ -111,6 +111,7 @@
 <li>以采样顶点为起始顶点，利用<code>Spark</code>的<code>Pregel</code>模块来跑多源最短路径</li>
 <li>每个源跑完之后标记形成的图就是连通子图</li>
 </ol>
+<a id="more"></a>
 <p>但是面试官一直问我该采多少样，你这么多是不是非常不精确之类的，（我当初就在想，这个就是要靠实验来定啊。。。）实在无法给面试官满意的答案，我就转移了个话题，反问：<br>q:请问假如这个图有2亿条边，那么最终形成的连通子图会超过2kw吗？<br>w:他说应该会超过并且可能会多于2kw<br>突然意识到我最初想到的采样方法这么做还真不合适。。。</p>
 <h2 id="标签传播版PageRank法">标签传播版PageRank法</h2><p>又思索了片刻，想到了PageRank+标签传播法，该方法使用<code>PageRank</code>的随机游走来求解，与之不同的这里传播的是标签，每次迭代都将自己的标签告诉邻居，邻居收到消息后更新自己的标签（进行union操作），直至迭代再消息合并之后自己的标签无变化时停止迭代。<br>列如cookieB的标签其实是（1，2）在迭代的时候会向cookieA和cookieC发送自己的标签，它们俩收到消息之后进行合并，最终其标签也是（1，2），此时就可以求出cookieA,cookieB,cookieC其实就是一个人了，最重要的时候<code>PageRank</code>很容易使用分布式实现。</p>
 <p>好，接下来从代码的角度来讲解此方法：</p>
@@ -221,15 +222,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -270,10 +267,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -656,3 +649,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

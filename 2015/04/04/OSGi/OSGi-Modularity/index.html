@@ -125,6 +125,7 @@
 <h3 id="1-3-_实现">1.3. 实现</h3><p>OSGI已经有很多实现，例如Equinox, Knopflerfish OSGi or Apache Felix.</p>
 <h3 id="1-4-_Eclipse的Equinox">1.4. Eclipse的Equinox</h3><p>Eclipse的Equinox是基于OSGI规范的实现，也这是Eclipse程序的运行时环境，Eclipse的扩展点是基于OSGI的<strong>Bundle</strong>和<strong>Service</strong>的概念来进行的。</p>
 <h2 id="2-_OSGI_Bundle和依赖管理">2. OSGI Bundle和依赖管理</h2><h3 id="2-1-_OSGI_Bundle">2.1. OSGI Bundle</h3><p>OSGI规范定义了OSGI <strong>Bundle</strong>为模块化的单元。<br>一个<b>Bundle</b>是一个紧密结合的、自包含的单元，它明确定义了对其他模块的依赖关系和服务，同时还定义了对外开放的API。<br><br>从技术上讲<b>Bundle</b>是一个带有额外元数据的.jar文件，这个元数据存储在<em>META-INF/MANIFEST.MF</em>中，<i>META-INF/MANIFEST.MF</i>文件是Java规范的一部分，任何非 OSGi 得运行时将忽略 OSGi 的元数据。因此 OSGi <strong>Bundle</strong>可以不受限制的在非 OSGi Java 环境中使用。<br></p>
+<a id="more"></a>
 <h3 id="2-2-_Bundle-标志名称_和_版本">2.2. Bundle-标志名称 和 版本</h3><p>每个<strong>Bundle</strong>通过<code>Bundle-SymbolicName</code>来定义它的标志名称属性，名称一般以<strong>Bundle</strong>作者的反向域名来定义，如果你有一个名为”example.com”的域名，那么标志名称将一般以”com.example”作为开头。<br><br>每个<strong>Bundle</strong>通过<code>Bundle-Version</code>都有一个版本号。<br><br><code>Bundle-SymbolicName</code>和<code>Bundle-Version</code>可以唯一标识在OSGI中的一个<strong>Bundle</strong>，这两个属性都是在<i>META-INF/MANIFEST.MF</i>中定义的。</p>
 <h3 id="2-3-_OSGI版本号的语义">2.3. OSGI版本号的语义</h3><p>OSGI推荐使用<code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code>语法来定义你的版本号。</p>
 <ul>
@@ -353,15 +354,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -402,10 +399,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -788,3 +781,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

@@ -13,23 +13,20 @@
     
     <meta name="description" content="LinkedList是Java编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与ArrayList作比较！
 
-&amp;#160; &amp;#160; &amp;#160; &amp;#160;LinkedList容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍LinkedList
-构造函数&amp;#160; &amp;#160; &amp;#160; &amp;#160;先来看一下它的几个私有变量的定义：123">
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;LinkedList容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍LinkedList">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 源码学习之java.util.LinkedList">
 <meta property="og:url" content="http://yyl8781697.github.io/2015/03/26/Java Source/Java-LinkedList/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="LinkedList是Java编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与ArrayList作比较！
 
-&amp;#160; &amp;#160; &amp;#160; &amp;#160;LinkedList容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍LinkedList
-构造函数&amp;#160; &amp;#160; &amp;#160; &amp;#160;先来看一下它的几个私有变量的定义：123">
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;LinkedList容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍LinkedList">
 <meta property="og:image" content="/img/Java-LinkedList/linkBefore.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 源码学习之java.util.LinkedList">
 <meta name="twitter:description" content="LinkedList是Java编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与ArrayList作比较！
 
-&amp;#160; &amp;#160; &amp;#160; &amp;#160;LinkedList容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍LinkedList
-构造函数&amp;#160; &amp;#160; &amp;#160; &amp;#160;先来看一下它的几个私有变量的定义：123">
+&amp;#160; &amp;#160; &amp;#160; &amp;#160;LinkedList容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍LinkedList">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -114,6 +111,7 @@
 <p><code>LinkedList</code>是<code>Java</code>编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
 </blockquote>
 <p>&#160; &#160; &#160; &#160;<code>LinkedList</code>容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍<code>LinkedList</code></p>
+<a id="more"></a>
 <h2 id="构造函数">构造函数</h2><p>&#160; &#160; &#160; &#160;先来看一下它的几个私有变量的定义：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Pointer to first node.</span><br><span class="line"> * Invariant: (first == null &amp;&amp; last == null) ||</span><br><span class="line"> *            (first.prev == null &amp;&amp; first.item != null)</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">transient</span> Node&lt;E&gt; first;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Pointer to last node.</span><br><span class="line"> * Invariant: (first == null &amp;&amp; last == null) ||</span><br><span class="line"> *            (last.next == null &amp;&amp; last.item != null)</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">transient</span> Node&lt;E&gt; last;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    E item;</span><br><span class="line">    Node&lt;E&gt; next;</span><br><span class="line">    Node&lt;E&gt; prev;</span><br><span class="line"></span><br><span class="line">    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.item = element;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">        <span class="keyword">this</span>.prev = prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&#160; &#160; &#160; &#160;注释中描述的得清晰</p>
 <ul>
@@ -250,15 +248,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -299,10 +293,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -685,3 +675,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

@@ -127,6 +127,7 @@ Enum默认实现了java.lang.Comp">
 <li>Enum还有一个<code>oridinal</code>的方法，这个方法返回枚举值在枚举类种的顺序。</li>
 </ol>
 <p>《Effective Java》中写着单例模式推荐的方式是使用<strong>单元素的枚举类</strong>实现，在查资料过程中竟然发现枚举值里面还能重写枚举的方法：</p>
+<a id="more"></a>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 单元素的枚举类型的 单例</span><br><span class="line"> *<span class="javadoctag"> @author</span> yyl</span><br><span class="line"> *</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Person &#123;</span><br><span class="line">	<span class="comment">//这里每一个枚举项都可以看做一个单例实例</span></span><br><span class="line">	instance,</span><br><span class="line">	him&#123;</span><br><span class="line">		<span class="annotation">@Override</span> </span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"gays:"</span>+str;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	she&#123;</span><br><span class="line">		<span class="annotation">@Override</span> </span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"girls:"</span>+str;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">sayHello</span><span class="params">(String str)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Hello:"</span>+str;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>使用单例的方式来调用<code>sayHello</code></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Person.instance.sayHello(<span class="string">"tom"</span>));</span><br><span class="line">System.out.println(Person.him.sayHello(<span class="string">"tom"</span>));</span><br><span class="line">System.out.println(Person.she.sayHello(<span class="string">"tom"</span>));</span><br></pre></td></tr></table></figure>
@@ -230,15 +231,11 @@ Enum默认实现了java.lang.Comp">
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -279,10 +276,6 @@ Enum默认实现了java.lang.Comp">
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -665,3 +658,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

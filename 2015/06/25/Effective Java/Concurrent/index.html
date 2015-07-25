@@ -119,7 +119,8 @@
 <li>它可以保证进入同步方法或者代码块的每个线程，都可以看到同一个锁保护之前所有的修改<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> stopRequented;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span><br><span class="line"></span>&#123;</span><br><span class="line">	Thread backgroundThread=<span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">while</span>(!stopRequented)</span><br><span class="line">				i++;</span><br><span class="line">			</span><br><span class="line">			System.out.println(<span class="string">"the thread stop now!"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	backgroundThread.start();</span><br><span class="line">	Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">	</span><br><span class="line">	stopRequented=<span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>看上面的代码，你运行的时候并没有按你期望的在3秒之后终止程序，这是因为<code>stopRequented</code>这个变量并没有同步，不能进行线程共享<br>虚拟机将那段循环代码可以转为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!stopRequented)</span><br><span class="line">	<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">		i++;</span><br></pre></td></tr></table></figure></p>
+<p>看上面的代码，你运行的时候并没有按你期望的在3秒之后终止程序，这是因为<code>stopRequented</code>这个变量并没有同步，不能进行线程共享<br>虚拟机将那段循环代码可以转为<br><a id="more"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!stopRequented)</span><br><span class="line">	<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">		i++;</span><br></pre></td></tr></table></figure>
 <p>所以解决上述问题的方法就是将其同步：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> stopRequented;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用同步方法来将变量同步</span></span><br><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">getStopRequented</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> stopRequented;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setStopRequented</span><span class="params">(<span class="keyword">boolean</span> b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	stopRequented=b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span><br><span class="line"></span>&#123;</span><br><span class="line">	Thread backgroundThread=<span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">while</span>(!getStopRequented())</span><br><span class="line">					i++;</span><br><span class="line">			</span><br><span class="line">			System.out.println(<span class="string">"the thread stop now!"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	backgroundThread.start();</span><br><span class="line">	Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">	</span><br><span class="line">	setStopRequented(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>另一个更为简单的方法是使用共享 变量关键字<code>volatile</code>：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> stopRequented;</span><br></pre></td></tr></table></figure></p>
 <p>但是<code>volatile</code>使用时得慎用，因为它只保证了关键字的变量是共享的，但是如果涉及其他操作可能会出现问题，比如<code>++</code></p>
@@ -299,15 +300,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -348,10 +345,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -734,3 +727,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

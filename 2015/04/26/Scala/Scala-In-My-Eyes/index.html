@@ -112,6 +112,7 @@ Scala注意，本文主要是描述我所了解的Scala相关的基础语法，�
 </blockquote>
 <h2 id="我眼中的Scala">我眼中的Scala</h2><pre><code><span class="keyword">Scala</span>是一种基于JVM的编程语言，集成了面向对象和函数式编程的特性，既能处理脚本化得临时任务，又能处理高并发场景下分布式大数据应用。
 </code></pre><p>&#160; &#160; &#160; &#160;<code>Java</code>就是因为有<code>JVM</code>虚拟机才成就了现在的辉煌，<code>Scala</code>同样是运行在<code>JVM</code>，大致可以看做Java的升级版，由于现在大数据大势所趋，各种大数据框架的出现导致了<code>Scala</code>强势崛起！<br>&#160; &#160; &#160; &#160;编程初学者最先接触的应该就是”Hello,World”，而WordCount可以看做大数据编程的入门必学技能，所以现在我们在”Hello,World”上实现CharCount：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Scala Application</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">str=</span>"<span class="title">Hello</span>,<span class="title">wrold</span>"</span><br><span class="line"></span><span class="function"><span class="keyword">val</span> <span class="title">data=str</span></span><br><span class="line"></span>	.split(<span class="type">Array</span>(',',' '))</span><br><span class="line">	.flatMap(<span class="keyword">for</span>(c&lt;-_) <span class="keyword">yield</span> (c,<span class="number">1</span>))  <span class="comment">//好Api</span></span><br><span class="line">	.groupBy(_._1)</span><br><span class="line">	.mapValues(_.size)</span><br><span class="line">		</span><br><span class="line">println(data)</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <p>&#160; &#160; &#160; &#160;假如你是用<code>Java</code>程序来写，最方便的莫过于<code>HashMap</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Java Application</span></span><br><span class="line">String str=<span class="string">"Hello,World"</span>;</span><br><span class="line">HashMap&lt;Character,Integer&gt; map=<span class="keyword">new</span> HashMap&lt;Character,Integer&gt;();</span><br><span class="line"><span class="keyword">for</span>(Character ch:str.toCharArray())</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(!<span class="string">","</span>.equals(ch))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(!map.containsKey(ch))</span><br><span class="line">		&#123;</span><br><span class="line">			map.put(ch, <span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		map.put(ch, map.get(ch)+<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(map);</span><br></pre></td></tr></table></figure></p>
 <p>其结果为</p>
 <pre><code><span class="built_in">Map</span>(e <span class="subst">-&gt; </span><span class="number">1</span>, l <span class="subst">-&gt; </span><span class="number">3</span>, H <span class="subst">-&gt; </span><span class="number">1</span>, r <span class="subst">-&gt; </span><span class="number">1</span>, w <span class="subst">-&gt; </span><span class="number">1</span>, o <span class="subst">-&gt; </span><span class="number">2</span>, d <span class="subst">-&gt; </span><span class="number">1</span>)
@@ -367,15 +368,11 @@ account.getBalance50.0
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -416,10 +413,6 @@ account.getBalance50.0
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -802,3 +795,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

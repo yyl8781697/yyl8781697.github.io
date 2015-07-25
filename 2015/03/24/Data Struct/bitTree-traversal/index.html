@@ -15,9 +15,7 @@
 
 前序遍历：根节点-&amp;gt;左孩子节点-&amp;gt;右孩子节点
 中序遍历：左孩子节点-&amp;gt;根节点-&amp;gt;右孩子节点
-后续遍历：左孩子节点-&amp;gt;右孩子节点-&amp;gt;根节点
-
-递归遍历&amp;#160; &amp;#160; &amp;#160; &amp;#160;该遍历最为经典也最为简单的就是使用">
+后续遍历：左孩子节点-&amp;gt;右孩子节点-&amp;gt;根节点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二叉树的遍历-递归和非递归">
 <meta property="og:url" content="http://yyl8781697.github.io/2015/03/24/Data Struct/bitTree-traversal/index.html">
@@ -26,9 +24,7 @@
 
 前序遍历：根节点-&amp;gt;左孩子节点-&amp;gt;右孩子节点
 中序遍历：左孩子节点-&amp;gt;根节点-&amp;gt;右孩子节点
-后续遍历：左孩子节点-&amp;gt;右孩子节点-&amp;gt;根节点
-
-递归遍历&amp;#160; &amp;#160; &amp;#160; &amp;#160;该遍历最为经典也最为简单的就是使用">
+后续遍历：左孩子节点-&amp;gt;右孩子节点-&amp;gt;根节点">
 <meta property="og:image" content="http://img.blog.csdn.net/20140805205402022?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcG9ueV9tYWdnaWU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="二叉树的遍历-递归和非递归">
@@ -36,9 +32,7 @@
 
 前序遍历：根节点-&amp;gt;左孩子节点-&amp;gt;右孩子节点
 中序遍历：左孩子节点-&amp;gt;根节点-&amp;gt;右孩子节点
-后续遍历：左孩子节点-&amp;gt;右孩子节点-&amp;gt;根节点
-
-递归遍历&amp;#160; &amp;#160; &amp;#160; &amp;#160;该遍历最为经典也最为简单的就是使用">
+后续遍历：左孩子节点-&amp;gt;右孩子节点-&amp;gt;根节点">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -125,6 +119,7 @@
 <li>中序遍历：左孩子节点-&gt;根节点-&gt;右孩子节点</li>
 <li>后续遍历：左孩子节点-&gt;右孩子节点-&gt;根节点</li>
 </ol>
+<a id="more"></a>
 <h2 id="递归遍历">递归遍历</h2><p>&#160; &#160; &#160; &#160;该遍历最为经典也最为简单的就是使用递归方法来做：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preOrderTraversalRecursive</span><span class="params">(BitNode node)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(node ==<span class="keyword">null</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">	System.out.print(node.val+<span class="string">","</span>);</span><br><span class="line">	preOrderTraversalRecursive(node.left);</span><br><span class="line">	preOrderTraversalRecursive(node.right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inOrderTraversalRecursive</span><span class="params">(BitNode node)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(node ==<span class="keyword">null</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	inOrderTraversalRecursive(node.left);</span><br><span class="line">	System.out.print(node.val+<span class="string">","</span>);</span><br><span class="line">	inOrderTraversalRecursive(node.right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postOrderTraversalRecursive</span><span class="params">(BitNode node)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(node ==<span class="keyword">null</span>)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	postOrderTraversalRecursive(node.left);</span><br><span class="line">	postOrderTraversalRecursive(node.right);</span><br><span class="line">	System.out.print(node.val+<span class="string">","</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>&#160; &#160; &#160; &#160;本文主要讨论二叉树的非递归遍历（也是面试官们喜欢的提问点）。</p>
 <h2 id="非递归遍历">非递归遍历</h2><blockquote>
@@ -272,15 +267,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -321,10 +312,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -707,3 +694,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

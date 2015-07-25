@@ -114,7 +114,9 @@ OSGi是Open Services Gateway initiative的缩写，叫做开放服务网关协�
 <h2 id="开发环境">开发环境</h2><blockquote>
 <p>Eclipse4.2.2 (他是基于Equinox实现的，已经自带osgi framework)，jre1.7</p>
 </blockquote>
-<h2 id="OSGI服务的创建">OSGI服务的创建</h2><p>首先新建名称为osgiDemoService的一个OSGI项目：File-&gt;New-&gt;Project-&gt;Plug-in Project<br><img src="/img/osgo-helloworld/osgiDemoService.png" alt=""><br><br>该项目为服务层，不需要生成Actviator<br><img src="/img/osgo-helloworld/osgiDemoServiceContent.png" alt=""><br>在该项目中新建一个接口osgi.demo.impl.Hello</p>
+<h2 id="OSGI服务的创建">OSGI服务的创建</h2><p>首先新建名称为osgiDemoService的一个OSGI项目：File-&gt;New-&gt;Project-&gt;Plug-in Project</p>
+<a id="more"></a>
+<p><img src="/img/osgo-helloworld/osgiDemoService.png" alt=""><br><br>该项目为服务层，不需要生成Actviator<br><img src="/img/osgo-helloworld/osgiDemoServiceContent.png" alt=""><br>在该项目中新建一个接口osgi.demo.impl.Hello</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> osgi.demo.service;</span><br><span class="line">	</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">	<span class="function">String <span class="title">sayHello</span><span class="params">(String str)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最后的MANIFEST.MF文件为</p>
 <pre><code><span class="attribute">Manifest-Version</span>: <span class="string">1.0</span>
@@ -409,15 +411,11 @@ clinet
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -458,10 +456,6 @@ clinet
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -844,3 +838,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

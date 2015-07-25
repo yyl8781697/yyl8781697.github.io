@@ -110,7 +110,9 @@
 <p><code>Hashtable</code>是<code>Java</code>编程中较为常用的容器类之一，在面试时常常被与<code>HashMap</code>作比较！</p>
 </blockquote>
 <p>&#160; &#160; &#160; &#160;为什么要常与<code>HashMap</code>作比较呢?因为他们的源码是极其相似啊，网上也常常有人说<code>HashMap</code>是基于<code>Hashtable</code>实现的吧，因为<code>Hashtable</code>在<code>Java1.0</code>中就有了，但是<code>HashMap</code>在<code>Java1.2</code>才出现。<br>&#160; &#160; &#160; &#160;本文讲解<code>Hashtable</code>时不再累赘，实现的原理大致都和<a href="http://kubicode.me/2015/03/27/Java-HashMap/" target="_blank" rel="external">HashMap</a>一样，这里主要讲<code>Hashtable</code>与<code>HashMap</code>几个不同点。</p>
-<h2 id="不支持null">不支持null</h2><p>&#160; &#160; &#160; &#160;我们知道<code>HashMap</code>是支持<code>null</code>的键和值的，每次遇到<code>null</code>时直接用0来作桶号，来看下<code>Hashtable</code>对<code>null</code>的处理<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Maps the specified &lt;code&gt;key&lt;/code&gt; to the specified</span><br><span class="line"> * &lt;code&gt;value&lt;/code&gt; in this Hashtable. Neither the key nor the</span><br><span class="line"> * value can be &lt;code&gt;null&lt;/code&gt;. &lt;p&gt;</span><br><span class="line"> *</span><br><span class="line"> * The value can be retrieved by calling the &lt;code&gt;get&lt;/code&gt; method</span><br><span class="line"> * with a key that is equal to the original key.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span>      key     the Hashtable key</span><br><span class="line"> *<span class="javadoctag"> @param</span>      value   the value</span><br><span class="line"> *<span class="javadoctag"> @return</span>     the previous value of the specified key in this Hashtable,</span><br><span class="line"> *             or &lt;code&gt;null&lt;/code&gt; if it did not have one</span><br><span class="line"> *<span class="javadoctag"> @exception</span>  NullPointerException  if the key or value is//当键和值为null时会抛NPE</span><br><span class="line"> *               &lt;code&gt;null&lt;/code&gt;</span><br><span class="line"> *<span class="javadoctag"> @see</span>     Object#equals(Object)</span><br><span class="line"> *<span class="javadoctag"> @see</span>     #get(Object)</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Make sure the value is not null</span></span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//to do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="不支持null">不支持null</h2><p>&#160; &#160; &#160; &#160;我们知道<code>HashMap</code>是支持<code>null</code>的键和值的，每次遇到<code>null</code>时直接用0来作桶号，来看下<code>Hashtable</code>对<code>null</code>的处理</p>
+<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Maps the specified &lt;code&gt;key&lt;/code&gt; to the specified</span><br><span class="line"> * &lt;code&gt;value&lt;/code&gt; in this Hashtable. Neither the key nor the</span><br><span class="line"> * value can be &lt;code&gt;null&lt;/code&gt;. &lt;p&gt;</span><br><span class="line"> *</span><br><span class="line"> * The value can be retrieved by calling the &lt;code&gt;get&lt;/code&gt; method</span><br><span class="line"> * with a key that is equal to the original key.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @param</span>      key     the Hashtable key</span><br><span class="line"> *<span class="javadoctag"> @param</span>      value   the value</span><br><span class="line"> *<span class="javadoctag"> @return</span>     the previous value of the specified key in this Hashtable,</span><br><span class="line"> *             or &lt;code&gt;null&lt;/code&gt; if it did not have one</span><br><span class="line"> *<span class="javadoctag"> @exception</span>  NullPointerException  if the key or value is//当键和值为null时会抛NPE</span><br><span class="line"> *               &lt;code&gt;null&lt;/code&gt;</span><br><span class="line"> *<span class="javadoctag"> @see</span>     Object#equals(Object)</span><br><span class="line"> *<span class="javadoctag"> @see</span>     #get(Object)</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Make sure the value is not null</span></span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//to do something</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>&#160; &#160; &#160; &#160;可以很显眼的看到当<code>value == null</code>会抛NPE异常，那<code>key == null</code>源码中可没写上，其实该判断时在<code>key.hashCode()</code>，而<code>Object.hashCode</code>是不支持<code>null</code>的，也就自然而来得<code>Hashtable</code>不支持<code>null</code>的键和值了</p>
 <h2 id="线程安全">线程安全</h2><p>&#160; &#160; &#160; &#160;在<code>Hashtable</code>中的绝大部分方法都是使用<code>synchronized</code>进行修饰的，这一点和<code>HashMap</code>有较大的不同，虽然说<code>Hashtable</code>的方法在多线程是安全的，但是和<a href="http://kubicode.me/2015/03/25/Java-Vector/#线程安全" target="_blank" rel="external">Vector</a>一样，在多线程下使用时也要再看是否还额外需要<code>synchronized</code>再修饰。</p>
 <h2 id="求余取桶号">求余取桶号</h2><p>&#160; &#160; &#160; &#160;在<code>HashMap</code>中是根据<code>key</code>的<code>hash</code>值和<code>table.length</code>进行与操作来求桶号的，并且要求table.length必须是2的幂次方，但是在<code>HashMap</code>中的实现是使用<code>hash</code>和<code>table.length</code>求余来实现，在对<code>table.length</code>的值并无其他要求，这种方法实现简单，但是效率没有<code>HashMap</code>的高，毕竟求余除法操作要比与操作慢。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> index = (hash &amp; <span class="number">0x7FFFFFFF</span>) % tab.length;</span><br></pre></td></tr></table></figure></p>
@@ -212,15 +214,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -261,10 +259,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -647,3 +641,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

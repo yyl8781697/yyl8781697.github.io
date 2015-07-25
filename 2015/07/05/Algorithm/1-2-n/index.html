@@ -109,6 +109,7 @@
 <p>但是如果这里不是1000，而是这个数字非常的大，求和就可能出现溢出</p>
 </blockquote>
 <h2 id="方法2">方法2</h2><p>还记得有一道经典的<a href="https://leetcode.com/problems/single-number/" target="_blank" rel="external">leetcode题目</a>就是一个数组中每个数出现2次，只有一个数字出现了3次，找出这个数字。<br>该题目的思路是A^A=0,A^0=A</p>
+<a id="more"></a>
 <p>按这个思路，因为我们知道1~1000已经出现一遍了，那么在遍历的时候自变量i也会从1~1000出现一遍，所以可以利用i来构造每个数字出现两次的情况，所以解题思路就是<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">searchTwiceNum</span><span class="params">(<span class="keyword">int</span> a[])</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> k=a[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		k^=a[i]^i;<span class="comment">//通过i来构造</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这样操作就不会出现溢出的情况了</p>
 <h2 id="参考">参考</h2><ul>
@@ -206,15 +207,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -255,10 +252,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -641,3 +634,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

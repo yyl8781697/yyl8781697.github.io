@@ -14,7 +14,7 @@
     <meta name="description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于jquery的出现，编写js代码已经变得异常的平民化，同时现在的web也已经是ajax满天飞，哪天你自己写一个web不含ajax的拿不出手当然，在.net的控件模式开发中一种去控件化开发已经变的变得更加通用：jquery+ajax+ashx  这种方式更加适用于一些小应用的开发，轻量、简单、自由由于那时候太年轻，刚刚开始这种模式开发的时候">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在ashx中利用反射+jquery轻松处理ajax 含Demo源码">
-<meta property="og:url" content="http://yyl8781697.github.io/2013/02/25/Asp.Net/handler-jquery-ajax/index.html">
+<meta property="og:url" content="http://yyl8781697.github.io/2013/02/25/Dotnet/handler-jquery-ajax/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;由于jquery的出现，编写js代码已经变得异常的平民化，同时现在的web也已经是ajax满天飞，哪天你自己写一个web不含ajax的拿不出手当然，在.net的控件模式开发中一种去控件化开发已经变的变得更加通用：jquery+ajax+ashx  这种方式更加适用于一些小应用的开发，轻量、简单、自由由于那时候太年轻，刚刚开始这种模式开发的时候">
 <meta name="twitter:card" content="summary">
@@ -80,7 +80,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2013/02/25/Asp.Net/handler-jquery-ajax/" title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码" itemprop="url">在ashx中利用反射+jquery轻松处理ajax 含Demo源码</a>
+      <a href="/2013/02/25/Dotnet/handler-jquery-ajax/" title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码" itemprop="url">在ashx中利用反射+jquery轻松处理ajax 含Demo源码</a>
   </h1>
   <p class="article-author">By
        
@@ -102,6 +102,7 @@
 		
 		<p>&#160; &#160; &#160; &#160;由于jquery的出现，编写js代码已经变得异常的平民化，同时现在的web也已经是ajax满天飞，哪天你自己写一个web不含ajax的拿不出手<br>当然，在.net的控件模式开发中一种去控件化开发已经变的变得更加通用：jquery+ajax+ashx  这种方式更加适用于一些小应用的开发，轻量、简单、自由<br>由于那时候太年轻，刚刚开始这种模式开发的时候 是一个ajax请求一个ashx页面，这样的结果可想而知，一个小的权限系统光光ashx文件就几十个了，而且文件名还大同小异，悲剧。</p>
 <p>&#160; &#160; &#160; &#160;后来做了一会儿变聪明了，把相同类别的请求都放到一个ashx文件中，每个请求传一个请求标志  通过switch来调用相应的请求方法，当然，这样要比原来好多了，至少没那么多ashx文件了，但是  每新建一个文件都要去添加switch方法，蛋疼啊  有木有，更加可耻的是 每次增删改一个请求都要去修改那个可恶的switch语句，烦啊</p>
+<a id="more"></a>
 <p>&#160; &#160; &#160; &#160;后来知道了反射，知道可以用反射来动态调用方法，脑子一转，哇  好主意，查了相关资料，没几分钟就把这个框架写了出来，然后百度一搜，次奥，关于这种的都有那么多文章了，本来都不想再写这篇文章，重复造轮子啊 要被骂的有木有，不过想想代码都写了，而且还是自己写的，写篇文章纪念一下，而且这个东西感觉比网上的更加方便，实用，嘿嘿。<br>下面就是这个handler主心骨鸡类的详解了</p>
 <p>&#160; &#160; &#160; &#160;首先在这个基类中定义几个默认的参数</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 指定过来的http请求类型  主要指定action方法名称的接收方式 get 或者 post</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">protected</span> NameValueCollection _httpReuqest = HttpContext.Current.Request.Form;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 指定返回头</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">string</span> _contentType = <span class="string">"text/plain"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> 指定接收action方法的参数名称</span></span><br><span class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">string</span> _actionName = <span class="string">"action"</span>;</span><br></pre></td></tr></table></figure>
@@ -131,7 +132,7 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Asp-Net/">Asp.Net</a>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
 </div>
 
 
@@ -146,7 +147,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2013/02/25/Asp.Net/handler-jquery-ajax/" data-title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2013/02/25/Dotnet/handler-jquery-ajax/" data-title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -160,7 +161,7 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2013/04/28/CSharp/RSA/" title="整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码">
+ <a href="/2013/04/28/Dotnet/RSA/" title="整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码">
   <strong>上一篇：</strong><br/>
   <span>
   整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码</span>
@@ -169,7 +170,7 @@
 
 
 <div class="next">
-<a href="/2012/12/07/CSharp/csharp-socket-udp/"  title="用c#写的一个局域网聊天客户端 类似小飞鸽">
+<a href="/2012/12/07/Dotnet/csharp-socket-udp/"  title="用c#写的一个局域网聊天客户端 类似小飞鸽">
  <strong>下一篇：</strong><br/> 
  <span>用c#写的一个局域网聊天客户端 类似小飞鸽
 </span>
@@ -180,7 +181,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2013/02/25/Asp.Net/handler-jquery-ajax/" data-title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码" data-url="http://yyl8781697.github.io/2013/02/25/Asp.Net/handler-jquery-ajax/"></div>
+	<div class="ds-thread" data-thread-key="2013/02/25/Dotnet/handler-jquery-ajax/" data-title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码" data-url="http://yyl8781697.github.io/2013/02/25/Dotnet/handler-jquery-ajax/"></div>
 </section>
 
 
@@ -212,15 +213,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -261,10 +258,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -647,3 +640,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

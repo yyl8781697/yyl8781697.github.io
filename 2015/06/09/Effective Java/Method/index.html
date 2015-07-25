@@ -125,6 +125,7 @@
 <li>如何为方法编写文档</li>
 </ul>
 <h2 id="第38条：检查参数的有效性">第38条：检查参数的有效性</h2><p>这条就是教我们对于公有方法，最好在方法体上的开头处加上参数检查，并且在文档中清楚地指出这些限制，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 求模</span><br><span class="line"> *<span class="javadoctag"> @param</span> m</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> *<span class="javadoctag"> @throws</span> ArithmeticException 如何m小于等于0时抛出异常</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigInteger <span class="title">mod</span><span class="params">(BigInteger m)</span> <span class="keyword">throws</span> ArithmeticException</span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(m.signum()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArithmeticException(<span class="string">"Moduls &lt;= 0:"</span>+m);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//do something</span></span><br><span class="line">	<span class="keyword">return</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <p>假如是对于私有方法，通常使用断言来检查他们的参数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">long</span> a[],<span class="keyword">int</span> offset,<span class="keyword">int</span> length)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">assert</span> a!=<span class="keyword">null</span>:<span class="string">"排序数组不能为空"</span>;</span><br><span class="line">	<span class="keyword">assert</span> offset &gt;= <span class="number">0</span>&amp;&amp; offset&lt;=a.length;</span><br><span class="line">	<span class="keyword">assert</span> length&gt;=<span class="number">0</span> &amp;&amp; length&lt;=a.length-offset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p><code>assert</code>默认是关闭的，需要使用<code>-enableassertions</code>或者<code>-ea</code>的<code>Java</code>参数来显示开启。</p>
@@ -279,15 +280,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -328,10 +325,6 @@
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -714,3 +707,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

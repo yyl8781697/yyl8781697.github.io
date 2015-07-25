@@ -128,6 +128,7 @@
 <h2 id="1-_准备">1. 准备</h2><p>下面的教程假定你已经熟悉OSGI的运行时以及模块层（<a href="http://www.vogella.com/tutorials/OSGiServices/article.html" target="_blank" rel="external">原文</a>,<a href="http://kubicode.me/2015/04/04/OSGi-Modularity/" target="_blank" rel="external">译文</a>）相关的描述。</p>
 <h2 id="2-_OSGI服务">2. OSGI服务</h2><h3 id="2-1-_什么是OSGI服务">2.1. 什么是OSGI服务</h3><p>一个OSGI的服务被定义为一个标准的Java类或者接口，通常一个Java接口被作为服务的接口来使用。一个<strong>bundle</strong>可以注册或者使用服务，为了达到此功能，OSGI提供了中心的服务注册表。<br><br>一个服务可以被动态的启动和停止，<strong>bundle</strong>在使用服务时必需有这种操控动态行为的能力，<strong>bundle</strong>服务可以注册一个监听器来监听服务的启动和停止。</p>
 <h3 id="2-2-_定义服务的最佳实践">2.2. 定义服务的最佳实践</h3><p>定义一个服务最通常的方法就是通过一个含有接口的<strong>bundle</strong>来定义，其他的<strong>bundle</strong>将会提供这个服务的实现，这就可以允许你通过不同的<strong>bundle</strong>来改变服务的实现。</p>
+<a id="more"></a>
 <h3 id="2-3-_服务的属性">2.3. 服务的属性</h3><p>在<code>BundleContext</code>类里面的<code>registerService()</code>方法你可以通过字典参数来指定任意的属性，你可以通过<code>ServiceReference</code>类中的<code>getProperty()</code>方法去访问一个指定的属性，该类属于<code>org.osgi.framework</code>包。</p>
 <h3 id="2-4-_OSGI服务的选择">2.4. OSGI服务的选择</h3><p>如果一些服务都是可用的并且对相同的API都是有效的，那么OSGI运行时将会默认得选择最低的<i>SERVICE_ID</i>作为使用的服务，你也可以通过服务的属性来设置你的<i>SERVICE_RANKING</i>，OSGI默认将会分配一个0的<i>SERVICE_RANKING</i>并且会选择较高<em>RANKING</em>值的服务来运行。（译者：这里我实验了一下，<i>SERVICE_ID</i>不可指定，<i>SERVICE_RANKING</i>可指定，但是默认为<code>null</code>，也就是说你想手动指定运行相同API的服务的话去指定<i>SERVICE_RANKING</i>就好了）<br><br><code>org.osgi.framework</code>包中的<code>Constants</code>类包含了<i>SERVICE_RANKING</i>值的字符串名称常量，这个常量可以用于设置<em>RANKING</em>的值。</p>
 <h2 id="3-_OSGI声明式服务">3. OSGI声明式服务</h2><h3 id="3-1-_定义声明式服务">3.1. 定义声明式服务</h3><p>OSGI的声明式服务功能(<em>declarative services</em> 简称：DS)可以让你通过元数据信息(XML)来定义和使用服务。通过DS你可以不使用任何扩展或者实现的类就可以定义服务了，这将允许这些服务在OSGI的运行时被独立的测试。<br><br>OSGI服务组件负责启动服务，通过声明服务或者其他方式来创建服务，这对服务消费者来说是不可见的。（这段不知道咋翻译了-_-，有兴趣去看原文）<br><br>服务组件包含一个XML描述和一个对象实例，服务描述包含服务组件的全部信息，例如组件实例类的名称，服务的接口等。<br><br>服务组件的引用在<em>MANIFEST.MF</em>中通过<em>Service-Component</em>属性来定义，如果OSGI在运行时找到了这样的引用，那么<code>org.eclipse.equinox.ds</code>插件将会创建相应的服务。<br><br>下面样例演示了如何在<em>MANIFEST.MF</em>中定义一个组件的引用：</p>
@@ -318,15 +319,11 @@ install file:c:\temp\bundles\plugins\org<span class="class">.eclipse</span><span
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/" title="CSharp">CSharp<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
 		  
 		
 		  
@@ -367,10 +364,6 @@ install file:c:\temp\bundles\plugins\org<span class="class">.eclipse</span><span
 		
 		  
 			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/CSharp/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -753,3 +746,6 @@ $(document).ready(function(){
 
   </body>
 </html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
