@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-07-25T03:02:13.000Z</updated>
+  <updated>2015-07-25T12:06:04.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,80 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[对策字符串的最大长度]]></title>
+    <link href="http://yyl8781697.github.io/2015/07/25/Algorithm/The-Longest-Palindrome/"/>
+    <id>http://yyl8781697.github.io/2015/07/25/Algorithm/The-Longest-Palindrome/</id>
+    <published>2015-07-25T07:03:19.000Z</published>
+    <updated>2015-07-25T12:06:04.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个字符串,输出该字符串中对称的子字符串的最大长度。比如输入字符串 “google”,由于该字符串里最长的对称子字符串是“goog”,因此输出 4。
+</code></pre><h2 id="解析">解析</h2><p>该题目比较直观的解法有：</p>
+<ol>
+<li>暴力法：遍历所有可能的子串，然后判断子串是否为回文，故总得复杂度为O(n^3)</li>
+<li>遍历字符串，以当前遍历为中心点，然后向两边扩展，直至扩展到不是回文，总复杂度为O(n^2)</li>
+</ol>
+<p>还有后缀树也可以解，不过需要较大的空间，本文使用的是manacher算法：</p>
+<pre><code>Manacher最早发现了可以用<span class="function"><span class="title">O</span><span class="params">(n)</span></span>的时间复杂度来解决该问题，所以这种方法称之为Manacher算法。
+</code></pre><p>现在以查询字符串”abaab”为例，该算法为了将”aba”和”baab” 奇偶形式统一考虑，做了一个很精妙的预处理：每每两个字符串以及两端都加一个标志符号#，就形成了<br>“#a#b#a#a#b#”新字符串，那么”aba”则可以看做”#a#b#a#”，同时”baab”转为#b#a#a#b#”，就都为奇数形式了<br><a id="more"></a></p>
+<pre><code>假设当前的字符串长度为<span class="keyword">n</span>,则添加的#个数为2*<span class="keyword">n</span>+1
+</code></pre><p>接下来需要添加一个辅助数组p,其中p[i]的值表示第i位上可以形成的最大回文半径(比如p[1]=2  因为#a#的半径为2)，全部先列出的话为：</p>
+<pre><code>新串:<span class="array"># a </span><span class="array"># b </span><span class="array"># a </span><span class="array"># a </span><span class="array"># b </span>#
+p[]:<span class="number">1</span> <span class="number">2</span> <span class="number">1</span> <span class="number">4</span> <span class="number">1</span> <span class="number">2</span> <span class="number">5</span> <span class="number">2</span> <span class="number">1</span> <span class="number">2</span> <span class="number">1</span>
+</code></pre><p>其实我们可以通过p[i]的值就可以得到每个字串相应位置的回文长度</p>
+<pre><code>半径<span class="tag">p</span>[i]的回文长度为<span class="number">2</span>*<span class="tag">p</span>[i]-<span class="number">1</span>，而每个在新字符串上每个回文两端必定是#，也是也就是相当于对原回文做了#的添加操作，假设原回文串为x长度，根据上面的添加#计算方式得到添加后的回文串为<span class="number">2</span>*x+<span class="number">1</span>
+故<span class="number">2</span>*<span class="tag">p</span>[i]-<span class="number">1</span>=<span class="number">2</span>*x+<span class="number">1</span> 
+可得x=<span class="tag">p</span>[i]-<span class="number">1</span>
+</code></pre><p>那么现在的问题就是相当于如何求出新字符串上p数组各个元素的值了,当然计算这个也不能靠暴力来算，不然就没意思了，大概我们了解到计算p[i]的时候 p<a href="j&lt;i">[j]</a>的值都是已经算出来了，同时回文串有对称性质，所以我们接下来可以这么看</p>
+<pre><code>现在要求<span class="tag">p</span>[<span class="number">5</span>]，根据P[<span class="number">3</span>]=<span class="number">4</span>可知，<span class="tag">p</span>[<span class="number">5</span>]是包含在<span class="tag">p</span>[<span class="number">3</span>]的回文串中，又因为回文的对称性，所以<span class="tag">p</span>[<span class="number">3</span>]左侧一定存在一个字符串与<span class="tag">p</span>[<span class="number">5</span>]一致，
+其实这里就可以算出其对称串为<span class="number">2</span>*<span class="number">3</span>-<span class="number">5</span>=<span class="number">1</span>  也就是<span class="tag">p</span>[<span class="number">1</span>]，P[<span class="number">1</span>]是已经算出的=<span class="number">2</span>  所以<span class="tag">p</span>[<span class="number">5</span>]也必定至少为<span class="number">2</span>（这里要考虑P[<span class="number">3</span>]回文的右界，不能超过）
+所以此时<span class="tag">p</span>[<span class="number">5</span>]只需要从<span class="tag">p</span>[<span class="number">3</span>]和<span class="tag">p</span>[<span class="number">7</span>]往两侧扩展即可，判断其存在的最大回文，这样就可以大大减少了重复计算
+</code></pre><p>接下来借用别人的图来解释一下<br><img src="/img/The-Longest-Palindrome/p1.png" alt=""></p>
+<blockquote>
+<p>对应上面的例子你可以将变量这么认为:i=5,id=3,j=1(通过2*id-i计算) 而mx=p[id]+4，其中id表示先前存在的能到最大右边的回文中心标记。。。</p>
+</blockquote>
+<p>所以当mx&gt;i的时候  就可以说明在计算i的时候  可以根据id找到左侧对应的点  这样就可以减少计算量</p>
+<p>但是另一种情况就是p[j]的回文范围超越了p[id]的回文范围，那这样就不能完全使用p[j]的值了<br><img src="/img/The-Longest-Palindrome/p2.png" alt=""><br>此时p[i]已知的最大可确保回文的范围就是mx-i</p>
+<p>综合上述：初始化p[i]=min(p[2*id-i],mx-i)  当mx&gt;i</p>
+<p>好，该算法的核心已经说明了接下来直接上代码：</p>
+<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Manacher 方法</span><br><span class="line"> * 通过增加#字符将问题统一转为奇数回文的计算</span><br><span class="line"> * 借助半径辅助数组，每次计算当前辅助数组的值的时候</span><br><span class="line"> * 利用回文的对称性可能避免重复计算</span><br><span class="line"> *<span class="javadoctag"> @param</span> str</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">manacher</span><span class="params">(String str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> len=(str.length()&lt;&lt;<span class="number">1</span>)+<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">char</span>[] f=<span class="keyword">new</span> <span class="keyword">char</span>[len];<span class="comment">//将每每两个字符中间加上#，同时首位也加#</span></span><br><span class="line">	<span class="keyword">int</span>[] p=<span class="keyword">new</span> <span class="keyword">int</span>[len];<span class="comment">//辅助数组 存储对应索引上能形成最大回文的半径</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;str.length();i++)</span><br><span class="line">	&#123;</span><br><span class="line">		f[i&lt;&lt;<span class="number">1</span>]=<span class="string">'#'</span>;</span><br><span class="line">		f[(i&lt;&lt;<span class="number">1</span>)+<span class="number">1</span>]=str.charAt(i);</span><br><span class="line">	&#125;</span><br><span class="line">	f[len-<span class="number">1</span>]=<span class="string">'#'</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> id=<span class="number">0</span>,maxId=<span class="number">0</span>,maxLen=<span class="number">0</span>,maxIndex=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(maxId&gt;i)</span><br><span class="line">		&#123;</span><br><span class="line">			p[i]=Math.min(p[<span class="number">2</span>*id-i], maxId-i);<span class="comment">//找到对称点</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			p[i]=<span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//继续往两边进行回文判断</span></span><br><span class="line">		<span class="keyword">while</span>((i-p[i])&gt;=<span class="number">0</span> &amp;&amp; (i+p[i])&lt;len &amp;&amp; f[i+p[i]]==f[i-p[i]])</span><br><span class="line">			p[i]++;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//更新当前可以到达的最远的索引id</span></span><br><span class="line">		<span class="keyword">if</span>(p[i]+i&gt;maxId)</span><br><span class="line">		&#123;</span><br><span class="line">			maxId=p[i]+i;</span><br><span class="line">			id=i;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//更新最大半径以及索引位置</span></span><br><span class="line">		<span class="keyword">if</span>(p[i]&gt;maxLen)</span><br><span class="line">		&#123;</span><br><span class="line">			maxLen=p[i];</span><br><span class="line">			maxIndex=i;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//构造回文字符串</span></span><br><span class="line">	<span class="keyword">char</span>[] ret=<span class="keyword">new</span> <span class="keyword">char</span>[maxLen-<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=maxIndex-maxLen+<span class="number">1</span>;i&lt;maxIndex+maxLen;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(f[i]!=<span class="string">'#'</span>)</span><br><span class="line">			ret[j++]=f[i];</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">return</span> String.valueOf(ret);</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试的一些样例为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	System.out.println(manacher(<span class="string">"abaab"</span>));</span><br><span class="line">	System.out.println(manacher(<span class="string">"google"</span>));</span><br><span class="line">	System.out.println(manacher(<span class="string">"adfdfsedasdxdsa"</span>));</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<pre><code><span class="title">baab</span>
+goog
+asdxdsa
+</code></pre><blockquote>
+<p>他们都说这个方法复杂度为O(n)，应该也是，主要是比较maxId，其余的重复已经都是可以根据前面的结果算得</p>
+</blockquote>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://blog.csdn.net/pi9nc/article/details/9251455" target="_blank" rel="external">Manacher算法处理字符串回文</a></li>
+<li><a href="http://blog.csdn.net/yzl_rex/article/details/7908259" target="_blank" rel="external">Manacher算法：求解最长回文字符串，时间复杂度为O(N)</a></li>
+<li>july 编程之美 73题</li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个字符串,输出该字符串中对称的子字符串的最大长度。比如输入字符串 “google”,由于该字符串里最长的对称子字符串是“goog”,因此输出 4。
+</code></pre><h2 id="解析">解析</h2><p>该题目比较直观的解法有：</p>
+<ol>
+<li>暴力法：遍历所有可能的子串，然后判断子串是否为回文，故总得复杂度为O(n^3)</li>
+<li>遍历字符串，以当前遍历为中心点，然后向两边扩展，直至扩展到不是回文，总复杂度为O(n^2)</li>
+</ol>
+<p>还有后缀树也可以解，不过需要较大的空间，本文使用的是manacher算法：</p>
+<pre><code>Manacher最早发现了可以用<span class="function"><span class="title">O</span><span class="params">(n)</span></span>的时间复杂度来解决该问题，所以这种方法称之为Manacher算法。
+</code></pre><p>现在以查询字符串”abaab”为例，该算法为了将”aba”和”baab” 奇偶形式统一考虑，做了一个很精妙的预处理：每每两个字符串以及两端都加一个标志符号#，就形成了<br>“#a#b#a#a#b#”新字符串，那么”aba”则可以看做”#a#b#a#”，同时”baab”转为#b#a#a#b#”，就都为奇数形式了<br>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[求旋转数组中的最小值]]></title>
@@ -1110,106 +1184,6 @@ abc
       <category term="Food" scheme="http://yyl8781697.github.io/tags/Food/"/>
     
       <category term="Food" scheme="http://yyl8781697.github.io/categories/Food/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《Effective Java》第十一章：序列化]]></title>
-    <link href="http://yyl8781697.github.io/2015/06/28/Effective%20Java/Serialization/"/>
-    <id>http://yyl8781697.github.io/2015/06/28/Effective Java/Serialization/</id>
-    <published>2015-06-27T16:08:34.000Z</published>
-    <updated>2015-07-25T01:22:35.000Z</updated>
-    <content type="html"><![CDATA[<p>“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。</p>
-<h2 id="第74条：谨慎地实现Serializable接口">第74条：谨慎地实现Serializable接口</h2><p>只要添加<code>implements Serializable</code>，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：</p>
-<ul>
-<li>一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。<ol>
-<li>一旦一个类实现<code>Serializable</code>接口，它的字节流编码就变成了导出API的一部分，一旦这个类被广泛使用，往往必须永远支持这种序列化形式。</li>
-<li>如果接受了默认的序列化形式，并且以后又要改变这个类的内部实现，结果可能会导致序列化形式不兼容</li>
-<li>序列化会使类的演变受到限制，这种限制与序列化版本UID有关，每个可序列化的类都有一个唯一标识符<code>serialVersionUID</code>，如果没有指定，则系统会根据类的具体实现来进行自动生成，所以你修改了类，并且没有显示的指定UID，那么兼容性就会被破坏。</li>
-</ol>
-</li>
-<li>它增加了Bug和安全漏洞的可能性<br>  序列化机制是一种语言之外的对象创建机制，所以反序列化是一个“隐藏的构造器”，具体与其他构造器相同的特点，所以反序列化过程也必须保证有构造器建立起来的约束关系，并且不允许攻击者在访问构造器过程中的内部对象，所以默认的反序列化机制很容易是对象约束遭到破坏，以及遭受非法的访问。</li>
-<li>随着类发行新的版本，相关测试的负担也增加了<br>  新的版本发布之后，要检查是否可以“在新版本中序列化一个实例，然后在旧版本中依然可以反序列化”，这个测试除了二进制兼容性以外，还要测试语义兼容性。所有测试的难度都是相当大啊！</li>
-</ul>
-<a id="more"></a>
-<p>下面是关于序列化类的操作：</p>
-<ul>
-<li>如果一个了类将要加入某个框架中，并且该框架依赖于序列化来实现对象传输或者持久化，那么实现<code>Serializable</code>这个接口就是非常有必要的。</li>
-<li>还有为了继承而设计的类尽量少的去实现<code>Serializable</code>接口，用户的接口也应该尽可能烧得继承<code>Serializable</code>接口，不然会对实现这些接口或者类的程序猿增加很多负担</li>
-<li><p>实现一个带有可序列化实例的类时，应该要注意类的约束条件，并且要实现</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObjectNoData</span><span class="params">()</span> <span class="keyword">throws</span> InvalidObjectException</span>&#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> InvalidObjectException(<span class="string">"stream data is required"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对于为继承而设计的不可序列化的类，你应该考虑提供一个无参构造器</p>
-</li>
-<li>内部类不应该实现<code>Serializable</code></li>
-</ul>
-<p>简而言之，千万不要认为实现<code>Serializable</code>很容易，里面的坑多着呢。</p>
-<h2 id="第75条：考虑使用自定义的序列化形式">第75条：考虑使用自定义的序列化形式</h2><p>一个对象的默认序列化使将该对象进行物理表示，也就是说，默认序列化描述了该对象内部所包含的数据，以及每一个可以从这个对象到达其他对象的内部数据。</p>
-<blockquote>
-<p>而对于一个对象来说，理想的序列化应该只包含该对象索比表示的逻辑数据，而逻辑数据和物理数据是应该相互独立的。</p>
-</blockquote>
-<p>当对象的物理表示等同于它的路基表示是，使用默认的序列化是合理的：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Name</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String lastName;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String firstName;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> String middelName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>类似这样的实体类，物理内容的这三个字段也可以很精确的反应它的逻辑内容。</p>
-<p>来看看下面的序列化类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StringList</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> Entry head = <span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">		String data;</span><br><span class="line">		Entry next;</span><br><span class="line">		Entry previous;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>从逻辑意义上讲，这个类表示一个字符串的序列，但是从物理意义上讲，把该序列化表示为一个双向链表。所以此时如果使用默认的序列化，那将会镜像除链表中所有的项以及这些项之间的所有双向链表。。-_-，大工程啊</p>
-<p>当一个类的物理表示与它的逻辑内容有区别时，使用默认序列化将会有以下4个缺点：</p>
-<ol>
-<li>它使这个类的导出API永远的束缚在该类的内容（<code>StringList.Entry</code>也会成为公有API的一部分）</li>
-<li>会消耗很多的空间（因为会维护一个双向链表）</li>
-<li>会消耗很多时间（遍历啊）</li>
-<li>会引起栈溢出（递归啊）</li>
-</ol>
-<p>其实类似这种类编写它的自定义序列化需求并不是很麻烦：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StringList</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">	<span class="comment">//添加“易变”标志防止默认序列化</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> size=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">transient</span> Entry head = <span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span></span>&#123;</span><br><span class="line">		String data;</span><br><span class="line">		Entry next;</span><br><span class="line">		Entry previous;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">		<span class="comment">//TO DO</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span><span class="params">(ObjectOutputStream s)</span> <span class="keyword">throws</span> IOException</span><br><span class="line">	</span>&#123;</span><br><span class="line">		s.defaultWriteObject();</span><br><span class="line">		s.writeInt(size);</span><br><span class="line">		<span class="comment">//在这里序列化</span></span><br><span class="line">		<span class="keyword">for</span>(Entry e=head;e != <span class="keyword">null</span> ; e=e.next)</span><br><span class="line">			s.writeObject(e.data);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream s)</span></span><br><span class="line">		<span class="keyword">throws</span> ClassNotFoundException,IOException</span><br><span class="line">	</span>&#123;</span><br><span class="line">		s.defaultReadObject();</span><br><span class="line">		<span class="comment">//在这里进行反序列化</span></span><br><span class="line">		<span class="keyword">int</span> numElements= s.readInt();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;numElements;i++)</span><br><span class="line">			add((String)s.readObject());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这里调用默认的<code>readObject()</code>和<code>writeObject()</code>可以影响全类的序列化形式，极大的增强灵活性。</p>
-<p>还有类似<code>key-value</code>的散列表也不适合使用默认的序列化，因为在不同的JVM中最终形成的散列位置可能会不一样。</p>
-<blockquote>
-<p>切记不管使用什么序列化方式，建议都显示的加上序列的唯一版本UID</p>
-</blockquote>
-<p>总而言之，当默认的序列化能合理的描述逻辑内容时，使用默认序列化就好了，否则建议使用自定义的序列化^_^</p>
-<h2 id="第76条：保护性的编写readObject方法">第76条：保护性的编写readObject方法</h2><p>针对第39条的<a href="http://kubicode.me/2015/06/09/Effective%20Java/Method/#第39条：必要时进行保护性拷贝" target="_blank" rel="external">日期类</a>，根据上一条的指导，貌似使用默认的序列化也是蛮合理的，增加<code>implements Serializable</code>即可。但是如果真的这么做，那么这个类将不再保证它的关键约束了。</p>
-<p>因为<code>readObject()</code>方法相当于是一个接受字节流的构造函数，那如果有人伪造了这个字节流的话，反序列化出来的对象时相当危险的。还有一个信号就是反序列化出来对象还可以随意被改动，因为默认的序列化并没有使用保护性拷贝，所以如果增对该日期类实现自己的序列化的化，可以这么干：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream s)</span></span><br><span class="line">		<span class="keyword">throws</span> IOException,ClassNotFoundException</span><br><span class="line"></span>&#123;</span><br><span class="line">	s.defaultReadObject();</span><br><span class="line">	</span><br><span class="line">	start=<span class="keyword">new</span> Date(start.getTime());<span class="comment">//进行保护兴拷贝</span></span><br><span class="line">	end=<span class="keyword">new</span> Date(end.getTime());</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(start.compareTo(end)&gt;<span class="number">0</span>)<span class="comment">//进行安全性检查</span></span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> InvalidObjectException(start +<span class="string">"after"</span>+ end);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>下面是编写<code>readObject</code>方法的指导方针：</p>
-<ul>
-<li>对于对象引用域必须保持私有的类，要保护性得拷贝这个域中的每个对象。</li>
-<li>对于任何约束条件，如果检查失败，则应该抛出一个<code>InvalidObjectException</code>异常。</li>
-<li>如果整个对象图在被反序列化之后必须进行验证，就应该使用<code>ObjectInputValidation</code>接口</li>
-<li>无论是直接方式还是间接方法，都不要调用类中任何可被覆盖的方法</li>
-</ul>
-<p>总而言之，当你编写<code>readObject</code>方法的时候，都要想：你正在编写一个公有的构造器，无论给他传递什么字节流，都必须产生一个有效的实例。</p>
-<h2 id="第77条：对于实例控制，枚举类型优于readResolve">第77条：对于实例控制，枚举类型优于readResolve</h2><p>一般的单例类，如果添加了<code>implements Serializable</code>之后，它就不再是一个单例，因为反序列化可以看做是另一个构造器，此时你就需要使用<code>readResolve()</code>方法，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> INSTANCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>直接返回这个单例就好了，但是注意的是这个单例需要用<code>transient</code>来标记</p>
-<p>当然说了这么做，然而其实这并没什么卵用，这种方法还不如使用枚举单例 -_-，可以参考<a href="http://kubicode.me/2015/04/22/Effective%20Java/Create-Destory-Object/#第3条：用私有的构造器或者枚举类型强化Singleton属性" target="_blank" rel="external">第3条</a>，它写得简单，用的省心。</p>
-<h2 id="第78条：考虑用序列化代理代替序列化实例">第78条：考虑用序列化代理代替序列化实例</h2><p>序列化代理模式可以解决普通类实现序列化时带来的各种副作用。</p>
-<p>序列化代理模式非常简单：</p>
-<ol>
-<li>为可序列化类设计一个私有的静态嵌套类</li>
-<li>为该嵌套类添加一个构造器，实现外围类的参数的复制<br>3， 这个嵌套类中需要添加一个<code>readResolve()</code>方法进行外围类的返回</li>
-<li>在外围类中添加<code>writeReplace()</code>方法进行外围类的复制</li>
-<li>在外围类中还要添加一个<code>readObject</code>防止被攻击</li>
-</ol>
-<p>根据上述指导，看下<code>EnumSet</code>源码中的序列化代理类的实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * This class is used to serialize all EnumSet instances, regardless of</span><br><span class="line"> * implementation type.  It captures their "logical contents" and they</span><br><span class="line"> * are reconstructed using public static factories.  This is necessary</span><br><span class="line"> * to ensure that the existence of a particular implementation type is</span><br><span class="line"> * an implementation detail.</span><br><span class="line"> *</span><br><span class="line"> *<span class="javadoctag"> @serial</span> include</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SerializationProxy</span> &lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Enum</span>&lt;<span class="title">E</span>&gt;&gt;</span><br><span class="line">    <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * The element type of this enum set.</span><br><span class="line">     *</span><br><span class="line">     *<span class="javadoctag"> @serial</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Class&lt;E&gt; elementType;</span><br><span class="line"></span><br><span class="line">    <span class="javadoc">/**</span><br><span class="line">     * The elements contained in this enum set.</span><br><span class="line">     *</span><br><span class="line">     *<span class="javadoctag"> @serial</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Enum[] elements;</span><br><span class="line"></span><br><span class="line">    SerializationProxy(EnumSet&lt;E&gt; set) &#123;</span><br><span class="line">        elementType = set.elementType;<span class="comment">//把数据拷贝进来</span></span><br><span class="line">        elements = set.toArray(ZERO_LENGTH_ENUM_ARRAY);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        EnumSet&lt;E&gt; result = EnumSet.noneOf(elementType);</span><br><span class="line">        <span class="keyword">for</span> (Enum e : elements)</span><br><span class="line">            result.add((E)e);</span><br><span class="line">        <span class="keyword">return</span> result;<span class="comment">//实例化Enumset</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">362491234563181265L</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Object <span class="title">writeReplace</span><span class="params">()</span> </span>&#123;<span class="comment">//代理模式的入口</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> SerializationProxy&lt;&gt;(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// readObject method for the serialization proxy pattern</span></span><br><span class="line"><span class="comment">// See Effective Java, Second Ed., Item 78.</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(java.io.ObjectInputStream stream)</span></span><br><span class="line">    <span class="keyword">throws</span> java.io.InvalidObjectException </span>&#123;<span class="comment">//防止被攻击 竟然注释和Effective Java有关</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> java.io.InvalidObjectException(<span class="string">"Proxy required"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>总而言之，推荐使用序列化代理模式！！！^_^</p>
-<h2 id="总结">总结</h2><p>真不容易，这本书终于看完了，这段时间因为工作日要上班，并且还要被老板催着科研论文，真心蛋疼~所以看书的进度还是比较慢啊。<br>不够回顾本书，里面还是提出了蛮多非常经典的建议的，感谢本书，感谢作者。^_^</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。</p>
-<h2 id="第74条：谨慎地实现Serializable接口">第74条：谨慎地实现Serializable接口</h2><p>只要添加<code>implements Serializable</code>，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：</p>
-<ul>
-<li>一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。<ol>
-<li>一旦一个类实现<code>Serializable</code>接口，它的字节流编码就变成了导出API的一部分，一旦这个类被广泛使用，往往必须永远支持这种序列化形式。</li>
-<li>如果接受了默认的序列化形式，并且以后又要改变这个类的内部实现，结果可能会导致序列化形式不兼容</li>
-<li>序列化会使类的演变受到限制，这种限制与序列化版本UID有关，每个可序列化的类都有一个唯一标识符<code>serialVersionUID</code>，如果没有指定，则系统会根据类的具体实现来进行自动生成，所以你修改了类，并且没有显示的指定UID，那么兼容性就会被破坏。</li>
-</ol>
-</li>
-<li>它增加了Bug和安全漏洞的可能性<br>  序列化机制是一种语言之外的对象创建机制，所以反序列化是一个“隐藏的构造器”，具体与其他构造器相同的特点，所以反序列化过程也必须保证有构造器建立起来的约束关系，并且不允许攻击者在访问构造器过程中的内部对象，所以默认的反序列化机制很容易是对象约束遭到破坏，以及遭受非法的访问。</li>
-<li>随着类发行新的版本，相关测试的负担也增加了<br>  新的版本发布之后，要检查是否可以“在新版本中序列化一个实例，然后在旧版本中依然可以反序列化”，这个测试除了二进制兼容性以外，还要测试语义兼容性。所有测试的难度都是相当大啊！</li>
-</ul>]]>
-    
-    </summary>
-    
-      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
-    
-      <category term="Effective Java" scheme="http://yyl8781697.github.io/categories/Effective-Java/"/>
     
   </entry>
   
