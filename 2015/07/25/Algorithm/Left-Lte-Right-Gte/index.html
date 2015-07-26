@@ -4,31 +4,28 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>LeetCode-Reorder List | Kubi Code&#39;Blog</title>
+    <title>左边的数都小于等 于它,右边的数都大于等于它 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="LeetCode地址：https://leetcode.com/problems/reorder-list/
-
-Problem:Given a singly linked list L: L0→L1→…→Ln-1→Ln,reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
-You must do this in-place without altering the node">
+    <meta name="description" content="题目一个 int 数组,里面数据无任何限制,要求求出所有这样的数 a[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
+解析想其他的都是泪（递归、分治）--最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^^最终的复杂度为O(nlogn)
+代码123456789101112131415">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LeetCode-Reorder List">
-<meta property="og:url" content="http://yyl8781697.github.io/2014/07/06/LeetCode/LeetCode-Reorder-List/index.html">
+<meta property="og:title" content="左边的数都小于等 于它,右边的数都大于等于它">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="LeetCode地址：https://leetcode.com/problems/reorder-list/
-
-Problem:Given a singly linked list L: L0→L1→…→Ln-1→Ln,reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
-You must do this in-place without altering the node">
+<meta property="og:description" content="题目一个 int 数组,里面数据无任何限制,要求求出所有这样的数 a[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
+解析想其他的都是泪（递归、分治）--最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^^最终的复杂度为O(nlogn)
+代码123456789101112131415">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LeetCode-Reorder List">
-<meta name="twitter:description" content="LeetCode地址：https://leetcode.com/problems/reorder-list/
-
-Problem:Given a singly linked list L: L0→L1→…→Ln-1→Ln,reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
-You must do this in-place without altering the node">
+<meta name="twitter:title" content="左边的数都小于等 于它,右边的数都大于等于它">
+<meta name="twitter:description" content="题目一个 int 数组,里面数据无任何限制,要求求出所有这样的数 a[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
+解析想其他的都是泪（递归、分治）--最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^^最终的复杂度为O(nlogn)
+代码123456789101112131415">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -89,14 +86,14 @@ You must do this in-place without altering the node">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/06/LeetCode/LeetCode-Reorder-List/" title="LeetCode-Reorder List" itemprop="url">LeetCode-Reorder List</a>
+      <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/" title="左边的数都小于等 于它,右边的数都大于等于它" itemprop="url">左边的数都小于等 于它,右边的数都大于等于它</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-06T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-06</time>
+    <time datetime="2015-07-25T00:52:50.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
     
   </p>
 </header>
@@ -105,20 +102,17 @@ You must do this in-place without altering the node">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">2.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/reorder-list/" target="_blank" rel="external">https://leetcode.com/problems/reorder-list/</a></p>
-</blockquote>
-<p>Problem:<br>Given a singly linked list L: <em>L0→L1→…→Ln-1→Ln</em>,<br>reorder it to: <em>L0→Ln→L1→Ln-1→L2→Ln-2→…</em></p>
-<p>You must do this in-place without altering the nodes’ values.</p>
-<p>For example,<br>Given {1,2,3,4}, reorder it to {1,4,2,3}.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reorderList</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span> || head.next==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        </span><br><span class="line">        Stack&lt;ListNode&gt; stack=<span class="keyword">new</span> Stack&lt;ListNode&gt;();</span><br><span class="line">        </span><br><span class="line">        ListNode temp=head;</span><br><span class="line">        <span class="keyword">while</span>(temp!=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            stack.push(temp);</span><br><span class="line">            temp=temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> length=stack.size();</span><br><span class="line">        temp=head;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;Math.floor((length+<span class="number">1</span>)/<span class="number">2</span>)-<span class="number">1</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            ListNode node=stack.pop();</span><br><span class="line">            node.next=temp.next;</span><br><span class="line">            temp.next=node;</span><br><span class="line">            </span><br><span class="line">            temp=node.next;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.pop().next=<span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+		<h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
+</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）-<em>-<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^</em>^<br>最终的复杂度为<code>O(nlogn)</code></p>
+<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 左边的数都小于等 于它,右边的数都大于等于它</span><br><span class="line"> * 将原数组排序b 如果a[i]=b[i] 则该i对应的值满足条件</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftLtRightGt</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] b=a.clone();</span><br><span class="line">	Arrays.sort(b);<span class="comment">//O(nlogn)</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i]==b[i])<span class="comment">//只要相等 就表示满足条件</span></span><br><span class="line">			System.out.println(i+<span class="string">":"</span>+a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2><p>July 微软面试题  第81题</p>
 <hr>
 <blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
 </blockquote>
   
 	</div>
@@ -127,13 +121,13 @@ You must do this in-place without altering the node">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
   </div>
 
 </div>
@@ -142,7 +136,7 @@ You must do this in-place without altering the node">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2014/07/06/LeetCode/LeetCode-Reorder-List/" data-title="LeetCode-Reorder List | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/" data-title="左边的数都小于等 于它,右边的数都大于等于它 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -156,18 +150,18 @@ You must do this in-place without altering the node">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/07/07/LeetCode/LeetCode-Candy/" title="LeetCode-Candy">
+ <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" title="求旋转数组中的最小值">
   <strong>上一篇：</strong><br/>
   <span>
-  LeetCode-Candy</span>
+  求旋转数组中的最小值</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/07/05/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-III/"  title="LeetCode-Best Time to Buy and Sell Stock III">
+<a href="/2015/07/24/Algorithm/x-exponent/"  title="数值的整数次方">
  <strong>下一篇：</strong><br/> 
- <span>LeetCode-Best Time to Buy and Sell Stock III
+ <span>数值的整数次方
 </span>
 </a>
 </div>
@@ -176,7 +170,7 @@ You must do this in-place without altering the node">
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2014/07/06/LeetCode/LeetCode-Reorder-List/" data-title="LeetCode-Reorder List" data-url="http://yyl8781697.github.io/2014/07/06/LeetCode/LeetCode-Reorder-List/"></div>
+	<div class="ds-thread" data-thread-key="2015/07/25/Algorithm/Left-Lte-Right-Gte/" data-title="左边的数都小于等 于它,右边的数都大于等于它" data-url="http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/"></div>
 </section>
 
 
@@ -186,7 +180,7 @@ You must do this in-place without altering the node">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">2.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
