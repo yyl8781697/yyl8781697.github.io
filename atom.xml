@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-07-25T12:06:04.000Z</updated>
+  <updated>2015-07-27T14:58:19.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,249 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Linux下的Find命令学习]]></title>
+    <link href="http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/"/>
+    <id>http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/</id>
+    <published>2015-07-26T06:46:14.000Z</published>
+    <updated>2015-07-27T14:58:19.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p><code>find</code>命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^<br>注：本文使用的环境是CentOS6.5</p>
+</blockquote>
+<h2 id="Find介绍">Find介绍</h2><pre><code>功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
+语法：<span class="built_in">find</span> 起始目录 寻找条件 操作 
+说明：<span class="built_in">find</span>命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
+</code></pre><p>其实关于<code>Linux</code>下的命令一般通过<code>—help</code>就可以大致入门使用，实在不行再用<code>man</code>来看更为完整版的手册。<br>下面先长长得列一下：<br><a id="more"></a></p>
+<pre><code>[root@master spark-1.3.1-bin-hadoop2.6]# find --<span class="keyword">help</span>
+Usage: find [-<span class="keyword">H</span>] [-<span class="keyword">L</span>] [-P] [-Olevel] [-<span class="keyword">D</span> <span class="keyword">help</span>|tree|<span class="keyword">search</span>|stat|rates|opt|exec] [path...] [expression]
+
+default path is the current directory; default expression is -<span class="keyword">print</span>
+expression may consist of: operators, options, tests, and actions:
+
+operators (decreasing precedence; -and is implicit where <span class="keyword">no</span> others are given):
+      ( EXPR )   ! EXPR   -not EXPR   EXPR1 -a EXPR2   EXPR1 -and EXPR2
+      EXPR1 -o EXPR2   EXPR1 -or EXPR2   EXPR1 , EXPR2
+
+positional options (always true): -daystart -follow -regextype
+
+normal options (always true, specified before other expressions):
+      -depth --<span class="keyword">help</span> -maxdepth <span class="keyword">LEVELS</span> -mindepth <span class="keyword">LEVELS</span> -mount -noleaf
+      --<span class="keyword">version</span> -xdev -ignore_readdir_race -noignore_readdir_race
+
+tests (<span class="keyword">N</span> can be +<span class="keyword">N</span> or -<span class="keyword">N</span> or <span class="keyword">N</span>): -amin <span class="keyword">N</span> -anewer <span class="keyword">FILE</span> -atime <span class="keyword">N</span> -cmin <span class="keyword">N</span>
+      -cnewer <span class="keyword">FILE</span> -ctime <span class="keyword">N</span> -empty -false -fstype <span class="keyword">TYPE</span> -gid <span class="keyword">N</span> -group NAME
+      -ilname PATTERN -iname PATTERN -inum <span class="keyword">N</span> -iwholename PATTERN -iregex PATTERN
+      -links <span class="keyword">N</span> -lname PATTERN -mmin <span class="keyword">N</span> -mtime <span class="keyword">N</span> -name PATTERN -newer <span class="keyword">FILE</span>
+      -nouser -nogroup -path PATTERN -perm [+-]MODE -regex PATTERN
+      -readable -writable -executable
+      -wholename PATTERN -size <span class="keyword">N</span>[bcwkMG] -true -<span class="keyword">type</span> [bcdpflsD] -uid <span class="keyword">N</span>
+      -used <span class="keyword">N</span> -user NAME -xtype [bcdpfls]
+      -context CONTEXT
+
+
+actions: -delete -print0 -printf <span class="keyword">FORMAT</span> -fprintf <span class="keyword">FILE</span> <span class="keyword">FORMAT</span> -<span class="keyword">print</span>
+      -fprint0 <span class="keyword">FILE</span> -fprint <span class="keyword">FILE</span> -<span class="keyword">ls</span> -fls <span class="keyword">FILE</span> -prune -quit
+      -exec COMMAND ; -exec COMMAND {} + -ok COMMAND ;
+      -execdir COMMAND ; -execdir COMMAND {} + -okdir COMMAND ;
+
+<span class="keyword">Report</span> (and track progress <span class="keyword">on</span> fixing) bugs via the findutils bug-reporting
+page at http:<span class="comment">//savannah.gnu.org/ or, if you have no web access, by sending</span>
+email to &lt;bug-findutils@gnu.org&gt;.
+</code></pre><p>从<code>—help</code>中我们大致可以发现<code>find</code>有以下四大表达式：</p>
+<ol>
+<li>operators(逻辑运算)：就是<code>and</code>,<code>or</code>,<code>not</code>这些东西</li>
+<li>options(可选项？)：感觉是一些额外可选的功能</li>
+<li>tests(条件属性)：各种属性啦，文件名，文件大小之类的</li>
+<li>acionts(行为)：find之后想干嘛呢？打印出来  or 去执行</li>
+</ol>
+<p>先来看一下当前的实验目录(使用了spark已编译的一个根目录)：</p>
+<pre><code><span class="attr_selector">[root@master spark-1.3.1-bin-hadoop2.6]</span># <span class="tag">ll</span>
+<span class="tag">total</span> 408
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">bin</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000 278851 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">CHANGES</span><span class="class">.txt</span>
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">May</span> 17 09<span class="pseudo">:00</span> <span class="tag">conf</span>
+<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">data</span>
+<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">ec2</span>
+<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">examples</span>
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">lib</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000  46083 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">LICENSE</span>
+<span class="tag">drwxr-xr-x</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">Jul</span> 22 11<span class="pseudo">:28</span> <span class="tag">logs</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000  22559 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">NOTICE</span>
+<span class="tag">drwxrwxr-x</span>. 7 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">python</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000   3629 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">README</span><span class="class">.md</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000    157 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">RELEASE</span>
+<span class="tag">drwxr-xr-x</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">Jul</span> 20 09<span class="pseudo">:33</span> <span class="tag">runjar</span>
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">sbin</span>
+<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-99afc66e-6bb1-41ee-8497-e2abdbb3013f</span>
+<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-e0919038-82ee-4d5d-b421-1f50f6a110ed</span>
+<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-f37f1978-ad83-4208-86d8-2bdf8c3e5696</span>
+</code></pre><p>在该目录下最简单的使用一个<code>find</code>操作</p>
+<pre><code>[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span>
+./NOTICE
+</code></pre><p>可以看到<code>NOTEICE</code>这个文件就查询出来了。</p>
+<h2 id="逻辑运算">逻辑运算</h2><p><code>find</code>命令通过逻辑运算可以完成强大的组合查询，先抛开这个，看看我们码农平常写的条件判断：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(f1 &amp;&amp; (f2 || f3) &amp;&amp; !f4)</span><br></pre></td></tr></table></figure></p>
+<p>而<code>find</code>的逻辑运算与之对应的就是：</p>
+<ul>
+<li><p><code>&amp;&amp;</code>对应<code>-and</code>，简写为：<code>-a</code></p>
+<pre><code>[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -a -<span class="keyword">size</span> -<span class="number">20</span>
+[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -a -<span class="keyword">size</span> +<span class="number">20</span>
+./NOTICE
+[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -<span class="keyword">size</span> +<span class="number">20</span>
+./NOTICE
+</code></pre><p>  可以发现”NOTICE”文件并且小于20是找不到的，但是大于20b的时候可以找到</p>
+<blockquote>
+<p>注意，缺省操作符的情况就是使用<code>-a</code>，所以第三条命令和第二条命令的效果是一样的。</p>
+</blockquote>
+</li>
+<li><p><code>||</code>对应<code>-or</code>，简写为：<code>-o</code></p>
+<pre><code>[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]<span class="preprocessor"># find -name <span class="title">"NOTICE"</span> -o -name <span class="title">"LICENSE"</span></span>
+./LICE<span class="built_in">NSE</span>
+./NOTICE
+</code></pre><p>  在或操作下两个文件都能查询出来</p>
+</li>
+<li><p><code>!</code>还是对应<code>!</code></p>
+<pre><code>[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> ! -name <span class="string">"NOTICE"</span> -<span class="keyword">size</span> +<span class="number">20</span>
+./LICENSE
+./CHANGES.txt
+</code></pre><p>  这样就可以查找在当前目录下名字不叫“NOTICE”以及大于20b的文件/文件夹了</p>
+</li>
+</ul>
+<blockquote>
+<p>注意，关于操作符还可以使用括号将各个操作表达式括起来，用起来还是非常灵活的^_^</p>
+</blockquote>
+<h2 id="可选项">可选项</h2><p>这个还是蛮有用的，看<code>—help</code>命令其实就是，还有:</p>
+<ul>
+<li><code>-depth</code>:使用它之后貌似先会从里向外打印，比如先找到最深的文件夹，然后一层一层向外显示</li>
+<li><code>-maxdepth</code>:限制递归的最大深度，如果只在当前目录下找，那么设置<code>-maxdepth 1</code>即可</li>
+<li><code>-mindepth</code>:限制最小深度，比如<code>-mindepth 2</code> 只查找深度大于2的文件</li>
+<li><code>-daystart</code>:限制查找的文件是今天起24小时的文件</li>
+<li><code>-follow</code>:遵循通配符链接方式查找</li>
+<li>还有其他等等</li>
+</ul>
+<h2 id="条件属性">条件属性</h2><p>在使用<code>find</code>的时候条件属性是我们的核心,这里有两个技巧</p>
+<ol>
+<li><p>如果属性后面跟着的条件是数字N，那么一般支持+,-操作，比如</p>
+<pre><code>[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> <span class="title">+22559c</span>
+</span>./<span class="type">LICENSE</span>
+./<span class="type">CHANGES</span>.txt
+[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> 22559<span class="title">c</span>
+</span>./<span class="type">NOTICE</span>
+[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> <span class="title">-22559c</span>
+</span>./<span class="type">README</span>.md
+./<span class="type">RELEASE</span>
+</code></pre><p> 上面3条命令分别就是查大于22559字节的文件，等于22559字节以及小于22559字节的文件</p>
+</li>
+<li><p>如果属性后面跟着的条件是字串，那么一般都支持通配符<code>*</code>、<code>?</code>、<code>［ ］</code></p>
+<pre><code>[root@master spark-<span class="number">1</span>.<span class="number">3</span>.<span class="number">1</span>-bin-hadoop2.<span class="number">6</span>]# <span class="built_in">find</span> -maxdepth <span class="number">1</span> -<span class="built_in">type</span> f -name "RE*"
+./README.<span class="built_in">md</span>
+./RELEASE
+</code></pre><p> 取”RE”开头的文件名</p>
+</li>
+</ol>
+<p>接下来看一些常用的筛选属性(要知道全部的话看<code>—help</code>里面的信息即可)</p>
+<ul>
+<li><code>-name PATTERN</code>:根据文件名进行匹配<blockquote>
+<p>估计是最为常用的一个属性之一了，上面的演示都是用它来作为示例，所以这里不加其他说明了</p>
+</blockquote>
+</li>
+<li><code>-type [bcdpflsD]</code>:筛选查找的类型：<ul>
+<li>b 块设备文件 </li>
+<li>c 字符设备文件 </li>
+<li>d 目录文件 </li>
+<li>p 命名管道（FIFO） </li>
+<li>f 普通文件 </li>
+<li>l 符号链接文件（symbolic links） </li>
+<li>s socket文件 </li>
+</ul>
+</li>
+</ul>
+<pre><code>[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="typedef"><span class="keyword">type</span> f</span>
+./<span class="type">LICENSE</span>
+./<span class="type">CHANGES</span>.txt
+./<span class="type">README</span>.md
+./<span class="type">NOTICE</span>
+./<span class="type">RELEASE</span>
+[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="typedef"><span class="keyword">type</span> d</span>
+.
+./sbin
+./spark-f37f1978-ad83-<span class="number">4208</span>-<span class="number">86</span>d8-<span class="number">2</span>bdf8c3e5696
+./ec2
+./bin
+./spark-<span class="number">99</span>afc66e-<span class="number">6</span>bb1-<span class="number">41</span>ee-<span class="number">8497</span>-e2abdbb3013f
+./<span class="typedef"><span class="keyword">data</span></span>
+./lib
+./conf
+./python
+./examples
+./runjar
+./spark-e0919038-<span class="number">82</span>ee-<span class="number">4</span>d5d-b421-<span class="number">1</span>f50f6a110ed
+./logs
+
+
+上述命名分别是查找当前目录下的文件和文件夹
+</code></pre><ul>
+<li><code>- size</code>:根据文件大小来进行匹配，这里大小的单位默认是字节<code>b</code>，还可以显式的其他单位<code>bcwkMG</code></li>
+<li><p><code>-perm</code>: 查找具有指定权限的文件和目录</p>
+<pre><code>[root@master spark-<span class="number">1.3</span>.<span class="number">1</span>-bin-hadoop2.<span class="number">6</span>]<span class="comment"># find -maxdepth 1 -perm 700</span>
+./spark<span class="operator">-f</span>37f1978-ad83-<span class="number">4208</span>-<span class="number">86</span>d8-<span class="number">2</span>bdf8c3e5696
+./spark-<span class="number">99</span>afc66e-<span class="number">6</span>bb1-<span class="number">41</span>ee-<span class="number">8497</span><span class="operator">-e</span>2abdbb3013f
+./spark<span class="operator">-e</span>0919038-<span class="number">82</span>ee-<span class="number">4</span>d5d-b421-<span class="number">1</span>f50f6a110ed
+</code></pre><p>  查找自有创建者才能用全完控制权限的目录和文件</p>
+</li>
+<li><code>-empty</code>:查找大小为0的目录或者空文件 </li>
+<li><code>-user NAME</code>:查找所属用户名的文件</li>
+<li><code>-amin n</code>:查找n分钟以前被访问过的所有文件</li>
+<li><code>-atime n</code>:查找n天以前被访问过的所有文件</li>
+<li><code>-cmin n</code>:查找n分钟以前文件状态被修改过的所有文件</li>
+<li><code>-ctime n</code>:查找n天以前文件状态被修改过的所有文件</li>
+<li><code>-mmin n</code>:查找n分钟以前文件内容被修改过的所有文件</li>
+<li><code>-mtime n</code>:查找n天以前文件内容被修改过的所有文件</li>
+<li>等等等自己看<code>—help</code></li>
+</ul>
+<h2 id="行为">行为</h2><blockquote>
+<p>这里的行为是指找到文件之后再做的行为操作</p>
+</blockquote>
+<ul>
+<li><code>-print</code>:将找到的文件/文件夹的名称给打印出来</li>
+<li><code>-ls</code>:将找到的文件/文件夹的的具体信息列出来</li>
+<li><code>-delete</code>:将找到的文件/文件夹的删除掉</li>
+<li><p><code>-exec command {} \;</code>:异常强大，在command 里面可以写linux的命令</p>
+<p>  [root@master spark-1.3.1-bin-hadoop2.6]# find -maxdepth 1 -size +20 -exec ls -l {} \;<br>  -rw-rw-r—. 1 1000 1000 46083 Apr 11 01:32 ./LICENSE<br>  -rw-rw-r—. 1 1000 1000 278851 Apr 11 01:32 ./CHANGES.txt<br>  -rw-rw-r—. 1 1000 1000 22559 Apr 11 01:32 ./NOTICE</p>
+<p>  比如来实现<code>-ls</code>的功能</p>
+</li>
+<li><p><code>-xargs</code>:也是异常强大，它会批次/依次的取得参数，进行相应的命令操作</p>
+<pre><code><span class="keyword">find</span> -maxdepth <span class="number">1</span> -<span class="keyword">size</span> +<span class="number">20</span> -<span class="keyword">print</span> |xargs <span class="keyword">grep</span> <span class="string">"License"</span>
+</code></pre><p>  类似这个可以查找含有”License”的文件、文件夹</p>
+</li>
+</ul>
+<h2 id="总结">总结</h2><blockquote>
+<p>find命令是一个非常优秀的工具，它可以按照用户指定的准则来匹配文件。使用exec和xargs可以使用户对所匹配到的文件执行几乎所有的命令。<br>但是这些命令还是得常用，但能熟能生巧啊-_-</p>
+</blockquote>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://blog.chinaunix.net/uid-20082146-id-83489.html" target="_blank" rel="external">find命令</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p><code>find</code>命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^<br>注：本文使用的环境是CentOS6.5</p>
+</blockquote>
+<h2 id="Find介绍">Find介绍</h2><pre><code>功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
+语法：<span class="built_in">find</span> 起始目录 寻找条件 操作 
+说明：<span class="built_in">find</span>命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
+</code></pre><p>其实关于<code>Linux</code>下的命令一般通过<code>—help</code>就可以大致入门使用，实在不行再用<code>man</code>来看更为完整版的手册。<br>下面先长长得列一下：<br>]]>
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://yyl8781697.github.io/tags/Linux/"/>
+    
+      <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[对策字符串的最大长度]]></title>
@@ -152,9 +395,9 @@ asdxdsa
     <link href="http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/"/>
     <id>http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/</id>
     <published>2015-07-25T00:52:50.000Z</published>
-    <updated>2015-07-26T00:57:30.000Z</updated>
+    <updated>2015-07-27T13:51:47.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）-<em>-<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^</em>^<br>最终的复杂度为<code>O(nlogn)</code></p>
+</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br><a id="more"></a></p>
 <h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 左边的数都小于等 于它,右边的数都大于等于它</span><br><span class="line"> * 将原数组排序b 如果a[i]=b[i] 则该i对应的值满足条件</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftLtRightGt</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] b=a.clone();</span><br><span class="line">	Arrays.sort(b);<span class="comment">//O(nlogn)</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i]==b[i])<span class="comment">//只要相等 就表示满足条件</span></span><br><span class="line">			System.out.println(i+<span class="string">":"</span>+a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="参考">参考</h2><p>July 微软面试题  第81题</p>
 <hr>
@@ -164,7 +407,8 @@ asdxdsa
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</cod]]>
+</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br>]]>
+    
     </summary>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
@@ -1055,115 +1299,6 @@ abc
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[二叉查找树]]></title>
-    <link href="http://yyl8781697.github.io/2015/06/29/Data%20Struct/Binary-Search-Tree/"/>
-    <id>http://yyl8781697.github.io/2015/06/29/Data Struct/Binary-Search-Tree/</id>
-    <published>2015-06-29T12:30:58.000Z</published>
-    <updated>2015-07-25T01:30:18.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="介绍">介绍</h2><p>二叉查找树（Binary Search Tree），又称二叉搜索树、二叉排序树。它符合这样的特征：</p>
-<ul>
-<li>它是一颗二叉树（空树也可以）</li>
-<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值</li>
-<li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值</li>
-<li>它的左、右子树也也都是为二叉排序树。</li>
-</ul>
-<pre><code>      <span class="number">8</span>    
-    /   <span class="string">\</span>
-   <span class="number">3</span>     <span class="number">10</span>
- /   <span class="string">\</span>     <span class="string">\</span>
-<span class="number">1</span>     <span class="number">6</span>     <span class="number">14</span>
-    /   <span class="string">\</span>  /
-   <span class="number">4</span>    <span class="number">7</span> <span class="number">13</span> 
-</code></pre><blockquote>
-<p>二叉查找树的搜索、插入、删除的时间复杂度等于O(h)，期望O(logn)，最坏O(n)</p>
-</blockquote>
-<a id="more"></a>
-<h2 id="树的结构">树的结构</h2><p>它的结构和普通的二叉树一样<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 树的结构</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> data=Integer.MIN_VALUE;<span class="comment">//节点数据 </span></span><br><span class="line">	<span class="keyword">public</span> TreeNode left,right;<span class="comment">//左右节点</span></span><br><span class="line">	<span class="keyword">public</span> TreeNode parent;<span class="comment">//父节点  java里面加这个属性方便操作一点^_^</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">()</span></span>&#123;&#125;;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">(<span class="keyword">int</span> data)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>根据上面的定义，有<code>tn.left.data&lt;tn.data&lt;tn.right.data</code></p>
-<h2 id="查找">查找</h2><p>二叉排序树种的查找过程为</p>
-<ol>
-<li>若排序树tree是空树，则查找失败，直接返回，否则：</li>
-<li>若x等于树的根节点的值，则查找成功，返回该节点；否则：</li>
-<li>若x小于树的根节点的值，则搜索左子树；否则：</li>
-<li>查找右子树。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查找操作</span><br><span class="line"> *<span class="javadoctag"> @param</span> T  当前树的节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> x  查询点</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> TreeNode <span class="title">search</span><span class="params">(TreeNode T,<span class="keyword">int</span> x)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(T==<span class="keyword">null</span>)<span class="comment">//当前节点为null时表示没有找到</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">if</span>(T.data==x)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> T;<span class="comment">//表示查找成功</span></span><br><span class="line">	&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(T.data&gt;x)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="comment">//当前节点大于查询值的时候 进行左子节点的查找</span></span><br><span class="line">		<span class="keyword">return</span> search(T.left,x);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;<span class="comment">//否则进行右子节点的查找</span></span><br><span class="line">		<span class="keyword">return</span> search(T.right,x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>假如我现在查找的值为4的节点，则查找的路径为8-&gt;3-&gt;6-&gt;4 最终可以找到值</p>
-<h2 id="插入">插入</h2><p>二叉排序树的插入过程为：</p>
-<ol>
-<li>若排序树为空树，这当前插入节点就是树的根节点，否则</li>
-<li>判断x是否等于树当前节点的值，如果是，则不插入，否则</li>
-<li>若x小于当前节点的值，如果此时当前节点的左子树为空，则直接插入到当前节点的左子树，否则将当前节点置为左子树进行第2步操作</li>
-<li>若x大于当前节点的值，如果此时当前节点的右子树为空，则直接插入到当前节点的右子树，否则将当前节点置为右子树进行第2步操作</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 树的插入操作</span><br><span class="line"> *<span class="javadoctag"> @param</span> T  树的根节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> x  需要插入的节点</span><br><span class="line"> *<span class="javadoctag"> @return</span>  如果插入成功返回true,否则返回false</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">insert</span><span class="params">(TreeNode T,<span class="keyword">int</span> x)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(T.data==Integer.MIN_VALUE)</span><br><span class="line">	&#123;</span><br><span class="line">		T.data=x;<span class="comment">//空节点的时候 插入点就是根节点</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	TreeNode t=T;</span><br><span class="line">	<span class="keyword">while</span>(t!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.data==x)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(t.data&gt;x)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(t.left==<span class="keyword">null</span>)</span><br><span class="line">			&#123;	<span class="comment">//当前对比节点的左子节点为空了 直接插入就好了</span></span><br><span class="line">				t.left=<span class="keyword">new</span> TreeNode(x);</span><br><span class="line">				t.left.parent=t;<span class="comment">//更新父节点</span></span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				t=t.left;<span class="comment">//否则继续进行左子节点的查找</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(t.right == <span class="keyword">null</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				t.right=<span class="keyword">new</span> TreeNode(x);</span><br><span class="line">				t.right.parent=t;</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				t=t.right;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>其实简单的版本就是先进行插入点得查找，如果找到点节点，则不插入，如果未找到，则直接插入到最后一个判断节点的后边即可。</p>
-</blockquote>
-<p>假如我当前插入的值是5，则进行查找操作了，在找到4之后发现未找到该值的节点，并且5&gt;4，所以5会插入到4的右孩子上</p>
-<pre><code>      <span class="number">8</span>    
-    /   <span class="string">\</span>
-   <span class="number">3</span>     <span class="number">10</span>
- /   <span class="string">\</span>     <span class="string">\</span>
-<span class="number">1</span>     <span class="number">6</span>     <span class="number">14</span>
-    /   <span class="string">\</span>  /
-   <span class="number">4</span>    <span class="number">7</span> <span class="number">13</span> 
-    <span class="string">\</span>
-     <span class="number">5</span>
-</code></pre><h2 id="删除">删除</h2><p>二叉排序树的删除分为三种情况：</p>
-<ul>
-<li>当前删除的节点为叶子节点，也就是没有孩子节点，此时可以直接删除，将当前删除节点的父节点对应的孩子指向空即可<blockquote>
-<p>比如要删除5，只需要将4的右子树指向空即可</p>
-</blockquote>
-</li>
-<li>当前删除的节点仅含左子树或者右子树，这种情况下也是直接删除该节点即可，只不过是将当前删除的父节点对应的孩子指向删除节点对应的孩子即可<blockquote>
-<p>比如要删除4，只需要将6的左子树指向5即可</p>
-</blockquote>
-</li>
-<li>当前删除的节点的左右子树都存在，此时先查找删除节点的左子树的最大值，然后删除迭代删除该节点，最后将删除节点的值更新为最大值即可（注意这是一个递归过程..）<blockquote>
-<p>比如要删除6，则先找它左子树的最大值为5，这个时候要删除5这个节点，然后将6的值域更新为5即可</p>
-</blockquote>
-</li>
-</ul>
-<p>具体代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 删除节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> T  树的跟</span><br><span class="line"> *<span class="javadoctag"> @param</span> x  需要删除的值</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">delete</span><span class="params">(TreeNode T,<span class="keyword">int</span> x)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	TreeNode t=search(T,x);</span><br><span class="line">	<span class="keyword">if</span>(t!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> isExistLeft=t.left!=<span class="keyword">null</span>?<span class="number">1</span>:<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">int</span> isExistRight=t.right!=<span class="keyword">null</span>?<span class="number">1</span>:<span class="number">0</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">switch</span>(isExistLeft|isExistRight&lt;&lt;<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0</span>:<span class="comment">//the leaf node</span></span><br><span class="line">			deleteMySelf(t);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">1</span>:<span class="comment">//only left</span></span><br><span class="line">			deleteOnlyLeft(t);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">2</span>:<span class="comment">//obly right</span></span><br><span class="line">			deleteOnlyRight(t);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">3</span>:<span class="comment">//both child</span></span><br><span class="line">			TreeNode maxT=findMaxNodeInLeft(t);<span class="comment">//先查找当前节点中左子树中最大的节点</span></span><br><span class="line">			delete(T,maxT.data);<span class="comment">//删除那个节点</span></span><br><span class="line">			t.data=maxT.data;<span class="comment">//然后更新当前节点中的值  即可</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> AssertionError(<span class="string">"no no no,somehing must be wrong!"</span>);</span><br><span class="line">		</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//没有找到该节点</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 删除我自己</span><br><span class="line"> *<span class="javadoctag"> @param</span> t</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteMySelf</span><span class="params">(TreeNode t)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t.parent!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.parent.left==t)</span><br><span class="line">		&#123;</span><br><span class="line">			t.parent.left=<span class="keyword">null</span>;<span class="comment">//直接删除我自己</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			t.parent.right=<span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		t.parent.right=<span class="keyword">new</span> TreeNode();<span class="comment">//相当于初始化根节点</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 当前节点仅含左子树的情况下进行删除</span><br><span class="line"> *<span class="javadoctag"> @param</span> t</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteOnlyLeft</span><span class="params">(TreeNode t)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t.parent!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.parent.left==t)</span><br><span class="line">		&#123;</span><br><span class="line">			t.parent.left=t.left;<span class="comment">//直接删除当前节点t</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			t.parent.right=t.left;</span><br><span class="line">		&#125;</span><br><span class="line">		t.left.parent=t.parent;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="comment">//根节点被删除</span></span><br><span class="line">		t.data=t.left.data;</span><br><span class="line">		t.left=t.left.left;</span><br><span class="line">		t.right=t.left.right;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 当前节点仅含左右树的情况下进行删除</span><br><span class="line"> *<span class="javadoctag"> @param</span> t</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteOnlyRight</span><span class="params">(TreeNode t)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(t.parent!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(t.parent.left==t)</span><br><span class="line">		&#123;</span><br><span class="line">			t.parent.left=t.right;<span class="comment">//直接删除当前节点t</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			t.parent.right=t.right;</span><br><span class="line">		&#125;</span><br><span class="line">		t.right.parent=t.parent;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="comment">//根节点被删除</span></span><br><span class="line">		t.data=t.right.data;</span><br><span class="line">		t.left=t.left.left;</span><br><span class="line">		t.right=t.left.right;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查找左子树中最大的节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> T</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> TreeNode <span class="title">findMaxNodeInLeft</span><span class="params">(TreeNode T)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	TreeNode t=T.left;</span><br><span class="line">	<span class="keyword">if</span>(t!=<span class="keyword">null</span>)</span><br><span class="line">	<span class="keyword">while</span>(t.right!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		t=t.right;<span class="comment">//因为肯定右子树更加大</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> t;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="实际操练">实际操练</h2><p>最后关于上文中各个操作的操练代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	TreeNode root=<span class="keyword">new</span> TreeNode();</span><br><span class="line">	root.parent=<span class="keyword">new</span> TreeNode(Integer.MAX_VALUE);<span class="comment">//凭空设置一个超级根节点  </span></span><br><span class="line">	root.parent.right=root;<span class="comment">//超级根节点接管根节点</span></span><br><span class="line">	insert(root,<span class="number">8</span>);</span><br><span class="line">	insert(root,<span class="number">3</span>);</span><br><span class="line">	insert(root,<span class="number">10</span>);</span><br><span class="line">	insert(root,<span class="number">1</span>);</span><br><span class="line">	insert(root,<span class="number">6</span>);</span><br><span class="line">	insert(root,<span class="number">14</span>);</span><br><span class="line">	insert(root,<span class="number">4</span>);</span><br><span class="line">	insert(root,<span class="number">7</span>);</span><br><span class="line">	insert(root,<span class="number">13</span>);<span class="comment">//上面的insert是构建排序二叉树</span></span><br><span class="line">	insert(root,<span class="number">5</span>);<span class="comment">//再次进行插入操作</span></span><br><span class="line">	System.out.println(root);</span><br><span class="line">	delete(root,<span class="number">3</span>);<span class="comment">//删除操作</span></span><br><span class="line">	System.out.println(root);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="参考">参考</h2><ul>
-<li><a href="http://www.cnblogs.com/zhuyf87/archive/2012/11/09/2763113.html" target="_blank" rel="external">http://www.cnblogs.com/zhuyf87/archive/2012/11/09/2763113.html</a></li>
-<li><a href="http://www.cnblogs.com/vamei/archive/2013/03/17/2962290.html" target="_blank" rel="external">http://www.cnblogs.com/vamei/archive/2013/03/17/2962290.html</a></li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="介绍">介绍</h2><p>二叉查找树（Binary Search Tree），又称二叉搜索树、二叉排序树。它符合这样的特征：</p>
-<ul>
-<li>它是一颗二叉树（空树也可以）</li>
-<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值</li>
-<li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值</li>
-<li>它的左、右子树也也都是为二叉排序树。</li>
-</ul>
-<pre><code>      <span class="number">8</span>    
-    /   <span class="string">\</span>
-   <span class="number">3</span>     <span class="number">10</span>
- /   <span class="string">\</span>     <span class="string">\</span>
-<span class="number">1</span>     <span class="number">6</span>     <span class="number">14</span>
-    /   <span class="string">\</span>  /
-   <span class="number">4</span>    <span class="number">7</span> <span class="number">13</span> 
-</code></pre><blockquote>
-<p>二叉查找树的搜索、插入、删除的时间复杂度等于O(h)，期望O(logn)，最坏O(n)</p>
-</blockquote>]]>
-    
-    </summary>
-    
-      <category term="Data Struct" scheme="http://yyl8781697.github.io/tags/Data-Struct/"/>
-    
-      <category term="Data Struct" scheme="http://yyl8781697.github.io/categories/Data-Struct/"/>
     
   </entry>
   

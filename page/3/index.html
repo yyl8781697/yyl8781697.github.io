@@ -82,6 +82,86 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/29/Data Struct/Binary-Search-Tree/" title="二叉查找树" itemprop="url">二叉查找树</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-29T12:30:58.000Z" itemprop="datePublished"> 发表于 2015-06-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="介绍">介绍</h2><p>二叉查找树（Binary Search Tree），又称二叉搜索树、二叉排序树。它符合这样的特征：</p>
+<ul>
+<li>它是一颗二叉树（空树也可以）</li>
+<li>若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值</li>
+<li>若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值</li>
+<li>它的左、右子树也也都是为二叉排序树。</li>
+</ul>
+<pre><code>      <span class="number">8</span>    
+    /   <span class="string">\</span>
+   <span class="number">3</span>     <span class="number">10</span>
+ /   <span class="string">\</span>     <span class="string">\</span>
+<span class="number">1</span>     <span class="number">6</span>     <span class="number">14</span>
+    /   <span class="string">\</span>  /
+   <span class="number">4</span>    <span class="number">7</span> <span class="number">13</span> 
+</code></pre><blockquote>
+<p>二叉查找树的搜索、插入、删除的时间复杂度等于O(h)，期望O(logn)，最坏O(n)</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/29/Data Struct/Binary-Search-Tree/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Data-Struct/">Data Struct</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Data-Struct/">Data Struct</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/29/Data Struct/Binary-Search-Tree/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/29/Data Struct/Binary-Search-Tree/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/28/Food/hongshaorou-dun-tudou/" title="自己煮：红烧肉炖土豆" itemprop="url">自己煮：红烧肉炖土豆</a>
   </h1>
   <p class="article-author">By
@@ -741,79 +821,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/" title="使用Spark求解大图的连通组件（百度面试题）" itemprop="url">使用Spark求解大图的连通组件（百度面试题）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-17T15:45:58.000Z" itemprop="datePublished"> 发表于 2015-06-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><p>在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：<br>cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC就是一个用户而已，但是百度的数据量很大，现需要找出这批大量数据中的所有作弊者，请使用分布式的方法来求解此问题（可以使用<code>Hadoop</code>,<code>Spark</code>或者其他的任何一种平台）</p>
-<blockquote>
-<p>当时面试官也说了这个其实就是找连通子图问题</p>
-</blockquote>
-<h2 id="采样+多源最短路径（失败）">采样+多源最短路径（失败）</h2><p>我最初以为这个图里每个连图子图规模较大，但是个数却不是很多，所以一下子想到的就是：</p>
-<ol>
-<li>先对大图采样</li>
-<li>以采样顶点为起始顶点，利用<code>Spark</code>的<code>Pregel</code>模块来跑多源最短路径</li>
-<li>每个源跑完之后标记形成的图就是连通子图</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Spark/">Spark</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Spark/">Spark</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -880,7 +887,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
 		  
 		
 		  
@@ -953,15 +960,15 @@
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
 			
 		
 			

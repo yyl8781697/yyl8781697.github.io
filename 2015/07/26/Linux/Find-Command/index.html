@@ -1,0 +1,846 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux下的Find命令学习 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="find命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^注：本文使用的环境是CentOS6.5
+
+Find介绍功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
+语法：find 起始目录 寻找条件 操作 
+说明：find命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
+其实关于Linux下的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下的Find命令学习">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="find命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^注：本文使用的环境是CentOS6.5
+
+Find介绍功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
+语法：find 起始目录 寻找条件 操作 
+说明：find命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
+其实关于Linux下的">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下的Find命令学习">
+<meta name="twitter:description" content="find命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^注：本文使用的环境是CentOS6.5
+
+Find介绍功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
+语法：find 起始目录 寻找条件 操作 
+说明：find命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
+其实关于Linux下的">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/26/Linux/Find-Command/" title="Linux下的Find命令学习" itemprop="url">Linux下的Find命令学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-26T06:46:14.000Z" itemprop="datePublished"> 发表于 2015-07-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Find介绍"><span class="toc-number">1.</span> <span class="toc-text">Find介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逻辑运算"><span class="toc-number">2.</span> <span class="toc-text">逻辑运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可选项"><span class="toc-number">3.</span> <span class="toc-text">可选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#条件属性"><span class="toc-number">4.</span> <span class="toc-text">条件属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行为"><span class="toc-number">5.</span> <span class="toc-text">行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p><code>find</code>命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^<br>注：本文使用的环境是CentOS6.5</p>
+</blockquote>
+<h2 id="Find介绍">Find介绍</h2><pre><code>功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
+语法：<span class="built_in">find</span> 起始目录 寻找条件 操作 
+说明：<span class="built_in">find</span>命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
+</code></pre><p>其实关于<code>Linux</code>下的命令一般通过<code>—help</code>就可以大致入门使用，实在不行再用<code>man</code>来看更为完整版的手册。<br>下面先长长得列一下：<br><a id="more"></a></p>
+<pre><code>[root@master spark-1.3.1-bin-hadoop2.6]# find --<span class="keyword">help</span>
+Usage: find [-<span class="keyword">H</span>] [-<span class="keyword">L</span>] [-P] [-Olevel] [-<span class="keyword">D</span> <span class="keyword">help</span>|tree|<span class="keyword">search</span>|stat|rates|opt|exec] [path...] [expression]
+
+default path is the current directory; default expression is -<span class="keyword">print</span>
+expression may consist of: operators, options, tests, and actions:
+
+operators (decreasing precedence; -and is implicit where <span class="keyword">no</span> others are given):
+      ( EXPR )   ! EXPR   -not EXPR   EXPR1 -a EXPR2   EXPR1 -and EXPR2
+      EXPR1 -o EXPR2   EXPR1 -or EXPR2   EXPR1 , EXPR2
+
+positional options (always true): -daystart -follow -regextype
+
+normal options (always true, specified before other expressions):
+      -depth --<span class="keyword">help</span> -maxdepth <span class="keyword">LEVELS</span> -mindepth <span class="keyword">LEVELS</span> -mount -noleaf
+      --<span class="keyword">version</span> -xdev -ignore_readdir_race -noignore_readdir_race
+
+tests (<span class="keyword">N</span> can be +<span class="keyword">N</span> or -<span class="keyword">N</span> or <span class="keyword">N</span>): -amin <span class="keyword">N</span> -anewer <span class="keyword">FILE</span> -atime <span class="keyword">N</span> -cmin <span class="keyword">N</span>
+      -cnewer <span class="keyword">FILE</span> -ctime <span class="keyword">N</span> -empty -false -fstype <span class="keyword">TYPE</span> -gid <span class="keyword">N</span> -group NAME
+      -ilname PATTERN -iname PATTERN -inum <span class="keyword">N</span> -iwholename PATTERN -iregex PATTERN
+      -links <span class="keyword">N</span> -lname PATTERN -mmin <span class="keyword">N</span> -mtime <span class="keyword">N</span> -name PATTERN -newer <span class="keyword">FILE</span>
+      -nouser -nogroup -path PATTERN -perm [+-]MODE -regex PATTERN
+      -readable -writable -executable
+      -wholename PATTERN -size <span class="keyword">N</span>[bcwkMG] -true -<span class="keyword">type</span> [bcdpflsD] -uid <span class="keyword">N</span>
+      -used <span class="keyword">N</span> -user NAME -xtype [bcdpfls]
+      -context CONTEXT
+
+
+actions: -delete -print0 -printf <span class="keyword">FORMAT</span> -fprintf <span class="keyword">FILE</span> <span class="keyword">FORMAT</span> -<span class="keyword">print</span>
+      -fprint0 <span class="keyword">FILE</span> -fprint <span class="keyword">FILE</span> -<span class="keyword">ls</span> -fls <span class="keyword">FILE</span> -prune -quit
+      -exec COMMAND ; -exec COMMAND {} + -ok COMMAND ;
+      -execdir COMMAND ; -execdir COMMAND {} + -okdir COMMAND ;
+
+<span class="keyword">Report</span> (and track progress <span class="keyword">on</span> fixing) bugs via the findutils bug-reporting
+page at http:<span class="comment">//savannah.gnu.org/ or, if you have no web access, by sending</span>
+email to &lt;bug-findutils@gnu.org&gt;.
+</code></pre><p>从<code>—help</code>中我们大致可以发现<code>find</code>有以下四大表达式：</p>
+<ol>
+<li>operators(逻辑运算)：就是<code>and</code>,<code>or</code>,<code>not</code>这些东西</li>
+<li>options(可选项？)：感觉是一些额外可选的功能</li>
+<li>tests(条件属性)：各种属性啦，文件名，文件大小之类的</li>
+<li>acionts(行为)：find之后想干嘛呢？打印出来  or 去执行</li>
+</ol>
+<p>先来看一下当前的实验目录(使用了spark已编译的一个根目录)：</p>
+<pre><code><span class="attr_selector">[root@master spark-1.3.1-bin-hadoop2.6]</span># <span class="tag">ll</span>
+<span class="tag">total</span> 408
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">bin</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000 278851 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">CHANGES</span><span class="class">.txt</span>
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">May</span> 17 09<span class="pseudo">:00</span> <span class="tag">conf</span>
+<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">data</span>
+<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">ec2</span>
+<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">examples</span>
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">lib</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000  46083 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">LICENSE</span>
+<span class="tag">drwxr-xr-x</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">Jul</span> 22 11<span class="pseudo">:28</span> <span class="tag">logs</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000  22559 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">NOTICE</span>
+<span class="tag">drwxrwxr-x</span>. 7 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">python</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000   3629 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">README</span><span class="class">.md</span>
+<span class="tag">-rw-rw-r--</span>. 1 1000 1000    157 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">RELEASE</span>
+<span class="tag">drwxr-xr-x</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">Jul</span> 20 09<span class="pseudo">:33</span> <span class="tag">runjar</span>
+<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">sbin</span>
+<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-99afc66e-6bb1-41ee-8497-e2abdbb3013f</span>
+<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-e0919038-82ee-4d5d-b421-1f50f6a110ed</span>
+<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-f37f1978-ad83-4208-86d8-2bdf8c3e5696</span>
+</code></pre><p>在该目录下最简单的使用一个<code>find</code>操作</p>
+<pre><code>[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span>
+./NOTICE
+</code></pre><p>可以看到<code>NOTEICE</code>这个文件就查询出来了。</p>
+<h2 id="逻辑运算">逻辑运算</h2><p><code>find</code>命令通过逻辑运算可以完成强大的组合查询，先抛开这个，看看我们码农平常写的条件判断：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(f1 &amp;&amp; (f2 || f3) &amp;&amp; !f4)</span><br></pre></td></tr></table></figure></p>
+<p>而<code>find</code>的逻辑运算与之对应的就是：</p>
+<ul>
+<li><p><code>&amp;&amp;</code>对应<code>-and</code>，简写为：<code>-a</code></p>
+<pre><code>[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -a -<span class="keyword">size</span> -<span class="number">20</span>
+[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -a -<span class="keyword">size</span> +<span class="number">20</span>
+./NOTICE
+[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -<span class="keyword">size</span> +<span class="number">20</span>
+./NOTICE
+</code></pre><p>  可以发现”NOTICE”文件并且小于20是找不到的，但是大于20b的时候可以找到</p>
+<blockquote>
+<p>注意，缺省操作符的情况就是使用<code>-a</code>，所以第三条命令和第二条命令的效果是一样的。</p>
+</blockquote>
+</li>
+<li><p><code>||</code>对应<code>-or</code>，简写为：<code>-o</code></p>
+<pre><code>[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]<span class="preprocessor"># find -name <span class="title">"NOTICE"</span> -o -name <span class="title">"LICENSE"</span></span>
+./LICE<span class="built_in">NSE</span>
+./NOTICE
+</code></pre><p>  在或操作下两个文件都能查询出来</p>
+</li>
+<li><p><code>!</code>还是对应<code>!</code></p>
+<pre><code>[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> ! -name <span class="string">"NOTICE"</span> -<span class="keyword">size</span> +<span class="number">20</span>
+./LICENSE
+./CHANGES.txt
+</code></pre><p>  这样就可以查找在当前目录下名字不叫“NOTICE”以及大于20b的文件/文件夹了</p>
+</li>
+</ul>
+<blockquote>
+<p>注意，关于操作符还可以使用括号将各个操作表达式括起来，用起来还是非常灵活的^_^</p>
+</blockquote>
+<h2 id="可选项">可选项</h2><p>这个还是蛮有用的，看<code>—help</code>命令其实就是，还有:</p>
+<ul>
+<li><code>-depth</code>:使用它之后貌似先会从里向外打印，比如先找到最深的文件夹，然后一层一层向外显示</li>
+<li><code>-maxdepth</code>:限制递归的最大深度，如果只在当前目录下找，那么设置<code>-maxdepth 1</code>即可</li>
+<li><code>-mindepth</code>:限制最小深度，比如<code>-mindepth 2</code> 只查找深度大于2的文件</li>
+<li><code>-daystart</code>:限制查找的文件是今天起24小时的文件</li>
+<li><code>-follow</code>:遵循通配符链接方式查找</li>
+<li>还有其他等等</li>
+</ul>
+<h2 id="条件属性">条件属性</h2><p>在使用<code>find</code>的时候条件属性是我们的核心,这里有两个技巧</p>
+<ol>
+<li><p>如果属性后面跟着的条件是数字N，那么一般支持+,-操作，比如</p>
+<pre><code>[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> <span class="title">+22559c</span>
+</span>./<span class="type">LICENSE</span>
+./<span class="type">CHANGES</span>.txt
+[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> 22559<span class="title">c</span>
+</span>./<span class="type">NOTICE</span>
+[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> <span class="title">-22559c</span>
+</span>./<span class="type">README</span>.md
+./<span class="type">RELEASE</span>
+</code></pre><p> 上面3条命令分别就是查大于22559字节的文件，等于22559字节以及小于22559字节的文件</p>
+</li>
+<li><p>如果属性后面跟着的条件是字串，那么一般都支持通配符<code>*</code>、<code>?</code>、<code>［ ］</code></p>
+<pre><code>[root@master spark-<span class="number">1</span>.<span class="number">3</span>.<span class="number">1</span>-bin-hadoop2.<span class="number">6</span>]# <span class="built_in">find</span> -maxdepth <span class="number">1</span> -<span class="built_in">type</span> f -name "RE*"
+./README.<span class="built_in">md</span>
+./RELEASE
+</code></pre><p> 取”RE”开头的文件名</p>
+</li>
+</ol>
+<p>接下来看一些常用的筛选属性(要知道全部的话看<code>—help</code>里面的信息即可)</p>
+<ul>
+<li><code>-name PATTERN</code>:根据文件名进行匹配<blockquote>
+<p>估计是最为常用的一个属性之一了，上面的演示都是用它来作为示例，所以这里不加其他说明了</p>
+</blockquote>
+</li>
+<li><code>-type [bcdpflsD]</code>:筛选查找的类型：<ul>
+<li>b 块设备文件 </li>
+<li>c 字符设备文件 </li>
+<li>d 目录文件 </li>
+<li>p 命名管道（FIFO） </li>
+<li>f 普通文件 </li>
+<li>l 符号链接文件（symbolic links） </li>
+<li>s socket文件 </li>
+</ul>
+</li>
+</ul>
+<pre><code>[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="typedef"><span class="keyword">type</span> f</span>
+./<span class="type">LICENSE</span>
+./<span class="type">CHANGES</span>.txt
+./<span class="type">README</span>.md
+./<span class="type">NOTICE</span>
+./<span class="type">RELEASE</span>
+[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="typedef"><span class="keyword">type</span> d</span>
+.
+./sbin
+./spark-f37f1978-ad83-<span class="number">4208</span>-<span class="number">86</span>d8-<span class="number">2</span>bdf8c3e5696
+./ec2
+./bin
+./spark-<span class="number">99</span>afc66e-<span class="number">6</span>bb1-<span class="number">41</span>ee-<span class="number">8497</span>-e2abdbb3013f
+./<span class="typedef"><span class="keyword">data</span></span>
+./lib
+./conf
+./python
+./examples
+./runjar
+./spark-e0919038-<span class="number">82</span>ee-<span class="number">4</span>d5d-b421-<span class="number">1</span>f50f6a110ed
+./logs
+
+
+上述命名分别是查找当前目录下的文件和文件夹
+</code></pre><ul>
+<li><code>- size</code>:根据文件大小来进行匹配，这里大小的单位默认是字节<code>b</code>，还可以显式的其他单位<code>bcwkMG</code></li>
+<li><p><code>-perm</code>: 查找具有指定权限的文件和目录</p>
+<pre><code>[root@master spark-<span class="number">1.3</span>.<span class="number">1</span>-bin-hadoop2.<span class="number">6</span>]<span class="comment"># find -maxdepth 1 -perm 700</span>
+./spark<span class="operator">-f</span>37f1978-ad83-<span class="number">4208</span>-<span class="number">86</span>d8-<span class="number">2</span>bdf8c3e5696
+./spark-<span class="number">99</span>afc66e-<span class="number">6</span>bb1-<span class="number">41</span>ee-<span class="number">8497</span><span class="operator">-e</span>2abdbb3013f
+./spark<span class="operator">-e</span>0919038-<span class="number">82</span>ee-<span class="number">4</span>d5d-b421-<span class="number">1</span>f50f6a110ed
+</code></pre><p>  查找自有创建者才能用全完控制权限的目录和文件</p>
+</li>
+<li><code>-empty</code>:查找大小为0的目录或者空文件 </li>
+<li><code>-user NAME</code>:查找所属用户名的文件</li>
+<li><code>-amin n</code>:查找n分钟以前被访问过的所有文件</li>
+<li><code>-atime n</code>:查找n天以前被访问过的所有文件</li>
+<li><code>-cmin n</code>:查找n分钟以前文件状态被修改过的所有文件</li>
+<li><code>-ctime n</code>:查找n天以前文件状态被修改过的所有文件</li>
+<li><code>-mmin n</code>:查找n分钟以前文件内容被修改过的所有文件</li>
+<li><code>-mtime n</code>:查找n天以前文件内容被修改过的所有文件</li>
+<li>等等等自己看<code>—help</code></li>
+</ul>
+<h2 id="行为">行为</h2><blockquote>
+<p>这里的行为是指找到文件之后再做的行为操作</p>
+</blockquote>
+<ul>
+<li><code>-print</code>:将找到的文件/文件夹的名称给打印出来</li>
+<li><code>-ls</code>:将找到的文件/文件夹的的具体信息列出来</li>
+<li><code>-delete</code>:将找到的文件/文件夹的删除掉</li>
+<li><p><code>-exec command {} \;</code>:异常强大，在command 里面可以写linux的命令</p>
+<p>  [root@master spark-1.3.1-bin-hadoop2.6]# find -maxdepth 1 -size +20 -exec ls -l {} \;<br>  -rw-rw-r—. 1 1000 1000 46083 Apr 11 01:32 ./LICENSE<br>  -rw-rw-r—. 1 1000 1000 278851 Apr 11 01:32 ./CHANGES.txt<br>  -rw-rw-r—. 1 1000 1000 22559 Apr 11 01:32 ./NOTICE</p>
+<p>  比如来实现<code>-ls</code>的功能</p>
+</li>
+<li><p><code>-xargs</code>:也是异常强大，它会批次/依次的取得参数，进行相应的命令操作</p>
+<pre><code><span class="keyword">find</span> -maxdepth <span class="number">1</span> -<span class="keyword">size</span> +<span class="number">20</span> -<span class="keyword">print</span> |xargs <span class="keyword">grep</span> <span class="string">"License"</span>
+</code></pre><p>  类似这个可以查找含有”License”的文件、文件夹</p>
+</li>
+</ul>
+<h2 id="总结">总结</h2><blockquote>
+<p>find命令是一个非常优秀的工具，它可以按照用户指定的准则来匹配文件。使用exec和xargs可以使用户对所匹配到的文件执行几乎所有的命令。<br>但是这些命令还是得常用，但能熟能生巧啊-_-</p>
+</blockquote>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://blog.chinaunix.net/uid-20082146-id-83489.html" target="_blank" rel="external">find命令</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/" data-title="Linux下的Find命令学习 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/07/25/Algorithm/The-Longest-Palindrome/"  title="对策字符串的最大长度">
+ <strong>下一篇：</strong><br/> 
+ <span>对策字符串的最大长度
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/07/26/Linux/Find-Command/" data-title="Linux下的Find命令学习" data-url="http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Find介绍"><span class="toc-number">1.</span> <span class="toc-text">Find介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逻辑运算"><span class="toc-number">2.</span> <span class="toc-text">逻辑运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可选项"><span class="toc-number">3.</span> <span class="toc-text">可选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#条件属性"><span class="toc-number">4.</span> <span class="toc-text">条件属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行为"><span class="toc-number">5.</span> <span class="toc-text">行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>21</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>19</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

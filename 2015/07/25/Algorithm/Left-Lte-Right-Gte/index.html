@@ -12,20 +12,17 @@
 
     
     <meta name="description" content="题目一个 int 数组,里面数据无任何限制,要求求出所有这样的数 a[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-解析想其他的都是泪（递归、分治）--最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^^最终的复杂度为O(nlogn)
-代码123456789101112131415">
+解析想其他的都是泪（递归、分治）最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^_^最终的复杂度为O(nlogn)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="左边的数都小于等 于它,右边的数都大于等于它">
 <meta property="og:url" content="http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="题目一个 int 数组,里面数据无任何限制,要求求出所有这样的数 a[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-解析想其他的都是泪（递归、分治）--最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^^最终的复杂度为O(nlogn)
-代码123456789101112131415">
+解析想其他的都是泪（递归、分治）最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^_^最终的复杂度为O(nlogn)">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="左边的数都小于等 于它,右边的数都大于等于它">
 <meta name="twitter:description" content="题目一个 int 数组,里面数据无任何限制,要求求出所有这样的数 a[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-解析想其他的都是泪（递归、分治）--最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^^最终的复杂度为O(nlogn)
-代码123456789101112131415">
+解析想其他的都是泪（递归、分治）最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数这样正好满足只使用了一个额外数组^_^最终的复杂度为O(nlogn)">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -107,7 +104,7 @@
 		</div>
 		
 		<h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）-<em>-<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^</em>^<br>最终的复杂度为<code>O(nlogn)</code></p>
+</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br><a id="more"></a></p>
 <h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 左边的数都小于等 于它,右边的数都大于等于它</span><br><span class="line"> * 将原数组排序b 如果a[i]=b[i] 则该i对应的值满足条件</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftLtRightGt</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] b=a.clone();</span><br><span class="line">	Arrays.sort(b);<span class="comment">//O(nlogn)</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i]==b[i])<span class="comment">//只要相等 就表示满足条件</span></span><br><span class="line">			System.out.println(i+<span class="string">":"</span>+a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="参考">参考</h2><p>July 微软面试题  第81题</p>
 <hr>
@@ -242,7 +239,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
 		  
 		
 		  
@@ -315,15 +312,15 @@
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
 			
 		
 			
