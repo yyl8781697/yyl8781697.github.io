@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-07-27T15:45:46.000Z</updated>
+  <updated>2015-07-27T15:54:03.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,9 +19,9 @@
     <link href="http://yyl8781697.github.io/2015/07/27/Algorithm/Find-Same-Char/"/>
     <id>http://yyl8781697.github.io/2015/07/27/Algorithm/Find-Same-Char/</id>
     <published>2015-07-27T15:39:41.000Z</published>
-    <updated>2015-07-27T15:45:46.000Z</updated>
+    <updated>2015-07-27T15:54:03.000Z</updated>
     <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code><span class="literal">a</span>~z 包括大小写与 <span class="number">0</span>~<span class="number">9</span> 组成的 N 个数, 用最快的方式把其中重复的元素挑出来。
-</code></pre><h2 id="解析">解析</h2><p>本题中已经限制了可能出现字符,他们对应的assci为</p>
+</code></pre><h2 id="解析">解析</h2><p>本题中已经限制了可能出现字符,他们对应的ascii为</p>
 <ul>
 <li>a-z:97~122,</li>
 <li>A-Z:65-90</li>
@@ -41,7 +41,7 @@
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="题目">题目</h2><pre><code><span class="literal">a</span>~z 包括大小写与 <span class="number">0</span>~<span class="number">9</span> 组成的 N 个数, 用最快的方式把其中重复的元素挑出来。
-</code></pre><h2 id="解析">解析</h2><p>本题中已经限制了可能出现字符,他们对应的assci为</p>
+</code></pre><h2 id="解析">解析</h2><p>本题中已经限制了可能出现字符,他们对应的ascii为</p>
 <ul>
 <li>a-z:97~122,</li>
 <li>A-Z:65-90</li>
