@@ -82,6 +82,144 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2013/04/28/Dotnet/RSA/" title="整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码" itemprop="url">整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2013-04-28T11:51:38.000Z" itemprop="datePublished"> 发表于 2013-04-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>&#160; &#160; &#160; &#160;最近在搞单点登录的设计,在设计中需要一个Token令牌的加密传输,这个令牌在整个连接单点的各个站中起着连接认证作用,如果被仿造将会有不可预计的损失,但是这个Token是要可逆的.然后我就找.net中的各种加密，各种找。<br>&#160; &#160; &#160; &#160;因为是可逆的,所以像那种md5,sha之类的不可逆加密就没法用了,然后可逆的加密主要是分为对称加密盒非对称加密:</p>
+<ul>
+<li>对称加密:用加密的钥匙来解密,比如DES,AES的加解密</li>
+<li>非对称加密:一个钥匙加密,用另一个钥匙解密,这个主要就是RSA比较成熟(<a href="http://baike.baidu.com/view/10613.htm">点我看科普</a>)</li>
+</ul>
+<p>&#160; &#160; &#160; &#160;当然这么看来非对称加密更加适合我这个需求,然后我又各种找RSA,.NET中自己实现了加密RSA加密类RSACryptoServiceProvider，但是这个用起来着实不爽，公钥和私钥是用xml来显示，太长太大，而且由于没有实现一些标准，只能用公钥加密，私钥解密（这个XML种私钥中可以看出公钥），但是事实上RSA的一对有效密钥公钥加密私钥解密  和私钥加密公钥解密均可  我想要的是后面的效果啊，结果又继续各种找，在找了好久看不到希望之际时，在csdn和博客园上看到了这两篇文章：</p>
+<ul>
+<li><a href="http://blog.csdn.net/zhilunchen/article/details/2943158">基于私钥加密公钥解密的RSA算法C#实现</a></li>
+<li><a href="http://www.cnblogs.com/hhh/archive/2011/06/03/2070692.html">C#使用RSA私钥加密公钥解密的改进，解决特定情况下解密后出现乱码的问题</a></li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2013/04/28/Dotnet/RSA/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CSharp/">CSharp</a><a href="/tags/RSA/">RSA</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/04/28/Dotnet/RSA/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/04/28/Dotnet/RSA/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2013/02/25/Dotnet/handler-jquery-ajax/" title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码" itemprop="url">在ashx中利用反射+jquery轻松处理ajax 含Demo源码</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2013-02-25T14:08:20.000Z" itemprop="datePublished"> 发表于 2013-02-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>&#160; &#160; &#160; &#160;由于jquery的出现，编写js代码已经变得异常的平民化，同时现在的web也已经是ajax满天飞，哪天你自己写一个web不含ajax的拿不出手<br>当然，在.net的控件模式开发中一种去控件化开发已经变的变得更加通用：jquery+ajax+ashx  这种方式更加适用于一些小应用的开发，轻量、简单、自由<br>由于那时候太年轻，刚刚开始这种模式开发的时候 是一个ajax请求一个ashx页面，这样的结果可想而知，一个小的权限系统光光ashx文件就几十个了，而且文件名还大同小异，悲剧。</p>
+<p>&#160; &#160; &#160; &#160;后来做了一会儿变聪明了，把相同类别的请求都放到一个ashx文件中，每个请求传一个请求标志  通过switch来调用相应的请求方法，当然，这样要比原来好多了，至少没那么多ashx文件了，但是  每新建一个文件都要去添加switch方法，蛋疼啊  有木有，更加可耻的是 每次增删改一个请求都要去修改那个可恶的switch语句，烦啊</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2013/02/25/Dotnet/handler-jquery-ajax/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/02/25/Dotnet/handler-jquery-ajax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/02/25/Dotnet/handler-jquery-ajax/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2012/12/07/Dotnet/csharp-socket-udp/" title="用c#写的一个局域网聊天客户端 类似小飞鸽" itemprop="url">用c#写的一个局域网聊天客户端 类似小飞鸽</a>
   </h1>
   <p class="article-author">By
@@ -649,7 +787,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>22</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>24</sup></a></li>
 		  
 		
 		  
@@ -730,7 +868,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>25</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>27</sup></a></li>
 			
 		
 			
