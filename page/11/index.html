@@ -82,6 +82,150 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2013/05/09/Dotnet/ajaxframework/" title="基于.Net 写我自己的Ajax后台框架AjaxFramework" itemprop="url">基于.Net 写我自己的Ajax后台框架AjaxFramework</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2013-05-09T15:01:59.000Z" itemprop="datePublished"> 发表于 2013-05-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="为什么要写自己的Ajax后台框架">为什么要写自己的Ajax后台框架</h2><p>&#160; &#160; &#160; &#160;现在Ajax在web应用方面已经用的稀巴烂了，如果你做一个网站没有用到ajax都不好意思拿出手，虽然面对ajax的潮流下，在.net开放方向，微软已经做了很多工作了，比如推出了ajax的服务器端控件，但是他不够灵活，用的人多吗？不多！</p>
+<p>&#160; &#160; &#160; &#160;在.Net环境下与ajax配合的几种情况（主要是针对webform，因为.net mvc你只要写action就可以将方法给发布出来，实现ajax的调用）：</p>
+<ol>
+<li><p>用ajax访问aspx页面：直接在page_load中输出html代码并且End掉多余标签的输出，但是他还要走生命周期，一个好好的aspx页面只用这个功能怪怪的，当然还可以直接在aspx.cs上面的方法上加上[webMethod]特性来标记ajax访问，但是必须该方法为静态，用起来也不是很爽。</p>
+</li>
+<li><p>用ajax访问ashx一般处理程序：这个是在.net的ajax开发中一种常见明确推荐的方式，他输出页面少，不冗余代码，调用灵活，但是他通常一个ashx页面只提供一个功能，但是市面上有可以通过switch方法的参数或者用委托或者反射的方法来实现一个ashx页面提供多个ajax访问的功能，但是没发现这样也挺乱的吗，我之前一直用这个，慢慢的 慢慢的开始讨厌这种写好写法!</p>
+</li>
+<li><p>用ajax直接调用webservice服务：这样的好处是在一个普通的webserive类中可以使用多个对外ajax访问点的发布，用起来很灵活，但是你一般的小网站为了ajax的访问还是部署webservice还是比较烦的吧！</p>
+</li>
+<li><p>用ajax去调用wcf：微软推出了wcf，并且现在公认为他是一种可以替代webservice的新产品，并且他还支持奖wcf部署在web服务器上，以url形式发布，当然了，这样就可以用ajax来访问调用，但是同上，小网站小应用还要去弄wcf，也是挺烦的一件事情！</p>
+</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2013/05/09/Dotnet/ajaxframework/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Ajax/">Ajax</a><a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/05/09/Dotnet/ajaxframework/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/05/09/Dotnet/ajaxframework/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2013/05/06/Dotnet/Mongodb-Pager/" title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码" itemprop="url">基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2013-05-06T03:27:59.000Z" itemprop="datePublished"> 发表于 2013-05-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>&#160; &#160; &#160; &#160;最近在设计的日志服务中需要用到Mongodb这个Nosql数据库（<a href="http://baike.baidu.com/view/3385614.htm">不知道Mongodb的点我</a>），由于是用于纯存日志，而且日志量巨大，百万千万级的，所以需要用到它的分页查询。<br>不过LZ也是刚刚接触这个数据库，不是很了解里面的命令语法，便在网上查了一些资料，结果 结果说mongodb自带的简单很方便的Skip方式的分页效率很低，无奈，无奈得用其他的，<br>&#160; &#160; &#160; &#160;有多篇文章都推荐Where+Limit的方式分页，说他效率比Skip方式高多了，但是好多资料都是讲一些思路，并没有很具体，但是也很有帮助拉，现在简单的来讲一下这个分页思路（Skip的方式那么简单就不讲啦）：<br>假设一张表中（Mongodb用集合来代替）有如下条数据：1,3,4,5,6,7,8,9,20,30,50,51,52,59,60（仅仅标志该记录的ID号 你可以理解为主键）<br>现在的也尺寸PageSize=4，那么</p>
+<ul>
+<li>第一页的数据为1,3,4,5，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;0 因为上一页是没有记录 所以用0来代替</li>
+<li>第二页的数据为6,7,8,9,20，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;5 这里的5就是上一页的最后一条记录</li>
+<li>第二页的数据为30,50,51,52,，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;20 </li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2013/05/06/Dotnet/Mongodb-Pager/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CSharp/">CSharp</a><a href="/tags/Mongodb/">Mongodb</a><a href="/tags/pager/">pager</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/05/06/Dotnet/Mongodb-Pager/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/05/06/Dotnet/Mongodb-Pager/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2013/04/28/Dotnet/RSA/" title="整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码" itemprop="url">整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码</a>
   </h1>
   <p class="article-author">By
@@ -787,7 +931,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>24</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>25</sup></a></li>
 		  
 		
 		  
@@ -815,7 +959,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
 		  
 		
 		  
@@ -868,7 +1012,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>27</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>28</sup></a></li>
 			
 		
 			
@@ -876,7 +1020,7 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>19</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
 			
 		
 			

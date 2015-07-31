@@ -82,6 +82,143 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/07/Spark/Graphs-Applications/" title="graphx上的一些简单应用" itemprop="url">graphx上的一些简单应用</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-07T14:59:23.000Z" itemprop="datePublished"> 发表于 2015-07-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>本文是温习<a href="http://www.csdn.net/article/2014-08-07/2821097">快刀初试：Spark GraphX在淘宝的实践</a>这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^</p>
+</blockquote>
+<h2 id="看实验用的图：">看实验用的图：</h2><p><img src="/img/Graphx-Application/sampleG.jpg" alt=""></p>
+<p>该图可以使用如下代码来进行标示<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc=new</span> <span class="title">SparkContext</span>(</span>);</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edge=List</span>(</span><span class="comment">//边的信息</span></span><br><span class="line">    (<span class="number">1</span>,<span class="number">2</span>),(<span class="number">1</span>,<span class="number">3</span>),(<span class="number">2</span>,<span class="number">3</span>),(<span class="number">3</span>,<span class="number">4</span>),(<span class="number">3</span>,<span class="number">5</span>),(<span class="number">3</span>,<span class="number">6</span>),</span><br><span class="line">    (<span class="number">4</span>,<span class="number">5</span>),(<span class="number">5</span>,<span class="number">6</span>),(<span class="number">7</span>,<span class="number">8</span>),(<span class="number">7</span>,<span class="number">9</span>),(<span class="number">8</span>,<span class="number">9</span>))</span><br><span class="line">   </span><br><span class="line"><span class="comment">//构建边的rdd</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edgeRdd=sc</span>.<span class="title">parallelize</span>(</span>edge).map(x=&gt;&#123;</span><br><span class="line">  <span class="type">Edge</span>(x._1.toLong,x._2.toLong,<span class="type">None</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//构建图 顶点Int类型</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">g=Graph</span>.<span class="title">fromEdges</span>(</span>edgeRdd, <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/07/Spark/Graphs-Applications/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/07/Spark/Graphs-Applications/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/07/Spark/Graphs-Applications/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/05/Algorithm/1-2-n/" title="假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的" itemprop="url">假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-05T15:41:26.000Z" itemprop="datePublished"> 发表于 2015-07-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>假设你有一个用 <span class="number">1001</span> 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 <span class="number">1</span> 到 <span class="number">1000</span><span class="comment">(包括 1000)</span>之间。此外,除一个数字出现两次外,其他所有数字只出现一 次。假设你只能对这个数组做一次处理,用一种算法找出重复的那个数字。如果你在运算中 使用了辅助的存储方式,那么你能找到不用这种方式的算法吗?
+</code></pre><h2 id="方法1">方法1</h2><p>这里都说1~1000都至少包含一遍了，所以求和在减去1~1000的和即可<br>假设遍历数组之后的求和为sum，则那个数字就是sum-(1000*10001/2)</p>
+<blockquote>
+<p>但是如果这里不是1000，而是这个数字非常的大，求和就可能出现溢出</p>
+</blockquote>
+<h2 id="方法2">方法2</h2><p>还记得有一道经典的<a href="https://leetcode.com/problems/single-number/">leetcode题目</a>就是一个数组中每个数出现2次，只有一个数字出现了3次，找出这个数字。<br>该题目的思路是A^A=0,A^0=A</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/05/Algorithm/1-2-n/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/05/Algorithm/1-2-n/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/05/Algorithm/1-2-n/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/03/Algorithm/Single-Linked-Cycle-Y/" title="单向列表是否有环，两个链表是否相交，以及交点" itemprop="url">单向列表是否有环，两个链表是否相交，以及交点</a>
   </h1>
   <p class="article-author">By
@@ -670,152 +807,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/25/Effective Java/Concurrent/" title="《Effective Java》第十章：并发" itemprop="url">《Effective Java》第十章：并发</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-25T02:41:45.000Z" itemprop="datePublished"> 发表于 2015-06-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>线程机制是允许同时进行多个活动，并发程序设计比单线程程序设计要困难的多，因为有更多得东西可能会出错，也很难以重现失败。</p>
-<h2 id="第66条：同步访问共享的可变数据">第66条：同步访问共享的可变数据</h2><p>关键字<code>synchronized</code>可以保证在同一时刻，只有一个线程可以执行某一个方法，或者某一个代码块，关于这点，有两方面的意义：</p>
-<ol>
-<li>当一个对象被一个线程修改的时候，可以阻止另一个线程观察到内部不一致的状态</li>
-<li>它可以保证进入同步方法或者代码块的每个线程，都可以看到同一个锁保护之前所有的修改<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> stopRequented;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span><br><span class="line"></span>&#123;</span><br><span class="line">	Thread backgroundThread=<span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">while</span>(!stopRequented)</span><br><span class="line">				i++;</span><br><span class="line">			</span><br><span class="line">			System.out.println(<span class="string">"the thread stop now!"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	backgroundThread.start();</span><br><span class="line">	Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">	</span><br><span class="line">	stopRequented=<span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>看上面的代码，你运行的时候并没有按你期望的在3秒之后终止程序，这是因为<code>stopRequented</code>这个变量并没有同步，不能进行线程共享<br>虚拟机将那段循环代码可以转为<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/25/Effective Java/Concurrent/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/25/Effective Java/Concurrent/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/25/Effective Java/Concurrent/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/24/Effective Java/Exception/" title="《Effective Java》第九章：异常" itemprop="url">《Effective Java》第九章：异常</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-23T23:30:23.000Z" itemprop="datePublished"> 发表于 2015-06-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>充分发挥异常的优点，可以提高程序的可读性、可靠性和可维护性。如果使用不当，它们也会带来负面影响。</p>
-<h2 id="第57条：只针对异常的情况下使用异常">第57条：只针对异常的情况下使用异常</h2><p>先看下如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">		range[i++].climd();</span><br><span class="line">&#125;<span class="keyword">catch</span>(ArrayIndexOutOfBoundsException e)</span><br><span class="line">&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>此代码看的如此蛋疼，使用异常来跳过数组越界，其实完全可以用下面的代码代替<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Mountain m:range)</span><br><span class="line">			m.climb();</span><br></pre></td></tr></table></figure></p>
-<p>简单明了（我想上面的例子大家都能看出孰优孰劣）<br>不推荐第一种写法的原因是：</p>
-<ol>
-<li>因为异常机制的设计初衷是用于不正常情形，所以很少会有<code>JVM</code>实现试图对它们进行优化，使得与显示的测试一样快速</li>
-<li>把代码放在<code>try-catch</code>块中反而阻止了现代<code>JVM</code>实现本来可能要执行的某些特征优化</li>
-<li>对数组进行遍历的标准模式并不会导致冗余检查。有些现代的<code>JVM</code>实现会将它们优化掉</li>
-</ol>
-<blockquote>
-<p>所以，异常应该只用于异常的情况下，它们永远不应该用于正常的控制流</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/24/Effective Java/Exception/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/24/Effective Java/Exception/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/24/Effective Java/Exception/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -838,7 +829,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>24</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>25</sup></a></li>
 		  
 		
 		  
@@ -866,7 +857,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>2</sup></a></li>
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
 		  
 		
 		  
@@ -919,7 +910,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>27</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>28</sup></a></li>
 			
 		
 			
@@ -927,7 +918,7 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>19</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
 			
 		
 			
