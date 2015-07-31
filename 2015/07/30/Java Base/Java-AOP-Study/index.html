@@ -109,7 +109,7 @@
 <blockquote>
 <p>我的理解哈：你现在有一系列普通的执行方法，但是想在方法执行的前后加点东西，比如记录日志，那你不可能去再每个方法上都去加记录日志的语句，那这个时候AOP就来了，将这个记录日志作为切面切入到这些方法中，在平常自然调用这些方法时候同时执行这些切面。</p>
 </blockquote>
-<p>那该怎么切入呢？</p>
+<p>那该怎么切入呢？<br><a id="more"></a></p>
 <h2 id="AOP原理">AOP原理</h2><p>切入的方法主要有在编译器修改源代码，在运行期字节码加载前修改字节码或字节码加载后动态创建代理类的字节码，下面借用别人总结的一个表：<br><img src="/img/Java-AOP-Study/list.png" alt=""><br>本文主要是学习“动态AOP”以及“动态字节码生成” 这两种比较常用的实现方法</p>
 <h2 id="动态AOP-动态代理">动态AOP-动态代理</h2><p>这种实现方法最主要的就是<code>Proxy.newProxyInstance</code>生成代理方法，其核心需要的是：<br><img src="/img/Java-AOP-Study/dynamicProxy.jpg" alt=""><br>也就是一定需要接口</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>;<span class="comment">//这个就是我们平常所执行的方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
