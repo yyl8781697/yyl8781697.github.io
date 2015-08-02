@@ -82,6 +82,78 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/02/Algorithm/Permutation-and-Combination/" title="全排列以及全组合" itemprop="url">全排列以及全组合</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-02T14:44:33.000Z" itemprop="datePublished"> 发表于 2015-08-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="全排列">全排列</h2><blockquote>
+<p>这里主要使用递归来实现，也就是考察递归的熟练使用与否</p>
+</blockquote>
+<p>全排列的递归生成规则为：</p>
+<ol>
+<li>n个数的全排列=(其中一个数的前缀)+n-1个树的全排列</li>
+<li>当前只剩下一个待选前缀的时候，停止迭代</li>
+<li>关于前缀的设立，是逐个迭代剩余的候选元素通过两两交换完成的，在进行输出之后还需要还得将两个数字重新交换回去</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/02/Algorithm/Permutation-and-Combination/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/02/Algorithm/Permutation-and-Combination/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/02/Algorithm/Permutation-and-Combination/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/30/Java Base/Java-AOP-Study/" title="学习Java AOP的实现" itemprop="url">学习Java AOP的实现</a>
   </h1>
   <p class="article-author">By
@@ -695,80 +767,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/24/Algorithm/x-exponent/" title="数值的整数次方" itemprop="url">数值的整数次方</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-24T12:05:12.000Z" itemprop="datePublished"> 发表于 2015-07-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
-</code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>还需要考虑：</p>
-<ol>
-<li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
-<li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
-<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/24/Algorithm/x-exponent/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/24/Algorithm/x-exponent/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/24/Algorithm/x-exponent/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -788,7 +789,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>25</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>26</sup></a></li>
 		  
 		
 		  
@@ -869,7 +870,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>28</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>29</sup></a></li>
 			
 		
 			

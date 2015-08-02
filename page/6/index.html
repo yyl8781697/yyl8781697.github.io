@@ -82,6 +82,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" title="Mac通过ssh连接到Centos时一些问题的解决" itemprop="url">Mac通过ssh连接到Centos时一些问题的解决</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-16T02:26:53.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Linux版本：Centos6.5<br>Mac版本：OS X Yosemite 10.10.2</p>
+<h2 id="LC_CTYPE:_cannot_change_locale_(UTF-8)">LC_CTYPE: cannot change locale (UTF-8)</h2><p>通过ssh连接到linux，会出现如下警告：</p>
+<pre><code>-<span class="string">bash:</span> <span class="string">warning:</span> <span class="string">setlocale:</span> <span class="string">LC_CTYPE:</span> cannot change locale (UTF-<span class="number">8</span>): No such file or directory
+</code></pre><p>这是由于没有找到对应的语言环境导致的：<br>按一下命令步骤操作即可修复：<br>首先</p>
+<pre><code>sudo vi <span class="regexp">/etc/</span>ssh_cofig
+</code></pre><p>然后将该文件中的SendEnv LANG LC_*这一行用#进行注释</p>
+<pre><code><span class="id">#SendEnv</span> LANG LC_*
+</code></pre><p>参考:<a href="http://www.cyberciti.biz/faq/os-x-terminal-bash-warning-setlocale-lc_ctype-cannot-change-locale/" target="_blank" rel="external">OS X Terminal: -bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory Fix</a></p>
+<h2 id="Write_failed:_Broken_pipe">Write failed: Broken pipe</h2><p>通过ssh连接到linux，有时候会莫名其妙的出现错误：</p>
+<pre><code><span class="tag">Write</span> <span class="rule"><span class="attribute">failed</span>:<span class="value"> Broken pipe</span></span>
+</code></pre><p>看资料说的是由于长时间未操作造成的，解决方法为在Mac端的~/.ssh/config文件中添加：</p>
+<pre><code><span class="title">ServerAliveInterval</span> <span class="number">60</span>
+</code></pre><p>参考：<a href="http://www.cnblogs.com/dudu/archive/2013/02/07/ssh-write-failed-broken-pipe.html" target="_blank" rel="external">解决ssh的”Write failed: Broken pipe”问题</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ssh/">ssh</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/14/Linux/Vim-Command-List/" title="Vim命令合集(转载)" itemprop="url">Vim命令合集(转载)</a>
   </h1>
   <p class="article-author">By
@@ -761,77 +836,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/" title="org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem" itemprop="url">org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-16T13:24:55.000Z" itemprop="datePublished"> 发表于 2015-04-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>将自己之前写好的hadoop程序拷贝给师弟时候总是会报下面的错：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassCastException: org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.common.HdfsHelper.&lt;clinit&gt;(HdfsHelper.java:<span class="number">25</span>)</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.LogisticRegression.LRProgram.run(LRProgram.java:<span class="number">53</span>)</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.LogisticRegression.LRProgram.main(LRProgram.java:<span class="number">23</span>)</span><br></pre></td></tr></table></figure></p>
-<p><strong>字面自已上就是本地文件不能转为分布式文件</strong>，自己在输入文件上加hdfs前缀也是无济于事，搜索关键字了半天也没找到匹配的方案，后来终于在一个博客找到了解决方案：<br><br>将<code>hadoop/conf/</code>下面的<code>core-site.xml</code>和<code>hdfs-site.xml</code>复制到工程文件的<code>/bin/</code>目录下面就可以了（使用的是Eclipse的IDE），坑爹。</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
   </nav>
 
 </div>
@@ -851,7 +858,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>25</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>26</sup></a></li>
 		  
 		
 		  
@@ -932,7 +939,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>28</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>29</sup></a></li>
 			
 		
 			

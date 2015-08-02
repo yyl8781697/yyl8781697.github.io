@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-07-31T16:36:34.000Z</updated>
+  <updated>2015-08-02T15:08:08.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,65 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[全排列以及全组合]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/02/Algorithm/Permutation-and-Combination/"/>
+    <id>http://yyl8781697.github.io/2015/08/02/Algorithm/Permutation-and-Combination/</id>
+    <published>2015-08-02T14:44:33.000Z</published>
+    <updated>2015-08-02T15:08:08.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="全排列">全排列</h2><blockquote>
+<p>这里主要使用递归来实现，也就是考察递归的熟练使用与否</p>
+</blockquote>
+<p>全排列的递归生成规则为：</p>
+<ol>
+<li>n个数的全排列=(其中一个数的前缀)+n-1个树的全排列</li>
+<li>当前只剩下一个待选前缀的时候，停止迭代</li>
+<li>关于前缀的设立，是逐个迭代剩余的候选元素通过两两交换完成的，在进行输出之后还需要还得将两个数字重新交换回去</li>
+</ol>
+<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 全排列算法</span><br><span class="line"> * 依次将剩余的元素交换到begin处  直到end的地方进行输出</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @param</span> begin</span><br><span class="line"> *<span class="javadoctag"> @param</span> end</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">permutation</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> begin,<span class="keyword">int</span> end)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(begin==end)<span class="comment">//当前已经排列完成 进行输出</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">			System.out.print(a[i]);</span><br><span class="line">		System.out.println();</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=begin;j&lt;=end;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			swap(a,begin,j);<span class="comment">//依次遍历剩余元素放置在begin 位置处</span></span><br><span class="line">			permutation(a,begin+<span class="number">1</span>,end);</span><br><span class="line">			swap(a,begin,j);<span class="comment">//将之前交换的数据还原</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> temp=a[i];</span><br><span class="line">	a[i]=a[j];</span><br><span class="line">	a[j]=temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>进行测试输出为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] a=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line">permutation(a,<span class="number">0</span>,a.length-<span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<p>最终的结果是</p>
+<pre><code>123
+132
+213
+231
+321
+312
+</code></pre><blockquote>
+<p>这里，这里只考虑的无重复的情况，一旦有重复的，需要考虑去重，因为两个相同的数字交换没什么意思啊。这里的去重主要是在for循环中添加一个isSwap来判断是否要交换即可。</p>
+</blockquote>
+<h2 id="全组合">全组合</h2><blockquote>
+<p>全组合貌似就是一个元素的<a href="http://kubicode.me/2015/07/19/Algorithm/SubCollection/" target="_blank" rel="external">全子集算法</a>，之前做过的-_-</p>
+</blockquote>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://blog.csdn.net/hackbuteer1/article/details/7462447" target="_blank" rel="external">http://blog.csdn.net/hackbuteer1/article/details/7462447</a></li>
+<li><a href="http://blog.csdn.net/hackbuteer1/article/details/6823329" target="_blank" rel="external">http://blog.csdn.net/hackbuteer1/article/details/6823329</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="全排列">全排列</h2><blockquote>
+<p>这里主要使用递归来实现，也就是考察递归的熟练使用与否</p>
+</blockquote>
+<p>全排列的递归生成规则为：</p>
+<ol>
+<li>n个数的全排列=(其中一个数的前缀)+n-1个树的全排列</li>
+<li>当前只剩下一个待选前缀的时候，停止迭代</li>
+<li>关于前缀的设立，是逐个迭代剩余的候选元素通过两两交换完成的，在进行输出之后还需要还得将两个数字重新交换回去</li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[学习Java AOP的实现]]></title>
@@ -1128,79 +1187,6 @@ abc
 <li>第二种就是先遍历存放到一个数组或者栈中，然后从后往前输出即可，就需要额外的O(n)空间。</li>
 </ol>
 <p>这两种方法都是需要额外的复杂度或者空间，网络行流传更好的方法就是使用递归-_-! 神方法啊，递归一次即可。。<br>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[链表的翻转]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/16/Algorithm/LinkedList-Revert/"/>
-    <id>http://yyl8781697.github.io/2015/07/16/Algorithm/LinkedList-Revert/</id>
-    <published>2015-07-16T15:28:28.000Z</published>
-    <updated>2015-07-25T01:25:01.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>将链表<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>翻转成<span class="number">4</span>-&gt;<span class="number">3</span>-&gt;<span class="number">2</span>-&gt;<span class="number">1</span>。
-</code></pre><h2 id="解题">解题</h2><p>最简单就是遍历链表，然后保存到一个数组中，然后再向后构建数组，当然，这种方式不好，会有额外开销。-_-<br>这里来介绍一下另一种方法：<br>假设现在的链表是</p>
-<pre><code><span class="built_in">null</span><span class="subst">-&gt;</span><span class="number">1</span><span class="subst">-&gt;</span><span class="number">2</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-</code></pre><p>如果我们想办法将2移到1的前面，然后3又移到2的前面，最后将4移动3的前面，这不就完了嘛？<br>好，现在开始移动：</p>
-<pre><code>    <span class="number">2</span>
-   <span class="subst">/</span> <span class="subst">\</span> 
-<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-将<span class="number">1</span>指向<span class="number">2</span>的next，然后将<span class="number">2</span>的next指向head的next，然后head的next指向<span class="number">2</span>
-
-    <span class="number">3</span><span class="subst">-</span><span class="number">2</span>
-   <span class="subst">/</span>  <span class="subst">|</span>
-<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-然后再移动<span class="number">3</span>
-
-    <span class="number">4</span><span class="subst">-</span><span class="number">3</span><span class="subst">-</span><span class="number">2</span>
-   <span class="subst">/</span>    <span class="subst">|</span>
-<span class="built_in">null</span>    <span class="number">1</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-再移动<span class="number">4</span>
-</code></pre><blockquote>
-<p>这种方式就不需要额外的空间，也只需要遍历一遍即可。</p>
-</blockquote>
-<a id="more"></a>
-<h2 id="代码">代码</h2><p>具体的代码如下，链表节点的数据结构为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> val;</span><br><span class="line">	<span class="keyword">public</span> Node next;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> val,Node next)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.val=val;</span><br><span class="line">		<span class="keyword">this</span>.next=next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>则其翻转的函数为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">revert</span><span class="params">(Node head)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Node temp=head.next;</span><br><span class="line">	Node p=<span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">while</span>(temp.next!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		p=temp.next;<span class="comment">//保存1号的下一个节点</span></span><br><span class="line">		temp.next=p.next;<span class="comment">//将1号的下一个节点删除</span></span><br><span class="line">		p.next=head.next;<span class="comment">//将1号的下一个节点指向链表第一点节点（非头部）</span></span><br><span class="line">		head.next=p;<span class="comment">//更新头部的指向</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>测试的代码为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	Node node4=<span class="keyword">new</span> Node(<span class="number">4</span>,<span class="keyword">null</span>);</span><br><span class="line">	Node node3=<span class="keyword">new</span> Node(<span class="number">3</span>,node4);</span><br><span class="line">	Node node2=<span class="keyword">new</span> Node(<span class="number">2</span>,node3);</span><br><span class="line">	Node node1=<span class="keyword">new</span> Node(<span class="number">1</span>,node2);</span><br><span class="line">	Node head=<span class="keyword">new</span> Node(-<span class="number">1</span>,node1);</span><br><span class="line">	print(head);</span><br><span class="line">	revert(head);</span><br><span class="line">	print(head);</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>最终的输出为</p>
-<pre><code>1,2,3,4,
-4,3,2,1,
-</code></pre><h2 id="参考">参考</h2><ol>
-<li><a href="http://blog.csdn.net/chuyuqing/article/details/44457665" target="_blank" rel="external">http://blog.csdn.net/chuyuqing/article/details/44457665</a></li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>将链表<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>翻转成<span class="number">4</span>-&gt;<span class="number">3</span>-&gt;<span class="number">2</span>-&gt;<span class="number">1</span>。
-</code></pre><h2 id="解题">解题</h2><p>最简单就是遍历链表，然后保存到一个数组中，然后再向后构建数组，当然，这种方式不好，会有额外开销。-_-<br>这里来介绍一下另一种方法：<br>假设现在的链表是</p>
-<pre><code><span class="built_in">null</span><span class="subst">-&gt;</span><span class="number">1</span><span class="subst">-&gt;</span><span class="number">2</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-</code></pre><p>如果我们想办法将2移到1的前面，然后3又移到2的前面，最后将4移动3的前面，这不就完了嘛？<br>好，现在开始移动：</p>
-<pre><code>    <span class="number">2</span>
-   <span class="subst">/</span> <span class="subst">\</span> 
-<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-将<span class="number">1</span>指向<span class="number">2</span>的next，然后将<span class="number">2</span>的next指向head的next，然后head的next指向<span class="number">2</span>
-
-    <span class="number">3</span><span class="subst">-</span><span class="number">2</span>
-   <span class="subst">/</span>  <span class="subst">|</span>
-<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-然后再移动<span class="number">3</span>
-
-    <span class="number">4</span><span class="subst">-</span><span class="number">3</span><span class="subst">-</span><span class="number">2</span>
-   <span class="subst">/</span>    <span class="subst">|</span>
-<span class="built_in">null</span>    <span class="number">1</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-再移动<span class="number">4</span>
-</code></pre><blockquote>
-<p>这种方式就不需要额外的空间，也只需要遍历一遍即可。</p>
-</blockquote>]]>
     
     </summary>
     
