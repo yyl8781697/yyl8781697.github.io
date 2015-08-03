@@ -82,6 +82,308 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/30/Effective Java/Enum-And-Annotation/" title="《Effective Java》第六章：枚举和注解" itemprop="url">《Effective Java》第六章：枚举和注解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T15:57:33.000Z" itemprop="datePublished"> 发表于 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="第30条：用枚举代替int常量">第30条：用枚举代替int常量</h2><p>在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式就是声明一组具名的<code>int</code>常量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_FUJI			=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_PIPPIN		=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_GRANNY_SMITH	=<span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
+<p>但是它又诸多的缺点：</p>
+<ul>
+<li>在类型安全性和使用方便性方面没有任何帮助。</li>
+<li>如果关联的<code>int</code>放生了变化，客户端必须得重新编译。</li>
+<li>打印调试的时候只能打印数字</li>
+</ul>
+<p>上述<code>int</code>常量如何使用枚举类实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> APPLE&#123;FUJI,PIPPIN,GRANNY_SMITH&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>除了编码简单之外，枚举的特点还有：</p>
+<ul>
+<li>枚举是类型安全的（所有可以作为单例的泛型化来使用）。</li>
+<li>可以增加或者重新排列枚举类型中的常量，而无需重新编译它的客户端代码。</li>
+<li>可以通过<code>toString</code>方法来打印可视的字符串。</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/Effective Java/Enum-And-Annotation/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/Effective Java/Enum-And-Annotation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/Effective Java/Enum-And-Annotation/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/24/Scala/Study-And-User-JSON4S/" title="学习和使用Scala的Json解析类库-JSON4S" itemprop="url">学习和使用Scala的Json解析类库-JSON4S</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-24T02:12:14.000Z" itemprop="datePublished"> 发表于 2015-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="介绍">介绍</h2><p>在<code>Scala</code>环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(<em>AST</em>),而<code>JSON4S</code>这个项目的目标就是提供一个单一的<em>AST</em>树供其他<code>Scala</code>类库来使用。</p>
+<p><img src="https://camo.githubusercontent.com/67e5a0a48c91139ac30d2ecbfd6d6b020e8688a2/68747470733a2f2f7261772e6769746875622e636f6d2f6a736f6e34732f6a736f6e34732f332e332f636f72652f6a736f6e2e706e67" alt="JSON4S工作原理"></p>
+<p><code>JSON4S</code>的features：</p>
+<ul>
+<li>快速的<code>JSON</code>解析</li>
+<li><code>LINQ</code> 风格的查询</li>
+<li>可以紧密结合样例类</li>
+<li>差别比较和合并</li>
+<li>使用<code>DSL</code>来生成有效格式的<code>JSON</code></li>
+<li>支持<code>XPATH</code></li>
+<li>优雅的打印</li>
+<li>支持<code>XML</code>的转换</li>
+<li>序列化</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/24/Scala/Study-And-User-JSON4S/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Json4s/">Json4s</a><a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/24/Scala/Study-And-User-JSON4S/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/24/Scala/Study-And-User-JSON4S/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/23/Effective Java/Generic/" title="《Effective Java》第五章：泛型" itemprop="url">《Effective Java》第五章：泛型</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-23T15:05:33.000Z" itemprop="datePublished"> 发表于 2015-05-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>泛型，可以告诉编译器每个集合中接受哪些对象类型，编译器会自动地为你的插入进行转化，并在编译时告知是否插入了类型错误的对象。(貌似<code>Java</code>里面的泛型都是<strong>伪泛型</strong>吧-_-|)</p>
+<h2 id="第23条：请不要再新代码中使用原生态类型">第23条：请不要再新代码中使用原生态类型</h2><blockquote>
+<p>什么是原生态类型？</p>
+</blockquote>
+<p>类似<code>List&lt;E&gt;</code>,<code>Collection&lt;E&gt;</code>泛型的定义都有一个原生态类型，那就是<code>List</code>,<code>Collection</code>，用他们定义类型也不会出错.</p>
+<blockquote>
+<p>为什么不要使用原生态类型</p>
+</blockquote>
+<p>使用原生态类型的集合类可以插入各种不同的类型，他们在编译时不会进行类型检查，但是运行时遇到错误就会抛出，这样是很不安全的。</p>
+<blockquote>
+<p>我在不确定或者不在乎集合类型的情况下，是不是用原生态类型最好？</p>
+</blockquote>
+<p>还是不要用，可以使用无限制的通配符来替代，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numElementsInCommon</span><span class="params">(Set&lt;?&gt; s1,Set&lt;?&gt; s2)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(Object o:s1)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(s2.contains(o))</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>它是类型安全的，但是无法猜测放入了哪些对象，此时可以使用<strong>泛型</strong>或者<strong>有限制的通配符类型</strong>（下文会描述）。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/23/Effective Java/Generic/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/23/Effective Java/Generic/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/23/Effective Java/Generic/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/" title="自己煮：泡椒牛蛙" itemprop="url">自己煮：泡椒牛蛙</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-16T14:38:59.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>泡椒牛蛙是一道色香味俱全的汉族名菜，属于川菜系。最常见又易烹制，成菜后味咸鲜，肉细嫩，色红亮，泡菜香气浓郁。
+</code></pre><h2 id="食材">食材</h2><ul>
+<li>牛蛙：2只</li>
+<li>油、料酒~~~~</li>
+<li>生姜、大蒜：适量</li>
+<li>莴笋：适量（炒到牛蛙里面的莴笋特别好吃）</li>
+<li>小米椒：一点点就好了（最好还有红灯笼椒，但是没买到-_-）</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Food/">Food</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Food/">Food</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" title="Mac通过ssh连接到Centos时一些问题的解决" itemprop="url">Mac通过ssh连接到Centos时一些问题的解决</a>
   </h1>
   <p class="article-author">By
@@ -543,299 +845,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/26/Scala/Scala-In-My-Eyes/" title="我眼中的Scala-简洁不简单" itemprop="url">我眼中的Scala-简洁不简单</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-26T12:53:19.000Z" itemprop="datePublished"> 发表于 2015-04-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>&#160; &#160; &#160; &#160;由于实验需要在半年前开始接触<code>Scala</code>，之前也学习/使用过<a href="http://www.tiobe.com/content/paperinfo/tpci/tpci_definition.htm">TIOBE</a>榜上Top20中一半左右的编程语言，感觉还是<code>Scala</code>给我印象最深，最近没怎么做相关的开发感觉都开始慢慢淡忘了，上周在技术分享时我对<code>Scala</code>作了一些总结，顺便在这里写下。</p>
-<blockquote>
-<p><code>Scala</code>注意，本文主要是描述我所了解的<code>Scala</code>相关的基础语法，和<code>Java</code>相同得在这里就不再累赘。</p>
-</blockquote>
-<h2 id="我眼中的Scala">我眼中的Scala</h2><pre><code><span class="keyword">Scala</span>是一种基于JVM的编程语言，集成了面向对象和函数式编程的特性，既能处理脚本化得临时任务，又能处理高并发场景下分布式大数据应用。
-</code></pre><p>&#160; &#160; &#160; &#160;<code>Java</code>就是因为有<code>JVM</code>虚拟机才成就了现在的辉煌，<code>Scala</code>同样是运行在<code>JVM</code>，大致可以看做Java的升级版，由于现在大数据大势所趋，各种大数据框架的出现导致了<code>Scala</code>强势崛起！<br>&#160; &#160; &#160; &#160;编程初学者最先接触的应该就是”Hello,World”，而WordCount可以看做大数据编程的入门必学技能，所以现在我们在”Hello,World”上实现CharCount：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Scala Application</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">str=</span>"<span class="title">Hello</span>,<span class="title">wrold</span>"</span><br><span class="line"></span><span class="function"><span class="keyword">val</span> <span class="title">data=str</span></span><br><span class="line"></span>	.split(<span class="type">Array</span>(',',' '))</span><br><span class="line">	.flatMap(<span class="keyword">for</span>(c&lt;-_) <span class="keyword">yield</span> (c,<span class="number">1</span>))  <span class="comment">//好Api</span></span><br><span class="line">	.groupBy(_._1)</span><br><span class="line">	.mapValues(_.size)</span><br><span class="line">		</span><br><span class="line">println(data)</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/26/Scala/Scala-In-My-Eyes/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Scala/">Scala</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Scala/">Scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/26/Scala/Scala-In-My-Eyes/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/26/Scala/Scala-In-My-Eyes/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/22/Effective Java/Create-Destory-Object/" title="《Effective Java》第二章：创建和销毁对象" itemprop="url">《Effective Java》第二章：创建和销毁对象</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-22T12:33:05.000Z" itemprop="datePublished"> 发表于 2015-04-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>本章的主题是创建和销毁对象：何时以及如何创建对象，何时以及如何避免创建对象，如何确保它们能够适时得销毁，以及如何管理对象和销毁之前必须进行的各种清理动作。</p>
-<h2 id="第1条：考虑用静态工厂方法代替构造器">第1条：考虑用静态工厂方法代替构造器</h2><blockquote>
-<p>这条感觉就是推荐我们尽量使用静态方法来生成实例对象。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> b?Boolean.TRUE:Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>推荐的理由如下：</p>
-<ol>
-<li>静态构造方法有自己的名称。（这理由是不是有点。。，个人感觉绝大部分程序猿在创建对象时都是首先尝试<code>new Construct()</code>）</li>
-<li>不必在每次调用它们时都创建一个新的对象。(单例中比较常用吧)</li>
-<li>它们可以返回原返回类型的任何子类型的对象。（<strong>这个特征的确是比较有优势一点</strong>）</li>
-<li>在创建参数化类型实例的时候，它们使代码变得更加简洁。</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/22/Effective Java/Create-Destory-Object/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/22/Effective Java/Create-Destory-Object/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/22/Effective Java/Create-Destory-Object/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/21/Java Base/Enum-Override/" title="关于Java枚举的重写" itemprop="url">关于Java枚举的重写</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-21T12:34:28.000Z" itemprop="datePublished"> 发表于 2015-04-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>对于Java枚举我之前所知道的是<sup>1</sup>：</p>
-<ol>
-<li>枚举本身就是一个类。</li>
-<li>它不能有<code>public</code>的构造函数，这样做可以保证客户代码没有办法新建一个enum的实例。     </li>
-<li>所有枚举值都是<code>public static final</code>的。注意这一点只是针对于枚举值，我们可以和在普通类里面定义变量一样定义其它任何类型的非枚举变量，这些变量可以用任何你想用的修饰符。     </li>
-<li>Enum默认实现了<code>java.lang.Comparable</code>接口。     </li>
-<li>Enum覆载了了<code>toString</code>方法，因此我们如果调用<code>Color.Blue.toString()</code>,默认返回字符串”Blue”.</li>
-<li>Enum提供了一个<code>valueOf</code>方法，这个方法和<code>toString</code>方法是相对应的。调用<code>valueOf(“Blue”)</code>将返回<code>Color.Blue</code>.因此我们在自己重写<code>toString</code>方法的时候就要注意到这一点，一般来说应该相对应地重写<code>valueOf</code>方法。     </li>
-<li>Enum还提供了<code>values</code>方法，这个方法使你能够方便的遍历所有的枚举值</li>
-<li>Enum还有一个<code>oridinal</code>的方法，这个方法返回枚举值在枚举类种的顺序。</li>
-</ol>
-<p>《Effective Java》中写着单例模式推荐的方式是使用<strong>单元素的枚举类</strong>实现，在查资料过程中竟然发现枚举值里面还能重写枚举的方法：</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/21/Java Base/Enum-Override/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Base/">Java Base</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/21/Java Base/Enum-Override/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/21/Java Base/Enum-Override/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/19/Food/Coke-Chicken-feet/" title="自己煮：可口又美味的可乐鸡翅" itemprop="url">自己煮：可口又美味的可乐鸡翅</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-19T12:23:47.000Z" itemprop="datePublished"> 发表于 2015-04-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>喜欢啃鸡爪，喜欢各种做法的鸡爪，包括泡椒凤爪，鸡爪煲，红烧鸡爪等。<br>咱这次做了一次可乐鸡爪，哈哈</p>
-</blockquote>
-<h2 id="食材">食材</h2><ul>
-<li>鸡爪：10个</li>
-<li>油、料酒、酱油~~~~</li>
-<li>生姜、大蒜：适量</li>
-<li>八角、香叶：适量</li>
-<li>辣椒：一点点就好了</li>
-<li>可乐（别太少了，估计3.5元的小瓶装可能不够）</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/19/Food/Coke-Chicken-feet/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Food/">Food</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Food/">Food</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/19/Food/Coke-Chicken-feet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/19/Food/Coke-Chicken-feet/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -858,7 +867,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>26</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>30</sup></a></li>
 		  
 		
 		  
@@ -939,7 +948,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>29</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
 			
 		
 			

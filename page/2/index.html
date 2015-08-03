@@ -82,6 +82,284 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/26/Linux/Find-Command/" title="Linux下的Find命令学习" itemprop="url">Linux下的Find命令学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-26T06:46:14.000Z" itemprop="datePublished"> 发表于 2015-07-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>find</code>命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^<br>注：本文使用的环境是CentOS6.5</p>
+</blockquote>
+<h2 id="Find介绍">Find介绍</h2><pre><code>功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
+语法：<span class="built_in">find</span> 起始目录 寻找条件 操作 
+说明：<span class="built_in">find</span>命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
+</code></pre><p>其实关于<code>Linux</code>下的命令一般通过<code>—help</code>就可以大致入门使用，实在不行再用<code>man</code>来看更为完整版的手册。<br>下面先长长得列一下：<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/26/Linux/Find-Command/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/26/Linux/Find-Command/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/26/Linux/Find-Command/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/25/Algorithm/The-Longest-Palindrome/" title="对策字符串的最大长度" itemprop="url">对策字符串的最大长度</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-25T07:03:19.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>输入一个字符串,输出该字符串中对称的子字符串的最大长度。比如输入字符串 “google”,由于该字符串里最长的对称子字符串是“goog”,因此输出 4。
+</code></pre><h2 id="解析">解析</h2><p>该题目比较直观的解法有：</p>
+<ol>
+<li>暴力法：遍历所有可能的子串，然后判断子串是否为回文，故总得复杂度为O(n^3)</li>
+<li>遍历字符串，以当前遍历为中心点，然后向两边扩展，直至扩展到不是回文，总复杂度为O(n^2)</li>
+</ol>
+<p>还有后缀树也可以解，不过需要较大的空间，本文使用的是manacher算法：</p>
+<pre><code>Manacher最早发现了可以用<span class="function"><span class="title">O</span><span class="params">(n)</span></span>的时间复杂度来解决该问题，所以这种方法称之为Manacher算法。
+</code></pre><p>现在以查询字符串”abaab”为例，该算法为了将”aba”和”baab” 奇偶形式统一考虑，做了一个很精妙的预处理：每每两个字符串以及两端都加一个标志符号#，就形成了<br>“#a#b#a#a#b#”新字符串，那么”aba”则可以看做”#a#b#a#”，同时”baab”转为#b#a#a#b#”，就都为奇数形式了<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/25/Algorithm/The-Longest-Palindrome/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/25/Algorithm/The-Longest-Palindrome/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/The-Longest-Palindrome/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" title="求旋转数组中的最小值" itemprop="url">求旋转数组中的最小值</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-25T02:42:58.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>题目:把一个数组最开始的若干个元素搬到数组的末尾,我们称之为数组的旋转。输入一个 排好序的数组的一个旋转,
+输出旋转数组的最小元素。例如数组<span class="list">{3, 4, 5, 1, 2}</span>为<span class="list">{1, 2, 3, 4, 5}</span>的一个旋转,该数 组的最小值为 <span class="number">1</span>。
+</code></pre><h2 id="解析">解析</h2><blockquote>
+<p>该题最容易想到的就是遍历，但是他的复杂度是O(n)，而作为面试题肯定是需要我们找出一种更优的方法</p>
+</blockquote>
+<p>这里使用可以二分法来解决该问题,假设数组a的长度为n，现在使用二分法过程中左端索引s,右端索引t，则中间位置为m=s+(t-s)/2<br>首先可以知道旋转数组在旋转之后a[0]&gt;a[n-1]是肯定成立的，</p>
+<p>当a[s]&lt;=a[m]的时候，我们应该进去右侧继续查找，比如a[0]<a[2] 接下来我们只需要找a[3~4]即可（注意a[m]都已经大于a[s]了，所以这里取右侧的时候m舍去的）
+同理，当a[s]>a[m]的时候 进入左侧继续搜索，直到<br>可以发现当a[s]&lt;=a[t]的时候  a[s]肯定就是最小值了。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/" title="左边的数都小于等 于它,右边的数都大于等于它" itemprop="url">左边的数都小于等 于它,右边的数都大于等于它</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-25T00:52:50.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
+</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/Left-Lte-Right-Gte/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/24/Algorithm/x-exponent/" title="数值的整数次方" itemprop="url">数值的整数次方</a>
   </h1>
   <p class="article-author">By
@@ -494,272 +772,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/18/Algorithm/CardStraight/" title="从52张牌中随意取5张，看是否能组成顺子" itemprop="url">从52张牌中随意取5张，看是否能组成顺子</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-18T15:23:27.000Z" itemprop="datePublished"> 发表于 2015-07-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>从52张牌中随意取5张，看是否能组成顺子
-其中1~k 表示1~13  大小王可以代替任意数字
-</code></pre><h2 id="解题">解题</h2><p>首先可以将牌映射到数组上，然后将数组排序<br>在使用左右两端的指针向中间靠<br>如果左指针与接下来的值相差1或者接下来的值时大小王 则过到下一个<br>否则判断右指针是否有大小王  有的话右指针左移一位<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/18/Algorithm/CardStraight/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/18/Algorithm/CardStraight/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/18/Algorithm/CardStraight/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/18/Algorithm/Put-Upside-Down-Stack/" title="使用递归的方法将栈颠倒" itemprop="url">使用递归的方法将栈颠倒</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-17T16:33:15.000Z" itemprop="datePublished"> 发表于 2015-07-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>使用递归的方法将栈颠倒
-</code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1<br>先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1<br>那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/18/Algorithm/Put-Upside-Down-Stack/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/18/Algorithm/Put-Upside-Down-Stack/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/18/Algorithm/Put-Upside-Down-Stack/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/17/Algorithm/DeleteNode-In-O1/" title="在O(1)时间内删除一个单链表上指定的节点" itemprop="url">在O(1)时间内删除一个单链表上指定的节点</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-16T23:19:56.000Z" itemprop="datePublished"> 发表于 2015-07-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>在<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span></span>时间内删除一个单链表上指定的节点
-</code></pre><h2 id="解题">解题</h2><p>这题主要是需要O(1)的复杂度，我们之前一般删除节点的方法都是找到要删除节点p，然后p.parent.next=p.next就可以了，但是那个复杂度是O(n)</p>
-<p>不过这里有一种我称为狸猫换太子的方法来解决这个问题<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/17/Algorithm/DeleteNode-In-O1/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/17/Algorithm/DeleteNode-In-O1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/17/Algorithm/DeleteNode-In-O1/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/16/Algorithm/Print-Tail-Head/" title="链表的逆序输出" itemprop="url">链表的逆序输出</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-16T15:52:12.000Z" itemprop="datePublished"> 发表于 2015-07-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="问题">问题</h2><pre><code>如何将一个链表进行逆序输出，比如<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>的链表输出为<span class="number">4321</span>
-</code></pre><h2 id="解题">解题</h2><ol>
-<li>最方便可能就是先讲原生链表翻转，再按翻转的输出，这样会破坏原有链表的结构</li>
-<li>第二种就是先遍历存放到一个数组或者栈中，然后从后往前输出即可，就需要额外的O(n)空间。</li>
-</ol>
-<p>这两种方法都是需要额外的复杂度或者空间，网络行流传更好的方法就是使用递归-_-! 神方法啊，递归一次即可。。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/16/Algorithm/Print-Tail-Head/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/16/Algorithm/Print-Tail-Head/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/16/Algorithm/Print-Tail-Head/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -782,7 +794,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>26</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>30</sup></a></li>
 		  
 		
 		  
@@ -863,7 +875,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>29</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
 			
 		
 			
