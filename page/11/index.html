@@ -82,6 +82,164 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/06/28/LeetCode/LeetCode-Path-Sum-II/" title="LeetCode-Path Sum II" itemprop="url">LeetCode-Path Sum II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-06-28T13:00:04.000Z" itemprop="datePublished"> 发表于 2014-06-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Problem:<br>Given a binary tree and a sum, find all root-to-leaf paths where each path’s sum equals the given sum.</p>
+<p>For example:<br>Given the below binary tree and <code>sum = 22</code>,</p>
+<pre><code>      <span class="number">5</span>
+     / <span class="string">\</span>
+    <span class="number">4</span>   <span class="number">8</span>
+   /   / <span class="string">\</span>
+  <span class="number">11</span>  <span class="number">13</span>  <span class="number">4</span>
+ /  <span class="string">\</span>      <span class="string">\</span>
+<span class="number">7</span>    <span class="number">2</span>      <span class="number">1</span>
+</code></pre><p>return</p>
+<pre><code>[
+   [<span class="number">5</span>,<span class="number">4</span>,<span class="number">11</span>,<span class="number">2</span>],
+   [<span class="number">5</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">5</span>]
+]
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for binary tree</span><br><span class="line"> * public class TreeNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     TreeNode left;</span><br><span class="line"> *     TreeNode right;</span><br><span class="line"> *     TreeNode(int x) &#123; val = x; &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; pathSum(TreeNode root, <span class="keyword">int</span> sum) &#123;</span><br><span class="line">		</span><br><span class="line">		List&lt;List&lt;Integer&gt;&gt; pathList=<span class="keyword">new</span> ArrayList&lt;List&lt;Integer&gt;&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(root!=<span class="keyword">null</span>)</span><br><span class="line">			pathSearch(pathList,<span class="keyword">new</span> Stack&lt;Integer&gt;(),root,sum);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> pathList;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pathSearch</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; pathList,Stack&lt;Integer&gt; curPath,TreeNode node,<span class="keyword">int</span> sum)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(node!=<span class="keyword">null</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			curPath.push(node.val);</span><br><span class="line">			sum-=node.val;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>(node.left==<span class="keyword">null</span> &amp;&amp; node.right==<span class="keyword">null</span>&amp;&amp;sum==<span class="number">0</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				pathList.add(Collections.list(((Stack&lt;Integer&gt;)curPath.clone()).elements()));</span><br><span class="line">			&#125;</span><br><span class="line">		</span><br><span class="line">			pathSearch(pathList,curPath,node.left,sum);</span><br><span class="line">			pathSearch(pathList,curPath,node.right,sum);</span><br><span class="line">			curPath.pop();</span><br><span class="line"></span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/06/28/LeetCode/LeetCode-Path-Sum-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/06/28/LeetCode/LeetCode-Path-Sum-II/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/06/27/LeetCode/LeetCode-Path-Sum/" title="LeetCode-Path Sum" itemprop="url">LeetCode-Path Sum</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-06-27T13:00:04.000Z" itemprop="datePublished"> 发表于 2014-06-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Problem:<br>Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.</p>
+<p>For example:<br>Given the below binary tree and <code>sum = 22</code>,</p>
+<pre><code>      <span class="number">5</span>
+     / <span class="string">\</span>
+    <span class="number">4</span>   <span class="number">8</span>
+   /   / <span class="string">\</span>
+  <span class="number">11</span>  <span class="number">13</span>  <span class="number">4</span>
+ /  <span class="string">\</span>      <span class="string">\</span>
+<span class="number">7</span>    <span class="number">2</span>      <span class="number">1</span>
+</code></pre><p>return true, as there exist a root-to-leaf path <code>5-&gt;4-&gt;11-&gt;2</code> which sum is 22.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for binary tree</span><br><span class="line"> * public class TreeNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     TreeNode left;</span><br><span class="line"> *     TreeNode right;</span><br><span class="line"> *     TreeNode(int x) &#123; val = x; &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	 </span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasPathSum</span><span class="params">(TreeNode root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">		 <span class="keyword">if</span>(root == <span class="keyword">null</span>)</span><br><span class="line">		 		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">		 	</span><br><span class="line">		 	sum-=root.val;</span><br><span class="line">		 	</span><br><span class="line">		 	<span class="keyword">if</span>(root.left ==<span class="keyword">null</span> &amp;&amp; root.right==<span class="keyword">null</span>)</span><br><span class="line">		 		<span class="keyword">return</span> sum==<span class="number">0</span>;</span><br><span class="line">		 	<span class="function"><span class="keyword">else</span></span><br><span class="line">		 		return <span class="title">hasPathSum</span><span class="params">(root.left,sum)</span> || <span class="title">hasPathSum</span><span class="params">(root.right,sum)</span></span>;</span><br><span class="line">	 &#125;</span><br><span class="line">	 </span><br><span class="line">	 </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/06/27/LeetCode/LeetCode-Path-Sum/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/06/27/LeetCode/LeetCode-Path-Sum/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/06/26/LeetCode/LeetCode-Reverse-Integer/" title="LeetCode-Max Points on a Line" itemprop="url">LeetCode-Max Points on a Line</a>
   </h1>
   <p class="article-author">By
@@ -652,147 +810,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2013/02/25/Dotnet/handler-jquery-ajax/" title="在ashx中利用反射+jquery轻松处理ajax 含Demo源码" itemprop="url">在ashx中利用反射+jquery轻松处理ajax 含Demo源码</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2013-02-25T14:08:20.000Z" itemprop="datePublished"> 发表于 2013-02-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>&#160; &#160; &#160; &#160;由于jquery的出现，编写js代码已经变得异常的平民化，同时现在的web也已经是ajax满天飞，哪天你自己写一个web不含ajax的拿不出手<br>当然，在.net的控件模式开发中一种去控件化开发已经变的变得更加通用：jquery+ajax+ashx  这种方式更加适用于一些小应用的开发，轻量、简单、自由<br>由于那时候太年轻，刚刚开始这种模式开发的时候 是一个ajax请求一个ashx页面，这样的结果可想而知，一个小的权限系统光光ashx文件就几十个了，而且文件名还大同小异，悲剧。</p>
-<p>&#160; &#160; &#160; &#160;后来做了一会儿变聪明了，把相同类别的请求都放到一个ashx文件中，每个请求传一个请求标志  通过switch来调用相应的请求方法，当然，这样要比原来好多了，至少没那么多ashx文件了，但是  每新建一个文件都要去添加switch方法，蛋疼啊  有木有，更加可耻的是 每次增删改一个请求都要去修改那个可恶的switch语句，烦啊</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2013/02/25/Dotnet/handler-jquery-ajax/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2013/02/25/Dotnet/handler-jquery-ajax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/02/25/Dotnet/handler-jquery-ajax/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2012/12/07/Dotnet/csharp-socket-udp/" title="用c#写的一个局域网聊天客户端 类似小飞鸽" itemprop="url">用c#写的一个局域网聊天客户端 类似小飞鸽</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2012-12-07T01:35:20.000Z" itemprop="datePublished"> 发表于 2012-12-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>最紧在公司实习，新人不给活干，就自己随便看看，了解一些DevExpress控件啊，编码规范啊之类的，自己就寻思着写一点点小东西练习练习</p>
-<p>出于自己对c# socket这块不熟，就选择了这块，顺便可以进一步了解委托 代理。</p>
-<p>闲话不说，先说下这次做的东西：一个局域网聊天的小软件  主要基于udp的通信，如果读者还不知道udp or tcp  那请度娘一下。。。</p>
-<h3 id="基本思路">基本思路</h3><blockquote>
-<p>这也都是网上查的，还查了飞鸽传书的 基本原理，在此感谢网上的各位高手哈：</p>
-</blockquote>
-<ol>
-<li>软件开启的时候先新开一个线程，该线程充当服务器端，一直死循环监听</li>
-<li>开了新线程了，调用广播的方法</li>
-<li>此时如果局域网内已经有有其它主机打开了这个软件，将会监听到这个广播，收到这个广播后将返回自己的主机，并且将监听到的主机添加自己的在线列表中，当然，发起广播的软件也能收到其它软件的回信，收到他们的主机后也加入自己的在线列表，这样各自的列表就都能建立起来，并且将当前的列表加入一个静态的泛型列表中（用于以后和其它用户的通信，维护他们的状态）</li>
-<li>通信 发送消息：双击一个主机列表后  得到该主机host 传到交谈窗体 并查询出他主机的endpoint，这样就可以进行本机和向该endpoint点发送消息了</li>
-<li>下线 下线之前软件会发一个下线的广播，其它的软件接到该广播的时候将会将该主机从自己的在线列表中移除</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2012/12/07/Dotnet/csharp-socket-udp/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/CSharp/">CSharp</a><a href="/tags/socket/">socket</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2012/12/07/Dotnet/csharp-socket-udp/#comments" class="ds-thread-count comments-count-link" data-thread-key="2012/12/07/Dotnet/csharp-socket-udp/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
@@ -815,7 +832,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>30</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>32</sup></a></li>
 		  
 		
 		  
@@ -896,7 +913,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>35</sup></a></li>
 			
 		
 			

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-08-03T22:44:12.000Z</updated>
+  <updated>2015-08-04T14:16:17.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,92 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[判断当前序列是否是二叉查找树的后续遍历结果]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/04/Algorithm/IsBSTPostOrder/"/>
+    <id>http://yyl8781697.github.io/2015/08/04/Algorithm/IsBSTPostOrder/</id>
+    <published>2015-08-04T13:54:53.000Z</published>
+    <updated>2015-08-04T14:16:17.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个整数数组,判断该数组是不是某二元查找树的后序遍历的结果。 如果是返回 <span class="literal">true</span>,否则返回 <span class="literal">false</span>。
+例如输入 <span class="number">5</span>、<span class="number">7</span>、<span class="number">6</span>、<span class="number">9</span>、<span class="number">11</span>、<span class="number">10</span>、<span class="number">8</span>,由于这一整数序列是如下树的后序遍历结果:
+      <span class="number">8</span> 
+     / <span class="string">\</span>
+    <span class="number">6</span>  <span class="number">10</span> 
+   /<span class="string">\</span>   /<span class="string">\</span> 
+  <span class="number">5</span>  <span class="number">7</span> <span class="number">9</span>  <span class="number">11</span>
+因此返回 <span class="literal">true</span>。
+如果输入 <span class="number">7</span>、<span class="number">4</span>、<span class="number">6</span>、<span class="number">5</span>,没有哪棵树的后序遍历的结果是这个序列,因此返回 <span class="literal">false</span>
+</code></pre><h2 id="解析">解析</h2><p>做该题之前还必须得了解什么是<a href="http://kubicode.me/2015/06/29/Data%20Struct/Binary-Search-Tree/" target="_blank" rel="external">二叉查找树</a><br>最主要的性质就是左子树的任何节点都小于根节点，右子树的任何节点都大于根节点。<br>然后后序遍历的最后一位肯定是根节点，所以，可以得到巧妙的方法为：<br>则该序列的最后一位a[n-1]必定是根节点，然后前面的序列中连续一部分是左子树的遍历，另一部份是右子树的遍历<br>此时需要在前面的序列中查找第一个大于root的节点a[i]<br><a id="more"></a></p>
+<pre><code>来个例子：后序遍历5、7，6，9，11，10，8
+第一次迭代：根节点为8 然后从左遍历过来可以发现9为首个大于8的地方，那么如果再9后面的都大于8的话就可以判断9以及后面的为8的右子树
+此时成立，8的左子树为5,7,6 右子树为9,11,10
+第二次迭代：
+左子树  6为根节点  同理7为6的右子树，5为6的左子树
+右子树  10为根节点  同理11为10的右子树 9为11的左子树
+剩余各个左右子树的各个孩子节点都为空，迭代停止，该序列为后序遍历
+
+再来看7、4，6，5
+其中5为根节点，7为第一个大于5的节点，但是7之后的4小于5，所以7以及后面的数字不可能为5的右子树，同时又不可能为左子树，所以不成立
+</code></pre><h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 通过左右子树的递归序列判断他们是否也能构成二叉查找树即可</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @param</span> left</span><br><span class="line"> *<span class="javadoctag"> @param</span> right</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isBSTPostOrder</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="comment">//这两个小于0的判断都是因为仅存在左子树 或者 仅存在右子树的时候 存在left必定会大于right</span></span><br><span class="line">	<span class="keyword">if</span>(left&gt;=right)</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> root=a[right];</span><br><span class="line">	<span class="keyword">int</span> mid=-<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=left;i&lt;right;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(mid!=-<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(a[i]&lt;root)</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//第一个大于root后面的节点存在小于root的节点  直接返回false</span></span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(a[i]&gt;root)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			mid=i;<span class="comment">//查找第一个大于root的值</span></span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(mid==-<span class="number">1</span>)</span><br><span class="line">		mid=right;<span class="comment">//表示只有左子树</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//分别递归左右子树</span></span><br><span class="line">	<span class="keyword">return</span> isBSTPostOrder(a,left,mid-<span class="number">1</span>) &amp;&amp; isBSTPostOrder(a,mid,right-<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] a=&#123;<span class="number">5</span>,<span class="number">7</span>,<span class="number">6</span>,<span class="number">9</span>,<span class="number">11</span>,<span class="number">10</span>,<span class="number">8</span>&#125;;<span class="comment">//ok</span></span><br><span class="line"><span class="keyword">int</span>[] b=&#123;<span class="number">7</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">5</span>&#125;;<span class="comment">//not ok</span></span><br><span class="line">System.out.println(isBSTPostOrder(a,<span class="number">0</span>,a.length-<span class="number">1</span>));</span><br><span class="line">System.out.println(isBSTPostOrder(b,<span class="number">0</span>,b.length-<span class="number">1</span>));</span><br></pre></td></tr></table></figure></p>
+<pre><code><span class="literal">true</span>
+<span class="literal">false</span>
+</code></pre><h2 id="参考">参考</h2><p>July 微软面试100题 第9题</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个整数数组,判断该数组是不是某二元查找树的后序遍历的结果。 如果是返回 <span class="literal">true</span>,否则返回 <span class="literal">false</span>。
+例如输入 <span class="number">5</span>、<span class="number">7</span>、<span class="number">6</span>、<span class="number">9</span>、<span class="number">11</span>、<span class="number">10</span>、<span class="number">8</span>,由于这一整数序列是如下树的后序遍历结果:
+      <span class="number">8</span> 
+     / <span class="string">\</span>
+    <span class="number">6</span>  <span class="number">10</span> 
+   /<span class="string">\</span>   /<span class="string">\</span> 
+  <span class="number">5</span>  <span class="number">7</span> <span class="number">9</span>  <span class="number">11</span>
+因此返回 <span class="literal">true</span>。
+如果输入 <span class="number">7</span>、<span class="number">4</span>、<span class="number">6</span>、<span class="number">5</span>,没有哪棵树的后序遍历的结果是这个序列,因此返回 <span class="literal">false</span>
+</code></pre><h2 id="解析">解析</h2><p>做该题之前还必须得了解什么是<a href="http://kubicode.me/2015/06/29/Data%20Struct/Binary-Search-Tree/">二叉查找树</a><br>最主要的性质就是左子树的任何节点都小于根节点，右子树的任何节点都大于根节点。<br>然后后序遍历的最后一位肯定是根节点，所以，可以得到巧妙的方法为：<br>则该序列的最后一位a[n-1]必定是根节点，然后前面的序列中连续一部分是左子树的遍历，另一部份是右子树的遍历<br>此时需要在前面的序列中查找第一个大于root的节点a[i]<br>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[删除指定的字符串]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/04/Algorithm/Delete-Specify-String/"/>
+    <id>http://yyl8781697.github.io/2015/08/04/Algorithm/Delete-Specify-String/</id>
+    <published>2015-08-04T13:26:01.000Z</published>
+    <updated>2015-08-04T13:37:16.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>删除指定的字符串
+比如They are students 和 aeiou 则删除之后剩下Thy r stdnts
+</code></pre><h2 id="解析">解析</h2><p>关于此类查找之类的如果能往位图上靠就是最快速的，本题也可以，一个字符是8位，也就是会出现256中情况，所以现在只需要用一个256长度的位图就可以来判断当前字符是否存在待删除的字符字典中。<br><a id="more"></a></p>
+<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用类似位图法的方式来做  复杂度是O(n+m)</span><br><span class="line"> * 因为一个int有32位，如果再要压缩的话 只需要使用8个int数组即可，本代码偷懒使用256个长度</span><br><span class="line"> *<span class="javadoctag"> @param</span> sStr</span><br><span class="line"> *<span class="javadoctag"> @param</span> dStr</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">deleteSpecifyString</span><span class="params">(String sStr,String dStr)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] dict=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">256</span>];<span class="comment">//每个字符8位  则会有256种情况</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;dStr.length();i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dict[dStr.charAt(i)]=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">char</span>[] cs=<span class="keyword">new</span> <span class="keyword">char</span>[sStr.length()];</span><br><span class="line">	<span class="keyword">int</span> t=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;sStr.length();i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(dict[sStr.charAt(i)]==<span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//表示这个字符串不需要删除</span></span><br><span class="line">			cs[t++]=sStr.charAt(i);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> String.valueOf(cs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	String sStr=<span class="string">"They are students"</span>;</span><br><span class="line">	String dStr=<span class="string">"aeiou"</span>;</span><br><span class="line">	</span><br><span class="line">	System.out.println(deleteSpecifyString(sStr,dStr));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code><span class="title">Thy</span> r stdnts
+</code></pre><hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>删除指定的字符串
+比如They are students 和 aeiou 则删除之后剩下Thy r stdnts
+</code></pre><h2 id="解析">解析</h2><p>关于此类查找之类的如果能往位图上靠就是最快速的，本题也可以，一个字符是8位，也就是会出现256中情况，所以现在只需要用一个256长度的位图就可以来判断当前字符是否存在待删除的字符字典中。<br>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[股票买卖，获得最大的收益]]></title>
@@ -1094,93 +1180,6 @@ asdxdsa
 <p>此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^</p>
 </blockquote>
 <p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[打印一个集合所有的子集和]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/19/Algorithm/SubCollection/"/>
-    <id>http://yyl8781697.github.io/2015/07/19/Algorithm/SubCollection/</id>
-    <published>2015-07-19T07:39:20.000Z</published>
-    <updated>2015-07-24T13:45:08.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>打印一个集合所有的子集和，比如<span class="list">{a,b,c}</span>的子集和有<span class="list">{a}</span>,<span class="list">{b}</span>,<span class="list">{c}</span>,<span class="list">{a,b}</span>,<span class="list">{a,c}</span>,<span class="list">{b,c}</span>,<span class="list">{a,b,c}</span>以及 空
-</code></pre><h2 id="解析">解析</h2><p>一个元素个数为n的集合所包含的所有组合的子集个数有2^n个，这样其实就可以将所以集合的情况映射到0~2^n-1个，然后按位取元素即可</p>
-<pre><code>比如<span class="list">{a,b,c}</span>这个三元素的集合按位映射
-<span class="list">{0,0,0}</span>=&gt;空
-<span class="list">{0,0,1}</span>=&gt;<span class="list">{c}</span>
-<span class="list">{0,1,0}</span>=&gt;<span class="list">{b}</span>
-<span class="list">{0,1,1}</span>=&gt;<span class="list">{b,c}</span>
-.
-.
-.
-<span class="list">{1,1,1}</span>=&gt;<span class="list">{a,b,c}</span>
-</code></pre><a id="more"></a>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 将集合映射到位，然后进行与操作,然后一个集合可能含有的子元素最多是2^n个</span><br><span class="line"> *<span class="javadoctag"> @param</span> cs</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">subCollection</span><span class="params">(<span class="keyword">char</span>[] cs)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> len=cs.length,maxNum=<span class="number">1</span>&lt;&lt;len;</span><br><span class="line">	<span class="keyword">int</span> temp=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> mark=<span class="number">0x1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;maxNum;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		temp=i;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;len &amp;&amp; temp!=<span class="number">0</span>;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>((temp&amp;mark)==<span class="number">1</span>)<span class="comment">//取最低位的数字是否为1   </span></span><br><span class="line">			&#123;</span><br><span class="line">				System.out.print(cs[j]);</span><br><span class="line">			&#125;</span><br><span class="line">			temp=temp&gt;&gt;<span class="number">1</span>;<span class="comment">//右移一位</span></span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(<span class="string">""</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最终的复杂度为<code>O(n*2^n)</code>，最主要的是这种方式代码写起来很方便<br>其测试代码为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span>[] cs=&#123;<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>&#125;;</span><br><span class="line">	subCollection(cs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>输出的结果为</p>
-<pre><code><span class="tag">a</span>
-<span class="tag">b</span>
-ab
-c
-ac
-bc
-abc
-</code></pre><h2 id="参考">参考</h2><p>July微软100道面试题  忘了第哪一道 -_-</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>打印一个集合所有的子集和，比如<span class="list">{a,b,c}</span>的子集和有<span class="list">{a}</span>,<span class="list">{b}</span>,<span class="list">{c}</span>,<span class="list">{a,b}</span>,<span class="list">{a,c}</span>,<span class="list">{b,c}</span>,<span class="list">{a,b,c}</span>以及 空
-</code></pre><h2 id="解析">解析</h2><p>一个元素个数为n的集合所包含的所有组合的子集个数有2^n个，这样其实就可以将所以集合的情况映射到0~2^n-1个，然后按位取元素即可</p>
-<pre><code>比如<span class="list">{a,b,c}</span>这个三元素的集合按位映射
-<span class="list">{0,0,0}</span>=&gt;空
-<span class="list">{0,0,1}</span>=&gt;<span class="list">{c}</span>
-<span class="list">{0,1,0}</span>=&gt;<span class="list">{b}</span>
-<span class="list">{0,1,1}</span>=&gt;<span class="list">{b,c}</span>
-.
-.
-.
-<span class="list">{1,1,1}</span>=&gt;<span class="list">{a,b,c}</span>
-</code></pre>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[奇数偶数分离 奇数在左侧,偶数在右侧,要求复杂度为O(N)]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/19/Algorithm/OddEvenSplit/"/>
-    <id>http://yyl8781697.github.io/2015/07/19/Algorithm/OddEvenSplit/</id>
-    <published>2015-07-19T07:20:01.000Z</published>
-    <updated>2015-07-24T13:45:23.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>奇数偶数分离 奇数在左侧  偶数在右侧 要求复杂度为<span class="function"><span class="title">O</span><span class="params">(N)</span></span>
-</code></pre><h2 id="解析">解析</h2><p>本题的难点主要是在O(N)复杂度的要求，但是想想有没有类似对数组左右分离的操作？<br>对，就是快速排序，在使用快速排序的分区中左边都是小于基准，右边都是大于基准<br>所以，同理，现在按照快排分区的思想，左边都是为奇数，右边都是为偶数，基数无论为奇偶皆可<br><a id="more"></a></p>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用快速排序的分区思想，只是&amp;lt;和&amp;gt;变为奇数和偶数而已</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">oddEvenSplit</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(a.length&lt;<span class="number">2</span>)</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> k=a[<span class="number">0</span>],i=<span class="number">0</span>,j=a.length-<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;j)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>((a[j]&amp;<span class="number">1</span>)==<span class="number">0</span> &amp;&amp; i&lt;j)<span class="comment">//从右往左找  直到遇到奇数</span></span><br><span class="line">			j--;</span><br><span class="line">		a[i]=a[j];</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">while</span>((a[i]&amp;<span class="number">1</span>)==<span class="number">1</span> &amp;&amp; i&lt;j)<span class="comment">//从左往右找  直到遇到偶数</span></span><br><span class="line">			i++;</span><br><span class="line">		a[j]=a[i];</span><br><span class="line">	&#125;</span><br><span class="line">	a[i]=k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看下测试代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] a=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;;</span><br><span class="line">	oddEvenSplit(a);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">		System.out.print(a[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>输出的结果为：</p>
-<pre><code>75314628
-</code></pre><p>可以发现这里是以1为基准，1左边的都是奇数，1右边的都是偶数</p>
-<h2 id="参考">参考</h2><p>July微软100道面试题  忘了第哪一道 -_-</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>奇数偶数分离 奇数在左侧  偶数在右侧 要求复杂度为<span class="function"><span class="title">O</span><span class="params">(N)</span></span>
-</code></pre><h2 id="解析">解析</h2><p>本题的难点主要是在O(N)复杂度的要求，但是想想有没有类似对数组左右分离的操作？<br>对，就是快速排序，在使用快速排序的分区中左边都是小于基准，右边都是大于基准<br>所以，同理，现在按照快排分区的思想，左边都是为奇数，右边都是为偶数，基数无论为奇偶皆可<br>]]>
     
     </summary>
     

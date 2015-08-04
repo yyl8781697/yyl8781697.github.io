@@ -82,6 +82,145 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/04/Algorithm/IsBSTPostOrder/" title="判断当前序列是否是二叉查找树的后续遍历结果" itemprop="url">判断当前序列是否是二叉查找树的后续遍历结果</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-04T13:54:53.000Z" itemprop="datePublished"> 发表于 2015-08-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>输入一个整数数组,判断该数组是不是某二元查找树的后序遍历的结果。 如果是返回 <span class="literal">true</span>,否则返回 <span class="literal">false</span>。
+例如输入 <span class="number">5</span>、<span class="number">7</span>、<span class="number">6</span>、<span class="number">9</span>、<span class="number">11</span>、<span class="number">10</span>、<span class="number">8</span>,由于这一整数序列是如下树的后序遍历结果:
+      <span class="number">8</span> 
+     / <span class="string">\</span>
+    <span class="number">6</span>  <span class="number">10</span> 
+   /<span class="string">\</span>   /<span class="string">\</span> 
+  <span class="number">5</span>  <span class="number">7</span> <span class="number">9</span>  <span class="number">11</span>
+因此返回 <span class="literal">true</span>。
+如果输入 <span class="number">7</span>、<span class="number">4</span>、<span class="number">6</span>、<span class="number">5</span>,没有哪棵树的后序遍历的结果是这个序列,因此返回 <span class="literal">false</span>
+</code></pre><h2 id="解析">解析</h2><p>做该题之前还必须得了解什么是<a href="http://kubicode.me/2015/06/29/Data%20Struct/Binary-Search-Tree/">二叉查找树</a><br>最主要的性质就是左子树的任何节点都小于根节点，右子树的任何节点都大于根节点。<br>然后后序遍历的最后一位肯定是根节点，所以，可以得到巧妙的方法为：<br>则该序列的最后一位a[n-1]必定是根节点，然后前面的序列中连续一部分是左子树的遍历，另一部份是右子树的遍历<br>此时需要在前面的序列中查找第一个大于root的节点a[i]<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/04/Algorithm/IsBSTPostOrder/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/04/Algorithm/IsBSTPostOrder/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/04/Algorithm/IsBSTPostOrder/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/04/Algorithm/Delete-Specify-String/" title="删除指定的字符串" itemprop="url">删除指定的字符串</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-04T13:26:01.000Z" itemprop="datePublished"> 发表于 2015-08-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>删除指定的字符串
+比如They are students 和 aeiou 则删除之后剩下Thy r stdnts
+</code></pre><h2 id="解析">解析</h2><p>关于此类查找之类的如果能往位图上靠就是最快速的，本题也可以，一个字符是8位，也就是会出现256中情况，所以现在只需要用一个256长度的位图就可以来判断当前字符是否存在待删除的字符字典中。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/04/Algorithm/Delete-Specify-String/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/04/Algorithm/Delete-Specify-String/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/04/Algorithm/Delete-Specify-String/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/04/Algorithm/Stock/" title="股票买卖，获得最大的收益" itemprop="url">股票买卖，获得最大的收益</a>
   </h1>
   <p class="article-author">By
@@ -628,142 +767,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/30/Algorithm/Put-Array-To-Tree/" title="怎样编写一个程序,把一个有序整数数组放到二叉树中" itemprop="url">怎样编写一个程序,把一个有序整数数组放到二叉树中</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-29T16:12:36.000Z" itemprop="datePublished"> 发表于 2015-07-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>怎样编写一个程序,把一个有序整数数组放到二叉树中?
-</code></pre><h2 id="解析">解析</h2><p>这里都说这个数组是有序了，想想二叉树中对应有序相关的，就是二叉搜索树了。<br>二叉搜索树的根节点大于左侧的值，同时又小于右侧的值，那这样正好取数组的中间值作为根节点<br>然后将两侧分别递归作为左右子节点即可。<br>这种方式建树的另一个好处就是将树还原成数组很方便：直接使用中序遍历或者<a href="http://kubicode.me/2015/07/01/Algorithm/Binary-Search-Tree-2-Double-LinkedList/">用不开辟空间的方法</a><br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/30/Algorithm/Put-Array-To-Tree/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/30/Algorithm/Put-Array-To-Tree/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/30/Algorithm/Put-Array-To-Tree/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/27/Algorithm/Find-Same-Char/" title="a~z 包括大小写与 0~9 组成的 N 个数, 用最快的方式把其中重复的元素挑出来" itemprop="url">a~z 包括大小写与 0~9 组成的 N 个数, 用最快的方式把其中重复的元素挑出来</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-27T15:39:41.000Z" itemprop="datePublished"> 发表于 2015-07-27</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code><span class="literal">a</span>~z 包括大小写与 <span class="number">0</span>~<span class="number">9</span> 组成的 N 个数, 用最快的方式把其中重复的元素挑出来。
-</code></pre><h2 id="解析">解析</h2><p>本题中已经限制了可能出现字符,他们对应的ascii为</p>
-<ul>
-<li>a-z:97~122,</li>
-<li>A-Z:65-90</li>
-<li>0-9:48~57</li>
-</ul>
-<p>所以这里只需要用位图法来存储，并且之用128位即可，就是4个长度的int数组，<br>在操作过程中，如果数组中已经设置了值，则说明当前遍历的为重复，打印出来即可<br>否则，将这个值设置到数组中，整体思路与位排序大致一致，复杂度为O(n)<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/27/Algorithm/Find-Same-Char/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/27/Algorithm/Find-Same-Char/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/27/Algorithm/Find-Same-Char/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -786,7 +789,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>30</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>32</sup></a></li>
 		  
 		
 		  
@@ -867,7 +870,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>35</sup></a></li>
 			
 		
 			
