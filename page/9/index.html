@@ -387,7 +387,51 @@
 </header>
     <div class="article-content">
         
-        
+        <h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
+<blockquote>
+<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。</p>
+</blockquote>
+<p>那能否证明<code>B(N,k)&lt;=ploy(N)</code>呢？<br>先来看下面这个表,其中当前纵向有<code>N</code>，横向表示具体的<code>k</code>值，表中的内容就是需要计算的<code>B(N,k)</code>值</p>
+<ul>
+<li><p>B(2,2)=3，B(3,2)=4 手算-_-<br>  <img src="/img/VC-Dimension/t1.png" width="500px" height="300px"><br>  因为任意两个点都不能被<code>shatter</code>，那么2个点产生的<code>dichotomies</code>不能超过3,同理3个点产生的<code>dichotomies</code>不能超过4</p>
+</li>
+<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能操作2，所以这里最大值都为1</p>
+</li>
+<li><p>B(N,k)=2<sup>N</sup>  当<code>N&lt;k</code><br>  <img src="/img/VC-Dimension/t3.png" width="500px" height="300px"><br>  这里的<code>2<sup>N</sup><2<sup>k<sup></sup></2<sup></code>必然成立，所以最大值直接取2<sup>N</sup>，不然多余选的点也都是重复的。</p>
+</li>
+<li><p>B(N,k)=2<sup>N</sup>-1  当<code>N=k</code><br>  <img src="/img/VC-Dimension/t4.png" width="500px" height="300px"><br>  在<code>N=k</code>的情况下满足全部不可能（点的所有组合为不可能），但是这里再减去一种就可以满足了</p>
+</li>
+<li><p>B(N,k)&lt;=B(N-1,k)+B(N-1,k-1)  当<code>N&gt;k</code><br>  <img src="/img/VC-Dimension/t5.png" width="500px" height="300px"><br>  表中新添的值为上限的上限，耐心地看下上图的推导-_-</p>
+<ol>
+<li>通过计算机暴力求解B(4,3)=11,(一种16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
+<li>现在将<code>x<sub>4</sub></code>这个点遮掉<br> <img src="/img/VC-Dimension/d2.png" width="500px" height="300px"></li>
+<li>同时将蓝色的遮掉<br> <img src="/img/VC-Dimension/d3.png" width="500px" height="300px"><br> 这里不能多余2个点被<code>shatter</code></li>
+<li>整理之后就可以得到如下关系式<br> <img src="/img/VC-Dimension/d4.png" width="300px" height="200px"></li>
+<li>写成通用式子为<br> <img src="/img/VC-Dimension/d5.png" width="300px" height="200px"><br> 即得解^_^</li>
+</ol>
+</li>
+</ul>
+<p>根据上限的上限的递推式，再结合数学归纳法可以得到<br><img src="/img/VC-Dimension/sg.png" width="300px" height="200px"><br>它的最高项的指数是<code>k-1</code></p>
+<p>那么现在：</p>
+<ol>
+<li><code>Growth Function</code>会被上限<code>B(N,k)</code> bound住</li>
+<li>而<code>B(N,k)</code> 又会被上限的上限bound住</li>
+<li>这个上限的上限的多项式和<code>break point</code>点有关</li>
+<li>所以可以得出结果，只要<code>break point</code>点存在，那么他的<code>Growth Function</code>最终会是一个多项式</li>
+</ol>
+<p>但是然并卵，<code>m<sub>H</sub>(N)</code>并无法直接代入到之前的<br><img src="/img/VC-Dimension/rbl.png" width="400px" height="200px"></p>
+<blockquote>
+<p>主要是因为：<code>E<sub>in</sub>(h)</code>的<code>hypothesis</code>可能取值是有限个的，但<code>E<sub>out</sub>(h)</code>的可能取值是无限的。可以通过将<code>E<sub>out</sub>(h)</code> 替换为验证集(verification set) 的<code>E<sub>in</sub>‘</code>来解决这个问题。<br><img src="/img/VC-Dimension/einp.png" width="500px" height="200px"></p>
+</blockquote>
+<p>好，那么接下来主要经历如下三个步骤：</p>
+<ol>
+<li>使用<code>E<sub>in</sub>‘<code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></code></code></li>
+<li>这样最终可能出现的<code>H(x1,x2..xn,x1’,x2’…xn’)</code><br> <img src="/img/VC-Dimension/s2.png" width="500px" height="200px"></li>
+<li>使用不替换的<code>Hoeffding</code><br> <img src="/img/VC-Dimension/s3.png" width="500px" height="200px"></li>
+</ol>
+<p>最终得到了著名的<code>VC Bound</code><br><img src="/img/VC-Dimension/vc.png" width="500px" height="200px"></p>
+<pre><code>那么终于可以说明空间存在有限的break point，并且采样的资料量N够多，就可以保证找到一个<span class="function"><span class="title">Ein</span><span class="params">(h)</span></span>最小的时候，得到最小的<span class="function"><span class="title">Eout</span><span class="params">(h)</span></span>,也就是说明Learning的可行性
+</code></pre>
         
         
         <p class="article-more-link">
