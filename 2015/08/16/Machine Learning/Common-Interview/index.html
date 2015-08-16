@@ -1,0 +1,733 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>机器学习常见面试题整理 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="有监督学习和无监督学习的区别
+有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）
+无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)
+
+正则化正则化是针对过拟合而提出的，以为在求解模型最优的是一般优化最小的经验风险，现在在该经验风险上加入模型复杂度这一项（正则化项是模型参数向量的范数），">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习常见面试题整理">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/08/16/Machine Learning/Common-Interview/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="有监督学习和无监督学习的区别
+有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）
+无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)
+
+正则化正则化是针对过拟合而提出的，以为在求解模型最优的是一般优化最小的经验风险，现在在该经验风险上加入模型复杂度这一项（正则化项是模型参数向量的范数），">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习常见面试题整理">
+<meta name="twitter:description" content="有监督学习和无监督学习的区别
+有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）
+无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)
+
+正则化正则化是针对过拟合而提出的，以为在求解模型最优的是一般优化最小的经验风险，现在在该经验风险上加入模型复杂度这一项（正则化项是模型参数向量的范数），">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/16/Machine Learning/Common-Interview/" title="机器学习常见面试题整理" itemprop="url">机器学习常见面试题整理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-15T23:39:47.000Z" itemprop="datePublished"> 发表于 2015-08-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#有监督学习和无监督学习的区别"><span class="toc-number">1.</span> <span class="toc-text">有监督学习和无监督学习的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则化"><span class="toc-number">2.</span> <span class="toc-text">正则化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过拟合"><span class="toc-number">3.</span> <span class="toc-text">过拟合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#产生的原因"><span class="toc-number">3.1.</span> <span class="toc-text">产生的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方法"><span class="toc-number">3.2.</span> <span class="toc-text">解决方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛化能力"><span class="toc-number">4.</span> <span class="toc-text">泛化能力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成模型和判别模型"><span class="toc-number">5.</span> <span class="toc-text">生成模型和判别模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线性分类器与非线性分类器的区别以及优劣"><span class="toc-number">6.</span> <span class="toc-text">线性分类器与非线性分类器的区别以及优劣</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特征比数据量还大时，选择什么样的分类器？"><span class="toc-number">6.1.</span> <span class="toc-text">特征比数据量还大时，选择什么样的分类器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对于维度很高的特征，你是选择线性还是非线性分类器？"><span class="toc-number">6.2.</span> <span class="toc-text">对于维度很高的特征，你是选择线性还是非线性分类器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对于维度极低的特征，你是选择线性还是非线性分类器？"><span class="toc-number">6.3.</span> <span class="toc-text">对于维度极低的特征，你是选择线性还是非线性分类器？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ill-condition病态问题"><span class="toc-number">7.</span> <span class="toc-text">ill-condition病态问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#L1和L2正则的区别，如何选择L1和L2正则"><span class="toc-number">8.</span> <span class="toc-text">L1和L2正则的区别，如何选择L1和L2正则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征向量的归一化方法"><span class="toc-number">9.</span> <span class="toc-text">特征向量的归一化方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征向量的异常值处理"><span class="toc-number">10.</span> <span class="toc-text">特征向量的异常值处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#越小的参数说明模型越简单"><span class="toc-number">11.</span> <span class="toc-text">越小的参数说明模型越简单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#svm中rbf核函数与高斯和函数的比较"><span class="toc-number">12.</span> <span class="toc-text">svm中rbf核函数与高斯和函数的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROC、AUC"><span class="toc-number">13.</span> <span class="toc-text">ROC、AUC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ROC曲线"><span class="toc-number">13.1.</span> <span class="toc-text">ROC曲线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AUC"><span class="toc-number">13.2.</span> <span class="toc-text">AUC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要使用ROC和AUC"><span class="toc-number">13.3.</span> <span class="toc-text">为什么要使用ROC和AUC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试集和训练集的区别"><span class="toc-number">14.</span> <span class="toc-text">测试集和训练集的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化Kmeans"><span class="toc-number">15.</span> <span class="toc-text">优化Kmeans</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据挖掘和机器学习的区别"><span class="toc-number">16.</span> <span class="toc-text">数据挖掘和机器学习的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#备注"><span class="toc-number">17.</span> <span class="toc-text">备注</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="有监督学习和无监督学习的区别">有监督学习和无监督学习的区别</h2><ul>
+<li>有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）</li>
+<li>无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)</li>
+</ul>
+<h2 id="正则化">正则化</h2><p>正则化是针对过拟合而提出的，以为在求解模型最优的是一般优化最小的经验风险，现在在该经验风险上加入模型复杂度这一项（正则化项是模型参数向量的范数），并使用一个rate比率来权衡模型复杂度与以往经验风险的权重，如果模型复杂度越高，结构化的经验风险会越大，现在的目标就变为了结构经验风险的最优化，可以防止模型训练过度复杂，有效的降低过拟合的风险。</p>
+<blockquote>
+<p>奥卡姆剃刀原理，能够很好的解释已知数据并且十分简单才是最好的模型。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="过拟合">过拟合</h2><p>如果一味的去提高训练数据的预测能力，所选模型的复杂度往往会很高，这种现象称为过拟合。所表现的就是模型训练时候的误差很小，但在测试的时候误差很大。</p>
+<h3 id="产生的原因">产生的原因</h3><ol>
+<li>因为参数太多，会导致我们的模型复杂度上升，容易过拟合</li>
+<li>权值学习迭代次数足够多(Overtraining),拟合了训练数据中的噪声和训练样例中没有代表性的特征.</li>
+</ol>
+<h3 id="解决方法">解决方法</h3><ol>
+<li>交叉验证法</li>
+<li>减少特征</li>
+<li>正则化</li>
+<li>权值衰减</li>
+<li>验证数据</li>
+</ol>
+<h2 id="泛化能力">泛化能力</h2><p>泛化能力是指模型对未知数据的预测能力</p>
+<h2 id="生成模型和判别模型">生成模型和判别模型</h2><ol>
+<li>生成模型：由数据学习联合概率分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测的模型，即生成模型：P(Y|X)= P(X,Y)/ P(X)。（朴素贝叶斯）<br> 生成模型可以还原联合概率分布p(X,Y)，并且有较快的学习收敛速度，还可以用于隐变量的学习</li>
+<li>判别模型：由数据直接学习决策函数Y=f(X)或者条件概率分布P(Y|X)作为预测的模型，即判别模型。（k近邻、决策树）<br> 直接面对预测，往往准确率较高，直接对数据在各种程度上的抽象，所以可以简化模型</li>
+</ol>
+<h2 id="线性分类器与非线性分类器的区别以及优劣">线性分类器与非线性分类器的区别以及优劣</h2><p>如果模型是参数的线性函数，并且存在线性分类面，那么就是线性分类器，否则不是。<br>常见的线性分类器有：LR,贝叶斯分类，单层感知机、线性回归<br>常见的非线性分类器：决策树、RF、GBDT、多层感知机</p>
+<blockquote>
+<p>SVM两种都有(看线性核还是高斯核)</p>
+</blockquote>
+<ul>
+<li>线性分类器速度快、编程方便，但是可能拟合效果不会很好</li>
+<li>非线性分类器编程复杂，但是效果拟合能力强</li>
+</ul>
+<h3 id="特征比数据量还大时，选择什么样的分类器？">特征比数据量还大时，选择什么样的分类器？</h3><p>线性分类器，因为维度高的时候，数据一般在维度空间里面会比较稀疏，很有可能线性可分</p>
+<h3 id="对于维度很高的特征，你是选择线性还是非线性分类器？">对于维度很高的特征，你是选择线性还是非线性分类器？</h3><p>理由同上</p>
+<h3 id="对于维度极低的特征，你是选择线性还是非线性分类器？">对于维度极低的特征，你是选择线性还是非线性分类器？</h3><p>非线性分类器，因为低维空间可能很多特征都跑到一起了，导致线性不可分</p>
+<h2 id="ill-condition病态问题">ill-condition病态问题</h2><p>训练完的模型测试样本稍作修改就会得到差别很大的结果，就是病态问题（这简直是不能用啊）</p>
+<h2 id="L1和L2正则的区别，如何选择L1和L2正则">L1和L2正则的区别，如何选择L1和L2正则</h2><blockquote>
+<p>他们都是可以防止过拟合，降低模型复杂度</p>
+</blockquote>
+<ul>
+<li>L1是在loss function后面加上 模型参数的1范数（也就是|xi|）</li>
+<li><p>L2是在loss function后面加上 模型参数的2范数（也就是sigma(xi^2)），注意L2范数的定义是sqrt(sigma(xi^2))，在正则项上没有添加sqrt根号是为了更加容易优化</p>
+</li>
+<li><p>L1 会产生稀疏的特征</p>
+</li>
+<li>L2 会产生更多地特征但是都会接近于0 </li>
+</ul>
+<p>L1会趋向于产生少量的特征，而其他的特征都是0，而L2会选择更多的特征，这些特征都会接近于0。L1在特征选择时候非常有用，而L2就只是一种规则化而已。</p>
+<h2 id="特征向量的归一化方法">特征向量的归一化方法</h2><ol>
+<li>线性函数转换，表达式如下：y=(x-MinValue)/(MaxValue-MinValue)</li>
+<li>对数函数转换，表达式如下：y=log10 (x)</li>
+<li>反余切函数转换 ，表达式如下：y=arctan(x)*2/PI</li>
+<li>减去均值，乘以方差：y=(x-means)/ variance</li>
+</ol>
+<h2 id="特征向量的异常值处理">特征向量的异常值处理</h2><ol>
+<li>用均值或者其他统计量代替</li>
+</ol>
+<h2 id="越小的参数说明模型越简单">越小的参数说明模型越简单</h2><p>过拟合的，拟合会经过曲面的每个点，也就是说在较小的区间里面可能会有较大的曲率，这里的导数就是很大，线性模型里面的权值就是导数，所以越小的参数说明模型越简单。</p>
+<blockquote>
+<p>这个其实可以看VC维相关的东西感觉更加合适</p>
+</blockquote>
+<h2 id="svm中rbf核函数与高斯和函数的比较">svm中rbf核函数与高斯和函数的比较</h2><p>高斯核函数好像是RBF核的一种</p>
+<h2 id="ROC、AUC">ROC、AUC</h2><p>ROC和AUC通常是用来评价一个二值分类器的好坏</p>
+<h3 id="ROC曲线">ROC曲线</h3><p>曲线坐标上：</p>
+<ul>
+<li>X轴是FPR（表示假阳率-预测结果为positive，但是实际结果为negitive，FP/(N)）</li>
+<li>Y轴式TPR（表示真阳率-预测结果为positive，而且的确真实结果也为positive的,TP/P）</li>
+</ul>
+<p>那么平面的上点(X,Y)：</p>
+<ul>
+<li>(0,1)表示所有的positive的样本都预测出来了，分类效果最好</li>
+<li>(0,0)表示预测的结果全部为negitive</li>
+<li>(1,0)表示预测的错过全部分错了，分类效果最差</li>
+<li>(1,1)表示预测的结果全部为positive<blockquote>
+<p>针对落在x=y上点，表示是采用随机猜测出来的结果</p>
+</blockquote>
+</li>
+</ul>
+<p>ROC曲线建立<br>一般默认预测完成之后会有一个概率输出p，这个概率越高，表示它对positive的概率越大。<br>现在假设我们有一个threshold，如果p&gt;threshold，那么该预测结果为positive，否则为negitive，按照这个思路，我们多设置几个threshold,那么我们就可以得到多组positive和negitive的结果了，也就是我们可以得到多组FPR和TPR值了<br>将这些(FPR,TPR)点投射到坐标上再用线连接起来就是ROC曲线了</p>
+<blockquote>
+<p>当threshold取1和0时，分别得到的就是(0,0)和(1,1)这两个点。（threshold=1，预测的样本全部为负样本，threshold=0，预测的样本全部为正样本）</p>
+</blockquote>
+<h3 id="AUC">AUC</h3><p>AUC(Area Under Curve)被定义为ROC曲线下的面积，显然这个面积不会大于1（一般情况下ROC会在x=y的上方，所以0.5&lt;AUC&lt;1）.</p>
+<blockquote>
+<p>AUC越大说明分类效果越好</p>
+</blockquote>
+<h3 id="为什么要使用ROC和AUC">为什么要使用ROC和AUC</h3><p>因为当测试集中的正负样本发生变化时，ROC曲线能基本保持不变，但是precision和recall可能就会有较大的波动。<br><a href="http://www.douban.com/note/284051363/?type=like" target="_blank" rel="external">http://www.douban.com/note/284051363/?type=like</a></p>
+<h2 id="测试集和训练集的区别">测试集和训练集的区别</h2><p>训练集用于建立模型,测试集评估模型的预测等能力</p>
+<h2 id="优化Kmeans">优化Kmeans</h2><p>使用kd树或者ball tree(这个树不懂)<br>将所有的观测实例构建成一颗kd树，之前每个聚类中心都是需要和每个观测点做依次距离计算，现在这些聚类中心根据kd树只需要计算附近的一个局部区域即可</p>
+<h2 id="数据挖掘和机器学习的区别">数据挖掘和机器学习的区别</h2><p>机器学习是数据挖掘的一个重要工具，但是数据挖掘不仅仅只有机器学习这一类方法，还有其他很多非机器学习的方法，比如图挖掘，频繁项挖掘等。感觉数据挖掘是从目的而言的，但是机器学习是从方法而言的。</p>
+<h2 id="备注">备注</h2><p>题目主要来源于网络，答案主要来源于网络或者《统计学习方法》，还有自己一小部分的总结，如果错误之处敬请指出</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/08/16/Machine Learning/Common-Interview/" data-title="机器学习常见面试题整理 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" title="机器学习常见算法个人总结（面试用）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  机器学习常见算法个人总结（面试用）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/08/11/Algorithm/Intelligence-Problems/"  title="一些面试常见的智力题啦">
+ <strong>下一篇：</strong><br/> 
+ <span>一些面试常见的智力题啦
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/16/Machine Learning/Common-Interview/" data-title="机器学习常见面试题整理" data-url="http://yyl8781697.github.io/2015/08/16/Machine Learning/Common-Interview/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#有监督学习和无监督学习的区别"><span class="toc-number">1.</span> <span class="toc-text">有监督学习和无监督学习的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则化"><span class="toc-number">2.</span> <span class="toc-text">正则化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过拟合"><span class="toc-number">3.</span> <span class="toc-text">过拟合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#产生的原因"><span class="toc-number">3.1.</span> <span class="toc-text">产生的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方法"><span class="toc-number">3.2.</span> <span class="toc-text">解决方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#泛化能力"><span class="toc-number">4.</span> <span class="toc-text">泛化能力</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#生成模型和判别模型"><span class="toc-number">5.</span> <span class="toc-text">生成模型和判别模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线性分类器与非线性分类器的区别以及优劣"><span class="toc-number">6.</span> <span class="toc-text">线性分类器与非线性分类器的区别以及优劣</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特征比数据量还大时，选择什么样的分类器？"><span class="toc-number">6.1.</span> <span class="toc-text">特征比数据量还大时，选择什么样的分类器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对于维度很高的特征，你是选择线性还是非线性分类器？"><span class="toc-number">6.2.</span> <span class="toc-text">对于维度很高的特征，你是选择线性还是非线性分类器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对于维度极低的特征，你是选择线性还是非线性分类器？"><span class="toc-number">6.3.</span> <span class="toc-text">对于维度极低的特征，你是选择线性还是非线性分类器？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ill-condition病态问题"><span class="toc-number">7.</span> <span class="toc-text">ill-condition病态问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#L1和L2正则的区别，如何选择L1和L2正则"><span class="toc-number">8.</span> <span class="toc-text">L1和L2正则的区别，如何选择L1和L2正则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征向量的归一化方法"><span class="toc-number">9.</span> <span class="toc-text">特征向量的归一化方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征向量的异常值处理"><span class="toc-number">10.</span> <span class="toc-text">特征向量的异常值处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#越小的参数说明模型越简单"><span class="toc-number">11.</span> <span class="toc-text">越小的参数说明模型越简单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#svm中rbf核函数与高斯和函数的比较"><span class="toc-number">12.</span> <span class="toc-text">svm中rbf核函数与高斯和函数的比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROC、AUC"><span class="toc-number">13.</span> <span class="toc-text">ROC、AUC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ROC曲线"><span class="toc-number">13.1.</span> <span class="toc-text">ROC曲线</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AUC"><span class="toc-number">13.2.</span> <span class="toc-text">AUC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要使用ROC和AUC"><span class="toc-number">13.3.</span> <span class="toc-text">为什么要使用ROC和AUC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试集和训练集的区别"><span class="toc-number">14.</span> <span class="toc-text">测试集和训练集的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#优化Kmeans"><span class="toc-number">15.</span> <span class="toc-text">优化Kmeans</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据挖掘和机器学习的区别"><span class="toc-number">16.</span> <span class="toc-text">数据挖掘和机器学习的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#备注"><span class="toc-number">17.</span> <span class="toc-text">备注</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

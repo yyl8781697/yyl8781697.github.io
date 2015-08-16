@@ -1,0 +1,683 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Learning is Possible  | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Hoeffding不等式下面有一个罐子罐子中的球是橙色的概率是μ，现从罐子中取出N个数量的球作为样本，其中样本中含橙色求的概率是ν，那么μ和ν是否会接近呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Learning is Possible ">
+<meta property="og:url" content="http://yyl8781697.github.io/2014/08/09/Machine Learning/Learning-Is-Possible/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Hoeffding不等式下面有一个罐子罐子中的球是橙色的概率是μ，现从罐子中取出N个数量的球作为样本，其中样本中含橙色求的概率是ν，那么μ和ν是否会接近呢？">
+<meta property="og:image" content="/img/Learning-Is-Possible/guanzi.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/hfi.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/le.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/lf.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/eio.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/rl.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/cl.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/mpla.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/plk.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/plk2.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/plk3.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/s.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/mh.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/rays.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/int.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/sc.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/mhv.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/qd.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/bp.png">
+<meta property="og:image" content="/img/Learning-Is-Possible/bps.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Learning is Possible ">
+<meta name="twitter:description" content="Hoeffding不等式下面有一个罐子罐子中的球是橙色的概率是μ，现从罐子中取出N个数量的球作为样本，其中样本中含橙色求的概率是ν，那么μ和ν是否会接近呢？">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/09/Machine Learning/Learning-Is-Possible/" title="《台大机器学习基石》Learning is Possible " itemprop="url">《台大机器学习基石》Learning is Possible </a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-08-09T10:55:28.000Z" itemprop="datePublished"> 发表于 2014-08-09</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hoeffding不等式"><span class="toc-number">1.</span> <span class="toc-text">Hoeffding不等式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用于Learning"><span class="toc-number">2.</span> <span class="toc-text">应用于Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于M的无限大问题"><span class="toc-number">3.</span> <span class="toc-text">关于M的无限大问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px"><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br><a id="more"></a><br>这里有一个叫做<code>Hoeffding不等式</code>可以来解释该问题<br><img src="/img/Learning-Is-Possible/hfi.png" height="140px" width="540px"><br>大致的表述就是<code>μ</code>与<code>ν</code>之差的绝对值小于<code>ξ</code>的概率为<code>2exp(-2ξ<sup>2</sup>N)</code>（这个概率也叫坏事发生的几率，林老师的叫法真的很kwy ^_^）,<code>ξ</code>越小，<code>μ</code>与<code>ν</code>越接近，其概率：</p>
+<ul>
+<li><code>ξ</code>越大，坏事发生的几率越小，但是<code>ξ</code>真的很大时，坏事发不发生已经么啥意义了-_-</li>
+<li><code>N</code>越大，坏事发生的几率越小，<code>μ</code>与<code>ν</code>会越来越接近,所以取样时大一点可以增加准确率.<blockquote>
+<p>将<code>N</code>取到总得数量，那就是<code>μ</code>=<code>ν</code></p>
+</blockquote>
+</li>
+</ul>
+<pre><code><span class="attribute">这里的‘μ</span>=<span class="string">ν’的状态问题称为probably approximately correct（PAC）问题，表示大概差不多是对的。 </span>
+</code></pre><p>所以，取的样本够大的时候，未知的<code>μ</code>可以从已知的<code>ν</code>推论出来，并且他们俩是类似的。</p>
+<h2 id="应用于Learning">应用于Learning</h2><p>假设当前一个学习算法的最终的实际假设是<code>f(x)</code>(一般是未知的)，其<code>h(x)</code>表示采样了之后的假设，其<code>y<sub>n</sub></code>为对应样本上的目标值。<br><img src="/img/Learning-Is-Possible/le.png" height="200px" width="340px"><br>这里的<code>E<sub>out</sub>h(x)</code>和<code>E<sub>in</sub>h(x)</code>正好就是对应上一节的<code>μ</code>=<code>ν</code><br><code>Hoeffding不等式</code>同样是适用于Learning问题<br><img src="/img/Learning-Is-Possible/lf.png" height="240px" width="540px"><br>所以在Learning的时候，可以从<code>E<sub>in</sub>h(x)</code>来推断出<code>E<sub>out</sub>h(x)</code>，也就是我们的Learning目的<br><img src="/img/Learning-Is-Possible/eio.png" height="240px" width="340px"></p>
+<p>上面如果能得到一个很小的<code>E<sub>in</sub>h(x)</code>，当然是皆大欢喜，此时<code>g’=f’</code>(g,f分别对应h(x)和f(x)对应的线/假设)，但是要知道其实在算法上其实有很多h可以选，那时候选择到得<code>E<sub>in</sub>h(x)</code>比较大得时候，那就比较悲催了，所以真实地学习应该是：<br><img src="/img/Learning-Is-Possible/rl.png" height="240px" width="340px"><br>像<code>PLA</code>一样选一根最优的线。</p>
+<p><code>Hoeffding不等式</code>只能保证<code>E<sub>in</sub>h(x)</code>和<code>E<sub>out</sub>h(x)</code>会有一个较大的几率说明他俩是相似的，但是无法保证在非常多得假设下(h(x))下，<code>E<sub>in</sub>h(x)</code>的值时比较小，那如果最终<code>E<sub>in</sub>h(x)</code>的值比较大，那么最终学习的算法就不好了，这个也叫做踩雷过程(这也可能使由于样本原因造成的)<br><img src="/img/Learning-Is-Possible/cl.png" height="440px" width="440px"><br>现在有<code>M</code>个假设，同时数据集可能会有表中的几个样本采样出来，<code>BAD</code>标志就是表示当前假设下在对应的样本上是踩雷了(<code>E<sub>in</sub>h(x)</code>)很大</p>
+<blockquote>
+<p>但是学习算法最希望的就是自由的选择具体假设下，能够得到具体的<code>BAD</code>几率</p>
+</blockquote>
+<p>这里可以使用联合<code>bound</code>的方式来求总体的<code>BAD</code>几率<br><img src="/img/Learning-Is-Possible/mpla.png" height="240px" width="540px"><br>从式子中可以发现最终的几率是加上了<code>M</code>的<code>Hoeffding不等式</code>几率</p>
+<h2 id="关于M的无限大问题">关于M的无限大问题</h2><p>上面知道<code>M</code>表示所有假设，而比如在<code>PLA</code>问题中可以了解到其实平面上会有无数条线，也就是无数条假设(M)，那这样其实上一小节中计算出来的几率会变无限大吗？那不是白搭了嘛-_-</p>
+<p>这里先换个思路想一下：<br><img src="/img/Learning-Is-Possible/plk.png" height="240px" width="240px"><br>上图的<code>PLA</code>只有一个点，上面画了可能存在的三条线，其实可以发现这两条实线是一个含义，这里只有两种线而已(一虚一实)<br>再者看一下两个点的<br><img src="/img/Learning-Is-Possible/plk2.png" height="340px" width="540px"><br>它就会有四种线<br>还有看一下三个点得<br><img src="/img/Learning-Is-Possible/plk3.png" height="440px" width="540px"><br>它最终会有八种线(其实如果这三个点成一条直线或者重叠在一个点上面的话不会有这么多)<br>再推演下去会有这么一个规律<br><img src="/img/Learning-Is-Possible/s.png" height="340px" width="200px"><br>在二维上，平面上划分这些点的种类数总是小于<code>2^N</code></p>
+<p>现在假设使用<code>m<sub>H</sub>(N)</code>来表示<code>N</code>个点的时候可能出现的最大分类线种数<code>dichotomies</code><br><img src="/img/Learning-Is-Possible/mh.png" height="240px" width="540px"><br>那么这个<code>m<sub>H</sub>(N)</code>的上界就是<code>2^N</code>，这个函数也叫做成长函数(Growth Function)</p>
+<p>现在综合看一下其他维度的成长函数值:</p>
+<ul>
+<li>一维的二分类 <code>N+1</code><br>  <img src="/img/Learning-Is-Possible/rays.png" height="400px" width="400px"></li>
+<li>一维的二分类（使用中间区间分开） <code>1/2*N<sup>2</sup>+1/2*N+1</code><br>  <img src="/img/Learning-Is-Possible/int.png" height="400px" width="400px"></li>
+<li>可以绕成一圈的凸集合 <code>2<sup>N</sup></code><br>  <img src="/img/Learning-Is-Possible/sc.png" height="400px" width="400px"><blockquote>
+<p>这里类似凸集的情况下N个点可能hold住<code>2<sup>N</sup></code>分类面的情况叫<code>shattered</code></p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/img/Learning-Is-Possible/mhv.png" height="300px" width="500px"><br>那么好了，如果<code>m<sub>H</sub>(N)</code>能直接取代<code>M</code>,同时<code>m<sub>H</sub>(N)</code>为多项式的话，<code>N</code>越大，那个这个<code>upbound</code>会越来越小，或者接近于0<br><img src="/img/Learning-Is-Possible/qd.png" height="300px" width="500px"></p>
+<p>现在来看一个<code>break point</code>的概念<br><img src="/img/Learning-Is-Possible/bp.png" height="300px" width="400px"><br>表示第一个无法<code>shattered</code>的点,比如在上面<code>lines in 2D</code>的图里面在3个点的时候最多有8条线(2^3)，正好是<code>shattered</code>,但是到了4个点的时候最多只有14条线，此时就无法<code>shattered</code>,故4就是<code>2D-PLA</code>的<code>break point</code>，同理<br><img src="/img/Learning-Is-Possible/bps.png" height="300px" width="400px"><br>那么这里可以通过推算最终可以知道<code>m<sub>H</sub>(N)=O(N^(k-1))</code>（具体证明要看看下一个视频VC维相关）,其中这里的<code>k</code>表示<code>break point</code>，这样就可以说上上上面的<code>m<sub>H</sub>(N)</code>能直接取代<code>M</code>是有效的</p>
+<h2 id="总结">总结</h2><p>所以当算法的该含有一个有限的<code>break point</code>的时候，并且采样的资料量<code>N</code>够多，就可以保证找到一个<code>E<sub>in</sub>h(x)</code>最小的时候，得到最小的<code>E<sub>out</sub>h(x)</code>,也就是说明Learning的可行性。（好绕）^_^</p>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第三讲</li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2014/08/09/Machine Learning/Learning-Is-Possible/" data-title="《台大机器学习基石》Learning is Possible  | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/15/Machine Learning/VC-Dimension/" title="《台大机器学习基石》VC Dimension">
+  <strong>上一篇：</strong><br/>
+  <span>
+  《台大机器学习基石》VC Dimension</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/"  title="《台大机器学习基石》Perceptron Learning Algorithm ">
+ <strong>下一篇：</strong><br/> 
+ <span>《台大机器学习基石》Perceptron Learning Algorithm 
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2014/08/09/Machine Learning/Learning-Is-Possible/" data-title="《台大机器学习基石》Learning is Possible " data-url="http://yyl8781697.github.io/2014/08/09/Machine Learning/Learning-Is-Possible/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hoeffding不等式"><span class="toc-number">1.</span> <span class="toc-text">Hoeffding不等式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用于Learning"><span class="toc-number">2.</span> <span class="toc-text">应用于Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于M的无限大问题"><span class="toc-number">3.</span> <span class="toc-text">关于M的无限大问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

@@ -1,0 +1,981 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>机器学习常见算法个人总结（面试用） | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="朴素贝叶斯P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)所以有：P(A|B)=P(B|A)*P(A)/P(B)
+对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别
+工作原理
+假设现在有样本x=(a1,a2,a3,…an)这个待分类项(并认为x里面的特征独立)
+再假设现在有分类目标Y={y1,y2,y3,y4..yn}
+那么max(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习常见算法个人总结（面试用）">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="朴素贝叶斯P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)所以有：P(A|B)=P(B|A)*P(A)/P(B)
+对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别
+工作原理
+假设现在有样本x=(a1,a2,a3,…an)这个待分类项(并认为x里面的特征独立)
+再假设现在有分类目标Y={y1,y2,y3,y4..yn}
+那么max(">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习常见算法个人总结（面试用）">
+<meta name="twitter:description" content="朴素贝叶斯P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)所以有：P(A|B)=P(B|A)*P(A)/P(B)
+对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别
+工作原理
+假设现在有样本x=(a1,a2,a3,…an)这个待分类项(并认为x里面的特征独立)
+再假设现在有分类目标Y={y1,y2,y3,y4..yn}
+那么max(">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" title="机器学习常见算法个人总结（面试用）" itemprop="url">机器学习常见算法个人总结（面试用）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-15T23:40:29.000Z" itemprop="datePublished"> 发表于 2015-08-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#朴素贝叶斯"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工作原理"><span class="toc-number">1.1.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作流程"><span class="toc-number">1.2.</span> <span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性特征"><span class="toc-number">1.3.</span> <span class="toc-text">属性特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Laplace校准(拉普拉斯校验)"><span class="toc-number">1.4.</span> <span class="toc-text">Laplace校准(拉普拉斯校验)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遇到特征之间不独立问题"><span class="toc-number">1.5.</span> <span class="toc-text">遇到特征之间不独立问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点"><span class="toc-number">1.6.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逻辑回归和线性回归"><span class="toc-number">2.</span> <span class="toc-text">逻辑回归和线性回归</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#梯度下降法"><span class="toc-number">2.1.</span> <span class="toc-text">梯度下降法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他优化方法"><span class="toc-number">2.2.</span> <span class="toc-text">其他优化方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于LR的过拟合问题："><span class="toc-number">2.3.</span> <span class="toc-text">关于LR的过拟合问题：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于LR的多分类：softmax"><span class="toc-number">2.4.</span> <span class="toc-text">关于LR的多分类：softmax</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于softmax和k个LR的选择"><span class="toc-number">2.5.</span> <span class="toc-text">关于softmax和k个LR的选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KNN算法"><span class="toc-number">3.</span> <span class="toc-text">KNN算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#三要素："><span class="toc-number">3.1.</span> <span class="toc-text">三要素：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#k值的选择"><span class="toc-number">3.2.</span> <span class="toc-text">k值的选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KNN的回归"><span class="toc-number">3.3.</span> <span class="toc-text">KNN的回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点："><span class="toc-number">3.4.</span> <span class="toc-text">优缺点：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KD树"><span class="toc-number">3.5.</span> <span class="toc-text">KD树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构造KD树"><span class="toc-number">3.5.1.</span> <span class="toc-text">构造KD树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#KD树的搜索"><span class="toc-number">3.5.2.</span> <span class="toc-text">KD树的搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#KD树进行KNN查找"><span class="toc-number">3.5.3.</span> <span class="toc-text">KD树进行KNN查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#KD树搜索的复杂度"><span class="toc-number">3.5.4.</span> <span class="toc-text">KD树搜索的复杂度</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVM、SMO"><span class="toc-number">4.</span> <span class="toc-text">SVM、SMO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线性SVM问题"><span class="toc-number">4.1.</span> <span class="toc-text">线性SVM问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对偶求解"><span class="toc-number">4.1.1.</span> <span class="toc-text">对偶求解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#损失函数"><span class="toc-number">4.2.</span> <span class="toc-text">损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要引入对偶算法"><span class="toc-number">4.3.</span> <span class="toc-text">为什么要引入对偶算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#核函数"><span class="toc-number">4.4.</span> <span class="toc-text">核函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVM优缺点"><span class="toc-number">4.5.</span> <span class="toc-text">SVM优缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SMO"><span class="toc-number">4.6.</span> <span class="toc-text">SMO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVM多分类问题"><span class="toc-number">4.7.</span> <span class="toc-text">SVM多分类问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树"><span class="toc-number">5.</span> <span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ID3"><span class="toc-number">5.1.</span> <span class="toc-text">ID3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C4-5"><span class="toc-number">5.2.</span> <span class="toc-text">C4.5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cart"><span class="toc-number">5.3.</span> <span class="toc-text">Cart</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#停止条件"><span class="toc-number">5.4.</span> <span class="toc-text">停止条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于特征与目标值"><span class="toc-number">5.5.</span> <span class="toc-text">关于特征与目标值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#决策树的分类与回归"><span class="toc-number">5.6.</span> <span class="toc-text">决策树的分类与回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#理想的决策树"><span class="toc-number">5.7.</span> <span class="toc-text">理想的决策树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决决策树的过拟合"><span class="toc-number">5.8.</span> <span class="toc-text">解决决策树的过拟合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点-1"><span class="toc-number">5.9.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#随机森林RF"><span class="toc-number">6.</span> <span class="toc-text">随机森林RF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#学习过程"><span class="toc-number">6.1.</span> <span class="toc-text">学习过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预测过程"><span class="toc-number">6.2.</span> <span class="toc-text">预测过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数问题"><span class="toc-number">6.3.</span> <span class="toc-text">参数问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#泛化误差估计"><span class="toc-number">6.4.</span> <span class="toc-text">泛化误差估计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#学习算法"><span class="toc-number">6.5.</span> <span class="toc-text">学习算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于CART"><span class="toc-number">6.6.</span> <span class="toc-text">关于CART</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点-2"><span class="toc-number">6.7.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GBDT"><span class="toc-number">7.</span> <span class="toc-text">GBDT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Shrinkage"><span class="toc-number">7.1.</span> <span class="toc-text">Shrinkage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调参"><span class="toc-number">7.2.</span> <span class="toc-text">调参</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点：-1"><span class="toc-number">7.3.</span> <span class="toc-text">优缺点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BP"><span class="toc-number">8.</span> <span class="toc-text">BP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最小二乘法"><span class="toc-number">9.</span> <span class="toc-text">最小二乘法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EM"><span class="toc-number">10.</span> <span class="toc-text">EM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bagging"><span class="toc-number">11.</span> <span class="toc-text">Bagging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boosting"><span class="toc-number">12.</span> <span class="toc-text">Boosting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#凸优化"><span class="toc-number">13.</span> <span class="toc-text">凸优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#凸集"><span class="toc-number">13.1.</span> <span class="toc-text">凸集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#凸函数"><span class="toc-number">13.2.</span> <span class="toc-text">凸函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#凸优化应用举例"><span class="toc-number">13.3.</span> <span class="toc-text">凸优化应用举例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#备注"><span class="toc-number">14.</span> <span class="toc-text">备注</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="朴素贝叶斯">朴素贝叶斯</h2><p>P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)<br>所以有：P(A|B)=P(B|A)*P(A)/P(B)</p>
+<p>对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别</p>
+<h3 id="工作原理">工作原理</h3><ol>
+<li>假设现在有样本x=(a1,a2,a3,…an)这个待分类项(并认为x里面的特征独立)</li>
+<li>再假设现在有分类目标Y={y1,y2,y3,y4..yn}</li>
+<li>那么max(P(y1|x),P(y2|x),P(y3|x)..P(yn|x))中的最大者就是最终的分类类别</li>
+<li>而P(yi|x)=p(x|yi)*P(yi)/P(x)</li>
+<li>因为x对于每个分类目标来说都一样，所以就是求max(P(x|yi)*p(yi))</li>
+<li>P(x|yi)*p(yi)=p(yi)*PI(P(ai|yi))  (PI表示连乘)</li>
+<li>而具体的p(ai|yi)和p(yi)都是能从训练样本中统计出来<br><br> p(ai|yi)表示该类别下该特征出现的概率<br><br> p(yi)表示全部类别中这个这个类别出现的概率</li>
+<li>好的，就是这么工作的^_^</li>
+</ol>
+<a id="more"></a>
+<h3 id="工作流程">工作流程</h3><ol>
+<li>准备阶段<br><br> 确定特征属性，并对每个特征属性进行适当划分，然后由人工对一部分待分类项进行分类，形成训练样本。</li>
+<li>训练阶段<br><br> 计算每个类别在训练样本中的出现频率及每个特征属性划分对每个类别的条件概率估计</li>
+<li>应用阶段<br><br> 使用分类器进行分类，输入是分类器和待分类样本，输出是样本属于的分类类别</li>
+</ol>
+<h3 id="属性特征">属性特征</h3><ol>
+<li>特征为离散值时直接统计即可（表示统计概率）</li>
+<li>特征为连续值的时候假定特征符合高斯分布:g(x,n,u)<br> 那么p(ak|yi)=g(xk,ni,ui)</li>
+</ol>
+<h3 id="Laplace校准(拉普拉斯校验)">Laplace校准(拉普拉斯校验)</h3><p>当某个类别下某个特征划分没有出现时，会有P(a|y)=0，就是导致分类器质量降低，所以此时引入Laplace校验，就是对没类别下所有划分的计数加1。</p>
+<h3 id="遇到特征之间不独立问题">遇到特征之间不独立问题</h3><p>参考改进的贝叶斯网络，使用DAG来进行概率图的描述</p>
+<h3 id="优缺点">优缺点</h3><p>朴素贝叶斯的优点：</p>
+<ol>
+<li>对小规模的数据表现很好，适合多分类任务，适合增量式训练。<br>缺点：</li>
+<li>对输入数据的表达形式很敏感（离散、连续，值极大极小之类的）。</li>
+</ol>
+<p><a href="http://www.cnblogs.com/leoo2sk/archive/2010/09/17/naive-bayesian-classifier.html" target="_blank" rel="external">http://www.cnblogs.com/leoo2sk/archive/2010/09/17/naive-bayesian-classifier.html</a></p>
+<h2 id="逻辑回归和线性回归">逻辑回归和线性回归</h2><pre><code>LR回归是一个线性的二分类模型，主要是计算在某个样本特征下事件发生的概率，比如根据用户的浏览购买情况作为特征来计算它是否会购买这个商品，抑或是它是否会点击这个商品。然后LR的最终值是根据一个线性和函数再通过一个sigmod函数来求得，这个线性和函数权重与特征值的累加以及加上偏置求出来的，所以在训练LR时也就是在训练线性和函数的各个权重值w。
+关于这个权重值w一般使用最大似然法来估计，比如yi=<span class="number">1</span>的概率是pi,则yi=<span class="number">0</span>的概率是<span class="number">1</span>-pi，那么观测概率为<span class="function"><span class="title">p</span><span class="params">(yi)</span></span>=pi^yi*(<span class="number">1</span>-pi)^(<span class="number">1</span>-yi)这个这个最大似然函数为（<span class="function"><span class="title">hw</span><span class="params">(xi)</span></span>^yi*(<span class="number">1</span>-<span class="function"><span class="title">hw</span><span class="params">(xi)</span></span>)^(<span class="number">1</span>-yi)）连乘，对这个似然函数取对数之后就会得到的表达式<span class="function"><span class="title">L</span><span class="params">(w)</span></span>=<span class="function"><span class="title">sigma</span><span class="params">(yi*log(hw(xi)</span></span>)-(<span class="number">1</span>-yi)<span class="function"><span class="title">log</span><span class="params">(<span class="number">1</span>-hw(xi)</span></span>))=<span class="function"><span class="title">sigma</span><span class="params">(yi*(w*xi)</span></span>-<span class="function"><span class="title">log</span><span class="params">(<span class="number">1</span>+exp(w*xi)</span></span>))，估计这个<span class="function"><span class="title">L</span><span class="params">(w)</span></span>的极大值就可以得到w的估计值。
+所以求解问题就变成了这个最大似然函数的最优化问题，这里通常会采样随机梯度下降法和拟牛顿迭代法来进行优化
+</code></pre><h3 id="梯度下降法">梯度下降法</h3><pre><code>如果hw(x)=1/(1-<span class="keyword">e</span>^(-wx))，
+则cost function=-1/<span class="keyword">m</span>* sigma(yi*<span class="literal">log</span>(hw(<span class="keyword">xi</span>)+(1-yi)*<span class="literal">log</span>(1-hw(<span class="keyword">xi</span>)))=<span class="literal">j</span>(w)
+这里就成了就<span class="literal">min</span>(<span class="literal">j</span>(w))
+所以更新w的过程为
+w:=w-lamea*<span class="literal">j</span>(w)'  (求导)
+w:=w-lamea* 1/<span class="keyword">m</span>\*sigma[<span class="keyword">m</span>](hw(<span class="keyword">xi</span>)-yi)*<span class="keyword">xi</span>)
+直到<span class="literal">j</span>(w)不能再的时候停止
+
+梯度下降法的最大问题就是会陷入局部最优，并且每次在对当前样本计算cost的时候都需要去遍历全部样本才能得到cost值，这样计算速度就会慢很多（虽然在计算的时候可以转为矩阵乘法去更新整个w值）
+所以现在好多框架（mahout）中一般使用随机梯度下降法，它在计算cost的时候只计算当前的代价，最终cost是在全部样本迭代一遍之求和得出，还有他在更新当前的参数w的时候并不是依次遍历样本，而是从所有的样本中随机选择一条进行计算，它方法收敛速度快（一般是使用最大迭代次数），并且还可以避免局部最优，并且还很容易并行（使用参数服务器的方式进行并行）
+这里SGD可以改进的地方就是使用动态的梯度值<span class="keyword">alpha</span>=0.04*(1.0+<span class="keyword">n</span>+i)+Rate
+</code></pre><h3 id="其他优化方法">其他优化方法</h3><ul>
+<li>拟牛顿法（记得是需要使用Hessian矩阵和cholesky分解）</li>
+<li>BFGS</li>
+<li>L-BFGS</li>
+</ul>
+<blockquote>
+<p>优缺点：无需选择学习率α，更快，但是更复杂</p>
+</blockquote>
+<h3 id="关于LR的过拟合问题：">关于LR的过拟合问题：</h3><blockquote>
+<p>如果我们有很多的特性，在训练集上拟合得很好，但是在预测集上却达不到这种效果</p>
+</blockquote>
+<pre><code>1. 减少feature个数（人工定义留多少个feature、算法选取这些feature）
+2. 正则化（留下所有的feature，但对于部分feature定义其parameter非常小）
+    在cost上加   lamea(sigma(w^2))
+    同时w的更新变为w:=w-rate* 1/<span class="keyword">m</span>\*sigma[<span class="keyword">m</span>](hw(<span class="keyword">xi</span>)-yi)*<span class="keyword">xi</span>+ （lamea/<span class="keyword">m</span>)*<span class="literal">w</span>
+    注意：这里的w0不受正则化影响
+</code></pre><h3 id="关于LR的多分类：softmax">关于LR的多分类：softmax</h3><pre><code>softmax:假设离散型随机变量Y的取值集合是{<span class="number">1</span>,<span class="number">2</span>,..,k},则多分类的LR为
+P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<span class="comment">(1-1到k求和(wk*x)</span>)    <span class="number">1</span>&amp;<span class="keyword">lt</span>;a&amp;<span class="keyword">lt</span>;k
+这里会输出当前样本下属于哪一类的概率，并且满足全部概率加起来=<span class="number">1</span>
+</code></pre><h3 id="关于softmax和k个LR的选择">关于softmax和k个LR的选择</h3><p>如果类别之间是否互斥（比如音乐只能属于古典音乐、乡村音乐、摇滚月的一种）就用softmax<br>否则类别之前有联系（比如一首歌曲可能有影视原声，也可能包含人声，或者是舞曲），这个时候使用k个LR更为合适</p>
+<p>优缺点：<br>Logistic回归优点：</p>
+<ol>
+<li>实现简单；</li>
+<li>分类时计算量非常小，速度很快，存储资源低；</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>容易欠拟合，一般准确度不太高</li>
+<li>只能处理两分类问题（在此基础上衍生出来的softmax可以用于多分类），且必须线性可分；</li>
+</ol>
+<p><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/18/2595410.html" target="_blank" rel="external">http://www.cnblogs.com/biyeymyhjob/archive/2012/07/18/2595410.html</a><br><a href="http://blog.csdn.net/abcjennifer/article/details/7716281" target="_blank" rel="external">http://blog.csdn.net/abcjennifer/article/details/7716281</a><br><a href="http://ufldl.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92" target="_blank" rel="external">http://ufldl.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92</a></p>
+<h2 id="KNN算法">KNN算法</h2><p>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类</p>
+<h3 id="三要素：">三要素：</h3><ol>
+<li>k值的选择</li>
+<li>距离的度量（常见的距离度量有欧式距离，马氏距离等）</li>
+<li>分类决策规则 （多数表决规则）</li>
+</ol>
+<h3 id="k值的选择">k值的选择</h3><ol>
+<li>k值越小表明模型越复杂，更加容易过拟合</li>
+<li>但是k值越大，模型越简单，如果k=N的时候就表明无论什么点都是训练集中类别最多的那个类</li>
+</ol>
+<blockquote>
+<p>所以一般k会取一个较小的值，然后用过交叉验证来确定<br>这里所谓的交叉验证就是将样本划分一部分出来为预测样本，比如95%训练，5%预测，然后k分别取1，2，3，4，5之类的，进行预测，计算最后的分类误差，选择误差最小的k</p>
+</blockquote>
+<h3 id="KNN的回归">KNN的回归</h3><p>在找到最近的k个实例之后，可以计算这k个实例的平均值作为预测值。或者还可以给这k个实例添加一个权重再求平均值，这个权重与度量距离成反比（越近权重越大）。</p>
+<h3 id="优缺点：">优缺点：</h3><p>KNN算法的优点：</p>
+<ol>
+<li>思想简单，理论成熟，既可以用来做分类也可以用来做回归；</li>
+<li>可用于非线性分类；</li>
+<li>训练时间复杂度为O(n)；</li>
+<li>准确度高，对数据没有假设，对outlier不敏感；</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>计算量大；</li>
+<li>样本不平衡问题（即有些类别的样本数量很多，而其它样本的数量很少）；</li>
+<li>需要大量的内存；</li>
+</ol>
+<h3 id="KD树">KD树</h3><p>KD树是一个二叉树，表示对K维空间的一个划分，可以进行快速检索（那KNN计算的时候不需要对全样本进行距离的计算了）</p>
+<h4 id="构造KD树">构造KD树</h4><p>在k维的空间上循环找子区域的中位数进行划分的过程。<br>假设现在有K维空间的数据集T={x1,x2,x3,…xn},xi={a1,a2,a3..ak}</p>
+<ol>
+<li>首先构造根节点，以坐标a1的中位数b为切分点，将根结点对应的矩形局域划分为两个区域，区域1中a1<b,区域2中a1>b</b,区域2中a1></li>
+<li>构造叶子节点，分别以上面两个区域中a2的中位数作为切分点，再次将他们两两划分，作为深度1的叶子节点，（如果a2=中位数，则a2的实例落在切分面）</li>
+<li>不断重复2的操作，深度为j的叶子节点划分的时候，索取的ai 的i=j%k+1，直到两个子区域没有实例时停止</li>
+</ol>
+<h4 id="KD树的搜索">KD树的搜索</h4><ol>
+<li>首先从根节点开始递归往下找到包含x的叶子节点，每一层都是找对应的xi</li>
+<li>将这个叶子节点认为是当前的“近似最近点”</li>
+<li>递归向上回退，如果以x圆心，以“近似最近点”为半径的球与根节点的另一半子区域边界相交，则说明另一半子区域中存在与x更近的点，则进入另一个子区域中查找该点并且更新”近似最近点“</li>
+<li>重复3的步骤，直到另一子区域与球体不相交或者退回根节点</li>
+<li>最后更新的”近似最近点“与x真正的最近点</li>
+</ol>
+<h4 id="KD树进行KNN查找">KD树进行KNN查找</h4><p>通过KD树的搜索找到与搜索目标最近的点，这样KNN的搜索就可以被限制在空间的局部区域上了，可以大大增加效率。</p>
+<h4 id="KD树搜索的复杂度">KD树搜索的复杂度</h4><p>当实例随机分布的时候，搜索的复杂度为log(N)，N为实例的个数，KD树更加适用于实例数量远大于空间维度的KNN搜索，如果实例的空间维度与实例个数差不多时，它的效率基于等于线性扫描。</p>
+<h2 id="SVM、SMO">SVM、SMO</h2><p>对于样本点(xi,yi)以及svm的超平面：wix+b=0</p>
+<ul>
+<li>函数间隔：yi(wxi+b)</li>
+<li>几何间隔：yi(wxi+b)/||w||,其中||w||为w的L2范数，几何间隔不会因为参数比例的改变而改变</li>
+</ul>
+<blockquote>
+<p>svm的基本想法就是求解能正确划分训练样本并且其几何间隔最大化的超平面。</p>
+</blockquote>
+<h3 id="线性SVM问题">线性SVM问题</h3><p>yi(wxi+b)/||w||&gt;=d  （使用几何间隔）<br>求max(d)<br>那么假设d’=d<em>||w||<br>则将问题转为：yi(wxi+b)&gt;=1,max(d’/||w||)<br>由于d’的成比例增减不会影响实际间距，所以这里的取d’=1，又因为max(1/||w||)=min(1/2\</em>||w||^2)<br>所以最终的问题就变为了<br>yi(wxi+b)&gt;=1,min(1/2*||w||^2)<br>这样就变成了一个凸的二次规划化，可以将其转换为拉格朗日函数，然后使用对偶算法来求解</p>
+<h4 id="对偶求解">对偶求解</h4><p>L(w,b,a)=1/2*||w||^2-sigma(ai*yi(wxi+b))+sigma(ai) 其中a={a1,a2..an}为拉格朗日向量<br>根据对偶性质  原始问题就是求对偶问题的极大极小max[a]min[w,b]L(w,b,a)<br>先求L对w,b的极小，再求对a的极大<br>求min[w,b]L(w,b,a)：<br>L’(w)=w-sigma(aiyixi)=0<br>L’(b)=sigma(aiyi)=0;<br>代入后可得min[w,b]L(w,b,a)=-1/2*sigma(sigma(aiajyiyj(xi·xj)))+sigma(ai)<br>求min[w,b]L(w,b,a)对a的极大<br>max[a] -1/2*sigma(sigma(aiajyiyj(xi·xj)))+sigma(ai)<br>sigma(aiyi)=0<br>转成等价的对偶形式就是<br>min[a] 1/2*sigma(sigma(aiajyiyj(xi·xj)))-sigma(ai)<br>sigma(aiyi)=0</p>
+<p>假如求解出来的a为a^=(a1,a2,…an)<br>则得到最优的w,b分别为<br>w^=sigma(aiyixi)<br>b^=yj-sigma(aiyi(xi·xj))</p>
+<p>所以，最终的决策分类面为<br>f=sign(sigma(aiyi(x·xi))+b^<br>也就是说，分类决策函数只依赖于输入x与训练样本的输入的内积</p>
+<blockquote>
+<p>与分离超平面最近的样本点称为支持向量</p>
+</blockquote>
+<h3 id="损失函数">损失函数</h3><p>经验损失函数:sigma(1-yi(wxi+b))   (注意，如果该值小于0时直接取0即可)<br>合页损失函数：sigma(1-yi(wi+b)) + leama||w||^2 后面的是L2正则项</p>
+<h3 id="为什么要引入对偶算法">为什么要引入对偶算法</h3><ol>
+<li>对偶问题往往更加容易求解(结合拉格朗日和kkt条件)</li>
+<li>可以很自然的引用核函数（拉格朗日表达式里面有内积，而核函数也是通过内积进行映射的）</li>
+</ol>
+<h3 id="核函数">核函数</h3><p>将输入特征x（线性不可分）映射到高维特征R空间，可以在R空间上让SVM进行线性可以变，这就是核函数的作用</p>
+<ul>
+<li>多项式核函数:K(x,z)=(x*z+1)^p</li>
+<li>高斯核函数:K(x,z)=exp(-(x-z)^2/a^2)   a为均值</li>
+<li>字符串核函数：好像用于文本匹配、检索之类的，不懂</li>
+</ul>
+<h3 id="SVM优缺点">SVM优缺点</h3><p>优点：</p>
+<ol>
+<li>使用核函数可以向高维空间进行映射</li>
+<li>使用核函数可以解决非线性的分类</li>
+<li>分类思想很简单，就是将样本与决策面的间隔最大化</li>
+<li>分类效果较好</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>对大规模数据训练比较困难，因为它是用二次规划来求解的</li>
+<li>无法直接支持多分类，但是可以使用间接的方法来做</li>
+</ol>
+<h3 id="SMO">SMO</h3><p>SMO是用于快速求解SVM的<br>它选择凸二次规划的两个变量，其他的变量保持不变，然后根据这两个变量构建一个二次规划问题，这个二次规划关于这两个变量解会更加的接近原始二次规划的解，通过这样的子问题划分可以大大增加整个算法的计算速度，关于这两个变量：</p>
+<ol>
+<li>其中一个是严重违反KKT条件的一个变量</li>
+<li>另一个变量是根据自由约束确定，好像是求剩余变量的最大化来确定的。</li>
+</ol>
+<h3 id="SVM多分类问题">SVM多分类问题</h3><ol>
+<li>直接法<br> 直接在目标函数上进行修改，将多个分类面的参数求解合并到一个最优化问题中，通过求解该优化就可以实现多分类（计算复杂度很高，实现起来较为困难）</li>
+<li>间接法<ol>
+<li>一对多<br><br>其中某个类为一类，其余n-1个类为另一个类，比如A,B,C,D四个类，第一次A为一个类，{B,C,D}为一个类训练一个分类器，第二次B为一个类,{A,C,D}为另一个类,按这方式共需要训练4个分类器，最后在测试的时候将测试样本经过这4个分类器f1(x),f2(x),f3(x)和f4(x),取其最大值为分类器(这种方式由于是1对M分类，会存在偏置，很不实用)</li>
+<li>一对一(libsvm实现的方式)<br><br>任意两个类都训练一个分类器，那么n个类就需要n*(n-1)/2个svm分类器。<br><br>还是以A,B,C,D为例,那么需要{A,B},{A,C},{A,D},{B,C},{B,D},{C,D}为目标共6个分类器，然后在预测的将测试样本通过这6个分类器之后进行投票选择最终结果。（这种方法虽好，但是需要n*(n-1)/2个分类器代价太大，不过有好像使用循环图来进行改进）</li>
+</ol>
+</li>
+</ol>
+<h2 id="决策树">决策树</h2><p>决策树是一颗依托决策而建立起来的树。</p>
+<h3 id="ID3">ID3</h3><ol>
+<li>首先是针对当前的集合，计算每个特征的信息增益</li>
+<li>然后选择信息增益最大的特征作为当前节点的决策决策特征</li>
+<li>根据特征不同的类别划分到不同的子节点（比如年龄特征有青年，中年，老年，则划分到3颗子树）</li>
+<li>然后继续对子节点进行递归，直到所有特征都被划分</li>
+</ol>
+<p>S(C,ai)=-sigma(pi<em>log(pi)) 一个属性中某个类别的熵  pi=P(yi|ai) pi表示ai情况下发生yi的概率，也即是统计概率<br>S(C,A)=sigma(P(A=ai)\</em>S(ai))  整个属性的熵，为各个类别的比例与各自熵的加权求和<br>Gain(C,A)=S(C)-S(C,A) 增益表示分类目标的熵减去当前属性的熵，增益越大，分类能力越强<br>(这里前者叫做经验熵，表示数据集分类C的不确定性，后者就是经验条件熵，表示在给定A的条件下对数据集分类C的不确定性，两者相减叫做互信息，决策树的增益等价于互信息)<br>比如说当前属性是是否拥有房产，分类是是否能偿还债务<br>现在：</p>
+<ul>
+<li>有用房产为7个，4个能偿还债务，3个无法偿还债务</li>
+<li>然后无房产为3个，其中1个能偿还债务，2个无法偿还债务</li>
+</ul>
+<p>然后S(有房产)=-(4/7*log4/7+3/7*log3/7)<br>    S(无房产)=-(1/3*log1/3+2/3*log2/3)<br>    其中S(分类)=-(5/10*log5/10+5/10*log5/10)<br>    最终的增益=S(分类)-(7/10*S(有房产)+3/10*S(无房产))  最大越好</p>
+<p>关于损失函数<br>设树的叶子节点个数为T，t为其中一个叶子节点，该叶子节点有Nt个样本，其中k类的样本有Ntk个，H(t)为叶子节点上的经验熵，则损失函数定义为<br>Ct(T)=sigma(Nt*H(t))+ lamdba |T|<br>其中H(t)=sigma(Ntk/Nt*log(Ntk/Nt))<br>代入可以得到Ct(T)=sigma(sigma(Ntk*log(Ntk/Nt)))+lamdba|T|<br>最终有Ct(T)=C(T)+ lamdba|T|<br>lamdba|T|为正则化项，leama是用于调节比率<br>决策树的生成只考虑了信息增益</p>
+<h3 id="C4-5">C4.5</h3><p>它是ID3的一个改进算法，使用信息增益率来进行属性的选择<br>splitInformation(S,A)=-sigma(|Si|/|S|*log2(|Si|/|S|))<br>GainRatio(S,A)=Gain(S,A)/splitInformation(S,A)</p>
+<p>优缺点：<br>准确率高，但是子构造树的过程中需要进行多次的扫描和排序，所以它的运算效率较低</p>
+<h3 id="Cart">Cart</h3><p>分类回归树(Classification And Regression Tree)是一个决策二叉树，在通过递归的方式建立，每个节点在分裂的时候都是希望通过最好的方式将剩余的样本划分成两类，这里的分类指标：</p>
+<ol>
+<li>分类树：基尼指数最小化(gini_index)</li>
+<li>回归树：平方误差最小化</li>
+</ol>
+<p>分类树：</p>
+<ol>
+<li>首先是根据当前特征计算他们的基尼增益</li>
+<li>选择基尼增益最小的特征作为划分特征</li>
+<li>从该特征中查找基尼指数最小的分类类别作为最优划分点</li>
+<li>将当前样本划分成两类，一类是划分特征的类别等于最优划分点，另一类就是不等于</li>
+<li>针对这两类递归进行上述的划分工作，直达所有叶子指向同一样本目标或者叶子个数小于一定的阈值</li>
+</ol>
+<p>gini用来度量分布不均匀性（或者说不纯），总体的类别越杂乱，GINI指数就越大（跟熵的概念很相似）<br>gini(ai)=1-sigma(pi^2) pi当前数据集中第i类样本的比例<br>gini越小，表示样本分布越均匀（0的时候就表示只有一类了），越大越不均匀<br>基尼增益gini_gain=sigma(Ni/N*gini(ai)) 表示当前属性的一个混乱  Ni/N表示当前类别占所有类别的概率<br>最终Cart选择GiniGain最小的特征作为划分特征</p>
+<p>以ID3中的贷款的那棵树为样例：<br>gini(有房产)=1-((3/7)^2+(4/7)^2)  //基尼指数<br>gini(无房产)=1-((1/3)^2+(2/3)^2)<br>gini_gain=7/10*gini(有房产)+3/10*gini(无房产)  //基尼增益</p>
+<p>回归树：</p>
+<blockquote>
+<p>回归树是以平方误差最小化的准则划分为两块区域</p>
+</blockquote>
+<ol>
+<li>遍历特征计算最优的划分点s，<br> 使其最小化的平方误差是：min{min(R1.sigma((yi-c1)^2))+min(R2.sigma((yi-c2)^2))}<br> 计算根据s划分到左侧和右侧子树的目标值与预测值之差的平方和最小，这里的预测值是两个子树上输入xi样本对应yi的均值</li>
+<li>找到最小的划分特征j以及其最优的划分点s,根据特征j以及划分点s将现有的样本划分为两个区域，一个是在特征j上小于等于s，另一个在在特征j上大于s<br> R1(j)={x|x(j)&lt;=s}、R2(j)={x|x(j)&gt;s}</li>
+<li>进入两个子区域按上述方法继续划分，直到到达停止条件</li>
+</ol>
+<blockquote>
+<p>这里面的最小化我记得可以使用最小二乘法来求</p>
+</blockquote>
+<p>关于剪枝：用独立的验证数据集对训练集生长的树进行剪枝（事后剪枝）。</p>
+<h3 id="停止条件">停止条件</h3><ol>
+<li>直到每个叶子节点都只有一种类型的记录时停止，（这种方式很容易过拟合）</li>
+<li>另一种时当叶子节点的记录树小于一定的阈值或者节点的信息增益小于一定的阈值时停止</li>
+</ol>
+<h3 id="关于特征与目标值">关于特征与目标值</h3><ol>
+<li>特征离散 目标值离散：可以使用ID3，cart</li>
+<li>特征连续 目标值离散：将连续的特征离散化  可以使用ID3，cart</li>
+<li>特征离散 目标值连续</li>
+</ol>
+<h3 id="决策树的分类与回归">决策树的分类与回归</h3><ul>
+<li>分类树<br>  输出叶子节点中所属类别最多的那一类</li>
+<li>回归树<br>  输出叶子节点中各个样本值的平均值</li>
+</ul>
+<h3 id="理想的决策树">理想的决策树</h3><ol>
+<li>叶子节点数尽量少</li>
+<li>叶子节点的深度尽量小(太深可能会过拟合)</li>
+</ol>
+<h3 id="解决决策树的过拟合">解决决策树的过拟合</h3><ol>
+<li>剪枝<ol>
+<li>前置剪枝：在分裂节点的时候设计比较苛刻的条件，如不满足则直接停止分裂（这样干决策树无法到最优，也无法得到比较好的效果）</li>
+<li>后置剪枝：在树建立完之后，用单个节点代替子树，节点的分类采用子树中主要的分类（这种方法比较浪费前面的建立过程）</li>
+</ol>
+</li>
+<li>交叉验证</li>
+<li>随机森林</li>
+</ol>
+<h3 id="优缺点-1">优缺点</h3><p>优点：</p>
+<ol>
+<li>计算量简单，可解释性强，比较适合处理有缺失属性值的样本，能够处理不相关的特征；<br>缺点：</li>
+<li>单颗决策树分类能力弱，并且对连续值变量难以处理；</li>
+<li>容易过拟合（后续出现了随机森林，减小了过拟合现象）；</li>
+</ol>
+<h2 id="随机森林RF">随机森林RF</h2><p>随机森林是有很多随机得决策树构成，它们之间没有关联。得到RF以后，在预测时分别对每一个决策树进行判断，最后使用Bagging的思想进行结果的输出（也就是投票的思想）</p>
+<h3 id="学习过程">学习过程</h3><ol>
+<li>现在有N个训练样本，每个样本的特征为M个，需要建K颗树</li>
+<li>从N个训练样本中有放回的取N个样本作为一组训练集（其余未取到的样本作为预测分类，评估其误差）</li>
+<li>从M个特征中取m个特征左右子集特征(m&lt;&lt;M)</li>
+<li>对采样的数据使用完全分裂的方式来建立决策树，这样的决策树每个节点要么无法分裂，要么所有的样本都指向同一个分类</li>
+<li>重复2的过程K次，即可建立森林</li>
+</ol>
+<h3 id="预测过程">预测过程</h3><ol>
+<li>将预测样本输入到K颗树分别进行预测</li>
+<li>如果是分类问题，直接使用投票的方式选择分类频次最高的类别</li>
+<li>如果是回归问题，使用分类之后的均值作为结果</li>
+</ol>
+<h3 id="参数问题">参数问题</h3><ol>
+<li>这里的一般取m=sqrt(M)</li>
+<li>关于树的个数K，一般都需要成百上千，但是也有具体的样本有关（比如特征数量）</li>
+<li>树的最大深度，（太深可能可能导致过拟合？？）</li>
+<li>节点上的最小样本数、最小信息增益</li>
+</ol>
+<h3 id="泛化误差估计">泛化误差估计</h3><p>使用oob（out-of-bag）进行泛化误差的估计，将各个树的未采样样本作为预测样本（大约有36.8%），使用已经建立好的森林对各个预测样本进行预测，预测完之后最后统计误分得个数占总预测样本的比率作为RF的oob误分率。</p>
+<h3 id="学习算法">学习算法</h3><ol>
+<li>ID3算法：处理离散值的量</li>
+<li>C45算法：处理连续值的量</li>
+<li>Cart算法：离散和连续 两者都合适？</li>
+</ol>
+<h3 id="关于CART">关于CART</h3><p>Cart可以通过特征的选择迭代建立一颗分类树，使得每次的分类平面能最好的将剩余数据分为两类</p>
+<p>gini=1-sigma(pi^2)，表示每个类别出现的概率和与1的差值，<br>分类问题：argmax（Gini-GiniLeft-GiniRight）<br>回归问题argmax(Var-VarLeft-VarRight) </p>
+<p>查找最佳特征f已经最佳属性阈值th  小于th的在左边，大于th的在右边子树</p>
+<h3 id="优缺点-2">优缺点</h3><ol>
+<li>能够处理大量特征的分类，并且还不用做特征选择</li>
+<li>在训练完成之后能给出哪些feature的比较重要</li>
+<li>训练速度很快</li>
+<li>很容易并行</li>
+<li>实现相对来说较为简单</li>
+</ol>
+<h2 id="GBDT">GBDT</h2><blockquote>
+<p>GBDT的精髓在于训练的时候都是以上一颗树的残差为目标，这个残差就是上一个树的预测值与真实值的差值。</p>
+</blockquote>
+<pre><code>比如，当前样本年龄是18岁，那么第一颗会去按18岁来训练，但是训练完之后预测的年龄为12岁，差值为6，所以第二颗树的会以6岁来进行训练，假如训练完之后预测出来的结果为6，那么两棵树累加起来就是真实年龄了，但是假如第二颗树预测出来的结果是5，那么剩余的残差1就会交给第三个树去训练。
+</code></pre><p>Boosting的好处就是每一步的参加就是变相了增加了分错instance的权重，而对已经对的instance趋向于0，这样后面的树就可以更加关注错分的instance的训练了</p>
+<h3 id="Shrinkage">Shrinkage</h3><p>Shrinkage认为，每次走一小步逐步逼近的结果要比每次迈一大步逼近结果更加容易避免过拟合。<br>y(1 ~ i) = y(1 ~ i-1) + step * yi</p>
+<blockquote>
+<p>就像我们做互联网，总是先解决60%用户的需求凑合着，再解决35%用户的需求，最后才关注那5%人的需求，这样就能逐渐把产品做好.</p>
+</blockquote>
+<h3 id="调参">调参</h3><ol>
+<li>树的个数  100~10000</li>
+<li>叶子的深度 3~8</li>
+<li>学习速率    0.01~1</li>
+<li>叶子上最大节点树  20</li>
+<li>训练采样比例 0.5~1</li>
+<li>训练特征采样比例  sqrt(num)</li>
+</ol>
+<h3 id="优缺点：-1">优缺点：</h3><p>优点：</p>
+<ol>
+<li>精度高</li>
+<li>能处理非线性数据</li>
+<li>能处理多特征类型</li>
+<li>适合低维稠密数据<br>缺点：</li>
+<li>并行麻烦（因为上下两颗树有联系）</li>
+<li>多分类的时候 复杂度很大</li>
+</ol>
+<h2 id="BP">BP</h2><h2 id="最小二乘法">最小二乘法</h2><p>最小二乘法是一种数学的优化技术，通过求最小化平方误差来寻找最佳的函数匹配<br>假设现在有二维的观测数据(x1,y1),(x2,y2)…(xn,yn)，求y=a+bx的拟合。</p>
+<p>现设yi=a+bxi+ki 如果有a,b能得到sigma(|ki|)最小，则该线比较理想<br>所以先变为求min(sigma(ki)) ，这个与min(sigma(ki^2))等价<br>而ki=yi-(a+bxi)<br>那么现设f=sigma((yi-(a+bxi))^2)求其最小即可</p>
+<blockquote>
+<p>上述就是最小二乘原则，估计a,b的方法称为最小二乘法</p>
+</blockquote>
+<p>先求f对a,b的偏导：<br>f’(a)=-2*sigma(yi-(a+bxi))=0<br>f’(b)=-2*xi*sigma(yi-(a+bxi))=0</p>
+<p>现设：X=sigma(xi)/n   Y=sigma(yi)/<br>则代入上述偏导：<br>an+bnX=nY<br>anX+b*sigma(xi^2)=sigma(xi*yi)</p>
+<p>求该行列式:<br>|n ,nX         |<br>|nX,sigma(xi^2)|<br>=n*sigma((xi-X))!=0  所以有唯一解</p>
+<p>最后记：<br>l(xx)=sigma((xi-X)^2)<br>l(yy)=sigma((yi-Y)^2)<br>l(xy)=sigma((xi-X)(yi-Y))</p>
+<p>则b=l(xy)/l(xx)   a=Y-bX</p>
+<p><a href="http://wenku.baidu.com/link?url=z-fofhp6T8y39P6tmaLzUiybVEQXpYTz6Uz-MjqxNNvg0GQrjCY0hA95mkqxg1Suk-fT_z-gq2jiMUhH9OWrv2e9kOA4uZ7ZlS6CcM2O0Zq" target="_blank" rel="external">百度文库-最小二乘法</a></p>
+<h2 id="EM">EM</h2><p>EM用于隐含变量的概率模型的极大似然估计，它一般分为两步：第一步求期望(E),第二步求极大(M)，<br>如果概率模型的变量都是观测变量，那么给定数据之后就可以直接使用极大似然法或者贝叶斯估计模型参数。<br>但是当模型含有隐含变量的时候就不能简单的用这些方法来估计，EM就是一种含有隐含变量的概率模型参数的极大似然估计法。</p>
+<p>应用到的地方：混合高斯模型、混合朴素贝叶斯模型、因子分析模型</p>
+<h2 id="Bagging">Bagging</h2><ol>
+<li>从N样本中有放回的采样N个样本</li>
+<li>对这N个样本在全属性上建立分类器(CART,SVM)</li>
+<li>重复上面的步骤，建立m个分类器</li>
+<li>预测的时候使用投票的方法得到结果</li>
+</ol>
+<h2 id="Boosting">Boosting</h2><p>boosting在训练的时候会给样本加一个权重，然后使loss function尽量去考虑那些分错类的样本（比如给分错类的样本的权重值加大）</p>
+<h2 id="凸优化">凸优化</h2><p>在机器学习中往往是最终要求解某个函数的最优值，但是一般情况下，任意一个函数的最优值求解比较困难，但是对于凸函数来说就可以有效的求解出全局最优值。</p>
+<h3 id="凸集">凸集</h3><p>一个集合C是，当前仅当任意x,y属于C且0&lt;=theta&lt;=1，都有theta*x+(1-theta)*y属于C<br>用通俗的话来说C集合线段上的任意两点也在C集合中</p>
+<h3 id="凸函数">凸函数</h3><p>一个函数f其定义域(D(f))是凸集，并且对任意x,y属于D(f)和0&lt;=theta&lt;=1都有<br><br>f(theta*x+(1-theta)*y)&lt;=theta*f(x)+(1-theta)*f(y)   —这个貌似叫做jensen不等式<br><br>用通俗的话来说就是曲线上任意两点的割线都在曲线的上方</p>
+<p>常见的凸函数有：</p>
+<ul>
+<li>指数函数f(x)=a^x   a&gt;1</li>
+<li>负对数函数-logax  a&gt;1,x&gt;0</li>
+<li>开口向上的二次函数等</li>
+</ul>
+<p>凸函数的判定：</p>
+<ol>
+<li>如果f是一阶可导，对于任意数据域内的x,y满足f(y)&gt;=f(x)+f’(x)(y-x)</li>
+<li>如果f是二阶可导，</li>
+</ol>
+<h3 id="凸优化应用举例">凸优化应用举例</h3><ul>
+<li>SVM：其中由max|w|  转向min(1/2*|w|^2)</li>
+<li>最小二乘法？</li>
+<li>LR的损失函数sigma(yi*log(hw(x))+(1-yi)*(log(1-hw(x))))</li>
+</ul>
+<h2 id="备注">备注</h2><p>资料主要来源于网络或者《统计学习方法》，还有自己一小部分的总结，如果错误之处敬请指出</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" data-title="机器学习常见算法个人总结（面试用） | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/08/16/Machine Learning/Common-Interview/"  title="机器学习常见面试题整理">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习常见面试题整理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" data-title="机器学习常见算法个人总结（面试用）" data-url="http://yyl8781697.github.io/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#朴素贝叶斯"><span class="toc-number">1.</span> <span class="toc-text">朴素贝叶斯</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#工作原理"><span class="toc-number">1.1.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作流程"><span class="toc-number">1.2.</span> <span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性特征"><span class="toc-number">1.3.</span> <span class="toc-text">属性特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Laplace校准(拉普拉斯校验)"><span class="toc-number">1.4.</span> <span class="toc-text">Laplace校准(拉普拉斯校验)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遇到特征之间不独立问题"><span class="toc-number">1.5.</span> <span class="toc-text">遇到特征之间不独立问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点"><span class="toc-number">1.6.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逻辑回归和线性回归"><span class="toc-number">2.</span> <span class="toc-text">逻辑回归和线性回归</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#梯度下降法"><span class="toc-number">2.1.</span> <span class="toc-text">梯度下降法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他优化方法"><span class="toc-number">2.2.</span> <span class="toc-text">其他优化方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于LR的过拟合问题："><span class="toc-number">2.3.</span> <span class="toc-text">关于LR的过拟合问题：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于LR的多分类：softmax"><span class="toc-number">2.4.</span> <span class="toc-text">关于LR的多分类：softmax</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于softmax和k个LR的选择"><span class="toc-number">2.5.</span> <span class="toc-text">关于softmax和k个LR的选择</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KNN算法"><span class="toc-number">3.</span> <span class="toc-text">KNN算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#三要素："><span class="toc-number">3.1.</span> <span class="toc-text">三要素：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#k值的选择"><span class="toc-number">3.2.</span> <span class="toc-text">k值的选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KNN的回归"><span class="toc-number">3.3.</span> <span class="toc-text">KNN的回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点："><span class="toc-number">3.4.</span> <span class="toc-text">优缺点：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KD树"><span class="toc-number">3.5.</span> <span class="toc-text">KD树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#构造KD树"><span class="toc-number">3.5.1.</span> <span class="toc-text">构造KD树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#KD树的搜索"><span class="toc-number">3.5.2.</span> <span class="toc-text">KD树的搜索</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#KD树进行KNN查找"><span class="toc-number">3.5.3.</span> <span class="toc-text">KD树进行KNN查找</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#KD树搜索的复杂度"><span class="toc-number">3.5.4.</span> <span class="toc-text">KD树搜索的复杂度</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SVM、SMO"><span class="toc-number">4.</span> <span class="toc-text">SVM、SMO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线性SVM问题"><span class="toc-number">4.1.</span> <span class="toc-text">线性SVM问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#对偶求解"><span class="toc-number">4.1.1.</span> <span class="toc-text">对偶求解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#损失函数"><span class="toc-number">4.2.</span> <span class="toc-text">损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要引入对偶算法"><span class="toc-number">4.3.</span> <span class="toc-text">为什么要引入对偶算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#核函数"><span class="toc-number">4.4.</span> <span class="toc-text">核函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVM优缺点"><span class="toc-number">4.5.</span> <span class="toc-text">SVM优缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SMO"><span class="toc-number">4.6.</span> <span class="toc-text">SMO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SVM多分类问题"><span class="toc-number">4.7.</span> <span class="toc-text">SVM多分类问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#决策树"><span class="toc-number">5.</span> <span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ID3"><span class="toc-number">5.1.</span> <span class="toc-text">ID3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C4-5"><span class="toc-number">5.2.</span> <span class="toc-text">C4.5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Cart"><span class="toc-number">5.3.</span> <span class="toc-text">Cart</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#停止条件"><span class="toc-number">5.4.</span> <span class="toc-text">停止条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于特征与目标值"><span class="toc-number">5.5.</span> <span class="toc-text">关于特征与目标值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#决策树的分类与回归"><span class="toc-number">5.6.</span> <span class="toc-text">决策树的分类与回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#理想的决策树"><span class="toc-number">5.7.</span> <span class="toc-text">理想的决策树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决决策树的过拟合"><span class="toc-number">5.8.</span> <span class="toc-text">解决决策树的过拟合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点-1"><span class="toc-number">5.9.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#随机森林RF"><span class="toc-number">6.</span> <span class="toc-text">随机森林RF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#学习过程"><span class="toc-number">6.1.</span> <span class="toc-text">学习过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预测过程"><span class="toc-number">6.2.</span> <span class="toc-text">预测过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参数问题"><span class="toc-number">6.3.</span> <span class="toc-text">参数问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#泛化误差估计"><span class="toc-number">6.4.</span> <span class="toc-text">泛化误差估计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#学习算法"><span class="toc-number">6.5.</span> <span class="toc-text">学习算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于CART"><span class="toc-number">6.6.</span> <span class="toc-text">关于CART</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点-2"><span class="toc-number">6.7.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GBDT"><span class="toc-number">7.</span> <span class="toc-text">GBDT</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Shrinkage"><span class="toc-number">7.1.</span> <span class="toc-text">Shrinkage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#调参"><span class="toc-number">7.2.</span> <span class="toc-text">调参</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点：-1"><span class="toc-number">7.3.</span> <span class="toc-text">优缺点：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BP"><span class="toc-number">8.</span> <span class="toc-text">BP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最小二乘法"><span class="toc-number">9.</span> <span class="toc-text">最小二乘法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EM"><span class="toc-number">10.</span> <span class="toc-text">EM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bagging"><span class="toc-number">11.</span> <span class="toc-text">Bagging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Boosting"><span class="toc-number">12.</span> <span class="toc-text">Boosting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#凸优化"><span class="toc-number">13.</span> <span class="toc-text">凸优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#凸集"><span class="toc-number">13.1.</span> <span class="toc-text">凸集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#凸函数"><span class="toc-number">13.2.</span> <span class="toc-text">凸函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#凸优化应用举例"><span class="toc-number">13.3.</span> <span class="toc-text">凸优化应用举例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#备注"><span class="toc-number">14.</span> <span class="toc-text">备注</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

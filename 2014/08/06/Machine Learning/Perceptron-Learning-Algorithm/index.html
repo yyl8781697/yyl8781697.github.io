@@ -1,0 +1,721 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Perceptron Learning Algorithm  | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Perceptron先来看一下一个经典的信用卡发放问题：这是一个用户的基本的信息，现在要决定是否对他发放信用卡。
+现在假设这些基本信息组成了一个向量X={x1,x2,…xd}同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Perceptron Learning Algorithm ">
+<meta property="og:url" content="http://yyl8781697.github.io/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Perceptron先来看一下一个经典的信用卡发放问题：这是一个用户的基本的信息，现在要决定是否对他发放信用卡。
+现在假设这些基本信息组成了一个向量X={x1,x2,…xd}同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/credit.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/wx.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/y.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/sum.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/h.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/g0.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/mistake.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/jd.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/update.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/cyclePLA.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/linerS.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/wf.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/neiji.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/mistakeInq.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/wt1.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/prov.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/hm.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/nonpla.png">
+<meta property="og:image" content="/img/Perceptron-Learning-Algorithm/pa.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Perceptron Learning Algorithm ">
+<meta name="twitter:description" content="Perceptron先来看一下一个经典的信用卡发放问题：这是一个用户的基本的信息，现在要决定是否对他发放信用卡。
+现在假设这些基本信息组成了一个向量X={x1,x2,…xd}同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/" title="《台大机器学习基石》Perceptron Learning Algorithm " itemprop="url">《台大机器学习基石》Perceptron Learning Algorithm </a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-08-06T13:15:25.000Z" itemprop="datePublished"> 发表于 2014-08-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Perceptron"><span class="toc-number">1.</span> <span class="toc-text">Perceptron</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perceptron_Learning_Algorithm_(PLA)"><span class="toc-number">2.</span> <span class="toc-text">Perceptron Learning Algorithm (PLA)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PLA_算法是否能正常终止"><span class="toc-number">3.</span> <span class="toc-text">PLA 算法是否能正常终止</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#wf和wt越来越接近"><span class="toc-number">3.1.</span> <span class="toc-text">wf和wt越来越接近</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wt会缓慢的增长"><span class="toc-number">3.2.</span> <span class="toc-text">wt会缓慢的增长</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#证明收敛"><span class="toc-number">3.3.</span> <span class="toc-text">证明收敛</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线性不可分的PLA"><span class="toc-number">4.</span> <span class="toc-text">线性不可分的PLA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Perceptron">Perceptron</h2><p>先来看一下一个经典的信用卡发放问题：<br><img src="/img/Perceptron-Learning-Algorithm/credit.png" height="140px" width="400px"><br>这是一个用户的基本的信息，现在要决定是否对他发放信用卡。</p>
+<p>现在假设这些基本信息组成了一个向量X={x1,x2,…xd}<br>同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}<br><img src="/img/Perceptron-Learning-Algorithm/wx.png" height="140px" width="400px"><br>那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发<br><a id="more"></a><br><img src="/img/Perceptron-Learning-Algorithm/y.png" height="140px" width="400px"><br>相应的表示：</p>
+<ul>
+<li><code>y=+1</code> 表示发卡，<code>y=-1</code>表示不发</li>
+<li><code>sign</code>是一个取符号函数<code>sign(x) = 1 if x&gt;0, -1 otherwise</code></li>
+<li>这里的<code>h</code>与<code>wi</code>的权重有关，以及与阈值<code>threshold</code>有关，这里的<code>h</code>就是叫做感知机</li>
+</ul>
+<pre><code>有了以上描述之后，我们需要电脑做的就是通过个人的基本信息以及每个维度上的权重算出一个分数值，如果这个分数值大于一个设定的阈值，如果超过这个阈值，最终得到的就判定给该用户发卡，否则不发信用卡。
+</code></pre><p>这里我们将阈值<code>threshold</code>做一个简化<br><img src="/img/Perceptron-Learning-Algorithm/sum.png" height="340px" width="400px"><br>相当于是加一个第0维度，该维度上的权重就是这个阈值，这么做的好处就是<code>h</code>就变成了两个向量的内积</p>
+<p>好，用形象的方式来表述，下面当只有2个属性的时候<br><img src="/img/Perceptron-Learning-Algorithm/h.png" height="340px" width="400px"></p>
+<ul>
+<li>(x1,x2)可以构成平面上的点</li>
+<li>标签值<code>y</code>：圆圈表示+1,叉叉表示-1</li>
+<li><code>h</code>就表示为平面上的线，其中线的一端是+1，另一端是-1</li>
+</ul>
+<blockquote>
+<p>所以，感知机其实是一个线性的二元分类器</p>
+</blockquote>
+<p>还有，该平面上其实有无线条线（也就是<code>hypothesis set</code>），那如何能找到一条最合理的线(<code>hypothesis</code>)来完成发放信用卡得判断呢？</p>
+<h2 id="Perceptron_Learning_Algorithm_(PLA)">Perceptron Learning Algorithm (PLA)</h2><p>现在我们是需要找到一个g(x) 这个g(x)≈f(x) 最近越好，也就是yn<br><img src="/img/Perceptron-Learning-Algorithm/g0.png" height="240px" width="240px"><br>首先我们从一个随机的线g0出发，这个g0可能不够好(这个g0这根线可以使用w0这个向量来表示，初始时都是0向量)，所以我们需要调整w的值来判断的改进学习g(x),直到到每个gn的时候每个点都判断正确(这里的t表示当前的一个样本点)</p>
+<p><img src="/img/Perceptron-Learning-Algorithm/mistake.png" height="140px" width="240px"><br>那么如果这个线还不够好的话，那么必定存在一个点，它是分类错误的(犯错)，我们现在就可以根据这个点来进行调整<br>那么就会有两种情况：</p>
+<ol>
+<li>我要的是yn=+1，但是经过g(x)之后为-1，那么也就是说w和x向量的角度太大，我们需要转向x端，也就是更新为w:=w+x</li>
+<li>我要的是yn=-1，但是经过g(x)之后为+1，那么也就是说w和x向量的角度太小，我们需要远离x端，也就是更新为w:=w-x<br><img src="/img/Perceptron-Learning-Algorithm/jd.png" height="340px" width="240px"><br>最终用一个式子来表示w的更新就是为<br><img src="/img/Perceptron-Learning-Algorithm/update.png" height="100px" width="240px"><br>直到这根线不再犯错，那么整个过程就是叫做<code>Perceptron Learning Algorithm (PLA)</code> </li>
+</ol>
+<p>那如果简单的判断当前的线g有没有犯错误？一种常见的方式就是使用<code>cycle PLA</code><br><img src="/img/Perceptron-Learning-Algorithm/cyclePLA.png" height="500px" width="500px"><br>这整个过程描述如下：</p>
+<ol>
+<li>假设现在有n个点，我们从1,2,3到逐个遍历过去</li>
+<li>如果当前的点没有犯错，那么我们进入下一个，否则我们就做刚刚的错误修正，然后再进入下一个点</li>
+<li>直到遍历了n个点又绕回来并且全部没有错得时候停止</li>
+</ol>
+<blockquote>
+<p>这里的循环时可以依次1~N进行遍历循环，也可以进行乱序循环(建议^_^)</p>
+</blockquote>
+<p>现在留下两个问题：</p>
+<ol>
+<li>PLA在学习过程中一定会停下来吗？？</li>
+<li>最终学习出来的先g能适用于训练以外的样本吗？</li>
+</ol>
+<h2 id="PLA_算法是否能正常终止">PLA 算法是否能正常终止</h2><p>先来看一下下面的几种数据情况<br><img src="/img/Perceptron-Learning-Algorithm/linerS.png" alt=""><br>其中第一幅图为线性可分，第二、三幅图为线性不可分</p>
+<p>其中PLA算法只能在线性可分的数据下才可能终止运算（因为在线性不可分的数据中铁定没有那么一条线来划分两类数据，连线都没有，谈何停止）<br>现在假设有存在正确分类的线<code>w<sub>f</sub></code>,<code>w<sub>t</sub></code>为训练时的线</p>
+<h3 id="wf和wt越来越接近">w<sub>f</sub>和w<sub>t</sub>越来越接近</h3><p><img src="/img/Perceptron-Learning-Algorithm/wf.png" height="340px" width="540px"></p>
+<ul>
+<li>那么该线与任意一点的内积乘以标签值一定是大于0的，也就是说其最小值是大于0的（上图的蓝色部分）</li>
+<li>同时在学习训练过程中，在进行w全职的矫正之后，矫正点与当前权重的内积与目标值的乘积一定是大于目标权重相应计算值的最小值的(红色部分)</li>
+</ul>
+<p>现在来看一下目标权重<code>w<sub>f</sub></code>与当前训练权重<code>w<sub>t</sub></code>的关系（两个向量的内积可以衡量他们的相似度,表示角度上的接近）<br><img src="/img/Perceptron-Learning-Algorithm/neiji.png" height="340px" width="540px"><br>从上面的式子可以看出，每作出一次矫正，目标权重与当前权重的相似度就更加进一步，也就是说明<code>每一次矫正权重是有效的</code></p>
+<h3 id="wt会缓慢的增长">w<sub>t</sub>会缓慢的增长</h3><p>因为PLA算法在只有犯错（预测错误）的时候才会进行权重的矫正，那么犯错的判断为<br><img src="/img/Perceptron-Learning-Algorithm/mistakeInq.png" height="140px" width="540px"><br>现在来看<code>w<sub>t</sub></code>矫正（增长）之后的值<code>w<sub>t+1</sub></code><br><img src="/img/Perceptron-Learning-Algorithm/wt1.png" height="440px" width="340px"><br>其中蓝色的部分正好为判断错误的不等式，恒小于0，而红色部分使用最大的点来代替之后，不等式成立<br>所以增长时<code>w<sub>t+1</sub></code>由上一个<code>x<sub>n</sub></code>决定，并且是在一个有界的范围内增长，比较缓慢。</p>
+<h3 id="证明收敛">证明收敛</h3><p>结合以上两个式子，可以得出<br><img src="/img/Perceptron-Learning-Algorithm/prov.png" height="340px" width="540px"><br>这表示两个正规化向量内积，为他们真正的相似<br>其中<br><img src="/img/Perceptron-Learning-Algorithm/hm.png" height="70px" width="140px">为一个常数<br>所以可以得到随着T的越来越大，<code>w<sub>f</sub></code>,<code>w<sub>t</sub></code>的夹角会越来越小，<br>向量夹角余弦值不会大于1，可知T 的值有，证明了简单的PLA 算法可以收敛，也就是他会停下来 。</p>
+<p>在</p>
+<ol>
+<li>数据是线性可分的，<code>w<sub>t</sub></code>会越来越接近<code>w<sub>f</sub></code></li>
+<li>总是在犯错的情况下进行权值的矫正，<code>w<sub>t</sub></code>会进行一个缓慢的增长<br>的条件下，最终简单PLA会正常终止</li>
+</ol>
+<h2 id="线性不可分的PLA">线性不可分的PLA</h2><blockquote>
+<p>如果得到数据是线性不可分怎么办（数据里面还有噪声），此时简单的PLA无法收敛</p>
+</blockquote>
+<p>但是我们有一种退而求其次的方法<br><img src="/img/Perceptron-Learning-Algorithm/nonpla.png" height="340px" width="540px"><br>在学习PLA算法的时候最终不一定要每个点都进行正确地划分，<strong>而是求最终出来的线分错的点最少</strong>（这根线不是完美的线，但是是一个最优的线）<br>但是求解那个最优的线是一个NP难题-_-</p>
+<p>下面来介绍一种叫<code>Pocket Algorithm</code>算法可以近似的求解最优<br><img src="/img/Perceptron-Learning-Algorithm/pa.png" height="440px" width="540px"><br>该算法与简单PLA最大的区别就是：</p>
+<ol>
+<li>它不是一轮一轮的遍历数据，而是去随机取一个点来进行判断</li>
+<li>只有当矫正了权重之后的犯错率（见那个min的公式）小于当前的权重的犯错率时，才会进行权重的更新<blockquote>
+<p>这里的检测错误率额代价很大，应该是要遍历一遍样本才可以知道-_-</p>
+</blockquote>
+</li>
+<li>它是提前设定了迭代次数</li>
+</ol>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第二讲</li>
+<li><a href="http://www.douban.com/note/319669984/" target="_blank" rel="external">http://www.douban.com/note/319669984/</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。<br>    该算法效率没有简单的PLA高，但是可以解决非线性可以问题，同时还会有一个不错的效果^_^</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/" data-title="《台大机器学习基石》Perceptron Learning Algorithm  | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/09/Machine Learning/Learning-Is-Possible/" title="《台大机器学习基石》Learning is Possible ">
+  <strong>上一篇：</strong><br/>
+  <span>
+  《台大机器学习基石》Learning is Possible </span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/"  title="LeetCode-Rotate Array">
+ <strong>下一篇：</strong><br/> 
+ <span>LeetCode-Rotate Array
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/" data-title="《台大机器学习基石》Perceptron Learning Algorithm " data-url="http://yyl8781697.github.io/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Perceptron"><span class="toc-number">1.</span> <span class="toc-text">Perceptron</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perceptron_Learning_Algorithm_(PLA)"><span class="toc-number">2.</span> <span class="toc-text">Perceptron Learning Algorithm (PLA)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PLA_算法是否能正常终止"><span class="toc-number">3.</span> <span class="toc-text">PLA 算法是否能正常终止</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#wf和wt越来越接近"><span class="toc-number">3.1.</span> <span class="toc-text">wf和wt越来越接近</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wt会缓慢的增长"><span class="toc-number">3.2.</span> <span class="toc-text">wt会缓慢的增长</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#证明收敛"><span class="toc-number">3.3.</span> <span class="toc-text">证明收敛</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线性不可分的PLA"><span class="toc-number">4.</span> <span class="toc-text">线性不可分的PLA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
