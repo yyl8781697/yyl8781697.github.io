@@ -82,6 +82,212 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/03/29/Algorithm/InsertionSort/" title="2014阿里巴巴实习生笔试题-插入排序基于链表的实现" itemprop="url">2014阿里巴巴实习生笔试题-插入排序基于链表的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-29T12:07:26.000Z" itemprop="datePublished"> 发表于 2015-03-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code><span class="number">13</span>、将一个从大到小的数组，用以下排序方法排序成从小到大的，______最快。
+A.插入排序
+B.冒泡排序
+<span class="keyword">C</span>.快速排序
+<span class="keyword">D</span>.堆排序
+</code></pre><p>&#160; &#160; &#160; &#160;该题假如是单问算法复杂度，无疑是C和D，都是O(n*logn)，但是在初始化时降序的情况下，就得另外考虑了，其实可以发现这个降序的数组对C，和D并无价值，并且还增加了排序时的比较次数，现在来看插入排序：</p>
+<pre><code>有一个已经有序的数据序列，要求在这个已经排好的数据序列中插入一个数，但要求插入后此数据序列仍然有序，这个时候就要用到一种新的排序方法<span class="comment">--插入排序</span>
+</code></pre><p>&#160; &#160; &#160; &#160;根据待排序数组是降序的情况下很容易想到插排在每次插入是只需要比较第一个元素即可，因为前面的元素都比他大，一般插入排序是基于数组实现的，每次在插入一个元素时需要将插入后的元素都向后移动一位，如果这样其复杂度也不会减少，这种可以下可以将插排基于链表来实现，这样就不需要移动数组了。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/29/Algorithm/InsertionSort/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/29/Algorithm/InsertionSort/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/29/Algorithm/InsertionSort/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/27/Java Source/Java-HashMap/" title="Java 源码学习之java.util.HashMap" itemprop="url">Java 源码学习之java.util.HashMap</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-27T06:06:00.000Z" itemprop="datePublished"> 发表于 2015-03-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>HashMap</code>是<code>Java</code>编程中最常用的容器类之一，它是通过<strong>数组+链表</strong>实现的，在面试时常常被问实现原理以及与<code>HashTable</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;<code>HashMap</code>是可以存储键值<code>key-value</code>对的容器，他是基于<strong>数组+链表</strong>的方式实现的，在遇到数组容量不够时也会执行扩容操作，<code>HashMap</code>具有插入、删除操作几乎为O(1)的效率，但是在迭代器中遍历取值时无法保序，接下来文本将从<code>HashMap</code>的构造、put、remove、iterator等方向进行源码的学习。</p>
+<h2 id="私有变量解析">私有变量解析</h2><p>&#160; &#160; &#160; &#160;在<code>HashMap</code>的源码中定义的私有变量比<code>ArrayList</code>多很多</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/27/Java Source/Java-HashMap/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/27/Java Source/Java-HashMap/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/27/Java Source/Java-HashMap/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/26/Java Source/Java-LinkedList/" title="Java 源码学习之java.util.LinkedList" itemprop="url">Java 源码学习之java.util.LinkedList</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-26T08:45:52.000Z" itemprop="datePublished"> 发表于 2015-03-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>LinkedList</code>是<code>Java</code>编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;<code>LinkedList</code>容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍<code>LinkedList</code></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/26/Java Source/Java-LinkedList/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/26/Java Source/Java-LinkedList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/26/Java Source/Java-LinkedList/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/03/25/Java Source/Java-Vector/" title="Java 源码学习之java.util.Vector" itemprop="url">Java 源码学习之java.util.Vector</a>
   </h1>
   <p class="article-author">By
@@ -355,201 +561,6 @@
 	
 	  	<span></span>
 		<a href="/2015/03/21/Hexo/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/21/Hexo/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/08/15/Machine Learning/VC-Dimension/" title="《台大机器学习基石》VC Dimension" itemprop="url">《台大机器学习基石》VC Dimension</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-08-15T07:45:20.000Z" itemprop="datePublished"> 发表于 2014-08-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
-<blockquote>
-<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2014/08/15/Machine Learning/VC-Dimension/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/08/15/Machine Learning/VC-Dimension/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/08/15/Machine Learning/VC-Dimension/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/08/09/Machine Learning/Learning-Is-Possible/" title="《台大机器学习基石》Learning is Possible " itemprop="url">《台大机器学习基石》Learning is Possible </a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-08-09T10:55:28.000Z" itemprop="datePublished"> 发表于 2014-08-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px" /><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2014/08/09/Machine Learning/Learning-Is-Possible/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/08/09/Machine Learning/Learning-Is-Possible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/08/09/Machine Learning/Learning-Is-Possible/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/" title="《台大机器学习基石》Perceptron Learning Algorithm " itemprop="url">《台大机器学习基石》Perceptron Learning Algorithm </a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-08-06T13:15:25.000Z" itemprop="datePublished"> 发表于 2014-08-06</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Perceptron">Perceptron</h2><p>先来看一下一个经典的信用卡发放问题：<br><img src="/img/Perceptron-Learning-Algorithm/credit.png" height="140px" width="400px" /><br>这是一个用户的基本的信息，现在要决定是否对他发放信用卡。</p>
-<p>现在假设这些基本信息组成了一个向量X={x1,x2,…xd}<br>同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}<br><img src="/img/Perceptron-Learning-Algorithm/wx.png" height="140px" width="400px" /><br>那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/08/06/Machine Learning/Perceptron-Learning-Algorithm/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 

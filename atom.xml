@@ -516,6 +516,112 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
   </entry>
   
   <entry>
+    <title><![CDATA[《台大机器学习基石》VC Dimension]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/15/Machine%20Learning/VC-Dimension/"/>
+    <id>http://yyl8781697.github.io/2015/08/15/Machine Learning/VC-Dimension/</id>
+    <published>2015-08-15T07:45:20.000Z</published>
+    <updated>2015-08-18T14:49:09.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
+<blockquote>
+<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br><a id="more"></a></p>
+</blockquote>
+<h3 id="证明">证明</h3><p>那能否证明<code>B(N,k)&lt;=ploy(N)</code>呢？<br>先来看下面这个表,其中当前纵向有<code>N</code>，横向表示具体的<code>k</code>值，表中的内容就是需要计算的<code>B(N,k)</code>值</p>
+<ul>
+<li><p>B(2,2)=3，B(3,2)=4 手算-_-<br>  <img src="/img/VC-Dimension/t1.png" width="500px" height="300px"><br>  因为任意两个点都不能被<code>shatter</code>，那么2个点产生的<code>dichotomies</code>不能超过3,同理3个点产生的<code>dichotomies</code>不能超过4</p>
+</li>
+<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能操作2，所以这里最大值都为1</p>
+</li>
+<li><p>B(N,k)=2<sup>N</sup>  当<code>N&lt;k</code><br>  <img src="/img/VC-Dimension/t3.png" width="500px" height="300px"><br>  这里的<code>2<sup>N</sup><2<sup>k<sup></sup></2<sup></code>必然成立，所以最大值直接取2<sup>N</sup>，不然多余选的点也都是重复的。</p>
+</li>
+<li><p>B(N,k)=2<sup>N</sup>-1  当<code>N=k</code><br>  <img src="/img/VC-Dimension/t4.png" width="500px" height="300px"><br>  在<code>N=k</code>的情况下满足全部不可能（点的所有组合为不可能），但是这里再减去一种就可以满足了</p>
+</li>
+<li><p>B(N,k)&lt;=B(N-1,k)+B(N-1,k-1)  当<code>N&gt;k</code><br>  <img src="/img/VC-Dimension/t5.png" width="500px" height="300px"><br>  表中新添的值为上限的上限，耐心地看下上图的推导-_-</p>
+<ol>
+<li>通过计算机暴力求解B(4,3)=11,(一种16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
+<li>现在将<code>x<sub>4</sub></code>这个点遮掉<br> <img src="/img/VC-Dimension/d2.png" width="500px" height="300px"></li>
+<li>同时将蓝色的遮掉<br> <img src="/img/VC-Dimension/d3.png" width="500px" height="300px"><br> 这里不能多余2个点被<code>shatter</code></li>
+<li>整理之后就可以得到如下关系式<br> <img src="/img/VC-Dimension/d4.png" width="300px" height="200px"></li>
+<li>写成通用式子为<br> <img src="/img/VC-Dimension/d5.png" width="300px" height="200px"><br> 即得解^_^</li>
+</ol>
+</li>
+</ul>
+<p>根据上限的上限的递推式，再结合数学归纳法可以得到<br><img src="/img/VC-Dimension/sg.png" width="300px" height="200px"><br>它的最高项的指数是<code>k-1</code></p>
+<p>那么现在：</p>
+<ol>
+<li><code>Growth Function</code>会被上限<code>B(N,k)</code> bound住</li>
+<li>而<code>B(N,k)</code> 又会被上限的上限bound住</li>
+<li>这个上限的上限的多项式和<code>break point</code>点有关</li>
+<li>所以可以得出结果，只要<code>break point</code>点存在，那么他的<code>Growth Function</code>最终会是一个多项式</li>
+</ol>
+<p>但是然并卵，<code>m<sub>H</sub>(N)</code>并无法直接代入到之前的</p>
+<h3 id="计算VC">计算VC</h3><p><img src="/img/VC-Dimension/rbl.png" width="400px" height="200px"></p>
+<blockquote>
+<p>主要是因为：<code>E<sub>in</sub>(h)</code>的<code>hypothesis</code>可能取值是有限个的，但<code>E<sub>out</sub>(h)</code>的可能取值是无限的。可以通过将<code>E<sub>out</sub>(h)</code> 替换为验证集(verification set) 的<code>E<sub>in</sub>‘</code>来解决这个问题。<br><img src="/img/VC-Dimension/einp.png" width="500px" height="200px"></p>
+</blockquote>
+<p>好，那么接下来主要经历如下三个步骤：</p>
+<ol>
+<li>使用<code>E<sub>in</sub>‘<code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></code></code></li>
+<li>这样最终可能出现的<code>H(x1,x2..xn,x1’,x2’…xn’)</code><br> <img src="/img/VC-Dimension/s2.png" width="500px" height="200px"></li>
+<li>使用不替换的<code>Hoeffding</code><br> <img src="/img/VC-Dimension/s3.png" width="500px" height="200px"></li>
+</ol>
+<p>最终得到了著名的<code>VC Bound</code><br><img src="/img/VC-Dimension/vc.png" width="500px" height="200px"></p>
+<pre><code>那么终于可以说明空间存在有限的break point，并且采样的资料量N够多，就可以保证找到一个<span class="function"><span class="title">Ein</span><span class="params">(h)</span></span>最小的时候，得到最小的<span class="function"><span class="title">Eout</span><span class="params">(h)</span></span>,也就是说明Learning的可行性
+</code></pre><h2 id="VC_Dimension">VC Dimension</h2><h3 id="定义">定义</h3><p>先来看一下<code>VC Dimension</code>的定义<br><img src="/img/VC-Dimension/vi.png" width="400px" height="300px"><br><code>VC Dimension</code>表示在<code>N</code>个点中能够<code>shatter</code>的最大的值，也就是<code>k-1</code>（<code>k</code>为<code>break point</code>,该值时不能<code>shatter</code>的最小值）</p>
+<p>这样的话就可以很容易计算出我们之前一直在讨论的那几种情况的<code>VC Dimension</code><br><img src="/img/VC-Dimension/vz.png" width="400px" height="300px"><br>那么我们可以知道好的<code>VC Dimension</code>应该是有限的，这样才可以保证<code>E<sub>in</sub>≈E<sub>out</sub></code><br>同时这样就就会有</p>
+<ol>
+<li><code>VC Dimension</code>与算法A无关</li>
+<li><code>VC Dimension</code>与数据p的分布无关</li>
+<li><code>VC Dimension</code>与目标函数f无关</li>
+</ol>
+<p>说了这么多，看一下<code>VC Dimension</code>与大<code>M</code>的关系<br><img src="/img/VC-Dimension/vm.png" width="500px" height="500px"><br>这样就可以看到：</p>
+<ol>
+<li><code>M</code>很小的时候，得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>会非常相似，但是可选的<code>E<sub>in</sub></code>太少了，可能到最后选择了 一个较大的<code>E<sub>in</sub></code></li>
+<li><code>M</code>很大的时候，可选的<code>E<sub>in</sub></code>比较多，可能到最后得到的<code>E<sub>in</sub></code>得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>可能不怎么想相似</li>
+<li><code>VC Dimension</code>很小的时候，与第一条一样，但是区别的是它的自由度受到了限制</li>
+<li><code>VC Dimension</code>很大的时候，与第二条一样，但是区别的是它的自由度没受限制，很自由</li>
+</ol>
+<blockquote>
+<p><code>VC Dimension</code>反映了假设空间<code>hypothesis set</code>的强大程度，<code>VC Dimension</code>越大，<code>hypothesis set</code>也越强，因为它可以<code>shatter</code>更多的点。</p>
+</blockquote>
+<h3 id="物理意义">物理意义</h3><p><code>VC Dimension</code>的物理意义是表示二元分类下的自由度是多少，而这个自由度是表示参数<code>w</code>的维度<br><img src="/img/VC-Dimension/vw.png" width="400px" height="300px"></p>
+<h3 id="模型复杂度">模型复杂度</h3><p>现在将之前任意一<code>hypothesis</code>发生坏事的概率<code>VC bound</code>变一下形<br><img src="/img/VC-Dimension/mc.png" width="500px" height="400px"><br>最终，根号里面的叫做模型复杂度，<strong>模型的复杂度越大，其泛化能力就会越低</strong>，这个模型的复杂度越与三个项有关：</p>
+<ol>
+<li><code>N</code>，抽样有多少个点</li>
+<li><code>H</code>，这里的<code>VC Dimension</code>有多大</li>
+<li><code>δ</code>，<code>E<sub>in</sub></code>与<code>E<sub>out</sub></code>相似在一个阈值内的概率</li>
+</ol>
+<p>现在在图上画出三者的关系：<br><img src="/img/VC-Dimension/tt.png" width="400px" height="300px"><br>那么可以看到随着<code>VC Dimension</code>越大，其模型复杂度也会越大,<code>E<sub>in</sub></code>会变小，但是<code>E<sub>out</sub></code>会有像图中一样一个山谷形的表现，最小的<code>E<sub>out</sub></code>会在中间</p>
+<p>所以更加深层次的可以了解到，我们并不是把<code>E<sub>in</sub></code>做的越小越好，因为这个时候可能会导致模型复杂度变大，从而最终使<code>E<sub>out</sub></code>也会变大,真正会做机器学习的人在优化<code>E<sub>in</sub></code>的同时会考虑带来的其他复杂度的代价。</p>
+<h3 id="采样复杂度">采样复杂度</h3><p><code>VC bound</code>的另一个意义就是模型复杂度<br>那就现在给你<br><img src="/img/VC-Dimension/p.png" width="400px" height="100px"><br>这些参数，那么如果计算使用最少的样本量来完成上述需求，计算过程可以参考下面<br><img src="/img/VC-Dimension/js.png" width="400px" height="200px"><br>而在理论上需要的样本是<code>N≈10000d<sub>vc</sub></code><br>但是其实在实际上<code>N≈10d<sub>vc</sub></code>即可,<br>为什么会这样呢？<br><img src="/img/VC-Dimension/ks.png" width="500px" height="400px"><br>这是因为<code>VC bound</code>推导的过程很宽松，里面很多假设都是取了上限</p>
+<blockquote>
+<p>所以，模型较复杂时(<code>N≈10d<sub>vc</sub></code> 较大)，需要更多的训练数据</p>
+</blockquote>
+<pre><code>除此外，我们为了避免overfit，一般都会加正则项。那加了正则项后，新的假设空间会得到一些限制，此时新假设空间的VC维将变小，也就是同样训练数据条件下，E<span class="keyword">in</span>更有可能等于E<span class="keyword">out</span>，所以泛化能力更强。这里从VC维的角度解释了正则项的作用。
+</code></pre><h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第六讲</li>
+<li>《台湾国立大学-机器学习基石》第七讲</li>
+<li><a href="http://www.flickering.cn/machine_learning/2015/04/vc%E7%BB%B4%E7%9A%84%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89/" target="_blank" rel="external">VC维的来龙去脉</a></li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
+<blockquote>
+<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[一些面试常见的智力题啦]]></title>
     <link href="http://yyl8781697.github.io/2015/08/11/Algorithm/Intelligence-Problems/"/>
     <id>http://yyl8781697.github.io/2015/08/11/Algorithm/Intelligence-Problems/</id>
@@ -619,6 +725,160 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[《台大机器学习基石》Learning is Possible ]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/09/Machine%20Learning/Learning-Is-Possible/"/>
+    <id>http://yyl8781697.github.io/2015/08/09/Machine Learning/Learning-Is-Possible/</id>
+    <published>2015-08-09T10:55:28.000Z</published>
+    <updated>2015-08-18T14:49:03.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px"><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br><a id="more"></a><br>这里有一个叫做<code>Hoeffding不等式</code>可以来解释该问题<br><img src="/img/Learning-Is-Possible/hfi.png" height="140px" width="540px"><br>大致的表述就是<code>μ</code>与<code>ν</code>之差的绝对值小于<code>ξ</code>的概率为<code>2exp(-2ξ<sup>2</sup>N)</code>（这个概率也叫坏事发生的几率，林老师的叫法真的很kwy ^_^）,<code>ξ</code>越小，<code>μ</code>与<code>ν</code>越接近，其概率：</p>
+<ul>
+<li><code>ξ</code>越大，坏事发生的几率越小，但是<code>ξ</code>真的很大时，坏事发不发生已经么啥意义了-_-</li>
+<li><code>N</code>越大，坏事发生的几率越小，<code>μ</code>与<code>ν</code>会越来越接近,所以取样时大一点可以增加准确率.<blockquote>
+<p>将<code>N</code>取到总得数量，那就是<code>μ</code>=<code>ν</code></p>
+</blockquote>
+</li>
+</ul>
+<pre><code><span class="attribute">这里的‘μ</span>=<span class="string">ν’的状态问题称为probably approximately correct（PAC）问题，表示大概差不多是对的。 </span>
+</code></pre><p>所以，取的样本够大的时候，未知的<code>μ</code>可以从已知的<code>ν</code>推论出来，并且他们俩是类似的。</p>
+<h2 id="应用于Learning">应用于Learning</h2><p>假设当前一个学习算法的最终的实际假设是<code>f(x)</code>(一般是未知的)，其<code>h(x)</code>表示采样了之后的假设，其<code>y<sub>n</sub></code>为对应样本上的目标值。<br><img src="/img/Learning-Is-Possible/le.png" height="200px" width="340px"><br>这里的<code>E<sub>out</sub>(h)</code>和<code>E<sub>in</sub>(h)</code>正好就是对应上一节的<code>μ</code>=<code>ν</code><br><code>Hoeffding不等式</code>同样是适用于Learning问题<br><img src="/img/Learning-Is-Possible/lf.png" height="240px" width="540px"><br>所以在Learning的时候，可以从<code>E<sub>in</sub>(h)</code>来推断出<code>E<sub>out</sub>(h)</code>，也就是我们的Learning目的<br><img src="/img/Learning-Is-Possible/eio.png" height="240px" width="340px"></p>
+<p>上面如果能得到一个很小的<code>E<sub>in</sub>(h)</code>，当然是皆大欢喜，此时<code>g’=f’</code>(g,f分别对应h(x)和f(x)对应的线/假设)，但是要知道其实在算法上其实有很多h可以选，那时候选择到得<code>E<sub>in</sub>(h)</code>比较大得时候，那就比较悲催了，所以真实地学习应该是：<br><img src="/img/Learning-Is-Possible/rl.png" height="240px" width="340px"><br>像<code>PLA</code>一样选一根最优的线。</p>
+<p><code>Hoeffding不等式</code>只能保证<code>E<sub>in</sub>(h)</code>和<code>E<sub>out</sub>(h)</code>会有一个较大的几率说明他俩是相似的，但是无法保证在非常多得假设下(h(x))下，<code>E<sub>in</sub>(h)</code>的值时比较小，那如果最终<code>E<sub>in</sub>(h)</code>的值比较大，那么最终学习的算法就不好了，这个也叫做踩雷过程(这也可能使由于样本原因造成的)<br><img src="/img/Learning-Is-Possible/cl.png" height="440px" width="440px"><br>现在有<code>M</code>个假设，同时数据集可能会有表中的几个样本采样出来，<code>BAD</code>标志就是表示当前假设下在对应的样本上是踩雷了(<code>E<sub>in</sub>(h)</code>)很大</p>
+<blockquote>
+<p>但是学习算法最希望的就是自由的选择具体假设下，能够得到具体的<code>BAD</code>几率</p>
+</blockquote>
+<p>这里可以使用联合<code>bound</code>的方式来求总体的<code>BAD</code>几率<br><img src="/img/Learning-Is-Possible/mpla.png" height="240px" width="540px"><br>从式子中可以发现最终的几率是加上了<code>M</code>的<code>Hoeffding不等式</code>几率</p>
+<h2 id="关于M的无限大问题">关于M的无限大问题</h2><p>上面知道<code>M</code>表示所有假设，而比如在<code>PLA</code>问题中可以了解到其实平面上会有无数条线，也就是无数条假设(M)，那这样其实上一小节中计算出来的几率会变无限大吗？那不是白搭了嘛-_-</p>
+<p>这里先换个思路想一下：<br><img src="/img/Learning-Is-Possible/plk.png" height="240px" width="240px"><br>上图的<code>PLA</code>只有一个点，上面画了可能存在的三条线，其实可以发现这两条实线是一个含义，这里只有两种线而已(一虚一实)<br>再者看一下两个点的<br><img src="/img/Learning-Is-Possible/plk2.png" height="340px" width="540px"><br>它就会有四种线<br>还有看一下三个点得<br><img src="/img/Learning-Is-Possible/plk3.png" height="440px" width="540px"><br>它最终会有八种线(其实如果这三个点成一条直线或者重叠在一个点上面的话不会有这么多)<br>再推演下去会有这么一个规律<br><img src="/img/Learning-Is-Possible/s.png" height="340px" width="200px"><br>在二维上，平面上划分这些点的种类数总是小于<code>2^N</code></p>
+<p>现在假设使用<code>m<sub>H</sub>(N)</code>来表示<code>N</code>个点的时候可能出现的最大分类线种数<code>dichotomies</code><br><img src="/img/Learning-Is-Possible/mh.png" height="240px" width="540px"><br>那么这个<code>m<sub>H</sub>(N)</code>的上界就是<code>2^N</code>，这个函数也叫做成长函数(Growth Function)</p>
+<p>现在综合看一下其他维度的成长函数值:</p>
+<ul>
+<li>一维的二分类 <code>N+1</code><br>  <img src="/img/Learning-Is-Possible/rays.png" height="400px" width="400px"></li>
+<li>一维的二分类（使用中间区间分开） <code>1/2*N<sup>2</sup>+1/2*N+1</code><br>  <img src="/img/Learning-Is-Possible/int.png" height="400px" width="400px"></li>
+<li>可以绕成一圈的凸集合 <code>2<sup>N</sup></code><br>  <img src="/img/Learning-Is-Possible/sc.png" height="400px" width="400px"><blockquote>
+<p>这里类似凸集的情况下N个点可能hold住<code>2<sup>N</sup></code>分类面的情况叫<code>shattered</code></p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/img/Learning-Is-Possible/mhv.png" height="300px" width="500px"><br>那么好了，如果<code>m<sub>H</sub>(N)</code>能直接取代<code>M</code>,同时<code>m<sub>H</sub>(N)</code>为多项式的话，<code>N</code>越大，那个这个<code>upbound</code>会越来越小，或者接近于0<br><img src="/img/Learning-Is-Possible/qd.png" height="300px" width="500px"></p>
+<p>现在来看一个<code>break point</code>的概念<br><img src="/img/Learning-Is-Possible/bp.png" height="300px" width="400px"><br>表示第一个无法<code>shattered</code>的点,比如在上面<code>lines in 2D</code>的图里面在3个点的时候最多有8条线(2^3)，正好是<code>shattered</code>,但是到了4个点的时候最多只有14条线，此时就无法<code>shattered</code>,故4就是<code>2D-PLA</code>的<code>break point</code>，同理<br><img src="/img/Learning-Is-Possible/bps.png" height="300px" width="400px"><br>那么这里可以通过推算最终可以知道<code>m<sub>H</sub>(N)=O(N^(k-1))</code>（具体证明要看看下一个视频VC维相关）,其中这里的<code>k</code>表示<code>break point</code>，这样就可以说上上上面的<code>m<sub>H</sub>(N)</code>是有限的，关于如果代替<code>M</code>的问题还得看下个分解。</p>
+<h2 id="总结">总结</h2><p>所以当算法的该含有一个有限的<code>break point</code>的时候，并且采样的资料量<code>N</code>够多，就可以保证找到一个<code>E<sub>in</sub>(h)</code>最小的时候，得到最小的<code>E<sub>out</sub>(h)</code>,也就是说明Learning的可行性。（好绕）^_^</p>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第四讲</li>
+<li>《台湾国立大学-机器学习基石》第五讲</li>
+<li>《台湾国立大学-机器学习基石》第六讲</li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px" /><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[《台大机器学习基石》Perceptron Learning Algorithm ]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/"/>
+    <id>http://yyl8781697.github.io/2015/08/06/Machine Learning/Perceptron-Learning-Algorithm/</id>
+    <published>2015-08-06T13:15:25.000Z</published>
+    <updated>2015-08-18T14:48:58.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Perceptron">Perceptron</h2><p>先来看一下一个经典的信用卡发放问题：<br><img src="/img/Perceptron-Learning-Algorithm/credit.png" height="140px" width="400px"><br>这是一个用户的基本的信息，现在要决定是否对他发放信用卡。</p>
+<p>现在假设这些基本信息组成了一个向量X={x1,x2,…xd}<br>同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}<br><img src="/img/Perceptron-Learning-Algorithm/wx.png" height="140px" width="400px"><br>那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发<br><a id="more"></a><br><img src="/img/Perceptron-Learning-Algorithm/y.png" height="140px" width="400px"><br>相应的表示：</p>
+<ul>
+<li><code>y=+1</code> 表示发卡，<code>y=-1</code>表示不发</li>
+<li><code>sign</code>是一个取符号函数<code>sign(x) = 1 if x&gt;0, -1 otherwise</code></li>
+<li>这里的<code>h</code>与<code>wi</code>的权重有关，以及与阈值<code>threshold</code>有关，这里的<code>h</code>就是叫做感知机</li>
+</ul>
+<pre><code>有了以上描述之后，我们需要电脑做的就是通过个人的基本信息以及每个维度上的权重算出一个分数值，如果这个分数值大于一个设定的阈值，如果超过这个阈值，最终得到的就判定给该用户发卡，否则不发信用卡。
+</code></pre><p>这里我们将阈值<code>threshold</code>做一个简化<br><img src="/img/Perceptron-Learning-Algorithm/sum.png" height="340px" width="400px"><br>相当于是加一个第0维度，该维度上的权重就是这个阈值，这么做的好处就是<code>h</code>就变成了两个向量的内积</p>
+<p>好，用形象的方式来表述，下面当只有2个属性的时候<br><img src="/img/Perceptron-Learning-Algorithm/h.png" height="340px" width="400px"></p>
+<ul>
+<li>(x1,x2)可以构成平面上的点</li>
+<li>标签值<code>y</code>：圆圈表示+1,叉叉表示-1</li>
+<li><code>h</code>就表示为平面上的线，其中线的一端是+1，另一端是-1</li>
+</ul>
+<blockquote>
+<p>所以，感知机其实是一个线性的二元分类器</p>
+</blockquote>
+<p>还有，该平面上其实有无线条线（也就是<code>hypothesis set</code>），那如何能找到一条最合理的线(<code>hypothesis</code>)来完成发放信用卡得判断呢？</p>
+<h2 id="Perceptron_Learning_Algorithm_(PLA)">Perceptron Learning Algorithm (PLA)</h2><p>现在我们是需要找到一个g(x) 这个g(x)≈f(x) 最近越好，也就是yn<br><img src="/img/Perceptron-Learning-Algorithm/g0.png" height="240px" width="240px"><br>首先我们从一个随机的线g0出发，这个g0可能不够好(这个g0这根线可以使用w0这个向量来表示，初始时都是0向量)，所以我们需要调整w的值来判断的改进学习g(x),直到到每个gn的时候每个点都判断正确(这里的t表示当前的一个样本点)</p>
+<p><img src="/img/Perceptron-Learning-Algorithm/mistake.png" height="140px" width="240px"><br>那么如果这个线还不够好的话，那么必定存在一个点，它是分类错误的(犯错)，我们现在就可以根据这个点来进行调整<br>那么就会有两种情况：</p>
+<ol>
+<li>我要的是yn=+1，但是经过g(x)之后为-1，那么也就是说w和x向量的角度太大，我们需要转向x端，也就是更新为w:=w+x</li>
+<li>我要的是yn=-1，但是经过g(x)之后为+1，那么也就是说w和x向量的角度太小，我们需要远离x端，也就是更新为w:=w-x<br><img src="/img/Perceptron-Learning-Algorithm/jd.png" height="340px" width="240px"><br>最终用一个式子来表示w的更新就是为<br><img src="/img/Perceptron-Learning-Algorithm/update.png" height="100px" width="240px"><br>直到这根线不再犯错，那么整个过程就是叫做<code>Perceptron Learning Algorithm (PLA)</code> </li>
+</ol>
+<p>那如果简单的判断当前的线g有没有犯错误？一种常见的方式就是使用<code>cycle PLA</code><br><img src="/img/Perceptron-Learning-Algorithm/cyclePLA.png" height="500px" width="500px"><br>这整个过程描述如下：</p>
+<ol>
+<li>假设现在有n个点，我们从1,2,3到逐个遍历过去</li>
+<li>如果当前的点没有犯错，那么我们进入下一个，否则我们就做刚刚的错误修正，然后再进入下一个点</li>
+<li>直到遍历了n个点又绕回来并且全部没有错得时候停止</li>
+</ol>
+<blockquote>
+<p>这里的循环时可以依次1~N进行遍历循环，也可以进行乱序循环(建议^_^)</p>
+</blockquote>
+<p>现在留下两个问题：</p>
+<ol>
+<li>PLA在学习过程中一定会停下来吗？？</li>
+<li>最终学习出来的先g能适用于训练以外的样本吗？</li>
+</ol>
+<h2 id="PLA_算法是否能正常终止">PLA 算法是否能正常终止</h2><p>先来看一下下面的几种数据情况<br><img src="/img/Perceptron-Learning-Algorithm/linerS.png" alt=""><br>其中第一幅图为线性可分，第二、三幅图为线性不可分</p>
+<p>其中PLA算法只能在线性可分的数据下才可能终止运算（因为在线性不可分的数据中铁定没有那么一条线来划分两类数据，连线都没有，谈何停止）<br>现在假设有存在正确分类的线<code>w<sub>f</sub></code>,<code>w<sub>t</sub></code>为训练时的线</p>
+<h3 id="wf和wt越来越接近">w<sub>f</sub>和w<sub>t</sub>越来越接近</h3><p><img src="/img/Perceptron-Learning-Algorithm/wf.png" height="340px" width="540px"></p>
+<ul>
+<li>那么该线与任意一点的内积乘以标签值一定是大于0的，也就是说其最小值是大于0的（上图的蓝色部分）</li>
+<li>同时在学习训练过程中，在进行w全职的矫正之后，矫正点与当前权重的内积与目标值的乘积一定是大于目标权重相应计算值的最小值的(红色部分)</li>
+</ul>
+<p>现在来看一下目标权重<code>w<sub>f</sub></code>与当前训练权重<code>w<sub>t</sub></code>的关系（两个向量的内积可以衡量他们的相似度,表示角度上的接近）<br><img src="/img/Perceptron-Learning-Algorithm/neiji.png" height="340px" width="540px"><br>从上面的式子可以看出，每作出一次矫正，目标权重与当前权重的相似度就更加进一步，也就是说明<code>每一次矫正权重是有效的</code></p>
+<h3 id="wt会缓慢的增长">w<sub>t</sub>会缓慢的增长</h3><p>因为PLA算法在只有犯错（预测错误）的时候才会进行权重的矫正，那么犯错的判断为<br><img src="/img/Perceptron-Learning-Algorithm/mistakeInq.png" height="140px" width="540px"><br>现在来看<code>w<sub>t</sub></code>矫正（增长）之后的值<code>w<sub>t+1</sub></code><br><img src="/img/Perceptron-Learning-Algorithm/wt1.png" height="440px" width="340px"><br>其中蓝色的部分正好为判断错误的不等式，恒小于0，而红色部分使用最大的点来代替之后，不等式成立<br>所以增长时<code>w<sub>t+1</sub></code>由上一个<code>x<sub>n</sub></code>决定，并且是在一个有界的范围内增长，比较缓慢。</p>
+<h3 id="证明收敛">证明收敛</h3><p>结合以上两个式子，可以得出<br><img src="/img/Perceptron-Learning-Algorithm/prov.png" height="340px" width="540px"><br>这表示两个正规化向量内积，为他们真正的相似<br>其中<br><img src="/img/Perceptron-Learning-Algorithm/hm.png" height="70px" width="140px">为一个常数<br>所以可以得到随着T的越来越大，<code>w<sub>f</sub></code>,<code>w<sub>t</sub></code>的夹角会越来越小，<br>向量夹角余弦值不会大于1，可知T 的值有，证明了简单的PLA 算法可以收敛，也就是他会停下来 。</p>
+<p>在</p>
+<ol>
+<li>数据是线性可分的，<code>w<sub>t</sub></code>会越来越接近<code>w<sub>f</sub></code></li>
+<li>总是在犯错的情况下进行权值的矫正，<code>w<sub>t</sub></code>会进行一个缓慢的增长<br>的条件下，最终简单PLA会正常终止</li>
+</ol>
+<h2 id="线性不可分的PLA">线性不可分的PLA</h2><blockquote>
+<p>如果得到数据是线性不可分怎么办（数据里面还有噪声），此时简单的PLA无法收敛</p>
+</blockquote>
+<p>但是我们有一种退而求其次的方法<br><img src="/img/Perceptron-Learning-Algorithm/nonpla.png" height="340px" width="540px"><br>在学习PLA算法的时候最终不一定要每个点都进行正确地划分，<strong>而是求最终出来的线分错的点最少</strong>（这根线不是完美的线，但是是一个最优的线）<br>但是求解那个最优的线是一个NP难题-_-</p>
+<p>下面来介绍一种叫<code>Pocket Algorithm</code>算法可以近似的求解最优<br><img src="/img/Perceptron-Learning-Algorithm/pa.png" height="440px" width="540px"><br>该算法与简单PLA最大的区别就是：</p>
+<ol>
+<li>它不是一轮一轮的遍历数据，而是去随机取一个点来进行判断</li>
+<li>只有当矫正了权重之后的犯错率（见那个min的公式）小于当前的权重的犯错率时，才会进行权重的更新<blockquote>
+<p>这里的检测错误率额代价很大，应该是要遍历一遍样本才可以知道-_-</p>
+</blockquote>
+</li>
+<li>它是提前设定了迭代次数</li>
+</ol>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第二讲</li>
+<li><a href="http://www.douban.com/note/319669984/" target="_blank" rel="external">http://www.douban.com/note/319669984/</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。<br>    该算法效率没有简单的PLA高，但是可以解决非线性可以问题，同时还会有一个不错的效果^_^</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Perceptron">Perceptron</h2><p>先来看一下一个经典的信用卡发放问题：<br><img src="/img/Perceptron-Learning-Algorithm/credit.png" height="140px" width="400px" /><br>这是一个用户的基本的信息，现在要决定是否对他发放信用卡。</p>
+<p>现在假设这些基本信息组成了一个向量X={x1,x2,…xd}<br>同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}<br><img src="/img/Perceptron-Learning-Algorithm/wx.png" height="140px" width="400px" /><br>那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
     
   </entry>
   
@@ -1492,136 +1752,6 @@ asdxdsa
 <p>还有后缀树也可以解，不过需要较大的空间，本文使用的是manacher算法：</p>
 <pre><code>Manacher最早发现了可以用<span class="function"><span class="title">O</span><span class="params">(n)</span></span>的时间复杂度来解决该问题，所以这种方法称之为Manacher算法。
 </code></pre><p>现在以查询字符串”abaab”为例，该算法为了将”aba”和”baab” 奇偶形式统一考虑，做了一个很精妙的预处理：每每两个字符串以及两端都加一个标志符号#，就形成了<br>“#a#b#a#a#b#”新字符串，那么”aba”则可以看做”#a#b#a#”，同时”baab”转为#b#a#a#b#”，就都为奇数形式了<br>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[求旋转数组中的最小值]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/"/>
-    <id>http://yyl8781697.github.io/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/</id>
-    <published>2015-07-25T02:42:58.000Z</published>
-    <updated>2015-07-25T03:02:13.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>题目:把一个数组最开始的若干个元素搬到数组的末尾,我们称之为数组的旋转。输入一个 排好序的数组的一个旋转,
-输出旋转数组的最小元素。例如数组<span class="list">{3, 4, 5, 1, 2}</span>为<span class="list">{1, 2, 3, 4, 5}</span>的一个旋转,该数 组的最小值为 <span class="number">1</span>。
-</code></pre><h2 id="解析">解析</h2><blockquote>
-<p>该题最容易想到的就是遍历，但是他的复杂度是O(n)，而作为面试题肯定是需要我们找出一种更优的方法</p>
-</blockquote>
-<p>这里使用可以二分法来解决该问题,假设数组a的长度为n，现在使用二分法过程中左端索引s,右端索引t，则中间位置为m=s+(t-s)/2<br>首先可以知道旋转数组在旋转之后a[0]&gt;a[n-1]是肯定成立的，</p>
-<p>当a[s]&lt;=a[m]的时候，我们应该进去右侧继续查找，比如a[0]<a[2] 接下来我们只需要找a[3~4]即可（注意a[m]都已经大于a[s]了，所以这里取右侧的时候m舍去的）="" 同理，当a[s]="">a[m]的时候 进入左侧继续搜索，直到<br>可以发现当a[s]&lt;=a[t]的时候  a[s]肯定就是最小值了。</a[2]></p>
-<a id="more"></a>
-<pre><code>以[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]的旋转数组[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]为例
-第一次搜索
-[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
- s     m       t
- 此时<span class="tag">a</span>[s]&lt;<span class="tag">a</span>[m] 进入右侧，则有
-
-[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
-         s m   t
-此时<span class="tag">a</span>[s]&gt;<span class="tag">a</span>[m]，进入左侧
-[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
-        sm t
-此时<span class="tag">a</span>[s]=<span class="tag">a</span>[m] 继续右侧
-[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
-           st
-这里就满足<span class="tag">a</span>[s]&lt;=<span class="tag">a</span>[t]  则<span class="tag">a</span>[s]=<span class="number">1</span> 最小
-</code></pre><blockquote>
-<p>这样就可以将复杂度降为O(logn) ^_^</p>
-</blockquote>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 求旋转数组中最小的值  避免遍历O(n)</span><br><span class="line"> * 可以使用二分法来做</span><br><span class="line"> * [4,5,6,7,8,1,2,3]</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @param</span> s</span><br><span class="line"> *<span class="javadoctag"> @param</span> t</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minValueRatateArray</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> s,<span class="keyword">int</span> t)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	 <span class="keyword">if</span>(a[s]&lt;=a[t])</span><br><span class="line">		 <span class="keyword">return</span> a[s];<span class="comment">//其实这个就是最小值了</span></span><br><span class="line">	 </span><br><span class="line">	 <span class="keyword">int</span> m=s+(t-s)/<span class="number">2</span>;<span class="comment">//中间数</span></span><br><span class="line">	 <span class="keyword">if</span>(a[s]&lt;=a[m])</span><br><span class="line">		 <span class="keyword">return</span> minValueRatateArray(a,m+<span class="number">1</span>,t);<span class="comment">//取右边</span></span><br><span class="line">	 <span class="function"><span class="keyword">else</span> </span><br><span class="line">		 return <span class="title">minValueRatateArray</span><span class="params">(a,s,m)</span></span>;<span class="comment">//取左边</span></span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="参考">参考</h2><ul>
-<li>July 微软面试100题系列 第69题</li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>题目:把一个数组最开始的若干个元素搬到数组的末尾,我们称之为数组的旋转。输入一个 排好序的数组的一个旋转,
-输出旋转数组的最小元素。例如数组<span class="list">{3, 4, 5, 1, 2}</span>为<span class="list">{1, 2, 3, 4, 5}</span>的一个旋转,该数 组的最小值为 <span class="number">1</span>。
-</code></pre><h2 id="解析">解析</h2><blockquote>
-<p>该题最容易想到的就是遍历，但是他的复杂度是O(n)，而作为面试题肯定是需要我们找出一种更优的方法</p>
-</blockquote>
-<p>这里使用可以二分法来解决该问题,假设数组a的长度为n，现在使用二分法过程中左端索引s,右端索引t，则中间位置为m=s+(t-s)/2<br>首先可以知道旋转数组在旋转之后a[0]&gt;a[n-1]是肯定成立的，</p>
-<p>当a[s]&lt;=a[m]的时候，我们应该进去右侧继续查找，比如a[0]<a[2] 接下来我们只需要找a[3~4]即可（注意a[m]都已经大于a[s]了，所以这里取右侧的时候m舍去的）
-同理，当a[s]>a[m]的时候 进入左侧继续搜索，直到<br>可以发现当a[s]&lt;=a[t]的时候  a[s]肯定就是最小值了。</p>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[左边的数都小于等 于它,右边的数都大于等于它]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/"/>
-    <id>http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/</id>
-    <published>2015-07-25T00:52:50.000Z</published>
-    <updated>2015-07-27T13:51:47.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br><a id="more"></a></p>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 左边的数都小于等 于它,右边的数都大于等于它</span><br><span class="line"> * 将原数组排序b 如果a[i]=b[i] 则该i对应的值满足条件</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftLtRightGt</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] b=a.clone();</span><br><span class="line">	Arrays.sort(b);<span class="comment">//O(nlogn)</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i]==b[i])<span class="comment">//只要相等 就表示满足条件</span></span><br><span class="line">			System.out.println(i+<span class="string">":"</span>+a[i]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="参考">参考</h2><p>July 微软面试题  第81题</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[数值的整数次方]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/24/Algorithm/x-exponent/"/>
-    <id>http://yyl8781697.github.io/2015/07/24/Algorithm/x-exponent/</id>
-    <published>2015-07-24T12:05:12.000Z</published>
-    <updated>2015-07-24T13:44:23.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
-</code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>还需要考虑：</p>
-<ol>
-<li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
-<li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
-<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
-</ol>
-<a id="more"></a>
-<p>考虑了这么多，那么可以直接上完整代码了</p>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 数值的整数次方 </span><br><span class="line"> * 使用递归来求解，并且同时考虑特殊情况 </span><br><span class="line"> * 复杂度为O(exp)</span><br><span class="line"> *<span class="javadoctag"> @param</span> base</span><br><span class="line"> *<span class="javadoctag"> @param</span> exp</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (exp==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>; <span class="comment">//任何数的0次方都是 1</span></span><br><span class="line">	<span class="keyword">if</span> (exp == <span class="number">1</span>) <span class="keyword">return</span> base;<span class="comment">//任何数的1 都是自己</span></span><br><span class="line">	<span class="keyword">if</span>(base == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(exp&lt;<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">return</span> Double.POSITIVE_INFINITY;<span class="comment">//0的负数次方都是 无穷大</span></span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;<span class="comment">//0的正数次方都是0</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">double</span> half = power(base, Math.abs(exp) &gt;&gt; <span class="number">1</span>);</span><br><span class="line">	<span class="comment">//这里判断如何当前是奇数次数 还需要再乘以一个自己</span></span><br><span class="line">	<span class="keyword">double</span> ret= (((exp &amp; <span class="number">1</span>) == <span class="number">1</span>) ? base : <span class="number">1.0</span>) * half * half;</span><br><span class="line">	<span class="keyword">if</span>(exp&lt;<span class="number">0</span>)<span class="comment">//如果这个整数是负数的时候  则取倒数</span></span><br><span class="line">		ret=<span class="number">1</span>/ret;</span><br><span class="line">	<span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="参考">参考</h2><ul>
-<li><a href="http://www.cnblogs.com/xwdreamer/archive/2012/05/15/2502329.html" target="_blank" rel="external">http://www.cnblogs.com/xwdreamer/archive/2012/05/15/2502329.html</a></li>
-<li>July 微软面试 第71题</li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
-</code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>还需要考虑：</p>
-<ol>
-<li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
-<li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
-<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
-</ol>]]>
     
     </summary>
     

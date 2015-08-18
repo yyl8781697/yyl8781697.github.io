@@ -82,6 +82,222 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/" title="找一个数组中绝对值和最小的三个元素" itemprop="url">找一个数组中绝对值和最小的三个元素</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-03T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>找一个数组中绝对值和最小的三个元素
+</code></pre><h2 id="解析">解析</h2><p>暴力的方法是O(n^3)，肯定还存在其他更加优的方法</p>
+<ol>
+<li>将数组升序排序</li>
+<li>固定一个数字，然后从两端开始找，如果sum&lt;0 则left++ 否则right—  同时记录最小的minSum<blockquote>
+<p>注意，两端向中间找的时候如果遇到当前固定的数字需要跳过</p>
+</blockquote>
+</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/03/Algorithm/Min-Abs-ThreeNumber/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/03/Algorithm/Max-Min-in-Array/" title="对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？" itemprop="url">对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-03T14:59:25.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>对于一个由<span class="keyword">N</span>个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？
+</code></pre><h2 id="解析">解析</h2><p>普通的遍历是需要O(2n)时间，那有没有其他更好的办法呢？<br>其实可以使用分而治之的思想，将N分为两段  分别取到每一段中的最大和最小值  ，然后最大与最大比即可 最小与最小比即可，这样就可以避免最小与最大的比较</p>
+<pre><code>比如：
+<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>
+正常对比的话得到<span class="built_in">min</span>=<span class="number">1</span>,<span class="built_in">max</span>=<span class="number">4</span>需要<span class="number">6</span>次
+那如果先求的<span class="built_in">min1</span>=<span class="number">1</span>,<span class="built_in">max1</span>=<span class="number">2</span>,min2=<span class="number">3</span>,max2=<span class="number">4</span>（需要<span class="number">2</span>次比较）
+然后<span class="built_in">min1</span>&lt;min2 得到<span class="built_in">min</span>=<span class="number">1</span>,<span class="built_in">max1</span>&lt;max2可得<span class="built_in">max</span>=<span class="number">4</span> （又是需要<span class="number">2</span>次）
+所以这种方法只需要<span class="number">4</span>次
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/03/Algorithm/Max-Min-in-Array/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/03/Algorithm/Max-Min-in-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/03/Algorithm/Max-Min-in-Array/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/02/Algorithm/Permutation-and-Combination/" title="全排列以及全组合" itemprop="url">全排列以及全组合</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-02T14:44:33.000Z" itemprop="datePublished"> 发表于 2015-08-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="全排列">全排列</h2><blockquote>
+<p>这里主要使用递归来实现，也就是考察递归的熟练使用与否</p>
+</blockquote>
+<p>全排列的递归生成规则为：</p>
+<ol>
+<li>n个数的全排列=(其中一个数的前缀)+n-1个树的全排列</li>
+<li>当前只剩下一个待选前缀的时候，停止迭代</li>
+<li>关于前缀的设立，是逐个迭代剩余的候选元素通过两两交换完成的，在进行输出之后还需要还得将两个数字重新交换回去</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/02/Algorithm/Permutation-and-Combination/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/02/Algorithm/Permutation-and-Combination/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/02/Algorithm/Permutation-and-Combination/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/30/Java Base/Java-AOP-Study/" title="学习Java AOP的实现" itemprop="url">学习Java AOP的实现</a>
   </h1>
   <p class="article-author">By
@@ -546,213 +762,6 @@
 	
 	  	<span></span>
 		<a href="/2015/07/25/Algorithm/The-Longest-Palindrome/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/The-Longest-Palindrome/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" title="求旋转数组中的最小值" itemprop="url">求旋转数组中的最小值</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-25T02:42:58.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>题目:把一个数组最开始的若干个元素搬到数组的末尾,我们称之为数组的旋转。输入一个 排好序的数组的一个旋转,
-输出旋转数组的最小元素。例如数组<span class="list">{3, 4, 5, 1, 2}</span>为<span class="list">{1, 2, 3, 4, 5}</span>的一个旋转,该数 组的最小值为 <span class="number">1</span>。
-</code></pre><h2 id="解析">解析</h2><blockquote>
-<p>该题最容易想到的就是遍历，但是他的复杂度是O(n)，而作为面试题肯定是需要我们找出一种更优的方法</p>
-</blockquote>
-<p>这里使用可以二分法来解决该问题,假设数组a的长度为n，现在使用二分法过程中左端索引s,右端索引t，则中间位置为m=s+(t-s)/2<br>首先可以知道旋转数组在旋转之后a[0]&gt;a[n-1]是肯定成立的，</p>
-<p>当a[s]&lt;=a[m]的时候，我们应该进去右侧继续查找，比如a[0]<a[2] 接下来我们只需要找a[3~4]即可（注意a[m]都已经大于a[s]了，所以这里取右侧的时候m舍去的）
-同理，当a[s]>a[m]的时候 进入左侧继续搜索，直到<br>可以发现当a[s]&lt;=a[t]的时候  a[s]肯定就是最小值了。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/" title="左边的数都小于等 于它,右边的数都大于等于它" itemprop="url">左边的数都小于等 于它,右边的数都大于等于它</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-25T00:52:50.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/Left-Lte-Right-Gte/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/24/Algorithm/x-exponent/" title="数值的整数次方" itemprop="url">数值的整数次方</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-24T12:05:12.000Z" itemprop="datePublished"> 发表于 2015-07-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
-</code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>还需要考虑：</p>
-<ol>
-<li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
-<li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
-<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/24/Algorithm/x-exponent/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/24/Algorithm/x-exponent/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/24/Algorithm/x-exponent/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
