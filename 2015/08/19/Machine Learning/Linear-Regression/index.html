@@ -1,0 +1,707 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Linear Regression | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Linear Regression现在相对比于之前的Perceptron Learning Algorithm算法，假如我们现在时的问题不是解决是否发行用卡，而是该发多少额度的问题也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！
+那么我们其实可以直接使用特征属性与权重的加权求和来表示需要发的信用额度即可(与PLA类似，但是没有激活函数：二值判断逆函数)上图中表示的就是为线性回归(L">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Linear Regression">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/08/19/Machine Learning/Linear-Regression/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Linear Regression现在相对比于之前的Perceptron Learning Algorithm算法，假如我们现在时的问题不是解决是否发行用卡，而是该发多少额度的问题也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！
+那么我们其实可以直接使用特征属性与权重的加权求和来表示需要发的信用额度即可(与PLA类似，但是没有激活函数：二值判断逆函数)上图中表示的就是为线性回归(L">
+<meta property="og:image" content="/img/Linear-Regression/ed.png">
+<meta property="og:image" content="/img/Linear-Regression/jq.png">
+<meta property="og:image" content="/img/Linear-Regression/2d.png">
+<meta property="og:image" content="/img/Linear-Regression/3d.png">
+<meta property="og:image" content="/img/Linear-Regression/se.png">
+<meta property="og:image" content="/img/Linear-Regression/jse.png">
+<meta property="og:image" content="/img/Linear-Regression/jse2.png">
+<meta property="og:image" content="/img/Linear-Regression/mt.png">
+<meta property="og:image" content="/img/Linear-Regression/wq.png">
+<meta property="og:image" content="/img/Linear-Regression/td.png">
+<meta property="og:image" content="/img/Linear-Regression/task.png">
+<meta property="og:image" content="/img/Linear-Regression/ei.png">
+<meta property="og:image" content="/img/Linear-Regression/pd.png">
+<meta property="og:image" content="/img/Linear-Regression/qw.png">
+<meta property="og:image" content="/img/Linear-Regression/task2.png">
+<meta property="og:image" content="/img/Linear-Regression/s1.png">
+<meta property="og:image" content="/img/Linear-Regression/s2.png">
+<meta property="og:image" content="/img/Linear-Regression/eip.png">
+<meta property="og:image" content="/img/Linear-Regression/eipt.png">
+<meta property="og:image" content="/img/Linear-Regression/hm.png">
+<meta property="og:image" content="/img/Linear-Regression/eips.png">
+<meta property="og:image" content="/img/Linear-Regression/eint2.png">
+<meta property="og:image" content="/img/Linear-Regression/eint3.png">
+<meta property="og:image" content="/img/Linear-Regression/einout.png">
+<meta property="og:image" content="/img/Linear-Regression/vvv.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Linear Regression">
+<meta name="twitter:description" content="Linear Regression现在相对比于之前的Perceptron Learning Algorithm算法，假如我们现在时的问题不是解决是否发行用卡，而是该发多少额度的问题也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！
+那么我们其实可以直接使用特征属性与权重的加权求和来表示需要发的信用额度即可(与PLA类似，但是没有激活函数：二值判断逆函数)上图中表示的就是为线性回归(L">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/19/Machine Learning/Linear-Regression/" title="《台大机器学习基石》Linear Regression" itemprop="url">《台大机器学习基石》Linear Regression</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-19T15:15:46.000Z" itemprop="datePublished"> 发表于 2015-08-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linear_Regression"><span class="toc-number">1.</span> <span class="toc-text">Linear Regression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ein(w)最小化"><span class="toc-number">2.</span> <span class="toc-text">Ein(w)最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Learning_happened"><span class="toc-number">3.</span> <span class="toc-text">Learning happened</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>算法，假如我们现在时的问题不是解决是否发行用卡，而是该发<strong>多少额度</strong>的问题<br><img src="/img/Linear-Regression/ed.png" width="300px" height="300px"><br>也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！</p>
+<p>那么我们其实可以直接使用特征属性与权重的加权求和来表示需要发的信用额度即可(与<code>PLA</code>类似，但是没有激活函数：二值判断逆函数)<br><img src="/img/Linear-Regression/jq.png" width="500px" height="300px"><br>上图中表示的就是为线性回归(<code>Linear Regression</code>)，其中<code>w<sup>T</sup>x</code>就是表示为全部的假设空间(<code>hypothesis set</code>)</p>
+<p>如果当前的特征是一维的，那么这里的<code>hypothesis set</code>就表示一条线，（因为总体的特征向量里面还有一个常数值）<br><img src="/img/Linear-Regression/2d.png" width="300px" height="300px"><br>如果当前的特征是二维的，那么这里的<code>hypothesis set</code>就一个平面<br><img src="/img/Linear-Regression/3d.png" width="300px" height="300px"><br>当然特征更加多得话，最终<code>hypothesis set</code>表示一个超平面<br>其中图上红色的部分叫做误差（视频里面叫做<strong>余数</strong>），那么回归分析的目标就是将所有的误差降到最小越好<br>这里使用平方误差来衡量整体的误差<br><img src="/img/Linear-Regression/se.png" width="300px" height="100px"><br>那么从机器学习的角度来说，这里的误差就可以看做(下面这个表达式就很熟悉了)<br><img src="/img/Linear-Regression/jse.png" width="300px" height="100px"><br>相应的<br><img src="/img/Linear-Regression/jse2.png" width="300px" height="100px"><br>表示这个分类器在未来未训练数据集中产生的误差是多少<br>那么现在的线性回归的问题就是转为将<code>E<sub>in</sub>(w)</code>优化到最小。</p>
+<h2 id="Ein(w)最小化">Ein(w)最小化</h2><p>现将上面小节的中的<code>E<sub>in</sub></code>转为矩阵的运算<br><img src="/img/Linear-Regression/mt.png" width="500px" height="400px"></p>
+<ol>
+<li>向量内积可交换，将<code>w<sup>T</sup>x</code>转为<code>x<sup>T</sup>w</code></li>
+<li>将连加转为向量形式的长度（应该是二范数）</li>
+<li>将<code>w</code>单独提出来（相当于隔离出了一个特征属性向量的矩阵）</li>
+<li>最终使用缩写来进行整理</li>
+</ol>
+<p>到了这一步我们可以发现<code>E<sub>in</sub>(w)</code>只与<code>w</code>有关，那么他们的关系图是<br><img src="/img/Linear-Regression/wq.png" width="300px" height="300px"><br>可以发现<code>E<sub>in</sub>(w)</code>是连续可导，还有它是凸的<br>那么用<code>E<sub>in</sub>(w)</code>对<code>w</code>求偏导即可求导最优值(梯度为0的位置)<br><img src="/img/Linear-Regression/td.png" width="400px" height="300px"><br>这样现在问题又转为了 求<img src="/img/Linear-Regression/task.png" width="300px" height="100px"></p>
+<p>首先将<img src="/img/Linear-Regression/ei.png" width="400px" height="100px"><br>现在对其求偏导<br><img src="/img/Linear-Regression/pd.png" width="300px" height="100px"><br>完了之后再将<code>A,b</code>替换回去<img src="/img/Linear-Regression/qw.png" width="300px" height="100px"></p>
+<p>进一步将问题转换为<img src="/img/Linear-Regression/task2.png" width="400px" height="100px"><br>式子中<code>X<sup>T</sup>X</code>和<code>X<sup>T</sup>y</code>都是已知的，唯一不知道的就是<code>w</code>，这样就变为了一个一次的方程式</p>
+<ol>
+<li>假如有<code>(X<sup>T</sup>X)<sup>-1</sup></code>反矩阵的存在，那么就可以直接得到解了,并且是唯一的<br> <img src="/img/Linear-Regression/s1.png" width="250px" height="250px"></li>
+<li>但是如果<code>(X<sup>T</sup>X)<sup>-1</sup></code>反矩阵不存在，那么得到的解可能就不唯一了<br> <img src="/img/Linear-Regression/s2.png" width="250px" height="250px"></li>
+</ol>
+<p>所以这里的核心就是计算虚假的反矩阵(<code>pseudo-inverse</code>),听林老师说这个的计算很多工具都是由现成的^_^</p>
+<blockquote>
+<p>刚刚求<code>E<sub>in</sub>(w)</code>最小化的过程中看似直接用公式代替可到，但是其中的<code>pseudo-inverse</code>计算起来麻烦，最终在计算的时候还是需要迭代，然后会触发<code>E<sub>in</sub>(w)</code>和<code>E<sub>out</sub>(w)</code>的变化，是一个深度隐含的学习过程(这种是叫做<code>Analytic Solution</code>)。</p>
+</blockquote>
+<h2 id="Learning_happened">Learning happened</h2><p>那么该如果保证<code>E<sub>out</sub></code>可以是小的呢？<br>我们先来看一下<code>E<sub>in</sub></code>的平均<br><img src="/img/Linear-Regression/eip.png" width="500px" height="100px"><br>其中<code>nosie level</code>表示样本中噪声的一个情况，<code>d+1</code>表示模型的自由度，<code>N</code>表示样本的容量<br>其中单独表示<code>E<sub>in</sub>(w)</code>的话为<br><img src="/img/Linear-Regression/eipt.png" width="500px" height="200px"><br>这样就形成了两项<code>1-XX<sup>+</sup></code>和<code>y</code>，也就是相当于将输入喝输出进行了一个分离,其中<code>XX<sup>+</sup></code>叫做<code>hat matrix</code><br>关于这个<code>hat matrix</code>,它的意义是这样纸的<br><img src="/img/Linear-Regression/hm.png" width="500px" height="400px"></p>
+<ol>
+<li>红色区块表示向量<code>X</code>的一个扩散，而<code>y^</code>就是落在这个空间上</li>
+<li>目标就是求<code>y-y^</code>的最小化，也就是图种的绿色那条线（<code>y^</code>）向下投影的线</li>
+<li><code>H</code>就是表示这个空间上<code>y</code>到<code>y^</code>的一个投影</li>
+<li><code>I-H</code>就是表示误差部分<code>y-y^</code></li>
+</ol>
+<p>相应的会有<code>trace(I-H)=N-(d+1)</code></p>
+<p>好，现在再来看<code>E<sub>in</sub></code>的平均到底是什么意思<br><img src="/img/Linear-Regression/eips.png" width="500px" height="400px"></p>
+<ol>
+<li>其中如果<code>f(x)</code>为目标函数，那么目标值<code>y</code>就相当于在<code>f(x)</code>上添加噪声</li>
+<li>然后这个噪声通过<code>I-H</code>就可以转为<code>y-y^</code></li>
+</ol>
+<p>现在对噪声作评价的话，那么就可以得到<img src="/img/Linear-Regression/eint2.png" width="500px" height="60px"><br>此时<img src="/img/Linear-Regression/eint3.png" width="500px" height="60px"><br>这两个式子哲学上的意思是<code>E<sub>in</sub></code>的平均是可以看到的，所以当存在噪声的时候看到的线会偏向于噪声方向，而在<code>E<sub>out</sub></code>的平均是未知的，比最好的那个线还要向右边偏一点（没听懂-_-）</p>
+<p>他们俩会形成如下的关系线<br><img src="/img/Linear-Regression/einout.png" width="300px" height="300px"><br>它描述的是当前的样本量与平均的<code>E<sub>in</sub></code>和<code>E<sub>out</sub></code>的关系,随着样本量<code>N</code>的增长，最终会趋向于<code>nosie level</code></p>
+<p>那么就可以得到<br><img src="/img/Linear-Regression/vvv.png" width="300px" height="200px"><br>说明<code>N</code>足够大，然后他的<code>noise level</code>够小时，说明了<code>Learning happened</code></p>
+<h2 id="总结">总结</h2><ol>
+<li>线性回归最终求出的是一个加权求和的值</li>
+</ol>
+<ul>
+<li>线性回归的<code>E<sub>in</sub></code>的采用的是最小平方误差</li>
+<li>在计算<code>E<sub>in</sub></code>的最小化时，可以将问题转为矩阵之后就逆矩阵相关即可</li>
+<li>通过<code>E<sub>in</sub></code>平均的计算,说明了<code>Learning happened</code></li>
+<li>其实线性回归去坐分类问题也是可以的^_^，第9课第4个小视频</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第九讲</li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/08/19/Machine Learning/Linear-Regression/" data-title="《台大机器学习基石》Linear Regression | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/"  title="机器学习常见算法个人总结（面试用）">
+ <strong>下一篇：</strong><br/> 
+ <span>机器学习常见算法个人总结（面试用）
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/19/Machine Learning/Linear-Regression/" data-title="《台大机器学习基石》Linear Regression" data-url="http://yyl8781697.github.io/2015/08/19/Machine Learning/Linear-Regression/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linear_Regression"><span class="toc-number">1.</span> <span class="toc-text">Linear Regression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ein(w)最小化"><span class="toc-number">2.</span> <span class="toc-text">Ein(w)最小化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Learning_happened"><span class="toc-number">3.</span> <span class="toc-text">Learning happened</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

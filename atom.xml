@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-08-16T00:22:10.000Z</updated>
+  <updated>2015-08-20T16:19:58.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,76 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[《台大机器学习基石》Linear Regression]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/19/Machine%20Learning/Linear-Regression/"/>
+    <id>http://yyl8781697.github.io/2015/08/19/Machine Learning/Linear-Regression/</id>
+    <published>2015-08-19T15:15:46.000Z</published>
+    <updated>2015-08-20T16:19:58.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>算法，假如我们现在时的问题不是解决是否发行用卡，而是该发<strong>多少额度</strong>的问题<br><img src="/img/Linear-Regression/ed.png" width="300px" height="300px"><br>也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！</p>
+<p>那么我们其实可以直接使用特征属性与权重的加权求和来表示需要发的信用额度即可(与<code>PLA</code>类似，但是没有激活函数：二值判断逆函数)<br><img src="/img/Linear-Regression/jq.png" width="500px" height="300px"><br>上图中表示的就是为线性回归(<code>Linear Regression</code>)，其中<code>w<sup>T</sup>x</code>就是表示为全部的假设空间(<code>hypothesis set</code>)</p>
+<p>如果当前的特征是一维的，那么这里的<code>hypothesis set</code>就表示一条线，（因为总体的特征向量里面还有一个常数值）<br><img src="/img/Linear-Regression/2d.png" width="300px" height="300px"><br>如果当前的特征是二维的，那么这里的<code>hypothesis set</code>就一个平面<br><img src="/img/Linear-Regression/3d.png" width="300px" height="300px"><br>当然特征更加多得话，最终<code>hypothesis set</code>表示一个超平面<br>其中图上红色的部分叫做误差（视频里面叫做<strong>余数</strong>），那么回归分析的目标就是将所有的误差降到最小越好<br>这里使用平方误差来衡量整体的误差<br><img src="/img/Linear-Regression/se.png" width="300px" height="100px"><br>那么从机器学习的角度来说，这里的误差就可以看做(下面这个表达式就很熟悉了)<br><img src="/img/Linear-Regression/jse.png" width="300px" height="100px"><br>相应的<br><img src="/img/Linear-Regression/jse2.png" width="300px" height="100px"><br>表示这个分类器在未来未训练数据集中产生的误差是多少<br>那么现在的线性回归的问题就是转为将<code>E<sub>in</sub>(w)</code>优化到最小。</p>
+<h2 id="Ein(w)最小化">Ein(w)最小化</h2><p>现将上面小节的中的<code>E<sub>in</sub></code>转为矩阵的运算<br><img src="/img/Linear-Regression/mt.png" width="500px" height="400px"></p>
+<ol>
+<li>向量内积可交换，将<code>w<sup>T</sup>x</code>转为<code>x<sup>T</sup>w</code></li>
+<li>将连加转为向量形式的长度（应该是二范数）</li>
+<li>将<code>w</code>单独提出来（相当于隔离出了一个特征属性向量的矩阵）</li>
+<li>最终使用缩写来进行整理</li>
+</ol>
+<p>到了这一步我们可以发现<code>E<sub>in</sub>(w)</code>只与<code>w</code>有关，那么他们的关系图是<br><img src="/img/Linear-Regression/wq.png" width="300px" height="300px"><br>可以发现<code>E<sub>in</sub>(w)</code>是连续可导，还有它是凸的<br>那么用<code>E<sub>in</sub>(w)</code>对<code>w</code>求偏导即可求导最优值(梯度为0的位置)<br><img src="/img/Linear-Regression/td.png" width="400px" height="300px"><br>这样现在问题又转为了 求<img src="/img/Linear-Regression/task.png" width="300px" height="100px"></p>
+<p>首先将<img src="/img/Linear-Regression/ei.png" width="400px" height="100px"><br>现在对其求偏导<br><img src="/img/Linear-Regression/pd.png" width="300px" height="100px"><br>完了之后再将<code>A,b</code>替换回去<img src="/img/Linear-Regression/qw.png" width="300px" height="100px"></p>
+<p>进一步将问题转换为<img src="/img/Linear-Regression/task2.png" width="400px" height="100px"><br>式子中<code>X<sup>T</sup>X</code>和<code>X<sup>T</sup>y</code>都是已知的，唯一不知道的就是<code>w</code>，这样就变为了一个一次的方程式</p>
+<ol>
+<li>假如有<code>(X<sup>T</sup>X)<sup>-1</sup></code>反矩阵的存在，那么就可以直接得到解了,并且是唯一的<br> <img src="/img/Linear-Regression/s1.png" width="250px" height="250px"></li>
+<li>但是如果<code>(X<sup>T</sup>X)<sup>-1</sup></code>反矩阵不存在，那么得到的解可能就不唯一了<br> <img src="/img/Linear-Regression/s2.png" width="250px" height="250px"></li>
+</ol>
+<p>所以这里的核心就是计算虚假的反矩阵(<code>pseudo-inverse</code>),听林老师说这个的计算很多工具都是由现成的^_^</p>
+<blockquote>
+<p>刚刚求<code>E<sub>in</sub>(w)</code>最小化的过程中看似直接用公式代替可到，但是其中的<code>pseudo-inverse</code>计算起来麻烦，最终在计算的时候还是需要迭代，然后会触发<code>E<sub>in</sub>(w)</code>和<code>E<sub>out</sub>(w)</code>的变化，是一个深度隐含的学习过程(这种是叫做<code>Analytic Solution</code>)。</p>
+</blockquote>
+<h2 id="Learning_happened">Learning happened</h2><p>那么该如果保证<code>E<sub>out</sub></code>可以是小的呢？<br>我们先来看一下<code>E<sub>in</sub></code>的平均<br><img src="/img/Linear-Regression/eip.png" width="500px" height="100px"><br>其中<code>nosie level</code>表示样本中噪声的一个情况，<code>d+1</code>表示模型的自由度，<code>N</code>表示样本的容量<br>其中单独表示<code>E<sub>in</sub>(w)</code>的话为<br><img src="/img/Linear-Regression/eipt.png" width="500px" height="200px"><br>这样就形成了两项<code>1-XX<sup>+</sup></code>和<code>y</code>，也就是相当于将输入喝输出进行了一个分离,其中<code>XX<sup>+</sup></code>叫做<code>hat matrix</code><br>关于这个<code>hat matrix</code>,它的意义是这样纸的<br><img src="/img/Linear-Regression/hm.png" width="500px" height="400px"></p>
+<ol>
+<li>红色区块表示向量<code>X</code>的一个扩散，而<code>y^</code>就是落在这个空间上</li>
+<li>目标就是求<code>y-y^</code>的最小化，也就是图种的绿色那条线（<code>y^</code>）向下投影的线</li>
+<li><code>H</code>就是表示这个空间上<code>y</code>到<code>y^</code>的一个投影</li>
+<li><code>I-H</code>就是表示误差部分<code>y-y^</code></li>
+</ol>
+<p>相应的会有<code>trace(I-H)=N-(d+1)</code></p>
+<p>好，现在再来看<code>E<sub>in</sub></code>的平均到底是什么意思<br><img src="/img/Linear-Regression/eips.png" width="500px" height="400px"></p>
+<ol>
+<li>其中如果<code>f(x)</code>为目标函数，那么目标值<code>y</code>就相当于在<code>f(x)</code>上添加噪声</li>
+<li>然后这个噪声通过<code>I-H</code>就可以转为<code>y-y^</code></li>
+</ol>
+<p>现在对噪声作评价的话，那么就可以得到<img src="/img/Linear-Regression/eint2.png" width="500px" height="60px"><br>此时<img src="/img/Linear-Regression/eint3.png" width="500px" height="60px"><br>这两个式子哲学上的意思是<code>E<sub>in</sub></code>的平均是可以看到的，所以当存在噪声的时候看到的线会偏向于噪声方向，而在<code>E<sub>out</sub></code>的平均是未知的，比最好的那个线还要向右边偏一点（没听懂-_-）</p>
+<p>他们俩会形成如下的关系线<br><img src="/img/Linear-Regression/einout.png" width="300px" height="300px"><br>它描述的是当前的样本量与平均的<code>E<sub>in</sub></code>和<code>E<sub>out</sub></code>的关系,随着样本量<code>N</code>的增长，最终会趋向于<code>nosie level</code></p>
+<p>那么就可以得到<br><img src="/img/Linear-Regression/vvv.png" width="300px" height="200px"><br>说明<code>N</code>足够大，然后他的<code>noise level</code>够小时，说明了<code>Learning happened</code></p>
+<h2 id="总结">总结</h2><ol>
+<li>线性回归最终求出的是一个加权求和的值</li>
+</ol>
+<ul>
+<li>线性回归的<code>E<sub>in</sub></code>的采用的是最小平方误差</li>
+<li>在计算<code>E<sub>in</sub></code>的最小化时，可以将问题转为矩阵之后就逆矩阵相关即可</li>
+<li>通过<code>E<sub>in</sub></code>平均的计算,说明了<code>Learning happened</code></li>
+<li>其实线性回归去坐分类问题也是可以的^_^，第9课第4个小视频</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第九讲</li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-A]]>
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[机器学习常见算法个人总结（面试用）]]></title>
@@ -520,7 +590,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
     <link href="http://yyl8781697.github.io/2015/08/15/Machine%20Learning/VC-Dimension/"/>
     <id>http://yyl8781697.github.io/2015/08/15/Machine Learning/VC-Dimension/</id>
     <published>2015-08-15T07:45:20.000Z</published>
-    <updated>2015-08-18T14:49:09.000Z</updated>
+    <updated>2015-08-19T15:20:40.000Z</updated>
     <content type="html"><![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
 <blockquote>
 <p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br><a id="more"></a></p>
@@ -529,7 +599,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 <ul>
 <li><p>B(2,2)=3，B(3,2)=4 手算-_-<br>  <img src="/img/VC-Dimension/t1.png" width="500px" height="300px"><br>  因为任意两个点都不能被<code>shatter</code>，那么2个点产生的<code>dichotomies</code>不能超过3,同理3个点产生的<code>dichotomies</code>不能超过4</p>
 </li>
-<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能操作2，所以这里最大值都为1</p>
+<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能超过2，所以这里最大值都为1</p>
 </li>
 <li><p>B(N,k)=2<sup>N</sup>  当<code>N&lt;k</code><br>  <img src="/img/VC-Dimension/t3.png" width="500px" height="300px"><br>  这里的<code>2<sup>N</sup><2<sup>k<sup></sup></2<sup></code>必然成立，所以最大值直接取2<sup>N</sup>，不然多余选的点也都是重复的。</p>
 </li>
@@ -537,7 +607,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 </li>
 <li><p>B(N,k)&lt;=B(N-1,k)+B(N-1,k-1)  当<code>N&gt;k</code><br>  <img src="/img/VC-Dimension/t5.png" width="500px" height="300px"><br>  表中新添的值为上限的上限，耐心地看下上图的推导-_-</p>
 <ol>
-<li>通过计算机暴力求解B(4,3)=11,(一种16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
+<li>通过计算机暴力求解B(4,3)=11,(一共16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
 <li>现在将<code>x<sub>4</sub></code>这个点遮掉<br> <img src="/img/VC-Dimension/d2.png" width="500px" height="300px"></li>
 <li>同时将蓝色的遮掉<br> <img src="/img/VC-Dimension/d3.png" width="500px" height="300px"><br> 这里不能多余2个点被<code>shatter</code></li>
 <li>整理之后就可以得到如下关系式<br> <img src="/img/VC-Dimension/d4.png" width="300px" height="200px"></li>
@@ -560,7 +630,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 </blockquote>
 <p>好，那么接下来主要经历如下三个步骤：</p>
 <ol>
-<li>使用<code>E<sub>in</sub>‘<code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></code></code></li>
+<li>使用<code>E<sub>in</sub>‘</code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></li>
 <li>这样最终可能出现的<code>H(x1,x2..xn,x1’,x2’…xn’)</code><br> <img src="/img/VC-Dimension/s2.png" width="500px" height="200px"></li>
 <li>使用不替换的<code>Hoeffding</code><br> <img src="/img/VC-Dimension/s3.png" width="500px" height="200px"></li>
 </ol>
@@ -793,7 +863,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
     <link href="http://yyl8781697.github.io/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/"/>
     <id>http://yyl8781697.github.io/2015/08/06/Machine Learning/Perceptron-Learning-Algorithm/</id>
     <published>2015-08-06T13:15:25.000Z</published>
-    <updated>2015-08-18T14:48:58.000Z</updated>
+    <updated>2015-08-20T16:14:17.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Perceptron">Perceptron</h2><p>先来看一下一个经典的信用卡发放问题：<br><img src="/img/Perceptron-Learning-Algorithm/credit.png" height="140px" width="400px"><br>这是一个用户的基本的信息，现在要决定是否对他发放信用卡。</p>
 <p>现在假设这些基本信息组成了一个向量X={x1,x2,…xd}<br>同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}<br><img src="/img/Perceptron-Learning-Algorithm/wx.png" height="140px" width="400px"><br>那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发<br><a id="more"></a><br><img src="/img/Perceptron-Learning-Algorithm/y.png" height="140px" width="400px"><br>相应的表示：</p>
 <ul>
@@ -867,7 +937,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 </ul>
 <hr>
 <blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。<br>    该算法效率没有简单的PLA高，但是可以解决非线性可以问题，同时还会有一个不错的效果^_^</p>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
 </blockquote>
 ]]></content>
     <summary type="html">
@@ -1684,80 +1754,6 @@ email to &lt;bug-findutils@gnu.org&gt;.
       <category term="Linux" scheme="http://yyl8781697.github.io/tags/Linux/"/>
     
       <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[对策字符串的最大长度]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/25/Algorithm/The-Longest-Palindrome/"/>
-    <id>http://yyl8781697.github.io/2015/07/25/Algorithm/The-Longest-Palindrome/</id>
-    <published>2015-07-25T07:03:19.000Z</published>
-    <updated>2015-07-25T12:06:04.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个字符串,输出该字符串中对称的子字符串的最大长度。比如输入字符串 “google”,由于该字符串里最长的对称子字符串是“goog”,因此输出 4。
-</code></pre><h2 id="解析">解析</h2><p>该题目比较直观的解法有：</p>
-<ol>
-<li>暴力法：遍历所有可能的子串，然后判断子串是否为回文，故总得复杂度为O(n^3)</li>
-<li>遍历字符串，以当前遍历为中心点，然后向两边扩展，直至扩展到不是回文，总复杂度为O(n^2)</li>
-</ol>
-<p>还有后缀树也可以解，不过需要较大的空间，本文使用的是manacher算法：</p>
-<pre><code>Manacher最早发现了可以用<span class="function"><span class="title">O</span><span class="params">(n)</span></span>的时间复杂度来解决该问题，所以这种方法称之为Manacher算法。
-</code></pre><p>现在以查询字符串”abaab”为例，该算法为了将”aba”和”baab” 奇偶形式统一考虑，做了一个很精妙的预处理：每每两个字符串以及两端都加一个标志符号#，就形成了<br>“#a#b#a#a#b#”新字符串，那么”aba”则可以看做”#a#b#a#”，同时”baab”转为#b#a#a#b#”，就都为奇数形式了<br><a id="more"></a></p>
-<pre><code>假设当前的字符串长度为<span class="keyword">n</span>,则添加的#个数为2*<span class="keyword">n</span>+1
-</code></pre><p>接下来需要添加一个辅助数组p,其中p[i]的值表示第i位上可以形成的最大回文半径(比如p[1]=2  因为#a#的半径为2)，全部先列出的话为：</p>
-<pre><code>新串:<span class="array"># a </span><span class="array"># b </span><span class="array"># a </span><span class="array"># a </span><span class="array"># b </span>#
-p[]:<span class="number">1</span> <span class="number">2</span> <span class="number">1</span> <span class="number">4</span> <span class="number">1</span> <span class="number">2</span> <span class="number">5</span> <span class="number">2</span> <span class="number">1</span> <span class="number">2</span> <span class="number">1</span>
-</code></pre><p>其实我们可以通过p[i]的值就可以得到每个字串相应位置的回文长度</p>
-<pre><code>半径<span class="tag">p</span>[i]的回文长度为<span class="number">2</span>*<span class="tag">p</span>[i]-<span class="number">1</span>，而每个在新字符串上每个回文两端必定是#，也是也就是相当于对原回文做了#的添加操作，假设原回文串为x长度，根据上面的添加#计算方式得到添加后的回文串为<span class="number">2</span>*x+<span class="number">1</span>
-故<span class="number">2</span>*<span class="tag">p</span>[i]-<span class="number">1</span>=<span class="number">2</span>*x+<span class="number">1</span> 
-可得x=<span class="tag">p</span>[i]-<span class="number">1</span>
-</code></pre><p>那么现在的问题就是相当于如何求出新字符串上p数组各个元素的值了,当然计算这个也不能靠暴力来算，不然就没意思了，大概我们了解到计算p[i]的时候 p<a href="j&lt;i">[j]</a>的值都是已经算出来了，同时回文串有对称性质，所以我们接下来可以这么看</p>
-<pre><code>现在要求<span class="tag">p</span>[<span class="number">5</span>]，根据P[<span class="number">3</span>]=<span class="number">4</span>可知，<span class="tag">p</span>[<span class="number">5</span>]是包含在<span class="tag">p</span>[<span class="number">3</span>]的回文串中，又因为回文的对称性，所以<span class="tag">p</span>[<span class="number">3</span>]左侧一定存在一个字符串与<span class="tag">p</span>[<span class="number">5</span>]一致，
-其实这里就可以算出其对称串为<span class="number">2</span>*<span class="number">3</span>-<span class="number">5</span>=<span class="number">1</span>  也就是<span class="tag">p</span>[<span class="number">1</span>]，P[<span class="number">1</span>]是已经算出的=<span class="number">2</span>  所以<span class="tag">p</span>[<span class="number">5</span>]也必定至少为<span class="number">2</span>（这里要考虑P[<span class="number">3</span>]回文的右界，不能超过）
-所以此时<span class="tag">p</span>[<span class="number">5</span>]只需要从<span class="tag">p</span>[<span class="number">3</span>]和<span class="tag">p</span>[<span class="number">7</span>]往两侧扩展即可，判断其存在的最大回文，这样就可以大大减少了重复计算
-</code></pre><p>接下来借用别人的图来解释一下<br><img src="/img/The-Longest-Palindrome/p1.png" alt=""></p>
-<blockquote>
-<p>对应上面的例子你可以将变量这么认为:i=5,id=3,j=1(通过2*id-i计算) 而mx=p[id]+4，其中id表示先前存在的能到最大右边的回文中心标记。。。</p>
-</blockquote>
-<p>所以当mx&gt;i的时候  就可以说明在计算i的时候  可以根据id找到左侧对应的点  这样就可以减少计算量</p>
-<p>但是另一种情况就是p[j]的回文范围超越了p[id]的回文范围，那这样就不能完全使用p[j]的值了<br><img src="/img/The-Longest-Palindrome/p2.png" alt=""><br>此时p[i]已知的最大可确保回文的范围就是mx-i</p>
-<p>综合上述：初始化p[i]=min(p[2*id-i],mx-i)  当mx&gt;i</p>
-<p>好，该算法的核心已经说明了接下来直接上代码：</p>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Manacher 方法</span><br><span class="line"> * 通过增加#字符将问题统一转为奇数回文的计算</span><br><span class="line"> * 借助半径辅助数组，每次计算当前辅助数组的值的时候</span><br><span class="line"> * 利用回文的对称性可能避免重复计算</span><br><span class="line"> *<span class="javadoctag"> @param</span> str</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">manacher</span><span class="params">(String str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> len=(str.length()&lt;&lt;<span class="number">1</span>)+<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">char</span>[] f=<span class="keyword">new</span> <span class="keyword">char</span>[len];<span class="comment">//将每每两个字符中间加上#，同时首位也加#</span></span><br><span class="line">	<span class="keyword">int</span>[] p=<span class="keyword">new</span> <span class="keyword">int</span>[len];<span class="comment">//辅助数组 存储对应索引上能形成最大回文的半径</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;str.length();i++)</span><br><span class="line">	&#123;</span><br><span class="line">		f[i&lt;&lt;<span class="number">1</span>]=<span class="string">'#'</span>;</span><br><span class="line">		f[(i&lt;&lt;<span class="number">1</span>)+<span class="number">1</span>]=str.charAt(i);</span><br><span class="line">	&#125;</span><br><span class="line">	f[len-<span class="number">1</span>]=<span class="string">'#'</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> id=<span class="number">0</span>,maxId=<span class="number">0</span>,maxLen=<span class="number">0</span>,maxIndex=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(maxId&gt;i)</span><br><span class="line">		&#123;</span><br><span class="line">			p[i]=Math.min(p[<span class="number">2</span>*id-i], maxId-i);<span class="comment">//找到对称点</span></span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			p[i]=<span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//继续往两边进行回文判断</span></span><br><span class="line">		<span class="keyword">while</span>((i-p[i])&gt;=<span class="number">0</span> &amp;&amp; (i+p[i])&lt;len &amp;&amp; f[i+p[i]]==f[i-p[i]])</span><br><span class="line">			p[i]++;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//更新当前可以到达的最远的索引id</span></span><br><span class="line">		<span class="keyword">if</span>(p[i]+i&gt;maxId)</span><br><span class="line">		&#123;</span><br><span class="line">			maxId=p[i]+i;</span><br><span class="line">			id=i;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//更新最大半径以及索引位置</span></span><br><span class="line">		<span class="keyword">if</span>(p[i]&gt;maxLen)</span><br><span class="line">		&#123;</span><br><span class="line">			maxLen=p[i];</span><br><span class="line">			maxIndex=i;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//构造回文字符串</span></span><br><span class="line">	<span class="keyword">char</span>[] ret=<span class="keyword">new</span> <span class="keyword">char</span>[maxLen-<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">int</span> j=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=maxIndex-maxLen+<span class="number">1</span>;i&lt;maxIndex+maxLen;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(f[i]!=<span class="string">'#'</span>)</span><br><span class="line">			ret[j++]=f[i];</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">return</span> String.valueOf(ret);</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试的一些样例为</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	System.out.println(manacher(<span class="string">"abaab"</span>));</span><br><span class="line">	System.out.println(manacher(<span class="string">"google"</span>));</span><br><span class="line">	System.out.println(manacher(<span class="string">"adfdfsedasdxdsa"</span>));</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结果：</p>
-<pre><code><span class="title">baab</span>
-goog
-asdxdsa
-</code></pre><blockquote>
-<p>他们都说这个方法复杂度为O(n)，应该也是，主要是比较maxId，其余的重复已经都是可以根据前面的结果算得</p>
-</blockquote>
-<h2 id="参考">参考</h2><ul>
-<li><a href="http://blog.csdn.net/pi9nc/article/details/9251455" target="_blank" rel="external">Manacher算法处理字符串回文</a></li>
-<li><a href="http://blog.csdn.net/yzl_rex/article/details/7908259" target="_blank" rel="external">Manacher算法：求解最长回文字符串，时间复杂度为O(N)</a></li>
-<li>july 编程之美 73题</li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目">题目</h2><pre><code>输入一个字符串,输出该字符串中对称的子字符串的最大长度。比如输入字符串 “google”,由于该字符串里最长的对称子字符串是“goog”,因此输出 4。
-</code></pre><h2 id="解析">解析</h2><p>该题目比较直观的解法有：</p>
-<ol>
-<li>暴力法：遍历所有可能的子串，然后判断子串是否为回文，故总得复杂度为O(n^3)</li>
-<li>遍历字符串，以当前遍历为中心点，然后向两边扩展，直至扩展到不是回文，总复杂度为O(n^2)</li>
-</ol>
-<p>还有后缀树也可以解，不过需要较大的空间，本文使用的是manacher算法：</p>
-<pre><code>Manacher最早发现了可以用<span class="function"><span class="title">O</span><span class="params">(n)</span></span>的时间复杂度来解决该问题，所以这种方法称之为Manacher算法。
-</code></pre><p>现在以查询字符串”abaab”为例，该算法为了将”aba”和”baab” 奇偶形式统一考虑，做了一个很精妙的预处理：每每两个字符串以及两端都加一个标志符号#，就形成了<br>“#a#b#a#a#b#”新字符串，那么”aba”则可以看做”#a#b#a#”，同时”baab”转为#b#a#a#b#”，就都为奇数形式了<br>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
     
   </entry>
   

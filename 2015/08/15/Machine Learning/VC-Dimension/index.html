@@ -150,7 +150,7 @@
 <ul>
 <li><p>B(2,2)=3，B(3,2)=4 手算-_-<br>  <img src="/img/VC-Dimension/t1.png" width="500px" height="300px"><br>  因为任意两个点都不能被<code>shatter</code>，那么2个点产生的<code>dichotomies</code>不能超过3,同理3个点产生的<code>dichotomies</code>不能超过4</p>
 </li>
-<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能操作2，所以这里最大值都为1</p>
+<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能超过2，所以这里最大值都为1</p>
 </li>
 <li><p>B(N,k)=2<sup>N</sup>  当<code>N&lt;k</code><br>  <img src="/img/VC-Dimension/t3.png" width="500px" height="300px"><br>  这里的<code>2<sup>N</sup><2<sup>k<sup></sup></2<sup></code>必然成立，所以最大值直接取2<sup>N</sup>，不然多余选的点也都是重复的。</p>
 </li>
@@ -158,7 +158,7 @@
 </li>
 <li><p>B(N,k)&lt;=B(N-1,k)+B(N-1,k-1)  当<code>N&gt;k</code><br>  <img src="/img/VC-Dimension/t5.png" width="500px" height="300px"><br>  表中新添的值为上限的上限，耐心地看下上图的推导-_-</p>
 <ol>
-<li>通过计算机暴力求解B(4,3)=11,(一种16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
+<li>通过计算机暴力求解B(4,3)=11,(一共16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
 <li>现在将<code>x<sub>4</sub></code>这个点遮掉<br> <img src="/img/VC-Dimension/d2.png" width="500px" height="300px"></li>
 <li>同时将蓝色的遮掉<br> <img src="/img/VC-Dimension/d3.png" width="500px" height="300px"><br> 这里不能多余2个点被<code>shatter</code></li>
 <li>整理之后就可以得到如下关系式<br> <img src="/img/VC-Dimension/d4.png" width="300px" height="200px"></li>
@@ -181,7 +181,7 @@
 </blockquote>
 <p>好，那么接下来主要经历如下三个步骤：</p>
 <ol>
-<li>使用<code>E<sub>in</sub>‘<code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></code></code></li>
+<li>使用<code>E<sub>in</sub>‘</code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></li>
 <li>这样最终可能出现的<code>H(x1,x2..xn,x1’,x2’…xn’)</code><br> <img src="/img/VC-Dimension/s2.png" width="500px" height="200px"></li>
 <li>使用不替换的<code>Hoeffding</code><br> <img src="/img/VC-Dimension/s3.png" width="500px" height="200px"></li>
 </ol>
@@ -364,7 +364,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
 		  
 		
 		  
@@ -417,11 +417,11 @@
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			

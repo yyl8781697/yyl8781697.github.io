@@ -92,6 +92,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/03/30/Java Source/Java-HashTable/" title="Java 源码学习之java.util.Hashtable" itemprop="url">Java 源码学习之java.util.Hashtable</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-30T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-03-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>Hashtable</code>是<code>Java</code>编程中较为常用的容器类之一，在面试时常常被与<code>HashMap</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;为什么要常与<code>HashMap</code>作比较呢?因为他们的源码是极其相似啊，网上也常常有人说<code>HashMap</code>是基于<code>Hashtable</code>实现的吧，因为<code>Hashtable</code>在<code>Java1.0</code>中就有了，但是<code>HashMap</code>在<code>Java1.2</code>才出现。<br>&#160; &#160; &#160; &#160;本文讲解<code>Hashtable</code>时不再累赘，实现的原理大致都和<a href="http://kubicode.me/2015/03/27/Java-HashMap/">HashMap</a>一样，这里主要讲<code>Hashtable</code>与<code>HashMap</code>几个不同点。</p>
+<h2 id="不支持null">不支持null</h2><p>&#160; &#160; &#160; &#160;我们知道<code>HashMap</code>是支持<code>null</code>的键和值的，每次遇到<code>null</code>时直接用0来作桶号，来看下<code>Hashtable</code>对<code>null</code>的处理</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/30/Java Source/Java-HashTable/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/30/Java Source/Java-HashTable/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/30/Java Source/Java-HashTable/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/03/29/Algorithm/InsertionSort/" title="2014阿里巴巴实习生笔试题-插入排序基于链表的实现" itemprop="url">2014阿里巴巴实习生笔试题-插入排序基于链表的实现</a>
   </h1>
   <p class="article-author">By
@@ -738,86 +806,6 @@ B.冒泡排序
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" title="LeetCode-Number of 1 Bits" itemprop="url">LeetCode-Number of 1 Bits</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-14T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
-</blockquote>
-<p>Problem:<br>Write a function that takes an unsigned integer and returns the number of ’1’ bits it has (also known as the Hamming weight).</p>
-<p>For example, the 32-bit integer ’11’ has binary representation <code>00000000000000000000000000001011</code>, so the function should return 3.</p>
-<p>思路</p>
-<ul>
-<li>使用移位操作，每次将最后的最低位累加</li>
-<li>我想说一模一样的代码，<code>Java</code>和<code>C++</code>的执行效率真的相差挺大</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">uint32_t</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>the Runetime is <code>10ms</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">// you need to treat n as an unsigned value</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>the Runtime is <code>239ms</code><br></p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
@@ -892,7 +880,7 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
 		  
 		
 		  
@@ -945,11 +933,11 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
