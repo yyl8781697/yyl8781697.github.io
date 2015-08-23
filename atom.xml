@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-08-20T16:23:55.000Z</updated>
+  <updated>2015-08-23T15:31:20.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -15,11 +15,110 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[《台大机器学习基石》Logistic Regression]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/21/Machine%20Learning/Logistic-Regression/"/>
+    <id>http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/</id>
+    <published>2015-08-21T13:07:01.000Z</published>
+    <updated>2015-08-23T15:31:20.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/" target="_blank" rel="external">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px"><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br><a id="more"></a></p>
+<blockquote>
+<p>这个也叫<code>Soft Binary Classification</code>，因为这里的概率可以根据一个阈值来判断是否属于哪一类</p>
+</blockquote>
+<p>刚刚可以看到目标函数<code>f(x)</code>的值是属于一个[0,1]范围的值，理所应当，我们理想的训练数据应该是这样的<br><img src="/img/Logistic-Regression/ind1.png" height="300px" width="300px"><br>想法虽好，然是实际上训练目标的概率值很难得到（比如一个患者你过了两三个月之后也许可以观察到该用户是否会患上心脏病，但是你可能是无法知道他患心脏病的真实概率的）<br>所以我们拿到的真实数据是这样的<br><img src="/img/Logistic-Regression/ind2.png" height="300px" width="300px"><br>这样也可以你可以看成为上上概率训练数据一个有噪声的版本，每个标签值对应的0或者1都是直接在概率阈值上进行了一个分类了</p>
+<p>那么现在的目标就是在原来（二分类）的数据上，以[0,1]范围为目标找到一个好的假设(<code>hypothesis</code>)</p>
+<p>那么首先可以想到的是按<code>Linear Regression</code>一样在特征值和权重向量上进行一个加权<br><img src="/img/Logistic-Regression/fw.png" height="400px" width="300px"><br>得到加权之后的<code>score</code>之后，我们希望<code>score</code>越高，最终得到的概率值越大（但是不能大于1），<code>score</code>越低，最终的概率值越小（不能小于0），那正好可以通过下面的函数的转换来完成刚刚的需求<br><img src="/img/Logistic-Regression/lf.png" height="300px" width="400px"><br>这个函数也叫做<code>logistic function</code><br><img src="/img/Logistic-Regression/logit.png" height="100px" width="400px"><br>其中里面的<code>s</code>就是相当于<code>score</code></p>
+<p>最终我们可以得到的模型函数为<br><img src="/img/Logistic-Regression/lh.png" height="300px" width="400px"><br>这也就是<code>Logistic Regression</code>的表示</p>
+<h2 id="Cross-Entropy_Error">Cross-Entropy Error</h2><p>根据<code>Logistic Regression</code>的目标函数<code>f(x)</code>可以很容易得到如下关系<br><img src="/img/Logistic-Regression/fx.png" height="100px" width="500px"></p>
+<p>假如现在有如下的数据<br><img src="/img/Logistic-Regression/cd.png" height="100px" width="500px"><br>那么这批数据产生的概率是<br><img src="/img/Logistic-Regression/d1.png" height="300px" width="300px"><br>使用<code>f(x)</code>替换可以得到<br><img src="/img/Logistic-Regression/d2.png" height="300px" width="300px"></p>
+<p>现在以<code>hypothesis</code>的角度来看，通过<code>h(x)</code>产生的样本情况为<br><img src="/img/Logistic-Regression/h1.png" height="300px" width="300px"></p>
+<p>如果<code>h(x)≈f(x)</code>,那么我们就可以说通过<code>h(x)</code>产生的样本的可能性与真正<code>f(x)</code>产生的数据很接近<br>那么我们现在找<br><img src="/img/Logistic-Regression/lhp.png" height="200px" width="500px"><br>这个是建立在<code>f(x)</code>产生的数据的可能性很大的基础上，所以现在也相应的就是求<code>h(x)</code>产生的样本的可能性也要很大。<br>用式子表达出来就是这个<br><img src="/img/Logistic-Regression/hn.png" height="100px" width="500px"><br>又因为<code>logistic function</code>的写对称性（<code>1-h(x)=h(-x)</code>），上面的式子可以转为<br><img src="/img/Logistic-Regression/hn2.png" height="100px" width="500px"><br>上面带负号的正好可以看做负样本(<code>y<sub>n</sub>=-1</code>)，带正好的也正好可以看做正样本(<code>y<sub>n</sub>=+1</code>)，同时对于每个<code>hypothesis</code>来说上图中灰色部分(产生各个数据的概率,不含目标)都是一样的，所以现在可以将上述式子简写为<br><img src="/img/Logistic-Regression/like.png" height="100px" width="500px"></p>
+<blockquote>
+<p>它是一个正比函数，<code>y<sub>n</sub></code>正好可以替换为原来的正负1</p>
+</blockquote>
+<p>现在要做的就是找到合适的<code>h(x)</code>，使的上述的可能性最高<br>把<code>h</code>用气w来替换为<br><img src="/img/Logistic-Regression/hwt.png" height="100px" width="500px"><br>为了求其最优化，我们将上述式子的连乘转为连加，通过添加一个<code>ln</code>函数(单调递增)，同时使用添加负号来由求最大化转为最小化(方便求)<br> <img src="/img/Logistic-Regression/cee.png" height="150px" width="500px">（式子2）<br>这里继续使用<code>logistic function</code>函数进行替换，可以有<br> <img src="/img/Logistic-Regression/ecc2.png" height="250px" width="500px"><br>(替换技巧ln a/b=ln a- ln b和ln 1=0)<br>紫色背景的表示对x<sub>n</sub>，y<sub>n</sub>的Error，通过累加再求平均就是很熟悉的<code>E<sub>in</sub></code>了,这个Error就叫做<code>Cross-Entropy Error</code></p>
+<h2 id="Gradient_Descent">Gradient Descent</h2><p>求式子2中的最小值最直观的就是对其求梯度并且其梯度在0的地方就是最小(也是最优)</p>
+<blockquote>
+<p>这里能用上述的方法来求是因为<code>Logistic Regression</code>的<code>E<sub>in</sub></code>是可导可微的，并且是凸的</p>
+</blockquote>
+<p>现在将其对<code>w</code>求偏导<br> <img src="/img/Logistic-Regression/pwf.png" height="400px" width="500px"><br>上面求的是梯度里面的一个<code>Component</code>，那么对所有的<code>Component</code>都整理起来可以得到<br><img src="/img/Logistic-Regression/zpwf.png" height="100px" width="500px"><br>目标就变成了求上述梯度为0的情况<br><img src="/img/Logistic-Regression/tdt.png" height="250px" width="250px"><br>但是可以看到上述的梯度并不是一个一次的方程式，也就是无法直接求出具体的值(不能像<code>Linear Regression</code>中那样直接求出)</p>
+<p>不过现在根据需要求解的问题看成现在这样<br><img src="/img/Logistic-Regression/gdt.png" height="250px" width="250px"><br>梯度的函数可以看成图种的曲线，而相应的参数<code>w</code>可以看成图种的那个球，每次都朝着错误的方向<code>v</code>滚，将球从上面滚到最低处，也就是得到梯度为0的情况<br><img src="/img/Logistic-Regression/aga.png" height="200px" width="400px"><br>其中<code>v</code>为球滚动的方向（后面可以知道是梯度的反方向），还有<code>η</code>表示步伐的长度(为正数，越大会滚的越快)<br>现在的问题就是转为了如果很快滚下去，并且是走对方向（真实中并不是一个二维空间，往往是一个多维空间）</p>
+<p>在曲线上很小很小的一个区间内可以看作是一个线段，那这样就可以在曲线上的一个点出来，然后走出一小段的线段来，那这样可以通过多维度的泰勒展开（额，不熟悉）可以得到<br><img src="/img/Logistic-Regression/aag.png" height="200px" width="500px"></p>
+<blockquote>
+<p>这里的<code>η</code>很小的时候，这个线段的逼近 还是很不错的</p>
+</blockquote>
+<p>上面公式中的灰色标志是表示与<code>v</code>没什么关系，在求解最小化的过程中有颜色部分两个向量内积的最小，那这样的话两个向量完全反方向就是最小的，也就是说<code>v</code>走的是梯度反方向，并且需要注意的是他是单位向量，所以这里就会有<br><img src="/img/Logistic-Regression/odo.png" height="200px" width="500px"><br>那么参数更新的方式就会有<br><img src="/img/Logistic-Regression/paraUpdate.png" height="200px" width="500px"></p>
+<pre><code>这个就是梯度下降法<span class="comment">(Gradient Descent)</span>，也是一种较为简单的，有效的优化方法
+</code></pre><p>好，到了这里<code>v</code>可以求了，那么<code>η</code>这个需要给定的参数取多少合适呢？<br><img src="/img/Logistic-Regression/eta.png" height="300px" width="400px"><br>从上图中可以发现：</p>
+<ol>
+<li><code>η</code>很小：那么整个参数更新过程就会很慢，不过准确性（与最小值的接近程度）应该还是可以保证的</li>
+<li><code>η</code>很大，那么这个参数过程就会很不稳定，那么他的最终的准确性可能就会较低</li>
+</ol>
+<p>比较推荐的是采用一种自适应的方法来做<br><img src="/img/Logistic-Regression/jr.png" height="300px" width="200px"><br>当梯度较大的时候，<code>η</code>也跨的较大，那么当梯度慢慢减小的时候，<code>η</code>也同时慢慢减少，也就是说<code>η</code>与梯度值会呈正相关的关系，那么这样在保证了准确性的同时，又可以加快速度^_^<br>此时根据<code>η</code>正比于梯度值的特性可以惊奇的发现<br><img src="/img/Logistic-Regression/xjr.png" height="250px" width="500px"><br>（图种<span style="color:red">红色</span>的<code>η</code>为原生值，<span style="color:purple">紫色</span>的<code>η</code>为正比的比率）<br>在整个参数的更新过程中可以将梯度值的计算消除掉，这里的<span style="color:purple">紫色</span>的<code>η</code>也称为学习速率</p>
+<p>现在<code>Logistic Regression</code>使用<code>Gradient Descent</code>来计算的过程为<br><img src="/img/Logistic-Regression/lrgd.png" height="400px" width="500px"></p>
+<ol>
+<li>首先将<code>w</code>初始化为0向量</li>
+<li>不断迭代的遍历样本</li>
+<li>每遍历一次样本时都计算当前样本的梯度(可以发现每个样本的梯度都需要遍历整个样本之后才能计算得到-_-)</li>
+<li>计算完梯度之后往梯度的反方向更新权值<code>w</code></li>
+<li>不断进行2~4的步骤，直到<code>E<sub>in</sub></code>足够小或者迭代次数足够多</li>
+<li>返回最后一个更新的<code>w</code>就作为我们的最优<code>hypothesis</code></li>
+</ol>
+<blockquote>
+<p>推导了这么久，但是最终发现整个计算过程还是比较简单清晰地，而且还有点像<code>PLA</code>的<code>Pocket Algorithm</code></p>
+</blockquote>
+<h2 id="Stochastic_Gradient_Descent">Stochastic Gradient Descent</h2><p>现在这里再重新理解一下<code>Gradient Descent</code>算法：每次迭代在计算其中一个样本的梯度的时候，都需要遍历所有的样本对梯度的贡献进行求和，然后取平均值作为最后的梯度，是不是感觉代价偏大(<strong>牵一发而动全身的感觉</strong>-_-，特别是在现在大数据的情况下，这效率应该会很慢)<br>现在我们是希望求得这个梯度的方向，但是不希望通过遍历所有样本求和求平均来得到梯度，有一个巧妙的方法就是将这个过程看过一个随机过程的平均，随便去抽一个样本然后将其作为梯度<br><img src="/img/Logistic-Regression/tor.png" height="200px" width="400px"><br>这种方式我们将随机的一个样本偏微分算出来的梯度称为随机梯度(Stochastic Gradient)，最终真实地梯度与这种随机方式求出来的梯度的期望是一致的<br><img src="/img/Logistic-Regression/tg.png" height="200px" width="400px"></p>
+<pre><code>上面的过程就好比：现在有<span class="number">10000</span>个数字，需要求这些数字的平均数，最普通的方法就是<span class="number">10000</span>求和再求平均，但是遍历<span class="number">10000</span>次的复杂度认为太大，另一种解决方法就随机抽一小批数据<span class="comment">(比如100)</span>再求和求平均，其实这两个期望是很类似的，现在另一种trick的方法是直接只抽一个数字，把它认为就是这<span class="number">10000</span>个数字的平均数，现在再想想抽数字抽好多次最后结果喝第一次求和的期望也是类似的
+</code></pre><blockquote>
+<p>这个方式可以认为：随机得梯度=真实梯度+一些噪声</p>
+</blockquote>
+<p>这样的话在更新参数这一块的代价较大的梯度计算即可直接替换为轻量级的随机梯度，在足够多次的迭代之后，这个真实梯度的平均也会约等于随机梯度的平均<br>那么最终<code>Stochastic Gradient Descent(SGD)</code>算法的表示为<br><img src="/img/Logistic-Regression/sgd.png" height="200px" width="400px"><br>在整个算法计算过程中除了随机梯度计算的区别，还有其终止条件就是足够多的迭代，但是取的是<code>E<sub>in</sub></code>最小的那组作为最优</p>
+<blockquote>
+<p>貌似林老师爆出来关于<code>η</code>参数的取值最优是0.1126 经验参数值哦^_^</p>
+</blockquote>
+<p><code>SGD</code>优势有:</p>
+<ol>
+<li>轻量级计算</li>
+<li>适合于大数据（因为复杂度低，计算梯度是O(1)）</li>
+<li>还可以进行<code>online learning</code></li>
+<li>。。。其实我想说比较容易实现并行</li>
+</ol>
+<p>劣势：就是可能不稳定</p>
+<h2 id="总结">总结</h2><p><code>Logistic Regression(LR)</code>是一个线性的二分类模型，主要有以下优缺点<br>优点：</p>
+<ol>
+<li>实现简单；</li>
+<li>分类时计算量非常小，速度很快，存储资源低，也很容易并行；(在大量数据情况下这个模型非常适用，这也是好多广告系统首选的原因)</li>
+<li>在处理分类问题的同时还可能给出一个概率值(这个值有时候蛮有用的)</li>
+<li>优化方法多：除了GD和SGD，应该还有拟牛顿法、BFGS、L-BFGS<br>缺点：</li>
+<li>容易欠拟合，一般准确度不太高(所以一般情况下需要加上L1,L2的正则项)</li>
+<li>只能处理两分类问题（在此基础上衍生出来的softmax可以用于多分类），且必须线性可分；</li>
+</ol>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第十讲</li>
+<li>《台湾国立大学-机器学习基石》第十一讲</li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px" /><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[《台大机器学习基石》Linear Regression]]></title>
     <link href="http://yyl8781697.github.io/2015/08/19/Machine%20Learning/Linear-Regression/"/>
     <id>http://yyl8781697.github.io/2015/08/19/Machine Learning/Linear-Regression/</id>
     <published>2015-08-19T15:15:46.000Z</published>
-    <updated>2015-08-20T16:23:55.000Z</updated>
+    <updated>2015-08-23T15:31:25.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>算法，假如我们现在时的问题不是解决是否发行用卡，而是该发<strong>多少额度</strong>的问题<br><img src="/img/Linear-Regression/ed.png" width="300px" height="300px"><br>也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！<br><a id="more"></a></p>
 <p>那么我们其实可以直接使用特征属性与权重的加权求和来表示需要发的信用额度即可(与<code>PLA</code>类似，但是没有激活函数：二值判断逆函数)<br><img src="/img/Linear-Regression/jq.png" width="500px" height="300px"><br>上图中表示的就是为线性回归(<code>Linear Regression</code>)，其中<code>w<sup>T</sup>x</code>就是表示为全部的假设空间(<code>hypothesis set</code>)</p>
 <p>如果当前的特征是一维的，那么这里的<code>hypothesis set</code>就表示一条线，（因为总体的特征向量里面还有一个常数值）<br><img src="/img/Linear-Regression/2d.png" width="300px" height="300px"><br>如果当前的特征是二维的，那么这里的<code>hypothesis set</code>就一个平面<br><img src="/img/Linear-Regression/3d.png" width="300px" height="300px"><br>当然特征更加多得话，最终<code>hypothesis set</code>表示一个超平面<br>其中图上红色的部分叫做误差（视频里面叫做<strong>余数</strong>），那么回归分析的目标就是将所有的误差降到最小越好<br>这里使用平方误差来衡量整体的误差<br><img src="/img/Linear-Regression/se.png" width="300px" height="100px"><br>那么从机器学习的角度来说，这里的误差就可以看做(下面这个表达式就很熟悉了)<br><img src="/img/Linear-Regression/jse.png" width="300px" height="100px"><br>相应的<br><img src="/img/Linear-Regression/jse2.png" width="300px" height="100px"><br>表示这个分类器在未来未训练数据集中产生的误差是多少<br>那么现在的线性回归的问题就是转为将<code>E<sub>in</sub>(w)</code>优化到最小。</p>
@@ -69,6 +168,7 @@
 <h2 id="参考">参考</h2><ul>
 <li>《台湾国立大学-机器学习基石》第九讲</li>
 </ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -90,8 +190,9 @@
     <link href="http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/"/>
     <id>http://yyl8781697.github.io/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/</id>
     <published>2015-08-15T23:40:29.000Z</published>
-    <updated>2015-08-20T16:25:36.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="朴素贝叶斯">朴素贝叶斯</h2><p>P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)<br>所以有：P(A|B)=P(B|A)*P(A)/P(B)</p>
+    <updated>2015-08-23T10:58:45.000Z</updated>
+    <content type="html"><![CDATA[<pre><code>这个总结最初是写在本地的<span class="variable">MacDown</span>中的，他的markdown语法解析与hexo的略微有点差异，懒得改了-<span class="variable">_</span>-，忍着点看..
+</code></pre><h2 id="朴素贝叶斯">朴素贝叶斯</h2><p>P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)<br>所以有：P(A|B)=P(B|A)*P(A)/P(B)</p>
 <p>对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别</p>
 <h3 id="工作原理">工作原理</h3><ol>
 <li>假设现在有样本x=(a1,a2,a3,…an)这个待分类项(并认为x里面的特征独立)</li>
@@ -443,7 +544,8 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 </blockquote>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="朴素贝叶斯">朴素贝叶斯</h2><p>P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)<br>所以有：P(A|B)=P(B|A)*P(A)/P(B)</p>
+    <![CDATA[<pre><code>这个总结最初是写在本地的<span class="variable">MacDown</span>中的，他的markdown语法解析与hexo的略微有点差异，懒得改了-<span class="variable">_</span>-，忍着点看..
+</code></pre><h2 id="朴素贝叶斯">朴素贝叶斯</h2><p>P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)<br>所以有：P(A|B)=P(B|A)*P(A)/P(B)</p>
 <p>对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别</p>
 <h3 id="工作原理">工作原理</h3><ol>
 <li>假设现在有样本x=(a1,a2,a3,…an)这个待分类项(并认为x里面的特征独立)</li>
@@ -469,7 +571,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
     <link href="http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Common-Interview/"/>
     <id>http://yyl8781697.github.io/2015/08/16/Machine Learning/Common-Interview/</id>
     <published>2015-08-15T23:39:47.000Z</published>
-    <updated>2015-08-15T23:47:43.000Z</updated>
+    <updated>2015-08-23T12:29:19.000Z</updated>
     <content type="html"><![CDATA[<h2 id="有监督学习和无监督学习的区别">有监督学习和无监督学习的区别</h2><ul>
 <li>有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）</li>
 <li>无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)</li>
@@ -531,7 +633,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 </ol>
 <h2 id="越小的参数说明模型越简单">越小的参数说明模型越简单</h2><p>过拟合的，拟合会经过曲面的每个点，也就是说在较小的区间里面可能会有较大的曲率，这里的导数就是很大，线性模型里面的权值就是导数，所以越小的参数说明模型越简单。</p>
 <blockquote>
-<p>这个其实可以看VC维相关的东西感觉更加合适</p>
+<p>追加：这个其实可以看VC维相关的东西感觉更加合适</p>
 </blockquote>
 <h2 id="svm中rbf核函数与高斯和函数的比较">svm中rbf核函数与高斯和函数的比较</h2><p>高斯核函数好像是RBF核的一种</p>
 <h2 id="ROC、AUC">ROC、AUC</h2><p>ROC和AUC通常是用来评价一个二值分类器的好坏</p>
@@ -562,7 +664,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 <h2 id="测试集和训练集的区别">测试集和训练集的区别</h2><p>训练集用于建立模型,测试集评估模型的预测等能力</p>
 <h2 id="优化Kmeans">优化Kmeans</h2><p>使用kd树或者ball tree(这个树不懂)<br>将所有的观测实例构建成一颗kd树，之前每个聚类中心都是需要和每个观测点做依次距离计算，现在这些聚类中心根据kd树只需要计算附近的一个局部区域即可</p>
 <h2 id="数据挖掘和机器学习的区别">数据挖掘和机器学习的区别</h2><p>机器学习是数据挖掘的一个重要工具，但是数据挖掘不仅仅只有机器学习这一类方法，还有其他很多非机器学习的方法，比如图挖掘，频繁项挖掘等。感觉数据挖掘是从目的而言的，但是机器学习是从方法而言的。</p>
-<h2 id="备注">备注</h2><p>题目主要来源于网络，答案主要来源于网络或者《统计学习方法》，还有自己一小部分的总结，如果错误之处敬请指出</p>
+<h2 id="备注">备注</h2><p>题目主要来源于网络，答案主要来源于网络或者《统计学习方法》，还有自己一小部分的总结，如果错误之处敬请指出<br>如果想要了解关于常见模型的东东可以看这篇<a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/" target="_blank" rel="external">机器学习常见算法个人总结（面试用）</a>文章</p>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -804,7 +906,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
     <link href="http://yyl8781697.github.io/2015/08/09/Machine%20Learning/Learning-Is-Possible/"/>
     <id>http://yyl8781697.github.io/2015/08/09/Machine Learning/Learning-Is-Possible/</id>
     <published>2015-08-09T10:55:28.000Z</published>
-    <updated>2015-08-18T14:49:03.000Z</updated>
+    <updated>2015-08-23T15:42:00.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px"><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br><a id="more"></a><br>这里有一个叫做<code>Hoeffding不等式</code>可以来解释该问题<br><img src="/img/Learning-Is-Possible/hfi.png" height="140px" width="540px"><br>大致的表述就是<code>μ</code>与<code>ν</code>之差的绝对值小于<code>ξ</code>的概率为<code>2exp(-2ξ<sup>2</sup>N)</code>（这个概率也叫坏事发生的几率，林老师的叫法真的很kwy ^_^）,<code>ξ</code>越小，<code>μ</code>与<code>ν</code>越接近，其概率：</p>
 <ul>
 <li><code>ξ</code>越大，坏事发生的几率越小，但是<code>ξ</code>真的很大时，坏事发不发生已经么啥意义了-_-</li>
@@ -864,7 +966,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
     <link href="http://yyl8781697.github.io/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/"/>
     <id>http://yyl8781697.github.io/2015/08/06/Machine Learning/Perceptron-Learning-Algorithm/</id>
     <published>2015-08-06T13:15:25.000Z</published>
-    <updated>2015-08-20T16:14:17.000Z</updated>
+    <updated>2015-08-23T15:31:14.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Perceptron">Perceptron</h2><p>先来看一下一个经典的信用卡发放问题：<br><img src="/img/Perceptron-Learning-Algorithm/credit.png" height="140px" width="400px"><br>这是一个用户的基本的信息，现在要决定是否对他发放信用卡。</p>
 <p>现在假设这些基本信息组成了一个向量X={x1,x2,…xd}<br>同时对于每一维度上有一个对应的权重向量W={w1,w2,…wd}<br><img src="/img/Perceptron-Learning-Algorithm/wx.png" height="140px" width="400px"><br>那么如果这两个向量乘积出来的值大于一个设定的阈值，我们就发他信用卡，否则就不发<br><a id="more"></a><br><img src="/img/Perceptron-Learning-Algorithm/y.png" height="140px" width="400px"><br>相应的表示：</p>
 <ul>
@@ -936,6 +1038,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 <li>《台湾国立大学-机器学习基石》第二讲</li>
 <li><a href="http://www.douban.com/note/319669984/" target="_blank" rel="external">http://www.douban.com/note/319669984/</a></li>
 </ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -1512,249 +1615,6 @@ after invoke
       <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
     
       <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Linux下的Find命令学习]]></title>
-    <link href="http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/"/>
-    <id>http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/</id>
-    <published>2015-07-26T06:46:14.000Z</published>
-    <updated>2015-07-27T15:22:07.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>find</code>命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^<br>注：本文使用的环境是CentOS6.5</p>
-</blockquote>
-<h2 id="Find介绍">Find介绍</h2><pre><code>功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
-语法：<span class="built_in">find</span> 起始目录 寻找条件 操作 
-说明：<span class="built_in">find</span>命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
-</code></pre><p>其实关于<code>Linux</code>下的命令一般通过<code>—help</code>就可以大致入门使用，实在不行再用<code>man</code>来看更为完整版的手册。<br>下面先长长得列一下：<br><a id="more"></a></p>
-<pre><code>[root@master spark-1.3.1-bin-hadoop2.6]# find --<span class="keyword">help</span>
-Usage: find [-<span class="keyword">H</span>] [-<span class="keyword">L</span>] [-P] [-Olevel] [-<span class="keyword">D</span> <span class="keyword">help</span>|tree|<span class="keyword">search</span>|stat|rates|opt|exec] [path...] [expression]
-
-default path is the current directory; default expression is -<span class="keyword">print</span>
-expression may consist of: operators, options, tests, and actions:
-
-operators (decreasing precedence; -and is implicit where <span class="keyword">no</span> others are given):
-      ( EXPR )   ! EXPR   -not EXPR   EXPR1 -a EXPR2   EXPR1 -and EXPR2
-      EXPR1 -o EXPR2   EXPR1 -or EXPR2   EXPR1 , EXPR2
-
-positional options (always true): -daystart -follow -regextype
-
-normal options (always true, specified before other expressions):
-      -depth --<span class="keyword">help</span> -maxdepth <span class="keyword">LEVELS</span> -mindepth <span class="keyword">LEVELS</span> -mount -noleaf
-      --<span class="keyword">version</span> -xdev -ignore_readdir_race -noignore_readdir_race
-
-tests (<span class="keyword">N</span> can be +<span class="keyword">N</span> or -<span class="keyword">N</span> or <span class="keyword">N</span>): -amin <span class="keyword">N</span> -anewer <span class="keyword">FILE</span> -atime <span class="keyword">N</span> -cmin <span class="keyword">N</span>
-      -cnewer <span class="keyword">FILE</span> -ctime <span class="keyword">N</span> -empty -false -fstype <span class="keyword">TYPE</span> -gid <span class="keyword">N</span> -group NAME
-      -ilname PATTERN -iname PATTERN -inum <span class="keyword">N</span> -iwholename PATTERN -iregex PATTERN
-      -links <span class="keyword">N</span> -lname PATTERN -mmin <span class="keyword">N</span> -mtime <span class="keyword">N</span> -name PATTERN -newer <span class="keyword">FILE</span>
-      -nouser -nogroup -path PATTERN -perm [+-]MODE -regex PATTERN
-      -readable -writable -executable
-      -wholename PATTERN -size <span class="keyword">N</span>[bcwkMG] -true -<span class="keyword">type</span> [bcdpflsD] -uid <span class="keyword">N</span>
-      -used <span class="keyword">N</span> -user NAME -xtype [bcdpfls]
-      -context CONTEXT
-
-
-actions: -delete -print0 -printf <span class="keyword">FORMAT</span> -fprintf <span class="keyword">FILE</span> <span class="keyword">FORMAT</span> -<span class="keyword">print</span>
-      -fprint0 <span class="keyword">FILE</span> -fprint <span class="keyword">FILE</span> -<span class="keyword">ls</span> -fls <span class="keyword">FILE</span> -prune -quit
-      -exec COMMAND ; -exec COMMAND {} + -ok COMMAND ;
-      -execdir COMMAND ; -execdir COMMAND {} + -okdir COMMAND ;
-
-<span class="keyword">Report</span> (and track progress <span class="keyword">on</span> fixing) bugs via the findutils bug-reporting
-page at http:<span class="comment">//savannah.gnu.org/ or, if you have no web access, by sending</span>
-email to &lt;bug-findutils@gnu.org&gt;.
-</code></pre><p>从<code>—help</code>中我们大致可以发现<code>find</code>有以下四大表达式：</p>
-<ol>
-<li>operators(逻辑运算)：就是<code>and</code>,<code>or</code>,<code>not</code>这些东西</li>
-<li>options(可选项？)：感觉是一些额外可选的功能</li>
-<li>tests(条件属性)：各种属性啦，文件名，文件大小之类的</li>
-<li>acionts(行为)：find之后想干嘛呢？打印出来  or 去执行</li>
-</ol>
-<p>先来看一下当前的实验目录(使用了spark已编译的一个根目录)：</p>
-<pre><code><span class="attr_selector">[root@master spark-1.3.1-bin-hadoop2.6]</span># <span class="tag">ll</span>
-<span class="tag">total</span> 408
-<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">bin</span>
-<span class="tag">-rw-rw-r--</span>. 1 1000 1000 278851 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">CHANGES</span><span class="class">.txt</span>
-<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">May</span> 17 09<span class="pseudo">:00</span> <span class="tag">conf</span>
-<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">data</span>
-<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">ec2</span>
-<span class="tag">drwxrwxr-x</span>. 3 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">examples</span>
-<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">lib</span>
-<span class="tag">-rw-rw-r--</span>. 1 1000 1000  46083 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">LICENSE</span>
-<span class="tag">drwxr-xr-x</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">Jul</span> 22 11<span class="pseudo">:28</span> <span class="tag">logs</span>
-<span class="tag">-rw-rw-r--</span>. 1 1000 1000  22559 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">NOTICE</span>
-<span class="tag">drwxrwxr-x</span>. 7 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">python</span>
-<span class="tag">-rw-rw-r--</span>. 1 1000 1000   3629 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">README</span><span class="class">.md</span>
-<span class="tag">-rw-rw-r--</span>. 1 1000 1000    157 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">RELEASE</span>
-<span class="tag">drwxr-xr-x</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">Jul</span> 20 09<span class="pseudo">:33</span> <span class="tag">runjar</span>
-<span class="tag">drwxrwxr-x</span>. 2 1000 1000   4096 <span class="tag">Apr</span> 11 01<span class="pseudo">:32</span> <span class="tag">sbin</span>
-<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-99afc66e-6bb1-41ee-8497-e2abdbb3013f</span>
-<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-e0919038-82ee-4d5d-b421-1f50f6a110ed</span>
-<span class="tag">drwx------</span>. 2 <span class="tag">root</span> <span class="tag">root</span>   4096 <span class="tag">May</span> 22 23<span class="pseudo">:24</span> <span class="tag">spark-f37f1978-ad83-4208-86d8-2bdf8c3e5696</span>
-</code></pre><p>在该目录下最简单的使用一个<code>find</code>操作</p>
-<pre><code>[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span>
-./NOTICE
-</code></pre><p>可以看到<code>NOTEICE</code>这个文件就查询出来了。</p>
-<h2 id="逻辑运算">逻辑运算</h2><p><code>find</code>命令通过逻辑运算可以完成强大的组合查询，先抛开这个，看看我们码农平常写的条件判断：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(f1 &amp;&amp; (f2 || f3) &amp;&amp; !f4)</span><br></pre></td></tr></table></figure></p>
-<p>而<code>find</code>的逻辑运算与之对应的就是：</p>
-<ul>
-<li><p><code>&amp;&amp;</code>对应<code>-and</code>，简写为：<code>-a</code></p>
-<pre><code>[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -a -<span class="keyword">size</span> -<span class="number">20</span>
-[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -a -<span class="keyword">size</span> +<span class="number">20</span>
-./NOTICE
-[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -name <span class="string">"NOTICE"</span> -<span class="keyword">size</span> +<span class="number">20</span>
-./NOTICE
-</code></pre><p>  可以发现”NOTICE”文件并且小于20是找不到的，但是大于20b的时候可以找到</p>
-<blockquote>
-<p>注意，缺省操作符的情况就是使用<code>-a</code>，所以第三条命令和第二条命令的效果是一样的。</p>
-</blockquote>
-</li>
-<li><p><code>||</code>对应<code>-or</code>，简写为：<code>-o</code></p>
-<pre><code>[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]<span class="preprocessor"># find -name <span class="title">"NOTICE"</span> -o -name <span class="title">"LICENSE"</span></span>
-./LICE<span class="built_in">NSE</span>
-./NOTICE
-</code></pre><p>  在或操作下两个文件都能查询出来</p>
-</li>
-<li><p><code>!</code>还是对应<code>!</code></p>
-<pre><code>[root<span class="variable">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> ! -name <span class="string">"NOTICE"</span> -<span class="keyword">size</span> +<span class="number">20</span>
-./LICENSE
-./CHANGES.txt
-</code></pre><p>  这样就可以查找在当前目录下名字不叫“NOTICE”以及大于20b的文件/文件夹了</p>
-</li>
-</ul>
-<blockquote>
-<p>注意，关于操作符还可以使用括号将各个操作表达式括起来，用起来还是非常灵活的^_^</p>
-</blockquote>
-<h2 id="可选项">可选项</h2><p>这个还是蛮有用的，看<code>—help</code>命令其实就是，还有:</p>
-<ul>
-<li><code>-depth</code>:使用它之后貌似先会从里向外打印，比如先找到最深的文件夹，然后一层一层向外显示</li>
-<li><code>-maxdepth</code>:限制递归的最大深度，如果只在当前目录下找，那么设置<code>-maxdepth 1</code>即可</li>
-<li><code>-mindepth</code>:限制最小深度，比如<code>-mindepth 2</code> 只查找深度大于2的文件</li>
-<li><code>-daystart</code>:限制查找的文件是今天起24小时的文件</li>
-<li><code>-follow</code>:遵循通配符链接方式查找</li>
-<li>还有其他等等</li>
-</ul>
-<h2 id="条件属性">条件属性</h2><p>在使用<code>find</code>的时候条件属性是我们的核心,这里有两个技巧</p>
-<ol>
-<li><p>如果属性后面跟着的条件是数字N，那么一般支持+,-操作，比如</p>
-<pre><code>[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> <span class="title">+22559c</span>
-</span>./<span class="type">LICENSE</span>
-./<span class="type">CHANGES</span>.txt
-[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> 22559<span class="title">c</span>
-</span>./<span class="type">NOTICE</span>
-[root<span class="annotation">@master</span> spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="class"><span class="keyword">type</span> <span class="title">f</span> <span class="title">-size</span> <span class="title">-22559c</span>
-</span>./<span class="type">README</span>.md
-./<span class="type">RELEASE</span>
-</code></pre><p> 上面3条命令分别就是查大于22559字节的文件，等于22559字节以及小于22559字节的文件</p>
-</li>
-<li><p>如果属性后面跟着的条件是字串，那么一般都支持通配符<code>*</code>、<code>?</code>、<code>［ ］</code></p>
-<pre><code>[root@master spark-<span class="number">1</span>.<span class="number">3</span>.<span class="number">1</span>-bin-hadoop2.<span class="number">6</span>]# <span class="built_in">find</span> -maxdepth <span class="number">1</span> -<span class="built_in">type</span> f -name "RE*"
-./README.<span class="built_in">md</span>
-./RELEASE
-</code></pre><p> 取”RE”开头的文件名</p>
-</li>
-</ol>
-<p>接下来看一些常用的筛选属性(要知道全部的话看<code>—help</code>里面的信息即可)</p>
-<ul>
-<li><code>-name PATTERN</code>:根据文件名进行匹配<blockquote>
-<p>估计是最为常用的一个属性之一了，上面的演示都是用它来作为示例，所以这里不加其他说明了</p>
-</blockquote>
-</li>
-<li><code>-type [bcdpflsD]</code>:筛选查找的类型：<ul>
-<li>b 块设备文件 </li>
-<li>c 字符设备文件 </li>
-<li>d 目录文件 </li>
-<li>p 命名管道（FIFO） </li>
-<li>f 普通文件 </li>
-<li>l 符号链接文件（symbolic links） </li>
-<li>s socket文件 </li>
-</ul>
-</li>
-</ul>
-<pre><code>[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="typedef"><span class="keyword">type</span> f</span>
-./<span class="type">LICENSE</span>
-./<span class="type">CHANGES</span>.txt
-./<span class="type">README</span>.md
-./<span class="type">NOTICE</span>
-./<span class="type">RELEASE</span>
-[root@master spark-<span class="number">1.3</span>.1-bin-hadoop2.6]# find -maxdepth <span class="number">1</span> -<span class="typedef"><span class="keyword">type</span> d</span>
-.
-./sbin
-./spark-f37f1978-ad83-<span class="number">4208</span>-<span class="number">86</span>d8-<span class="number">2</span>bdf8c3e5696
-./ec2
-./bin
-./spark-<span class="number">99</span>afc66e-<span class="number">6</span>bb1-<span class="number">41</span>ee-<span class="number">8497</span>-e2abdbb3013f
-./<span class="typedef"><span class="keyword">data</span></span>
-./lib
-./conf
-./python
-./examples
-./runjar
-./spark-e0919038-<span class="number">82</span>ee-<span class="number">4</span>d5d-b421-<span class="number">1</span>f50f6a110ed
-./logs
-
-
-上述命名分别是查找当前目录下的文件和文件夹
-</code></pre><ul>
-<li><code>- size</code>:根据文件大小来进行匹配，这里大小的单位默认是字节<code>b</code>，还可以显式的其他单位<code>bcwkMG</code></li>
-<li><p><code>-perm</code>: 查找具有指定权限的文件和目录</p>
-<pre><code>[root@master spark-<span class="number">1.3</span>.<span class="number">1</span>-bin-hadoop2.<span class="number">6</span>]<span class="comment"># find -maxdepth 1 -perm 700</span>
-./spark<span class="operator">-f</span>37f1978-ad83-<span class="number">4208</span>-<span class="number">86</span>d8-<span class="number">2</span>bdf8c3e5696
-./spark-<span class="number">99</span>afc66e-<span class="number">6</span>bb1-<span class="number">41</span>ee-<span class="number">8497</span><span class="operator">-e</span>2abdbb3013f
-./spark<span class="operator">-e</span>0919038-<span class="number">82</span>ee-<span class="number">4</span>d5d-b421-<span class="number">1</span>f50f6a110ed
-</code></pre><p>  查找自有创建者才能用全完控制权限的目录和文件</p>
-</li>
-<li><code>-empty</code>:查找大小为0的目录或者空文件 </li>
-<li><code>-user NAME</code>:查找所属用户名的文件</li>
-<li><code>-amin n</code>:查找n分钟以前被访问过的所有文件</li>
-<li><code>-atime n</code>:查找n天以前被访问过的所有文件</li>
-<li><code>-cmin n</code>:查找n分钟以前文件状态被修改过的所有文件</li>
-<li><code>-ctime n</code>:查找n天以前文件状态被修改过的所有文件</li>
-<li><code>-mmin n</code>:查找n分钟以前文件内容被修改过的所有文件</li>
-<li><code>-mtime n</code>:查找n天以前文件内容被修改过的所有文件</li>
-<li>等等等自己看<code>—help</code></li>
-</ul>
-<h2 id="行为">行为</h2><blockquote>
-<p>这里的行为是指找到文件之后再做的行为操作</p>
-</blockquote>
-<ul>
-<li><code>-print</code>:将找到的文件/文件夹的名称给打印出来</li>
-<li><code>-ls</code>:将找到的文件/文件夹的的具体信息列出来</li>
-<li><code>-delete</code>:将找到的文件/文件夹的删除掉</li>
-<li><p><code>-exec command {} \;</code>:异常强大，在command 里面可以写linux的命令</p>
-<p>  [root@master spark-1.3.1-bin-hadoop2.6]# find -maxdepth 1 -size +20 -exec ls -l {} \;<br>  -rw-rw-r—. 1 1000 1000 46083 Apr 11 01:32 ./LICENSE<br>  -rw-rw-r—. 1 1000 1000 278851 Apr 11 01:32 ./CHANGES.txt<br>  -rw-rw-r—. 1 1000 1000 22559 Apr 11 01:32 ./NOTICE</p>
-<p>  比如来实现<code>-ls</code>的功能</p>
-</li>
-<li><p><code>-xargs</code>:也是异常强大，它会批次/依次的取得参数，进行相应的命令操作</p>
-<pre><code><span class="keyword">find</span> -maxdepth <span class="number">1</span> -<span class="keyword">size</span> +<span class="number">20</span> -<span class="keyword">print</span> |xargs <span class="keyword">grep</span> <span class="string">"License"</span>
-</code></pre><p>  类似这个可以查找含有”License”的文件、文件夹</p>
-</li>
-</ul>
-<h2 id="总结">总结</h2><blockquote>
-<p>find命令是一个非常优秀的工具，它可以按照用户指定的准则来匹配文件。使用exec和xargs可以使用户对所匹配到的文件执行几乎所有的命令。<br>但是这些命令还是得常用，但能熟能生巧啊-_-</p>
-</blockquote>
-<h2 id="参考">参考</h2><ul>
-<li><a href="http://blog.chinaunix.net/uid-20082146-id-83489.html" target="_blank" rel="external">find命令</a></li>
-</ul>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>find</code>命令极为好使，在面试中也常常会被问到，所以在这里再好好学习一下^_^<br>注：本文使用的环境是CentOS6.5</p>
-</blockquote>
-<h2 id="Find介绍">Find介绍</h2><pre><code>功能：在目录结构中搜索文件，并执行指定的操作。此命令提供了相当多的查找条件，功能很强大。 
-语法：<span class="built_in">find</span> 起始目录 寻找条件 操作 
-说明：<span class="built_in">find</span>命令从指定的起始目录开始，递归地搜索其各个子目录，查找满足寻找条件的文件并对之采取相关的操作。 
-</code></pre><p>其实关于<code>Linux</code>下的命令一般通过<code>—help</code>就可以大致入门使用，实在不行再用<code>man</code>来看更为完整版的手册。<br>下面先长长得列一下：<br>]]>
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://yyl8781697.github.io/tags/Linux/"/>
-    
-      <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
     
   </entry>
   

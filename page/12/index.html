@@ -92,6 +92,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/06/26/LeetCode/LeetCode-Reverse-Integer/" title="LeetCode-Max Points on a Line" itemprop="url">LeetCode-Max Points on a Line</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-06-26T13:00:04.000Z" itemprop="datePublished"> 发表于 2014-06-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Problem:<br>Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for a point.</span><br><span class="line"> * class Point &#123;</span><br><span class="line"> *     int x;</span><br><span class="line"> *     int y;</span><br><span class="line"> *     Point() &#123; x = 0; y = 0; &#125;</span><br><span class="line"> *     Point(int a, int b) &#123; x = a; y = b; &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxPoints</span><span class="params">(Point[] points)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(points.length&lt;=<span class="number">1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> points.length;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">int</span>[] pointNum=<span class="keyword">new</span> <span class="keyword">int</span>[points.length];<span class="comment">//the number in average group</span></span><br><span class="line">		Point[] pointGroup=<span class="keyword">new</span> Point[points.length];</span><br><span class="line">		<span class="keyword">int</span> groupLength=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">boolean</span> flagAdd=<span class="keyword">false</span>;</span><br><span class="line">		<span class="keyword">for</span>(Point point:points)</span><br><span class="line">		&#123;</span><br><span class="line">			flagAdd=<span class="keyword">false</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;groupLength;i++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(pointGroup[i].x==point.x &amp;&amp; pointGroup[i].y==point.y)</span><br><span class="line">				&#123;</span><br><span class="line">					pointNum[i]++;</span><br><span class="line">					flagAdd=<span class="keyword">true</span>;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>(!flagAdd)</span><br><span class="line">			&#123;</span><br><span class="line">				pointGroup[groupLength]=point;</span><br><span class="line">				pointNum[groupLength]=<span class="number">1</span>;</span><br><span class="line">				groupLength++;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">int</span> maxNum=pointNum[<span class="number">0</span>],tempNum=<span class="number">0</span>;</span><br><span class="line">		HashMap&lt;Straight,Integer&gt; straightMap=<span class="keyword">new</span> HashMap&lt;Straight,Integer&gt;();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;groupLength;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;groupLength;j++)</span><br><span class="line">			&#123;</span><br><span class="line">				tempNum=pointNum[i]+pointNum[j];</span><br><span class="line">				Straight straight=<span class="keyword">new</span> Straight(pointGroup[i],pointGroup[j]);</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">if</span>(straightMap.containsKey(straight))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">continue</span>;</span><br><span class="line">				&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">					straightMap.put(straight, <span class="number">1</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">for</span>(<span class="keyword">int</span> k=j+<span class="number">1</span>;k&lt;groupLength;k++)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">if</span>(straight.isIn(pointGroup[k]))</span><br><span class="line">					&#123;</span><br><span class="line">						tempNum+=pointNum[k];</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">if</span>(maxNum&lt;tempNum)</span><br><span class="line">				&#123;</span><br><span class="line">					maxNum=tempNum;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> maxNum;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Straight</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">double</span> <span class="number">_</span>gradient;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">double</span> <span class="number">_</span>intercept;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Straight</span><span class="params">(Point p1,Point p2)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(p1.x==p2.x)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">this</span><span class="number">._</span>gradient=Double.NaN;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">this</span><span class="number">._</span>intercept=p1.x;</span><br><span class="line">				</span><br><span class="line">				</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				<span class="keyword">this</span><span class="number">._</span>gradient=(p2.y-p1.y)/(<span class="keyword">double</span>)(p2.x-p1.x);</span><br><span class="line">				<span class="keyword">this</span><span class="number">._</span>intercept=p1.y-<span class="keyword">this</span><span class="number">._</span>gradient*p1.x;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Straight</span><span class="params">(<span class="keyword">double</span> gradient,<span class="keyword">double</span> intercept)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			<span class="keyword">this</span><span class="number">._</span>gradient=gradient;</span><br><span class="line">			<span class="keyword">this</span><span class="number">._</span>intercept=intercept;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="javadoc">/**</span><br><span class="line">		 * judge this point whether in this straight</span><br><span class="line">		 *<span class="javadoctag"> @param</span> point</span><br><span class="line">		 *<span class="javadoctag"> @return</span></span><br><span class="line">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isIn</span><span class="params">(Point point)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>(Double.isNaN(<span class="keyword">this</span><span class="number">._</span>gradient))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">this</span><span class="number">._</span>intercept==point.x;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> Math.abs(point.y-(<span class="keyword">this</span><span class="number">._</span>gradient*point.x+<span class="keyword">this</span><span class="number">._</span>intercept))&lt;=<span class="number">1e-7</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/06/26/LeetCode/LeetCode-Reverse-Integer/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/06/26/LeetCode/LeetCode-Reverse-Integer/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/06/25/LeetCode/LeetCode-Max-Points-on-a-Line/" title="LeetCode-Reverse Integer" itemprop="url">LeetCode-Reverse Integer</a>
   </h1>
   <p class="article-author">By
@@ -735,75 +803,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2012/10/09/Javascript/javascript-cookie/" title="分享javascript中方便增删改cookie的一个类" itemprop="url">分享javascript中方便增删改cookie的一个类</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2012-10-09T13:07:20.000Z" itemprop="datePublished"> 发表于 2012-10-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>&#160; &#160; &#160; &#160;在学校失业一个半月了，还没找到实习，悲剧，蛋疼，把jquery.cookie.js改了一下，改成了纯javascript版本，以备我以后项目只需，增加了一个得到页面全部cookie键值的功能。<br>主要是通过对document.cookie字符串的分析来进行功能的组装的。<br>&#160; &#160; &#160; &#160;温习一下javascript中对cookie的操作：</p>
-<ul>
-<li>增加cookie可以用document.cookie=”userId=111”;来实现</li>
-<li>完整版可以用：document.cookie=”userId=111;domain=.google.com;path=\;secure=secure;expire=”+date.toGMTString();</li>
-<li>可以设置cookie的过期时间，域名，路径</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2012/10/09/Javascript/javascript-cookie/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Javascript/">Javascript</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Cookie/">Cookie</a><a href="/tags/Javascript/">Javascript</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2012/10/09/Javascript/javascript-cookie/#comments" class="ds-thread-count comments-count-link" data-thread-key="2012/10/09/Javascript/javascript-cookie/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/11/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/13/">Next<span></span></a>
@@ -878,7 +877,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
 		  
 		
 		  
@@ -927,11 +926,11 @@
 			
 		
 			
-				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
 			
 		
 			

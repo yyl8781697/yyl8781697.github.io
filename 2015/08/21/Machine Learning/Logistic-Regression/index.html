@@ -1,0 +1,741 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Logistic Regression | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Logistic Regression前两篇文章中的模型Perceptron Learning Algorithm和Linear Regression可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率f(x)=P(+1|x)∈[0,1],这个概率值越大，患心脏病的概率越大，反之则越">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Logistic Regression">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Logistic Regression前两篇文章中的模型Perceptron Learning Algorithm和Linear Regression可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率f(x)=P(+1|x)∈[0,1],这个概率值越大，患心脏病的概率越大，反之则越">
+<meta property="og:image" content="/img/Logistic-Regression/har.png">
+<meta property="og:image" content="/img/Logistic-Regression/ind1.png">
+<meta property="og:image" content="/img/Logistic-Regression/ind2.png">
+<meta property="og:image" content="/img/Logistic-Regression/fw.png">
+<meta property="og:image" content="/img/Logistic-Regression/lf.png">
+<meta property="og:image" content="/img/Logistic-Regression/logit.png">
+<meta property="og:image" content="/img/Logistic-Regression/lh.png">
+<meta property="og:image" content="/img/Logistic-Regression/fx.png">
+<meta property="og:image" content="/img/Logistic-Regression/cd.png">
+<meta property="og:image" content="/img/Logistic-Regression/d1.png">
+<meta property="og:image" content="/img/Logistic-Regression/d2.png">
+<meta property="og:image" content="/img/Logistic-Regression/h1.png">
+<meta property="og:image" content="/img/Logistic-Regression/lhp.png">
+<meta property="og:image" content="/img/Logistic-Regression/hn.png">
+<meta property="og:image" content="/img/Logistic-Regression/hn2.png">
+<meta property="og:image" content="/img/Logistic-Regression/like.png">
+<meta property="og:image" content="/img/Logistic-Regression/hwt.png">
+<meta property="og:image" content="/img/Logistic-Regression/cee.png">
+<meta property="og:image" content="/img/Logistic-Regression/ecc2.png">
+<meta property="og:image" content="/img/Logistic-Regression/pwf.png">
+<meta property="og:image" content="/img/Logistic-Regression/zpwf.png">
+<meta property="og:image" content="/img/Logistic-Regression/tdt.png">
+<meta property="og:image" content="/img/Logistic-Regression/gdt.png">
+<meta property="og:image" content="/img/Logistic-Regression/aga.png">
+<meta property="og:image" content="/img/Logistic-Regression/aag.png">
+<meta property="og:image" content="/img/Logistic-Regression/odo.png">
+<meta property="og:image" content="/img/Logistic-Regression/paraUpdate.png">
+<meta property="og:image" content="/img/Logistic-Regression/eta.png">
+<meta property="og:image" content="/img/Logistic-Regression/jr.png">
+<meta property="og:image" content="/img/Logistic-Regression/xjr.png">
+<meta property="og:image" content="/img/Logistic-Regression/lrgd.png">
+<meta property="og:image" content="/img/Logistic-Regression/tor.png">
+<meta property="og:image" content="/img/Logistic-Regression/tg.png">
+<meta property="og:image" content="/img/Logistic-Regression/sgd.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Logistic Regression">
+<meta name="twitter:description" content="Logistic Regression前两篇文章中的模型Perceptron Learning Algorithm和Linear Regression可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率f(x)=P(+1|x)∈[0,1],这个概率值越大，患心脏病的概率越大，反之则越">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/21/Machine Learning/Logistic-Regression/" title="《台大机器学习基石》Logistic Regression" itemprop="url">《台大机器学习基石》Logistic Regression</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-21T13:07:01.000Z" itemprop="datePublished"> 发表于 2015-08-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic_Regression"><span class="toc-number">1.</span> <span class="toc-text">Logistic Regression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross-Entropy_Error"><span class="toc-number">2.</span> <span class="toc-text">Cross-Entropy Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_Descent"><span class="toc-number">3.</span> <span class="toc-text">Gradient Descent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stochastic_Gradient_Descent"><span class="toc-number">4.</span> <span class="toc-text">Stochastic Gradient Descent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/" target="_blank" rel="external">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px"><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br><a id="more"></a></p>
+<blockquote>
+<p>这个也叫<code>Soft Binary Classification</code>，因为这里的概率可以根据一个阈值来判断是否属于哪一类</p>
+</blockquote>
+<p>刚刚可以看到目标函数<code>f(x)</code>的值是属于一个[0,1]范围的值，理所应当，我们理想的训练数据应该是这样的<br><img src="/img/Logistic-Regression/ind1.png" height="300px" width="300px"><br>想法虽好，然是实际上训练目标的概率值很难得到（比如一个患者你过了两三个月之后也许可以观察到该用户是否会患上心脏病，但是你可能是无法知道他患心脏病的真实概率的）<br>所以我们拿到的真实数据是这样的<br><img src="/img/Logistic-Regression/ind2.png" height="300px" width="300px"><br>这样也可以你可以看成为上上概率训练数据一个有噪声的版本，每个标签值对应的0或者1都是直接在概率阈值上进行了一个分类了</p>
+<p>那么现在的目标就是在原来（二分类）的数据上，以[0,1]范围为目标找到一个好的假设(<code>hypothesis</code>)</p>
+<p>那么首先可以想到的是按<code>Linear Regression</code>一样在特征值和权重向量上进行一个加权<br><img src="/img/Logistic-Regression/fw.png" height="400px" width="300px"><br>得到加权之后的<code>score</code>之后，我们希望<code>score</code>越高，最终得到的概率值越大（但是不能大于1），<code>score</code>越低，最终的概率值越小（不能小于0），那正好可以通过下面的函数的转换来完成刚刚的需求<br><img src="/img/Logistic-Regression/lf.png" height="300px" width="400px"><br>这个函数也叫做<code>logistic function</code><br><img src="/img/Logistic-Regression/logit.png" height="100px" width="400px"><br>其中里面的<code>s</code>就是相当于<code>score</code></p>
+<p>最终我们可以得到的模型函数为<br><img src="/img/Logistic-Regression/lh.png" height="300px" width="400px"><br>这也就是<code>Logistic Regression</code>的表示</p>
+<h2 id="Cross-Entropy_Error">Cross-Entropy Error</h2><p>根据<code>Logistic Regression</code>的目标函数<code>f(x)</code>可以很容易得到如下关系<br><img src="/img/Logistic-Regression/fx.png" height="100px" width="500px"></p>
+<p>假如现在有如下的数据<br><img src="/img/Logistic-Regression/cd.png" height="100px" width="500px"><br>那么这批数据产生的概率是<br><img src="/img/Logistic-Regression/d1.png" height="300px" width="300px"><br>使用<code>f(x)</code>替换可以得到<br><img src="/img/Logistic-Regression/d2.png" height="300px" width="300px"></p>
+<p>现在以<code>hypothesis</code>的角度来看，通过<code>h(x)</code>产生的样本情况为<br><img src="/img/Logistic-Regression/h1.png" height="300px" width="300px"></p>
+<p>如果<code>h(x)≈f(x)</code>,那么我们就可以说通过<code>h(x)</code>产生的样本的可能性与真正<code>f(x)</code>产生的数据很接近<br>那么我们现在找<br><img src="/img/Logistic-Regression/lhp.png" height="200px" width="500px"><br>这个是建立在<code>f(x)</code>产生的数据的可能性很大的基础上，所以现在也相应的就是求<code>h(x)</code>产生的样本的可能性也要很大。<br>用式子表达出来就是这个<br><img src="/img/Logistic-Regression/hn.png" height="100px" width="500px"><br>又因为<code>logistic function</code>的写对称性（<code>1-h(x)=h(-x)</code>），上面的式子可以转为<br><img src="/img/Logistic-Regression/hn2.png" height="100px" width="500px"><br>上面带负号的正好可以看做负样本(<code>y<sub>n</sub>=-1</code>)，带正好的也正好可以看做正样本(<code>y<sub>n</sub>=+1</code>)，同时对于每个<code>hypothesis</code>来说上图中灰色部分(产生各个数据的概率,不含目标)都是一样的，所以现在可以将上述式子简写为<br><img src="/img/Logistic-Regression/like.png" height="100px" width="500px"></p>
+<blockquote>
+<p>它是一个正比函数，<code>y<sub>n</sub></code>正好可以替换为原来的正负1</p>
+</blockquote>
+<p>现在要做的就是找到合适的<code>h(x)</code>，使的上述的可能性最高<br>把<code>h</code>用气w来替换为<br><img src="/img/Logistic-Regression/hwt.png" height="100px" width="500px"><br>为了求其最优化，我们将上述式子的连乘转为连加，通过添加一个<code>ln</code>函数(单调递增)，同时使用添加负号来由求最大化转为最小化(方便求)<br> <img src="/img/Logistic-Regression/cee.png" height="150px" width="500px">（式子2）<br>这里继续使用<code>logistic function</code>函数进行替换，可以有<br> <img src="/img/Logistic-Regression/ecc2.png" height="250px" width="500px"><br>(替换技巧ln a/b=ln a- ln b和ln 1=0)<br>紫色背景的表示对x<sub>n</sub>，y<sub>n</sub>的Error，通过累加再求平均就是很熟悉的<code>E<sub>in</sub></code>了,这个Error就叫做<code>Cross-Entropy Error</code></p>
+<h2 id="Gradient_Descent">Gradient Descent</h2><p>求式子2中的最小值最直观的就是对其求梯度并且其梯度在0的地方就是最小(也是最优)</p>
+<blockquote>
+<p>这里能用上述的方法来求是因为<code>Logistic Regression</code>的<code>E<sub>in</sub></code>是可导可微的，并且是凸的</p>
+</blockquote>
+<p>现在将其对<code>w</code>求偏导<br> <img src="/img/Logistic-Regression/pwf.png" height="400px" width="500px"><br>上面求的是梯度里面的一个<code>Component</code>，那么对所有的<code>Component</code>都整理起来可以得到<br><img src="/img/Logistic-Regression/zpwf.png" height="100px" width="500px"><br>目标就变成了求上述梯度为0的情况<br><img src="/img/Logistic-Regression/tdt.png" height="250px" width="250px"><br>但是可以看到上述的梯度并不是一个一次的方程式，也就是无法直接求出具体的值(不能像<code>Linear Regression</code>中那样直接求出)</p>
+<p>不过现在根据需要求解的问题看成现在这样<br><img src="/img/Logistic-Regression/gdt.png" height="250px" width="250px"><br>梯度的函数可以看成图种的曲线，而相应的参数<code>w</code>可以看成图种的那个球，每次都朝着错误的方向<code>v</code>滚，将球从上面滚到最低处，也就是得到梯度为0的情况<br><img src="/img/Logistic-Regression/aga.png" height="200px" width="400px"><br>其中<code>v</code>为球滚动的方向（后面可以知道是梯度的反方向），还有<code>η</code>表示步伐的长度(为正数，越大会滚的越快)<br>现在的问题就是转为了如果很快滚下去，并且是走对方向（真实中并不是一个二维空间，往往是一个多维空间）</p>
+<p>在曲线上很小很小的一个区间内可以看作是一个线段，那这样就可以在曲线上的一个点出来，然后走出一小段的线段来，那这样可以通过多维度的泰勒展开（额，不熟悉）可以得到<br><img src="/img/Logistic-Regression/aag.png" height="200px" width="500px"></p>
+<blockquote>
+<p>这里的<code>η</code>很小的时候，这个线段的逼近 还是很不错的</p>
+</blockquote>
+<p>上面公式中的灰色标志是表示与<code>v</code>没什么关系，在求解最小化的过程中有颜色部分两个向量内积的最小，那这样的话两个向量完全反方向就是最小的，也就是说<code>v</code>走的是梯度反方向，并且需要注意的是他是单位向量，所以这里就会有<br><img src="/img/Logistic-Regression/odo.png" height="200px" width="500px"><br>那么参数更新的方式就会有<br><img src="/img/Logistic-Regression/paraUpdate.png" height="200px" width="500px"></p>
+<pre><code>这个就是梯度下降法<span class="comment">(Gradient Descent)</span>，也是一种较为简单的，有效的优化方法
+</code></pre><p>好，到了这里<code>v</code>可以求了，那么<code>η</code>这个需要给定的参数取多少合适呢？<br><img src="/img/Logistic-Regression/eta.png" height="300px" width="400px"><br>从上图中可以发现：</p>
+<ol>
+<li><code>η</code>很小：那么整个参数更新过程就会很慢，不过准确性（与最小值的接近程度）应该还是可以保证的</li>
+<li><code>η</code>很大，那么这个参数过程就会很不稳定，那么他的最终的准确性可能就会较低</li>
+</ol>
+<p>比较推荐的是采用一种自适应的方法来做<br><img src="/img/Logistic-Regression/jr.png" height="300px" width="200px"><br>当梯度较大的时候，<code>η</code>也跨的较大，那么当梯度慢慢减小的时候，<code>η</code>也同时慢慢减少，也就是说<code>η</code>与梯度值会呈正相关的关系，那么这样在保证了准确性的同时，又可以加快速度^_^<br>此时根据<code>η</code>正比于梯度值的特性可以惊奇的发现<br><img src="/img/Logistic-Regression/xjr.png" height="250px" width="500px"><br>（图种<span style="color:red">红色</span>的<code>η</code>为原生值，<span style="color:purple">紫色</span>的<code>η</code>为正比的比率）<br>在整个参数的更新过程中可以将梯度值的计算消除掉，这里的<span style="color:purple">紫色</span>的<code>η</code>也称为学习速率</p>
+<p>现在<code>Logistic Regression</code>使用<code>Gradient Descent</code>来计算的过程为<br><img src="/img/Logistic-Regression/lrgd.png" height="400px" width="500px"></p>
+<ol>
+<li>首先将<code>w</code>初始化为0向量</li>
+<li>不断迭代的遍历样本</li>
+<li>每遍历一次样本时都计算当前样本的梯度(可以发现每个样本的梯度都需要遍历整个样本之后才能计算得到-_-)</li>
+<li>计算完梯度之后往梯度的反方向更新权值<code>w</code></li>
+<li>不断进行2~4的步骤，直到<code>E<sub>in</sub></code>足够小或者迭代次数足够多</li>
+<li>返回最后一个更新的<code>w</code>就作为我们的最优<code>hypothesis</code></li>
+</ol>
+<blockquote>
+<p>推导了这么久，但是最终发现整个计算过程还是比较简单清晰地，而且还有点像<code>PLA</code>的<code>Pocket Algorithm</code></p>
+</blockquote>
+<h2 id="Stochastic_Gradient_Descent">Stochastic Gradient Descent</h2><p>现在这里再重新理解一下<code>Gradient Descent</code>算法：每次迭代在计算其中一个样本的梯度的时候，都需要遍历所有的样本对梯度的贡献进行求和，然后取平均值作为最后的梯度，是不是感觉代价偏大(<strong>牵一发而动全身的感觉</strong>-_-，特别是在现在大数据的情况下，这效率应该会很慢)<br>现在我们是希望求得这个梯度的方向，但是不希望通过遍历所有样本求和求平均来得到梯度，有一个巧妙的方法就是将这个过程看过一个随机过程的平均，随便去抽一个样本然后将其作为梯度<br><img src="/img/Logistic-Regression/tor.png" height="200px" width="400px"><br>这种方式我们将随机的一个样本偏微分算出来的梯度称为随机梯度(Stochastic Gradient)，最终真实地梯度与这种随机方式求出来的梯度的期望是一致的<br><img src="/img/Logistic-Regression/tg.png" height="200px" width="400px"></p>
+<pre><code>上面的过程就好比：现在有<span class="number">10000</span>个数字，需要求这些数字的平均数，最普通的方法就是<span class="number">10000</span>求和再求平均，但是遍历<span class="number">10000</span>次的复杂度认为太大，另一种解决方法就随机抽一小批数据<span class="comment">(比如100)</span>再求和求平均，其实这两个期望是很类似的，现在另一种trick的方法是直接只抽一个数字，把它认为就是这<span class="number">10000</span>个数字的平均数，现在再想想抽数字抽好多次最后结果喝第一次求和的期望也是类似的
+</code></pre><blockquote>
+<p>这个方式可以认为：随机得梯度=真实梯度+一些噪声</p>
+</blockquote>
+<p>这样的话在更新参数这一块的代价较大的梯度计算即可直接替换为轻量级的随机梯度，在足够多次的迭代之后，这个真实梯度的平均也会约等于随机梯度的平均<br>那么最终<code>Stochastic Gradient Descent(SGD)</code>算法的表示为<br><img src="/img/Logistic-Regression/sgd.png" height="200px" width="400px"><br>在整个算法计算过程中除了随机梯度计算的区别，还有其终止条件就是足够多的迭代，但是取的是<code>E<sub>in</sub></code>最小的那组作为最优</p>
+<blockquote>
+<p>貌似林老师爆出来关于<code>η</code>参数的取值最优是0.1126 经验参数值哦^_^</p>
+</blockquote>
+<p><code>SGD</code>优势有:</p>
+<ol>
+<li>轻量级计算</li>
+<li>适合于大数据（因为复杂度低，计算梯度是O(1)）</li>
+<li>还可以进行<code>online learning</code></li>
+<li>。。。其实我想说比较容易实现并行</li>
+</ol>
+<p>劣势：就是可能不稳定</p>
+<h2 id="总结">总结</h2><p><code>Logistic Regression(LR)</code>是一个线性的二分类模型，主要有以下优缺点<br>优点：</p>
+<ol>
+<li>实现简单；</li>
+<li>分类时计算量非常小，速度很快，存储资源低，也很容易并行；(在大量数据情况下这个模型非常适用，这也是好多广告系统首选的原因)</li>
+<li>在处理分类问题的同时还可能给出一个概率值(这个值有时候蛮有用的)</li>
+<li>优化方法多：除了GD和SGD，应该还有拟牛顿法、BFGS、L-BFGS<br>缺点：</li>
+<li>容易欠拟合，一般准确度不太高(所以一般情况下需要加上L1,L2的正则项)</li>
+<li>只能处理两分类问题（在此基础上衍生出来的softmax可以用于多分类），且必须线性可分；</li>
+</ol>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第十讲</li>
+<li>《台湾国立大学-机器学习基石》第十一讲</li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/" data-title="《台大机器学习基石》Logistic Regression | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/08/19/Machine Learning/Linear-Regression/"  title="《台大机器学习基石》Linear Regression">
+ <strong>下一篇：</strong><br/> 
+ <span>《台大机器学习基石》Linear Regression
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/21/Machine Learning/Logistic-Regression/" data-title="《台大机器学习基石》Logistic Regression" data-url="http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic_Regression"><span class="toc-number">1.</span> <span class="toc-text">Logistic Regression</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross-Entropy_Error"><span class="toc-number">2.</span> <span class="toc-text">Cross-Entropy Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_Descent"><span class="toc-number">3.</span> <span class="toc-text">Gradient Descent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stochastic_Gradient_Descent"><span class="toc-number">4.</span> <span class="toc-text">Stochastic Gradient Descent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

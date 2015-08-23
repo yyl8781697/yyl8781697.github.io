@@ -92,6 +92,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/03/31/Algorithm/abcSort/" title="一个字符数组，里面的字符可能是a-z、A-Z、0-9.现在要求对数组进行排序" itemprop="url">一个字符数组，里面的字符可能是a-z、A-Z、0-9.现在要求对数组进行排序</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-31T13:32:48.000Z" itemprop="datePublished"> 发表于 2015-03-31</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>创新工场面试题目</p>
+<pre><code>一个字符数组，里面的字符可能是<span class="literal">a</span>-z、<span class="literal">A</span>-Z、<span class="number">0</span>-<span class="number">9</span>.现在要求对数组进行排序，要求所有小写字符放在最前面，所有大写字符放在中间，所有数字放在最后，而且各部分内部分别有序。
+</code></pre><p>此题网上看到别人的做法都说的比较迷糊，好多也都是用快排之类来做的，现在来说一下我的思路：可以将这些字符转为<code>ascii</code>码，小写在前，大小在中间，数字在最后，正好是按<code>ascii</code>倒着排过来，现在已经确认待排序的内容都是在<code>ascii</code>的范围内，所以可以借鉴位排序的方法，申请一个128位的int数组，将每个字符映射到这个数组里面，多个出现在字符累加起来，如果没有出现则置0，最后按顺序输出即可，不需要任何比较。最终整个算法的复杂度为O(N)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span>[] cs=&#123;<span class="string">'a'</span>,<span class="string">'Q'</span>,<span class="string">'7'</span>,<span class="string">'b'</span>,<span class="string">'9'</span>,<span class="string">'P'</span>,<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'8'</span>,<span class="string">'O'</span>,<span class="string">'Q'</span>,<span class="string">'d'</span>,<span class="string">'N'</span>,<span class="string">'2'</span>,<span class="string">'e'</span>,<span class="string">'M'</span>&#125;;</span><br><span class="line"><span class="keyword">int</span>[] ascii=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">128</span>];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cs.length;i++)</span><br><span class="line">&#123;</span><br><span class="line">	ascii[cs[i]]+=<span class="number">1</span>;<span class="comment">//逐个对应的放入桶中</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> t=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">97</span>;i&lt;=<span class="number">122</span>;i++)<span class="comment">//输出小写字母到cs原数组中</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;ascii[i];j++)</span><br><span class="line">	&#123;</span><br><span class="line">		cs[t++]=(<span class="keyword">char</span>)i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">65</span>;i&lt;=<span class="number">90</span>;i++)<span class="comment">//输出大小字母</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;ascii[i];j++)</span><br><span class="line">	&#123;</span><br><span class="line">		cs[t++]=(<span class="keyword">char</span>)i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">48</span>;i&lt;=<span class="number">57</span>;i++)<span class="comment">//输出数字</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;ascii[i];j++)</span><br><span class="line">	&#123;</span><br><span class="line">		cs[t++]=(<span class="keyword">char</span>)i;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cs.length;i++)</span><br><span class="line">&#123;</span><br><span class="line">	System.out.print(cs[i]);<span class="comment">//最后正真输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/31/Algorithm/abcSort/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/31/Algorithm/abcSort/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/03/30/Java Source/Java-HashTable/" title="Java 源码学习之java.util.Hashtable" itemprop="url">Java 源码学习之java.util.Hashtable</a>
   </h1>
   <p class="article-author">By
@@ -658,83 +728,6 @@ B.冒泡排序
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/" title="LeetCode-Rotate Array" itemprop="url">LeetCode-Rotate Array</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-20T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
-</blockquote>
-<p>Problem:<br>Rotate an array of <em>n</em> elements to the right by <em>k</em> steps.</p>
-<p>For example, with <em>n</em> = 7 and <em>k</em> = 3, the array <code>[1,2,3,4,5,6,7]</code> is rotated to <code>[5,6,7,1,2,3,4]</code>.</p>
-<p>Note:<br>Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.</p>
-<p>思路</p>
-<ul>
-<li>使用两次翻转即可，第一次以<em>k</em>分割线翻转<code>[4,3,2,1,7,6,5]</code>，第二次全部翻转<code>[5,6,7,1,2,3,4]</code></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inverse</span><span class="params">(<span class="keyword">int</span> nums[],<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m=(start+end)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">for</span>(;start&lt;=m;start++,end--)</span><br><span class="line">        &#123;</span><br><span class="line">            temp=nums[start];</span><br><span class="line">            nums[start]=nums[end];</span><br><span class="line">            nums[end]=temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rotate</span><span class="params">(<span class="keyword">int</span> nums[], <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        k=k%n;</span><br><span class="line">        <span class="keyword">if</span>(n-k-<span class="number">1</span>&gt;=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            inverse(nums,<span class="number">0</span>,n-k-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        inverse(nums,n-k,n-<span class="number">1</span>);</span><br><span class="line">        inverse(nums,<span class="number">0</span>,n-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Rotate-Array/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/" title="LeetCode-Reverse Bits" itemprop="url">LeetCode-Reverse Bits</a>
   </h1>
   <p class="article-author">By
@@ -880,7 +873,7 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
 		  
 		
 		  
@@ -929,11 +922,11 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>6</sup></a></li>
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
 			
 		
 			
