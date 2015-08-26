@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-08-23T15:31:20.000Z</updated>
+  <updated>2015-08-26T12:26:00.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yyl8781697.github.io/2015/08/21/Machine%20Learning/Logistic-Regression/"/>
     <id>http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/</id>
     <published>2015-08-21T13:07:01.000Z</published>
-    <updated>2015-08-23T15:31:20.000Z</updated>
+    <updated>2015-08-26T12:26:00.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/" target="_blank" rel="external">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px"><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br><a id="more"></a></p>
 <blockquote>
 <p>这个也叫<code>Soft Binary Classification</code>，因为这里的概率可以根据一个阈值来判断是否属于哪一类</p>
@@ -89,7 +89,7 @@
 <li>分类时计算量非常小，速度很快，存储资源低，也很容易并行；(在大量数据情况下这个模型非常适用，这也是好多广告系统首选的原因)</li>
 <li>在处理分类问题的同时还可能给出一个概率值(这个值有时候蛮有用的)</li>
 <li>优化方法多：除了GD和SGD，应该还有拟牛顿法、BFGS、L-BFGS<br>缺点：</li>
-<li>容易欠拟合，一般准确度不太高(所以一般情况下需要加上L1,L2的正则项)</li>
+<li>容易欠拟合，一般准确度不太高</li>
 <li>只能处理两分类问题（在此基础上衍生出来的softmax可以用于多分类），且必须线性可分；</li>
 </ol>
 <h2 id="参考">参考</h2><ul>
