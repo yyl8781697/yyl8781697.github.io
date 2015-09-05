@@ -1,0 +1,710 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Multiclass-Classification | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Multiclass-ClassificationPerceptron Learning Algorithm,Logistic Regression这些算法的最初出现都是基于2分类的(Binary Classification)，但是生活中会出很多多分类的问题出现（比如选择题：四选一，视觉的识别，手写体的识别之类的）
+那么我们如何才能使用这些二分类的模型来完成多分类的需求呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Multiclass-Classification">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/08/30/Machine Learning/Multiclass-Classification/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Multiclass-ClassificationPerceptron Learning Algorithm,Logistic Regression这些算法的最初出现都是基于2分类的(Binary Classification)，但是生活中会出很多多分类的问题出现（比如选择题：四选一，视觉的识别，手写体的识别之类的）
+那么我们如何才能使用这些二分类的模型来完成多分类的需求呢？">
+<meta property="og:image" content="/img/Multiclass-Classification/mc.png">
+<meta property="og:image" content="/img/Multiclass-Classification/mcw.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oa1.png">
+<meta property="og:image" content="/img/Multiclass-Classification/bc.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oa2.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oa3.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oa4.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oa5.png">
+<meta property="og:image" content="/img/Multiclass-Classification/s1.png">
+<meta property="og:image" content="/img/Multiclass-Classification/sp.png">
+<meta property="og:image" content="/img/Multiclass-Classification/s24.png">
+<meta property="og:image" content="/img/Multiclass-Classification/ccpb.png">
+<meta property="og:image" content="/img/Multiclass-Classification/s24s.png">
+<meta property="og:image" content="/img/Multiclass-Classification/lmc.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oo1.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oo12.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oo2.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oo3.png">
+<meta property="og:image" content="/img/Multiclass-Classification/oo5.png">
+<meta property="og:image" content="/img/Multiclass-Classification/eq.png">
+<meta property="og:image" content="/img/Multiclass-Classification/lc.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Multiclass-Classification">
+<meta name="twitter:description" content="Multiclass-ClassificationPerceptron Learning Algorithm,Logistic Regression这些算法的最初出现都是基于2分类的(Binary Classification)，但是生活中会出很多多分类的问题出现（比如选择题：四选一，视觉的识别，手写体的识别之类的）
+那么我们如何才能使用这些二分类的模型来完成多分类的需求呢？">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/30/Machine Learning/Multiclass-Classification/" title="《台大机器学习基石》Multiclass-Classification" itemprop="url">《台大机器学习基石》Multiclass-Classification</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-30T01:27:19.000Z" itemprop="datePublished"> 发表于 2015-08-30</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Multiclass-Classification"><span class="toc-number">1.</span> <span class="toc-text">Multiclass-Classification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#One-Vs-All"><span class="toc-number">2.</span> <span class="toc-text">One-Vs-All</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#One-Vs-One"><span class="toc-number">3.</span> <span class="toc-text">One-Vs-One</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Multiclass-Classification">Multiclass-Classification</h2><p><a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>,<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/" target="_blank" rel="external">Logistic Regression</a>这些算法的最初出现都是基于2分类的(Binary Classification)，但是生活中会出很多多分类的问题出现（比如选择题：四选一，视觉的识别，手写体的识别之类的）</p>
+<p><img src="/img/Multiclass-Classification/mc.png" height="300px" width="500px"><br><img src="/img/Multiclass-Classification/mcw.png" height="100px" width="300px"><br>那么我们如何才能使用这些二分类的模型来完成多分类的需求呢？<br><a id="more"></a></p>
+<h2 id="One-Vs-All">One-Vs-All</h2><p>这里可以先采用一对多的方法来进行多分类，以上面的4个不同形状的多边形分类为例：<br>这是将方块作为一类，其余作为另一类<br><img src="/img/Multiclass-Classification/oa1.png" height="300px" width="500px"><br>也其实就是一个二分类问题了，通过这个分类器我们可以至少将方块给区分出来<br><img src="/img/Multiclass-Classification/bc.png" height="100px" width="350px"></p>
+<p>这是一个菱形作为一类的方案<br><img src="/img/Multiclass-Classification/oa2.png" height="300px" width="500px"></p>
+<p>同理就会有4个区分不同形状的分类器<br><img src="/img/Multiclass-Classification/oa3.png" height="300px" width="500px"></p>
+<p>那么原图上四个角可以进行很容易得分类的<br><img src="/img/Multiclass-Classification/oa4.png" height="250px" width="250px"></p>
+<p>那么问题来了：<br><img src="/img/Multiclass-Classification/oa5.png" height="250px" width="250px"></p>
+<ul>
+<li>在1，2，3，4四个区域是每个单分类器的交集处，就会出现不知道这个分类应该属于哪个类额</li>
+<li>还有在5这个区域，没有一个分类器去涉及它，就会成为了4不管区域了-_-</li>
+</ul>
+<p>这里可以用一个软性(<code>softly</code>)的方法来解决这个问题<br><img src="/img/Multiclass-Classification/s1.png" height="250px" width="250px"><br>颜色越深的区域属于这个类的概率越大，也就是<br><img src="/img/Multiclass-Classification/sp.png" height="100px" width="350px"><br>那么之后形成的4个形状各自的分类器为<br><img src="/img/Multiclass-Classification/s24.png" height="300px" width="500px"><br>使用这种软性分类器最终的多分类判别方式是<br><img src="/img/Multiclass-Classification/ccpb.png" height="100px" width="350px"><br>也就是它会取分类概率那大的那个类别作为预测出来的分类<br>这种软性多分类的分类能力为<br><img src="/img/Multiclass-Classification/s24s.png" height="250px" width="250px"><br>可以发现图中的4中形状的类别都基本已经分开了</p>
+<p>现在以<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/" target="_blank" rel="external">Logistic Regression</a>为例来总结一下<code>One-Vs-All</code>的多分类过程<br><img src="/img/Multiclass-Classification/lmc.png" height="300px" width="500px"></p>
+<ol>
+<li>首先是遍历每个类别，被遍历的类别作为<code>positive</code>，其余的类作为<code>negitive</code>类别，使用<code>Logistic Regression</code>来训练一个分类器</li>
+<li>这样遍历完了之后就可以得到<code>k</code>（表示类别的种类数）分类器（这样也可以将每个分类器对应到一个类别）</li>
+<li>在预测阶段输入一个样本，计算出概率最高的分类器作为预测的类别</li>
+</ol>
+<p>这种分类方法：</p>
+<ul>
+<li>优点：效率很高，有多少个类别就训练多少个分类器就可以完成多分类，并且普适性还比较广，可以应用于能输出值或者概率的分类器</li>
+<li>缺点：就是有较大的样本不平衡，比如现在有很多个类别，每个类别都是只占其中一点点的样本，那么每个单模型在训练的时候可能都是偏向于<code>negitive</code>，最终在预测的时候就是相当于在一端偏向<code>negitive</code>的模型中找<code>positive</code>的分类器</li>
+</ul>
+<h2 id="One-Vs-One">One-Vs-One</h2><p>相当于<code>One-Vs-All</code>的方法，这里的<code>One-Vs-One</code>是从多个类别里面随便选两个出来进行分类,<br>比如还是以上面的四种形状分类为例，先单独拿出菱形和方块这两种类别<br><img src="/img/Multiclass-Classification/oo1.png" height="300px" width="500px"><br>然后单独对这两个类别做一个二分类<br><img src="/img/Multiclass-Classification/oo12.png" height="100px" width="300px"></p>
+<p>还可以做<br>方块和三角形<br><img src="/img/Multiclass-Classification/oo2.png" height="200px" width="200px"><br>方块和星星<br><img src="/img/Multiclass-Classification/oo3.png" height="200px" width="200px"><br>等等还有其他的。。它在四种类别中就会有6种不同的方法(N(4,2),用于表示4的2组合)<br><img src="/img/Multiclass-Classification/oo5.png" height="250px" width="600px"></p>
+<pre><code>现在将这个问题想做是4支队伍，两两对战，然后取出一组成绩最好的作为预测类别，也就是一种投票分类
+</code></pre><p>所以关于上述分类的公式是<br><img src="/img/Multiclass-Classification/eq.png" height="150px" width="600px"></p>
+<p>再来撸一下<code>One-Vs-One</code>的流程:</p>
+<ol>
+<li>遍历<code>k</code>个类别，两两之间进行组合，那么就会有<code>C(k,2)</code>组</li>
+<li>对那么多组进行一个单独进行分类训练</li>
+<li>训练完了之后最终模型的预测输出使用投票的方法</li>
+</ol>
+<p><img src="/img/Multiclass-Classification/lc.png" height="300px" width="500px"></p>
+<p>这种分类方法有</p>
+<ol>
+<li>优点：高效，别看它分为了<code>N(k,2)</code>个模型，但是每个训练的时候他的训练样本只有针对训练类做一下，并且还比较稳定</li>
+<li>缺点：预测的时间会变久，需要更加多得训练</li>
+</ol>
+<h2 id="总结">总结</h2><p>假设现在有<code>k</code>个类别，现在需要使用多分类的方法去预测一个样本属于具体哪个类</p>
+<ul>
+<li><code>One-Vs-All</code>:其中一个类别作为一类，剩余其他类作为一类训练一个二分类模型，按次方法共训练<code>k</code>模型，一般可以认为一个模型对应一个类别，预测时候取概率最大的那个模型即可<br>  优点：训练速度快<br>  缺点：会导致样本不平衡</li>
+<li><code>One-Vs-One</code>:两两类别之间取数据进行二分类模型的训练，按此方法共训练<code>N(k,2)</code>个模型,在预测的时候使用投票的方法作为最终结果<br>  优点：高效（因为每个单模型并不是训练全部数据），稳定<br>  缺点：预测时间会变很久</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第十一讲</li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/08/30/Machine Learning/Multiclass-Classification/" data-title="《台大机器学习基石》Multiclass-Classification | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/09/01/Machine Learning/Overfitting/" title="《台大机器学习基石》Overfitting">
+  <strong>上一篇：</strong><br/>
+  <span>
+  《台大机器学习基石》Overfitting</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/08/21/Machine Learning/Logistic-Regression/"  title="《台大机器学习基石》Logistic Regression">
+ <strong>下一篇：</strong><br/> 
+ <span>《台大机器学习基石》Logistic Regression
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/08/30/Machine Learning/Multiclass-Classification/" data-title="《台大机器学习基石》Multiclass-Classification" data-url="http://yyl8781697.github.io/2015/08/30/Machine Learning/Multiclass-Classification/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Multiclass-Classification"><span class="toc-number">1.</span> <span class="toc-text">Multiclass-Classification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#One-Vs-All"><span class="toc-number">2.</span> <span class="toc-text">One-Vs-All</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#One-Vs-One"><span class="toc-number">3.</span> <span class="toc-text">One-Vs-One</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

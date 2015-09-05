@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yyl8781697.github.io/2015/09/01/Machine%20Learning/Overfitting/</loc>
+    <lastmod>2015-09-03T16:44:44.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/08/30/Machine%20Learning/Multiclass-Classification/</loc>
+    <lastmod>2015-09-01T15:30:59.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yyl8781697.github.io/2015/08/21/Machine%20Learning/Logistic-Regression/</loc>
     <lastmod>2015-08-26T12:26:00.000Z</lastmod>
   </url>

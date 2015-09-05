@@ -1,0 +1,714 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Overfitting | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="What is Overfitting假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合将得到如下的结果可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的Ein=0，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现Eout会很高，这种低Ein高Eout就是叫做泛化能力差(BAD generalizat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Overfitting">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/09/01/Machine Learning/Overfitting/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="What is Overfitting假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合将得到如下的结果可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的Ein=0，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现Eout会很高，这种低Ein高Eout就是叫做泛化能力差(BAD generalizat">
+<meta property="og:image" content="/img/Overfitting/4fit2.png">
+<meta property="og:image" content="/img/Overfitting/vc.png">
+<meta property="og:image" content="/img/Overfitting/case1.png">
+<meta property="og:image" content="/img/Overfitting/case2.png">
+<meta property="og:image" content="/img/Overfitting/curves.png">
+<meta property="og:image" content="/img/Overfitting/yf.png">
+<meta property="og:image" content="/img/Overfitting/isv.png">
+<meta property="og:image" content="/img/Overfitting/iqv.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Overfitting">
+<meta name="twitter:description" content="What is Overfitting假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合将得到如下的结果可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的Ein=0，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现Eout会很高，这种低Ein高Eout就是叫做泛化能力差(BAD generalizat">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/01/Machine Learning/Overfitting/" title="《台大机器学习基石》Overfitting" itemprop="url">《台大机器学习基石》Overfitting</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-01T15:24:58.000Z" itemprop="datePublished"> 发表于 2015-09-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#What_is_Overfitting"><span class="toc-number">1.</span> <span class="toc-text">What is Overfitting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The_Role_of_Noise_and_Data_Size"><span class="toc-number">2.</span> <span class="toc-text">The Role of Noise and Data Size</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution_for_Overfitting"><span class="toc-number">3.</span> <span class="toc-text">Solution for Overfitting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="What_is_Overfitting">What is Overfitting</h2><p>假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合<br>将得到如下的结果<br><img src="/img/Overfitting/4fit2.png" height="240px" width="240px"><br>可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的<code>E<sub>in</sub>=0</code>，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现<code>E<sub>out</sub></code>会很高，<br>这种低<code>E<sub>in</sub></code>高<code>E<sub>out</sub></code>就是叫做泛化能力差(<code>BAD generalization</code>)，也是往往我们在做训练预测时不希望看到的。<br><a id="more"></a></p>
+<p>此时再来回顾一下VC维中经典的一张图<br><img src="/img/Overfitting/vc.png" height="240px" width="240px"><br>可以看到VC维在<code>d<sup>*</sup><sub>vc</sub></code>的时候可以有最小的<code>E<sub>out</sub></code><br>但是在<code>d<sup>*</sup><sub>vc</sub></code>的右侧，可以发现VC维在不断增大时，<code>E<sub>in</sub></code>不断减小，但是<code>E<sub>out</sub></code>会不断增大，这种就是过拟合了（<code>Overfitting</code>）</p>
+<blockquote>
+<p>其实在<code>d<sup>*</sup><sub>vc</sub></code>的左侧叫做欠拟合<code>underfitting</code>，这种情况一般通过增加特征或者向高维映射来进行解决，但是<code>Overfitting</code>是由于一般是VC维太大造成的，不容易解决</p>
+</blockquote>
+<p><code>Overfitting</code>产生的主要原因有</p>
+<ol>
+<li>使用了太多的VC维，也就是模型太复杂了（类似刚刚用4次方的线）</li>
+<li>噪声<code>Nosie</code>太多，这些噪声都被训练函数给拟合学习了</li>
+<li>数据量太少</li>
+</ol>
+<h2 id="The_Role_of_Noise_and_Data_Size">The Role of Noise and Data Size</h2><p>以二维平面上的函数为例，现在平面上有这么一些点：</p>
+<ol>
+<li>一种是以十次多项式产生的点，但是加上了一些噪声</li>
+<li>另一种时以五十次多项式产生的店，但是没有噪声</li>
+</ol>
+<p><img src="/img/Overfitting/case1.png" height="300px" width="500px"><br>分别使用一个二次多项式(<code>H<sub>2</sub></code>)和一个十次多项式<code>H<sub>10</sub></code>用回归的方式去拟合这两个平面上的点</p>
+<p>最终拟合得结果为<br><img src="/img/Overfitting/case2.png" height="350px" width="500px"><br>从两个平面上均可以惊奇的发现：</p>
+<ul>
+<li><code>H<sub>2</sub></code>的<code>E<sub>in</sub></code>比<code>H<sub>10</sub></code>的大，但是在<code>E<sub>out</sub></code>却比<code>H<sub>10</sub></code>小的多</li>
+<li><code>H<sub>10</sub></code>的<code>E<sub>in</sub></code>可以做到很小，但是观察图<code>H<sub>10</sub></code>在图上的高低之处正好与原图相反</li>
+</ul>
+<blockquote>
+<p>也就是说从<code>H<sub>2</sub></code>切换到<code>H<sub>10</sub></code>时，<code>E<sub>in</sub></code>变小了，但是<code>E<sub>out</sub></code>增加了，也就是此时发生了<code>Overfitting</code></p>
+</blockquote>
+<p>这里比较有意思的是原来是十次项产生的点用十次项的线来拟合，该<code>E<sub>out</sub></code>竟然比二次项的线要高很多-_-，这是为何呢？？</p>
+<p>可以看看这两个多项式的学习曲线（这个是针对<code>Liner Regression</code>）<br><img src="/img/Overfitting/curves.png" height="300px" width="500px"><br>其中：</p>
+<ol>
+<li>当样本量无限多的时候，<code>E<sub>in</sub></code>会接近于<code>E<sub>out</sub></code>，否在在有限样本时，<code>E<sub>in</sub></code>总小于<code>E<sub>out</sub></code>，因为训练出来的线总是往训练样本靠拢，这样在预测样本上的时候这个靠拢的距离就会变大。</li>
+<li>随着样本量的增加，<code>E<sub>in</sub></code>会慢慢增加，但是<code>E<sub>out</sub></code>会慢慢减少</li>
+<li>当样本量较少的时候(也就是左边的区域)，这里随着<code>E<sub>in</sub></code>的减少，<code>E<sub>out</sub></code>会增加，也就是出现了<code>Overfitting</code>的情况，应该就是出现了<code>Overfitting</code>的情况，只是左侧的图(十次多项式)更加明显而已</li>
+</ol>
+<blockquote>
+<p>所以啊，可以看出使用简单的模型有多重要^_^</p>
+</blockquote>
+<p>这里再来进一步进行一些<code>Overfitting</code>的实验<br>现在有一个多项次函数和高斯噪声产生的点<br><img src="/img/Overfitting/yf.png" height="200px" width="300px"><br>有三个参数：</p>
+<ol>
+<li><code>σ<sup>2</sup></code>表示高斯噪声的强度</li>
+<li><code>Q<sub>f</sub></code>表示目标多项次函数的复杂度(比如50次多项式 就是<code>Q<sub>f</sub>=50</code>)</li>
+<li><code>N</code>表示训练数据量的大小</li>
+</ol>
+<p>还是用<code>H<sub>2</sub></code>(<code>g<sub>2</sub></code>)和<code>H<sub>10</sub></code>(<code>g<sub>10</sub></code>)进行实验，根据上一个实验的经验，这里肯定成立的是<code>E<sub>in</sub>(g<sub>10</sub>)&lt;E<sub>in</sub>(g<sub>2</sub>)</code>,现在设定<code>Overfitting</code>的度量为<code>E<sub>out</sub>(g<sub>10</sub>)-E<sub>out</sub>(g<sub>2</sub>)</code>，如果这个差值越大，说明<code>Overfitting</code>得越厉害。</p>
+<p>那这样直接看实验结果图</p>
+<blockquote>
+<p>这里横纵坐标是用上面三个参数中选的，还有平面上的颜色表示<code>Overfitting</code>的程度，也就是右侧的那个小纵条，越往上升，<code>Overfitting</code>得越厉害（度量的差值越大）。</p>
+</blockquote>
+<p>先来看噪声强度<code>σ<sup>2</sup></code>和样本数量<code>N</code>对<code>Overfitting</code>的影响<br><img src="/img/Overfitting/isv.png" height="250px" width="250px"><br>从图中可以看到：</p>
+<ul>
+<li>样本数量越少，噪声强度越大的时候，<code>Overfitting</code>得越厉害</li>
+<li>样本数量越多，噪声强度越小的时候，<code>Overfitting</code>的程度很轻<blockquote>
+<p>恩，这想想也是，结果挺合理的^_^</p>
+</blockquote>
+</li>
+</ul>
+<p>再来看看一张比较扭曲的图：目标多项次函数的复杂度<code>Q<sub>f</sub></code>和样本数量<code>N</code>对<code>Overfitting</code>的影响<br><img src="/img/Overfitting/iqv.png" height="250px" width="250px"><br>其实这张图大致上和上面的趋势是一直的，只不过在较少样本同时在较小的复杂度情况下也可以得到较小的<code>Overfitting</code>。</p>
+<blockquote>
+<p>额。。。这个原因我也不是很了解，先去问问其他大神！！</p>
+</blockquote>
+<p>上面两个图中的纵坐标中：</p>
+<ol>
+<li>高斯噪声也叫做随机噪声(<code>stochastic noise</code>)</li>
+<li>目标的复杂度也叫做确定性噪声(<code>deterministic nosie</code>)<br> 这个怎么说呢，比如一个十次项的目标函数产生的点，用一个二次项来拟合，那么这些点中必定有一些是在二次项之外的，那这不就是噪声了嘛，所以这个噪声是可以计算出来的</li>
+</ol>
+<p>他们俩都会对<code>Overfitting</code>都会有影响，并且影响都很类似，不过差别就是<code>deterministic nosie</code>和训练的模型是有改关的。</p>
+<h2 id="Solution_for_Overfitting">Solution for Overfitting</h2><p>既然了解了<code>Overfitting</code>出现的原因以及导致的后果，那咱们该如何处理呢？大致有以下几种方法</p>
+<ol>
+<li>使用简单的模型<br> 根据之前VC维的理论，简单的模型VC维较低，可以得到较低的<code>E<sub>int</sub></code></li>
+<li>剪枝或者数据清洗<br> 其实是为了降低噪声带来的影响</li>
+<li>数据的提示<br> 在原特征上再挖掘有用特征，这样可以弥补训练样本少带来的问题</li>
+<li>正则项<br> 额。好东西，不过下个视频才讲-_-</li>
+<li>验证<br> 应该可以理解为交叉验证把？</li>
+</ol>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第十三讲</li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/09/01/Machine Learning/Overfitting/" data-title="《台大机器学习基石》Overfitting | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/08/30/Machine Learning/Multiclass-Classification/"  title="《台大机器学习基石》Multiclass-Classification">
+ <strong>下一篇：</strong><br/> 
+ <span>《台大机器学习基石》Multiclass-Classification
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/09/01/Machine Learning/Overfitting/" data-title="《台大机器学习基石》Overfitting" data-url="http://yyl8781697.github.io/2015/09/01/Machine Learning/Overfitting/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#What_is_Overfitting"><span class="toc-number">1.</span> <span class="toc-text">What is Overfitting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The_Role_of_Noise_and_Data_Size"><span class="toc-number">2.</span> <span class="toc-text">The Role of Noise and Data Size</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Solution_for_Overfitting"><span class="toc-number">3.</span> <span class="toc-text">Solution for Overfitting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

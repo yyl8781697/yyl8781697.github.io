@@ -92,6 +92,152 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/" title="Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）" itemprop="url">Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-21T00:45:01.000Z" itemprop="datePublished"> 发表于 2015-06-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code><span class="tag">Instance</span>的格式是：
+<span class="tag">Lineid</span> <span class="tag">show</span> <span class="tag">clk</span> <span class="tag">fea1</span><span class="pseudo">:slot1</span> <span class="tag">fea2</span><span class="pseudo">:slot2</span> …
+<span class="tag">Feature</span>的格式是：
+<span class="tag">Fea1</span>\<span class="tag">tweight</span>
+<span class="tag">Fea2</span>\<span class="tag">tweight</span>
+
+现在要求计算每个<span class="tag">instance</span>的<span class="tag">feature</span>权重之和，但是<span class="tag">feature</span>数量极多，可能几千万或者几亿，总之无法放入内存。
+</code></pre><h2 id="分析">分析</h2><ol>
+<li>这是一道很典型的<code>Join</code>操作题目，但是由于是百度的面试题，肯定不会那么简单</li>
+<li>假如将Instance作为大表，Feature作为小表，但是Feature已经无法放入内存了，就无法用<code>map-silde</code>来做<code>Join</code>了</li>
+<li>所以只能用<code>reduce-silde</code>来做，但是这种方式在<code>Reducer</code>端输入的迭代器中会混杂着Feature的权重和LineId，并且是无序的，所以一般会遍历迭代器，然后将两者分离，但是问题就出在这里了，分离的时候要将LineId保存到一个容器里，这时候极有可能出现OOM，也就是在<code>Reducer</code>端内存不足</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/" title="使用Spark求解大图的连通组件(第二版)" itemprop="url">使用Spark求解大图的连通组件(第二版)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-18T13:23:47.000Z" itemprop="datePublished"> 发表于 2015-06-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="原因">原因</h2><p>昨天将<a href="http://kubicode.me/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/">此题</a>使用标签传播版PageRank法（标签合并）得到了正确地结果，但是今天想想这个效率也还是蛮低啊：</p>
+<ol>
+<li>虽然关于标签的存储使用了位图法，但是海量数据下这个标签的存储仍然是一个大得问题</li>
+<li>迭代过程中多次对两两标签集合进行合并，还不时的需要<code>clone</code>操作，时间空间开销都是很大</li>
+<li>关于迭代停止是判断两个标签集合里面的内容是否相等，需要O（n）的复杂度</li>
+<li>最后在判断连通子图时，进行<code>Join</code>的<code>key</code>计算时使用了<code>hashCode</code>，这种方法偷懒的方法很容易造成结果不准确，但是也的确很难用一个唯一的数字来表示一个<code>HashMap</code>了呀</li>
+</ol>
+<h2 id="所以">所以</h2><p>今天想到了这些标签集合完全可以使用集合中标签的最小值的代替，比如（接上文的cookie）cookeiA的最小值是1，cookeB的最小值是1，cookeC的最小值是3，在迭代时cookieB将消息发给cookieC，cookeC将自己的标签由3更新到了1，这样就很判断cookieA，B,C就是一个人了，而且只需要一个<code>int</code>类型就可以了，不需要额外的开销。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/" title="使用Spark求解大图的连通组件（百度面试题）" itemprop="url">使用Spark求解大图的连通组件（百度面试题）</a>
   </h1>
   <p class="article-author">By
@@ -666,143 +812,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/31/Mac/My-Tools-Used-In-Mac/" title="我在Mac中使用的各种实用工具" itemprop="url">我在Mac中使用的各种实用工具</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-31T06:30:53.000Z" itemprop="datePublished"> 发表于 2015-05-31</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>用Mac一个多月来，已经慢慢习惯，Mac下的软件都比较精致，虽然其数量远不及Windows，但是日常使用的都已经有了。</p>
-<h2 id="office2011_for_mac破解版">office2011 for mac破解版</h2><p>下载地址<a href="http://www.macx.cn/thread-2082485-1-1.html">http://www.macx.cn/thread-2082485-1-1.html</a><br>穷人Mac使用者首选，可以和Windows上的office无缝对接，如果你安装完之后发现word很模糊的话 请将office升级到最新版。<br>里面还有一个很强的功能就是Micosoft Connection，用这个软件可以直接在mac端远程到windows端，方便的很。</p>
-<h2 id="chmox">chmox</h2><p>下载地址<a href="http://chmox.sourceforge.net/">http://chmox.sourceforge.net/</a><br>chmox可以在mac下查看chm帮助文档,毕竟chm格式的文档很多啊^_^，chmox真实良心产品</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/31/Mac/My-Tools-Used-In-Mac/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Mac/">Mac</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Mac/">Mac</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/31/Mac/My-Tools-Used-In-Mac/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/31/Mac/My-Tools-Used-In-Mac/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/31/Spark/Build-Spark-Source-And-Compile/" title="使用IDEA搭建Spark源码环境及编译Spark源码" itemprop="url">使用IDEA搭建Spark源码环境及编译Spark源码</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-31T05:57:05.000Z" itemprop="datePublished"> 发表于 2015-05-31</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>之前在看网上使用Eclipse搭建<code>Spark</code>的源码环境各种复杂，所以我只会spark source code下载下来，然后Import到Eclipse中，各种报错，各种包没有，还好我只是看看源码而已，不运行它报错也无所谓啦，人懒没办法..<br /><br>但是现在想深入得学习一下<code>Spark</code>的源码环,就不得不搭建完整地环境，所以使用号称开发神器的IDEA来搭建<code>Spark</code>的源码环境，果然很方便^_^</p>
-<h2 id="准备工作">准备工作</h2><ul>
-<li><code>JDK1.7+</code></li>
-<li><code>Scala2.10.4</code>(最好用这个版本，不然用最新版可能导致Spark出各种错误，点<a href="http://www.scala-lang.org/download/2.10.4.html">这里</a>下载)</li>
-<li><code>IntelliJ IDEA 14 Community Edition</code>(记得下载时选择<a href="http://www.jetbrains.com/idea/download/">社区版</a>,它是免费的)</li>
-<li><code>Mac OS X 10.10.2</code> (用其他环境也可以，但是别用windows啊)</li>
-</ul>
-<h2 id="从Github上clone源码">从Github上clone源码</h2><p>打开Idea,在欢迎界面别动！！！<br /><br>点击<strong>Check out from version Control-&gt;Git</strong><br /></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/31/Spark/Build-Spark-Source-And-Compile/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Spark/">Spark</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Spark/">Spark</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/31/Spark/Build-Spark-Source-And-Compile/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/31/Spark/Build-Spark-Source-And-Compile/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -877,7 +886,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
 		  
 		
 		  
@@ -922,11 +931,11 @@
 			
 		
 			
-				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>7</sup></a></li>
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
 			
 		
 			
