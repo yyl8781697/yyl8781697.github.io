@@ -92,6 +92,96 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/08/Effective Java/Class-And-Interface/" title="《Effective Java》第四章：类和接口" itemprop="url">《Effective Java》第四章：类和接口</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-08T14:39:56.000Z" itemprop="datePublished"> 发表于 2015-05-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
+<h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
+<p>尽可能使每个类或者成员不被外界访问。</p>
+</blockquote>
+<p><code>Java</code>的4种访问级别：</p>
+<ul>
+<li>私有的<code>private</code>：只有在申明该成员的类的内部才可以访问。</li>
+<li>包级私有的<code>package-private</code>：包内的任何类都可以访问这个成员，（<strong>这个是默认的访问级别</strong>）</li>
+<li>受保护的<code>protected</code>：子类可以访问超类的<code>protected</code>成员，<strong>但是还有这个<code>protected</code>成员类的包内的任何类也可以访问</strong>。</li>
+<li>公有的<code>public</code>：任何地方都可以访问这个成员。</li>
+</ul>
+<blockquote>
+<p>如何方法覆盖了超类中的中的一个方法，子类中的访问级别就不允许低于超类的访问级别。</p>
+</blockquote>
+<p>这样可以确保使用超类的实例的地方也可以使用子类的实例。</p>
+<blockquote>
+<p>实例域是不能公有的。</p>
+</blockquote>
+<p>其实就是建议类里面只暴露<code>final</code>修饰的变量成员，其他变量一律不要暴露。</p>
+<blockquote>
+<p>长度非零的数组总是可变的。</p>
+</blockquote>
+<p>就算你使用<code>static final</code>关键字将一个数组成员暴露出来，但是这个数组成员的内容还是可以被外部给修改的。你可以使用</p>
+<ul>
+<li>创建不可变量列表</li>
+<li>克隆这个对象</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/08/Effective Java/Class-And-Interface/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/08/Effective Java/Class-And-Interface/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/08/Effective Java/Class-And-Interface/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/03/Java Base/You-Donnot-Kown-About-The-Clone/" title="关于Java的Clone，你这些都知道吗？" itemprop="url">关于Java的Clone，你这些都知道吗？</a>
   </h1>
   <p class="article-author">By
@@ -722,75 +812,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/07/OSGi/OSGi-Services/" title="（译）OSGi-Services，OSGI-服务" itemprop="url">（译）OSGi-Services，OSGI-服务</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-07T13:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>本教程介绍了关于服务声明相关的OSGI服务用法，Eclipse Equinox作为OSGI的服务器使用，本教程使用了Eclipse4.3(Kepler)。</p>
-</blockquote>
-<h2 id="1-_准备">1. 准备</h2><p>下面的教程假定你已经熟悉OSGI的运行时以及模块层（<a href="http://www.vogella.com/tutorials/OSGiServices/article.html">原文</a>,<a href="http://kubicode.me/2015/04/04/OSGi-Modularity/">译文</a>）相关的描述。</p>
-<h2 id="2-_OSGI服务">2. OSGI服务</h2><h3 id="2-1-_什么是OSGI服务">2.1. 什么是OSGI服务</h3><p>一个OSGI的服务被定义为一个标准的Java类或者接口，通常一个Java接口被作为服务的接口来使用。一个<strong>bundle</strong>可以注册或者使用服务，为了达到此功能，OSGI提供了中心的服务注册表。<br /><br>一个服务可以被动态的启动和停止，<strong>bundle</strong>在使用服务时必需有这种操控动态行为的能力，<strong>bundle</strong>服务可以注册一个监听器来监听服务的启动和停止。</p>
-<h3 id="2-2-_定义服务的最佳实践">2.2. 定义服务的最佳实践</h3><p>定义一个服务最通常的方法就是通过一个含有接口的<strong>bundle</strong>来定义，其他的<strong>bundle</strong>将会提供这个服务的实现，这就可以允许你通过不同的<strong>bundle</strong>来改变服务的实现。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/07/OSGi/OSGi-Services/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/OSGi/">OSGi</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/07/OSGi/OSGi-Services/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/07/OSGi/OSGi-Services/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
@@ -865,7 +886,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
 		  
 		
 		  
@@ -910,7 +931,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
 			
 		
 			

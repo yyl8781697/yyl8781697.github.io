@@ -1,0 +1,716 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Regularization | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Regularization正则化(Regularization)是缓解Overfitting非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：
+那这种正则化过程又该如何做呢？其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的点击我)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Regularization">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/09/05/Machine Learning/Regularization/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Regularization正则化(Regularization)是缓解Overfitting非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：
+那这种正则化过程又该如何做呢？其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的点击我)">
+<meta property="og:image" content="/img/Regularization/reg_target.png">
+<meta property="og:image" content="/img/Regularization/contains.png">
+<meta property="og:image" content="/img/Regularization/h10h2.png">
+<meta property="og:image" content="/img/Regularization/h10h2p.png">
+<meta property="og:image" content="/img/Regularization/hc.png">
+<meta property="og:image" content="/img/Regularization/lrReg.png">
+<meta property="og:image" content="/img/Regularization/opt.png">
+<meta property="og:image" content="/img/Regularization/lagrange.png">
+<meta property="og:image" content="/img/Regularization/par.png">
+<meta property="og:image" content="/img/Regularization/wreg.png">
+<meta property="og:image" content="/img/Regularization/lrg.png">
+<meta property="og:image" content="/img/Regularization/lamdba.png">
+<meta property="og:image" content="/img/Regularization/vct.jpg">
+<meta property="og:image" content="/img/Regularization/complex.png">
+<meta property="og:image" content="/img/Regularization/l1l2.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Regularization">
+<meta name="twitter:description" content="Regularization正则化(Regularization)是缓解Overfitting非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：
+那这种正则化过程又该如何做呢？其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的点击我)">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/05/Machine Learning/Regularization/" title="《台大机器学习基石》Regularization" itemprop="url">《台大机器学习基石》Regularization</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-05T08:36:48.000Z" itemprop="datePublished"> 发表于 2015-09-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Regularization"><span class="toc-number">1.</span> <span class="toc-text">Regularization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Regularization_and_VC_theory"><span class="toc-number">2.</span> <span class="toc-text">Regularization and VC theory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#L2_VS_L1_Regularization"><span class="toc-number">3.</span> <span class="toc-text">L2 VS L1 Regularization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Regularization">Regularization</h2><p>正则化(<code>Regularization</code>)是缓解<code>Overfitting</code>非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：<br><img src="/img/Regularization/reg_target.png" height="300px" width="500px"></p>
+<p>那这种正则化过程又该如何做呢？<br>其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的<a href="http://kubicode.me/2015/09/01/Machine%20Learning/Overfitting/" target="_blank" rel="external">点击我</a>)<br><a id="more"></a><br>并且我们还知道低次多项式的假设空间是包含在高次多项式中的<br><img src="/img/Regularization/contains.png" height="150px" width="250px"><br>那么也就是说我们如果能把高次的多项式慢慢退回到合适的低次多项式中，就可以缓解<code>Overfitting</code>问题</p>
+<p>这里来看一下<code>H<sub>2</sub></code>和<code>H<sub>10</sub></code>的多项式关系<br><img src="/img/Regularization/h10h2.png" height="250px" width="500px"><br>可以发现<code>H<sub>2</sub></code>的多项式仅仅是在<code>H<sub>10</sub></code>添加了红色的约束即可形成</p>
+<p>那这样给我们的启发是在<code>H<sub>10</sub></code>多项式退回到<code>H<sub>2</sub></code>多项式时可以加约束来操作<br>现在可以将上述的启发套用到求<code>min(E<sub>in</sub>)</code><br><img src="/img/Regularization/h10h2p.png" height="300px" width="700px"></p>
+<ol>
+<li>上图左侧：求<code>H<sub>10</sub></code>的<code>min(E<sub>in</sub>)</code>可以按具体模型正常求解,这样相对来说可以得到一个更小的<code>E<sub>in</sub></code></li>
+<li>上图中间：求<code>H<sub>2</sub></code>的时候可以在红色约束(后面8个权重值均为0)的基础上求<code>H<sub>10</sub></code>的<code>min(E<sub>in</sub>)</code></li>
+<li>上图右侧：让约束来的更加宽松一点，只要存在8个权重的值为0，这里可以用<code>H‘<sub>2</sub></code>来表示，产生的<code>hypothesis</code>也叫做<code>sparse hypothesis</code>，因为大部分权重值都为0呀^_^</li>
+</ol>
+<blockquote>
+<p>这里就会有：<code>H<sub>2</sub> ⊂ H‘<sub>2</sub> ⊂ H<sub>10</sub></code></p>
+</blockquote>
+<p>现在看似求解<code>H‘<sub>2</sub></code>的<code>min(E<sub>in</sub>)</code>即可，但是遗憾的是他是一个NP难题-_-!!<br>只能继续改进了：原来在<code>H‘<sub>2</sub></code>中对不等于0的权重进行计数设定一个阈值，这个过程可以转为将权重平方和小于一个阈值来操作，这样就有了：<br><img src="/img/Regularization/hc.png" height="300px" width="250px"><br>这样就转为了一个类似的最佳化问题，并且可以解决原来<code>H‘<sub>2</sub></code>离散约束，这个<code>hypothesis</code>叫做<code>H(c)</code>,这个<code>H(c)</code>产生的权重要么非常稀疏，要么都是比较小的。<br>这样产生的权重值叫做<code>W<sub>reg</sub></code>，它也是通过<code>H(c)</code>来完成<code>Regularization</code>的优化解决方案。</p>
+<p>现在使用<code>H(c)</code>的求解<code>Linear Regression</code>，将其转为矩阵形式求解为：<br><img src="/img/Regularization/lrReg.png" height="300px" width="400px"><br>则根据约束条件我们可以知道在约束下最优的解是在半径为<code>sqrt(C)</code>的球里面找到一个权重<code>w</code>使得原始的<code>E<sub>in</sub></code>最小<br>我们现在需要做的就是在条件下求最佳化问题：<br><img src="/img/Regularization/opt.png" height="300px" width="300px"></p>
+<blockquote>
+<p>原始问题是沿着梯度反方向滚到谷底即可，也就是椭圆中的<code>W<sub>lin</sub></code>,现在的话该点就会被限制在球内，则我们可以知道最佳点一定是在球的边缘。</p>
+</blockquote>
+<p>则现在<code>w</code>可以滚动的规则为：</p>
+<ol>
+<li>球的切面方向量的垂直方向为<code>normal</code>，但是只能往该方向的垂直方向滚动(绿色的向量)，不然就会违背了<code>w</code>在球内的约束条件</li>
+<li>要往梯度的反方向滚动(蓝色的方向)，但是为了不违反在球内的条件，所以只能在梯度反方向的分量滚动，并且该方法还必须垂直于<code>normal</code></li>
+</ol>
+<p>所以<code>w</code>滚动的方向是梯度反方向中能垂直球的切面方向量的垂直方向（有点绕。。简单的说，就是蓝色方向与红色垂直的方向滚动），这样即可以满足在球内的约束条件，又可以进一步的优化<code>E<sub>in</sub></code>,直达梯度的反方向与求的切面方向垂直的方向平行，就达到最优了。</p>
+<p>因为最终需要那两个方向是平行的，也样通过拉格朗日乘法可以将其写到一个式子里面去<br><img src="/img/Regularization/lagrange.png" height="250px" width="300px"></p>
+<p>现在假设当前的模型是<code>Linear Regression</code><br><img src="/img/Regularization/par.png" height="250px" width="300px"></p>
+<p>这样只需要求<code>w<sub>reg</sub></code>即可<br><img src="/img/Regularization/wreg.png" height="100px" width="300px"></p>
+<p>现在延生看待这个问题的话<br><img src="/img/Regularization/lrg.png" height="350px" width="500px"><br>其中，在原始基础上添加的<code>w<sup>T</sup>w</code>称作正则项，这里的<code>λ</code>需要取正数大于等于0</p>
+<blockquote>
+<p>这种方式最大的优势就是将原本的阈值<code>C</code>，现在如果知道<code>λ</code>的话就可以在一个式子里面进行直接求解了</p>
+</blockquote>
+<p>关于<code>λ</code>产生的影响的结果图<br><img src="/img/Regularization/lamdba.png" height="300px" width="700px"><br>可以发现</p>
+<ol>
+<li><code>λ</code>如果不加的会产生<code>Overfitting</code></li>
+<li><code>λ</code>加一点点就可以缓解<code>Overfitting</code></li>
+<li>但是<code>λ</code>加太多的话会产生<code>underfitting</code></li>
+</ol>
+<p>这种正则化的方式叫做<code>weight-decay</code>，会把权重值变小（因为球面上权重向量的各个值都会比较小^_^）。</p>
+<h2 id="Regularization_and_VC_theory">Regularization and VC theory</h2><p>通过求带有约束的<code>E<sub>in</sub></code>可以相继得到<code>augmented Error</code>和<code>VC Bound</code><br><img src="/img/Regularization/vct.jpg" height="400px" width="500px"></p>
+<blockquote>
+<p>这里在最优化<code>augmented Error</code>的同时其实在间接的求<code>VC Bound</code></p>
+</blockquote>
+<p>再来看一下他们俩的区别：</p>
+<ul>
+<li><code>augmented Error</code>它的正则项<code>w<sup>T</sup>w=Ω(W)</code>是表示一个<code>hypothesis</code>的复杂程度</li>
+<li><code>VC Bound</code>的<code>Ω(H)</code>是表示整个<code>hypothesis set</code>的复杂程度</li>
+</ul>
+<p>那么如果<code>λ/N*Ω(W)</code>与<code>Ω(H)</code>之间存在关联的话，就可以说最小化<code>E<sub>aug</sub></code>是比通过<code>E<sub>in</sub></code>来求<code>E<sub>out</sub></code>的更好的一个代理</p>
+<p>再来看具体的一个模型复杂度的一个问题<br><img src="/img/Regularization/complex.png" height="200px" width="400px"></p>
+<ul>
+<li>原始求<code>E<sub>in</sub></code>他需要的VC复杂度为<code>d<sub>vc</sub>(H)=d+1</code>，需要在整个<code>hypothesis set</code>中找</li>
+<li>在<code>E<sub>aug</sub></code>中他是被限制在了<code>H(C)</code>中，所以所需的VC复杂度为<code>d<sub>vc</sub>(H(C))=d<sub>EFF</sub>(H,min E<sub>aug</sub>)</code>,他只考虑了<code>w</code>比较小的情况</li>
+</ul>
+<blockquote>
+<p>所以<code>E<sub>aug</sub></code>有效的VC复杂度要比原来的<code>E<sub>in</sub></code>小很多</p>
+</blockquote>
+<h2 id="L2_VS_L1_Regularization">L2 VS L1 Regularization</h2><p>上面提到的<code>||W||<sup>2</sup></code>的正则化称为<code>L2 Regulariation</code>,这里再来看一个 <code>L1 Regularization</code><br><img src="/img/Regularization/l1l2.png" height="400px" width="500px"><br><code>L1 Regularization</code>主要是在原始<code>E<sub>in</sub></code>上添加了权重向量的绝对值求和<code>||W||<sub>1</sub></code>,它可以产生更为稀疏的权重值，因为<code>||W||<sub>1</sub></code>在多维中可以看做菱形体，根据上面求球体最优的方法，在上面提到的最有约束中我们可以知道w滚动的方向是菱形体法向量垂直的方法（该垂直方向是梯度方向的一个放量），直到滚到菱形体角上的时候，该垂直方向将与梯度方向平行，也就是到了最优，而菱形体角上各个权重的值会是比较稀疏的，也就是说<code>L1 Regularization</code>可以将特征稀疏化（特征稀疏化可以减少存储空间，又可以加快计算速度，只是。。这个稀疏化很不方便优化）。</p>
+<p>参考上图对比一下<code>L2 Regulariation</code>和<code>L1 Regulariation</code>：</p>
+<ul>
+<li><code>L2 Regulariation</code>：凸函数，可以求导，并且很方便优化，最后通过正则化之后得到权重值都会偏小</li>
+<li><code>L1 Regulariation</code>：凸函数，但是角上无法求导，也就是说优化比较难，通过正则化之后得到的权重值比较稀疏，对于计算和存储都是很大的优势。</li>
+</ul>
+<blockquote>
+<p>关于<code>E<sub>aug</sub></code>中正则项的<code>λ</code>参数的取值最好是按照噪声大小来定^_^</p>
+</blockquote>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第十四讲</li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/09/05/Machine Learning/Regularization/" data-title="《台大机器学习基石》Regularization | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/09/01/Machine Learning/Overfitting/"  title="《台大机器学习基石》Overfitting">
+ <strong>下一篇：</strong><br/> 
+ <span>《台大机器学习基石》Overfitting
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/09/05/Machine Learning/Regularization/" data-title="《台大机器学习基石》Regularization" data-url="http://yyl8781697.github.io/2015/09/05/Machine Learning/Regularization/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Regularization"><span class="toc-number">1.</span> <span class="toc-text">Regularization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Regularization_and_VC_theory"><span class="toc-number">2.</span> <span class="toc-text">Regularization and VC theory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#L2_VS_L1_Regularization"><span class="toc-number">3.</span> <span class="toc-text">L2 VS L1 Regularization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

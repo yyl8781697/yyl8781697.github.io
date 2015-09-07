@@ -92,6 +92,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/30/Algorithm/Put-x-To-Head/" title="函数将字符串中的字符&#39;*&#39;移到串的前部分" itemprop="url">函数将字符串中的字符&#39;*&#39;移到串的前部分</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-29T16:51:08.000Z" itemprop="datePublished"> 发表于 2015-07-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>函数将字符串中的字符'<span class="keyword">*</span>'移到串的前部分,前面的非'<span class="keyword">*</span>'字符后移,但不能改变非'<span class="keyword">*</span>'字符的先 后顺序,函数返回串中字符'<span class="keyword">*</span>'的数量。如原始串为:ab<span class="keyword">*</span><span class="keyword">*</span>cd<span class="keyword">*</span><span class="keyword">*</span>e<span class="keyword">*</span>12,处理后为<span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>abcde12, 函数并返回值为 5。(要求使用尽量少的时间和辅助空间)
+</code></pre><h2 id="解析1">解析1</h2><p>之前做过<a href="http://kubicode.me/2015/07/19/Algorithm/OddEvenSplit/">奇数偶数分离</a>可能很快就想到使用快排分区的思想来解此题了：<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/30/Algorithm/Put-x-To-Head/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/30/Algorithm/Put-x-To-Head/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/30/Algorithm/Put-x-To-Head/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/30/Algorithm/Put-Array-To-Tree/" title="怎样编写一个程序,把一个有序整数数组放到二叉树中" itemprop="url">怎样编写一个程序,把一个有序整数数组放到二叉树中</a>
   </h1>
   <p class="article-author">By
@@ -709,75 +774,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/19/Algorithm/Longest/" title="最长递增子序列" itemprop="url">最长递增子序列</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-19T08:31:57.000Z" itemprop="datePublished"> 发表于 2015-07-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>题目</p>
-<pre><code>给定一个长度为<span class="keyword">N</span>的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为<span class="number">6</span>的数组A<span class="list">{5， 6， 7， 1， 2， 8}</span>，则其最长的单调递增子序列为<span class="list">{5，6，7，8}</span>，长度为<span class="number">4.</span>
-</code></pre><h2 id="解析">解析</h2><blockquote>
-<p>此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^</p>
-</blockquote>
-<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/19/Algorithm/Longest/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/19/Algorithm/Longest/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/19/Algorithm/Longest/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -852,7 +848,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
 		  
 		
 		  
@@ -897,7 +893,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>9</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
 			
 		
 			
