@@ -1,0 +1,699 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《台大机器学习基石》Validation | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Model Select problem在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了Perceptron Learning Algorithm，Linear Regression,Logistic Regression），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如Regularization的类型，或者具体参数的值，比如Gradi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《台大机器学习基石》Validation">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/09/07/Machine Learning/Validation/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Model Select problem在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了Perceptron Learning Algorithm，Linear Regression,Logistic Regression），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如Regularization的类型，或者具体参数的值，比如Gradi">
+<meta property="og:image" content="/img/Validation/goal.png">
+<meta property="og:image" content="/img/Validation/hof.png">
+<meta property="og:image" content="/img/Validation/cbee.png">
+<meta property="og:image" content="/img/Validation/sib.png">
+<meta property="og:image" content="/img/Validation/cv.png">
+<meta property="og:image" content="/img/Validation/fhof.png">
+<meta property="og:image" content="/img/Validation/Eout.png">
+<meta property="og:image" content="/img/Validation/process.png">
+<meta property="og:image" content="/img/Validation/tog.png">
+<meta property="og:image" content="/img/Validation/compare.png">
+<meta property="og:image" content="/img/Validation/rv.png">
+<meta property="og:image" content="/img/Validation/en.png">
+<meta property="og:image" content="/img/Validation/ioocv.png">
+<meta property="og:image" content="/img/Validation/show.png">
+<meta property="og:image" content="/img/Validation/prove.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《台大机器学习基石》Validation">
+<meta name="twitter:description" content="Model Select problem在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了Perceptron Learning Algorithm，Linear Regression,Logistic Regression），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如Regularization的类型，或者具体参数的值，比如Gradi">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/07/Machine Learning/Validation/" title="《台大机器学习基石》Validation" itemprop="url">《台大机器学习基石》Validation</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-07T15:32:37.000Z" itemprop="datePublished"> 发表于 2015-09-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Model_Select_problem"><span class="toc-number">1.</span> <span class="toc-text">Model Select problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Validation_Error"><span class="toc-number">2.</span> <span class="toc-text">Validation Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross_Validation"><span class="toc-number">3.</span> <span class="toc-text">Cross Validation</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Model_Select_problem">Model Select problem</h2><p>在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>，<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/" target="_blank" rel="external">Linear Regression</a>,<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/" target="_blank" rel="external">Logistic Regression</a>），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如<a href="http://kubicode.me/2015/09/05/Machine%20Learning/Regularization/" target="_blank" rel="external">Regularization</a>的类型，或者具体参数的值，比如<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/#Gradient_Descent" target="_blank" rel="external">Gradient Descent</a>里面的步长等，我们知道，现在机器学习的目的就是得到最小化的<code>E<sub>out</sub></code>（也就是测试误差啦），那么现在给你一批数据，然后会出现上述那么多的选择，如果做才能得到最小的<code>E<sub>out</sub></code>呢？<br><img src="/img/Validation/goal.png" height="200px" width="500px"><br>也就是我们要找到一个最好的模型<code>H<sub>m<sup><em></em></sup></sub></code>，使得<code>E<sub>out</sub>(g<sub>m<sup></sup></sub>)</code>最小。<br><a id="more"></a></p>
+<p>看到<code>E<sub>out</sub></code>首先联想到得就是<code>E<sub>in</sub></code>，根据<a href="http://kubicode.me/2015/08/15/Machine%20Learning/VC-Dimension/#VC_Bound" target="_blank" rel="external">VC Bound</a>可以知道,样本空间存在有限的break point，并且采样的资料量N够多的时候，有一个很大的概率<code>E<sub>out</sub></code>与<code>E<sub>in</sub></code>会很相似，但是又根据VC维中的模型复杂图可以看到，到VC维很高时（模型会很复杂），此时的<code>E<sub>in</sub></code>会很小，但是<code>E<sub>out</sub></code>就会很大了，这样就会出现了<code>BAD Regularization</code></p>
+<pre><code>这里好比一个<span class="number">1126</span>次的多项式的E<span class="keyword">in</span>总是能低于<span class="number">1</span>次的多项式-_-，但是其E<span class="keyword">out</span>就不一定了
+</code></pre><p>所以说只使用<code>E<sub>in</sub></code>最小化来选择模型并不是很靠谱，因为不能保证得到一个最小的<code>E<sub>out</sub></code>-_-||</p>
+<p>现在再来思考一下，假如我们能够得到测试数据的误差<code>E<sub>test</sub></code>,那么<code>E<sub>out</sub></code>会不会与之很相似呢？<br>关于这个问题<code>Hoeffding</code>不等式又可以出来证明了<br><img src="/img/Validation/hof.png" height="150px" width="400px"> 1-2<br>这里的<code>M</code>表示可以进行模型选择的数量，<code>N<sub>test</sub></code>表示预测样本的数量，通过上面的不等式可以看到当预测样本足够大，可选模型足够少的时候，<code>E<sub>test</sub></code>和<code>E<sub>out</sub></code>是很就近的。<br>那么问题来了：关于这个测试样本如何得到？？？这是一个比较大的问题<br>先来看<code>E<sub>in</sub></code>和<code>E<sub>test</sub></code>这两者的对比<br><img src="/img/Validation/cbee.png" height="250px" width="500px"><br>可以发现：</p>
+<ul>
+<li><code>E<sub>in</sub></code>表示数据比较容易获取，但是可以变相得看做在原有数据集上训练完了 又在该数据库测试了一遍</li>
+<li><code>E<sub>test</sub></code>测试数据比较难获取，但是一旦得到的测试数据都市无污染的，没有被训练过（也就是没有哎呦）</li>
+</ul>
+<p>所以这里又想了一种比较折中的方式<br><img src="/img/Validation/sib.png" height="250px" width="450px"><br>这个折中的方式就是使用现有的训练样本来进行测试，但是这个训练样本是没有被训练过， 这里叫做评估/验证的误差<code>E<sub>val</sub></code>,这中方式的具体做法就是将训练样本分为两部分，一本分用于训练，另一个部分用于测试，通过这种方式就可以有效的选择。</p>
+<h2 id="Validation_Error">Validation Error</h2><p>现在假设总资料有<code>N</code>，切出<code>K</code>份来作为验证集，这样关于这个式子就可以有<br><img src="/img/Validation/cv.png" height="250px" width="500px"><br>（ps:其中D表示所有的数据集,<code>g<sub>m</sub></code>为我们需要的目标函数）<br>这样的话：</p>
+<ol>
+<li><code>D<sub>val</sub></code>表示验证数据集，并且是比较容易得到的</li>
+<li>在<code>K</code>合适的情况下<code>E<sub>val</sub></code>与<code>E<sub>out</sub></code>是很接近的</li>
+<li><code>D<sub>val</sub></code>数据从训练数据中剥离出来，并且是没有训练过</li>
+</ol>
+<p>那么根据上面的式子1-2 可以有<br><img src="/img/Validation/fhof.png" height="150px" width="400px"><br>(其中式子里面带减号是为了表示当前训练的数据集并不是全集，而是除去了切出去之后剩余的训练集)</p>
+<p>按照上面的思路，我们只需要求<code>E<sub>val</sub></code>的最小化即可<br>在通过比较最小化的<code>E<sub>val</sub></code>之后得到的模型其实并不是我们需要的最终的模型，因为该模型是在部分数据集上训练得到的，接下来我们还可以将该模型在全集上再次训练出一个新的模型<br><img src="/img/Validation/Eout.png" height="250px" width="400px"><br>根据<a href="http://kubicode.me/2015/09/01/Machine%20Learning/Overfitting/#The_Role_of_Noise_and_Data_Size" target="_blank" rel="external">数据集的学习曲线</a>可以了解到 全集训练出模型的<code>E<sub>out</sub></code>将会更加小</p>
+<p>所以我们最终产生一个最优模型的学习流程应该是这样的<br><img src="/img/Validation/process.png" height="400px" width="400px"> </p>
+<ol>
+<li>将数据集<code>D</code>分为两份，训练集叫做<code>D<sub>train</sub></code>，验证集叫做<code>D<sub>val</sub></code></li>
+<li>将训练集<code>D<sub>train</sub></code>输入到各个模型中<code>H<sub>m</sub></code>得到各自的<code>g<sup>-</sup><sub>m</sub></code>（也就是模型模型训练之后得到的）</li>
+<li>将这些训练出来的<code>g<sup>-</sup><sub>m</sub></code>通过验证集<code>D<sub>val</sub></code>来进行一个验证误差计算<code>E<sub>m</sub></code></li>
+<li>将得到<code>E<sub>m</sub></code>最小的模型<code>H<sub>m<sup>*</sup></sub></code>再次输入到全部数据集中进行一个训练</li>
+<li>最终输出全集上的训练得到<code>g<sub>m<sup>*</sup></sub></code>的结果</li>
+</ol>
+<p>这样将上面提到的几个概念连起来之后有<br><img src="/img/Validation/tog.png" height="150px" width="500px"> </p>
+<p>现在来对比一下刚刚提到几种最优模型的选择方法<br><img src="/img/Validation/compare.png" height="300px" width="300px"> 2-6<br>其中横轴表示验证数据集<code>K</code>的大小，纵轴表示<code>E<sub>out</sub></code>的大小，从图中可以看到</p>
+<ul>
+<li>黑色的实线表示通过<code>E<code>in</code></code>来选择的模型，因为它是在全集上进行的计算，所以总是和验证集的大小没关系，故为一条直线</li>
+<li>黑色的虚线表示直接在测试集上根据其误差选择的模型，测试集都给你了。。。当然能选择较好的模型，但是这种事情一般都是不现实的。。</li>
+<li>红色的线表示根据<code>E<sub>val</sub></code>进行模型的选择，但是最终给的模型仍然是在除验证集的训练集上训练得出的</li>
+<li>蓝色的线表示根据<code>E<sub>val</sub></code>进行模型的选择，但是最终给的模型会重新在全集上进行一次训练</li>
+<li>可以发现蓝色的线总是优于红色的线，这也说明在全集的训练能将<code>E<sub>out</sub></code>降到更低</li>
+<li>可以发现蓝色的线也总是低于黑色的实线，这也说明了使用<code>E<sub>val</sub></code>比<code>E<code>in</code></code>选择模型更加靠谱</li>
+<li>还可以发现红色的线会在<code>K</code>到于一定程度之后会高于黑色的实线，这是因为<code>K</code>越大，而总得样本集是一定的，也就是说明能训练的样本就变少了，那么最后训练的<code>g<sup>-</sup><sub>m</sub></code>的<code>E<sub>val</sub></code>比较大了，也就会导致<code>E<sub>out</sub></code>变大</li>
+</ul>
+<blockquote>
+<p>上图可以总结出使用<code>E<sub>val</sub></code>来选择模型是靠谱的，并且<code>E<sub>val</sub></code>大小也是相当重要的，当然是越小越好</p>
+</blockquote>
+<p>其实使用求<code>E<sub>val</sub></code>最小来选择模型，我们是希望<code>E<sub>val</sub></code>较小的同时可以得到一个较为相似的<code>E<sub>out</sub>(g<sup>-</sup>)</code>，那么我们也可以认为<code>E<sub>out</sub>(g<sup>-</sup>)</code>较小，同时在得到<code>E<sub>out</sub>(g<sup>-</sup>)</code>较小的同时又希望得到相似<code>E<sub>out</sub>(g)</code>,这才是模型选择的最终目的，但是这两个相似同时成立遂不如人愿啊-_-<br><img src="/img/Validation/rv.png" height="150px" width="500px"> </p>
+<ol>
+<li>看右侧：当<code>K</code>比较大的时候，这样才可以让<code>E<sub>val</sub></code>越准越好，也就是会越接近<code>E<sub>out</sub>(g<sup>-</sup>)</code><blockquote>
+<p>但是此时的<code>E<sub>out</sub>(g<sup>-</sup>)</code>和<code>E<sub>out</sub>(g)</code>就会有较大的偏离的，从图2-6中<code>K&gt;5</code>之后，两者的偏差就会越来越大</p>
+</blockquote>
+</li>
+<li>看左侧：当<code>K</code>比较小的时候，这样<code>E<sub>out</sub>(g<sup>-</sup>)</code>才是基于较多的训练样本训练出得模型，才能接近<code>E<sub>out</sub>(g)</code>，当<code>K=0</code>时，<code>E<sub>out</sub>(g<sup>-</sup>)=E<sub>out</sub>(g)</code></li>
+</ol>
+<p>那这个<code>K</code>值的选择可纠结了，该咋选呢？根据林老师的经验建议<code>K=N/5</code>比较合适，其中<code>N</code>为样本总数。</p>
+<h2 id="Cross_Validation">Cross Validation</h2><p>现在考虑极端情况，当<code>K=1</code>的时候，我们去计算一个<code>E<sub>val</sub></code><br><img src="/img/Validation/en.png" height="120px" width="300px"><br>那么这个<code>e<sub>n</sub></code>会与<code>E<sub>out</sub></code>接近呢？一般一个<code>e<sub>n</sub></code>不太可能与之接近 -_-|| 想想也是~<br>那假如我们用<code>N</code>个<code>e<sub>n</sub></code>来求平均呢？每个<code>e<sub>n</sub></code>都是用不同的样本进行的校样(假设数据集中的各个样本都把不同)<br><img src="/img/Validation/ioocv.png" height="150px" width="400px"> </p>
+<blockquote>
+<p>这种方式就是叫做交叉验证（Cross Validation），因为里面同一个样本，有时会作为训练样本，有时会作为测试样本。</p>
+</blockquote>
+<p>这张图就可以演示平面上三个点,现有一个一次函数和一个常量来拟合，使用交叉验证来进行选择<br><img src="/img/Validation/show.png" height="400px" width="500px"> </p>
+<p> 那现在咱们只需要能证明<code>E<sub>ioocv</sub>(H,A)≈E<sub>out</sub>(g)</code>即可。<br> <img src="/img/Validation/prove.png" height="400px" width="500px"> </p>
+<blockquote>
+<p>我理解的大致推导的过程是,将整个对<code>Data</code>的期望拆解之后形成<code>D<sub>train</sub></code>和<code>D<sub>val</sub></code>，根据<code>E<sub>val</sub></code>推出<code>E<sup>-</sup><sub>out</sub></code>  再根据对<code>D<sub>train</sub></code>上的期望得到<code>E<sub>out</sub>(N-1)</code>的平均，再之外围的求和的平均可以抵消，结果就成了在  <code>E<sub>out</sub>(N-1)</code>的平均的平均了。ps：当<code>K=1</code>的时候，<code>E<sup>-</sup><sub>out</sub></code> 和<code>E<sub>out</sub>(N-1)</code>很接近,同时<code>E<sub>out</sub>(N-1)</code>又会与<code>E<sub>out</sub></code>很接近，这就证明成立了。^_^</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/09/07/Machine Learning/Validation/" data-title="《台大机器学习基石》Validation | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/09/05/Machine Learning/Regularization/"  title="《台大机器学习基石》Regularization">
+ <strong>下一篇：</strong><br/> 
+ <span>《台大机器学习基石》Regularization
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/09/07/Machine Learning/Validation/" data-title="《台大机器学习基石》Validation" data-url="http://yyl8781697.github.io/2015/09/07/Machine Learning/Validation/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Model_Select_problem"><span class="toc-number">1.</span> <span class="toc-text">Model Select problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Validation_Error"><span class="toc-number">2.</span> <span class="toc-text">Validation Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross_Validation"><span class="toc-number">3.</span> <span class="toc-text">Cross Validation</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

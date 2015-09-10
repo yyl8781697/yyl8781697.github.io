@@ -183,7 +183,7 @@
 <blockquote>
 <p>所以<code>E<sub>aug</sub></code>有效的VC复杂度要比原来的<code>E<sub>in</sub></code>小很多</p>
 </blockquote>
-<h2 id="L2_VS_L1_Regularization">L2 VS L1 Regularization</h2><p>上面提到的<code>||W||<sup>2</sup></code>的正则化称为<code>L2 Regulariation</code>,这里再来看一个 <code>L1 Regularization</code><br><img src="/img/Regularization/l1l2.png" height="400px" width="500px"><br><code>L1 Regularization</code>主要是在原始<code>E<sub>in</sub></code>上添加了权重向量的绝对值求和<code>||W||<sub>1</sub></code>,它可以产生更为稀疏的权重值，因为<code>||W||<sub>1</sub></code>在多维中可以看做菱形体，根据上面求球体最优的方法，在上面提到的最有约束中我们可以知道w滚动的方向是菱形体法向量垂直的方法（该垂直方向是梯度方向的一个放量），直到滚到菱形体角上的时候，该垂直方向将与梯度方向平行，也就是到了最优，而菱形体角上各个权重的值会是比较稀疏的，也就是说<code>L1 Regularization</code>可以将特征稀疏化（特征稀疏化可以减少存储空间，又可以加快计算速度，只是。。这个稀疏化很不方便优化）。</p>
+<h2 id="L2_VS_L1_Regularization">L2 VS L1 Regularization</h2><p>上面提到的<code>||W||<sup>2</sup></code>的正则化称为<code>L2 Regulariation</code>,这里再来看一个 <code>L1 Regularization</code><br><img src="/img/Regularization/l1l2.png" height="400px" width="700px"><br><code>L1 Regularization</code>主要是在原始<code>E<sub>in</sub></code>上添加了权重向量的绝对值求和<code>||W||<sub>1</sub></code>,它可以产生更为稀疏的权重值，因为<code>||W||<sub>1</sub></code>在多维中可以看做菱形体，根据上面求球体最优的方法，在上面提到的最有约束中我们可以知道w滚动的方向是菱形体法向量垂直的方法（该垂直方向是梯度方向的一个放量），直到滚到菱形体角上的时候，该垂直方向将与梯度方向平行，也就是到了最优，而菱形体角上各个权重的值会是比较稀疏的，也就是说<code>L1 Regularization</code>可以将特征稀疏化（特征稀疏化可以减少存储空间，又可以加快计算速度，只是。。这个稀疏化很不方便优化）。</p>
 <p>参考上图对比一下<code>L2 Regulariation</code>和<code>L1 Regulariation</code>：</p>
 <ul>
 <li><code>L2 Regulariation</code>：凸函数，可以求导，并且很方便优化，最后通过正则化之后得到权重值都会偏小</li>
@@ -235,6 +235,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2015/09/07/Machine Learning/Validation/" title="《台大机器学习基石》Validation">
+  <strong>上一篇：</strong><br/>
+  <span>
+  《台大机器学习基石》Validation</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/09/01/Machine Learning/Overfitting/"  title="《台大机器学习基石》Overfitting">
@@ -328,7 +336,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
 		  
 		
 		  
@@ -373,7 +381,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>10</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
 			
 		
 			
