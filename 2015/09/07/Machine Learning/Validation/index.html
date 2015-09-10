@@ -32,6 +32,10 @@
 <meta property="og:image" content="/img/Validation/ioocv.png">
 <meta property="og:image" content="/img/Validation/show.png">
 <meta property="og:image" content="/img/Validation/prove.png">
+<meta property="og:image" content="/img/Validation/handwrite.png">
+<meta property="og:image" content="/img/Validation/example.png">
+<meta property="og:image" content="/img/Validation/result.png">
+<meta property="og:image" content="/img/Validation/vf.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《台大机器学习基石》Validation">
 <meta name="twitter:description" content="Model Select problem在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了Perceptron Learning Algorithm，Linear Regression,Logistic Regression），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如Regularization的类型，或者具体参数的值，比如Gradi">
@@ -121,7 +125,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Model_Select_problem"><span class="toc-number">1.</span> <span class="toc-text">Model Select problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Validation_Error"><span class="toc-number">2.</span> <span class="toc-text">Validation Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross_Validation"><span class="toc-number">3.</span> <span class="toc-text">Cross Validation</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Model_Select_problem"><span class="toc-number">1.</span> <span class="toc-text">Model Select problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Validation_Error"><span class="toc-number">2.</span> <span class="toc-text">Validation Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross_Validation"><span class="toc-number">3.</span> <span class="toc-text">Cross Validation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">3.1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#V-Fold_Cross_Validation"><span class="toc-number">3.2.</span> <span class="toc-text">V-Fold Cross Validation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -176,12 +180,33 @@
 <p>那这个<code>K</code>值的选择可纠结了，该咋选呢？根据林老师的经验建议<code>K=N/5</code>比较合适，其中<code>N</code>为样本总数。</p>
 <h2 id="Cross_Validation">Cross Validation</h2><p>现在考虑极端情况，当<code>K=1</code>的时候，我们去计算一个<code>E<sub>val</sub></code><br><img src="/img/Validation/en.png" height="120px" width="300px"><br>那么这个<code>e<sub>n</sub></code>会与<code>E<sub>out</sub></code>接近呢？一般一个<code>e<sub>n</sub></code>不太可能与之接近 -_-|| 想想也是~<br>那假如我们用<code>N</code>个<code>e<sub>n</sub></code>来求平均呢？每个<code>e<sub>n</sub></code>都是用不同的样本进行的校样(假设数据集中的各个样本都把不同)<br><img src="/img/Validation/ioocv.png" height="150px" width="400px"> </p>
 <blockquote>
-<p>这种方式就是叫做交叉验证（Cross Validation），因为里面同一个样本，有时会作为训练样本，有时会作为测试样本。</p>
+<p>这种方式就是叫做交叉验证（Cross Validation），因为里面同一个样本，有时会作为训练样本，有时会作为测试样本。<br> 在<code>K=1</code>的时候也叫<code>leave one out validation</code></p>
 </blockquote>
 <p>这张图就可以演示平面上三个点,现有一个一次函数和一个常量来拟合，使用交叉验证来进行选择<br><img src="/img/Validation/show.png" height="400px" width="500px"> </p>
 <p> 那现在咱们只需要能证明<code>E<sub>ioocv</sub>(H,A)≈E<sub>out</sub>(g)</code>即可。<br> <img src="/img/Validation/prove.png" height="400px" width="500px"> </p>
 <blockquote>
-<p>我理解的大致推导的过程是,将整个对<code>Data</code>的期望拆解之后形成<code>D<sub>train</sub></code>和<code>D<sub>val</sub></code>，根据<code>E<sub>val</sub></code>推出<code>E<sup>-</sup><sub>out</sub></code>  再根据对<code>D<sub>train</sub></code>上的期望得到<code>E<sub>out</sub>(N-1)</code>的平均，再之外围的求和的平均可以抵消，结果就成了在  <code>E<sub>out</sub>(N-1)</code>的平均的平均了。ps：当<code>K=1</code>的时候，<code>E<sup>-</sup><sub>out</sub></code> 和<code>E<sub>out</sub>(N-1)</code>很接近,同时<code>E<sub>out</sub>(N-1)</code>又会与<code>E<sub>out</sub></code>很接近，这就证明成立了。^_^</p>
+<p>我理解的大致推导的过程是,将整个对<code>Data</code>的期望拆解之后形成<code>D<sub>train</sub></code>和<code>D<sub>val</sub></code>，根据<code>E<sub>val</sub></code>推出<code>E<sup>-</sup><sub>out</sub></code>  再根据对<code>D<sub>train</sub></code>上的期望得到<code>E<sub>out</sub>(N-1)</code>的平均，再之外围的求和的平均可以抵消，结果就成了在  <code>E<sub>out</sub>(N-1)</code>的平均了。ps：当<code>K=1</code>的时候，<code>E<sup>-</sup><sub>out</sub></code> 和<code>E<sub>out</sub>(N-1)</code>很接近,同时<code>E<sub>out</sub>(N-1)</code>又会与<code>E<sub>out</sub></code>很接近，这就证明成立了。^_^</p>
+</blockquote>
+<h3 id="Example">Example</h3><p>到了这里，来看一个实际的例子<br><img src="/img/Validation/handwrite.png" height="300px" width="400px"><br>现在需要做一个手写体的识别，来识别是否是1，通过不同的选择方法来进行最优模型的选择<br><img src="/img/Validation/example.png" height="300px" width="400px"><br>可以发现，随着特征的增加<code>E<sub>in</sub></code>在不断的减少（这点其实很容易理解，与VC维里面的图相似），但是会发现<code>E<sub>out</sub></code>并不是一直的降低，反而特征增加到一定量之后，<code>E<sub>out</sub></code>就上升了<br>反而来看验证的误差<code>E<sub>cv</sub></code>(cv表示cross validation)，他的曲线几乎与<code>E<sub>out</sub></code>一致，并且在两者最低点的地方也很相似，最终可以分别看到用<code>E<sub>in</sub></code>和<code>E<sub>cv</sub></code>选择出来的模型<br><img src="/img/Validation/result.png" height="300px" width="500px"><br>很明显，通过交叉验证选出来的模型更加平滑，也更加不容易过拟合。^_^</p>
+<h3 id="V-Fold_Cross_Validation">V-Fold Cross Validation</h3><p>上面说的使用<code>leave one out validation</code>的交叉验证来选择模型的效果虽然好，然后难免也存在以下两个主要的问题</p>
+<ol>
+<li>计算问题<br> 可以看到，计算一次<code>E<sub>ioocv</sub></code>,都大概需要<code>N</code>次，并且每次训练时的数据量为<code>N-1</code>,那这样整个训练的复杂度野生生的由<code>Ω(N)</code>提升到了<code>Ω(N)<sub>2</sub></code>，复杂一些的模型在数据量大一点的情况下整个训练速度已经很难控了，这么一来简直就是灾难。-_-||</li>
+<li>稳定性问题<br> ps:关于这点现在还是没想通，感觉单个点测试总体平均之后应和<code>v-fold validation</code>一样的-_-，为啥就这个会有这么大的波动。。 来个高手指导下<blockquote>
+<p>所以<code>leave one out validation</code>的交叉验证在实际中并不常用</p>
+</blockquote>
+</li>
+</ol>
+<p>既然有问题存在，那么如何改善呢？<br>在<code>leave one out validation</code>中，每个验证的样本只有1个，这个也未免太极端了，现在想想假如将整个样本划分为10分，每一份都轮流做一次验证集,每一轮中其余9份作为训练集，最终将求出来的10个验证集误差<code>E<sub>val</sub></code>求平均<br><img src="/img/Validation/vf.png" height="300px" width="500px"><br>这种方式在效果上其实很类似<code>leave one out validation</code>，但是在计算量上却可以大大的减少，该方式并一定是划分10份，叫做<code>v-fold cross-validation</code>，该<code>v</code>一般取5或者10的效果就已经不错了</p>
+<blockquote>
+<p>虽然这么看来使用<code>E<sub>val</sub></code>已经很错了，但是其实评估一个模型的好坏还是得看<code>E<sub>out</sub></code>，目的不能忘^_^</p>
+</blockquote>
+<h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第十五讲</li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
 </blockquote>
   
 	</div>
@@ -241,7 +266,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Model_Select_problem"><span class="toc-number">1.</span> <span class="toc-text">Model Select problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Validation_Error"><span class="toc-number">2.</span> <span class="toc-text">Validation Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross_Validation"><span class="toc-number">3.</span> <span class="toc-text">Cross Validation</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Model_Select_problem"><span class="toc-number">1.</span> <span class="toc-text">Model Select problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Validation_Error"><span class="toc-number">2.</span> <span class="toc-text">Validation Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cross_Validation"><span class="toc-number">3.</span> <span class="toc-text">Cross Validation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">3.1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#V-Fold_Cross_Validation"><span class="toc-number">3.2.</span> <span class="toc-text">V-Fold Cross Validation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
