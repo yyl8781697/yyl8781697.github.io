@@ -1,0 +1,688 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>关于Scala中Iterator中size/length的一个坑 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Scala语言是出了名的语法诡异，功能强大-_-，他的Iterator也是如此，还提供了亲民心的size/length方法，但是，但是，但是慎用!!
+
+事情是这样的
+今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量N（使用size方法来做），然后计算出一个需要采样的量n,然后遍历(直接for来做)这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Scala中Iterator中size/length的一个坑">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Scala语言是出了名的语法诡异，功能强大-_-，他的Iterator也是如此，还提供了亲民心的size/length方法，但是，但是，但是慎用!!
+
+事情是这样的
+今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量N（使用size方法来做），然后计算出一个需要采样的量n,然后遍历(直接for来做)这">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Scala中Iterator中size/length的一个坑">
+<meta name="twitter:description" content="Scala语言是出了名的语法诡异，功能强大-_-，他的Iterator也是如此，还提供了亲民心的size/length方法，但是，但是，但是慎用!!
+
+事情是这样的
+今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量N（使用size方法来做），然后计算出一个需要采样的量n,然后遍历(直接for来做)这">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" title="关于Scala中Iterator中size/length的一个坑" itemprop="url">关于Scala中Iterator中size/length的一个坑</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-19T02:36:42.000Z" itemprop="datePublished"> 发表于 2015-09-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<blockquote>
+<p><code>Scala</code>语言是出了名的语法诡异，功能强大-_-，他的<code>Iterator</code>也是如此，还提供了亲民心的<code>size/length</code>方法，但是，但是，但是慎用!!</p>
+</blockquote>
+<p>事情是这样的</p>
+<pre><code>今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量<span class="keyword">N</span>（使用size方法来做），然后计算出一个需要采样的量<span class="keyword">n</span>,然后遍历(直接<span class="keyword">for</span>来做)这个迭代器，按自己的业务采样<span class="keyword">n</span>个记录！
+</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。</p>
+<p>后来发现问题就是处在这个<code>size</code>方法。。</p>
+<p><code>Iterator</code>大致是满足如下继承关系的:<br><code>AbstractIterator-&gt;Iterator-&gt;TraversableOnce-&gt;GenTraversableOnce</code></p>
+<p>在<code>TraversableOnce</code>这个<code>trait</code>中对<code>size</code>方法进行了实现，<br>现在来看源码：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">size</span>:</span> <span class="type">Int</span> = &#123;</span><br><span class="line"><span class="keyword">var</span> result = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> (x &lt;- self) result += <span class="number">1</span>   <span class="comment">//额，它的计数是直接遍历得来的..</span></span><br><span class="line">result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>Iterator</code>这个<code>trait</code>中对<code>length</code>方法进行了实现，<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Returns the number of elements in this iterator.</span><br><span class="line">*  $willNotTerminateInf</span><br><span class="line">*</span><br><span class="line">*  @note Reuse: $consumesIterator</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">length</span>:</span> <span class="type">Int</span> = <span class="keyword">this</span>.size</span><br></pre></td></tr></table></figure></p>
+<p>可以发现<code>size/length</code>是通过遍历迭代器累加来计数的，这样就是导致使用了<code>size/length</code>之后就无法再取迭代器里面的值，然后就出现了上述<code>for</code>根本无法进入。。-_-||</p>
+<p>然后就会出现这样的测试结果<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">it=List</span>(</span><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>).iterator</span><br><span class="line"><span class="type">System</span>.out.println(it.size);</span><br><span class="line"><span class="type">System</span>.out.println(it.size);</span><br></pre></td></tr></table></figure></p>
+<pre><code>4
+0
+</code></pre><p>这是因为<code>collection.iterator</code>会产生一个新的迭代器实例<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="comment">/*IterableLike*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iterator</span>:</span> <span class="type">Iterator</span>[<span class="type">A</span>] = <span class="keyword">new</span> <span class="type">AbstractIterator</span>[<span class="type">A</span>] &#123;</span><br><span class="line"><span class="keyword">var</span> these = self</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hasNext</span>:</span> <span class="type">Boolean</span> = !these.isEmpty</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">next</span>(</span>): <span class="type">A</span> =</span><br><span class="line">  <span class="keyword">if</span> (hasNext) &#123;</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">result</span> =</span> these.head; these = these.tail; result</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="type">Iterator</span>.empty.next</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Have to clear `these` so the iterator is exhausted like</span><br><span class="line"> *  it would be without the optimization.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toList</span>:</span> <span class="type">List</span>[<span class="type">A</span>] = &#123;</span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">xs</span> =</span> these.toList</span><br><span class="line">  these = newBuilder.result</span><br><span class="line">  xs</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>第一次<code>size</code>完了之后就已经将该迭代器遍历掉了-_-</p>
+<blockquote>
+<p>个人感觉<code>Iterator.size</code>这个方法简直是一个坑，还不如像<code>java</code>一样不提供该方法，所以慎用慎用..</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" data-title="关于Scala中Iterator中size/length的一个坑 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/09/07/Machine Learning/Validation/"  title="《台大机器学习基石》Validation">
+ <strong>下一篇：</strong><br/> 
+ <span>《台大机器学习基石》Validation
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" data-title="关于Scala中Iterator中size/length的一个坑" data-url="http://yyl8781697.github.io/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

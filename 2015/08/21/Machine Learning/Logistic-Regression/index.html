@@ -212,7 +212,10 @@
 <li>实现简单；</li>
 <li>分类时计算量非常小，速度很快，存储资源低，也很容易并行；(在大量数据情况下这个模型非常适用，这也是好多广告系统首选的原因)</li>
 <li>在处理分类问题的同时还可能给出一个概率值(这个值有时候蛮有用的)</li>
-<li>优化方法多：除了GD和SGD，应该还有拟牛顿法、BFGS、L-BFGS<br>缺点：</li>
+<li>优化方法多：除了GD和SGD，应该还有拟牛顿法、BFGS、L-BFGS</li>
+</ol>
+<p>缺点：</p>
+<ol>
 <li>容易欠拟合，一般准确度不太高</li>
 <li>只能处理两分类问题（在此基础上衍生出来的softmax可以用于多分类），且必须线性可分；</li>
 </ol>
@@ -373,7 +376,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 		  
 		
 		  
@@ -422,15 +425,15 @@
 			
 		
 			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
 			
 		
 			
@@ -734,6 +737,35 @@ $(document).ready(function(){
 
 <!-- MathJax Begin -->
 <!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 <!-- MathJax End -->

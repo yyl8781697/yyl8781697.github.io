@@ -92,6 +92,73 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/" title="把数组排成最小的数" itemprop="url">把数组排成最小的数</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-20T12:31:43.000Z" itemprop="datePublished"> 发表于 2015-07-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="number">32132</span>。请给出解决问题的算法，并证明该算法。
+</code></pre><h2 id="解析">解析</h2><p>假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。<br>如果ab&lt;ba,则会有a&lt;b，所以这题的关键就是构建a,b的比较器</p>
+<blockquote>
+<p>不得不说，这个思路太妙了^_^<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/20/Algorithm/Minimum-Combination-in-Array/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/19/Algorithm/TrainTickets/" title="火车票 查询问题  针对12306设计一个快速的查询系统" itemprop="url">火车票 查询问题  针对12306设计一个快速的查询系统</a>
   </h1>
   <p class="article-author">By
@@ -716,74 +783,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/07/Spark/Graphs-Applications/" title="graphx上的一些简单应用" itemprop="url">graphx上的一些简单应用</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-07T14:59:23.000Z" itemprop="datePublished"> 发表于 2015-07-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>本文是温习<a href="http://www.csdn.net/article/2014-08-07/2821097">快刀初试：Spark GraphX在淘宝的实践</a>这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^</p>
-</blockquote>
-<h2 id="看实验用的图：">看实验用的图：</h2><p><img src="/img/Graphx-Application/sampleG.jpg" alt=""></p>
-<p>该图可以使用如下代码来进行标示<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc=new</span> <span class="title">SparkContext</span>(</span>);</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edge=List</span>(</span><span class="comment">//边的信息</span></span><br><span class="line">    (<span class="number">1</span>,<span class="number">2</span>),(<span class="number">1</span>,<span class="number">3</span>),(<span class="number">2</span>,<span class="number">3</span>),(<span class="number">3</span>,<span class="number">4</span>),(<span class="number">3</span>,<span class="number">5</span>),(<span class="number">3</span>,<span class="number">6</span>),</span><br><span class="line">    (<span class="number">4</span>,<span class="number">5</span>),(<span class="number">5</span>,<span class="number">6</span>),(<span class="number">7</span>,<span class="number">8</span>),(<span class="number">7</span>,<span class="number">9</span>),(<span class="number">8</span>,<span class="number">9</span>))</span><br><span class="line">   </span><br><span class="line"><span class="comment">//构建边的rdd</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edgeRdd=sc</span>.<span class="title">parallelize</span>(</span>edge).map(x=&gt;&#123;</span><br><span class="line">  <span class="type">Edge</span>(x._1.toLong,x._2.toLong,<span class="type">None</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//构建图 顶点Int类型</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">g=Graph</span>.<span class="title">fromEdges</span>(</span>edgeRdd, <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/07/Spark/Graphs-Applications/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Spark/">Spark</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Spark/">Spark</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/07/Spark/Graphs-Applications/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/07/Spark/Graphs-Applications/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
@@ -870,7 +869,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Scala/" title="Scala">Scala<sup>3</sup></a></li>
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 		  
 		
 		  
@@ -919,15 +918,15 @@
 			
 		
 			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>3</sup></a></li>
 			
 		
 			
@@ -1149,6 +1148,35 @@ $(document).ready(function(){
 
 <!-- MathJax Begin -->
 <!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 <!-- MathJax End -->
