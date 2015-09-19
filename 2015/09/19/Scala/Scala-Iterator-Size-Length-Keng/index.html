@@ -124,7 +124,7 @@
 </blockquote>
 <p>事情是这样的</p>
 <pre><code>今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量<span class="keyword">N</span>（使用size方法来做），然后计算出一个需要采样的量<span class="keyword">n</span>,然后遍历(直接<span class="keyword">for</span>来做)这个迭代器，按自己的业务采样<span class="keyword">n</span>个记录！
-</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。</p>
+</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。<br><a id="more"></a></p>
 <p>后来发现问题就是处在这个<code>size</code>方法。。</p>
 <p><code>Iterator</code>大致是满足如下继承关系的:<br><code>AbstractIterator-&gt;Iterator-&gt;TraversableOnce-&gt;GenTraversableOnce</code></p>
 <p>在<code>TraversableOnce</code>这个<code>trait</code>中对<code>size</code>方法进行了实现，<br>现在来看源码：</p>
