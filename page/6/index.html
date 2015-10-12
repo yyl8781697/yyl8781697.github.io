@@ -92,6 +92,151 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/" title="TeraSort在Hadoop中的非常非常非常简单的实现" itemprop="url">TeraSort在Hadoop中的非常非常非常简单的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-27T10:26:12.000Z" itemprop="datePublished"> 发表于 2015-06-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>关于TeraSort的思想其实是非常简单的，但是查了网上好多资料，感觉把它的实现复杂化了（指的在<code>Hadoop</code>中），它们要自定义<code>InputFormat</code>，<code>RecordReader</code>等，其实我想说，实现一个TeraSort根本不需要这么麻烦，所以本文就将实现一个非常简单、非常简单、非常简单的实现记录下来，额，重要的事情说三遍。^_^</p>
+</blockquote>
+<h2 id="TeraSort简介">TeraSort简介</h2><pre><code><span class="number">1</span>TB排序通常用于衡量分布式数据处理框架的数据处理能力。TeraSort是Hadoop中的的一个排序作业，在<span class="number">2008</span>年，Hadoop在<span class="number">1</span>TB排序基准评估中赢得第一名，耗时<span class="number">209</span>秒。<span class="comment">(其实现在在TeraSort上Spark已将Hadoop甩在后面-_-)</span>
+</code></pre><p>在看排序之前，先来看一下Map-Reduce的一张非常经典的流程图：<br><img src="/img/TeraSort-in-Hadoop/shuffle.gif" alt="Map-Reduce流程图"></p>
+<p>从图种可以了解到Map-Reduce执行的整个过程中会进行两次排序，一次是在Map端的shuffle，另一次是在Reduce端的shuffle，TeraSort正好是利用这种特性来进行排序</p>
+<blockquote>
+<p>注意，这里的排序仅仅是针对<code>key</code>的。</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/27/Hadoop/TeraSort-in-Hadoop/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/26/Food/zhuti-huangdou-tang/" title="自己煮：猪蹄黄豆汤" itemprop="url">自己煮：猪蹄黄豆汤</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-26T14:18:25.000Z" itemprop="datePublished"> 发表于 2015-06-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>猪蹄黄豆汤的流程：</p>
+<ol>
+<li>切猪蹄（真难切。。。）</li>
+<li>将切好的猪蹄和黄豆在水中浸泡好几个小时</li>
+<li>起油锅，放一点点油</li>
+<li>将猪蹄炒30秒左右</li>
+<li>加水没过猪蹄，</li>
+<li>等水开了，放入黄豆</li>
+<li>放入料酒，八角，茴香</li>
+<li>一直煮2小时，期间加了一些水 -_-
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/26/Food/zhuti-huangdou-tang/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Food/">Food</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Food/">Food</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/26/Food/zhuti-huangdou-tang/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/26/Food/zhuti-huangdou-tang/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/25/Effective Java/Concurrent/" title="《Effective Java》第十章：并发" itemprop="url">《Effective Java》第十章：并发</a>
   </h1>
   <p class="article-author">By
@@ -672,160 +817,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/06/Food/Spicy-fish/" title="自己煮：麻辣鱼" itemprop="url">自己煮：麻辣鱼</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-06T12:46:54.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>麻辣鱼简直就是大餐啊，油而不腻，并且鱼的腥味直接被重口味的油辣给冲掉了-_-，可惜我做的还不到火候。<br>又是一个周五，所以要给自己一个大餐，哈哈！</p>
-<h2 id="食材">食材</h2><ul>
-<li>鱼：最好是黑鱼，并且要切片（自己切麻烦，可以在买菜的时候直接叫师傅给切了）</li>
-<li>油、料酒~~~~</li>
-<li>生姜、大蒜：适量，再来一点点葱</li>
-<li>大量大量的辣椒</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/06/Food/Spicy-fish/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Food/">Food</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Food/">Food</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/06/Food/Spicy-fish/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/06/Food/Spicy-fish/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举" itemprop="url">谈谈Scala中的枚举</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-06T01:56:03.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="先谈Java中的枚举">先谈Java中的枚举</h2><p>将<code>Scala</code>的枚举之前，我们先来讲讲关于<code>Java</code>里面的枚举（相信对于广大程序猿来说都是很熟悉）：</p>
-<ul>
-<li><p>使用<code>enum</code>关键词定义</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;...&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了<code>java.lang.Enum</code></p>
-</li>
-<li>无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）</li>
-<li>枚举其实是一组<code>int</code>常量（当初它就是因为使用<code>int</code>常量的需求很大才又了枚举），它还可以在<code>swtich</code>中很方便的使用</li>
-<li><p>每个枚举变量还可以重写枚举类或者实现接口中的方法（这个蛮好用）</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;</span><br><span class="line">Mon&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"monday"</span>;&#125;</span><br><span class="line">&#125;,</span><br><span class="line">Tue&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"tuesday"</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">""</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>…（我也不知道了-_-）</p>
-</li>
-</ul>
-<h2 id="再看Scala中的枚举">再看Scala中的枚举</h2><blockquote>
-<p>你会发现，上面说的一切在<code>Scala</code>中其实并没有甚么卵用-_-，因为在<code>Scala</code>中压根就么有<code>enum</code>这个关键词，但是当初发明<code>Scala</code>大神兼<code>Java</code>的创始人并没有落下枚举。</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/06/Scala/Enum-in-Scala/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Scala/">Scala</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Scala/">Scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/06/Scala/Enum-in-Scala/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/06/Scala/Enum-in-Scala/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
   </nav>
 
 </div>
@@ -897,7 +891,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -906,6 +900,10 @@
 		
 		  
 			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
 		  
 		
 		  
@@ -938,11 +936,11 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>20</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
 			
 		
 			
@@ -970,7 +968,7 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
 			
@@ -982,7 +980,11 @@
 			
 		
 			
-				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
 			
 		
 			
@@ -990,23 +992,19 @@
 			
 		
 			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>1</sup></a></li>
 			
 		
 		</ul>

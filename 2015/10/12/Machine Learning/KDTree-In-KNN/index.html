@@ -1,0 +1,729 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>KNN算法中KD树的应用 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="KNN算法给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
+点我查看详情
+
+但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对KNN算法实现一个简单的KD树
+
+KD树KD树是一个二叉树，表示对K维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KNN算法中KD树的应用">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/10/12/Machine Learning/KDTree-In-KNN/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="KNN算法给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
+点我查看详情
+
+但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对KNN算法实现一个简单的KD树
+
+KD树KD树是一个二叉树，表示对K维">
+<meta property="og:image" content="/img/KDTree-In-KNN/example.png">
+<meta property="og:image" content="/img/KDTree-In-KNN/search1.jpg">
+<meta property="og:image" content="/img/KDTree-In-KNN/search2.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KNN算法中KD树的应用">
+<meta name="twitter:description" content="KNN算法给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
+点我查看详情
+
+但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对KNN算法实现一个简单的KD树
+
+KD树KD树是一个二叉树，表示对K维">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/" title="KNN算法中KD树的应用" itemprop="url">KNN算法中KD树的应用</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-10-12T03:57:39.000Z" itemprop="datePublished"> 发表于 2015-10-12</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KNN算法"><span class="toc-number">1.</span> <span class="toc-text">KNN算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KD树"><span class="toc-number">2.</span> <span class="toc-text">KD树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#建立KD树"><span class="toc-number">2.1.</span> <span class="toc-text">建立KD树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KD树搜索"><span class="toc-number">2.2.</span> <span class="toc-text">KD树搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#栗子"><span class="toc-number">3.</span> <span class="toc-text">栗子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
+</code></pre><p><a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#KNN算法" target="_blank" rel="external">点我查看详情</a></p>
+<blockquote>
+<p>但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对<code>KNN</code>算法实现一个简单的<code>KD</code>树</p>
+</blockquote>
+<h2 id="KD树">KD树</h2><pre><code>KD树是一个二叉树，表示对<span class="keyword">K</span>维空间的一个划分，可以进行快速检索（那KNN计算的时候不需要对全样本进行距离的计算了）
+</code></pre><p>比如针对6个二维数据点{（2,3），（5,4），（9,6），（4,7），（8,1），（7,2）}，可以形成以下树形结构以及空间划分<br><img src="/img/KDTree-In-KNN/example.png" alt=""></p>
+<a id="more"></a>
+<p>该树的功能就是在高维空间下进行一个快速的最近邻查询。先来看定义的树的类结构<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Node</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span>[] data;<span class="comment">//树上节点的数据  是一个多维的向量</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span> distance;<span class="comment">//与当前查询点的距离  初始化的时候是没有的</span></span><br><span class="line">	<span class="keyword">public</span> Node left,right,parent;<span class="comment">//左右子节点  以及父节点</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> dim=-<span class="number">1</span>;<span class="comment">//维度  建立树的时候判断的维度</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">double</span>[] data)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 返回指定索引上的数值</span><br><span class="line">	 *<span class="javadoctag"> @param</span> index</span><br><span class="line">	 *<span class="javadoctag"> @return</span></span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getData</span><span class="params">(<span class="keyword">int</span> index)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(data==<span class="keyword">null</span> || data.length&lt;=index)</span><br><span class="line">			<span class="keyword">return</span> Integer.MIN_VALUE;</span><br><span class="line">		<span class="keyword">return</span> data[index];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Node o)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">this</span>.distance&gt;o.distance)</span><br><span class="line">			<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">		<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(<span class="keyword">this</span>.distance==o.distance)</span></span><br><span class="line">			return 0</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 计算距离 这里返回欧式距离</span><br><span class="line">	 *<span class="javadoctag"> @param</span> that</span><br><span class="line">	 *<span class="javadoctag"> @return</span></span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">computeDistance</span><span class="params">(Node that)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">this</span>.data==<span class="keyword">null</span> || that.data==<span class="keyword">null</span> || <span class="keyword">this</span>.data.length!=that.data.length)</span><br><span class="line">			<span class="keyword">return</span> Double.MAX_VALUE;<span class="comment">//出问题了  距离最远</span></span><br><span class="line">		<span class="keyword">double</span> d=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="keyword">this</span>.data.length;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			d+=Math.pow(<span class="keyword">this</span>.data[i]-that.data[i], <span class="number">2</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> Math.sqrt(d);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(data==<span class="keyword">null</span> || data.length==<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		StringBuilder sb=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;data.length;i++)</span><br><span class="line">			sb.append(data[i]+<span class="string">" "</span>);</span><br><span class="line">		sb.append(<span class="string">" d:"</span>+<span class="keyword">this</span>.distance);</span><br><span class="line">		<span class="keyword">return</span> sb.toString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="建立KD树">建立KD树</h3><p>在<code>d</code>维的空间上循环找子区域的中位数进行划分的过程。<br>假设现在有<code>d</code>维空间的数据集<code>T={x<sub>1</sub>,x<sub>2</sub>,x<sub>3</sub>,…x<sub>n</sub>},xi={a<sub>1</sub>,a<sub>2</sub>,a<sub>3</sub>..a<sub>d</sub>}</code></p>
+<ol>
+<li>首先构造根节点，以坐标<code>a<sub>1</sub></code>的中位数<code>b</code>为切分点，将根结点对应的矩形局域划分为两个区域，区域1中<code>a1&lt;b</code>,区域2中<code>a1&gt;b</code>，中位数所在的节点就是树上的节点</li>
+<li>构造叶子节点，分别以上面两个区域中<code>a<sub>2</sub></code>的中位数作为切分点，再次将他们两两划分，作为深度1的叶子节点，（如果<code>a<sub>2</sub></code>=中位数，则<code>a<sub>2</sub></code>的实例落在切分面）</li>
+<li>不断重复2的操作，深度为<code>j</code>的叶子节点划分的时候，索取的<code>a<sub>i</sub></code> 的<code>i=j%d+1</code>，直到两个子区域没有实例时停止</li>
+</ol>
+<p>所以我们首先需要在高维的数据中针对某一维进行一个中位数的查找的，这里最快捷的就是借用快排的方法</p>
+<pre><code>假设f为快排的排头，进行一轮对比之后如果f所在的索引大于<span class="built_in">size</span>/<span class="number">2</span>，则此时只需要对左边进行递归排序就可以了，若小于<span class="built_in">size</span>/<span class="number">2</span>，则只需对右边区域进行递归排序，如果等于<span class="built_in">size</span>/<span class="number">2</span>  则说明
+f就是中位数  直接返回就好啦
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用快排进进行一个中位数的查找  完了之后返回的数组size/2即中位数</span><br><span class="line"> *<span class="javadoctag"> @param</span> nodeList</span><br><span class="line"> *<span class="javadoctag"> @param</span> index</span><br><span class="line"> *<span class="javadoctag"> @param</span> left</span><br><span class="line"> *<span class="javadoctag"> @param</span> right</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">quickSortForMedian</span><span class="params">(List&lt;Node&gt; nodeList,<span class="keyword">int</span> index,<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(left&gt;=right || nodeList.size()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	</span><br><span class="line">	Node kn=nodeList.get(left);</span><br><span class="line">	<span class="keyword">double</span> k=kn.getData(index);<span class="comment">//取得向量指定索引的值</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> i=left,j=right;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;j)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>(nodeList.get(j).getData(index)&gt;=k &amp;&amp; i&lt;j)</span><br><span class="line">			j--;</span><br><span class="line">		nodeList.set(i, nodeList.get(j));</span><br><span class="line">		<span class="keyword">while</span>(nodeList.get(i).getData(index)&lt;=k &amp;&amp; i&lt;j)</span><br><span class="line">			i++;</span><br><span class="line">		nodeList.set(j, nodeList.get(i));</span><br><span class="line">	&#125;</span><br><span class="line">	nodeList.set(i, kn);</span><br><span class="line">	<span class="keyword">if</span>(i==nodeList.size()/<span class="number">2</span>)</span><br><span class="line">		<span class="keyword">return</span> ;<span class="comment">//完成中位数的排序了</span></span><br><span class="line">	<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(i&lt;nodeList.size()</span>/2)</span><br><span class="line">	</span>&#123;</span><br><span class="line">		quickSortForMedian(nodeList,index,i+<span class="number">1</span>,right);<span class="comment">//只需要排序右边就可以了</span></span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		quickSortForMedian(nodeList,index,left,i-<span class="number">1</span>);<span class="comment">//只需要排序左边就可以了</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了中位数查找，接下来就可以使用递归来进行树的建立了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 构建kd树  返回根节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> nodeList</span><br><span class="line"> *<span class="javadoctag"> @param</span> index</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Node <span class="title">buildKDTree</span><span class="params">(List&lt;Node&gt; nodeList,<span class="keyword">int</span> index)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(nodeList==<span class="keyword">null</span> || nodeList.size()==<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	quickSortForMedian(nodeList,index,<span class="number">0</span>,nodeList.size()-<span class="number">1</span>);<span class="comment">//中位数排序</span></span><br><span class="line">	Node root=nodeList.get(nodeList.size()/<span class="number">2</span>);<span class="comment">//中位数 当做根节点</span></span><br><span class="line">	root.dim=index;</span><br><span class="line">	List&lt;Node&gt; leftNodeList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();<span class="comment">//放入左侧区域的节点  包括包含与中位数等值的节点-_-</span></span><br><span class="line">	List&lt;Node&gt; rightNodeList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(Node node:nodeList)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(root!=node)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(node.getData(index)&lt;=root.getData(index))</span><br><span class="line">				leftNodeList.add(node);<span class="comment">//左子区域 包含与中位数等值的节点</span></span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				rightNodeList.add(node);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> newIndex=index+<span class="number">1</span>;<span class="comment">//进入下一个维度</span></span><br><span class="line">	<span class="keyword">if</span>(newIndex&gt;=root.data.length)</span><br><span class="line">		newIndex=<span class="number">0</span>;<span class="comment">//从0维度开始再算</span></span><br><span class="line">	root.left=buildKDTree(leftNodeList,newIndex);<span class="comment">//添加左右子区域</span></span><br><span class="line">	root.right=buildKDTree(rightNodeList,newIndex);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(root.left!=<span class="keyword">null</span>)</span><br><span class="line">		root.left.parent=root;<span class="comment">//添加父指针  </span></span><br><span class="line">	<span class="keyword">if</span>(root.right!=<span class="keyword">null</span>)</span><br><span class="line">		root.right.parent=root;<span class="comment">//添加父指针  </span></span><br><span class="line">	<span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="KD树搜索">KD树搜索</h3><ol>
+<li>首先从根节点开始递归往下找到包含<code>q</code>的叶子节点，每一层都是找对应的<code>x<sub>i</sub></code></li>
+<li>将这个叶子节点认为是当前的“近似最近点”</li>
+<li>递归向上回退，如果以<code>q</code>圆心，以“近似最近点”为半径的球与根节点的另一半子区域边界相交，则说明另一半子区域中存在与<code>q</code>更近的点，则进入另一个子区域中查找该点并且更新”近似最近点“</li>
+<li>重复3的步骤，直到另一子区域与球体不相交或者退回根节点</li>
+<li>最后更新的”近似最近点“与<code>q</code>真正的最近点</li>
+</ol>
+<p>这里注意按上述方式找到的与查询点最近的那个点，但是我们在<code>KNN</code>的时候是查询<code>k</code>个最近点，<code>topK</code>问题嘛，这里我们就使用了一个最大堆的维护来保证最近的<code>k</code>个点<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 维护一个k的最大堆</span><br><span class="line"> *<span class="javadoctag"> @param</span> listNode</span><br><span class="line"> *<span class="javadoctag"> @param</span> newNode</span><br><span class="line"> *<span class="javadoctag"> @param</span> k</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">maintainMaxHeap</span><span class="params">(List&lt;Node&gt; listNode,Node newNode,<span class="keyword">int</span> k)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(listNode.size()&lt;k)</span><br><span class="line">	&#123;</span><br><span class="line">		maxHeapFixUp(listNode,newNode);<span class="comment">//不足k个堆   直接向上修复</span></span><br><span class="line">	&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(newNode.distance&lt;listNode.get(<span class="number">0</span>)</span>.distance)</span>&#123;</span><br><span class="line">		<span class="comment">//比堆顶的要小   还需要向下修复 覆盖堆顶</span></span><br><span class="line">		maxHeapFixDown(listNode,newNode);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 从上往下修复  将会覆盖第一个节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> listNode</span><br><span class="line"> *<span class="javadoctag"> @param</span> newNode</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">maxHeapFixDown</span><span class="params">(List&lt;Node&gt; listNode,Node newNode)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	listNode.set(<span class="number">0</span>, newNode);</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> j=i*<span class="number">2</span>+<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(j&lt;listNode.size())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(j+<span class="number">1</span>&lt;listNode.size() &amp;&amp; listNode.get(j).distance&lt;listNode.get(j+<span class="number">1</span>).distance)</span><br><span class="line">			j++;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(listNode.get(i).distance&gt;=listNode.get(j).distance)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		</span><br><span class="line">		Node t=listNode.get(i);</span><br><span class="line">		listNode.set(i, listNode.get(j));</span><br><span class="line">		listNode.set(j, t);</span><br><span class="line">		</span><br><span class="line">		i=j;</span><br><span class="line">		j=i*<span class="number">2</span>+<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">maxHeapFixUp</span><span class="params">(List&lt;Node&gt; listNode,Node newNode)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	listNode.add(newNode);</span><br><span class="line">	<span class="keyword">int</span> j=listNode.size()-<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> i=(j+<span class="number">1</span>)/<span class="number">2</span>-<span class="number">1</span>;<span class="comment">//i是parent节点</span></span><br><span class="line">	<span class="keyword">while</span>(i&gt;=<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(listNode.get(i).distance&gt;=listNode.get(j).distance)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		</span><br><span class="line">		Node t=listNode.get(i);</span><br><span class="line">		listNode.set(i, listNode.get(j));</span><br><span class="line">		listNode.set(j, t);</span><br><span class="line">		</span><br><span class="line">		j=i;</span><br><span class="line">		i=(j+<span class="number">1</span>)/<span class="number">2</span>-<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>好，现在就可以按照上述的思路来进行搜索了，搜索过程中维护一个k堆<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查询最近邻</span><br><span class="line"> *<span class="javadoctag"> @param</span> root kd树</span><br><span class="line"> *<span class="javadoctag"> @param</span> q 查询点</span><br><span class="line"> *<span class="javadoctag"> @param</span> k</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Node&gt; <span class="title">searchKNN</span><span class="params">(Node root,Node q,<span class="keyword">int</span> k)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	List&lt;Node&gt; knnList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();</span><br><span class="line">	Node almostNNode=searchLeaf(root,q);<span class="comment">//近似最近点</span></span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span>(almostNNode!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">double</span> curD=q.computeDistance(almostNNode);<span class="comment">//最近近似点与查询点的距离 也就是球体的半径</span></span><br><span class="line">		almostNNode.distance=curD;</span><br><span class="line">		maintainMaxHeap(knnList,almostNNode,k);</span><br><span class="line">		<span class="keyword">if</span>(almostNNode.parent!=<span class="keyword">null</span> &amp;&amp;</span><br><span class="line">				curD&gt;Math.abs(q.getData(almostNNode.parent.dim)-almostNNode.parent.getData(almostNNode.parent.dim)))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//这样可能在另一个子区域中存在更加近似的点</span></span><br><span class="line">			Node brother=getBrother(almostNNode);</span><br><span class="line">			brother.distance=q.computeDistance(brother);</span><br><span class="line">			maintainMaxHeap(knnList,brother,k);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		almostNNode=almostNNode.parent;<span class="comment">//返回上一级</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> knnList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 获取兄弟节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> node</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Node <span class="title">getBrother</span><span class="params">(Node node)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(node==node.parent.left)</span><br><span class="line">		<span class="keyword">return</span> node.parent.right;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">return</span> node.parent.left;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查询到叶子节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> root</span><br><span class="line"> *<span class="javadoctag"> @param</span> q</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Node <span class="title">searchLeaf</span><span class="params">(Node root,Node q)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Node leaf=root,next=<span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">int</span> index=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(leaf.left!=<span class="keyword">null</span> || leaf.right!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(q.getData(index)&lt;leaf.getData(index))</span><br><span class="line">		&#123;</span><br><span class="line">			next=leaf.left;<span class="comment">//进入左侧</span></span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(q.getData(index)</span>&gt;leaf.<span class="title">getData</span><span class="params">(index)</span>)</span><br><span class="line">		</span>&#123;</span><br><span class="line">			next=leaf.right;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="comment">//当取到中位数时  判断左右子区域哪个更加近</span></span><br><span class="line">			<span class="keyword">if</span>(q.computeDistance(leaf.left)&lt;q.computeDistance(leaf.right))</span><br><span class="line">				next=leaf.left;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				next=leaf.right;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(next==<span class="keyword">null</span>)</span><br><span class="line">			<span class="keyword">break</span>;<span class="comment">//下一个节点是空时  结束了</span></span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			leaf=next;</span><br><span class="line">			<span class="keyword">if</span>(++index&gt;=root.data.length)</span><br><span class="line">				index=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> leaf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意这里在判断查询点<code>q</code>与另一个子区域的边界是否相交时是需要判断半径与（<code>q</code>和父节点影响构建维数上的值之差即可）</p>
+</blockquote>
+<h2 id="栗子">栗子</h2><p>还是以上面的6个数据点进行构建<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Node&gt; nodeList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2</span>,<span class="number">3</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">5</span>,<span class="number">4</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">9</span>,<span class="number">6</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">4</span>,<span class="number">7</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">8</span>,<span class="number">1</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">7</span>,<span class="number">2</span>&#125;));</span><br><span class="line"></span><br><span class="line">KDTree kdTree=<span class="keyword">new</span> KDTree();</span><br><span class="line">Node root=kdTree.buildKDTree(nodeList,<span class="number">0</span>);</span><br><span class="line">System.out.println(root);</span><br></pre></td></tr></table></figure></p>
+<p>对(2.1,3.1)进行查询<br><img src="/img/KDTree-In-KNN/search1.jpg" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(kdTree.searchKNN(root,<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2.1</span>,<span class="number">3.1</span>&#125;),<span class="number">2</span>));</span><br></pre></td></tr></table></figure></p>
+<p>可以发现最近的两个点</p>
+<pre><code>[<span class="number">5.0</span> <span class="number">4.0</span>  d:<span class="number">3.0364452901377956</span>, <span class="number">2.0</span> <span class="number">3.0</span>  d:<span class="number">0.14142135623730964</span>]
+</code></pre><p>完全符合预期</p>
+<p>再来看(2,4.5)这个查询点<br><img src="/img/KDTree-In-KNN/search2.jpg" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(kdTree.searchKNN(root,<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2</span>,<span class="number">4.5</span>&#125;),<span class="number">1</span>));</span><br><span class="line">System.out.println(kdTree.searchKNN(root,<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2</span>,<span class="number">4.5</span>&#125;),<span class="number">3</span>));</span><br></pre></td></tr></table></figure></p>
+<pre><code>[<span class="number">2.0</span> <span class="number">3.0</span>  d:<span class="number">1.5</span>]
+[<span class="number">4.0</span> <span class="number">7.0</span>  d:<span class="number">3.2015621187164243</span>, <span class="number">2.0</span> <span class="number">3.0</span>  d:<span class="number">1.5</span>, <span class="number">5.0</span> <span class="number">4.0</span>  d:<span class="number">3.0413812651491097</span>]
+</code></pre><p>首先最近邻的叶子节点是(4,7) 但是其半径会与另一子区域相交，所以继续进行(2,3)进行距离计算</p>
+<blockquote>
+<p>完整的源代码在这儿有!</p>
+</blockquote>
+<h2 id="参考">参考</h2><ol>
+<li>《统计学习方法》第三章</li>
+<li><a href="http://blog.csdn.net/qll125596718/article/details/8426458" target="_blank" rel="external">http://blog.csdn.net/qll125596718/article/details/8426458</a>这篇文章举例比较详细</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Data-Struct/">Data Struct</a><a href="/tags/Java/">Java</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/10/12/Machine Learning/KDTree-In-KNN/" data-title="KNN算法中KD树的应用 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/10/05/Python/Numpy-Fast-Memory/"  title="numpy工具包常用快速记">
+ <strong>下一篇：</strong><br/> 
+ <span>numpy工具包常用快速记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/10/12/Machine Learning/KDTree-In-KNN/" data-title="KNN算法中KD树的应用" data-url="http://yyl8781697.github.io/2015/10/12/Machine Learning/KDTree-In-KNN/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#KNN算法"><span class="toc-number">1.</span> <span class="toc-text">KNN算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#KD树"><span class="toc-number">2.</span> <span class="toc-text">KD树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#建立KD树"><span class="toc-number">2.1.</span> <span class="toc-text">建立KD树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KD树搜索"><span class="toc-number">2.2.</span> <span class="toc-text">KD树搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#栗子"><span class="toc-number">3.</span> <span class="toc-text">栗子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

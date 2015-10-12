@@ -1,0 +1,737 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>numpy工具包常用快速记 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="numpy这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看scipy api
+
+使用之前首先得引入包1import numpy as np
+arraynp.array实现了真正的数组，在numpy中其实就是矩阵啦，同时提供了丰富的矩阵计算方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="numpy工具包常用快速记">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/10/05/Python/Numpy-Fast-Memory/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="numpy这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看scipy api
+
+使用之前首先得引入包1import numpy as np
+arraynp.array实现了真正的数组，在numpy中其实就是矩阵啦，同时提供了丰富的矩阵计算方法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="numpy工具包常用快速记">
+<meta name="twitter:description" content="numpy这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看scipy api
+
+使用之前首先得引入包1import numpy as np
+arraynp.array实现了真正的数组，在numpy中其实就是矩阵啦，同时提供了丰富的矩阵计算方法">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/10/05/Python/Numpy-Fast-Memory/" title="numpy工具包常用快速记" itemprop="url">numpy工具包常用快速记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-10-05T14:54:26.000Z" itemprop="datePublished"> 发表于 2015-10-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#array"><span class="toc-number">1.</span> <span class="toc-text">array</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#np-array"><span class="toc-number">1.1.</span> <span class="toc-text">np.array</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-arange"><span class="toc-number">1.2.</span> <span class="toc-text">np.arange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-linspace"><span class="toc-number">1.3.</span> <span class="toc-text">np.linspace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-ones"><span class="toc-number">1.4.</span> <span class="toc-text">np.ones</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-zeros"><span class="toc-number">1.5.</span> <span class="toc-text">np.zeros</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-eye"><span class="toc-number">1.6.</span> <span class="toc-text">np.eye</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-diag"><span class="toc-number">1.7.</span> <span class="toc-text">np.diag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#矩阵的四则运算"><span class="toc-number">1.8.</span> <span class="toc-text">矩阵的四则运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#summary"><span class="toc-number">1.9.</span> <span class="toc-text">summary</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#random"><span class="toc-number">2.</span> <span class="toc-text">random</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#np-random-rand"><span class="toc-number">2.1.</span> <span class="toc-text">np.random.rand</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-random-randn"><span class="toc-number">2.2.</span> <span class="toc-text">np.random.randn</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p><code>numpy</code>这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看<a href="http://docs.scipy.org/doc/" target="_blank" rel="external">scipy api</a></p>
+</blockquote>
+<p>使用之前首先得引入包<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure></p>
+<h2 id="array">array</h2><p><code>np.array</code>实现了真正的数组，在<code>numpy</code>中其实就是矩阵啦，同时提供了丰富的矩阵计算方法<br><a id="more"></a></p>
+<h3 id="np-array"><a href="http://docs.scipy.org/doc/numpy/reference/c-api.array.html#index-0" target="_blank" rel="external">np.array</a></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])  <span class="comment">#一维数组</span></span><br><span class="line">np.array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])  <span class="comment">#二维数组</span></span><br></pre></td></tr></table></figure>
+<h3 id="np-arange"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" target="_blank" rel="external">np.arange</a></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.arange(<span class="number">10</span>) <span class="comment">#使用指定range来创建数组 array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])</span></span><br><span class="line">np.arange(<span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>)  <span class="comment">#开始，终止(不包含)，步长  array([1, 3, 5, 7])</span></span><br></pre></td></tr></table></figure>
+<h3 id="np-linspace"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.linspace.html#numpy.linspace" target="_blank" rel="external">np.linspace</a></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>) <span class="comment">#开始，终止，创建元素个数   array([ 0.    0.25  0.5   0.75  1.  ])</span></span><br><span class="line">np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>,endpoint=<span class="keyword">False</span>) <span class="comment">#endpoint这个参数控制最后一个终止值是否被包含，默认Ture，array([ 0.   0.2  0.4  0.6  0.8])</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>arange与linspace都是在指定范围内生成均匀的变量，只是前者是按步长进行生成，后者是按指定的数量进行生成</p>
+</blockquote>
+<h3 id="np-ones"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ones.html#numpy.ones" target="_blank" rel="external">np.ones</a></h3><blockquote>
+<p>快速生成值为1的矩阵</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">np.ones(<span class="number">5</span>)  <span class="comment">#array([ 1.,  1.,  1.,  1.,  1.])</span></span><br><span class="line">np.ones((<span class="number">2</span>,<span class="number">2</span>)) <span class="comment">#生成一个2x2的值为1的矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 1.,  1.],</span><br><span class="line">       [ 1.,  1.]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
+<h3 id="np-zeros"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html#numpy.zeros" target="_blank" rel="external">np.zeros</a></h3><blockquote>
+<p>快速生成值为1的矩阵</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">np.zeros(<span class="number">5</span>) <span class="comment">#array([ 0.,  0.,  0.,  0.,  0.])</span></span><br><span class="line">np.zeros((<span class="number">2</span>,<span class="number">2</span>)) <span class="comment">#生成一个2x2的值为0的矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 0.,  0.],</span><br><span class="line">       [ 0.,  0.]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
+<h3 id="np-eye"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.eye.html#numpy.eye" target="_blank" rel="external">np.eye</a></h3><blockquote>
+<p>快速生成值为1的对角矩阵</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">np.eye(<span class="number">3</span>)</span><br><span class="line"><span class="string">"""</span><br><span class="line">[[ 1.  0.  0.]</span><br><span class="line"> [ 0.  1.  0.]</span><br><span class="line"> [ 0.  0.  1.]]</span><br><span class="line">"""</span></span><br><span class="line"></span><br><span class="line">np.eye(<span class="number">3</span>,k=<span class="number">1</span>)  <span class="comment">#这里的k可以指定对角的索引位置 默认是0，也就是真正的对角</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">[[ 0.  1.  0.]</span><br><span class="line"> [ 0.  0.  1.]</span><br><span class="line"> [ 0.  0.  0.]]</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
+<h3 id="np-diag"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.diag.html#numpy.diag" target="_blank" rel="external">np.diag</a></h3><blockquote>
+<p>提取普通矩阵的对角</p>
+<ul>
+<li>若普通矩阵是1维矩阵，则直接将该1维矩阵转为对角矩阵</li>
+<li>若普通矩阵是2维矩阵，则提取该对角线(k)的矩阵并返回一个1维矩阵</li>
+</ul>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">np.diag(np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]))  <span class="comment">#将4x1的矩阵转为只有对角线上有值的方正</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">[[1 0 0 0]</span><br><span class="line"> [0 2 0 0]</span><br><span class="line"> [0 0 3 0]</span><br><span class="line"> [0 0 0 4]]</span><br><span class="line">"""</span></span><br><span class="line"></span><br><span class="line">np.diag(np.ones((<span class="number">3</span>,<span class="number">3</span>))) <span class="comment">#提取对角线上的元素 转为了1维矩阵 [ 1.  1.  1.]</span></span><br><span class="line"><span class="comment">#若继续想要对角方正，则需呀再一次转换</span></span><br><span class="line">np.diag(np.diag(np.ones((<span class="number">3</span>,<span class="number">3</span>))))</span><br><span class="line"><span class="string">"""</span><br><span class="line">[[ 1.  0.  0.]</span><br><span class="line"> [ 0.  1.  0.]</span><br><span class="line"> [ 0.  0.  1.]]</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
+<h3 id="矩阵的四则运算">矩阵的四则运算</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">a=np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>,<span class="number">3</span>)  <span class="comment">##0~8的3x3矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[0, 1, 2],</span><br><span class="line">       [3, 4, 5],</span><br><span class="line">       [6, 7, 8]])</span><br><span class="line">"""</span></span><br><span class="line"></span><br><span class="line">b=np.array(range(<span class="number">9</span>)[::-<span class="number">1</span>]).reshape(<span class="number">3</span>,<span class="number">3</span>)  <span class="comment">##8~0的3x3矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[8, 7, 6],</span><br><span class="line">       [5, 4, 3],</span><br><span class="line">       [2, 1, 0]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
+<p>加减乘除都可以按这个走<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">a+<span class="number">1</span> <span class="comment">#在每个元素上+1</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[1, 2, 3],</span><br><span class="line">       [4, 5, 6],</span><br><span class="line">       [7, 8, 9]])</span><br><span class="line">"""</span></span><br><span class="line">a+b <span class="comment">#两个矩阵相加</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[8, 8, 8],</span><br><span class="line">       [8, 8, 8],</span><br><span class="line">       [8, 8, 8]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure></p>
+<p>还可以做幂次方<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a**<span class="number">2</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 0,  1,  4],</span><br><span class="line">       [ 9, 16, 25],</span><br><span class="line">       [36, 49, 64]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure></p>
+<p>还可以倒着运算<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span>**a</span><br><span class="line">array([[  <span class="number">1</span>,   <span class="number">2</span>,   <span class="number">4</span>],</span><br><span class="line">       [  <span class="number">8</span>,  <span class="number">16</span>,  <span class="number">32</span>],</span><br><span class="line">       [ <span class="number">64</span>, <span class="number">128</span>, <span class="number">256</span>]])</span><br></pre></td></tr></table></figure></p>
+<h3 id="summary">summary</h3><ol>
+<li>关于取值，还是按[index]的方式即可取</li>
+<li>还有很方便的函数：<ul>
+<li>求和:sum</li>
+<li>转置：T</li>
+<li>最大最小：max,min</li>
+<li>方差：var,标准差：std</li>
+<li>均值：mean</li>
+</ul>
+</li>
+</ol>
+<h2 id="random">random</h2><blockquote>
+<p>用于产生强大的随机数呀,并且可以指定具体的矩阵形状</p>
+</blockquote>
+<h3 id="np-random-rand"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" target="_blank" rel="external">np.random.rand</a></h3><blockquote>
+<p>产生均匀的0~1之间的随机数</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">np.random.rand(<span class="number">4</span>) <span class="comment">#生成1x4的随机矩阵 array([ 0.78374518,  0.64304815,  0.01667375,  0.50154654])</span></span><br><span class="line">np.random.rand(<span class="number">2</span>,<span class="number">3</span>)  <span class="comment">#生成2x3的随机矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 0.20500983,  0.66468726,  0.55619774],</span><br><span class="line">       [ 0.37256962,  0.86550713,  0.05781776]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
+<h3 id="np-random-randn"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.randn.html#numpy.random.randn" target="_blank" rel="external">np.random.randn</a></h3><blockquote>
+<p>生成服从高斯分布的随机矩阵</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">np.random.randn(<span class="number">4</span>)  <span class="comment">#生成N(0,1)分布的的1x4的矩阵 array([ 0.72481524, -0.1976192 , -0.48224937, -0.8019294 ])</span></span><br><span class="line"><span class="comment">#如果想执行方差和均值的话，可以这么干sigma * np.random.randn(...) + mu</span></span><br><span class="line"><span class="number">2.5</span> * np.random.randn(<span class="number">2</span>, <span class="number">4</span>) + <span class="number">3</span>  <span class="comment">#比如这个就是服从N~(3,6.25)的高斯分布</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 5.2147326 ,  0.90325509,  1.39212656,  5.97713821],</span><br><span class="line">       [-0.26270206,  3.09619677,  2.21054634,  2.94103359]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://docs.scipy.org/doc/numpy/genindex.html" target="_blank" rel="external">numpy api</a></li>
+<li><a href="http://www.scipy-lectures.org/" target="_blank" rel="external">http://www.scipy-lectures.org/</a>  其实上面写的这里都有-_-</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/10/05/Python/Numpy-Fast-Memory/" data-title="numpy工具包常用快速记 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/" title="KNN算法中KD树的应用">
+  <strong>上一篇：</strong><br/>
+  <span>
+  KNN算法中KD树的应用</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/"  title="关于Scala中Iterator中size/length的一个坑">
+ <strong>下一篇：</strong><br/> 
+ <span>关于Scala中Iterator中size/length的一个坑
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/10/05/Python/Numpy-Fast-Memory/" data-title="numpy工具包常用快速记" data-url="http://yyl8781697.github.io/2015/10/05/Python/Numpy-Fast-Memory/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#array"><span class="toc-number">1.</span> <span class="toc-text">array</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#np-array"><span class="toc-number">1.1.</span> <span class="toc-text">np.array</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-arange"><span class="toc-number">1.2.</span> <span class="toc-text">np.arange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-linspace"><span class="toc-number">1.3.</span> <span class="toc-text">np.linspace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-ones"><span class="toc-number">1.4.</span> <span class="toc-text">np.ones</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-zeros"><span class="toc-number">1.5.</span> <span class="toc-text">np.zeros</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-eye"><span class="toc-number">1.6.</span> <span class="toc-text">np.eye</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-diag"><span class="toc-number">1.7.</span> <span class="toc-text">np.diag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#矩阵的四则运算"><span class="toc-number">1.8.</span> <span class="toc-text">矩阵的四则运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#summary"><span class="toc-number">1.9.</span> <span class="toc-text">summary</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#random"><span class="toc-number">2.</span> <span class="toc-text">random</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#np-random-rand"><span class="toc-number">2.1.</span> <span class="toc-text">np.random.rand</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#np-random-randn"><span class="toc-number">2.2.</span> <span class="toc-text">np.random.randn</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
