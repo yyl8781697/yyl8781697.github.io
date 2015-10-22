@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-10-12T05:00:01.000Z</updated>
+  <updated>2015-10-12T08:10:44.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yyl8781697.github.io/2015/10/12/Machine%20Learning/KDTree-In-KNN/"/>
     <id>http://yyl8781697.github.io/2015/10/12/Machine Learning/KDTree-In-KNN/</id>
     <published>2015-10-12T03:57:39.000Z</published>
-    <updated>2015-10-12T05:00:01.000Z</updated>
+    <updated>2015-10-12T08:10:44.000Z</updated>
     <content type="html"><![CDATA[<h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
 </code></pre><p><a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#KNN算法" target="_blank" rel="external">点我查看详情</a></p>
 <blockquote>
@@ -1141,7 +1141,7 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
     <link href="http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Common-Interview/"/>
     <id>http://yyl8781697.github.io/2015/08/16/Machine Learning/Common-Interview/</id>
     <published>2015-08-15T23:39:47.000Z</published>
-    <updated>2015-08-23T12:29:19.000Z</updated>
+    <updated>2015-10-20T11:03:21.000Z</updated>
     <content type="html"><![CDATA[<h2 id="有监督学习和无监督学习的区别">有监督学习和无监督学习的区别</h2><ul>
 <li>有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）</li>
 <li>无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)</li>
@@ -1206,7 +1206,8 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 <p>追加：这个其实可以看VC维相关的东西感觉更加合适</p>
 </blockquote>
 <h2 id="svm中rbf核函数与高斯和函数的比较">svm中rbf核函数与高斯和函数的比较</h2><p>高斯核函数好像是RBF核的一种</p>
-<h2 id="ROC、AUC">ROC、AUC</h2><p>ROC和AUC通常是用来评价一个二值分类器的好坏</p>
+<h2 id="KMeans初始类簇中心点的选取">KMeans初始类簇中心点的选取</h2><h3 id="选择批次距离尽可能远的K个点">选择批次距离尽可能远的K个点</h3><pre><code>首先随机选取一个点作为初始点，然后选择距离与该点最远的那个点作为中心点，再选择距离与前两个点最远的店作为第三个中心店，以此类推，直至选取大k个
+</code></pre><h3 id="选用层次聚类或者Canopy算法进行初始聚类">选用层次聚类或者Canopy算法进行初始聚类</h3><h2 id="ROC、AUC">ROC、AUC</h2><p>ROC和AUC通常是用来评价一个二值分类器的好坏</p>
 <h3 id="ROC曲线">ROC曲线</h3><p>曲线坐标上：</p>
 <ul>
 <li>X轴是FPR（表示假阳率-预测结果为positive，但是实际结果为negitive，FP/(N)）</li>

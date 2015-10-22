@@ -2,18 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yyl8781697.github.io/books/index.html</loc>
+    <lastmod>2015-10-22T17:00:06.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Common-Interview/</loc>
+    <lastmod>2015-10-20T11:03:21.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/about/index.html</loc>
+    <lastmod>2015-10-13T11:39:15.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/</loc>
+    <lastmod>2015-10-12T08:11:56.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yyl8781697.github.io/2015/10/12/Machine%20Learning/KDTree-In-KNN/</loc>
-    <lastmod>2015-10-12T05:00:01.000Z</lastmod>
+    <lastmod>2015-10-12T08:10:44.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://yyl8781697.github.io/2015/10/05/Python/Numpy-Fast-Memory/</loc>
     <lastmod>2015-10-08T02:33:12.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/yyl-resume.html</loc>
-    <lastmod>2015-09-20T09:47:26.000Z</lastmod>
   </url>
   
   <url>
@@ -24,11 +39,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/</loc>
     <lastmod>2015-09-19T04:18:46.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/about/index.html</loc>
-    <lastmod>2015-09-14T01:43:18.000Z</lastmod>
   </url>
   
   <url>
@@ -72,18 +82,8 @@
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Common-Interview/</loc>
-    <lastmod>2015-08-23T12:29:19.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/</loc>
     <lastmod>2015-08-23T10:58:45.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/books/index.html</loc>
-    <lastmod>2015-08-23T10:25:55.000Z</lastmod>
   </url>
   
   <url>
@@ -279,11 +279,6 @@
   <url>
     <loc>http://yyl8781697.github.io/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/</loc>
     <lastmod>2015-07-25T01:20:51.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/</loc>
-    <lastmod>2015-07-25T01:20:19.000Z</lastmod>
   </url>
   
   <url>
