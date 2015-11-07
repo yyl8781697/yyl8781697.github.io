@@ -92,6 +92,156 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/22/Effective Java/Create-Destory-Object/" title="《Effective Java》第二章：创建和销毁对象" itemprop="url">《Effective Java》第二章：创建和销毁对象</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-22T12:33:05.000Z" itemprop="datePublished"> 发表于 2015-04-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>本章的主题是创建和销毁对象：何时以及如何创建对象，何时以及如何避免创建对象，如何确保它们能够适时得销毁，以及如何管理对象和销毁之前必须进行的各种清理动作。</p>
+<h2 id="第1条：考虑用静态工厂方法代替构造器">第1条：考虑用静态工厂方法代替构造器</h2><blockquote>
+<p>这条感觉就是推荐我们尽量使用静态方法来生成实例对象。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> b?Boolean.TRUE:Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>推荐的理由如下：</p>
+<ol>
+<li>静态构造方法有自己的名称。（这理由是不是有点。。，个人感觉绝大部分程序猿在创建对象时都是首先尝试<code>new Construct()</code>）</li>
+<li>不必在每次调用它们时都创建一个新的对象。(单例中比较常用吧)</li>
+<li>它们可以返回原返回类型的任何子类型的对象。（<strong>这个特征的确是比较有优势一点</strong>）</li>
+<li>在创建参数化类型实例的时候，它们使代码变得更加简洁。</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/22/Effective Java/Create-Destory-Object/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/22/Effective Java/Create-Destory-Object/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/22/Effective Java/Create-Destory-Object/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/21/Java Base/Enum-Override/" title="关于Java枚举的重写" itemprop="url">关于Java枚举的重写</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-21T12:34:28.000Z" itemprop="datePublished"> 发表于 2015-04-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>对于Java枚举我之前所知道的是<sup>1</sup>：</p>
+<ol>
+<li>枚举本身就是一个类。</li>
+<li>它不能有<code>public</code>的构造函数，这样做可以保证客户代码没有办法新建一个enum的实例。     </li>
+<li>所有枚举值都是<code>public static final</code>的。注意这一点只是针对于枚举值，我们可以和在普通类里面定义变量一样定义其它任何类型的非枚举变量，这些变量可以用任何你想用的修饰符。     </li>
+<li>Enum默认实现了<code>java.lang.Comparable</code>接口。     </li>
+<li>Enum覆载了了<code>toString</code>方法，因此我们如果调用<code>Color.Blue.toString()</code>,默认返回字符串”Blue”.</li>
+<li>Enum提供了一个<code>valueOf</code>方法，这个方法和<code>toString</code>方法是相对应的。调用<code>valueOf(“Blue”)</code>将返回<code>Color.Blue</code>.因此我们在自己重写<code>toString</code>方法的时候就要注意到这一点，一般来说应该相对应地重写<code>valueOf</code>方法。     </li>
+<li>Enum还提供了<code>values</code>方法，这个方法使你能够方便的遍历所有的枚举值</li>
+<li>Enum还有一个<code>oridinal</code>的方法，这个方法返回枚举值在枚举类种的顺序。</li>
+</ol>
+<p>《Effective Java》中写着单例模式推荐的方式是使用<strong>单元素的枚举类</strong>实现，在查资料过程中竟然发现枚举值里面还能重写枚举的方法：</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/21/Java Base/Enum-Override/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Base/">Java Base</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/21/Java Base/Enum-Override/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/21/Java Base/Enum-Override/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/19/Food/Coke-Chicken-feet/" title="自己煮：可口又美味的可乐鸡爪" itemprop="url">自己煮：可口又美味的可乐鸡爪</a>
   </h1>
   <p class="article-author">By
@@ -639,145 +789,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/30/Java Source/Java-HashTable/" title="Java 源码学习之java.util.Hashtable" itemprop="url">Java 源码学习之java.util.Hashtable</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-30T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-03-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>Hashtable</code>是<code>Java</code>编程中较为常用的容器类之一，在面试时常常被与<code>HashMap</code>作比较！</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;为什么要常与<code>HashMap</code>作比较呢?因为他们的源码是极其相似啊，网上也常常有人说<code>HashMap</code>是基于<code>Hashtable</code>实现的吧，因为<code>Hashtable</code>在<code>Java1.0</code>中就有了，但是<code>HashMap</code>在<code>Java1.2</code>才出现。<br>&#160; &#160; &#160; &#160;本文讲解<code>Hashtable</code>时不再累赘，实现的原理大致都和<a href="http://kubicode.me/2015/03/27/Java-HashMap/">HashMap</a>一样，这里主要讲<code>Hashtable</code>与<code>HashMap</code>几个不同点。</p>
-<h2 id="不支持null">不支持null</h2><p>&#160; &#160; &#160; &#160;我们知道<code>HashMap</code>是支持<code>null</code>的键和值的，每次遇到<code>null</code>时直接用0来作桶号，来看下<code>Hashtable</code>对<code>null</code>的处理</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/30/Java Source/Java-HashTable/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/30/Java Source/Java-HashTable/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/30/Java Source/Java-HashTable/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/29/Algorithm/InsertionSort/" title="2014阿里巴巴实习生笔试题-插入排序基于链表的实现" itemprop="url">2014阿里巴巴实习生笔试题-插入排序基于链表的实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-29T12:07:26.000Z" itemprop="datePublished"> 发表于 2015-03-29</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code><span class="number">13</span>、将一个从大到小的数组，用以下排序方法排序成从小到大的，______最快。
-A.插入排序
-B.冒泡排序
-<span class="keyword">C</span>.快速排序
-<span class="keyword">D</span>.堆排序
-</code></pre><p>&#160; &#160; &#160; &#160;该题假如是单问算法复杂度，无疑是C和D，都是O(n*logn)，但是在初始化时降序的情况下，就得另外考虑了，其实可以发现这个降序的数组对C，和D并无价值，并且还增加了排序时的比较次数，现在来看插入排序：</p>
-<pre><code>有一个已经有序的数据序列，要求在这个已经排好的数据序列中插入一个数，但要求插入后此数据序列仍然有序，这个时候就要用到一种新的排序方法<span class="comment">--插入排序</span>
-</code></pre><p>&#160; &#160; &#160; &#160;根据待排序数组是降序的情况下很容易想到插排在每次插入是只需要比较第一个元素即可，因为前面的元素都比他大，一般插入排序是基于数组实现的，每次在插入一个元素时需要将插入后的元素都向后移动一位，如果这样其复杂度也不会减少，这种可以下可以将插排基于链表来实现，这样就不需要移动数组了。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/29/Algorithm/InsertionSort/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/29/Algorithm/InsertionSort/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/29/Algorithm/InsertionSort/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
@@ -844,11 +855,11 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>4</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 		  
 		
 		  
@@ -921,6 +932,10 @@ B.冒泡排序
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
 			
 		
@@ -941,19 +956,15 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			

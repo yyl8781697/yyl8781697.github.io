@@ -92,6 +92,145 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/03/30/Java Source/Java-HashTable/" title="Java 源码学习之java.util.Hashtable" itemprop="url">Java 源码学习之java.util.Hashtable</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-30T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-03-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>Hashtable</code>是<code>Java</code>编程中较为常用的容器类之一，在面试时常常被与<code>HashMap</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;为什么要常与<code>HashMap</code>作比较呢?因为他们的源码是极其相似啊，网上也常常有人说<code>HashMap</code>是基于<code>Hashtable</code>实现的吧，因为<code>Hashtable</code>在<code>Java1.0</code>中就有了，但是<code>HashMap</code>在<code>Java1.2</code>才出现。<br>&#160; &#160; &#160; &#160;本文讲解<code>Hashtable</code>时不再累赘，实现的原理大致都和<a href="http://kubicode.me/2015/03/27/Java-HashMap/">HashMap</a>一样，这里主要讲<code>Hashtable</code>与<code>HashMap</code>几个不同点。</p>
+<h2 id="不支持null">不支持null</h2><p>&#160; &#160; &#160; &#160;我们知道<code>HashMap</code>是支持<code>null</code>的键和值的，每次遇到<code>null</code>时直接用0来作桶号，来看下<code>Hashtable</code>对<code>null</code>的处理</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/30/Java Source/Java-HashTable/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/30/Java Source/Java-HashTable/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/30/Java Source/Java-HashTable/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/29/Algorithm/InsertionSort/" title="2014阿里巴巴实习生笔试题-插入排序基于链表的实现" itemprop="url">2014阿里巴巴实习生笔试题-插入排序基于链表的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-29T12:07:26.000Z" itemprop="datePublished"> 发表于 2015-03-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code><span class="number">13</span>、将一个从大到小的数组，用以下排序方法排序成从小到大的，______最快。
+A.插入排序
+B.冒泡排序
+<span class="keyword">C</span>.快速排序
+<span class="keyword">D</span>.堆排序
+</code></pre><p>&#160; &#160; &#160; &#160;该题假如是单问算法复杂度，无疑是C和D，都是O(n*logn)，但是在初始化时降序的情况下，就得另外考虑了，其实可以发现这个降序的数组对C，和D并无价值，并且还增加了排序时的比较次数，现在来看插入排序：</p>
+<pre><code>有一个已经有序的数据序列，要求在这个已经排好的数据序列中插入一个数，但要求插入后此数据序列仍然有序，这个时候就要用到一种新的排序方法<span class="comment">--插入排序</span>
+</code></pre><p>&#160; &#160; &#160; &#160;根据待排序数组是降序的情况下很容易想到插排在每次插入是只需要比较第一个元素即可，因为前面的元素都比他大，一般插入排序是基于数组实现的，每次在插入一个元素时需要将插入后的元素都向后移动一位，如果这样其复杂度也不会减少，这种可以下可以将插排基于链表来实现，这样就不需要移动数组了。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/29/Algorithm/InsertionSort/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/29/Algorithm/InsertionSort/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/29/Algorithm/InsertionSort/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/03/27/Java Source/Java-HashMap/" title="Java 源码学习之java.util.HashMap" itemprop="url">Java 源码学习之java.util.HashMap</a>
   </h1>
   <p class="article-author">By
@@ -519,83 +658,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/" title="LeetCode-Reverse Bits" itemprop="url">LeetCode-Reverse Bits</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-20T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
-</blockquote>
-<p>Problem:<br>Reverse bits of a given 32 bits unsigned integer.</p>
-<p>For example, given input 43261596 (represented in binary as <strong>00000010100101000001111010011100</strong>), return 964176192 (represented in binary as <strong>00111001011110000010100101000000</strong>).</p>
-<p>Follow up:<br>If this function is called many times, how would you optimize it?</p>
-<p>思路</p>
-<ul>
-<li>输入数据向右移取最低位，结果变量与最低位进行或操作，再向左移</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">uint32_t</span> <span class="title">reverseBits</span><span class="params">(<span class="keyword">uint32_t</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">uint32_t</span> ret=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> x=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            ret=ret&lt;&lt;<span class="number">1</span>;</span><br><span class="line">            ret=ret|(n&amp;<span class="number">0x1</span>);</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Reverse Bits/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/" title="LeetCode-Rotate Array" itemprop="url">LeetCode-Rotate Array</a>
   </h1>
   <p class="article-author">By
@@ -673,14 +735,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" title="LeetCode-Number of 1 Bits" itemprop="url">LeetCode-Number of 1 Bits</a>
+      <a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/" title="LeetCode-Reverse Bits" itemprop="url">LeetCode-Reverse Bits</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-14T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-14</time>
+    <time datetime="2014-07-20T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-20</time>
     
   </p>
 </header>
@@ -689,17 +751,14 @@
         <blockquote>
 <p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
 </blockquote>
-<p>Problem:<br>Write a function that takes an unsigned integer and returns the number of ’1’ bits it has (also known as the Hamming weight).</p>
-<p>For example, the 32-bit integer ’11’ has binary representation <code>00000000000000000000000000001011</code>, so the function should return 3.</p>
+<p>Problem:<br>Reverse bits of a given 32 bits unsigned integer.</p>
+<p>For example, given input 43261596 (represented in binary as <strong>00000010100101000001111010011100</strong>), return 964176192 (represented in binary as <strong>00111001011110000010100101000000</strong>).</p>
+<p>Follow up:<br>If this function is called many times, how would you optimize it?</p>
 <p>思路</p>
 <ul>
-<li>使用移位操作，每次将最后的最低位累加</li>
-<li>我想说一模一样的代码，<code>Java</code>和<code>C++</code>的执行效率真的相差挺大</li>
+<li>输入数据向右移取最低位，结果变量与最低位进行或操作，再向左移</li>
 </ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">uint32_t</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>the Runetime is <code>10ms</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">// you need to treat n as an unsigned value</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>the Runtime is <code>239ms</code><br></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">uint32_t</span> <span class="title">reverseBits</span><span class="params">(<span class="keyword">uint32_t</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">uint32_t</span> ret=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> x=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            ret=ret&lt;&lt;<span class="number">1</span>;</span><br><span class="line">            ret=ret|(n&amp;<span class="number">0x1</span>);</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -733,83 +792,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/" title="LeetCode-Single Number II" itemprop="url">LeetCode-Single Number II</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-12T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/single-number-ii/" target="_blank" rel="external">https://leetcode.com/problems/single-number-ii/</a></p>
-</blockquote>
-<p>Problem:<br>Given an array of integers, every element appears three times except for one. Find that single one.</p>
-<p><strong>Note:</strong><br>Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?</p>
-<p>思路</p>
-<ul>
-<li>将数组A中每个整形的二进制 分散到一个32位数组A上求和，出现3次的在该位上的和肯定是3的倍数</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="keyword">int</span>[] A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,index=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] binarySum=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">32</span>];</span><br><span class="line">        <span class="keyword">if</span>(A==<span class="keyword">null</span> || A.length==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            index=<span class="number">0</span>;</span><br><span class="line">            do</span><br><span class="line">            &#123;</span><br><span class="line">                binarySum[index++]+=A[i]%<span class="number">2</span>;</span><br><span class="line">                A[i]/=<span class="number">2</span>;</span><br><span class="line">            &#125;<span class="keyword">while</span>(A[i]!=<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;binarySum.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            index=binarySum[i]%<span class="number">3</span>;</span><br><span class="line">            <span class="keyword">if</span>(Math.abs(index)&gt;<span class="number">1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                index=(index+<span class="number">3</span>)%<span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            ret+=Math.pow(<span class="number">2</span>, i)*(index);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/12/LeetCode/LeetCode-Single-Number-II/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Reverse Bits/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -889,11 +872,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>4</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 		  
 		
 		  
@@ -966,6 +949,10 @@
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
 			
 		
@@ -986,19 +973,15 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			

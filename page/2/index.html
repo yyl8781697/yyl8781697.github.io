@@ -92,6 +92,146 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/19/Machine Learning/Linear-Regression/" title="《台大机器学习基石》Linear Regression" itemprop="url">《台大机器学习基石》Linear Regression</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-19T15:15:46.000Z" itemprop="datePublished"> 发表于 2015-08-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>算法，假如我们现在时的问题不是解决是否发行用卡，而是该发<strong>多少额度</strong>的问题<br><img src="/img/Linear-Regression/ed.png" width="300px" height="300px" /><br>也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/19/Machine Learning/Linear-Regression/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/19/Machine Learning/Linear-Regression/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/19/Machine Learning/Linear-Regression/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" title="机器学习常见算法个人总结（面试用）" itemprop="url">机器学习常见算法个人总结（面试用）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-15T23:40:29.000Z" itemprop="datePublished"> 发表于 2015-08-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>这个总结最初是写在本地的<span class="variable">MacDown</span>中的，他的markdown语法解析与hexo的略微有点差异，懒得改了-<span class="variable">_</span>-，忍着点看..
+</code></pre><h2 id="朴素贝叶斯">朴素贝叶斯</h2><p>P(A∩B)=P(A)*P(B|A)=P(B)*P(A|B)<br>所以有：P(A|B)=P(B|A)*P(A)/P(B)</p>
+<p>对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别</p>
+<h3 id="工作原理">工作原理</h3><ol>
+<li>假设现在有样本x=(a1,a2,a3,…an)这个待分类项(并认为x里面的特征独立)</li>
+<li>再假设现在有分类目标Y={y1,y2,y3,y4..yn}</li>
+<li>那么max(P(y1|x),P(y2|x),P(y3|x)..P(yn|x))中的最大者就是最终的分类类别</li>
+<li>而P(yi|x)=p(x|yi)*P(yi)/P(x)</li>
+<li>因为x对于每个分类目标来说都一样，所以就是求max(P(x|yi)*p(yi))</li>
+<li>P(x|yi)*p(yi)=p(yi)*PI(P(ai|yi))  (PI表示连乘)</li>
+<li>而具体的p(ai|yi)和p(yi)都是能从训练样本中统计出来<br> p(ai|yi)表示该类别下该特征出现的概率<br> p(yi)表示全部类别中这个这个类别出现的概率</li>
+<li>好的，就是这么工作的^_^</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/16/Machine Learning/Common-Interview/" title="机器学习常见面试题整理" itemprop="url">机器学习常见面试题整理</a>
   </h1>
   <p class="article-author">By
@@ -624,144 +764,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/03/Algorithm/Short-Abstract/" title="最短摘要生成" itemprop="url">最短摘要生成</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-03T15:21:15.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>最短摘要生成
-给定一个字符串，以及一系列查询词，在这个字符串中找到一个子串，该子串包含全部的查询词，求这个最短子串
-</code></pre><h2 id="解析">解析</h2><p>两个指针，begin和end<br>首先使用end往右边移动一直移动到全部包含查询字符集q的位置<br>然后将begin也向右边移动，直达再移动一次begin-end区间里面的数据将不再包含q<br>此时记录begin和end以及其最小的间距<br>然后begin右移一位，end继续右边移动直至全部包含，周而复始<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/03/Algorithm/Short-Abstract/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/03/Algorithm/Short-Abstract/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/03/Algorithm/Short-Abstract/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/" title="找一个数组中绝对值和最小的三个元素" itemprop="url">找一个数组中绝对值和最小的三个元素</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-03T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>找一个数组中绝对值和最小的三个元素
-</code></pre><h2 id="解析">解析</h2><p>暴力的方法是O(n^3)，肯定还存在其他更加优的方法</p>
-<ol>
-<li>将数组升序排序</li>
-<li>固定一个数字，然后从两端开始找，如果sum&lt;0 则left++ 否则right—  同时记录最小的minSum<blockquote>
-<p>注意，两端向中间找的时候如果遇到当前固定的数字需要跳过</p>
-</blockquote>
-</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/03/Algorithm/Min-Abs-ThreeNumber/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -828,11 +830,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>4</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mac/" title="Mac">Mac<sup>1</sup></a></li>
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 		  
 		
 		  
@@ -905,6 +907,10 @@
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
 			
 		
@@ -925,19 +931,15 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			
