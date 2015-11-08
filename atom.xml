@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-11-08T12:04:49.000Z</updated>
+  <updated>2015-11-08T12:23:38.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/"/>
     <id>http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/</id>
     <published>2015-11-08T01:23:38.000Z</published>
-    <updated>2015-11-08T12:04:49.000Z</updated>
+    <updated>2015-11-08T12:23:38.000Z</updated>
     <content type="html"><![CDATA[<pre><code>Hadoop Streaming是一个便于变成<span class="keyword">Map</span> <span class="keyword">Reduce</span>程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
 </code></pre><h2 id="Streaming实践">Streaming实践</h2><p>先直接来看一个由<code>python</code>写的<code>Streaming</code>程序，还有那个经典的word count,我们的数据集是一篇<a href="/img/Hadoop-Streaming-Primary-Learning-And-Debug/words.txt">英语作文</a>,<br>看来看他的<code>mapper</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys,re</span><br><span class="line"></span><br><span class="line">re_english = re.compile(<span class="string">u'[^a-zA-Z0-9\-]+'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin: <span class="comment">#这里你可以看做是map类中的line输入</span></span><br><span class="line">    words = re_english.sub(<span class="string">' '</span>,line.strip()) <span class="comment">#这里只提取英文数字</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> words.split():</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\t%s'</span> % (word, <span class="number">1</span>)  <span class="comment">#这儿就是标准的输出，用tab隔开  默认第一个值为key</span></span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
@@ -211,6 +211,7 @@ has    <span class="number">4</span>
 <li>Caused by: java.io.IOException: error=2, No such file or directory<br>  这个往往是由于没有指定<code>mapper,redue=cer</code>的<code>-file</code>引起的，也可以使用通配符<code>*</code></li>
 <li>另一未知的错误 估计就是写的脚本执行出了问题，使用上述方式先在本地调试完了再跑</li>
 </ul>
+<h2 id="总结">总结</h2><p><code>Hadoop streaming</code>写起来很灵活，并且由于跨语言，迁移起来很很快，熟悉不同语言的开发人员也非常容易合作，如果<code>Hadoop streaming</code>程序由多个<code>Map-Reduce</code>构成，那么用<code>Shell</code>来组织整个程序也就会非常的方便快捷</p>
 <h2 id="参考">参考</h2><ul>
 <li><a href="http://hadoop.apache.org/docs/r2.7.1/hadoop-streaming/HadoopStreaming.html" target="_blank" rel="external">Hadoop Streaming</a></li>
 <li><a href="http://shiyanjun.cn/archives/336.html" target="_blank" rel="external">Hadoop Streaming原理及实践</a></li>

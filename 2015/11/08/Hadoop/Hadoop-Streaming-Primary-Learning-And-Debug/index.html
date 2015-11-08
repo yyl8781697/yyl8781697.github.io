@@ -109,7 +109,7 @@ Streaming实践先直接来看一个由python写的Streaming程序，还有那�
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming实践"><span class="toc-number">1.</span> <span class="toc-text">Streaming实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming调试"><span class="toc-number">2.</span> <span class="toc-text">Streaming调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming常见错误"><span class="toc-number">3.</span> <span class="toc-text">Streaming常见错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming实践"><span class="toc-number">1.</span> <span class="toc-text">Streaming实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming调试"><span class="toc-number">2.</span> <span class="toc-text">Streaming调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming常见错误"><span class="toc-number">3.</span> <span class="toc-text">Streaming常见错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -304,6 +304,7 @@ has    <span class="number">4</span>
 <li>Caused by: java.io.IOException: error=2, No such file or directory<br>  这个往往是由于没有指定<code>mapper,redue=cer</code>的<code>-file</code>引起的，也可以使用通配符<code>*</code></li>
 <li>另一未知的错误 估计就是写的脚本执行出了问题，使用上述方式先在本地调试完了再跑</li>
 </ul>
+<h2 id="总结">总结</h2><p><code>Hadoop streaming</code>写起来很灵活，并且由于跨语言，迁移起来很很快，熟悉不同语言的开发人员也非常容易合作，如果<code>Hadoop streaming</code>程序由多个<code>Map-Reduce</code>构成，那么用<code>Shell</code>来组织整个程序也就会非常的方便快捷</p>
 <h2 id="参考">参考</h2><ul>
 <li><a href="http://hadoop.apache.org/docs/r2.7.1/hadoop-streaming/HadoopStreaming.html" target="_blank" rel="external">Hadoop Streaming</a></li>
 <li><a href="http://shiyanjun.cn/archives/336.html" target="_blank" rel="external">Hadoop Streaming原理及实践</a></li>
@@ -371,7 +372,7 @@ has    <span class="number">4</span>
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming实践"><span class="toc-number">1.</span> <span class="toc-text">Streaming实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming调试"><span class="toc-number">2.</span> <span class="toc-text">Streaming调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming常见错误"><span class="toc-number">3.</span> <span class="toc-text">Streaming常见错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming实践"><span class="toc-number">1.</span> <span class="toc-text">Streaming实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming调试"><span class="toc-number">2.</span> <span class="toc-text">Streaming调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming常见错误"><span class="toc-number">3.</span> <span class="toc-text">Streaming常见错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
