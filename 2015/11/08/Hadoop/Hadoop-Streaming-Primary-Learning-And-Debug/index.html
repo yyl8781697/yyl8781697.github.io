@@ -1,0 +1,862 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Hadoop Streaming 实践以及Debug | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Hadoop Streaming是一个便于变成Map Reduce程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
+Streaming实践先直接来看一个由python写的Streaming程序，还有那个经典的wor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop Streaming 实践以及Debug">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Hadoop Streaming是一个便于变成Map Reduce程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
+Streaming实践先直接来看一个由python写的Streaming程序，还有那个经典的wor">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop Streaming 实践以及Debug">
+<meta name="twitter:description" content="Hadoop Streaming是一个便于变成Map Reduce程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
+Streaming实践先直接来看一个由python写的Streaming程序，还有那个经典的wor">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" title="Hadoop Streaming 实践以及Debug" itemprop="url">Hadoop Streaming 实践以及Debug</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-08T01:23:38.000Z" itemprop="datePublished"> 发表于 2015-11-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming实践"><span class="toc-number">1.</span> <span class="toc-text">Streaming实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming调试"><span class="toc-number">2.</span> <span class="toc-text">Streaming调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming常见错误"><span class="toc-number">3.</span> <span class="toc-text">Streaming常见错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<pre><code>Hadoop Streaming是一个便于变成<span class="keyword">Map</span> <span class="keyword">Reduce</span>程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
+</code></pre><h2 id="Streaming实践">Streaming实践</h2><p>先直接来看一个由<code>python</code>写的<code>Streaming</code>程序，还有那个经典的word count,我们的数据集是一篇<a href="/img/Hadoop-Streaming-Primary-Learning-And-Debug/words.txt">英语作文</a>,<br>看来看他的<code>mapper</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys,re</span><br><span class="line"></span><br><span class="line">re_english = re.compile(<span class="string">u'[^a-zA-Z0-9\-]+'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin: <span class="comment">#这里你可以看做是map类中的line输入</span></span><br><span class="line">    words = re_english.sub(<span class="string">' '</span>,line.strip()) <span class="comment">#这里只提取英文数字</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> words.split():</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\t%s'</span> % (word, <span class="number">1</span>)  <span class="comment">#这儿就是标准的输出，用tab隔开  默认第一个值为key</span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>其实看上面的<code>mapper</code>文件还是挺带感的，和标准的<code>mapper</code>类很类似，这里就不解释了，相信用<code>java</code>写过标准<code>Map-Reduce</code>都应该很熟悉<br><br>现在再来看<code>reducer</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">!/usr/bin/env python</span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">lastk = <span class="keyword">None</span> <span class="comment">#这里标志最后一个k  用于控制同一个key 到一个组中</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        w,c = line.split(<span class="string">'\t'</span>)</span><br><span class="line">        c = int(c) <span class="comment">#不转成int会比较麻烦  这是是计数</span></span><br><span class="line">        <span class="keyword">if</span> lastk == <span class="keyword">None</span>: <span class="comment">#这里是判断是否过来的是第一个key</span></span><br><span class="line">            lastk=w</span><br><span class="line">            count += c</span><br><span class="line">        <span class="keyword">elif</span> lastk == w:</span><br><span class="line">            count += c</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br><span class="line">            lastk=w</span><br><span class="line">            count = c <span class="comment">#这里重置计数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> lastk <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br></pre></td></tr></table></figure></p>
+<p>陌生感来了把~其实这里是这样的：</p>
+<pre><code>都说了是Streaming，他其实是流式进来的，在进来之前还是和标准的mr一样按<span class="built_in">key</span>进行partation划分到各个桶中，然后每个桶会有若干个<span class="built_in">key</span>，这里按<span class="built_in">key</span>分组一次会将记录一条一条的使用*unix的标准输入 读入道sys.stdin中，那么问题了来了，原来mr中的 迭代器的值如何构造？这里主要使用lastk来的变量，每次当输入的<span class="built_in">key</span>与lastk相等的时候，将当前的值加入到字典或者数组中（因为这个demo是wordcount，所以用累加计数来代替了，第<span class="number">16</span>行），直到<span class="built_in">key</span>与lastk不等时（第<span class="number">18</span>行），此时的数组或者字典就是原来 值的迭代器里面的东西，和正常的mr一样操作，该输出的输出，完了之后同时得更新lastk以迎接下一组<span class="built_in">key</span>的到来，同时清空数组或者字典，周而复始，直至全部输入之后，判断我的lastk是否存在值，有的话这个lastk作为最后一组<span class="built_in">key</span>进行输出（第<span class="number">23</span>行），这样的方式就可以构造出原来的(<span class="built_in">key</span>,iter[<span class="built_in">value</span>])模式了
+</code></pre><blockquote>
+<p>上述的构造看上去些代码可能更加麻烦一点，但是其实这样的方式是应该灵活了</p>
+</blockquote>
+<p>现在<code>mapper</code>和<code>reducer</code>两个文件写完了，该如何执行呢？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar <span class="variable">$HADOOP_HOME</span>/share/hadoop/tools/lib/hadoop-streaming-<span class="number">2.7</span>.<span class="number">0</span>.jar \</span><br><span class="line">-input /yyl/data/words.txt \</span><br><span class="line">-output /yyl/<span class="built_in">test</span>/ouput/streaming \</span><br><span class="line">-mapper <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_mapper.py \</span><br><span class="line">-reducer <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_reducer.py \</span><br><span class="line">-file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/*.py \</span><br></pre></td></tr></table></figure>
+<p>其实提交的方式很类似原生的<code>jar</code>包提交，只是这里的<code>jar</code>是使用了<code>Hadoop</code>自带的<code>streaming</code>包,敲火车键进行执行</p>
+<pre><code><span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">47</span> WARN streaming.<span class="string">StreamJob:</span> -file option is deprecated, please use generic option -files instead.
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">47</span> WARN util.<span class="string">NativeCodeLoader:</span> Unable to load native-hadoop library <span class="keyword">for</span> your platform... using builtin-java classes where applicable
+<span class="string">packageJobJar:</span> [<span class="regexp">/root/</span>program<span class="regexp">/hadoop-2.7.0/</span>runjar<span class="regexp">/pyscript/</span>word_count_mapper.py, <span class="regexp">/root/</span>program<span class="regexp">/hadoop-2.7.0/</span>runjar<span class="regexp">/pyscript/</span>word_count_reducer.py, <span class="regexp">/tmp/</span>hadoop-unjar1825196483906999229<span class="regexp">/] [] /</span>tmp/streamjob6480432411236657839.jar tmpDir=<span class="literal">null</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">51</span> INFO client.<span class="string">RMProxy:</span> Connecting to ResourceManager at master/<span class="number">192.168</span>.56.2:<span class="number">8032</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">51</span> INFO client.<span class="string">RMProxy:</span> Connecting to ResourceManager at master/<span class="number">192.168</span>.56.2:<span class="number">8032</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">53</span> INFO mapred.<span class="string">FileInputFormat:</span> Total input paths to <span class="string">process :</span> <span class="number">1</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">54</span> INFO mapreduce.<span class="string">JobSubmitter:</span> number of <span class="string">splits:</span><span class="number">2</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">54</span> INFO mapreduce.<span class="string">JobSubmitter:</span> Submitting tokens <span class="keyword">for</span> <span class="string">job:</span> job_1446946409340_0001
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">55</span> INFO impl.<span class="string">YarnClientImpl:</span> Submitted application application_1446946409340_0001
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">55</span> INFO mapreduce.<span class="string">Job:</span> The url to track the <span class="string">job:</span> <span class="string">http:</span><span class="comment">//master:8088/proxy/application_1446946409340_0001/</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">55</span> INFO mapreduce.<span class="string">Job:</span> Running <span class="string">job:</span> job_1446946409340_0001
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">12</span> INFO mapreduce.<span class="string">Job:</span> Job job_1446946409340_0001 running <span class="keyword">in</span> uber <span class="string">mode :</span> <span class="literal">false</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">12</span> INFO mapreduce.<span class="string">Job:</span>  map <span class="number">0</span>% reduce <span class="number">0</span>%
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">33</span> INFO mapreduce.<span class="string">Job:</span>  map <span class="number">100</span>% reduce <span class="number">0</span>%
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">46</span> INFO mapreduce.<span class="string">Job:</span>  map <span class="number">100</span>% reduce <span class="number">100</span>%
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">47</span> INFO mapreduce.<span class="string">Job:</span> Job job_1446946409340_0001 completed successfully
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">47</span> INFO mapreduce.<span class="string">Job:</span> <span class="string">Counters:</span> <span class="number">49</span>
+    File System Counters
+----此处和mr一样  省略<span class="number">1</span>w字
+    File Input Format Counters
+        Bytes Read=<span class="number">2223</span>
+    File Output Format Counters
+        Bytes Written=<span class="number">1208</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">47</span> INFO streaming.<span class="string">StreamJob:</span> Output <span class="string">directory:</span> <span class="regexp">/yyl/</span>test<span class="regexp">/ouput/</span>streaming
+</code></pre><p>然后来查看熟悉的word count结果</p>
+<pre><code>[root<span class="annotation">@master</span> pyscript]# hadoop fs -get <span class="regexp">/yyl/</span>test<span class="regexp">/ouput/</span>streaming
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">48</span>:<span class="number">16</span> WARN util.<span class="string">NativeCodeLoader:</span> Unable to load native-hadoop library <span class="keyword">for</span> your platform... using builtin-java classes where applicable
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">48</span>:<span class="number">19</span> WARN hdfs.<span class="string">DFSClient:</span> DFSInputStream has been closed already
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">48</span>:<span class="number">19</span> WARN hdfs.<span class="string">DFSClient:</span> DFSInputStream has been closed already
+[root<span class="annotation">@master</span> pyscript]# cd streaming/
+[root<span class="annotation">@master</span> streaming]# sort -nr -k <span class="number">2</span> part-<span class="number">00000</span> | head -n <span class="number">10</span>
+and    <span class="number">11</span>
+to    <span class="number">10</span>
+people    <span class="number">10</span>
+Micro-blog    <span class="number">8</span>
+their    <span class="number">6</span>
+a    <span class="number">5</span>
+other    <span class="number">4</span>
+of    <span class="number">4</span>
+more    <span class="number">4</span>
+has    <span class="number">4</span>
+</code></pre><p>取计数最高的10个，看到了熟悉的字样，好了，这样一次<code>streaming</code>写执行完了，是不是甚是方便</p>
+<blockquote>
+<p>这里有一个提示，可以再通<code>hadoop版本hadoop-streaming-*.jar</code>的位置不一样，你可以使用<a href="http://kubicode.me/2015/07/26/Linux/Find-Command/" target="_blank" rel="external">find</a>命令进行查找具体的位置</p>
+</blockquote>
+<p>到了这里已经可以基本执行<code>streaming</code>程序了，但是从上面的跑的命令里可以看到有好多配置的样子，还有另外可以发现，在写的<code>mapper</code>和<code>reducer</code>中只写了数据的处理逻辑，其他的一些配置参数根本无法写入，那么这些东西都是得在执行的命令里面进行配置的，他可以有的配置参数大致有如下几个</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数名称</th>
+<th style="text-align:left">可选/必选</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>-input</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">输入文件/目录的位置</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-output</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">输出目录</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-mapper</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left"><code>mapper</code>的执行文件或者<code>JavaClassName</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-reducer</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left"><code>reducer</code>的执行或者<code>JavaClassName</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-file</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">执行的mapper或者reducer文件以及其依赖文件，一定要写，多个可以写多行，他会共享到各个节点上，也可以是jar包</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-inputformat</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">填<code>JavaClassName</code>，为自定义的输入格式，默认是<code>TextInputFormat</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-outputformat</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">填<code>JavaClassName</code>，为自定义的输出格式，默认是<code>TextOutputformat</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-partitioner</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">填<code>JavaClassName</code>，为自定义的分区函数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-combiner</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left"><code>mapper</code>输出之后的合并类，是<code>JavaClassName</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-cmdenv</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left"><code>name=value</code>为输入到流命令里面的环境变量</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-inputreader</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">貌似可以代替<code>-inputformat</code>这个东西</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-verbose</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">启用<code>java</code>的<code>verbose</code>输出</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-lazyOutput</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">当输出格式为<code>FileOutputFormat</code>时，可以配置为懒输出-_-</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-numReduceTasks</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定的<code>reducer</code>的数目</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-mapdebug</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定一个脚本当<code>mapper</code>失败的时候进行调用</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-reducedebug</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定一个脚本当<code>reducer</code>失败的时候进行调用</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-conf</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定配置文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-D</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left"><code>property=value</code> 可以配置<code>Hadoop</code>原生的配置项 <strong>实用</strong>^_^</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这么看来，<code>streaming</code>还是很强大以及很灵活的</p>
+</blockquote>
+<h2 id="Streaming调试">Streaming调试</h2><p>从上述的配置中可以看到 可以配置<code>mapdebug</code>和<code>reducedebug</code>来追踪<code>streaming</code>中的错误信息来进行调试，除了这种方式，<code>streaming</code>调试还有一种更加方便的方式，<br>先来看<code>streaming</code>的执行过程<code>mapper-&gt;shuffle-&gt;reducer</code>，数据以流的方式进行传递的，在<code>Linux</code>中可以配合自带的命令以及官道来完成这一过程，现在可以看模拟刚刚的demo执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master pyscript]<span class="comment"># cat ~/data/words.txt | python word_count_mapper.py | sort | python word_count_reducer.py | sort -nr -k 2 |head -n 10</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到其输出</p>
+<pre><code><span class="operator">and</span>    <span class="number">11</span>
+<span class="built_in">to</span>    <span class="number">10</span>
+people    <span class="number">10</span>
+Micro-blog    <span class="number">8</span>
+their    <span class="number">6</span>
+<span class="operator">a</span>    <span class="number">5</span>
+other    <span class="number">4</span>
+<span class="operator">of</span>    <span class="number">4</span>
+more    <span class="number">4</span>
+has    <span class="number">4</span>
+</code></pre><p>与上述demo中的结果一模一样，现在大致来分解一下上述命令</p>
+<ol>
+<li><code>cat ~/data/words.txt </code>:输出文件内容</li>
+<li><code>| python word_count_mapper.py</code>:管道命令  将上一步输出的内容输出到要执行的<code>mapper</code>中</li>
+<li><code>| sort </code>:管道命令 直接将<code>mapper</code>中输出的内容按第一列进行排序，排序完了之后其实就是达到了分组的效应</li>
+<li><code>| python word_count_reducer.py</code>:管道 将排序后的值一次输入到<code>reducer</code>中进行执行，其实到了这一步已经完成了<code>streaming</code>的模拟</li>
+<li><code>| sort -nr -k 2 |head -n 10</code> 将最后的结果排个序，再取top</li>
+</ol>
+<p>使用上述方式来进行调试我感觉有两大优势</p>
+<ol>
+<li>快，不需要提交到服务器上 慢悠悠的取执行</li>
+<li>准，可以直接看到<code>python</code>抛出来的错误</li>
+</ol>
+<h2 id="Streaming常见错误">Streaming常见错误</h2><ul>
+<li>Caused by: java.io.IOException: error=2, No such file or directory<br>  这个往往是由于没有指定<code>mapper,redue=cer</code>的<code>-file</code>引起的，也可以使用通配符<code>*</code></li>
+<li>另一未知的错误 估计就是写的脚本执行出了问题，使用上述方式先在本地调试完了再跑</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://hadoop.apache.org/docs/r2.7.1/hadoop-streaming/HadoopStreaming.html" target="_blank" rel="external">Hadoop Streaming</a></li>
+<li><a href="http://shiyanjun.cn/archives/336.html" target="_blank" rel="external">Hadoop Streaming原理及实践</a></li>
+<li><a href="http://dongxicheng.org/mapreduce/hadoop-streaming-programming/" target="_blank" rel="external">Hadoop Streaming 编程</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" data-title="Hadoop Streaming 实践以及Debug | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/"  title="在Mac的OSX系统中配置VIM">
+ <strong>下一篇：</strong><br/> 
+ <span>在Mac的OSX系统中配置VIM
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" data-title="Hadoop Streaming 实践以及Debug" data-url="http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming实践"><span class="toc-number">1.</span> <span class="toc-text">Streaming实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming调试"><span class="toc-number">2.</span> <span class="toc-text">Streaming调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Streaming常见错误"><span class="toc-number">3.</span> <span class="toc-text">Streaming常见错误</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

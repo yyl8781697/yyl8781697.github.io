@@ -92,6 +92,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" title="Hadoop Streaming 实践以及Debug" itemprop="url">Hadoop Streaming 实践以及Debug</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-08T01:23:38.000Z" itemprop="datePublished"> 发表于 2015-11-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>Hadoop Streaming是一个便于变成<span class="keyword">Map</span> <span class="keyword">Reduce</span>程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
+</code></pre><h2 id="Streaming实践">Streaming实践</h2><p>先直接来看一个由<code>python</code>写的<code>Streaming</code>程序，还有那个经典的word count,我们的数据集是一篇<a href="/img/Hadoop-Streaming-Primary-Learning-And-Debug/words.txt">英语作文</a>,<br>看来看他的<code>mapper</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys,re</span><br><span class="line"></span><br><span class="line">re_english = re.compile(<span class="string">u'[^a-zA-Z0-9\-]+'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin: <span class="comment">#这里你可以看做是map类中的line输入</span></span><br><span class="line">    words = re_english.sub(<span class="string">' '</span>,line.strip()) <span class="comment">#这里只提取英文数字</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> words.split():</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\t%s'</span> % (word, <span class="number">1</span>)  <span class="comment">#这儿就是标准的输出，用tab隔开  默认第一个值为key</span></span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/" title="在Mac的OSX系统中配置VIM" itemprop="url">在Mac的OSX系统中配置VIM</a>
   </h1>
   <p class="article-author">By
@@ -692,70 +757,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/21/Machine Learning/Logistic-Regression/" title="《台大机器学习基石》Logistic Regression" itemprop="url">《台大机器学习基石》Logistic Regression</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-21T13:07:01.000Z" itemprop="datePublished"> 发表于 2015-08-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px" /><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/21/Machine Learning/Logistic-Regression/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/21/Machine Learning/Logistic-Regression/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/21/Machine Learning/Logistic-Regression/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -798,7 +799,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
 		  
 		
 		  
@@ -895,15 +896,15 @@
 			
 		
 			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>4</sup></a></li>
 			
 		
 			

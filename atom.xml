@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2015-11-07T12:39:50.000Z</updated>
+  <updated>2015-11-08T12:04:49.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,225 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Hadoop Streaming 实践以及Debug]]></title>
+    <link href="http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/"/>
+    <id>http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/</id>
+    <published>2015-11-08T01:23:38.000Z</published>
+    <updated>2015-11-08T12:04:49.000Z</updated>
+    <content type="html"><![CDATA[<pre><code>Hadoop Streaming是一个便于变成<span class="keyword">Map</span> <span class="keyword">Reduce</span>程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
+</code></pre><h2 id="Streaming实践">Streaming实践</h2><p>先直接来看一个由<code>python</code>写的<code>Streaming</code>程序，还有那个经典的word count,我们的数据集是一篇<a href="/img/Hadoop-Streaming-Primary-Learning-And-Debug/words.txt">英语作文</a>,<br>看来看他的<code>mapper</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys,re</span><br><span class="line"></span><br><span class="line">re_english = re.compile(<span class="string">u'[^a-zA-Z0-9\-]+'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin: <span class="comment">#这里你可以看做是map类中的line输入</span></span><br><span class="line">    words = re_english.sub(<span class="string">' '</span>,line.strip()) <span class="comment">#这里只提取英文数字</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> words.split():</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\t%s'</span> % (word, <span class="number">1</span>)  <span class="comment">#这儿就是标准的输出，用tab隔开  默认第一个值为key</span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>其实看上面的<code>mapper</code>文件还是挺带感的，和标准的<code>mapper</code>类很类似，这里就不解释了，相信用<code>java</code>写过标准<code>Map-Reduce</code>都应该很熟悉<br><br>现在再来看<code>reducer</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">!/usr/bin/env python</span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">lastk = <span class="keyword">None</span> <span class="comment">#这里标志最后一个k  用于控制同一个key 到一个组中</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        w,c = line.split(<span class="string">'\t'</span>)</span><br><span class="line">        c = int(c) <span class="comment">#不转成int会比较麻烦  这是是计数</span></span><br><span class="line">        <span class="keyword">if</span> lastk == <span class="keyword">None</span>: <span class="comment">#这里是判断是否过来的是第一个key</span></span><br><span class="line">            lastk=w</span><br><span class="line">            count += c</span><br><span class="line">        <span class="keyword">elif</span> lastk == w:</span><br><span class="line">            count += c</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br><span class="line">            lastk=w</span><br><span class="line">            count = c <span class="comment">#这里重置计数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> lastk <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br></pre></td></tr></table></figure></p>
+<p>陌生感来了把~其实这里是这样的：</p>
+<pre><code>都说了是Streaming，他其实是流式进来的，在进来之前还是和标准的mr一样按<span class="built_in">key</span>进行partation划分到各个桶中，然后每个桶会有若干个<span class="built_in">key</span>，这里按<span class="built_in">key</span>分组一次会将记录一条一条的使用*unix的标准输入 读入道sys.stdin中，那么问题了来了，原来mr中的 迭代器的值如何构造？这里主要使用lastk来的变量，每次当输入的<span class="built_in">key</span>与lastk相等的时候，将当前的值加入到字典或者数组中（因为这个demo是wordcount，所以用累加计数来代替了，第<span class="number">16</span>行），直到<span class="built_in">key</span>与lastk不等时（第<span class="number">18</span>行），此时的数组或者字典就是原来 值的迭代器里面的东西，和正常的mr一样操作，该输出的输出，完了之后同时得更新lastk以迎接下一组<span class="built_in">key</span>的到来，同时清空数组或者字典，周而复始，直至全部输入之后，判断我的lastk是否存在值，有的话这个lastk作为最后一组<span class="built_in">key</span>进行输出（第<span class="number">23</span>行），这样的方式就可以构造出原来的(<span class="built_in">key</span>,iter[<span class="built_in">value</span>])模式了
+</code></pre><blockquote>
+<p>上述的构造看上去些代码可能更加麻烦一点，但是其实这样的方式是应该灵活了</p>
+</blockquote>
+<p>现在<code>mapper</code>和<code>reducer</code>两个文件写完了，该如何执行呢？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar <span class="variable">$HADOOP_HOME</span>/share/hadoop/tools/lib/hadoop-streaming-<span class="number">2.7</span>.<span class="number">0</span>.jar \</span><br><span class="line">-input /yyl/data/words.txt \</span><br><span class="line">-output /yyl/<span class="built_in">test</span>/ouput/streaming \</span><br><span class="line">-mapper <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_mapper.py \</span><br><span class="line">-reducer <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_reducer.py \</span><br><span class="line">-file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/*.py \</span><br></pre></td></tr></table></figure>
+<p>其实提交的方式很类似原生的<code>jar</code>包提交，只是这里的<code>jar</code>是使用了<code>Hadoop</code>自带的<code>streaming</code>包,敲火车键进行执行</p>
+<pre><code><span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">47</span> WARN streaming.<span class="string">StreamJob:</span> -file option is deprecated, please use generic option -files instead.
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">47</span> WARN util.<span class="string">NativeCodeLoader:</span> Unable to load native-hadoop library <span class="keyword">for</span> your platform... using builtin-java classes where applicable
+<span class="string">packageJobJar:</span> [<span class="regexp">/root/</span>program<span class="regexp">/hadoop-2.7.0/</span>runjar<span class="regexp">/pyscript/</span>word_count_mapper.py, <span class="regexp">/root/</span>program<span class="regexp">/hadoop-2.7.0/</span>runjar<span class="regexp">/pyscript/</span>word_count_reducer.py, <span class="regexp">/tmp/</span>hadoop-unjar1825196483906999229<span class="regexp">/] [] /</span>tmp/streamjob6480432411236657839.jar tmpDir=<span class="literal">null</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">51</span> INFO client.<span class="string">RMProxy:</span> Connecting to ResourceManager at master/<span class="number">192.168</span>.56.2:<span class="number">8032</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">51</span> INFO client.<span class="string">RMProxy:</span> Connecting to ResourceManager at master/<span class="number">192.168</span>.56.2:<span class="number">8032</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">53</span> INFO mapred.<span class="string">FileInputFormat:</span> Total input paths to <span class="string">process :</span> <span class="number">1</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">54</span> INFO mapreduce.<span class="string">JobSubmitter:</span> number of <span class="string">splits:</span><span class="number">2</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">54</span> INFO mapreduce.<span class="string">JobSubmitter:</span> Submitting tokens <span class="keyword">for</span> <span class="string">job:</span> job_1446946409340_0001
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">55</span> INFO impl.<span class="string">YarnClientImpl:</span> Submitted application application_1446946409340_0001
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">55</span> INFO mapreduce.<span class="string">Job:</span> The url to track the <span class="string">job:</span> <span class="string">http:</span><span class="comment">//master:8088/proxy/application_1446946409340_0001/</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">46</span>:<span class="number">55</span> INFO mapreduce.<span class="string">Job:</span> Running <span class="string">job:</span> job_1446946409340_0001
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">12</span> INFO mapreduce.<span class="string">Job:</span> Job job_1446946409340_0001 running <span class="keyword">in</span> uber <span class="string">mode :</span> <span class="literal">false</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">12</span> INFO mapreduce.<span class="string">Job:</span>  map <span class="number">0</span>% reduce <span class="number">0</span>%
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">33</span> INFO mapreduce.<span class="string">Job:</span>  map <span class="number">100</span>% reduce <span class="number">0</span>%
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">46</span> INFO mapreduce.<span class="string">Job:</span>  map <span class="number">100</span>% reduce <span class="number">100</span>%
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">47</span> INFO mapreduce.<span class="string">Job:</span> Job job_1446946409340_0001 completed successfully
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">47</span> INFO mapreduce.<span class="string">Job:</span> <span class="string">Counters:</span> <span class="number">49</span>
+    File System Counters
+----此处和mr一样  省略<span class="number">1</span>w字
+    File Input Format Counters
+        Bytes Read=<span class="number">2223</span>
+    File Output Format Counters
+        Bytes Written=<span class="number">1208</span>
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">47</span>:<span class="number">47</span> INFO streaming.<span class="string">StreamJob:</span> Output <span class="string">directory:</span> <span class="regexp">/yyl/</span>test<span class="regexp">/ouput/</span>streaming
+</code></pre><p>然后来查看熟悉的word count结果</p>
+<pre><code>[root<span class="annotation">@master</span> pyscript]# hadoop fs -get <span class="regexp">/yyl/</span>test<span class="regexp">/ouput/</span>streaming
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">48</span>:<span class="number">16</span> WARN util.<span class="string">NativeCodeLoader:</span> Unable to load native-hadoop library <span class="keyword">for</span> your platform... using builtin-java classes where applicable
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">48</span>:<span class="number">19</span> WARN hdfs.<span class="string">DFSClient:</span> DFSInputStream has been closed already
+<span class="number">15</span><span class="regexp">/11/</span><span class="number">07</span> <span class="number">20</span>:<span class="number">48</span>:<span class="number">19</span> WARN hdfs.<span class="string">DFSClient:</span> DFSInputStream has been closed already
+[root<span class="annotation">@master</span> pyscript]# cd streaming/
+[root<span class="annotation">@master</span> streaming]# sort -nr -k <span class="number">2</span> part-<span class="number">00000</span> | head -n <span class="number">10</span>
+and    <span class="number">11</span>
+to    <span class="number">10</span>
+people    <span class="number">10</span>
+Micro-blog    <span class="number">8</span>
+their    <span class="number">6</span>
+a    <span class="number">5</span>
+other    <span class="number">4</span>
+of    <span class="number">4</span>
+more    <span class="number">4</span>
+has    <span class="number">4</span>
+</code></pre><p>取计数最高的10个，看到了熟悉的字样，好了，这样一次<code>streaming</code>写执行完了，是不是甚是方便</p>
+<blockquote>
+<p>这里有一个提示，可以再通<code>hadoop版本hadoop-streaming-*.jar</code>的位置不一样，你可以使用<a href="http://kubicode.me/2015/07/26/Linux/Find-Command/" target="_blank" rel="external">find</a>命令进行查找具体的位置</p>
+</blockquote>
+<p>到了这里已经可以基本执行<code>streaming</code>程序了，但是从上面的跑的命令里可以看到有好多配置的样子，还有另外可以发现，在写的<code>mapper</code>和<code>reducer</code>中只写了数据的处理逻辑，其他的一些配置参数根本无法写入，那么这些东西都是得在执行的命令里面进行配置的，他可以有的配置参数大致有如下几个</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数名称</th>
+<th style="text-align:left">可选/必选</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>-input</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">输入文件/目录的位置</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-output</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">输出目录</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-mapper</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left"><code>mapper</code>的执行文件或者<code>JavaClassName</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-reducer</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left"><code>reducer</code>的执行或者<code>JavaClassName</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-file</code></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">执行的mapper或者reducer文件以及其依赖文件，一定要写，多个可以写多行，他会共享到各个节点上，也可以是jar包</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-inputformat</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">填<code>JavaClassName</code>，为自定义的输入格式，默认是<code>TextInputFormat</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-outputformat</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">填<code>JavaClassName</code>，为自定义的输出格式，默认是<code>TextOutputformat</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-partitioner</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">填<code>JavaClassName</code>，为自定义的分区函数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-combiner</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left"><code>mapper</code>输出之后的合并类，是<code>JavaClassName</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-cmdenv</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left"><code>name=value</code>为输入到流命令里面的环境变量</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-inputreader</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">貌似可以代替<code>-inputformat</code>这个东西</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-verbose</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">启用<code>java</code>的<code>verbose</code>输出</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-lazyOutput</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">当输出格式为<code>FileOutputFormat</code>时，可以配置为懒输出-_-</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-numReduceTasks</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定的<code>reducer</code>的数目</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-mapdebug</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定一个脚本当<code>mapper</code>失败的时候进行调用</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-reducedebug</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定一个脚本当<code>reducer</code>失败的时候进行调用</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-conf</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">指定配置文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>-D</code></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left"><code>property=value</code> 可以配置<code>Hadoop</code>原生的配置项 <strong>实用</strong>^_^</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>这么看来，<code>streaming</code>还是很强大以及很灵活的</p>
+</blockquote>
+<h2 id="Streaming调试">Streaming调试</h2><p>从上述的配置中可以看到 可以配置<code>mapdebug</code>和<code>reducedebug</code>来追踪<code>streaming</code>中的错误信息来进行调试，除了这种方式，<code>streaming</code>调试还有一种更加方便的方式，<br>先来看<code>streaming</code>的执行过程<code>mapper-&gt;shuffle-&gt;reducer</code>，数据以流的方式进行传递的，在<code>Linux</code>中可以配合自带的命令以及官道来完成这一过程，现在可以看模拟刚刚的demo执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master pyscript]<span class="comment"># cat ~/data/words.txt | python word_count_mapper.py | sort | python word_count_reducer.py | sort -nr -k 2 |head -n 10</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到其输出</p>
+<pre><code><span class="operator">and</span>    <span class="number">11</span>
+<span class="built_in">to</span>    <span class="number">10</span>
+people    <span class="number">10</span>
+Micro-blog    <span class="number">8</span>
+their    <span class="number">6</span>
+<span class="operator">a</span>    <span class="number">5</span>
+other    <span class="number">4</span>
+<span class="operator">of</span>    <span class="number">4</span>
+more    <span class="number">4</span>
+has    <span class="number">4</span>
+</code></pre><p>与上述demo中的结果一模一样，现在大致来分解一下上述命令</p>
+<ol>
+<li><code>cat ~/data/words.txt </code>:输出文件内容</li>
+<li><code>| python word_count_mapper.py</code>:管道命令  将上一步输出的内容输出到要执行的<code>mapper</code>中</li>
+<li><code>| sort </code>:管道命令 直接将<code>mapper</code>中输出的内容按第一列进行排序，排序完了之后其实就是达到了分组的效应</li>
+<li><code>| python word_count_reducer.py</code>:管道 将排序后的值一次输入到<code>reducer</code>中进行执行，其实到了这一步已经完成了<code>streaming</code>的模拟</li>
+<li><code>| sort -nr -k 2 |head -n 10</code> 将最后的结果排个序，再取top</li>
+</ol>
+<p>使用上述方式来进行调试我感觉有两大优势</p>
+<ol>
+<li>快，不需要提交到服务器上 慢悠悠的取执行</li>
+<li>准，可以直接看到<code>python</code>抛出来的错误</li>
+</ol>
+<h2 id="Streaming常见错误">Streaming常见错误</h2><ul>
+<li>Caused by: java.io.IOException: error=2, No such file or directory<br>  这个往往是由于没有指定<code>mapper,redue=cer</code>的<code>-file</code>引起的，也可以使用通配符<code>*</code></li>
+<li>另一未知的错误 估计就是写的脚本执行出了问题，使用上述方式先在本地调试完了再跑</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://hadoop.apache.org/docs/r2.7.1/hadoop-streaming/HadoopStreaming.html" target="_blank" rel="external">Hadoop Streaming</a></li>
+<li><a href="http://shiyanjun.cn/archives/336.html" target="_blank" rel="external">Hadoop Streaming原理及实践</a></li>
+<li><a href="http://dongxicheng.org/mapreduce/hadoop-streaming-programming/" target="_blank" rel="external">Hadoop Streaming 编程</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<pre><code>Hadoop Streaming是一个便于变成<span class="keyword">Map</span> <span class="keyword">Reduce</span>程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
+</code></pre><h2 id="Streaming实践">Streaming实践</h2><p>先直接来看一个由<code>python</code>写的<code>Streaming</code>程序，还有那个经典的word count,我们的数据集是一篇<a href="/img/Hadoop-Streaming-Primary-Learning-And-Debug/words.txt">英语作文</a>,<br>看来看他的<code>mapper</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys,re</span><br><span class="line"></span><br><span class="line">re_english = re.compile(<span class="string">u'[^a-zA-Z0-9\-]+'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin: <span class="comment">#这里你可以看做是map类中的line输入</span></span><br><span class="line">    words = re_english.sub(<span class="string">' '</span>,line.strip()) <span class="comment">#这里只提取英文数字</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> words.split():</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\t%s'</span> % (word, <span class="number">1</span>)  <span class="comment">#这儿就是标准的输出，用tab隔开  默认第一个值为key</span></span><br></pre></td></tr></table></figure></p>]]>
+    
+    </summary>
+    
+      <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
+    
+      <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[在Mac的OSX系统中配置VIM]]></title>
@@ -50,7 +269,7 @@
     <link href="http://yyl8781697.github.io/2015/11/04/Linux/Shell-Command-List/"/>
     <id>http://yyl8781697.github.io/2015/11/04/Linux/Shell-Command-List/</id>
     <published>2015-11-04T14:34:28.000Z</published>
-    <updated>2015-11-07T17:58:31.000Z</updated>
+    <updated>2015-11-08T01:12:48.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>Shell脚本是非常强的大一个脚本语言，但是不用会手生，所以在此记录Shell脚本的相应关键点，也做查字典用^_^</p>
 </blockquote>
@@ -403,6 +622,7 @@ everything <span class="keyword">is</span> here
 <li><a href="http://www.jellythink.com/archives/699" target="_blank" rel="external">Linux Shell简明教程</a></li>
 <li><a href="http://blog.sina.com.cn/s/blog_9d074aae01012ytf.html" target="_blank" rel="external">shell中for循环总结</a></li>
 <li><a href="http://www.1987.name/181.html" target="_blank" rel="external">Shell函数的定义、执行、传参和递归函数</a></li>
+<li><a href="http://www.cnblogs.com/liujiahi/archive/2011/03/30/2196400.html" target="_blank" rel="external">shell 中数学计算总结</a></li>
 </ul>
 <hr>
 <blockquote>
@@ -2121,40 +2341,6 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
     <![CDATA[<h2 id="题目">题目</h2><pre><code>删除指定的字符串
 比如They are students 和 aeiou 则删除之后剩下Thy r stdnts
 </code></pre><h2 id="解析">解析</h2><p>关于此类查找之类的如果能往位图上靠就是最快速的，本题也可以，一个字符是8位，也就是会出现256中情况，所以现在只需要用一个256长度的位图就可以来判断当前字符是否存在待删除的字符字典中。<br>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[股票买卖，获得最大的收益]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/04/Algorithm/Stock/"/>
-    <id>http://yyl8781697.github.io/2015/08/04/Algorithm/Stock/</id>
-    <published>2015-08-03T22:34:24.000Z</published>
-    <updated>2015-08-03T22:44:12.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="问题">问题</h2><pre><code>一个人知道未来<span class="keyword">n</span>天的每天股票的价格，请你给出一个算法，使得这个人从哪天买入，哪天卖出能获得最大的收益。
-</code></pre><h2 id="解析">解析</h2><p>问题实际上就是求一个数组后面元素减前面元素的最大值<br>看了大神们提出了一个O(n)的方法，就是遍历过去，同时记录当前最小的那个元素，然后每次都是当前遍历元素减去最小的元素   取其差值最大<br><a id="more"></a></p>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 通过维护一个最小的minLeft  来计算最大的差值  聪明</span><br><span class="line"> *<span class="javadoctag"> @param</span> a</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">stock</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(a.length&lt;<span class="number">2</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//都来不及买和卖  肯定不做了</span></span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> max=a[<span class="number">1</span>]-a[<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">int</span> minLeft=a[<span class="number">0</span>];</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		minLeft=Math.min(minLeft, a[i-<span class="number">1</span>]);<span class="comment">//通过最小的价格买下</span></span><br><span class="line">		max=Math.max(max, a[i]-minLeft);<span class="comment">//计算买了能赚最大的钱</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> Math.max(<span class="number">0</span>, max);<span class="comment">//再怎么也不能亏</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] a=&#123;<span class="number">4</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">14</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">15</span>&#125;;</span><br><span class="line">	System.out.println(stock(a));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<pre><code>14
-</code></pre><p>其他两个股票升级问题看</p>
-<ul>
-<li><a href="http://kubicode.me/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/" target="_blank" rel="external">LeetCode-Best Time to Buy and Sell Stock II</a></li>
-<li><a href="http://kubicode.me/2014/07/05/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-III/" target="_blank" rel="external">LeetCode-Best Time to Buy and Sell Stock III</a></li>
-</ul>
-<h2 id="参考">参考</h2><p><a href="http://www.cnblogs.com/iamccme/archive/2013/05/21/3091706.html" target="_blank" rel="external">http://www.cnblogs.com/iamccme/archive/2013/05/21/3091706.html</a></p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="问题">问题</h2><pre><code>一个人知道未来<span class="keyword">n</span>天的每天股票的价格，请你给出一个算法，使得这个人从哪天买入，哪天卖出能获得最大的收益。
-</code></pre><h2 id="解析">解析</h2><p>问题实际上就是求一个数组后面元素减前面元素的最大值<br>看了大神们提出了一个O(n)的方法，就是遍历过去，同时记录当前最小的那个元素，然后每次都是当前遍历元素减去最小的元素   取其差值最大<br>]]>
     
     </summary>
     
