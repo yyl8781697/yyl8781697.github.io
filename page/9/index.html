@@ -92,6 +92,82 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/03/Effective Java/The-Methods-General-To-All-Object/" title="《Effective Java》第三章：对于所有对象都通用的方法" itemprop="url">《Effective Java》第三章：对于所有对象都通用的方法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-03T14:59:34.000Z" itemprop="datePublished"> 发表于 2015-05-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="对于所有对象都通用的方法">对于所有对象都通用的方法</h1><p>类在继承时，它的所有非<code>final</code>方法都用明确得通用约定，他们都是被设计为要被覆盖的，对于任何一个类，在覆盖这些方法的时候，都需要遵循这些通用的约定，如果做不到这一点，其他依赖于这些约定的类将无法结合该类一起工作。</p>
+<h2 id="第8条：覆盖equals时请遵守通用约定">第8条：覆盖equals时请遵守通用约定</h2><blockquote>
+<p>我们都知道<code>equals</code>方法称被用于判断两个对象是否相等（除地址外），那你知道该方法应该被如何设计呢？</p>
+</blockquote>
+<p><code>equals</code>方法需要遵循的约定：</p>
+<ul>
+<li><strong>自反性</strong>：对于任何非<code>null</code>的引用值<code>x</code>，<code>x.equals(x)</code>必须要<code>true</code>，也就是自己一定要和自己相等啊。</li>
+<li><strong>对称性</strong>：对于任何非<code>null</code>的引用值<code>x</code>和<code>y</code>，当前仅当<code>y.equals(x)=true</code>时，<code>x.equals(y)=true</code>一定成立。</li>
+<li><strong>传递性</strong>：对于任何非<code>null</code>的引用值<code>x</code>、<code>y</code>和<code>z</code>，如果<code>x.equals(y)=true</code>、<code>y.equals(z)=true</code>，则<code>x.equals(z)=true</code>一定成立，关于这点，写代码时难点主要是在有子类、超类同时存在的情况下比较难搞。。</li>
+<li><strong>一致性</strong>：对于任何非<code>null</code>的引用值<code>x</code>和<code>y</code>，只要<code>equals</code>的比较操作在对象中所用的信息没有被修改，多次调用<code>x.equals(y)</code>返回的值一定相等。</li>
+<li>对于任何非<code>null</code>的引用值<code>x</code>，<code>x.equals(null)</code>一定为<code>false</code>，关于这一条，不必要在<code>equals</code>方法是使用<code>null</code>的判断。</li>
+</ul>
+<p>对于这些约束，编写<code>equals</code>有下面几个诀窍：</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/03/Effective Java/The-Methods-General-To-All-Object/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/03/Effective Java/The-Methods-General-To-All-Object/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/03/Effective Java/The-Methods-General-To-All-Object/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/26/Scala/Scala-In-My-Eyes/" title="我眼中的Scala-简洁不简单" itemprop="url">我眼中的Scala-简洁不简单</a>
   </h1>
   <p class="article-author">By
@@ -718,76 +794,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/02/OSGi/OSGi-HelloWorld/" title="使用OSGi进行动态加载更新模块-实现Hello world" itemprop="url">使用OSGi进行动态加载更新模块-实现Hello world</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-02T13:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-02</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="OSGI">OSGI</h2><blockquote>
-<p>OSGi是<strong>Open Services Gateway initiative</strong>的缩写，叫做开放服务网关协议。OSGI是用于定义Java动态化组件系统的标准，这些标准通过为大型分布式系统以及嵌入式系统提供一种模块化架构减少了软件的复杂度，基于OSGI比较成功的项目有<a href="http://download.eclipse.org/equinox/">Equinox</a>,<a href="http://felix.apache.org/">felix</a>,<a href="http://www.knopflerfish.org/">Knopflerfish</a>，关于OSGI的详情参考<a href="http://osgi.com.cn/article/7289226">http://osgi.com.cn/article/7289226</a>，接下来使用OSGI来演示我们最熟悉的Hello world</p>
-</blockquote>
-<h2 id="开发环境">开发环境</h2><blockquote>
-<p>Eclipse4.2.2 (他是基于Equinox实现的，已经自带osgi framework)，jre1.7</p>
-</blockquote>
-<h2 id="OSGI服务的创建">OSGI服务的创建</h2><p>首先新建名称为osgiDemoService的一个OSGI项目：File-&gt;New-&gt;Project-&gt;Plug-in Project</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/02/OSGi/OSGi-HelloWorld/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/OSGi/">OSGi</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/02/OSGi/OSGi-HelloWorld/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/02/OSGi/OSGi-HelloWorld/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
@@ -854,7 +860,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>5</sup></a></li>
 		  
 		
 		  
@@ -931,11 +937,11 @@
 			
 		
 			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -955,11 +961,11 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>2</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 			

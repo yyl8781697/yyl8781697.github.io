@@ -1,0 +1,957 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>awk学习清单 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="与其说awk是一个强大的文本处理工具，我更加喜欢称之为轻量级的C语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。ps:比Excel更加方便哦,一句话：awk可以带你装b带你飞~
+初体验：九九乘法表123456789101112131415#! /bin/awk -fBEGIN&amp;#123;    print &quot;lets begins&quot;&amp;#125;&amp;#123;    for(i=1;i&amp;lt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="awk学习清单">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/11/24/Linux/awk-study-list/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="与其说awk是一个强大的文本处理工具，我更加喜欢称之为轻量级的C语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。ps:比Excel更加方便哦,一句话：awk可以带你装b带你飞~
+初体验：九九乘法表123456789101112131415#! /bin/awk -fBEGIN&amp;#123;    print &quot;lets begins&quot;&amp;#125;&amp;#123;    for(i=1;i&amp;lt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="awk学习清单">
+<meta name="twitter:description" content="与其说awk是一个强大的文本处理工具，我更加喜欢称之为轻量级的C语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。ps:比Excel更加方便哦,一句话：awk可以带你装b带你飞~
+初体验：九九乘法表123456789101112131415#! /bin/awk -fBEGIN&amp;#123;    print &quot;lets begins&quot;&amp;#125;&amp;#123;    for(i=1;i&amp;lt">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/11/24/Linux/awk-study-list/" title="awk学习清单" itemprop="url">awk学习清单</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-11-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初体验：九九乘法表"><span class="toc-number">1.</span> <span class="toc-text">初体验：九九乘法表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk基础结构"><span class="toc-number">2.</span> <span class="toc-text">awk基础结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列的操作"><span class="toc-number">3.</span> <span class="toc-text">列的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#列的输出"><span class="toc-number">3.1.</span> <span class="toc-text">列的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列的过滤"><span class="toc-number">3.2.</span> <span class="toc-text">列的过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">4.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量定义使用"><span class="toc-number">4.1.</span> <span class="toc-text">变量定义使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型转换"><span class="toc-number">4.2.</span> <span class="toc-text">类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内建变量"><span class="toc-number">4.3.</span> <span class="toc-text">内建变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制流程"><span class="toc-number">5.</span> <span class="toc-text">控制流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if判断"><span class="toc-number">5.1.</span> <span class="toc-text">if判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#while循环"><span class="toc-number">5.2.</span> <span class="toc-text">while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while循环"><span class="toc-number">5.3.</span> <span class="toc-text">do-while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for循环"><span class="toc-number">5.4.</span> <span class="toc-text">for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch"><span class="toc-number">5.5.</span> <span class="toc-text">switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#next控制"><span class="toc-number">5.6.</span> <span class="toc-text">next控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nextfile控制"><span class="toc-number">5.7.</span> <span class="toc-text">nextfile控制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="##"><span class="toc-number"></span> <span class="toc-text">#</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<pre><code>与其说<span class="tag">awk</span>是一个强大的文本处理工具，我更加喜欢称之为轻量级的<span class="tag">C</span>语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。<span class="rule"><span class="attribute">ps</span>:<span class="value">比Excel更加方便哦,一句话：awk可以带你装b带你飞~</span></span>
+</code></pre><h2 id="初体验：九九乘法表">初体验：九九乘法表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"lets begins"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=NR;i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%sx%s=%s\t"</span>,NR,i,NR*i)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"ends"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在先看<code>awk</code>程序之前，咱先来看一下由他实现的一个九九乘法表</p>
+<pre><code>yans-MacBook-Pro:Downloads yanyl$ seq <span class="number">9</span> | awk -f chengfa.awk
+lets begins
+<span class="number">1</span><span class="variable">x1=</span><span class="number">1</span>
+<span class="number">2</span><span class="variable">x1=</span><span class="number">2</span>    <span class="number">2</span><span class="variable">x2=</span><span class="number">4</span>
+<span class="number">3</span><span class="variable">x1=</span><span class="number">3</span>    <span class="number">3</span><span class="variable">x2=</span><span class="number">6</span>    <span class="number">3</span><span class="variable">x3=</span><span class="number">9</span>
+<span class="number">4</span><span class="variable">x1=</span><span class="number">4</span>    <span class="number">4</span><span class="variable">x2=</span><span class="number">8</span>    <span class="number">4</span><span class="variable">x3=</span><span class="number">12</span>    <span class="number">4</span><span class="variable">x4=</span><span class="number">16</span>
+<span class="number">5</span><span class="variable">x1=</span><span class="number">5</span>    <span class="number">5</span><span class="variable">x2=</span><span class="number">10</span>    <span class="number">5</span><span class="variable">x3=</span><span class="number">15</span>    <span class="number">5</span><span class="variable">x4=</span><span class="number">20</span>    <span class="number">5</span><span class="variable">x5=</span><span class="number">25</span>
+<span class="number">6</span><span class="variable">x1=</span><span class="number">6</span>    <span class="number">6</span><span class="variable">x2=</span><span class="number">12</span>    <span class="number">6</span><span class="variable">x3=</span><span class="number">18</span>    <span class="number">6</span><span class="variable">x4=</span><span class="number">24</span>    <span class="number">6</span><span class="variable">x5=</span><span class="number">30</span>    <span class="number">6</span><span class="variable">x6=</span><span class="number">36</span>
+<span class="number">7</span><span class="variable">x1=</span><span class="number">7</span>    <span class="number">7</span><span class="variable">x2=</span><span class="number">14</span>    <span class="number">7</span><span class="variable">x3=</span><span class="number">21</span>    <span class="number">7</span><span class="variable">x4=</span><span class="number">28</span>    <span class="number">7</span><span class="variable">x5=</span><span class="number">35</span>    <span class="number">7</span><span class="variable">x6=</span><span class="number">42</span>    <span class="number">7</span><span class="variable">x7=</span><span class="number">49</span>
+<span class="number">8</span><span class="variable">x1=</span><span class="number">8</span>    <span class="number">8</span><span class="variable">x2=</span><span class="number">16</span>    <span class="number">8</span><span class="variable">x3=</span><span class="number">24</span>    <span class="number">8</span><span class="variable">x4=</span><span class="number">32</span>    <span class="number">8</span><span class="variable">x5=</span><span class="number">40</span>    <span class="number">8</span><span class="variable">x6=</span><span class="number">48</span>    <span class="number">8</span><span class="variable">x7=</span><span class="number">56</span>    <span class="number">8</span><span class="variable">x8=</span><span class="number">64</span>
+<span class="number">9</span><span class="variable">x1=</span><span class="number">9</span>    <span class="number">9</span><span class="variable">x2=</span><span class="number">18</span>    <span class="number">9</span><span class="variable">x3=</span><span class="number">27</span>    <span class="number">9</span><span class="variable">x4=</span><span class="number">36</span>    <span class="number">9</span><span class="variable">x5=</span><span class="number">45</span>    <span class="number">9</span><span class="variable">x6=</span><span class="number">54</span>    <span class="number">9</span><span class="variable">x7=</span><span class="number">63</span>    <span class="number">9</span><span class="variable">x8=</span><span class="number">72</span>    <span class="number">9</span><span class="variable">x9=</span><span class="number">81</span>
+ends
+yans-MacBook-Pro:Downloads yanyl$
+</code></pre><p>是不是着实惊艳了一把，程序暂时不解释，不错，为了更好更加方便得处理<code>Linux</code>下的文本，文本就记录学习<code>awk</code>神器的基本用法^_^</p>
+<h2 id="awk基础结构">awk基础结构</h2><p><code>awk</code>基础结构如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'BEGIN&#123;commands&#125; &#123;commands&#125; END&#123;commands&#125;'</span> filename</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这个命令敲下去之后，<code>awk</code>回去按行读取<code>filename</code>的文本进行操作，里面的程序就是你对应的文本处理逻辑，还有这里的文件输入也可以改为标准的<code>stdin</code>的形式哦~</p>
+</blockquote>
+<p>很清晰，<code>awk</code>可以分为3块:</p>
+<ol>
+<li><code>BEGIN</code>:可以理解为程序的初始化，可以自定一些变量，或者定义文件的分隔符等</li>
+<li>{}模式块：这里会从文件或者输入里面按行读取，在这里可以使用<code>内建变量</code>或者列的值<code>$i</code> 或者自定义变量等，然后使用控制结果或者内置函数来进行相应的文本处理逻辑</li>
+<li><code>END</code>:程序执行结束块，可以做一些<code>Summary</code>类型或者其他的输出</li>
+</ol>
+<blockquote>
+<p>其实模式快可以省略，默认是执行<code>{print}</code> 打印行内容，其实其他两块也可以省略-_-</p>
+</blockquote>
+<p>所以总结来说<code>awk</code>的结构其实可以直接看做一个循环体<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BEGINE <span class="comment">#进行初始化</span></span><br><span class="line"><span class="keyword">while</span></span><br><span class="line">	&#123;commands&#125; <span class="comment">#内部循环的处理逻辑</span></span><br><span class="line">END <span class="comment">#结尾</span></span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是：</p>
+<ol>
+<li><code>awk</code>语法的是包含在引号或者双引号里面的</li>
+<li>程序复杂的话可以写成<code>awk</code>结尾的文件，然后使用<code>awk -f xxx.awk filename</code>来进行执行</li>
+</ol>
+<blockquote>
+<p>当然了,刚刚都说了<code>awk</code>的优势在于轻量级，下面更多的<code>demo</code>都是行内的语法，并不会专门去写成<code>*.awk</code>文件再来执行^_^</p>
+</blockquote>
+<h2 id="列的操作">列的操作</h2><h3 id="列的输出">列的输出</h3><p>演示之前先看使用的实验文本文件<a href="/img/awk-study-list/score.log">成绩表score.log</a></p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ <span class="keyword">cat</span> <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+301    xiaoming    math    95
+301    xiaoming    chinese    58
+301    xiaoming    english    68
+301    xiaohong    math    77
+301    xiaohong    chinese    88
+301    xiaohong    english    75
+302    peter    math    35
+302    peter    chinese    45
+302    peter    english    95
+</code></pre><blockquote>
+<p>这里的列于列之间是使用<code>tab</code>隔开的</p>
+</blockquote>
+<p>先来看一下最简单的输出,假设我只关心年龄和成绩</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk '{<span class="keyword">print</span> <span class="label">$2</span>,<span class="label">$4}</span>' <span class="keyword">score</span>.<span class="literal">log</span>
+name <span class="keyword">score</span>
+xiaoming 95
+xiaoming 58
+xiaoming 68
+xiaohong 77
+xiaohong 88
+xiaohong 75
+peter 35
+peter 45
+peter 95
+</code></pre><blockquote>
+<p>这里的取列是使用<code>$i~n</code>  从1开始计数，比如<code>$1</code>是第一列，<code>$4</code>是第4列，其中<code>$0</code>表示整好</p>
+</blockquote>
+<p>但是发现没对齐，我想将其对个齐：</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk '{printf(<span class="string">"%-8s\t%-8s\n"</span>,<span class="label">$2</span>,<span class="label">$4</span>)}' <span class="keyword">score</span>.<span class="literal">log</span>
+name        <span class="keyword">score</span>
+xiaoming    95
+xiaoming    58
+xiaoming    68
+xiaohong    77
+xiaohong    88
+xiaohong    75
+peter       35
+peter       45
+peter       95
+</code></pre><blockquote>
+<p>就是就是使用了标准了<code>C</code>语言风格的<code>printf</code>函数了</p>
+</blockquote>
+<h3 id="列的过滤">列的过滤</h3><p>我感觉里面比较强大的就是使用<code>awk</code>进行各种过滤操作了，简直了<br>现在我只是想查看小明的成绩</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$2</span>==<span class="string">"xiaoming"</span>' <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+301    xiaoming    math    95
+301    xiaoming    chinese    58
+301    xiaoming    english    68
+</code></pre><blockquote>
+<p>这里支持and(<code>&amp;&amp;</code>)和or(<code>||</code>)的操作，同时<code>NR</code>表示当前的行号，<code>NR==1</code>就是为了保留表头</p>
+</blockquote>
+<p>同时<code>awk</code>还支持<code>C</code>语言系的各种比较符号<code>!=, &gt;, &lt;, &gt;=, &lt;=</code><br>查看不及格的小兔崽子-_-</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$4</span>&lt;60' <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+301    xiaoming    chinese    58
+302    peter    math    35
+302    peter    chinese    45
+</code></pre><p>这里除了支持直接判断的语法，还支持字符串的匹配，使用<code>~</code>符号（这个有点强大），使用语法为<code>~/pattern/</code><br>现在来看一下姓小的同学</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$2</span>~/xiao/' <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+301    xiaoming    math    95
+301    xiaoming    chinese    58
+301    xiaoming    english    68
+301    xiaohong    math    77
+301    xiaohong    chinese    88
+301    xiaohong    english    75
+</code></pre><p>还可以进行模式非匹配，要<code>!~</code>即可</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$2</span>!~/xiao/' <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+302    peter    math    35
+302    peter    chinese    45
+302    peter    english    95
+</code></pre><h2 id="变量">变量</h2><h3 id="变量定义使用">变量定义使用</h3><p><code>awk</code>里面变量的几个点:</p>
+<ol>
+<li>里面的变量命名和<code>C</code>系一样</li>
+<li>变量区分大小写</li>
+<li>变量一般都是数字和字符串类型</li>
+<li>在初始化时，数字类型初始化为0，字符串类型初始化为空，并且在运行期间可变，同时不需要向<code>C</code>一样显示的初始化变量</li>
+</ol>
+<p>这里来看一个最简单的变量的创建与读写</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '{name=<span class="string">"zhangsan"</span>} END{<span class="keyword">print</span> name}' <span class="keyword">score</span>.<span class="literal">log</span>
+zhangsan
+yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '{age=23} END{<span class="keyword">print</span> age}' <span class="keyword">score</span>.<span class="literal">log</span>
+23
+</code></pre><blockquote>
+<p>这里想想<code>python</code>的变量就可以了哦~</p>
+</blockquote>
+<p>另外参数不一定要在<code>awk</code>语句中初始化，还可以在输入文件中进行传递，语法格式为<code>awk &#39;statment&#39; var=value file</code>的方式</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '<span class="label">$4</span>&gt;ms' ms=60 <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+301    xiaoming    math    95
+301    xiaoming    english    68
+301    xiaohong    math    77
+301    xiaohong    chinese    88
+301    xiaohong    english    75
+302    peter    english    95
+yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '<span class="label">$4</span>&gt;ms' ms=90 <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+301    xiaoming    math    95
+302    peter    english    95
+</code></pre><p>这里示例是用于展示在输入文件的时候传一个<code>ms</code>变量，来控制过滤最小分数，应该还是蛮方便的</p>
+<h3 id="类型转换">类型转换</h3><blockquote>
+<p>这里的类型转换只有数字类型和字符串类型的转换啦-_-</p>
+</blockquote>
+<p>记住一个原则<code>+号表示数字类型的操作，会忽略字符串，而空才是正常字符串的拼接</code></p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span>+three}'
+5
+yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span> three}'
+23
+yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span>+<span class="string">"s"</span>+three}'
+5
+yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span> <span class="string">"s"</span> three}'
+2s3
+</code></pre><blockquote>
+<p>还有关于详细的转换参考<a href="http://www.gnu.org/software/gawk/manual/gawk.html#Variables" target="_blank" rel="external">这里</a></p>
+</blockquote>
+<h3 id="内建变量">内建变量</h3><p>下面贴出的都是一些内置变量，在自己创建变量的时候请勿将变量名创建为下面的内置变量名</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">变量名</th>
+<th style="text-align:left">变量描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>$0</code></td>
+<td style="text-align:left">表示当前正行的内容</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$1~$n</code></td>
+<td style="text-align:left">表示第几个列的值，这些列是使用<code>FS</code>变量进行分割的</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>FS</code></td>
+<td style="text-align:left">列的分割符，默认是空格或者<code>tab</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NF</code></td>
+<td style="text-align:left">表示当前文件中列的个数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NR</code></td>
+<td style="text-align:left">表示当前读取的行数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>FNR</code></td>
+<td style="text-align:left">这个表示当前文件自己标的行号</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NR</code></td>
+<td style="text-align:left">表示当前读取的行数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>RS</code></td>
+<td style="text-align:left">表示输入记录的换行符，默认为换行符<code>\n</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>OFS</code></td>
+<td style="text-align:left">表示输出记录的分割符，默认是空格</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ORS</code></td>
+<td style="text-align:left">表示输出记录的分割符，默认是换行符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>FILENAME</code></td>
+<td style="text-align:left">当前输出的文件名</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ARGC</code></td>
+<td style="text-align:left">传入参数的个数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ARGV</code></td>
+<td style="text-align:left">传入参数的数组</td>
+</tr>
+</tbody>
+</table>
+<p>上面是列出了一些常用的内置变量，详细的可以看<a href="http://www.gnu.org/software/gawk/manual/gawk.html#Built_002din-Variables" target="_blank" rel="external">这里</a></p>
+<blockquote>
+<p>个人感觉最常用的就是<code>$i</code>犀利以及<code>FS</code>、<code>NR</code>之类的了^_^</p>
+</blockquote>
+<h2 id="控制流程">控制流程</h2><blockquote>
+<p><code>awk</code>提供了类<code>C</code>系语言的强大的控制流程语法，可以发现绝大部门语法和<code>C</code>是一样的</p>
+</blockquote>
+<h3 id="if判断">if判断</h3><p><code>if</code>语法是你超级熟悉的<code>if (condition) then-body [else else-body]</code><br>现在需要给每个人每门成绩打一个标签，85分以上优秀，60及以上良好，否则。。。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (NR==<span class="number">1</span>) <span class="comment">#这里针对第一行  额外操作   追加一个标签列</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">print</span> <span class="variable">$0</span> <span class="string">"\tlabel"</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	    <span class="keyword">if</span>(<span class="variable">$4</span> &gt;= <span class="number">85</span>)</span><br><span class="line">	        label = <span class="string">"excellent"</span></span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">$4</span> &gt;= <span class="number">60</span>)</span><br><span class="line">	        label = <span class="string">"well"</span></span><br><span class="line">	    <span class="keyword">else</span></span><br><span class="line">	        label = <span class="string">"shit"</span></span><br><span class="line"></span><br><span class="line">	    <span class="built_in">print</span> <span class="variable">$0</span> <span class="string">"\t"</span> label</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将这个<code>awk</code>文件进行执行之后可以看到</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk -f <span class="keyword">test</span>.awk <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>    <span class="keyword">label</span>
+301    xiaoming    math    95    excellent
+301    xiaoming    chinese    58    shit
+301    xiaoming    english    68    well
+301    xiaohong    math    77    well
+301    xiaohong    chinese    88    excellent
+301    xiaohong    english    75    well
+302    peter    math    35    shit
+302    peter    chinese    45    shit
+302    peter    english    95    excellent
+</code></pre><p>这里注意，你如果想把控制语句写到一行，就必须得使用<code>{}</code>显示标注执行主体，<code>;</code>来标注结束，就是像下面这么任性我也是没办法</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '{<span class="keyword">if</span> (NR==1){<span class="keyword">print</span> <span class="label">$0</span> <span class="string">"\tlabel"</span>;}<span class="keyword">else</span>{<span class="keyword">if</span>(<span class="label">$4</span> &gt;= 85){<span class="keyword">label</span> = <span class="string">"excellent"</span>;}<span class="keyword">else</span> <span class="keyword">if</span> (<span class="label">$4</span> &gt;= 60){<span class="keyword">label</span> = <span class="string">"well"</span>;}<span class="keyword">else</span>{<span class="keyword">label</span> = <span class="string">"shit"</span>;}<span class="keyword">print</span> <span class="label">$0</span> <span class="string">"\t"</span> <span class="keyword">label</span>;}}' <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>    <span class="keyword">label</span>
+301    xiaoming    math    95    excellent
+301    xiaoming    chinese    58    shit
+301    xiaoming    english    68    well
+301    xiaohong    math    77    well
+301    xiaohong    chinese    88    excellent
+301    xiaohong    english    75    well
+302    peter    math    35    shit
+302    peter    chinese    45    shit
+302    peter    english    95    excellent
+</code></pre><h3 id="while循环">while循环</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (condition)</span><br><span class="line">  body</span><br></pre></td></tr></table></figure>
+<p><code>while</code>还是很方便使用</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{i=1;<span class="keyword">sum</span>=0;<span class="keyword">while</span>(i&lt;10) {<span class="keyword">sum</span>+=i;i++;} <span class="keyword">print</span> <span class="keyword">sum</span> }'
+45
+</code></pre><p>从1累加到9的实现</p>
+<h3 id="do-while循环">do-while循环</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">  body</span><br><span class="line"><span class="keyword">while</span> (condition)</span><br></pre></td></tr></table></figure>
+<h3 id="for循环">for循环</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (initialization; condition; increment)</span><br><span class="line">  body</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个方法在最上面的初体验里面就有了</p>
+</blockquote>
+<h3 id="switch">switch</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">switch (expression) &#123;</span><br><span class="line"><span class="keyword">case</span> value or regular expression:</span><br><span class="line">    <span class="keyword">case</span>-body</span><br><span class="line">default:</span><br><span class="line">    default-body</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这个在<code>gnu awk</code>的手册中说明支持，但是自己捣鼓了半天也没结果，下次深入了再贴出来</p>
+</blockquote>
+<h3 id="next控制">next控制</h3><p>既然有了上面那么强大的<code>C</code>系控制，肯定也少不了<code>break</code>和<code>continue</code>，在<code>awk</code>中都是支持的，而且用法都一样，所以这里不再一一描述，有意思的是来说一下这个<code>next</code>关键字</p>
+<pre><code><span class="keyword">next</span>:在文章最上面描述的awk的结构的中间部分是一个天然的循环，<span class="keyword">next</span>关键词就是让你在这个天然的循环中跳转到下一行处理,就像<span class="keyword">continue</span>
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$4</span>&lt;<span class="number">60</span>)</span><br><span class="line">        next <span class="comment">#小于60的直接过掉  不做处理</span></span><br><span class="line">    <span class="built_in">print</span> <span class="variable">$0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面程序是用来过掉不及格的同学的</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk -f <span class="keyword">test</span>.awk <span class="keyword">score</span>.<span class="literal">log</span>
+<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
+301    xiaoming    math    95
+301    xiaoming    english    68
+301    xiaohong    math    77
+301    xiaohong    chinese    88
+301    xiaohong    english    75
+302    peter    english    95
+</code></pre><h3 id="nextfile控制">nextfile控制</h3><p>另外一个与<code>next</code>类似的就是<code>nextfile</code> ，表示跳到下一个输入文件(因为<code>awk</code>一下子可以有多个输入文件呀)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$0</span>~/score/)</span><br><span class="line">        next <span class="comment">#含有score字符串的直接过掉</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$4</span>&lt;n)</span><br><span class="line">        nextfile</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> n <span class="string">"\t"</span> <span class="variable">$0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到结果</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk -f <span class="keyword">test</span>.awk <span class="keyword">n</span>=58 <span class="keyword">score</span>.<span class="keyword">log</span> <span class="keyword">n</span>=88 <span class="keyword">score</span>.<span class="literal">log</span>
+58    301    xiaoming    math    95
+58    301    xiaoming    chinese    58
+58    301    xiaoming    english    68
+58    301    xiaohong    math    77
+58    301    xiaohong    chinese    88
+58    301    xiaohong    english    75
+88    301    xiaoming    math    95
+</code></pre><p>都是符合预期的<br>同时还有一个<code>exit</code>关键词不再介绍，结束程序用的</p>
+<h1 id="#">#</h1><h2 id="参考">参考</h2><ol>
+<li><a href="http://www.ibm.com/developerworks/cn/education/aix/au-gawk/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/education/aix/au-gawk/</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2015/11/24/Linux/awk-study-list/" data-title="awk学习清单 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/"  title="Hadoop Streaming 实践以及Debug">
+ <strong>下一篇：</strong><br/> 
+ <span>Hadoop Streaming 实践以及Debug
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2015/11/24/Linux/awk-study-list/" data-title="awk学习清单" data-url="http://yyl8781697.github.io/2015/11/24/Linux/awk-study-list/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初体验：九九乘法表"><span class="toc-number">1.</span> <span class="toc-text">初体验：九九乘法表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk基础结构"><span class="toc-number">2.</span> <span class="toc-text">awk基础结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列的操作"><span class="toc-number">3.</span> <span class="toc-text">列的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#列的输出"><span class="toc-number">3.1.</span> <span class="toc-text">列的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列的过滤"><span class="toc-number">3.2.</span> <span class="toc-text">列的过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">4.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量定义使用"><span class="toc-number">4.1.</span> <span class="toc-text">变量定义使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型转换"><span class="toc-number">4.2.</span> <span class="toc-text">类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内建变量"><span class="toc-number">4.3.</span> <span class="toc-text">内建变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制流程"><span class="toc-number">5.</span> <span class="toc-text">控制流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if判断"><span class="toc-number">5.1.</span> <span class="toc-text">if判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#while循环"><span class="toc-number">5.2.</span> <span class="toc-text">while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while循环"><span class="toc-number">5.3.</span> <span class="toc-text">do-while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for循环"><span class="toc-number">5.4.</span> <span class="toc-text">for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch"><span class="toc-number">5.5.</span> <span class="toc-text">switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#next控制"><span class="toc-number">5.6.</span> <span class="toc-text">next控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nextfile控制"><span class="toc-number">5.7.</span> <span class="toc-text">nextfile控制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="##"><span class="toc-number"></span> <span class="toc-text">#</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

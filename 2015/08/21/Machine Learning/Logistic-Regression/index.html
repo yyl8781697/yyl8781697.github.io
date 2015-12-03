@@ -166,7 +166,7 @@
 </blockquote>
 <p>现在将其对<code>w</code>求偏导<br> <img src="/img/Logistic-Regression/pwf.png" height="400px" width="500px"><br>上面求的是梯度里面的一个<code>Component</code>，那么对所有的<code>Component</code>都整理起来可以得到<br><img src="/img/Logistic-Regression/zpwf.png" height="100px" width="500px"><br>目标就变成了求上述梯度为0的情况<br><img src="/img/Logistic-Regression/tdt.png" height="250px" width="250px"><br>但是可以看到上述的梯度并不是一个一次的方程式，也就是无法直接求出具体的值(不能像<code>Linear Regression</code>中那样直接求出)</p>
 <p>不过现在根据需要求解的问题看成现在这样<br><img src="/img/Logistic-Regression/gdt.png" height="250px" width="250px"><br>梯度的函数可以看成图种的曲线，而相应的参数<code>w</code>可以看成图种的那个球，每次都朝着错误的方向<code>v</code>滚，将球从上面滚到最低处，也就是得到梯度为0的情况<br><img src="/img/Logistic-Regression/aga.png" height="200px" width="400px"><br>其中<code>v</code>为球滚动的方向（后面可以知道是梯度的反方向），还有<code>η</code>表示步伐的长度(为正数，越大会滚的越快)<br>现在的问题就是转为了如果很快滚下去，并且是走对方向（真实中并不是一个二维空间，往往是一个多维空间）</p>
-<p>在曲线上很小很小的一个区间内可以看作是一个线段，那这样就可以在曲线上的一个点出来，然后走出一小段的线段来，那这样可以通过多维度的泰勒展开（额，不熟悉）可以得到<br><img src="/img/Logistic-Regression/aag.png" height="200px" width="500px"></p>
+<p>在曲线上很小很小的一个区间内可以看作是一个线段，那这样就可以在曲线上的一个点出来，然后走出一小段的线段来，那这样可以通过多维度的泰勒展开可以得到<br><img src="/img/Logistic-Regression/aag.png" height="200px" width="500px"></p>
 <blockquote>
 <p>这里的<code>η</code>很小的时候，这个线段的逼近 还是很不错的</p>
 </blockquote>
@@ -356,7 +356,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>5</sup></a></li>
 		  
 		
 		  
@@ -433,11 +433,11 @@
 			
 		
 			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -457,11 +457,11 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>2</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 			
