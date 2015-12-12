@@ -92,6 +92,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/09/01/Machine Learning/Overfitting/" title="《台大机器学习基石》Overfitting" itemprop="url">《台大机器学习基石》Overfitting</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-01T15:24:58.000Z" itemprop="datePublished"> 发表于 2015-09-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="What_is_Overfitting">What is Overfitting</h2><p>假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合<br>将得到如下的结果<br><img src="/img/Overfitting/4fit2.png" height="240px" width="240px" /><br>可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的<code>E<sub>in</sub>=0</code>，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现<code>E<sub>out</sub></code>会很高，<br>这种低<code>E<sub>in</sub></code>高<code>E<sub>out</sub></code>就是叫做泛化能力差(<code>BAD generalization</code>)，也是往往我们在做训练预测时不希望看到的。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/09/01/Machine Learning/Overfitting/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/01/Machine Learning/Overfitting/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/01/Machine Learning/Overfitting/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/30/Machine Learning/Multiclass-Classification/" title="《台大机器学习基石》Multiclass-Classification" itemprop="url">《台大机器学习基石》Multiclass-Classification</a>
   </h1>
   <p class="article-author">By
@@ -689,79 +753,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/04/Algorithm/IsBSTPostOrder/" title="判断当前序列是否是二叉查找树的后续遍历结果" itemprop="url">判断当前序列是否是二叉查找树的后续遍历结果</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-04T13:54:53.000Z" itemprop="datePublished"> 发表于 2015-08-04</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>输入一个整数数组,判断该数组是不是某二元查找树的后序遍历的结果。 如果是返回 <span class="literal">true</span>,否则返回 <span class="literal">false</span>。
-例如输入 <span class="number">5</span>、<span class="number">7</span>、<span class="number">6</span>、<span class="number">9</span>、<span class="number">11</span>、<span class="number">10</span>、<span class="number">8</span>,由于这一整数序列是如下树的后序遍历结果:
-      <span class="number">8</span> 
-     / <span class="string">\</span>
-    <span class="number">6</span>  <span class="number">10</span> 
-   /<span class="string">\</span>   /<span class="string">\</span> 
-  <span class="number">5</span>  <span class="number">7</span> <span class="number">9</span>  <span class="number">11</span>
-因此返回 <span class="literal">true</span>。
-如果输入 <span class="number">7</span>、<span class="number">4</span>、<span class="number">6</span>、<span class="number">5</span>,没有哪棵树的后序遍历的结果是这个序列,因此返回 <span class="literal">false</span>
-</code></pre><h2 id="解析">解析</h2><p>做该题之前还必须得了解什么是<a href="http://kubicode.me/2015/06/29/Data%20Struct/Binary-Search-Tree/">二叉查找树</a><br>最主要的性质就是左子树的任何节点都小于根节点，右子树的任何节点都大于根节点。<br>然后后序遍历的最后一位肯定是根节点，所以，可以得到巧妙的方法为：<br>则该序列的最后一位a[n-1]必定是根节点，然后前面的序列中连续一部分是左子树的遍历，另一部份是右子树的遍历<br>此时需要在前面的序列中查找第一个大于root的节点a[i]<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/04/Algorithm/IsBSTPostOrder/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/04/Algorithm/IsBSTPostOrder/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/04/Algorithm/IsBSTPostOrder/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -848,7 +839,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+			<li><a href="/categories/Python/" title="Python">Python<sup>2</sup></a></li>
 		  
 		
 		  
@@ -917,6 +908,10 @@
 			
 		
 			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
@@ -929,15 +924,11 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			

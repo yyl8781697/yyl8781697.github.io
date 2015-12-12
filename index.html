@@ -585,6 +585,82 @@ yans-MacBook-Pro:Downloads yanyl$
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/09/12/Python/python-little-memory/" title="python里面的一些小记（方便自己查询）" itemprop="url">python里面的一些小记（方便自己查询）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-12T01:37:18.000Z" itemprop="datePublished"> 发表于 2015-09-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
+</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些东西</h2><blockquote>
+<p>当然下面的判断完全可以自己使用正则表达式来些，但是有一句话是<code>杀鸡焉用牛刀</code>,下面的api使用起来就会非常便捷</p>
+</blockquote>
+<p><code>s</code>为字符串</p>
+<ol>
+<li><code>s.isalnum()</code> 所有字符都是数字或者字母</li>
+<li><code>s.isalpha()</code> 所有字符都是字母</li>
+<li><code>s.isdigit()</code> 所有字符都是数字</li>
+<li><code>s.islower()</code> 所有字符都是小写</li>
+<li><code>s.isupper()</code> 所有字符都是大写</li>
+<li><code>s.istitle()</code> 所有单词都是首字母大写，像标题</li>
+<li><code>s.isspace()</code> 所有字符都是空白字符、<code>\t</code>、<code>\n</code>、<code>\r</code></li>
+</ol>
+<h3 id="下面应该回持续更新">下面应该回持续更新</h3>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/12/Python/python-little-memory/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/12/Python/python-little-memory/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/09/07/Machine Learning/Validation/" title="《台大机器学习基石》Validation" itemprop="url">《台大机器学习基石》Validation</a>
   </h1>
   <p class="article-author">By
@@ -708,70 +784,6 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/01/Machine Learning/Overfitting/" title="《台大机器学习基石》Overfitting" itemprop="url">《台大机器学习基石》Overfitting</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-01T15:24:58.000Z" itemprop="datePublished"> 发表于 2015-09-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="What_is_Overfitting">What is Overfitting</h2><p>假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合<br>将得到如下的结果<br><img src="/img/Overfitting/4fit2.png" height="240px" width="240px" /><br>可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的<code>E<sub>in</sub>=0</code>，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现<code>E<sub>out</sub></code>会很高，<br>这种低<code>E<sub>in</sub></code>高<code>E<sub>out</sub></code>就是叫做泛化能力差(<code>BAD generalization</code>)，也是往往我们在做训练预测时不希望看到的。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/09/01/Machine Learning/Overfitting/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/01/Machine Learning/Overfitting/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/01/Machine Learning/Overfitting/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -858,7 +870,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+			<li><a href="/categories/Python/" title="Python">Python<sup>2</sup></a></li>
 		  
 		
 		  
@@ -927,6 +939,10 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
@@ -939,15 +955,11 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			

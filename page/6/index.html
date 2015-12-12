@@ -92,6 +92,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/02/Algorithm/MinStack/" title="定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素" itemprop="url">定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-02T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-07-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素。要求函数min、push以及pop的时间复杂度都是<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span></span>。
+</code></pre><h2 id="解题">解题</h2><p>这道题目的主要难点就是需要的复杂度为O(1)，也就是说在求最小值的时候无法遍历该栈。<br>正确地解法就是使用一个辅助栈（数组），为维持当前栈容量下地最小值情况</p>
+<p>比如</p>
+<pre><code>栈数据
+3,5,2,4,1
+辅助数据
+0,0,2,2,4
+</code></pre><p>将5压入栈的时候，发现上一个栈顶元素下的最小值是3，故这里无法更新最小值，仍旧将当前的最小值置为3（索引位置为0），但是当2压入栈的时候<br>，可以发展2&lt;3，所以在该类情况下会将当前栈的最小值更新为2（即索引为2）<br>这种设计在出栈的时候只需要将栈数据的栈顶出掉即可，同样在求最小值的时候只要返回当前辅助数据中索引值在栈数据中的值即可<br>这样就非常方便地实现了O（1）的要求，同时因为辅助栈是存储索引位置，索引并不会占用很大的内容空间</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/02/Algorithm/MinStack/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/02/Algorithm/MinStack/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/02/Algorithm/MinStack/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/01/Algorithm/Binary-Search-Tree-2-Double-LinkedList/" title="二叉排序树转为双向链表" itemprop="url">二叉排序树转为双向链表</a>
   </h1>
   <p class="article-author">By
@@ -767,81 +838,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/" title="Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）" itemprop="url">Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-21T00:45:01.000Z" itemprop="datePublished"> 发表于 2015-06-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code><span class="tag">Instance</span>的格式是：
-<span class="tag">Lineid</span> <span class="tag">show</span> <span class="tag">clk</span> <span class="tag">fea1</span><span class="pseudo">:slot1</span> <span class="tag">fea2</span><span class="pseudo">:slot2</span> …
-<span class="tag">Feature</span>的格式是：
-<span class="tag">Fea1</span>\<span class="tag">tweight</span>
-<span class="tag">Fea2</span>\<span class="tag">tweight</span>
-
-现在要求计算每个<span class="tag">instance</span>的<span class="tag">feature</span>权重之和，但是<span class="tag">feature</span>数量极多，可能几千万或者几亿，总之无法放入内存。
-</code></pre><h2 id="分析">分析</h2><ol>
-<li>这是一道很典型的<code>Join</code>操作题目，但是由于是百度的面试题，肯定不会那么简单</li>
-<li>假如将Instance作为大表，Feature作为小表，但是Feature已经无法放入内存了，就无法用<code>map-silde</code>来做<code>Join</code>了</li>
-<li>所以只能用<code>reduce-silde</code>来做，但是这种方式在<code>Reducer</code>端输入的迭代器中会混杂着Feature的权重和LineId，并且是无序的，所以一般会遍历迭代器，然后将两者分离，但是问题就出在这里了，分离的时候要将LineId保存到一个容器里，这时候极有可能出现OOM，也就是在<code>Reducer</code>端内存不足</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -928,7 +924,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+			<li><a href="/categories/Python/" title="Python">Python<sup>2</sup></a></li>
 		  
 		
 		  
@@ -997,6 +993,10 @@
 			
 		
 			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
@@ -1009,15 +1009,11 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 			
 		
 			
