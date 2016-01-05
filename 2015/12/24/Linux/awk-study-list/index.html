@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>awk学习清单 | Kubi Code&#39;Blog</title>
+    <title>轻量的结构化文本处理工具-awk | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
@@ -14,13 +14,13 @@
     <meta name="description" content="与其说awk是一个强大的文本处理工具，我更加喜欢称之为轻量级的C语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。ps:比Excel更加方便哦,一句话：awk可以带你装b带你飞~
 初体验：九九乘法表123456789101112131415#! /bin/awk -fBEGIN&amp;#123;    print &quot;lets begins&quot;&amp;#125;&amp;#123;    for(i=1;i&amp;lt">
 <meta property="og:type" content="article">
-<meta property="og:title" content="awk学习清单">
-<meta property="og:url" content="http://yyl8781697.github.io/2015/11/24/Linux/awk-study-list/index.html">
+<meta property="og:title" content="轻量的结构化文本处理工具-awk">
+<meta property="og:url" content="http://yyl8781697.github.io/2015/12/24/Linux/awk-study-list/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="与其说awk是一个强大的文本处理工具，我更加喜欢称之为轻量级的C语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。ps:比Excel更加方便哦,一句话：awk可以带你装b带你飞~
 初体验：九九乘法表123456789101112131415#! /bin/awk -fBEGIN&amp;#123;    print &quot;lets begins&quot;&amp;#125;&amp;#123;    for(i=1;i&amp;lt">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="awk学习清单">
+<meta name="twitter:title" content="轻量的结构化文本处理工具-awk">
 <meta name="twitter:description" content="与其说awk是一个强大的文本处理工具，我更加喜欢称之为轻量级的C语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。ps:比Excel更加方便哦,一句话：awk可以带你装b带你飞~
 初体验：九九乘法表123456789101112131415#! /bin/awk -fBEGIN&amp;#123;    print &quot;lets begins&quot;&amp;#125;&amp;#123;    for(i=1;i&amp;lt">
 
@@ -93,14 +93,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/24/Linux/awk-study-list/" title="awk学习清单" itemprop="url">awk学习清单</a>
+      <a href="/2015/12/24/Linux/awk-study-list/" title="轻量的结构化文本处理工具-awk" itemprop="url">轻量的结构化文本处理工具-awk</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2015-11-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-11-24</time>
+    <time datetime="2015-12-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-12-24</time>
     
   </p>
 </header>
@@ -109,7 +109,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初体验：九九乘法表"><span class="toc-number">1.</span> <span class="toc-text">初体验：九九乘法表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk基础结构"><span class="toc-number">2.</span> <span class="toc-text">awk基础结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列的操作"><span class="toc-number">3.</span> <span class="toc-text">列的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#列的输出"><span class="toc-number">3.1.</span> <span class="toc-text">列的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列的过滤"><span class="toc-number">3.2.</span> <span class="toc-text">列的过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">4.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量定义使用"><span class="toc-number">4.1.</span> <span class="toc-text">变量定义使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型转换"><span class="toc-number">4.2.</span> <span class="toc-text">类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内建变量"><span class="toc-number">4.3.</span> <span class="toc-text">内建变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制流程"><span class="toc-number">5.</span> <span class="toc-text">控制流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if判断"><span class="toc-number">5.1.</span> <span class="toc-text">if判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#while循环"><span class="toc-number">5.2.</span> <span class="toc-text">while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while循环"><span class="toc-number">5.3.</span> <span class="toc-text">do-while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for循环"><span class="toc-number">5.4.</span> <span class="toc-text">for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch"><span class="toc-number">5.5.</span> <span class="toc-text">switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#next控制"><span class="toc-number">5.6.</span> <span class="toc-text">next控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nextfile控制"><span class="toc-number">5.7.</span> <span class="toc-text">nextfile控制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="##"><span class="toc-number"></span> <span class="toc-text">#</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初体验：九九乘法表"><span class="toc-number">1.</span> <span class="toc-text">初体验：九九乘法表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk基础结构"><span class="toc-number">2.</span> <span class="toc-text">awk基础结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列的操作"><span class="toc-number">3.</span> <span class="toc-text">列的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#列的输出"><span class="toc-number">3.1.</span> <span class="toc-text">列的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列的过滤"><span class="toc-number">3.2.</span> <span class="toc-text">列的过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">4.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量定义使用"><span class="toc-number">4.1.</span> <span class="toc-text">变量定义使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型转换"><span class="toc-number">4.2.</span> <span class="toc-text">类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内建变量"><span class="toc-number">4.3.</span> <span class="toc-text">内建变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制流程"><span class="toc-number">5.</span> <span class="toc-text">控制流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if判断"><span class="toc-number">5.1.</span> <span class="toc-text">if判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#while循环"><span class="toc-number">5.2.</span> <span class="toc-text">while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while循环"><span class="toc-number">5.3.</span> <span class="toc-text">do-while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for循环"><span class="toc-number">5.4.</span> <span class="toc-text">for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch"><span class="toc-number">5.5.</span> <span class="toc-text">switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#next控制"><span class="toc-number">5.6.</span> <span class="toc-text">next控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nextfile控制"><span class="toc-number">5.7.</span> <span class="toc-text">nextfile控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数组"><span class="toc-number">6.</span> <span class="toc-text">数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建与使用"><span class="toc-number">6.1.</span> <span class="toc-text">创建与使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除"><span class="toc-number">6.2.</span> <span class="toc-text">删除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内置函数"><span class="toc-number">7.</span> <span class="toc-text">内置函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算术函数"><span class="toc-number">7.1.</span> <span class="toc-text">算术函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串函数"><span class="toc-number">7.2.</span> <span class="toc-text">字符串函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义函数"><span class="toc-number">7.3.</span> <span class="toc-text">自定义函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -406,9 +406,199 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 58    301    xiaohong    english    75
 88    301    xiaoming    math    95
 </code></pre><p>都是符合预期的<br>同时还有一个<code>exit</code>关键词不再介绍，结束程序用的</p>
-<h1 id="#">#</h1><h2 id="参考">参考</h2><ol>
-<li><a href="http://www.ibm.com/developerworks/cn/education/aix/au-gawk/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/education/aix/au-gawk/</a></li>
+<h2 id="数组">数组</h2><h3 id="创建与使用">创建与使用</h3><p><code>awk</code>为了更好更加强大的处理出具，他也提供了数组这个功能，但是略有特点:</p>
+<ol>
+<li>数组的索引不一定是要连续数据，而且还可以字符串与汉字混合（据官网doc解释，<code>awk</code>将数字型的索引都转成了字符串）</li>
+<li>使用数组签不需要显示声明他的长度</li>
+<li>很多产生数组的函数  产生完了之后都是从1开始的（注意这个，不然得坑爹了）</li>
 </ol>
+<p>来看一个比较全面的使用数组的列子<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">	<span class="comment">#可以直接给数组赋值了，不需要定义</span></span><br><span class="line">    arr[<span class="string">"color"</span>]=<span class="string">"red"</span>;</span><br><span class="line">    arr[<span class="string">"age"</span>]=<span class="number">23</span></span><br><span class="line">    arr[<span class="number">99</span>]=<span class="number">999</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">#使用for each的方式取值，当然也可以for的三段式取值</span></span><br><span class="line">    <span class="keyword">for</span>(x <span class="keyword">in</span> arr)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">print</span> x <span class="string">":"</span> arr[x];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到输出结果中将数组的索引和值都打印出来了</p>
+<pre><code>yans-MacBook-Pro-<span class="number">2</span>:awk_test yanyl$ seq <span class="number">1</span> | awk -f test.awk
+<span class="label">age:</span><span class="number">23</span>
+<span class="label">color:</span>red
+<span class="number">99</span>:<span class="number">999</span>
+</code></pre><p>但是需要注意的是你不能这么写<br><code>if(arr[&quot;name&quot;] == &quot;xiaoming&quot;)</code>，也许<code>awk</code>不会报错，但是也不会有正确结果出来，所以你可以些么写 <code>if(&quot;name&quot; in arr)</code>先进行一个是否有索引的判断，这样比较安全<br>其他的技巧自己看详情的doc拉</p>
+<blockquote>
+<p>我感觉<code>awk</code>的里面的数组俨然是一个<code>LinkedHashMap</code>-_-</p>
+</blockquote>
+<h3 id="删除">删除</h3><p>删除的语法也很简单<code>delete array[index-expression]</code>，<br>比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    arr[<span class="string">"color"</span>]=<span class="string">"red"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">"color"</span> <span class="keyword">in</span> arr)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">"yes"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">"no"</span></span><br><span class="line"></span><br><span class="line">   delete arr[<span class="string">"color"</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="string">"color"</span> <span class="keyword">in</span> arr)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">"yes"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">"no"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>进行一个打印之后可以发现</p>
+<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ seq 1 | awk -f <span class="keyword">test</span>.awk
+yes
+<span class="keyword">no</span>
+</code></pre><p>在第二次判断数组是否存在该元素的时 可以发现已经删除掉了<br>如果想删除全部元素就可以直接使用这个语法：<code>delete array</code>,但是要注意的是 删除了之后之后这个变量还是数组类型，此时无法被用于赋值字符串或者数字:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    arr[<span class="string">"color"</span>]=<span class="string">"red"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    delete arr</span><br><span class="line">    arr=<span class="number">4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种方式在进行第二次赋值的时候会发错</p>
+<pre><code>yans-MacBook-Pro-2:awk_test yanyl$ seq 1 | awk -f test.awk
+awk: can't assign to arr; it's an<span class="instruction"> array </span>name.
+ input record number 1, file
+ source line number 9
+</code></pre><blockquote>
+<p>关于其余的<a href="http://www.gnu.org/software/gawk/manual/gawk.html#Multiscanning" target="_blank" rel="external">多维数组</a>还是去看文档把~</p>
+</blockquote>
+<h2 id="内置函数">内置函数</h2><p><code>awk</code>的另一个强大之处就是提供了很丰富的内置函数，写起来非常方便!</p>
+<h3 id="算术函数">算术函数</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">函数名称</th>
+<th style="text-align:left">介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>atan2(y,x)</code></td>
+<td style="text-align:left">反正切函数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>cos(x)</code></td>
+<td style="text-align:left">余弦函数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>sin(x)</code></td>
+<td style="text-align:left">正弦函数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>exp(x)</code></td>
+<td style="text-align:left"><code>e</code>的幂次方,任意数的幂次方可以使用<code>x**y</code>来算</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>log(x)</code></td>
+<td style="text-align:left">自然数的对数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>sqrt(x)</code></td>
+<td style="text-align:left">平方根</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>int(x)</code></td>
+<td style="text-align:left">整数的值</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>rand()</code></td>
+<td style="text-align:left">任意随机数，大于0小于1，注意得加<code>srand()</code>方法设置种子</td>
+</tr>
+</tbody>
+</table>
+<p>这里仅演示<code>rand()</code>随机数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    srand();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">print</span> rand();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行得到</p>
+<pre><code>yans-MacBook-Pro-<span class="number">2</span>:awk_<span class="built_in">test</span> yanyl$ seq <span class="number">9</span> | awk <span class="operator">-f</span> test.awk
+<span class="number">0.107174</span>
+<span class="number">0.117314</span>
+<span class="number">0.89198</span>
+<span class="number">0.700518</span>
+<span class="number">0.269547</span>
+<span class="number">0.503197</span>
+<span class="number">0.402781</span>
+<span class="number">0.958053</span>
+<span class="number">0.523041</span>
+</code></pre><blockquote>
+<p>注意，如果不加<code>srand()</code>方法，则多次执行还是原来的随机数…</p>
+</blockquote>
+<h3 id="字符串函数">字符串函数</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">函数名称</th>
+<th style="text-align:left">介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>asort(source [, dest [, how ] ])</code></td>
+<td style="text-align:left">对数组的值进行排序</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>asorti(source [, dest [, how ] ])</code></td>
+<td style="text-align:left">对数组的索引进行排序</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gensub(regexp, replacement, how [, target])</code></td>
+<td style="text-align:left">正则替换，<code>how</code>为替换的个数，为<code>g or G</code>的时候替换全部，还可以将匹配到的部分使用<code>/N</code>的格式来取</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>gsub(regexp, replacement [, target])</code></td>
+<td style="text-align:left">正则替换</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>index(in, find)</code></td>
+<td style="text-align:left">查找指定字符串的索引位置，不存在时返回0, 还是注意它不支持正则</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>length([string])</code></td>
+<td style="text-align:left">查找字符串的长度，如果查找变量未指定的时候，返回0（当做查一个数组）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>match(string, regexp [, array])</code></td>
+<td style="text-align:left">正则查找字符串 返回找到的位置，如果传了<code>array</code>参数，查找的字符串将会丢入这个数组</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>split(string, array [, fieldsep [, seps ] ])</code></td>
+<td style="text-align:left">将字符串分割到数组</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>strtonum(str)</code></td>
+<td style="text-align:left">将字符串转为数字</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>sub(regexp, replacement [, target])</code></td>
+<td style="text-align:left">替换指定字符串</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>substr(string, start [, length ])</code></td>
+<td style="text-align:left">截取指定字符串</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>sub(regexp, replacement [, target])</code></td>
+<td style="text-align:left">替换指定字符串</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>tolower(string)</code></td>
+<td style="text-align:left">转小写</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>toupper(string)</code></td>
+<td style="text-align:left">转大写</td>
+</tr>
+</tbody>
+</table>
+<p>演示几个常用的<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    str=<span class="string">"abc-def"</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> substr(str,<span class="number">3</span>,<span class="number">2</span>) <span class="comment">#截取字符串</span></span><br><span class="line">    sub(/<span class="built_in">cd</span>/,<span class="string">"CD"</span>,str) <span class="comment">#转大写</span></span><br><span class="line">    <span class="built_in">print</span> str</span><br><span class="line">    split(str,arr,<span class="string">"-"</span>) <span class="comment">#分割字符串</span></span><br><span class="line">    <span class="keyword">for</span>(i <span class="keyword">in</span> arr)</span><br><span class="line">        <span class="built_in">print</span> arr[i]</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> index(str,<span class="string">"c-d"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到结果</p>
+<pre><code>yans-<span class="constant">MacBook-Pro-</span><span class="number">2</span><span class="symbol">:awk_test</span> yanyl<span class="variable">$ </span>seq <span class="number">1</span> | awk -f test.awk
+c-
+abc-<span class="function"><span class="keyword">def</span>
+<span class="title">def</span></span>
+abc
+<span class="number">3</span>
+</code></pre><h3 id="自定义函数">自定义函数</h3><p><code>awk</code>很强大的一点就是支持自定义函数<br>自定义函数的语法如下</p>
+<pre><code><span class="function"><span class="keyword">function</span></span> <span class="keyword">name</span>([<span class="type">parameter</span>-list])
+{
+     body-of-<span class="function"><span class="keyword">function</span></span>
+}
+</code></pre><p>还是非常简单的熟悉啊</p>
+<blockquote>
+<p>由于<code>awk</code>是读取整个代码之后再运行的，所以自定义函数也不需要放在调用者之前，可以放任何地方,如有也返回值也直接使用<code>return</code>即可</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    sayhello(<span class="string">"tom"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> sayhello(name)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hello,%s\n"</span>,name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用可以有</p>
+<pre><code>yans-MacBook-Pro-<span class="number">2</span>:awk_<span class="built_in">test</span> yanyl$ seq <span class="number">1</span> | awk <span class="operator">-f</span> test.awk
+hello,tom
+</code></pre><blockquote>
+<p>函数里面想使用局部变量就必须将其放到传参中</p>
+</blockquote>
+<h2 id="总结">总结</h2><ol>
+<li><code>awk</code>里面只有<code>数值</code>、<code>字符串</code>、<code>数组</code>三种变量</li>
+<li><code>awk</code>的数组其实索引从<code>1</code>开始!!!</li>
+<li><code>awk</code>的大部分语法和C一样，但是不需要预定义变量</li>
+<li><code>awk</code>非常轻量级，处理结构化的文本文件非常的方便</li>
+<li><code>awk</code>还有其他很多功能，参见官方文档，因为主要是用其轻量，所以这里不再一一介绍</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://www.ibm.com/developerworks/cn/education/aix/au-gawk/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/education/aix/au-gawk/</a></li>
+<li><a href="http://www.gnu.org/software/gawk/manual/gawk.html#Getopt-Function" target="_blank" rel="external">awk guid</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -431,7 +621,7 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2015/11/24/Linux/awk-study-list/" data-title="awk学习清单 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2015/12/24/Linux/awk-study-list/" data-title="轻量的结构化文本处理工具-awk | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -444,6 +634,14 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/01/03/Linux/shell-line-no-tab/" title="用笨方法解决Shell中按行读取文件之后Tab键不见的问题">
+  <strong>上一篇：</strong><br/>
+  <span>
+  用笨方法解决Shell中按行读取文件之后Tab键不见的问题</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/"  title="Hadoop Streaming 实践以及Debug">
@@ -457,7 +655,7 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/11/24/Linux/awk-study-list/" data-title="awk学习清单" data-url="http://yyl8781697.github.io/2015/11/24/Linux/awk-study-list/"></div>
+	<div class="ds-thread" data-thread-key="2015/12/24/Linux/awk-study-list/" data-title="轻量的结构化文本处理工具-awk" data-url="http://yyl8781697.github.io/2015/12/24/Linux/awk-study-list/"></div>
 </section>
 
 
@@ -467,7 +665,7 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初体验：九九乘法表"><span class="toc-number">1.</span> <span class="toc-text">初体验：九九乘法表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk基础结构"><span class="toc-number">2.</span> <span class="toc-text">awk基础结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列的操作"><span class="toc-number">3.</span> <span class="toc-text">列的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#列的输出"><span class="toc-number">3.1.</span> <span class="toc-text">列的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列的过滤"><span class="toc-number">3.2.</span> <span class="toc-text">列的过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">4.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量定义使用"><span class="toc-number">4.1.</span> <span class="toc-text">变量定义使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型转换"><span class="toc-number">4.2.</span> <span class="toc-text">类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内建变量"><span class="toc-number">4.3.</span> <span class="toc-text">内建变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制流程"><span class="toc-number">5.</span> <span class="toc-text">控制流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if判断"><span class="toc-number">5.1.</span> <span class="toc-text">if判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#while循环"><span class="toc-number">5.2.</span> <span class="toc-text">while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while循环"><span class="toc-number">5.3.</span> <span class="toc-text">do-while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for循环"><span class="toc-number">5.4.</span> <span class="toc-text">for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch"><span class="toc-number">5.5.</span> <span class="toc-text">switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#next控制"><span class="toc-number">5.6.</span> <span class="toc-text">next控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nextfile控制"><span class="toc-number">5.7.</span> <span class="toc-text">nextfile控制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="##"><span class="toc-number"></span> <span class="toc-text">#</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#初体验：九九乘法表"><span class="toc-number">1.</span> <span class="toc-text">初体验：九九乘法表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk基础结构"><span class="toc-number">2.</span> <span class="toc-text">awk基础结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#列的操作"><span class="toc-number">3.</span> <span class="toc-text">列的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#列的输出"><span class="toc-number">3.1.</span> <span class="toc-text">列的输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列的过滤"><span class="toc-number">3.2.</span> <span class="toc-text">列的过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变量"><span class="toc-number">4.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量定义使用"><span class="toc-number">4.1.</span> <span class="toc-text">变量定义使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型转换"><span class="toc-number">4.2.</span> <span class="toc-text">类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内建变量"><span class="toc-number">4.3.</span> <span class="toc-text">内建变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制流程"><span class="toc-number">5.</span> <span class="toc-text">控制流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if判断"><span class="toc-number">5.1.</span> <span class="toc-text">if判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#while循环"><span class="toc-number">5.2.</span> <span class="toc-text">while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-while循环"><span class="toc-number">5.3.</span> <span class="toc-text">do-while循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for循环"><span class="toc-number">5.4.</span> <span class="toc-text">for循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch"><span class="toc-number">5.5.</span> <span class="toc-text">switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#next控制"><span class="toc-number">5.6.</span> <span class="toc-text">next控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nextfile控制"><span class="toc-number">5.7.</span> <span class="toc-text">nextfile控制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数组"><span class="toc-number">6.</span> <span class="toc-text">数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建与使用"><span class="toc-number">6.1.</span> <span class="toc-text">创建与使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除"><span class="toc-number">6.2.</span> <span class="toc-text">删除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内置函数"><span class="toc-number">7.</span> <span class="toc-text">内置函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算术函数"><span class="toc-number">7.1.</span> <span class="toc-text">算术函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串函数"><span class="toc-number">7.2.</span> <span class="toc-text">字符串函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义函数"><span class="toc-number">7.3.</span> <span class="toc-text">自定义函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
@@ -529,7 +727,7 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
 		  
 		
 		  
@@ -598,7 +796,7 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
 			
 		
 			
@@ -606,7 +804,11 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
 			
 		
 			
@@ -615,10 +817,6 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 		
 			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
 			
 		
 			
@@ -711,7 +909,7 @@ yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

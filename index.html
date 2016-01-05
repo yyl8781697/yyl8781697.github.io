@@ -92,14 +92,82 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/11/24/Linux/awk-study-list/" title="awk学习清单" itemprop="url">awk学习清单</a>
+      <a href="/2016/01/03/Linux/shell-line-no-tab/" title="用笨方法解决Shell中按行读取文件之后Tab键不见的问题" itemprop="url">用笨方法解决Shell中按行读取文件之后Tab键不见的问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2015-11-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-11-24</time>
+    <time datetime="2016-01-03T14:24:09.000Z" itemprop="datePublished"> 发表于 2016-01-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>Shell</code>强大灵活，但是今天在使用<code>Shell</code>处理按行读取文件时发现  读取到的行设定的<code>tab</code>分割符不见了</p>
+</blockquote>
+<p>先看一下演示的待<a href="http://kubicode.me/img/awk-study-list/score.log">处理文件</a>:<br><img src="/img/shell-line-no-tab/demo_text.png" alt=""></p>
+<p>需要做的需求就是将里面的数据使用<code>shell</code>将第一列读取出来做一些其他处理(当然如果仅仅是完成读取首列这个功能，使用<code>awk</code>是最快的，这里只是演示)</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/01/03/Linux/shell-line-no-tab/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/01/03/Linux/shell-line-no-tab/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/01/03/Linux/shell-line-no-tab/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/24/Linux/awk-study-list/" title="轻量的结构化文本处理工具-awk" itemprop="url">轻量的结构化文本处理工具-awk</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-12-24</time>
     
   </p>
 </header>
@@ -126,7 +194,7 @@ yans-MacBook-Pro:Downloads yanyl$
         
         <p class="article-more-link">
           
-            <a href="/2015/11/24/Linux/awk-study-list/#more">Read More</a>
+            <a href="/2015/12/24/Linux/awk-study-list/#more">Read More</a>
           
        </p>
     </div>
@@ -152,7 +220,7 @@ yans-MacBook-Pro:Downloads yanyl$
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/11/24/Linux/awk-study-list/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/24/Linux/awk-study-list/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/12/24/Linux/awk-study-list/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/24/Linux/awk-study-list/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -719,71 +787,6 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/05/Machine Learning/Regularization/" title="《台大机器学习基石》Regularization" itemprop="url">《台大机器学习基石》Regularization</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-05T08:36:48.000Z" itemprop="datePublished"> 发表于 2015-09-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Regularization">Regularization</h2><p>正则化(<code>Regularization</code>)是缓解<code>Overfitting</code>非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：<br><img src="/img/Regularization/reg_target.png" height="300px" width="500px" /></p>
-<p>那这种正则化过程又该如何做呢？<br>其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的<a href="http://kubicode.me/2015/09/01/Machine%20Learning/Overfitting/">点击我</a>)<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/09/05/Machine Learning/Regularization/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/05/Machine Learning/Regularization/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/05/Machine Learning/Regularization/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -850,7 +853,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
 		  
 		
 		  
@@ -919,7 +922,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
 			
 		
 			
@@ -927,7 +930,11 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
 			
 		
 			
@@ -936,10 +943,6 @@ yans-MacBook-Pro:Downloads yanyl$
 		
 			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
 			
 		
 			
@@ -1032,7 +1035,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

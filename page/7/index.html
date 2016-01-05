@@ -92,6 +92,83 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/" title="最大子矩阵和的问题" itemprop="url">最大子矩阵和的问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-23T12:28:16.000Z" itemprop="datePublished"> 发表于 2015-06-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>现有矩阵：
+0, -2, -7,  0, 3
+9,  2, -6,  2, 5
+-<span class="ruby"><span class="number">4</span>, <span class="number">1</span>, -<span class="number">4</span>,  <span class="number">1</span>, <span class="number">6</span>
+</span>-<span class="ruby"><span class="number">1</span>, <span class="number">8</span>,  <span class="number">0</span>, -<span class="number">2</span>, <span class="number">2</span>
+</span>求该矩阵的一个子矩阵，使子矩阵所有元素的和最大
+</code></pre><h2 id="最大子序列">最大子序列</h2><p>在看最大子矩阵之前，先来看一下最大子序列的求解：</p>
+<pre><code>给定一个长度为n的一维数组a，请找出此数组的一个子数组,使得此子数组的和sum＝<span class="tag">a</span>[i]+<span class="tag">a</span>[i+<span class="number">1</span>]+……+<span class="tag">a</span>[j]最大（<span class="number">0</span>&lt;=i&lt;=j&lt;=n-<span class="number">1</span>）
+比如在序列-<span class="number">2</span>,<span class="number">11</span>,-<span class="number">4</span>,<span class="number">13</span>,-<span class="number">5</span>,-<span class="number">2</span>中，最大子序和为<span class="number">11</span>+(-<span class="number">4</span>)+<span class="number">13</span>=<span class="number">19</span>
+</code></pre><p>求解该方法一般使用动态规划<code>b[j]=max{b[j-1]+a[j],a[j]}</code>，简化后的程序为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSubSum</span><span class="params">(<span class="keyword">int</span>[] a)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> maxSum=<span class="number">0</span>,curSum=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		curSum+=a[i];</span><br><span class="line">		<span class="keyword">if</span>(curSum&gt;maxSum)</span><br><span class="line">		&#123;</span><br><span class="line">			maxSum=curSum;</span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(curSum&lt;<span class="number">0</span>)</span></span><br><span class="line">		</span>&#123;</span><br><span class="line">			curSum=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> maxSum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>该解法的复杂度为O(n)</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/23/Algorithm/Max-Sum-in-SubMatrix/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/" title="Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）" itemprop="url">Reducer端内存不足的情况下如何进行Hadoop的Join（百度面试题）</a>
   </h1>
   <p class="article-author">By
@@ -749,69 +826,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/31/Food/Braised-chicken-claw/" title="自己煮：红烧鸡爪" itemprop="url">自己煮：红烧鸡爪</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-31T12:46:20.000Z" itemprop="datePublished"> 发表于 2015-05-31</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>具体煮的步骤和<a href="http://kubicode.me/2015/04/19/Food/Coke-Chicken-feet/" target="_blank" rel="external">自己煮：可口又美味的可乐鸡翅</a>一样，无法是增加了酱油的分量以及在最后煮的时候放得时水，可以看到这样煮出来的颜色会比较浓一下，直接看成品图吧：^_^<br><img src="/img/jizhua/8.jpg" alt=""></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Food/">Food</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Food/">Food</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/31/Food/Braised-chicken-claw/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/31/Food/Braised-chicken-claw/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
@@ -878,7 +892,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
 		  
 		
 		  
@@ -947,7 +961,7 @@
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
 			
 		
 			
@@ -955,7 +969,11 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
 			
 		
 			
@@ -964,10 +982,6 @@
 		
 			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>3</sup></a></li>
 			
 		
 			
@@ -1060,7 +1074,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		
