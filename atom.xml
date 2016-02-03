@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-01-03T15:03:02.000Z</updated>
+  <updated>2016-02-03T06:24:54.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,217 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[在Hexo中离线安装数据工具包-Mathjax]]></title>
+    <link href="http://yyl8781697.github.io/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/"/>
+    <id>http://yyl8781697.github.io/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/</id>
+    <published>2016-01-27T09:30:11.000Z</published>
+    <updated>2016-02-03T06:24:54.000Z</updated>
+    <content type="html"><![CDATA[<pre><code>这里与其说安装，还是不如直接拷贝相应文件到hexo目录
+</code></pre><p>最近尝试在写<code>blog</code>的时候用<code>Latex</code>来写数学公式，写起来还是极其方便灵活滴，但是，但是其速度慢如爬蜗牛，一般修改一下，在刷新一下要<code>4~5s</code>才能将公式渲染出来，其书写效率也太低了，总之我不能忍，所以准备将其<code>MathJax</code>放在本地.</p>
+<ol>
+<li>一方面是希望加快公式的渲染速度</li>
+<li>另一方面也是希望能支持我在断网的情况下也能正常使用<code>Mathjax</code></li>
+</ol>
+<a id="more"></a>
+<p>我用的是<a href="http://wuchong.me/" target="_blank" rel="external">Jark</a>大神的<code>jacman</code>主题，在简单<code>grep</code>查找之后可以发现<code>MathJax</code>的引用在:<br><code>/themes/jacman/layout/_partial/mathjax.ejs</code>这里，可以发现也就远程引用了官网cdn的一个js<br><code>&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;</code></p>
+<p>在<a href="http://docs.mathjax.org/en/latest/installation.html" target="_blank" rel="external">http://docs.mathjax.org/en/latest/installation.html</a>可以下载到<code>Mathjax</code>的离线包（建议乖乖直接下包，别去爬<code>cdn</code>里面的目录，心累）。</p>
+<p>离线包解压之后的<code>unpacked</code>目录里面有整理好直接引用的资源文件(尼玛，之类有<code>16m</code>，难怪慢如蜗牛..)</p>
+<p>在<code>/themes/jacman/source/js</code>新建一个<code>mathjax/2.5-latest</code>的目录，将<code>unpacked</code>下的文件整个儿拷贝过去,修改<code>mathjax.ejs</code>中的引用<br><code>&lt;script type=&quot;text/javascript&quot; src=&quot;/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;</code></p>
+<p>清空目录，再重新生成文件,启动服务器，跑起来看公式 只能说   <code>如丝般顺滑</code> ^_^</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<pre><code>这里与其说安装，还是不如直接拷贝相应文件到hexo目录
+</code></pre><p>最近尝试在写<code>blog</code>的时候用<code>Latex</code>来写数学公式，写起来还是极其方便灵活滴，但是，但是其速度慢如爬蜗牛，一般修改一下，在刷新一下要<code>4~5s</code>才能将公式渲染出来，其书写效率也太低了，总之我不能忍，所以准备将其<code>MathJax</code>放在本地.</p>
+<ol>
+<li>一方面是希望加快公式的渲染速度</li>
+<li>另一方面也是希望能支持我在断网的情况下也能正常使用<code>Mathjax</code></li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Hexo" scheme="http://yyl8781697.github.io/tags/Hexo/"/>
+    
+      <category term="Hexo" scheme="http://yyl8781697.github.io/categories/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[概率检索模型BM25系列-文档相关性检索的利器]]></title>
+    <link href="http://yyl8781697.github.io/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/"/>
+    <id>http://yyl8781697.github.io/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/</id>
+    <published>2016-01-26T09:06:31.000Z</published>
+    <updated>2016-02-03T07:15:01.000Z</updated>
+    <content type="html"><![CDATA[<pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
+</code></pre><h2 id="概率排序原理">概率排序原理</h2><p>以往的<code>向量空间模型</code>是将<code>query</code>和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而<code>概率检索模型</code>是一种直接对用户需求进行相关性的建模方法,一个<code>query</code>进来，将所有的文档分为两类—-<code>相关文档</code>、<code>不相关文档</code>,这样就转为了一个相关性的分类问题,赞!</p>
+<p>对于某个文档$D$来说，$P(R|D)$表示该文档数据相关文档的概率，则$P(NR|D)$表示该文档属于不相关文档的概率，如果<code>query</code>属于相关文档的概率大于不相关文档$P(R|D)&gt;P(RN|D)$，则认为这个文档是与用户查询相关相关的.</p>
+<a id="more"></a>
+<p>现在使用贝叶斯公式将其转一下:</p>
+<center>$P(R|D)&gt;P(NR|D) &lt;=&gt;\frac{P(D|R)P(R)}{P(D)}&gt;\frac{P(D|NR)P(NR)}{P(D)} &lt;=&gt; \frac{P(D|R)}{P(D|NR)}&gt;\frac{P(NR)}{P(R)}$</center>
+
+<p>在搜索排序过程中不需要真正的分类，只需要保证相关性由高到底排序即可，所以只需要$\frac{P(D|R)}{P(D|NR)}$降序即可，<br>这样就最终转为计算$P(D|R)$,$P(D|NR)$的值即可.</p>
+<h2 id="二元独立模型(BIM)">二元独立模型(BIM)</h2><pre><code><span class="xml">词汇独立性假设:文档里面出现的词没有任何关联，这样一个文档的出现就可以转为各个单词出现概率的乘积（虽然这种假设有违实际，但是算起来简单的啊</span><span class="keyword">^_</span><span class="xml">^）</span>
+</code></pre><p>上述提到的文档$D$表示为<code>{1,0,1,0,1}</code>，用$p_i$来表示第$i$个单词在相关文档出现的概率,则在已知<code>相关文档</code>集合的情况下，观察到$D$的概率为:<br>    <center>$P(D|R)=p_1 \times (1-p_2) \times p_3 \times (1-p_4) \times p_5$ </center></p>
+<blockquote>
+<p>第<code>1,3,5</code>表示这个单词在$D$中出现,所以其贡献概率为$p_i$，而第<code>2,4</code>这两个单词并没有在$D$中出现，所以其贡献的概率为$1-p_i$ </p>
+</blockquote>
+<p>同理在<code>不相关文档</code>中观察到的概率为:<br>    <center>$P(D|R)=s_1 \times (1-s_2) \times s_3 \times (1-s_4) \times s_5$ </center></p>
+<p>最终得到的相关性概率估算为:</p>
+<center>$\frac{P(D|R)}{P(D|NR)}=\frac{p_1 \times (1-p_2) \times p_3 \times (1-p_4) \times p_5}{s_1 \times (1-s_2) \times s_3 \times (1-s_4) \times s_5}$</center>
+
+<p>现在将其推广之后可以有通用的式子：<br><!-- 
+\frac{P(D|R)}{P(D|NR)}= \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}
+--></p>
+<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_zs.gif" alt=""></center>
+
+<blockquote>
+<p>$d_i=1$表示在文档中出现的单词，$d_i=0$表示没在文档中出现的单词:</p>
+</blockquote>
+<p>在这里进一步对上述公式进行等价变换之后有:</p>
+<!-- 
+\\
+\frac{P(D|R)}{P(D|NR)}=\prod_{i:d_i=1} \frac{p_i}{s_i} \times \left ( \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \times \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \right ) \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}\\
+= \left ( \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \right ) \times  \left ( \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i} \right )  \\
+=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} \times \prod_i \frac{1-pi}{1-s_i} \\
+=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} 
+-->
+<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_2.gif" alt=""></center>
+
+<p>其中上面式子第三步的第二部分$\prod_i \frac{1-pi}{1-s_i} $表示各个单词在所有文档中出现的概率，所以这个式子的值和具体文档并没有什么关系，在排序中不起作用，才可以简化到第4步.</p>
+<p>为了方便计算，将上述连乘公式取$log$:</p>
+<center>$log(\frac{P(D|R)}{P(D|NR)}) =  \sum_{i:d_i=1} log \frac{p_i(1-s_i)}{s_i(1-p_i)}$</center>
+
+<p>有了上述最终可计算的式子之后，我们就只需要统计文档$D$中的各个单词在<code>相关文档</code>/<code>不相关文档</code>中出现的概率即可:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">相关文档</th>
+<th style="text-align:left">不相关文档</th>
+<th style="text-align:left">文档数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">$d_i=1$</td>
+<td style="text-align:left">$r_i$</td>
+<td style="text-align:left">$n_i-r_i$</td>
+<td style="text-align:left">$n_i$</td>
+</tr>
+<tr>
+<td style="text-align:left">$d_i=0$</td>
+<td style="text-align:left">$R-r_i$</td>
+<td style="text-align:left">$(N-R)-(n_i-r_i)$</td>
+<td style="text-align:left">$N-n_i$</td>
+</tr>
+<tr>
+<td style="text-align:left">文档数量</td>
+<td style="text-align:left">$R$</td>
+<td style="text-align:left">$N-R$</td>
+<td style="text-align:left">$N$</td>
+</tr>
+</tbody>
+</table>
+<p>上面的表格表示各个单词在文档集合中的<code>相关文档</code>/<code>不相关文档</code>出现数量,同时为了避免$log(0)$出现，加上平滑之后可以计算得到:</p>
+<center>$p_i=\frac{r_i+0.5}{R+1}$</center><br><center>$s_i=\frac{(n_i-r_i)+0.5}{(N-R)+1}$</center>
+
+<p>则最终可以得到如下公式:</p>
+<center>$\sum_{q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)}$</center>
+
+<p>上面的公式表示对于同时出现查询$q_i$以及文档$d_i$的时候，对$q_i$在$d_i$中出现的单词在<code>相关文档</code>/<code>不相关文档</code>进行统计，即可得到查询与文档的相关性估计值.</p>
+<blockquote>
+<p>在不确定哪些文档是相关的，哪些文档是不相关的的时候，可以给公式的估算因子直接赋予固定值，则该公式将会蜕化为$IDF$因子.</p>
+</blockquote>
+<h2 id="BM25_模型">BM25 模型</h2><h3 id="模型概述">模型概述</h3><blockquote>
+<p>上一小节中的<code>BIM模型</code>效果并不佳，也没有考虑单词权重，但是他给<code>BM25模型</code>打下了深深的基础</p>
+</blockquote>
+<pre><code>B<span class="title">M25</span> 模型在BIM模型的基础上考虑了查询词在Query以及Doc中的权重，并通过实验引入了一些经验参数。B<span class="title">M25</span>模型是目前最成功的内容排序模型.
+</code></pre><p>改进之后的<code>BM25</code>模型的拟合公式如下:</p>
+<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
+
+<p>上面的式子中:</p>
+<ol>
+<li>第1部分即为上一小节的二元独立模型BIM计算得分</li>
+<li>第2部分是查询词在$D$中的权重，其中$f_i$代表词在文档中的词频,$K$因子代表了对文档长度的考虑，其计算公式为$K=k_1((1-b)+b \cdot \frac{dl}{avdl})$<ol>
+<li>$k_1$为经验参数,这里的$k_1$一般设置为1.2,</li>
+<li>$b$为调节因子，将$b$设为0时，文档长度因素将不起作用，经验表明一般$b=0.75$</li>
+<li>$dl$代表当前文档的长度</li>
+<li>$avdl$代表所有文档的平均长度</li>
+</ol>
+</li>
+<li>第3部分是查询词在自身的权重,$qf_i$表示在查询中的词频,$k_2$也为调节因子，因为在短查询下这部分一般为1，为了放大这部分的差异，$k_2$一般取值为<code>0~1000</code></li>
+</ol>
+<blockquote>
+<p>综合看来,<code>BM25</code>模型结合了<code>BIM</code>因子、<code>文档长度</code>、<code>文档词频</code>和<code>查询词频</code>进行公式融合，并利用$k_1$、$k_2$、$b$对各种因子进行权重的调整.</p>
+</blockquote>
+<h3 id="栗子">栗子</h3><p>假设当前以<code>乔布斯 IPAD2</code>这个查询词为例，来计算在某文档$D$中<code>BM25相关性</code>的值，由于不知道文档集中相关与不相关的分类，所以这里直接将相关文档个数$r$置为0,则将得到的<code>BIM</code>因子为:<br>    <center>$Rel_{BIM}=log \frac {(0+0.5)((N-0)-(n_i-0)+0.5)}{(n_i-0+0.5)(0-0+0.5)}=log \frac{N-n_i+0.5}{n_i+0.5}$</center></p>
+<p>其他数值假定如下:</p>
+<ol>
+<li>文档的集合总数$N=100000$</li>
+<li>包含<code>乔布斯</code>的文档个数为$n_{乔布斯}=1000$</li>
+<li>包含<code>IPAD2</code>的文档个数为$n_{IPAD2}=100$</li>
+<li>文档$D$中出现<code>乔布斯</code>的词频为$f_{乔布斯}=8$</li>
+<li>文档$D$中出现<code>IPAD2</code>的词频为$f_{IPAD2}=8$</li>
+<li>查询词频均为$qf_i=1$</li>
+<li>调节因子$k_1=1.2$</li>
+<li>调节因子$k_2=200$</li>
+<li>调节因子$b=0.75$</li>
+<li>设文档$D$的长度为平均长度的1.5倍($\frac{dl}{avdl}=1.5$),即$K=1.2 \times (0.25+0.75 \times 1.5)=1.65$</li>
+</ol>
+<p>则最终可以计算到的<code>BM25</code>结果为:</p>
+<p>$Rel_{BM25}=log \frac{100000-1000+0.5}{1000+0.5} \times \frac{(1.2+1) \times 8}{1.65+8} \times \frac{(200+1) \times 1}{200+1}+ log \frac{100000-1000+0.5}{1000+0.5} \times \frac{(1.2+1) \times 5}{1.65+5} \times \frac{(200+1) \times 1}{200+1} = 8.59$</p>
+<p>每个文档按上述公式计算得到相关性排序即可.</p>
+<h2 id="BM25F_模型">BM25F 模型</h2><blockquote>
+<p>在<code>BM25</code>模型中，文档被当做一个整体进行进行词频的统计，而忽视了不同区域的重要性，<code>BM25F</code>模型正是抓住了这点进行了相应的改进。</p>
+</blockquote>
+<p><code>BM25F</code>模型在计算相关性时候，会对文档分割成不同的域来进行加权统计，非常适用于网页搜索，因为在一个网页有<code>标题信息</code>、<code>meta信息</code>、<code>页面内容信息</code>等，而<code>标题信息</code>无疑是最重要的，其次是<code>meta信息</code>，最后才是<code>网页内容</code>，<code>BM25F</code>在计算相关性的，会将网页分为不用的区域，在各个区域分别统计自己的词频。<br>所以<code>BM25F</code>模型的计算公式为:</p>
+<center>$\sum_{i:q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \times \frac{f_i^u}{k_1+f_i^u}$</center>
+
+<blockquote>
+<p><code>BM25F</code>的第1部分还是<code>BIM</code>的值</p>
+</blockquote>
+<p>其中与<code>BM25</code>主要的差别体现在$f_i^u$因子上,它是单词$i$在各个区域不同的得分,计算公式如下:</p>
+<!-- f_i^u=\sum_{k=1}^uw_k \times \frac{f_{ui}}{B_u}-->
+<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_5.gif" alt=""></center><br><center>$B_u=((1-b_u)+b_u \times  \frac{ul_u}{uvul_u})$</center>
+
+<p>上面的公式表示:</p>
+<ol>
+<li>文档$D$来个不同的$u$个域</li>
+<li>各个域对应的权重为$W_k$</li>
+<li><code>f<sub>i</sub><sup>u</sup></code>为第<code>i</code>个单词在各个域中的 $\frac{f_{ui}}{B_u}$ 的加权和</li>
+<li>$f_{ui}$表示词频</li>
+<li>$B_u$表示各个域的长度情况</li>
+<li>$ul_u$为实际域的实际长度,$uvul_u$表示域的平均长度</li>
+<li>$b_u$则为各个域长度的调节因子</li>
+</ol>
+<h2 id="总结">总结</h2><p><code>BM25</code>系列的模型主要是考虑查询词到文档里面的各种词频，含有大量自由的调节因子，最终给出查询到文档的相关性，模型都是比较简单的，但是里面提高的相关文档和不相关文档的引入将比较麻烦，有实际场景可以一试。</p>
+<h2 id="参考">参考</h2><ol>
+<li>《这就是搜索引擎：核心技术详解》 . 第五章</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
+</code></pre><h2 id="概率排序原理">概率排序原理</h2><p>以往的<code>向量空间模型</code>是将<code>query</code>和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而<code>概率检索模型</code>是一种直接对用户需求进行相关性的建模方法,一个<code>query</code>进来，将所有的文档分为两类—-<code>相关文档</code>、<code>不相关文档</code>,这样就转为了一个相关性的分类问题,赞!</p>
+<p>对于某个文档$D$来说，$P(R|D)$表示该文档数据相关文档的概率，则$P(NR|D)$表示该文档属于不相关文档的概率，如果<code>query</code>属于相关文档的概率大于不相关文档$P(R|D)&gt;P(RN|D)$，则认为这个文档是与用户查询相关相关的.</p>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+    
+      <category term="Search Engine" scheme="http://yyl8781697.github.io/categories/Search-Engine/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[用笨方法解决Shell中按行读取文件之后Tab键不见的问题]]></title>
@@ -1815,6 +2026,28 @@ f就是中位数  直接返回就好啦
   </entry>
   
   <entry>
+    <title><![CDATA[各种便利的网站]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/26/Others/I-Likes-These-Websites/"/>
+    <id>http://yyl8781697.github.io/2015/08/26/Others/I-Likes-These-Websites/</id>
+    <published>2015-08-26T10:06:26.000Z</published>
+    <updated>2016-01-26T15:45:58.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>收集了对自己各种有用的网站^_^</p>
+</blockquote>
+<h2 id="学习">学习</h2><h3 id="Latex">Latex</h3><p>在线编辑器<a href="http://latex.codecogs.com/eqneditor/editor.php" target="_blank" rel="external">http://latex.codecogs.com/eqneditor/editor.php</a></p>
+<h2 id="码代">码代</h2><h2 id="娱乐">娱乐</h2>]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>收集了对自己各种有用的网站^_^</p>
+</blockquote>
+<h2 id="学习">学习</h2><h3 id="Latex">Latex</h3><p>在线编辑器<a href="http://latex.codecogs.com/eq]]>
+    </summary>
+    
+      <category term="Others" scheme="http://yyl8781697.github.io/categories/Others/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[《台大机器学习基石》Logistic Regression]]></title>
     <link href="http://yyl8781697.github.io/2015/08/21/Machine%20Learning/Logistic-Regression/"/>
     <id>http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/</id>
@@ -2483,279 +2716,6 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 <blockquote>
 <p>奥卡姆剃刀原理，能够很好的解释已知数据并且十分简单才是最好的模型。</p>
 </blockquote>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》VC Dimension]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/15/Machine%20Learning/VC-Dimension/"/>
-    <id>http://yyl8781697.github.io/2015/08/15/Machine Learning/VC-Dimension/</id>
-    <published>2015-08-15T07:45:20.000Z</published>
-    <updated>2015-08-19T15:20:40.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
-<blockquote>
-<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br><a id="more"></a></p>
-</blockquote>
-<h3 id="证明">证明</h3><p>那能否证明<code>B(N,k)&lt;=ploy(N)</code>呢？<br>先来看下面这个表,其中当前纵向有<code>N</code>，横向表示具体的<code>k</code>值，表中的内容就是需要计算的<code>B(N,k)</code>值</p>
-<ul>
-<li><p>B(2,2)=3，B(3,2)=4 手算-_-<br>  <img src="/img/VC-Dimension/t1.png" width="500px" height="300px"><br>  因为任意两个点都不能被<code>shatter</code>，那么2个点产生的<code>dichotomies</code>不能超过3,同理3个点产生的<code>dichotomies</code>不能超过4</p>
-</li>
-<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能超过2，所以这里最大值都为1</p>
-</li>
-<li><p>B(N,k)=2<sup>N</sup>  当<code>N&lt;k</code><br>  <img src="/img/VC-Dimension/t3.png" width="500px" height="300px"><br>  这里的<code>2<sup>N</sup><2<sup>k<sup></sup></2<sup></code>必然成立，所以最大值直接取2<sup>N</sup>，不然多余选的点也都是重复的。</p>
-</li>
-<li><p>B(N,k)=2<sup>N</sup>-1  当<code>N=k</code><br>  <img src="/img/VC-Dimension/t4.png" width="500px" height="300px"><br>  在<code>N=k</code>的情况下满足全部不可能（点的所有组合为不可能），但是这里再减去一种就可以满足了</p>
-</li>
-<li><p>B(N,k)&lt;=B(N-1,k)+B(N-1,k-1)  当<code>N&gt;k</code><br>  <img src="/img/VC-Dimension/t5.png" width="500px" height="300px"><br>  表中新添的值为上限的上限，耐心地看下上图的推导-_-</p>
-<ol>
-<li>通过计算机暴力求解B(4,3)=11,(一共16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
-<li>现在将<code>x<sub>4</sub></code>这个点遮掉<br> <img src="/img/VC-Dimension/d2.png" width="500px" height="300px"></li>
-<li>同时将蓝色的遮掉<br> <img src="/img/VC-Dimension/d3.png" width="500px" height="300px"><br> 这里不能多余2个点被<code>shatter</code></li>
-<li>整理之后就可以得到如下关系式<br> <img src="/img/VC-Dimension/d4.png" width="300px" height="200px"></li>
-<li>写成通用式子为<br> <img src="/img/VC-Dimension/d5.png" width="300px" height="200px"><br> 即得解^_^</li>
-</ol>
-</li>
-</ul>
-<p>根据上限的上限的递推式，再结合数学归纳法可以得到<br><img src="/img/VC-Dimension/sg.png" width="300px" height="200px"><br>它的最高项的指数是<code>k-1</code></p>
-<p>那么现在：</p>
-<ol>
-<li><code>Growth Function</code>会被上限<code>B(N,k)</code> bound住</li>
-<li>而<code>B(N,k)</code> 又会被上限的上限bound住</li>
-<li>这个上限的上限的多项式和<code>break point</code>点有关</li>
-<li>所以可以得出结果，只要<code>break point</code>点存在，那么他的<code>Growth Function</code>最终会是一个多项式</li>
-</ol>
-<p>但是然并卵，<code>m<sub>H</sub>(N)</code>并无法直接代入到之前的</p>
-<h3 id="计算VC">计算VC</h3><p><img src="/img/VC-Dimension/rbl.png" width="400px" height="200px"></p>
-<blockquote>
-<p>主要是因为：<code>E<sub>in</sub>(h)</code>的<code>hypothesis</code>可能取值是有限个的，但<code>E<sub>out</sub>(h)</code>的可能取值是无限的。可以通过将<code>E<sub>out</sub>(h)</code> 替换为验证集(verification set) 的<code>E<sub>in</sub>‘</code>来解决这个问题。<br><img src="/img/VC-Dimension/einp.png" width="500px" height="200px"></p>
-</blockquote>
-<p>好，那么接下来主要经历如下三个步骤：</p>
-<ol>
-<li>使用<code>E<sub>in</sub>‘</code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></li>
-<li>这样最终可能出现的<code>H(x1,x2..xn,x1’,x2’…xn’)</code><br> <img src="/img/VC-Dimension/s2.png" width="500px" height="200px"></li>
-<li>使用不替换的<code>Hoeffding</code><br> <img src="/img/VC-Dimension/s3.png" width="500px" height="200px"></li>
-</ol>
-<p>最终得到了著名的<code>VC Bound</code><br><img src="/img/VC-Dimension/vc.png" width="500px" height="200px"></p>
-<pre><code>那么终于可以说明空间存在有限的break point，并且采样的资料量N够多，就可以保证找到一个<span class="function"><span class="title">Ein</span><span class="params">(h)</span></span>最小的时候，得到最小的<span class="function"><span class="title">Eout</span><span class="params">(h)</span></span>,也就是说明Learning的可行性
-</code></pre><h2 id="VC_Dimension">VC Dimension</h2><h3 id="定义">定义</h3><p>先来看一下<code>VC Dimension</code>的定义<br><img src="/img/VC-Dimension/vi.png" width="400px" height="300px"><br><code>VC Dimension</code>表示在<code>N</code>个点中能够<code>shatter</code>的最大的值，也就是<code>k-1</code>（<code>k</code>为<code>break point</code>,该值时不能<code>shatter</code>的最小值）</p>
-<p>这样的话就可以很容易计算出我们之前一直在讨论的那几种情况的<code>VC Dimension</code><br><img src="/img/VC-Dimension/vz.png" width="400px" height="300px"><br>那么我们可以知道好的<code>VC Dimension</code>应该是有限的，这样才可以保证<code>E<sub>in</sub>≈E<sub>out</sub></code><br>同时这样就就会有</p>
-<ol>
-<li><code>VC Dimension</code>与算法A无关</li>
-<li><code>VC Dimension</code>与数据p的分布无关</li>
-<li><code>VC Dimension</code>与目标函数f无关</li>
-</ol>
-<p>说了这么多，看一下<code>VC Dimension</code>与大<code>M</code>的关系<br><img src="/img/VC-Dimension/vm.png" width="500px" height="500px"><br>这样就可以看到：</p>
-<ol>
-<li><code>M</code>很小的时候，得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>会非常相似，但是可选的<code>E<sub>in</sub></code>太少了，可能到最后选择了 一个较大的<code>E<sub>in</sub></code></li>
-<li><code>M</code>很大的时候，可选的<code>E<sub>in</sub></code>比较多，可能到最后得到的<code>E<sub>in</sub></code>得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>可能不怎么想相似</li>
-<li><code>VC Dimension</code>很小的时候，与第一条一样，但是区别的是它的自由度受到了限制</li>
-<li><code>VC Dimension</code>很大的时候，与第二条一样，但是区别的是它的自由度没受限制，很自由</li>
-</ol>
-<blockquote>
-<p><code>VC Dimension</code>反映了假设空间<code>hypothesis set</code>的强大程度，<code>VC Dimension</code>越大，<code>hypothesis set</code>也越强，因为它可以<code>shatter</code>更多的点。</p>
-</blockquote>
-<h3 id="物理意义">物理意义</h3><p><code>VC Dimension</code>的物理意义是表示二元分类下的自由度是多少，而这个自由度是表示参数<code>w</code>的维度<br><img src="/img/VC-Dimension/vw.png" width="400px" height="300px"></p>
-<h3 id="模型复杂度">模型复杂度</h3><p>现在将之前任意一<code>hypothesis</code>发生坏事的概率<code>VC bound</code>变一下形<br><img src="/img/VC-Dimension/mc.png" width="500px" height="400px"><br>最终，根号里面的叫做模型复杂度，<strong>模型的复杂度越大，其泛化能力就会越低</strong>，这个模型的复杂度越与三个项有关：</p>
-<ol>
-<li><code>N</code>，抽样有多少个点</li>
-<li><code>H</code>，这里的<code>VC Dimension</code>有多大</li>
-<li><code>δ</code>，<code>E<sub>in</sub></code>与<code>E<sub>out</sub></code>相似在一个阈值内的概率</li>
-</ol>
-<p>现在在图上画出三者的关系：<br><img src="/img/VC-Dimension/tt.png" width="400px" height="300px"><br>那么可以看到随着<code>VC Dimension</code>越大，其模型复杂度也会越大,<code>E<sub>in</sub></code>会变小，但是<code>E<sub>out</sub></code>会有像图中一样一个山谷形的表现，最小的<code>E<sub>out</sub></code>会在中间</p>
-<p>所以更加深层次的可以了解到，我们并不是把<code>E<sub>in</sub></code>做的越小越好，因为这个时候可能会导致模型复杂度变大，从而最终使<code>E<sub>out</sub></code>也会变大,真正会做机器学习的人在优化<code>E<sub>in</sub></code>的同时会考虑带来的其他复杂度的代价。</p>
-<h3 id="采样复杂度">采样复杂度</h3><p><code>VC bound</code>的另一个意义就是模型复杂度<br>那就现在给你<br><img src="/img/VC-Dimension/p.png" width="400px" height="100px"><br>这些参数，那么如果计算使用最少的样本量来完成上述需求，计算过程可以参考下面<br><img src="/img/VC-Dimension/js.png" width="400px" height="200px"><br>而在理论上需要的样本是<code>N≈10000d<sub>vc</sub></code><br>但是其实在实际上<code>N≈10d<sub>vc</sub></code>即可,<br>为什么会这样呢？<br><img src="/img/VC-Dimension/ks.png" width="500px" height="400px"><br>这是因为<code>VC bound</code>推导的过程很宽松，里面很多假设都是取了上限</p>
-<blockquote>
-<p>所以，模型较复杂时(<code>N≈10d<sub>vc</sub></code> 较大)，需要更多的训练数据</p>
-</blockquote>
-<pre><code>除此外，我们为了避免overfit，一般都会加正则项。那加了正则项后，新的假设空间会得到一些限制，此时新假设空间的VC维将变小，也就是同样训练数据条件下，E<span class="keyword">in</span>更有可能等于E<span class="keyword">out</span>，所以泛化能力更强。这里从VC维的角度解释了正则项的作用。
-</code></pre><h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第六讲</li>
-<li>《台湾国立大学-机器学习基石》第七讲</li>
-<li><a href="http://www.flickering.cn/machine_learning/2015/04/vc%E7%BB%B4%E7%9A%84%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89/" target="_blank" rel="external">VC维的来龙去脉</a></li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
-<blockquote>
-<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[一些面试常见的智力题啦]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/11/Algorithm/Intelligence-Problems/"/>
-    <id>http://yyl8781697.github.io/2015/08/11/Algorithm/Intelligence-Problems/</id>
-    <published>2015-08-11T15:10:06.000Z</published>
-    <updated>2015-08-16T00:15:08.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>考智力，脑子不好使咋办？？只有记下来^_^</p>
-</blockquote>
-<h2 id="烧香/绳子计时1小时15分钟">烧香/绳子计时1小时15分钟</h2><pre><code>烧一根不均匀的绳,从头烧到尾总共需要 1 个小时。现在有若干条材质相同的绳子,问 如何用烧绳的方法来计时一个小时十五分钟呢?
-</code></pre><p>假设现在有三根绳子A和B和C，现在将A的两端都点着，B的一端都点着<br>半小时过去后，A就烧没了，此时B应该还有半小时的时长可以烧，但是现在把B的另一端也点着<br>又过了十五分钟，B也烧没了，这个时候把C的两端也都点着<br>又过了半小时，C也烧没了<br>好了，一小时十五分钟就这么烧到了^_^<br>其实主要思路还是两端  一端 烧得搭配</p>
-<a id="more"></a>
-<h2 id="取两个同一颜色的果冻">取两个同一颜色的果冻</h2><pre><code>你有一桶果冻,其中有黄色、绿色、红色三种,闭上眼睛抓取同种颜色的两个。抓取多少 个就可以确定你肯定有两个同一颜色的果冻?
-</code></pre><p>用鸽巢原理，很容易得出是4啊</p>
-<h2 id="打水问题">打水问题</h2><pre><code>如果你有无穷多的水,一个 3 公升的􏰁捅,一个 5 公升的􏰁捅,两只􏰁捅形状上下都不 均匀,问你如何才能准确称出 4 公升的水
-</code></pre><p>假设3、5公升的桶分别为A=0，B=0</p>
-<ol>
-<li>将B的桶装满，此时A=0,B=5</li>
-<li>将B中的水倒入A，直到A满掉，此时A=3，B=2</li>
-<li>A中的水倒掉，将B中剩余的水全部倒入A，此时A=2，B=0</li>
-<li>将B中的水装满，此时，A=2，B=5</li>
-<li>将B中的水倒入A直到A满了（也就是倒入了1升水），此时A=3，B=4</li>
-</ol>
-<h2 id="诚实国和说谎国">诚实国和说谎国</h2><pre><code>来了两个人,已知一个是诚实国的,另一个是说谎国的。 诚实国永远说实话,说谎国永远说谎话。现在你要去说谎国, 但不知道应该走哪条路,需要问这两个人。请问应该怎么问?
-</code></pre><p>假设这两个人分别简称甲和乙.</p>
-<ol>
-<li><p>情况一</p>
-<ul>
-<li>问题1问甲：乙是来自说谎国的对吧?<br>如甲是说谎国的他只会说谎,甲不能回答正确答案乙是来自诚实国他必然回答“乙是来自诚实国”.</li>
-<li>问题2问甲：乙是来自诚实国对吧?<br>如甲是说谎国的他只会说谎,那他在明知乙是诚实国人的情况下也回答“乙是来自说谎国”.<blockquote>
-<p>经过前两个问题分析甲的回答前后矛盾,可知道甲在说谎,甲来自说谎国.</p>
-</blockquote>
-</li>
-<li>问题3问甲：哪边的岔道口通向说谎国?<br>因为已经推论出甲必说谎话所以向他答案的反其道而行就好.</li>
-</ul>
-</li>
-<li><p>情况二</p>
-<ul>
-<li>问题1问甲：乙是来自说谎国的对吧?<br>如甲是诚实的,他必然回答“乙是来自说谎国”.</li>
-<li>问题2问甲：乙是来自诚实国对吧?<br>如甲是诚实的,他必然回答“不,乙来自说谎国”.<blockquote>
-<p>经过前两个问题分析甲的回答前后一致,可知道甲是诚实的,甲来自诚实国.</p>
-</blockquote>
-</li>
-<li>问题3问甲：哪边的岔道口通向说谎国?<br>按甲指出的方向走就好.</li>
-</ul>
-</li>
-</ol>
-<h2 id="称球问题">称球问题</h2><pre><code><span class="number">12</span> 个球一个天平,现知道只有一个和其它的重量不同,问怎样称才能用三次就找到那个 球。<span class="number">13</span> 个呢?<span class="comment">(注意此题并未说明那个球的重量是轻是重,所以需要仔细考虑)</span>
-</code></pre><p><strong>先看12个球</strong><br>分三组:每组四个,第一组编号1-4，第二组5-8，第三组9-12.<br>第一次称：天平左边放第一组，右边放第二组。 </p>
-<ul>
-<li><p>A 第一种可能：<code>平衡</code>。则不同的在第三组。<br>  接下来可以在左边放第9、10、11号，右边放1、2、3号三个正常的。 </p>
-<ul>
-<li>a.如果<code>平衡</code>，则12号是不同的; </li>
-<li>b.如果<code>左重右轻</code>，则不同的在9、10、11号中，而且比正常球重。再称一次：9放左边，10放右边，如果平衡，则11号是不同的；如果左重右轻，则9号是不同的，如果右重左轻，则10号是不同的。 </li>
-<li>c.如果左轻右重，道理同b </li>
-</ul>
-</li>
-<li><p>B 第二种可能：<code>左重右轻</code>，则不同的在1-8号中，但不知比正常的轻还是重。<br>  第二次称：左边放1、2、5号，右边放6、9、3号。 </p>
-<ul>
-<li>a.如果<code>平衡</code>。则不同的在4、7、8中。可以称第三次：左边放4、7，右边放9、10。如果平衡，则8是不同;如果左重右轻，则4是不同；如果左轻右重，则7是不同。 </li>
-<li>b.仍然<code>左重右轻</code>。则不同的在位置没有改变的1、2、6中。可以称第三次：左边放1、6，右边放9、10。如果平衡，则2是不同; 如果左重右轻，则1是不同;如果左轻右重，则6是不同。 </li>
-<li>c：<code>左轻右重</code>。则不同的在5、3、中，因为只有它们改变了原来的位置。可以称第三次：左放5，3，右放9，10。如果左轻右重，则5是不同，如果左重右轻，则3是不同。 </li>
-</ul>
-</li>
-<li><p>C 第三种可能：<code>左轻右重</code>，道理同B </p>
-<p>  至此，不论发生任何情况，称三次都可以找出不同，而且知道比正常的轻了还是重了。</p>
-</li>
-</ul>
-<p><strong>现在来看13个球</strong><br>同样分三组，第一组编号1-4，第二组5-8，第三组9-13</p>
-<ul>
-<li>如果出现了上述A的情况，则说明不同的再第三组<br>  接下来可以左边放1、2、3  右边放9、19、11<ul>
-<li>a 如果平衡，则说明不同的在12、13里面，那么拿一个正常的与12对比，即可得到结果</li>
-<li>b 如果左重右轻，说明不同的球再11、12、13里面，则不同的在9、10、11号中，而且比正常球重。再称一次：9放左边，10放右边，如果平衡，则11号是不同的；如果左重右轻，则9号是不同的，如果右重左轻，则10号是不同的。 </li>
-<li>c.如果左轻右重，道理同b </li>
-</ul>
-</li>
-<li>如果出现了上述B或C的情况 按B或者C走就好了</li>
-</ul>
-<h2 id="每条直线上至少有三个点">每条直线上至少有三个点</h2><pre><code>在 9 个点上画 10 条直线,要求每条直线上至少有三个点
-</code></pre><p>先画一个五角星，然后去掉一个点就可以了(bingo)</p>
-<h2 id="抛硬币问题">抛硬币问题</h2><pre><code>101个硬币中有一个假币，有一个无砝码的天平，称两次，判断假币比真币重还是轻。
-</code></pre><p>方案是分33，33，35三堆，先33与33称，</p>
-<ul>
-<li>如果相同，那么假币在35那堆里，然后去35枚真币与有假币那堆的称，就知道结果了。</li>
-<li>如果33与33重量不相等，记录哪一堆更重，然后可以知道35枚硬币都只真的，从中取33枚，与其中33个中的一堆对比，<ul>
-<li>如果相等，另一堆就是假，</li>
-<li>不相等，那么这一堆就是假，根据之前记录的轻重比，就知道结果了。</li>
-</ul>
-</li>
-</ul>
-<h2 id="备注">备注</h2><p>理论上还会再更新-_-</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>考智力，脑子不好使咋办？？只有记下来^_^</p>
-</blockquote>
-<h2 id="烧香/绳子计时1小时15分钟">烧香/绳子计时1小时15分钟</h2><pre><code>烧一根不均匀的绳,从头烧到尾总共需要 1 个小时。现在有若干条材质相同的绳子,问 如何用烧绳的方法来计时一个小时十五分钟呢?
-</code></pre><p>假设现在有三根绳子A和B和C，现在将A的两端都点着，B的一端都点着<br>半小时过去后，A就烧没了，此时B应该还有半小时的时长可以烧，但是现在把B的另一端也点着<br>又过了十五分钟，B也烧没了，这个时候把C的两端也都点着<br>又过了半小时，C也烧没了<br>好了，一小时十五分钟就这么烧到了^_^<br>其实主要思路还是两端  一端 烧得搭配</p>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/tags/Algorithm/"/>
-    
-      <category term="Algorithm" scheme="http://yyl8781697.github.io/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》Learning is Possible ]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/09/Machine%20Learning/Learning-Is-Possible/"/>
-    <id>http://yyl8781697.github.io/2015/08/09/Machine Learning/Learning-Is-Possible/</id>
-    <published>2015-08-09T10:55:28.000Z</published>
-    <updated>2015-08-23T15:42:00.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px"><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br><a id="more"></a><br>这里有一个叫做<code>Hoeffding不等式</code>可以来解释该问题<br><img src="/img/Learning-Is-Possible/hfi.png" height="140px" width="540px"><br>大致的表述就是<code>μ</code>与<code>ν</code>之差的绝对值小于<code>ξ</code>的概率为<code>2exp(-2ξ<sup>2</sup>N)</code>（这个概率也叫坏事发生的几率，林老师的叫法真的很kwy ^_^）,<code>ξ</code>越小，<code>μ</code>与<code>ν</code>越接近，其概率：</p>
-<ul>
-<li><code>ξ</code>越大，坏事发生的几率越小，但是<code>ξ</code>真的很大时，坏事发不发生已经么啥意义了-_-</li>
-<li><code>N</code>越大，坏事发生的几率越小，<code>μ</code>与<code>ν</code>会越来越接近,所以取样时大一点可以增加准确率.<blockquote>
-<p>将<code>N</code>取到总得数量，那就是<code>μ</code>=<code>ν</code></p>
-</blockquote>
-</li>
-</ul>
-<pre><code><span class="attribute">这里的‘μ</span>=<span class="string">ν’的状态问题称为probably approximately correct（PAC）问题，表示大概差不多是对的。 </span>
-</code></pre><p>所以，取的样本够大的时候，未知的<code>μ</code>可以从已知的<code>ν</code>推论出来，并且他们俩是类似的。</p>
-<h2 id="应用于Learning">应用于Learning</h2><p>假设当前一个学习算法的最终的实际假设是<code>f(x)</code>(一般是未知的)，其<code>h(x)</code>表示采样了之后的假设，其<code>y<sub>n</sub></code>为对应样本上的目标值。<br><img src="/img/Learning-Is-Possible/le.png" height="200px" width="340px"><br>这里的<code>E<sub>out</sub>(h)</code>和<code>E<sub>in</sub>(h)</code>正好就是对应上一节的<code>μ</code>=<code>ν</code><br><code>Hoeffding不等式</code>同样是适用于Learning问题<br><img src="/img/Learning-Is-Possible/lf.png" height="240px" width="540px"><br>所以在Learning的时候，可以从<code>E<sub>in</sub>(h)</code>来推断出<code>E<sub>out</sub>(h)</code>，也就是我们的Learning目的<br><img src="/img/Learning-Is-Possible/eio.png" height="240px" width="340px"></p>
-<p>上面如果能得到一个很小的<code>E<sub>in</sub>(h)</code>，当然是皆大欢喜，此时<code>g’=f’</code>(g,f分别对应h(x)和f(x)对应的线/假设)，但是要知道其实在算法上其实有很多h可以选，那时候选择到得<code>E<sub>in</sub>(h)</code>比较大得时候，那就比较悲催了，所以真实地学习应该是：<br><img src="/img/Learning-Is-Possible/rl.png" height="240px" width="340px"><br>像<code>PLA</code>一样选一根最优的线。</p>
-<p><code>Hoeffding不等式</code>只能保证<code>E<sub>in</sub>(h)</code>和<code>E<sub>out</sub>(h)</code>会有一个较大的几率说明他俩是相似的，但是无法保证在非常多得假设下(h(x))下，<code>E<sub>in</sub>(h)</code>的值时比较小，那如果最终<code>E<sub>in</sub>(h)</code>的值比较大，那么最终学习的算法就不好了，这个也叫做踩雷过程(这也可能使由于样本原因造成的)<br><img src="/img/Learning-Is-Possible/cl.png" height="440px" width="440px"><br>现在有<code>M</code>个假设，同时数据集可能会有表中的几个样本采样出来，<code>BAD</code>标志就是表示当前假设下在对应的样本上是踩雷了(<code>E<sub>in</sub>(h)</code>)很大</p>
-<blockquote>
-<p>但是学习算法最希望的就是自由的选择具体假设下，能够得到具体的<code>BAD</code>几率</p>
-</blockquote>
-<p>这里可以使用联合<code>bound</code>的方式来求总体的<code>BAD</code>几率<br><img src="/img/Learning-Is-Possible/mpla.png" height="240px" width="540px"><br>从式子中可以发现最终的几率是加上了<code>M</code>的<code>Hoeffding不等式</code>几率</p>
-<h2 id="关于M的无限大问题">关于M的无限大问题</h2><p>上面知道<code>M</code>表示所有假设，而比如在<code>PLA</code>问题中可以了解到其实平面上会有无数条线，也就是无数条假设(M)，那这样其实上一小节中计算出来的几率会变无限大吗？那不是白搭了嘛-_-</p>
-<p>这里先换个思路想一下：<br><img src="/img/Learning-Is-Possible/plk.png" height="240px" width="240px"><br>上图的<code>PLA</code>只有一个点，上面画了可能存在的三条线，其实可以发现这两条实线是一个含义，这里只有两种线而已(一虚一实)<br>再者看一下两个点的<br><img src="/img/Learning-Is-Possible/plk2.png" height="340px" width="540px"><br>它就会有四种线<br>还有看一下三个点得<br><img src="/img/Learning-Is-Possible/plk3.png" height="440px" width="540px"><br>它最终会有八种线(其实如果这三个点成一条直线或者重叠在一个点上面的话不会有这么多)<br>再推演下去会有这么一个规律<br><img src="/img/Learning-Is-Possible/s.png" height="340px" width="200px"><br>在二维上，平面上划分这些点的种类数总是小于<code>2^N</code></p>
-<p>现在假设使用<code>m<sub>H</sub>(N)</code>来表示<code>N</code>个点的时候可能出现的最大分类线种数<code>dichotomies</code><br><img src="/img/Learning-Is-Possible/mh.png" height="240px" width="540px"><br>那么这个<code>m<sub>H</sub>(N)</code>的上界就是<code>2^N</code>，这个函数也叫做成长函数(Growth Function)</p>
-<p>现在综合看一下其他维度的成长函数值:</p>
-<ul>
-<li>一维的二分类 <code>N+1</code><br>  <img src="/img/Learning-Is-Possible/rays.png" height="400px" width="400px"></li>
-<li>一维的二分类（使用中间区间分开） <code>1/2*N<sup>2</sup>+1/2*N+1</code><br>  <img src="/img/Learning-Is-Possible/int.png" height="400px" width="400px"></li>
-<li>可以绕成一圈的凸集合 <code>2<sup>N</sup></code><br>  <img src="/img/Learning-Is-Possible/sc.png" height="400px" width="400px"><blockquote>
-<p>这里类似凸集的情况下N个点可能hold住<code>2<sup>N</sup></code>分类面的情况叫<code>shattered</code></p>
-</blockquote>
-</li>
-</ul>
-<p><img src="/img/Learning-Is-Possible/mhv.png" height="300px" width="500px"><br>那么好了，如果<code>m<sub>H</sub>(N)</code>能直接取代<code>M</code>,同时<code>m<sub>H</sub>(N)</code>为多项式的话，<code>N</code>越大，那个这个<code>upbound</code>会越来越小，或者接近于0<br><img src="/img/Learning-Is-Possible/qd.png" height="300px" width="500px"></p>
-<p>现在来看一个<code>break point</code>的概念<br><img src="/img/Learning-Is-Possible/bp.png" height="300px" width="400px"><br>表示第一个无法<code>shattered</code>的点,比如在上面<code>lines in 2D</code>的图里面在3个点的时候最多有8条线(2^3)，正好是<code>shattered</code>,但是到了4个点的时候最多只有14条线，此时就无法<code>shattered</code>,故4就是<code>2D-PLA</code>的<code>break point</code>，同理<br><img src="/img/Learning-Is-Possible/bps.png" height="300px" width="400px"><br>那么这里可以通过推算最终可以知道<code>m<sub>H</sub>(N)=O(N^(k-1))</code>（具体证明要看看下一个视频VC维相关）,其中这里的<code>k</code>表示<code>break point</code>，这样就可以说上上上面的<code>m<sub>H</sub>(N)</code>是有限的，关于如果代替<code>M</code>的问题还得看下个分解。</p>
-<h2 id="总结">总结</h2><p>所以当算法的该含有一个有限的<code>break point</code>的时候，并且采样的资料量<code>N</code>够多，就可以保证找到一个<code>E<sub>in</sub>(h)</code>最小的时候，得到最小的<code>E<sub>out</sub>(h)</code>,也就是说明Learning的可行性。（好绕）^_^</p>
-<h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第四讲</li>
-<li>《台湾国立大学-机器学习基石》第五讲</li>
-<li>《台湾国立大学-机器学习基石》第六讲</li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px" /><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br>]]>
     
     </summary>
     

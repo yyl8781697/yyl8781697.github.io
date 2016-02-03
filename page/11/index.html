@@ -92,6 +92,211 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/03/26/Java Source/Java-LinkedList/" title="Java 源码学习之java.util.LinkedList" itemprop="url">Java 源码学习之java.util.LinkedList</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-26T08:45:52.000Z" itemprop="datePublished"> 发表于 2015-03-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>LinkedList</code>是<code>Java</code>编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;<code>LinkedList</code>容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍<code>LinkedList</code></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/26/Java Source/Java-LinkedList/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/26/Java Source/Java-LinkedList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/26/Java Source/Java-LinkedList/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/25/Java Source/Java-Vector/" title="Java 源码学习之java.util.Vector" itemprop="url">Java 源码学习之java.util.Vector</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-25T06:10:21.000Z" itemprop="datePublished"> 发表于 2015-03-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>Vector</code>是<code>Java</code>编程中最常用的容器类之一，它是基于动态的数组实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;看过源码的小伙伴可能有相同的感觉：进入<code>Vector.Java</code>会顿一会儿，还以为自己点错进去<code>ArrayList</code>的源码文件了呢！是的，<code>Vector</code>与<code>ArrayList</code>的实现基本相似，同样是基于动态数组，同样是需要扩容，本文在接下来的源码分析中与<code>ArraryList</code>重复的部分不再累赘，如需要了解的同学请点入进<a href="http://kubicode.me/2015/03/24/Java-ArrayList/">ArrarList源码分析</a></p>
+<h2 id="Vertor的1倍扩容">Vertor的1倍扩容</h2><blockquote>
+<p>还记得<code>ArrayList</code>每次扩容为元数组的0.5倍不？<code>Vector</code>在进行扩容操作时与<code>ArrayList</code>略微不同</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/25/Java Source/Java-Vector/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/25/Java Source/Java-Vector/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/25/Java Source/Java-Vector/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/24/Java Source/Java-ArrayList/" title="Java 源码学习之java.util.ArrayList" itemprop="url">Java 源码学习之java.util.ArrayList</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-24T12:50:40.000Z" itemprop="datePublished"> 发表于 2015-03-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>ArrayList</code>是Java编程中最常用的容器类之一，它是基于动态的数组实现的，在面试时常常被与<code>Vector</code>、<code>LikedList</code>作比较！</p>
+</blockquote>
+<p>&#160; &#160; &#160; &#160;本文将主要从<code>ArrayList</code>的构造函数、<code>add</code>、<code>remove</code>,<code>iterator</code>为入口进行源码分析</p>
+<h2 id="构造函数">构造函数</h2><p>&#160; &#160; &#160; &#160;在看构造函数之后先看下一下<code>ArrayList</code>类的三个重要私有变量</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/24/Java Source/Java-ArrayList/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/24/Java Source/Java-ArrayList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/24/Java Source/Java-ArrayList/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/03/24/Data Struct/bitTree-traversal/" title="二叉树的遍历-递归和非递归" itemprop="url">二叉树的遍历-递归和非递归</a>
   </h1>
   <p class="article-author">By
@@ -246,83 +451,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/" title="LeetCode-Rotate Array" itemprop="url">LeetCode-Rotate Array</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-20T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
-</blockquote>
-<p>Problem:<br>Rotate an array of <em>n</em> elements to the right by <em>k</em> steps.</p>
-<p>For example, with <em>n</em> = 7 and <em>k</em> = 3, the array <code>[1,2,3,4,5,6,7]</code> is rotated to <code>[5,6,7,1,2,3,4]</code>.</p>
-<p>Note:<br>Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.</p>
-<p>思路</p>
-<ul>
-<li>使用两次翻转即可，第一次以<em>k</em>分割线翻转<code>[4,3,2,1,7,6,5]</code>，第二次全部翻转<code>[5,6,7,1,2,3,4]</code></li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inverse</span><span class="params">(<span class="keyword">int</span> nums[],<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m=(start+end)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">for</span>(;start&lt;=m;start++,end--)</span><br><span class="line">        &#123;</span><br><span class="line">            temp=nums[start];</span><br><span class="line">            nums[start]=nums[end];</span><br><span class="line">            nums[end]=temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rotate</span><span class="params">(<span class="keyword">int</span> nums[], <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        k=k%n;</span><br><span class="line">        <span class="keyword">if</span>(n-k-<span class="number">1</span>&gt;=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            inverse(nums,<span class="number">0</span>,n-k-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        inverse(nums,n-k,n-<span class="number">1</span>);</span><br><span class="line">        inverse(nums,<span class="number">0</span>,n-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Rotate-Array/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/" title="LeetCode-Reverse Bits" itemprop="url">LeetCode-Reverse Bits</a>
   </h1>
   <p class="article-author">By
@@ -381,6 +509,83 @@
 	
 	  	<span></span>
 		<a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Reverse Bits/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/" title="LeetCode-Rotate Array" itemprop="url">LeetCode-Rotate Array</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-20T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
+</blockquote>
+<p>Problem:<br>Rotate an array of <em>n</em> elements to the right by <em>k</em> steps.</p>
+<p>For example, with <em>n</em> = 7 and <em>k</em> = 3, the array <code>[1,2,3,4,5,6,7]</code> is rotated to <code>[5,6,7,1,2,3,4]</code>.</p>
+<p>Note:<br>Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.</p>
+<p>思路</p>
+<ul>
+<li>使用两次翻转即可，第一次以<em>k</em>分割线翻转<code>[4,3,2,1,7,6,5]</code>，第二次全部翻转<code>[5,6,7,1,2,3,4]</code></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inverse</span><span class="params">(<span class="keyword">int</span> nums[],<span class="keyword">int</span> start,<span class="keyword">int</span> end)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m=(start+end)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">for</span>(;start&lt;=m;start++,end--)</span><br><span class="line">        &#123;</span><br><span class="line">            temp=nums[start];</span><br><span class="line">            nums[start]=nums[end];</span><br><span class="line">            nums[end]=temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rotate</span><span class="params">(<span class="keyword">int</span> nums[], <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        k=k%n;</span><br><span class="line">        <span class="keyword">if</span>(n-k-<span class="number">1</span>&gt;=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            inverse(nums,<span class="number">0</span>,n-k-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        inverse(nums,n-k,n-<span class="number">1</span>);</span><br><span class="line">        inverse(nums,<span class="number">0</span>,n-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Rotate-Array/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -627,242 +832,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" title="LeetCode-Linked List Cycle II" itemprop="url">LeetCode-Linked List Cycle II</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-10T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/linked-list-cycle-ii/" target="_blank" rel="external">https://leetcode.com/problems/linked-list-cycle-ii/</a></p>
-</blockquote>
-<p>Problem:<br>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.</p>
-<p>Follow up:<br>Can you solve it without using extra space?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">detectCycle</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        ListNode cycleStart=<span class="keyword">null</span>,</span><br><span class="line">                singleStepNode=<span class="keyword">null</span>,</span><br><span class="line">                doubleStepNode=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> isCycle=<span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> cycleStart;</span><br><span class="line">        </span><br><span class="line">        singleStepNode =head;</span><br><span class="line">        doubleStepNode=head;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(singleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode.next!=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=singleStepNode.next;</span><br><span class="line"></span><br><span class="line">            doubleStepNode=doubleStepNode.next.next;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(singleStepNode==doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                isCycle=<span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(isCycle)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=head;</span><br><span class="line">            <span class="keyword">while</span>(singleStepNode != doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                singleStepNode=singleStepNode.next;</span><br><span class="line">                doubleStepNode=doubleStepNode.next;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            cycleStart=singleStepNode;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> cycleStart;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/" title="LeetCode-Evaluate Reverse Polish Notation" itemprop="url">LeetCode-Evaluate Reverse Polish Notation</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-08T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/evaluate-reverse-polish-notation/" target="_blank" rel="external">https://leetcode.com/problems/evaluate-reverse-polish-notation/</a></p>
-</blockquote>
-<p>Problem:<br>Evaluate the value of an arithmetic expression in Reverse Polish Notation.</p>
-<p>Valid operators are <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>. Each operand may be an integer or another expression.</p>
-<p>Some examples:</p>
-<pre><code>[<span class="string">"2"</span>, <span class="string">"1"</span>, <span class="string">"+"</span>, <span class="string">"3"</span>, <span class="string">"*"</span>]<span class="function"> -&gt;</span> <span class="function"><span class="params">((<span class="number">2</span> + <span class="number">1</span>) * <span class="number">3</span>)</span> -&gt;</span> <span class="number">9</span>
-[<span class="string">"4"</span>, <span class="string">"13"</span>, <span class="string">"5"</span>, <span class="string">"/"</span>, <span class="string">"+"</span>]<span class="function"> -&gt;</span> <span class="function"><span class="params">(<span class="number">4</span> + (<span class="number">13</span> / <span class="number">5</span>))</span> -&gt;</span> <span class="number">6</span>
-</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">evalRPN</span><span class="params">(String[] tokens)</span> </span>&#123;</span><br><span class="line">        Stack&lt;Integer&gt; numStack=<span class="keyword">new</span> Stack&lt;Integer&gt;();</span><br><span class="line">        Integer ret=Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">for</span>(String str:tokens)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(str.matches(<span class="string">"-?\\d+"</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                numStack.push(Integer.parseInt(str));</span><br><span class="line">                </span><br><span class="line">                </span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                </span><br><span class="line">                ret=numStack.pop();</span><br><span class="line">                <span class="keyword">switch</span>(str)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"+"</span>:ret=numStack.pop()+ret;<span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"-"</span>:ret=numStack.pop()-ret;<span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"*"</span>:ret=numStack.pop()*ret;<span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"/"</span>:ret=numStack.pop()/ret;<span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                numStack.push(ret);</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> numStack.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/" title="LeetCode-Clone Graph" itemprop="url">LeetCode-Clone Graph</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-08T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/clone-graph/" target="_blank" rel="external">https://leetcode.com/problems/clone-graph/</a></p>
-</blockquote>
-<p>Problem:<br>Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.</p>
-<p><strong>OJ’s undirected graph serialization:</strong><br>Nodes are labeled uniquely.</p>
-<p>We use <code>#</code> as a separator for each node, and , as a separator for node label and each neighbor of the node.<br>As an example, consider the serialized graph {0,1,2#1,2#2,2}.</p>
-<p>The graph has a total of three nodes, and therefore contains three parts as separated by <code>#</code>.</p>
-<ol>
-<li>First node is labeled as 0. Connect node 0 to both nodes 1 and 2.</li>
-<li>Second node is labeled as 1. Connect node 1 to node 2.</li>
-<li>Third node is labeled as 2. Connect node 2 to node 2 (itself), thus forming a self-cycle.</li>
-</ol>
-<p>Visually, the graph looks like the following:</p>
-<pre><code>   <span class="number">1</span>
-  / <span class="string">\</span>
- /   <span class="string">\</span>
-<span class="number">0</span> --- <span class="number">2</span>
-     / <span class="string">\</span>
-     <span class="string">\_/</span>
-</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for undirected graph.</span><br><span class="line"> * class UndirectedGraphNode &#123;</span><br><span class="line"> *     int label;</span><br><span class="line"> *     List&lt;UndirectedGraphNode&gt; neighbors;</span><br><span class="line"> *     UndirectedGraphNode(int x) &#123; label = x; neighbors = new ArrayList&lt;UndirectedGraphNode&gt;(); &#125;</span><br><span class="line"> * &#125;;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> UndirectedGraphNode <span class="title">cloneGraph</span><span class="params">(UndirectedGraphNode node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(node==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">        HashMap&lt;Integer,UndirectedGraphNode&gt; graphMap=<span class="keyword">new</span> HashMap&lt;Integer,UndirectedGraphNode&gt;();</span><br><span class="line">        Queue&lt;UndirectedGraphNode&gt; visit=<span class="keyword">new</span> LinkedList&lt;UndirectedGraphNode&gt;();</span><br><span class="line">        UndirectedGraphNode temp;</span><br><span class="line">        </span><br><span class="line">        visit.add(node);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(!visit.isEmpty())</span><br><span class="line">        &#123;</span><br><span class="line">            temp=visit.poll();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(!graphMap.containsKey(temp.label))</span><br><span class="line">            &#123;</span><br><span class="line">                UndirectedGraphNode graphNode=<span class="keyword">new</span> UndirectedGraphNode(temp.label);</span><br><span class="line">                graphMap.put(temp.label, graphNode);</span><br><span class="line">                </span><br><span class="line">                visit.addAll(temp.neighbors);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        visit.add(node);</span><br><span class="line">        <span class="keyword">while</span>(!visit.isEmpty())</span><br><span class="line">        &#123;</span><br><span class="line">            temp=visit.poll();</span><br><span class="line">            UndirectedGraphNode graphNode=graphMap.get(temp.label);</span><br><span class="line">            <span class="keyword">if</span>(graphNode.neighbors.size()==<span class="number">0</span> &amp;&amp; temp.neighbors.size()!=<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(UndirectedGraphNode neighbor:temp.neighbors)</span><br><span class="line">                &#123;</span><br><span class="line">                    graphNode.neighbors.add(graphMap.get(neighbor.label));</span><br><span class="line">                    visit.add(neighbor);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> graphMap.get(node.label);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/08/LeetCode/LeetCode-Clone-Graph/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
   </nav>
 
 </div>
@@ -906,7 +878,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 		  
 		
 		  
@@ -942,6 +914,10 @@
 		  
 		
 		  
+			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 		  
 		
@@ -954,7 +930,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 		  
 		
 		  
@@ -983,7 +959,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 			
 		
 			
@@ -999,11 +975,11 @@
 			
 		
 			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
 			
 		
 			
@@ -1031,6 +1007,14 @@
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
@@ -1039,15 +1023,7 @@
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -1256,7 +1232,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 

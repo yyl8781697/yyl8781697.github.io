@@ -92,6 +92,141 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/" title="在Hexo中离线安装数据工具包-Mathjax" itemprop="url">在Hexo中离线安装数据工具包-Mathjax</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-27T09:30:11.000Z" itemprop="datePublished"> 发表于 2016-01-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>这里与其说安装，还是不如直接拷贝相应文件到hexo目录
+</code></pre><p>最近尝试在写<code>blog</code>的时候用<code>Latex</code>来写数学公式，写起来还是极其方便灵活滴，但是，但是其速度慢如爬蜗牛，一般修改一下，在刷新一下要<code>4~5s</code>才能将公式渲染出来，其书写效率也太低了，总之我不能忍，所以准备将其<code>MathJax</code>放在本地.</p>
+<ol>
+<li>一方面是希望加快公式的渲染速度</li>
+<li>另一方面也是希望能支持我在断网的情况下也能正常使用<code>Mathjax</code></li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hexo/">Hexo</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/" title="概率检索模型BM25系列-文档相关性检索的利器" itemprop="url">概率检索模型BM25系列-文档相关性检索的利器</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-26T09:06:31.000Z" itemprop="datePublished"> 发表于 2016-01-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
+</code></pre><h2 id="概率排序原理">概率排序原理</h2><p>以往的<code>向量空间模型</code>是将<code>query</code>和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而<code>概率检索模型</code>是一种直接对用户需求进行相关性的建模方法,一个<code>query</code>进来，将所有的文档分为两类—-<code>相关文档</code>、<code>不相关文档</code>,这样就转为了一个相关性的分类问题,赞!</p>
+<p>对于某个文档$D$来说，$P(R|D)$表示该文档数据相关文档的概率，则$P(NR|D)$表示该文档属于不相关文档的概率，如果<code>query</code>属于相关文档的概率大于不相关文档$P(R|D)&gt;P(RN|D)$，则认为这个文档是与用户查询相关相关的.</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/01/03/Linux/shell-line-no-tab/" title="用笨方法解决Shell中按行读取文件之后Tab键不见的问题" itemprop="url">用笨方法解决Shell中按行读取文件之后Tab键不见的问题</a>
   </h1>
   <p class="article-author">By
@@ -647,149 +782,9 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/12/Python/python-little-memory/" title="python里面的一些小记（方便自己查询）" itemprop="url">python里面的一些小记（方便自己查询）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-12T01:37:18.000Z" itemprop="datePublished"> 发表于 2015-09-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
-</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些东西</h2><blockquote>
-<p>当然下面的判断完全可以自己使用正则表达式来些，但是有一句话是<code>杀鸡焉用牛刀</code>,下面的api使用起来就会非常便捷</p>
-</blockquote>
-<p><code>s</code>为字符串</p>
-<ol>
-<li><code>s.isalnum()</code> 所有字符都是数字或者字母</li>
-<li><code>s.isalpha()</code> 所有字符都是字母</li>
-<li><code>s.isdigit()</code> 所有字符都是数字</li>
-<li><code>s.islower()</code> 所有字符都是小写</li>
-<li><code>s.isupper()</code> 所有字符都是大写</li>
-<li><code>s.istitle()</code> 所有单词都是首字母大写，像标题</li>
-<li><code>s.isspace()</code> 所有字符都是空白字符、<code>\t</code>、<code>\n</code>、<code>\r</code></li>
-</ol>
-<h3 id="下面应该回持续更新">下面应该回持续更新</h3>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Python/">Python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/12/Python/python-little-memory/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/12/Python/python-little-memory/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/07/Machine Learning/Validation/" title="《台大机器学习基石》Validation" itemprop="url">《台大机器学习基石》Validation</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-07T15:32:37.000Z" itemprop="datePublished"> 发表于 2015-09-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Model_Select_problem">Model Select problem</h2><p>在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>，<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/">Linear Regression</a>,<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/">Logistic Regression</a>），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如<a href="http://kubicode.me/2015/09/05/Machine%20Learning/Regularization/">Regularization</a>的类型，或者具体参数的值，比如<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/#Gradient_Descent">Gradient Descent</a>里面的步长等，我们知道，现在机器学习的目的就是得到最小化的<code>E<sub>out</sub></code>（也就是测试误差啦），那么现在给你一批数据，然后会出现上述那么多的选择，如果做才能得到最小的<code>E<sub>out</sub></code>呢？<br><img src="/img/Validation/goal.png" height="200px" width="500px" /><br>也就是我们要找到一个最好的模型<code>H<sub>m<sup><em></sup></sub></code>，使得<code>E<sub>out</sub>(g<sub>m<sup></em></sup></sub>)</code>最小。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/09/07/Machine Learning/Validation/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/07/Machine Learning/Validation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/07/Machine Learning/Validation/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -833,7 +828,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 		  
 		
 		  
@@ -869,6 +864,10 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
+			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 		  
 		
@@ -881,7 +880,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 		  
 		
 		  
@@ -910,7 +909,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 			
 		
 			
@@ -926,11 +925,11 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
 			
 		
 			
@@ -958,6 +957,14 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
@@ -966,15 +973,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -1183,7 +1182,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 

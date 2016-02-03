@@ -92,6 +92,146 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/09/12/Python/python-little-memory/" title="python里面的一些小记（方便自己查询）" itemprop="url">python里面的一些小记（方便自己查询）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-12T01:37:18.000Z" itemprop="datePublished"> 发表于 2015-09-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
+</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些东西</h2><blockquote>
+<p>当然下面的判断完全可以自己使用正则表达式来些，但是有一句话是<code>杀鸡焉用牛刀</code>,下面的api使用起来就会非常便捷</p>
+</blockquote>
+<p><code>s</code>为字符串</p>
+<ol>
+<li><code>s.isalnum()</code> 所有字符都是数字或者字母</li>
+<li><code>s.isalpha()</code> 所有字符都是字母</li>
+<li><code>s.isdigit()</code> 所有字符都是数字</li>
+<li><code>s.islower()</code> 所有字符都是小写</li>
+<li><code>s.isupper()</code> 所有字符都是大写</li>
+<li><code>s.istitle()</code> 所有单词都是首字母大写，像标题</li>
+<li><code>s.isspace()</code> 所有字符都是空白字符、<code>\t</code>、<code>\n</code>、<code>\r</code></li>
+</ol>
+<h3 id="下面应该回持续更新">下面应该回持续更新</h3>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/12/Python/python-little-memory/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/12/Python/python-little-memory/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/07/Machine Learning/Validation/" title="《台大机器学习基石》Validation" itemprop="url">《台大机器学习基石》Validation</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-07T15:32:37.000Z" itemprop="datePublished"> 发表于 2015-09-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Model_Select_problem">Model Select problem</h2><p>在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>，<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/">Linear Regression</a>,<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/">Logistic Regression</a>），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如<a href="http://kubicode.me/2015/09/05/Machine%20Learning/Regularization/">Regularization</a>的类型，或者具体参数的值，比如<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/#Gradient_Descent">Gradient Descent</a>里面的步长等，我们知道，现在机器学习的目的就是得到最小化的<code>E<sub>out</sub></code>（也就是测试误差啦），那么现在给你一批数据，然后会出现上述那么多的选择，如果做才能得到最小的<code>E<sub>out</sub></code>呢？<br><img src="/img/Validation/goal.png" height="200px" width="500px" /><br>也就是我们要找到一个最好的模型<code>H<sub>m<sup><em></sup></sub></code>，使得<code>E<sub>out</sub>(g<sub>m<sup></em></sup></sub>)</code>最小。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/09/07/Machine Learning/Validation/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/07/Machine Learning/Validation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/07/Machine Learning/Validation/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/09/05/Machine Learning/Regularization/" title="《台大机器学习基石》Regularization" itemprop="url">《台大机器学习基石》Regularization</a>
   </h1>
   <p class="article-author">By
@@ -267,6 +407,67 @@
 	
 	  	<span></span>
 		<a href="/2015/08/30/Machine Learning/Multiclass-Classification/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/30/Machine Learning/Multiclass-Classification/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/26/Others/I-Likes-These-Websites/" title="各种便利的网站" itemprop="url">各种便利的网站</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-26T10:06:26.000Z" itemprop="datePublished"> 发表于 2015-08-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>收集了对自己各种有用的网站^_^</p>
+</blockquote>
+<h2 id="学习">学习</h2><h3 id="Latex">Latex</h3><p>在线编辑器<a href="http://latex.codecogs.com/eqneditor/editor.php" target="_blank" rel="external">http://latex.codecogs.com/eqneditor/editor.php</a></p>
+<h2 id="码代">码代</h2><h2 id="娱乐">娱乐</h2>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Others/">Others</a>
+</div>
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/26/Others/I-Likes-These-Websites/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/26/Others/I-Likes-These-Websites/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -555,207 +756,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/15/Machine Learning/VC-Dimension/" title="《台大机器学习基石》VC Dimension" itemprop="url">《台大机器学习基石》VC Dimension</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-15T07:45:20.000Z" itemprop="datePublished"> 发表于 2015-08-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
-<blockquote>
-<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/15/Machine Learning/VC-Dimension/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/15/Machine Learning/VC-Dimension/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/15/Machine Learning/VC-Dimension/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/11/Algorithm/Intelligence-Problems/" title="一些面试常见的智力题啦" itemprop="url">一些面试常见的智力题啦</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-11T15:10:06.000Z" itemprop="datePublished"> 发表于 2015-08-11</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>考智力，脑子不好使咋办？？只有记下来^_^</p>
-</blockquote>
-<h2 id="烧香/绳子计时1小时15分钟">烧香/绳子计时1小时15分钟</h2><pre><code>烧一根不均匀的绳,从头烧到尾总共需要 1 个小时。现在有若干条材质相同的绳子,问 如何用烧绳的方法来计时一个小时十五分钟呢?
-</code></pre><p>假设现在有三根绳子A和B和C，现在将A的两端都点着，B的一端都点着<br>半小时过去后，A就烧没了，此时B应该还有半小时的时长可以烧，但是现在把B的另一端也点着<br>又过了十五分钟，B也烧没了，这个时候把C的两端也都点着<br>又过了半小时，C也烧没了<br>好了，一小时十五分钟就这么烧到了^_^<br>其实主要思路还是两端  一端 烧得搭配</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/11/Algorithm/Intelligence-Problems/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/11/Algorithm/Intelligence-Problems/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/11/Algorithm/Intelligence-Problems/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/09/Machine Learning/Learning-Is-Possible/" title="《台大机器学习基石》Learning is Possible " itemprop="url">《台大机器学习基石》Learning is Possible </a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-09T10:55:28.000Z" itemprop="datePublished"> 发表于 2015-08-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px" /><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/09/Machine Learning/Learning-Is-Possible/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/09/Machine Learning/Learning-Is-Possible/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/09/Machine Learning/Learning-Is-Possible/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
@@ -799,7 +802,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 		  
 		
 		  
@@ -835,6 +838,10 @@
 		  
 		
 		  
+			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 		  
 		
@@ -847,7 +854,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 		  
 		
 		  
@@ -876,7 +883,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 			
 		
 			
@@ -892,11 +899,11 @@
 			
 		
 			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
 			
 		
 			
@@ -924,6 +931,14 @@
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
@@ -932,15 +947,7 @@
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -1149,7 +1156,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 

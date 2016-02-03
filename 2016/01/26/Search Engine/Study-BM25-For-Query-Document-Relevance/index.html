@@ -1,0 +1,827 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>概率检索模型BM25系列-文档相关性检索的利器 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="给定一个用户需求(query),如果搜索系统展示的搜索结果是根据文档和query的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
+概率排序原理以往的向量空间模型是将query和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而概率检索模型是一种直接对用户需求进行相关性的建模方法,一个query进来，将所有的文档分为两类—-相关文档、不相关文档,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="概率检索模型BM25系列-文档相关性检索的利器">
+<meta property="og:url" content="http://yyl8781697.github.io/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="给定一个用户需求(query),如果搜索系统展示的搜索结果是根据文档和query的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
+概率排序原理以往的向量空间模型是将query和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而概率检索模型是一种直接对用户需求进行相关性的建模方法,一个query进来，将所有的文档分为两类—-相关文档、不相关文档,">
+<meta property="og:image" content="/img/Study-BM25-For-Query-Document-Relevance/eq_zs.gif">
+<meta property="og:image" content="/img/Study-BM25-For-Query-Document-Relevance/eq_2.gif">
+<meta property="og:image" content="/img/Study-BM25-For-Query-Document-Relevance/eq_5.gif">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="概率检索模型BM25系列-文档相关性检索的利器">
+<meta name="twitter:description" content="给定一个用户需求(query),如果搜索系统展示的搜索结果是根据文档和query的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
+概率排序原理以往的向量空间模型是将query和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而概率检索模型是一种直接对用户需求进行相关性的建模方法,一个query进来，将所有的文档分为两类—-相关文档、不相关文档,">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="" target="_blank">
+							<label>Search</label>
+						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
+						</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/" title="概率检索模型BM25系列-文档相关性检索的利器" itemprop="url">概率检索模型BM25系列-文档相关性检索的利器</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-26T09:06:31.000Z" itemprop="datePublished"> 发表于 2016-01-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概率排序原理"><span class="toc-number">1.</span> <span class="toc-text">概率排序原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二元独立模型(BIM)"><span class="toc-number">2.</span> <span class="toc-text">二元独立模型(BIM)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BM25_模型"><span class="toc-number">3.</span> <span class="toc-text">BM25 模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模型概述"><span class="toc-number">3.1.</span> <span class="toc-text">模型概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#栗子"><span class="toc-number">3.2.</span> <span class="toc-text">栗子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BM25F_模型"><span class="toc-number">4.</span> <span class="toc-text">BM25F 模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
+</code></pre><h2 id="概率排序原理">概率排序原理</h2><p>以往的<code>向量空间模型</code>是将<code>query</code>和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而<code>概率检索模型</code>是一种直接对用户需求进行相关性的建模方法,一个<code>query</code>进来，将所有的文档分为两类—-<code>相关文档</code>、<code>不相关文档</code>,这样就转为了一个相关性的分类问题,赞!</p>
+<p>对于某个文档$D$来说，$P(R|D)$表示该文档数据相关文档的概率，则$P(NR|D)$表示该文档属于不相关文档的概率，如果<code>query</code>属于相关文档的概率大于不相关文档$P(R|D)&gt;P(RN|D)$，则认为这个文档是与用户查询相关相关的.</p>
+<a id="more"></a>
+<p>现在使用贝叶斯公式将其转一下:</p>
+<center>$P(R|D)&gt;P(NR|D) &lt;=&gt;\frac{P(D|R)P(R)}{P(D)}&gt;\frac{P(D|NR)P(NR)}{P(D)} &lt;=&gt; \frac{P(D|R)}{P(D|NR)}&gt;\frac{P(NR)}{P(R)}$</center>
+
+<p>在搜索排序过程中不需要真正的分类，只需要保证相关性由高到底排序即可，所以只需要$\frac{P(D|R)}{P(D|NR)}$降序即可，<br>这样就最终转为计算$P(D|R)$,$P(D|NR)$的值即可.</p>
+<h2 id="二元独立模型(BIM)">二元独立模型(BIM)</h2><pre><code><span class="xml">词汇独立性假设:文档里面出现的词没有任何关联，这样一个文档的出现就可以转为各个单词出现概率的乘积（虽然这种假设有违实际，但是算起来简单的啊</span><span class="keyword">^_</span><span class="xml">^）</span>
+</code></pre><p>上述提到的文档$D$表示为<code>{1,0,1,0,1}</code>，用$p_i$来表示第$i$个单词在相关文档出现的概率,则在已知<code>相关文档</code>集合的情况下，观察到$D$的概率为:<br>    <center>$P(D|R)=p_1 \times (1-p_2) \times p_3 \times (1-p_4) \times p_5$ </center></p>
+<blockquote>
+<p>第<code>1,3,5</code>表示这个单词在$D$中出现,所以其贡献概率为$p_i$，而第<code>2,4</code>这两个单词并没有在$D$中出现，所以其贡献的概率为$1-p_i$ </p>
+</blockquote>
+<p>同理在<code>不相关文档</code>中观察到的概率为:<br>    <center>$P(D|R)=s_1 \times (1-s_2) \times s_3 \times (1-s_4) \times s_5$ </center></p>
+<p>最终得到的相关性概率估算为:</p>
+<center>$\frac{P(D|R)}{P(D|NR)}=\frac{p_1 \times (1-p_2) \times p_3 \times (1-p_4) \times p_5}{s_1 \times (1-s_2) \times s_3 \times (1-s_4) \times s_5}$</center>
+
+<p>现在将其推广之后可以有通用的式子：<br><!-- 
+\frac{P(D|R)}{P(D|NR)}= \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}
+--></p>
+<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_zs.gif" alt=""></center>
+
+<blockquote>
+<p>$d_i=1$表示在文档中出现的单词，$d_i=0$表示没在文档中出现的单词:</p>
+</blockquote>
+<p>在这里进一步对上述公式进行等价变换之后有:</p>
+<!-- 
+\\
+\frac{P(D|R)}{P(D|NR)}=\prod_{i:d_i=1} \frac{p_i}{s_i} \times \left ( \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \times \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \right ) \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}\\
+= \left ( \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \right ) \times  \left ( \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i} \right )  \\
+=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} \times \prod_i \frac{1-pi}{1-s_i} \\
+=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} 
+-->
+<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_2.gif" alt=""></center>
+
+<p>其中上面式子第三步的第二部分$\prod_i \frac{1-pi}{1-s_i} $表示各个单词在所有文档中出现的概率，所以这个式子的值和具体文档并没有什么关系，在排序中不起作用，才可以简化到第4步.</p>
+<p>为了方便计算，将上述连乘公式取$log$:</p>
+<center>$log(\frac{P(D|R)}{P(D|NR)}) =  \sum_{i:d_i=1} log \frac{p_i(1-s_i)}{s_i(1-p_i)}$</center>
+
+<p>有了上述最终可计算的式子之后，我们就只需要统计文档$D$中的各个单词在<code>相关文档</code>/<code>不相关文档</code>中出现的概率即可:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">相关文档</th>
+<th style="text-align:left">不相关文档</th>
+<th style="text-align:left">文档数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">$d_i=1$</td>
+<td style="text-align:left">$r_i$</td>
+<td style="text-align:left">$n_i-r_i$</td>
+<td style="text-align:left">$n_i$</td>
+</tr>
+<tr>
+<td style="text-align:left">$d_i=0$</td>
+<td style="text-align:left">$R-r_i$</td>
+<td style="text-align:left">$(N-R)-(n_i-r_i)$</td>
+<td style="text-align:left">$N-n_i$</td>
+</tr>
+<tr>
+<td style="text-align:left">文档数量</td>
+<td style="text-align:left">$R$</td>
+<td style="text-align:left">$N-R$</td>
+<td style="text-align:left">$N$</td>
+</tr>
+</tbody>
+</table>
+<p>上面的表格表示各个单词在文档集合中的<code>相关文档</code>/<code>不相关文档</code>出现数量,同时为了避免$log(0)$出现，加上平滑之后可以计算得到:</p>
+<center>$p_i=\frac{r_i+0.5}{R+1}$</center><br><center>$s_i=\frac{(n_i-r_i)+0.5}{(N-R)+1}$</center>
+
+<p>则最终可以得到如下公式:</p>
+<center>$\sum_{q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)}$</center>
+
+<p>上面的公式表示对于同时出现查询$q_i$以及文档$d_i$的时候，对$q_i$在$d_i$中出现的单词在<code>相关文档</code>/<code>不相关文档</code>进行统计，即可得到查询与文档的相关性估计值.</p>
+<blockquote>
+<p>在不确定哪些文档是相关的，哪些文档是不相关的的时候，可以给公式的估算因子直接赋予固定值，则该公式将会蜕化为$IDF$因子.</p>
+</blockquote>
+<h2 id="BM25_模型">BM25 模型</h2><h3 id="模型概述">模型概述</h3><blockquote>
+<p>上一小节中的<code>BIM模型</code>效果并不佳，也没有考虑单词权重，但是他给<code>BM25模型</code>打下了深深的基础</p>
+</blockquote>
+<pre><code>B<span class="title">M25</span> 模型在BIM模型的基础上考虑了查询词在Query以及Doc中的权重，并通过实验引入了一些经验参数。B<span class="title">M25</span>模型是目前最成功的内容排序模型.
+</code></pre><p>改进之后的<code>BM25</code>模型的拟合公式如下:</p>
+<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
+
+<p>上面的式子中:</p>
+<ol>
+<li>第1部分即为上一小节的二元独立模型BIM计算得分</li>
+<li>第2部分是查询词在$D$中的权重，其中$f_i$代表词在文档中的词频,$K$因子代表了对文档长度的考虑，其计算公式为$K=k_1((1-b)+b \cdot \frac{dl}{avdl})$<ol>
+<li>$k_1$为经验参数,这里的$k_1$一般设置为1.2,</li>
+<li>$b$为调节因子，将$b$设为0时，文档长度因素将不起作用，经验表明一般$b=0.75$</li>
+<li>$dl$代表当前文档的长度</li>
+<li>$avdl$代表所有文档的平均长度</li>
+</ol>
+</li>
+<li>第3部分是查询词在自身的权重,$qf_i$表示在查询中的词频,$k_2$也为调节因子，因为在短查询下这部分一般为1，为了放大这部分的差异，$k_2$一般取值为<code>0~1000</code></li>
+</ol>
+<blockquote>
+<p>综合看来,<code>BM25</code>模型结合了<code>BIM</code>因子、<code>文档长度</code>、<code>文档词频</code>和<code>查询词频</code>进行公式融合，并利用$k_1$、$k_2$、$b$对各种因子进行权重的调整.</p>
+</blockquote>
+<h3 id="栗子">栗子</h3><p>假设当前以<code>乔布斯 IPAD2</code>这个查询词为例，来计算在某文档$D$中<code>BM25相关性</code>的值，由于不知道文档集中相关与不相关的分类，所以这里直接将相关文档个数$r$置为0,则将得到的<code>BIM</code>因子为:<br>    <center>$Rel_{BIM}=log \frac {(0+0.5)((N-0)-(n_i-0)+0.5)}{(n_i-0+0.5)(0-0+0.5)}=log \frac{N-n_i+0.5}{n_i+0.5}$</center></p>
+<p>其他数值假定如下:</p>
+<ol>
+<li>文档的集合总数$N=100000$</li>
+<li>包含<code>乔布斯</code>的文档个数为$n_{乔布斯}=1000$</li>
+<li>包含<code>IPAD2</code>的文档个数为$n_{IPAD2}=100$</li>
+<li>文档$D$中出现<code>乔布斯</code>的词频为$f_{乔布斯}=8$</li>
+<li>文档$D$中出现<code>IPAD2</code>的词频为$f_{IPAD2}=8$</li>
+<li>查询词频均为$qf_i=1$</li>
+<li>调节因子$k_1=1.2$</li>
+<li>调节因子$k_2=200$</li>
+<li>调节因子$b=0.75$</li>
+<li>设文档$D$的长度为平均长度的1.5倍($\frac{dl}{avdl}=1.5$),即$K=1.2 \times (0.25+0.75 \times 1.5)=1.65$</li>
+</ol>
+<p>则最终可以计算到的<code>BM25</code>结果为:</p>
+<p>$Rel_{BM25}=log \frac{100000-1000+0.5}{1000+0.5} \times \frac{(1.2+1) \times 8}{1.65+8} \times \frac{(200+1) \times 1}{200+1}+ log \frac{100000-1000+0.5}{1000+0.5} \times \frac{(1.2+1) \times 5}{1.65+5} \times \frac{(200+1) \times 1}{200+1} = 8.59$</p>
+<p>每个文档按上述公式计算得到相关性排序即可.</p>
+<h2 id="BM25F_模型">BM25F 模型</h2><blockquote>
+<p>在<code>BM25</code>模型中，文档被当做一个整体进行进行词频的统计，而忽视了不同区域的重要性，<code>BM25F</code>模型正是抓住了这点进行了相应的改进。</p>
+</blockquote>
+<p><code>BM25F</code>模型在计算相关性时候，会对文档分割成不同的域来进行加权统计，非常适用于网页搜索，因为在一个网页有<code>标题信息</code>、<code>meta信息</code>、<code>页面内容信息</code>等，而<code>标题信息</code>无疑是最重要的，其次是<code>meta信息</code>，最后才是<code>网页内容</code>，<code>BM25F</code>在计算相关性的，会将网页分为不用的区域，在各个区域分别统计自己的词频。<br>所以<code>BM25F</code>模型的计算公式为:</p>
+<center>$\sum_{i:q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \times \frac{f_i^u}{k_1+f_i^u}$</center>
+
+<blockquote>
+<p><code>BM25F</code>的第1部分还是<code>BIM</code>的值</p>
+</blockquote>
+<p>其中与<code>BM25</code>主要的差别体现在$f_i^u$因子上,它是单词$i$在各个区域不同的得分,计算公式如下:</p>
+<!-- f_i^u=\sum_{k=1}^uw_k \times \frac{f_{ui}}{B_u}-->
+<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_5.gif" alt=""></center><br><center>$B_u=((1-b_u)+b_u \times  \frac{ul_u}{uvul_u})$</center>
+
+<p>上面的公式表示:</p>
+<ol>
+<li>文档$D$来个不同的$u$个域</li>
+<li>各个域对应的权重为$W_k$</li>
+<li><code>f<sub>i</sub><sup>u</sup></code>为第<code>i</code>个单词在各个域中的 $\frac{f_{ui}}{B_u}$ 的加权和</li>
+<li>$f_{ui}$表示词频</li>
+<li>$B_u$表示各个域的长度情况</li>
+<li>$ul_u$为实际域的实际长度,$uvul_u$表示域的平均长度</li>
+<li>$b_u$则为各个域长度的调节因子</li>
+</ol>
+<h2 id="总结">总结</h2><p><code>BM25</code>系列的模型主要是考虑查询词到文档里面的各种词频，含有大量自由的调节因子，最终给出查询到文档的相关性，模型都是比较简单的，但是里面提高的相关文档和不相关文档的引入将比较麻烦，有实际场景可以一试。</p>
+<h2 id="参考">参考</h2><ol>
+<li>《这就是搜索引擎：核心技术详解》 . 第五章</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yyl8781697.github.io/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/" data-title="概率检索模型BM25系列-文档相关性检索的利器 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/" title="在Hexo中离线安装数据工具包-Mathjax">
+  <strong>上一篇：</strong><br/>
+  <span>
+  在Hexo中离线安装数据工具包-Mathjax</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/01/03/Linux/shell-line-no-tab/"  title="用笨方法解决Shell中按行读取文件之后Tab键不见的问题">
+ <strong>下一篇：</strong><br/> 
+ <span>用笨方法解决Shell中按行读取文件之后Tab键不见的问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/" data-title="概率检索模型BM25系列-文档相关性检索的利器" data-url="http://yyl8781697.github.io/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概率排序原理"><span class="toc-number">1.</span> <span class="toc-text">概率排序原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二元独立模型(BIM)"><span class="toc-number">2.</span> <span class="toc-text">二元独立模型(BIM)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BM25_模型"><span class="toc-number">3.</span> <span class="toc-text">BM25 模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模型概述"><span class="toc-number">3.1.</span> <span class="toc-text">模型概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#栗子"><span class="toc-number">3.2.</span> <span class="toc-text">栗子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BM25F_模型"><span class="toc-number">4.</span> <span class="toc-text">BM25F 模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+
+
+<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

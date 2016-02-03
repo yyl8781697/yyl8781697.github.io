@@ -92,6 +92,236 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举" itemprop="url">谈谈Scala中的枚举</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-06T01:56:03.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="先谈Java中的枚举">先谈Java中的枚举</h2><p>将<code>Scala</code>的枚举之前，我们先来讲讲关于<code>Java</code>里面的枚举（相信对于广大程序猿来说都是很熟悉）：</p>
+<ul>
+<li><p>使用<code>enum</code>关键词定义</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;...&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了<code>java.lang.Enum</code></p>
+</li>
+<li>无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）</li>
+<li>枚举其实是一组<code>int</code>常量（当初它就是因为使用<code>int</code>常量的需求很大才又了枚举），它还可以在<code>swtich</code>中很方便的使用</li>
+<li><p>每个枚举变量还可以重写枚举类或者实现接口中的方法（这个蛮好用）</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;</span><br><span class="line">Mon&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"monday"</span>;&#125;</span><br><span class="line">&#125;,</span><br><span class="line">Tue&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"tuesday"</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">""</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>…（我也不知道了-_-）</p>
+</li>
+</ul>
+<h2 id="再看Scala中的枚举">再看Scala中的枚举</h2><blockquote>
+<p>你会发现，上面说的一切在<code>Scala</code>中其实并没有甚么卵用-_-，因为在<code>Scala</code>中压根就么有<code>enum</code>这个关键词，但是当初发明<code>Scala</code>大神兼<code>Java</code>的创始人并没有落下枚举。</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/06/Scala/Enum-in-Scala/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/06/Scala/Enum-in-Scala/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/06/Scala/Enum-in-Scala/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/04/Akka/Study-Akka-First/" title="初识Akka" itemprop="url">初识Akka</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-04T15:45:36.000Z" itemprop="datePublished"> 发表于 2015-06-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a href="http://akka.io/">Akka</a>压压惊，当然在<code>Spark</code>中大量的使用了<code>AKKA</code>是主要原因^_^</p>
+</blockquote>
+<h2 id="AKKA介绍">AKKA介绍</h2><p><a href="http://akka.io/">Akka</a>是一个基于<code>JVM</code>的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：</p>
+<ol>
+<li>并发和分布式</li>
+<li>弹性设计</li>
+<li>高性能</li>
+<li>去中心化</li>
+<li>高扩展性</li>
+</ol>
+<p>可以基于<code>AKKA</code>构建高并发的web框架，也可以构建分布式系统（<code>Spark</code>）</p>
+<h2 id="AKKA的引用">AKKA的引用</h2><p>如果你是<code>Maven</code>用户，你可以这么添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.typesafe.akka<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>akka-actor_2.10<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>2.3.11<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果你是<code>SBT</code>用户，你的<code>build.sbt</code>可以这么写<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name := &#34;My Project&#34;&#10;version := &#34;1.0&#34;&#10;scalaVersion := &#34;2.10.4&#34;&#10;libraryDependencies +=&#10;  &#34;com.typesafe.akka&#34; %% &#34;akka-actor&#34; % &#34;2.3.11&#34;</span><br></pre></td></tr></table></figure></p>
+<p>它还提供了好多其他的其他用法，但是由于天朝连国外网速也是在是太慢了，我直接去<a href="http://akka.io/downloads/">http://akka.io/downloads/</a>将压缩包给download下来，然后将已编译的<code>jar</code>添加到IDEA中，简单、粗暴、高效。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/04/Akka/Study-Akka-First/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Akka/">Akka</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Akka/">Akka</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/04/Akka/Study-Akka-First/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/04/Akka/Study-Akka-First/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" title="Spark源码中所使用的经典数据结构或者设计模式" itemprop="url">Spark源码中所使用的经典数据结构或者设计模式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-02T13:32:28.000Z" itemprop="datePublished"> 发表于 2015-06-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="位域法">位域法</h2><blockquote>
+<p>如果一个枚举类型的元素主要用于在集合中，一般就使用<code>int</code>枚举类型，将2的不同倍数赋予每个常量。<br>这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。</p>
+</blockquote>
+<p>在<code>Spark</code>源码中进入<code>SparkSubmit</code>类中就可以看到<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Cluster managers</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">YARN</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">STANDALONE</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">MESOS</span> =</span> <span class="number">4</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">LOCAL</span> =</span> <span class="number">8</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_CLUSTER_MGRS</span> =</span> <span class="type">YARN</span> | <span class="type">STANDALONE</span> | <span class="type">MESOS</span> | <span class="type">LOCAL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Deploy modes</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLIENT</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLUSTER</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_DEPLOY_MODES</span> =</span> <span class="type">CLIENT</span> | <span class="type">CLUSTER</span></span><br></pre></td></tr></table></figure></p>
+<p>将集群类型和部署模式使用位域法来存储。</p>
+<blockquote>
+<p>在《Effective Java》第32条中提到，但是都不推荐。。<code>Spark</code>都使用了，难道这种结构不好嘛？？^_^</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/31/Food/Braised-chicken-claw/" title="自己煮：红烧鸡爪" itemprop="url">自己煮：红烧鸡爪</a>
   </h1>
   <p class="article-author">By
@@ -588,245 +818,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" title="Mac通过ssh连接到Centos时一些问题的解决" itemprop="url">Mac通过ssh连接到Centos时一些问题的解决</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-16T02:26:53.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Linux版本：Centos6.5<br>Mac版本：OS X Yosemite 10.10.2</p>
-<h2 id="LC_CTYPE:_cannot_change_locale_(UTF-8)">LC_CTYPE: cannot change locale (UTF-8)</h2><p>通过ssh连接到linux，会出现如下警告：</p>
-<pre><code>-<span class="string">bash:</span> <span class="string">warning:</span> <span class="string">setlocale:</span> <span class="string">LC_CTYPE:</span> cannot change locale (UTF-<span class="number">8</span>): No such file or directory
-</code></pre><p>这是由于没有找到对应的语言环境导致的：<br>按一下命令步骤操作即可修复：<br>首先</p>
-<pre><code>sudo vi <span class="regexp">/etc/</span>ssh_cofig
-</code></pre><p>然后将该文件中的SendEnv LANG LC_*这一行用#进行注释</p>
-<pre><code><span class="id">#SendEnv</span> LANG LC_*
-</code></pre><p>参考:<a href="http://www.cyberciti.biz/faq/os-x-terminal-bash-warning-setlocale-lc_ctype-cannot-change-locale/" target="_blank" rel="external">OS X Terminal: -bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory Fix</a></p>
-<h2 id="Write_failed:_Broken_pipe">Write failed: Broken pipe</h2><p>通过ssh连接到linux，有时候会莫名其妙的出现错误：</p>
-<pre><code><span class="tag">Write</span> <span class="rule"><span class="attribute">failed</span>:<span class="value"> Broken pipe</span></span>
-</code></pre><p>看资料说的是由于长时间未操作造成的，解决方法为在Mac端的~/.ssh/config文件中添加：</p>
-<pre><code><span class="title">ServerAliveInterval</span> <span class="number">60</span>
-</code></pre><p>参考：<a href="http://www.cnblogs.com/dudu/archive/2013/02/07/ssh-write-failed-broken-pipe.html" target="_blank" rel="external">解决ssh的”Write failed: Broken pipe”问题</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ssh/">ssh</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/14/Linux/Vim-Command-List/" title="Vim命令合集(转载)" itemprop="url">Vim命令合集(转载)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-14T13:32:08.000Z" itemprop="datePublished"> 发表于 2015-05-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="命令历史">命令历史</h2><p>以<code>:</code>和<code>/</code>开头的命令都有历史纪录，可以首先键入<code>:</code>或<code>/</code>然后按上下箭头来选择某个历史命令。</p>
-<h2 id="启动vim">启动vim</h2><p>在命令行窗口中输入以下命令即可</p>
-<ul>
-<li><code>vim</code> 直接启动vim</li>
-<li><code>vim filename</code> 打开vim并创建名为filename的文件</li>
-</ul>
-<h2 id="文件命令">文件命令</h2><ul>
-<li><code>vim file</code>  打开单个文件</li>
-<li><code>vim file1 file2 file3 …</code>  同时打开多个文件</li>
-<li><code>:open file</code>  在vim窗口中打开一个新文件</li>
-<li><code>:split file</code>  在新窗口中打开文件</li>
-<li><code>:bn</code>  切换到下一个文件</li>
-<li><code>:bp</code>  切换到上一个文件</li>
-<li><code>:args</code>  查看当前打开的文件列表，当前正在编辑的文件会用[]括起来。</li>
-<li>打开远程文件，比如ftp或者share folder<br><code>:e ftp://192.168.10.76/abc.txt</code><br><code>:e \qadrive\test\1.txt</code></li>
-</ul>
-<h2 id="vim的模式">vim的模式</h2><ul>
-<li>正常模式（按<code>Esc</code>或<code>Ctrl+[</code>进入） 左下角显示文件名或为空</li>
-<li>插入模式（按<code>i</code>键进入） 左下角显示—INSERT—</li>
-<li>可视模式（不知道如何进入） 左下角显示—VISUAL—</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/14/Linux/Vim-Command-List/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/14/Linux/Vim-Command-List/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/14/Linux/Vim-Command-List/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/" title="记录在Hadoop2.2.0中剔除一个DataNode" itemprop="url">记录在Hadoop2.2.0中剔除一个DataNode</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-10T14:33:45.000Z" itemprop="datePublished"> 发表于 2015-05-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>最近在<code>Haddop</code>环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现<strong>Job Failed</strong>的问题，看日志就是其中一台机器<strong>Connect Timeout</strong>了，在WebUI上点击这台机器IP的各种UI界面也是开不了，<code>HDFS</code>还连不上-_-|，之前也遇到过这种问题，解决方法简单粗暴：</p>
-<ol>
-<li>重启<code>Haddop</code>集群：一般重启一下还正好了</li>
-</ol>
-<ul>
-<li>停<code>Haddop</code>集群，然后重启每台物理机，然后再开启<code>Hadoop</code>集群：这么做一般问题就可以解决-_-|</li>
-<li>还有一种就是直接去<code>Linux</code>上删除<code>dfs</code>文件目录，重新初始化<code>HDFS</code>：这么做效果虽达到了，但是。。。向<code>HDFS</code>传数据还很久一段时间。。</li>
-</ul>
-<p>今天第1、2种方法试了都不行，第三种方法也太麻烦了（集群有15台<code>DataNode</code>+1台<code>NameNode</code>，重新初始化每次都要去每个机器上删除文件夹再新建），由于时间受限，就想尝试去动态的直接把那个老是异常的节点去掉得了，赶紧查了下面一些资料：</p>
-<ul>
-<li><a href="http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527">http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527</a></li>
-<li><a href="http://www.itpub.net/thread-1866448-1-1.html">http://www.itpub.net/thread-1866448-1-1.html</a></li>
-<li><a href="http://www.programgo.com/article/9436398293/">http://www.programgo.com/article/9436398293/</a></li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/10/Hadoop/Hadoop-Remove-DataNode/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
   </nav>
 
 </div>
@@ -870,7 +864,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 		  
 		
 		  
@@ -906,6 +900,10 @@
 		  
 		
 		  
+			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 		  
 		
@@ -918,7 +916,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 		  
 		
 		  
@@ -947,7 +945,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 			
 		
 			
@@ -963,11 +961,11 @@
 			
 		
 			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
 			
 		
 			
@@ -995,6 +993,14 @@
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
@@ -1003,15 +1009,7 @@
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -1220,7 +1218,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 

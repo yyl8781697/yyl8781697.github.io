@@ -92,6 +92,215 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/01/17/Search Engine/search-engine/" title="读《这就是搜索引擎：核心技术详解》有感总结" itemprop="url">读《这就是搜索引擎：核心技术详解》有感总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-01-17T09:10:52.000Z" itemprop="datePublished"> 发表于 2014-01-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>&#160; &#160; &#160; &#160;搜索引擎的使用对于我们来说不陌生，对于一个正常的搜索流程，比如用户输入查询“搜索引擎 技术”，搜索引擎需要分别将存储的磁盘上的两个单词的倒排序索引读入内存，之后进行解压缩，然后求两个单词对应倒排序列表的搅基，找到所有包含两个单词的文档集合，根据排序算法来对每个文档的相关性进行打分，按照相关度输入相关最高的搜索结果。</p>
+<p>&#160; &#160; &#160; &#160;但是对于这系列步骤中海量文档数据的来源，存储，查找的技术又是如何的呢？下面是我最近看了《这就是搜索引擎：核心技术详解》这书的大致总结：</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2014/01/17/Search Engine/search-engine/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/01/17/Search Engine/search-engine/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/01/17/Search Engine/search-engine/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2013/05/09/Dotnet/ajaxframework/" title="基于.Net 写我自己的Ajax后台框架AjaxFramework" itemprop="url">基于.Net 写我自己的Ajax后台框架AjaxFramework</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2013-05-09T15:01:59.000Z" itemprop="datePublished"> 发表于 2013-05-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="为什么要写自己的Ajax后台框架">为什么要写自己的Ajax后台框架</h2><p>&#160; &#160; &#160; &#160;现在Ajax在web应用方面已经用的稀巴烂了，如果你做一个网站没有用到ajax都不好意思拿出手，虽然面对ajax的潮流下，在.net开放方向，微软已经做了很多工作了，比如推出了ajax的服务器端控件，但是他不够灵活，用的人多吗？不多！</p>
+<p>&#160; &#160; &#160; &#160;在.Net环境下与ajax配合的几种情况（主要是针对webform，因为.net mvc你只要写action就可以将方法给发布出来，实现ajax的调用）：</p>
+<ol>
+<li><p>用ajax访问aspx页面：直接在page_load中输出html代码并且End掉多余标签的输出，但是他还要走生命周期，一个好好的aspx页面只用这个功能怪怪的，当然还可以直接在aspx.cs上面的方法上加上[webMethod]特性来标记ajax访问，但是必须该方法为静态，用起来也不是很爽。</p>
+</li>
+<li><p>用ajax访问ashx一般处理程序：这个是在.net的ajax开发中一种常见明确推荐的方式，他输出页面少，不冗余代码，调用灵活，但是他通常一个ashx页面只提供一个功能，但是市面上有可以通过switch方法的参数或者用委托或者反射的方法来实现一个ashx页面提供多个ajax访问的功能，但是没发现这样也挺乱的吗，我之前一直用这个，慢慢的 慢慢的开始讨厌这种写好写法!</p>
+</li>
+<li><p>用ajax直接调用webservice服务：这样的好处是在一个普通的webserive类中可以使用多个对外ajax访问点的发布，用起来很灵活，但是你一般的小网站为了ajax的访问还是部署webservice还是比较烦的吧！</p>
+</li>
+<li><p>用ajax去调用wcf：微软推出了wcf，并且现在公认为他是一种可以替代webservice的新产品，并且他还支持奖wcf部署在web服务器上，以url形式发布，当然了，这样就可以用ajax来访问调用，但是同上，小网站小应用还要去弄wcf，也是挺烦的一件事情！</p>
+</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2013/05/09/Dotnet/ajaxframework/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Ajax/">Ajax</a><a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/05/09/Dotnet/ajaxframework/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/05/09/Dotnet/ajaxframework/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2013/05/06/Dotnet/Mongodb-Pager/" title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码" itemprop="url">基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2013-05-06T03:27:59.000Z" itemprop="datePublished"> 发表于 2013-05-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>&#160; &#160; &#160; &#160;最近在设计的日志服务中需要用到Mongodb这个Nosql数据库（<a href="http://baike.baidu.com/view/3385614.htm">不知道Mongodb的点我</a>），由于是用于纯存日志，而且日志量巨大，百万千万级的，所以需要用到它的分页查询。<br>不过LZ也是刚刚接触这个数据库，不是很了解里面的命令语法，便在网上查了一些资料，结果 结果说mongodb自带的简单很方便的Skip方式的分页效率很低，无奈，无奈得用其他的，<br>&#160; &#160; &#160; &#160;有多篇文章都推荐Where+Limit的方式分页，说他效率比Skip方式高多了，但是好多资料都是讲一些思路，并没有很具体，但是也很有帮助拉，现在简单的来讲一下这个分页思路（Skip的方式那么简单就不讲啦）：<br>假设一张表中（Mongodb用集合来代替）有如下条数据：1,3,4,5,6,7,8,9,20,30,50,51,52,59,60（仅仅标志该记录的ID号 你可以理解为主键）<br>现在的也尺寸PageSize=4，那么</p>
+<ul>
+<li>第一页的数据为1,3,4,5，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;0 因为上一页是没有记录 所以用0来代替</li>
+<li>第二页的数据为6,7,8,9,20，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;5 这里的5就是上一页的最后一条记录</li>
+<li>第二页的数据为30,50,51,52,，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;20 </li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2013/05/06/Dotnet/Mongodb-Pager/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CSharp/">CSharp</a><a href="/tags/Mongodb/">Mongodb</a><a href="/tags/pager/">pager</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2013/05/06/Dotnet/Mongodb-Pager/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/05/06/Dotnet/Mongodb-Pager/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2013/04/28/Dotnet/RSA/" title="整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码" itemprop="url">整合一个基于c#的RSA私钥加密公钥解密的Helper类,含源码</a>
   </h1>
   <p class="article-author">By
@@ -568,216 +777,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2010/07/23/LeetCode/mou-dai/" title="某呆需要的资料-沉底" itemprop="url">某呆需要的资料-沉底</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2010-07-23T12:55:17.000Z" itemprop="datePublished"> 发表于 2010-07-23</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="IT新闻、动态">IT新闻、动态</h2><blockquote>
-<p>这里面一般不涉及技术，主要是一些科技类创新的文章</p>
-</blockquote>
-<ul>
-<li><a href="http://36kr.com/" target="_blank" rel="external">36氪</a>：IT界最新的新闻</li>
-<li><a href="http://www.huxiu.com/" target="_blank" rel="external">虎嗅网</a>：也有非常多关于IT的</li>
-<li><a href="http://www.guokr.com/" target="_blank" rel="external">果壳网</a>：科技界的信息较多</li>
-</ul>
-<h2 id="程序员一般逛的几个网站">程序员一般逛的几个网站</h2><blockquote>
-<p>主要都是直接和技术/开发类挂钩的网站</p>
-</blockquote>
-<h3 id="国内">国内</h3><ol>
-<li><a href="http://www.csdn.net/" target="_blank" rel="external">csdn</a>:全球最大的中文IT社区(里面的技术<a href="http://bbs.csdn.net/home" target="_blank" rel="external">BBS</a>和技术<a href="http://blog.csdn.net/" target="_blank" rel="external">博客</a>是他的主打)</li>
-<li><a href="http://www.cnblogs.com/" target="_blank" rel="external">博客园</a>:一般都是原创的IT开发文章</li>
-<li><a href="http://www.oschina.net/" target="_blank" rel="external">开源中国社区</a>:上面都是开源的新闻/项目之类的</li>
-<li>其实还有一些：<a href="http://www.51cto.com/" target="_blank" rel="external">51cto</a>,<a href="http://www.iteye.com/" target="_blank" rel="external">iteye</a>,<a href="http://www.chinaunix.net/" target="_blank" rel="external">chinaunix</a></li>
-</ol>
-<h3 id="国外">国外</h3><ol>
-<li><a href="https://github.com/" target="_blank" rel="external">github</a>:全球最火的源码托管网站，如果应聘者在上面有自己的开源项目一般都是比较牛的</li>
-<li><a href="http://apache.org/" target="_blank" rel="external">Apache基金会</a>:上面全是开源项目，并且这些项目的质量都很高，每个项目一般都是以一个团队或者公司在维护的</li>
-<li><a href="http://stackoverflow.com/" target="_blank" rel="external">stackoverflow</a>:国外非常火的技术问答社区(但是我没去过-_-)</li>
-</ol>
-<h2 id="程序员的一些职场生涯">程序员的一些职场生涯</h2><blockquote>
-<p>去这些网站看看可以看到程序员的求职现状和心态 以及他们的想法</p>
-</blockquote>
-<ol>
-<li><a href="http://www.oschina.net/question?catalog=100" target="_blank" rel="external">开源中国社区-职业生涯</a></li>
-<li><a href="http://bbs.csdn.net/forums/OFFICELIFE" target="_blank" rel="external">csdn-职场话题</a></li>
-<li><a href="http://bbs.byr.cn/#!board/WorkLife" target="_blank" rel="external">北邮人-职场生涯</a></li>
-</ol>
-<h2 id="招聘渠道">招聘渠道</h2><blockquote>
-<p>个人感觉招IT类比58，赶集之类的靠谱多了</p>
-</blockquote>
-<ol>
-<li><a href="http://www.neitui.me/" target="_blank" rel="external">内推网</a>:主要是做互联网招聘的，并且好多都是内推的</li>
-<li><a href="http://passport.lagou.com/landingPage.html?utm_source=AD__qiqi_dmp2&amp;utm_medium=dmp&amp;utm_campaign=dmp" target="_blank" rel="external">拉勾网</a>:和内推网差不多，但是一般都是社招</li>
-<li><a href="http://www.liepin.com/" target="_blank" rel="external">猎聘网</a>:号称是招聘高端互联网人才</li>
-<li><a href="http://bbs.byr.cn/#!board/JobInfo" target="_blank" rel="external">北邮人论坛</a>：这在这找应届生非常合适</li>
-<li>还有国内的csdn，博客园和开源中国都也有自己相应的招聘版块，也都可以发布信息</li>
-</ol>
-<h2 id="关于岗位问题">关于岗位问题</h2><h3 id="开发岗">开发岗</h3><blockquote>
-<p>注：测试开发和运维虽然不是纯开发，但是现在一般都是自动化了，所以也是需要写一些自动化的代码的</p>
-</blockquote>
-<ul>
-<li><p>前端</p>
-<blockquote>
-<p>故名思议该岗位就是做前台的开发了，这里的前台主要为web前端，类似PC客户端，APP客户端的前端一般不设前端岗</p>
-</blockquote>
-<p>  涉及的技术标签有：</p>
-<ul>
-<li><a href="http://www.w3school.com.cn/html/" target="_blank" rel="external">html</a>:这个是前端的基础，现在最新的叫html5了，也叫h5</li>
-<li><a href="http://www.w3school.com.cn/css/" target="_blank" rel="external">css</a>:这个也是web开发必懂，用于做网页样式的，新的浏览器都支持css3，还有现在关于css有一个新潮的<a href="http://www.ibm.com/developerworks/cn/web/1207_zhaoch_lesscss/" target="_blank" rel="external">less</a>框架</li>
-<li><p><a href="http://www.w3school.com.cn/js/" target="_blank" rel="external">javascript</a>:JavaScript 被数百万计的网页用来改进设计、验证表单、检测浏览器、创建cookies，以及更多的应用</p>
-<blockquote>
-<p>上面的3项技术是前端最基础的，也必须懂的，一般面试的话他们就是基础，同时如果会php,python,nodejs之类的这些服务器端脚本语言更好，还有再会一些UI设计方面：比如photoshop,fireworks之类的加分，一般一个优秀的程序员刚刚提到的那些技能都会，并且都比较熟练</p>
-</blockquote>
-<p>好了，这里将javascript（简称js）展开一下，js是最基础的web前端脚本语言，但是为了加快开发速度，所以很多开发都不是基于原生的js来进行，而是使用js库来开发：</p>
-</li>
-</ul>
-<ol>
-<li><a href="http://jquery.com/" target="_blank" rel="external">JQuery</a>:它几乎可以说是最火热的js库，非常轻量级，而且免费，并且基本兼容全部浏览器</li>
-<li><a href="http://docs.angularjs.cn/api" target="_blank" rel="external">angularjs</a>:这个也是非常新潮的js库，将整个web前端开发模块化了，并且还支持数据源的绑定，近两年兴起的</li>
-<li><a href="http://requirejs.org/" target="_blank" rel="external">RequireJS</a>:貌似是一个js的模块加载器</li>
-<li><a href="https://nodejs.org/" target="_blank" rel="external">NodeJs</a>:普通的js只能运行的浏览器的执行引擎上，而使用nodejs可以直接运行在pc端，并且与js的语法是一样的，同时还可以写高性能的后台并发服务，它非常火。。</li>
-<li><p>其他还有好多库比如:<a href="http://docs.sencha.com/extjs/5.1/" target="_blank" rel="external">extjs</a>,<a href="http://www.jeasyui.com/" target="_blank" rel="external">easyui</a></p>
-<p>最后列一些不错的web前段开发框架:<a href="http://getbootstrap.com/" target="_blank" rel="external">bootstrap</a>..看<a href="http://www.csdn.net/article/2013-02-25/2814245-20-best-front-end-framework" target="_blank" rel="external">这里</a>介绍的比较好</p>
-<blockquote>
-<p>总结：做前端可以发现需要会的东西很杂，很多，他们的主要难点就是写出兼容性好的页面，比如兼容各个浏览器(IE,chrome,firefox,360安全等),还有需要适应更重尺寸(各个尺寸的电脑屏幕，手机屏幕，平板屏幕。。。)，，同时，前段还得提供友好的人机交互。。。</p>
-</blockquote>
-<p>一些面试题（看看大概了解面试官的需求）：</p>
-</li>
-</ol>
-<ul>
-<li><a href="http://www.cnblogs.com/majinyun0802/p/4670212.html" target="_blank" rel="external">最新前端开发面试题</a></li>
-</ul>
-</li>
-<li><p>后端</p>
-<blockquote>
-<p>该岗位很好理解，就是做后台的开发了，那什么是后台开发呢？</p>
-</blockquote>
-<pre><code>比如在你在<span class="number">12306</span>上买了一张票，点击买的一刹那，<span class="number">12306</span>后台就会接到你买票的请求，可能会将请求放入一个队列，负载均衡会陆续将队列中的数据分发到一个实际机器上处理，然后改机器上的后台程序会判断是否存在这张票，判断当前用户是否允许买这张票，然后写入<span class="command">log</span>日志，生成订单信息，然后将这张票给锁住，接着你在前台就会到付钱的界面，你去支付宝付了钱之后，<span class="number">12306</span>的后台会得到刚才刚才订单的付款信息，进行校对确认，无误之后写入数据库，写入日志，购票成功，然后你就可以前台看到付款成功了，这一系列在后台处理的事情就是后台开发了。
-</code></pre><p>  后台开发一般的语言：</p>
-<ul>
-<li>c/c++：非常高效的语言，但是由于开发成本较大，所以一般如果不是特别追求效率的话不会使用该语言，或者一个项目中可能只有部分特别追求效率的模块会有c/c++来写</li>
-<li>java:面向对象语言，市场占有率极其高(国内的bat以及其他二三线的互联网公司的大部分产品都是使用它来开发的)，它最大的特点就是开源产品众多，开发速度快，有非常多成熟的解决方案，还跨平台。<blockquote>
-<p>还有提一下就是关于JavaWeb的开发，很多的开源组件：ssh(struts+spring+hibernate),ibatis,mybatis等</p>
-</blockquote>
-</li>
-<li>c#:定位于java一样，但是由于他是受windows平台的限制，大公司用的并不是特别多，但是中小型公司用的很多，所以市场占有率也是相当的高。<blockquote>
-<p>与JavaWeb不同，c#开发的web一般就分为webform和mvc，但是也有很多模仿java的组件出来。。比如nhibernate之类的。</p>
-</blockquote>
-</li>
-<li>python,ruby,php:好多公司也会采用这些脚本语言作为他的后端</li>
-<li><p>scala,go,nodejs:这类计算是脚本语言，但是国内外有好多公司用他们来开发<code>高性能</code>的后端</p>
-<blockquote>
-<p>总结：浅层理解后台开发就是向数据库读取数据（所以一般需要了解各种数据的特点和用户，比如myslq，oracle，sqlserver，mongodb之类的），然后提供给web前端或者其他app之类的前端来使用。深层理解的话就是在理解线层的基础上还需要考虑高性能，分布式，可靠的安全性，一致性非常多的问题，所以相对来说后端比前端的要求更大，深度也更加深。</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>测试开发</p>
-<blockquote>
-<p>做测试也是有一定的要求的，不再是像以前一样在产品界面上点来点去就好了，现在一般都是自动化测试，所以也是需要写代码的。。好的测试开发是一个高产品保障，所以该需求也是非常大。</p>
-</blockquote>
-<p>  关于测试开发一般有：</p>
-<ul>
-<li>单元测试：表示对代码里面的单个方法（函数）的可用性进行测试，经典的测试框架有junit,nunit之类的<blockquote>
-<p>该测试一般由开发人员来完成</p>
-</blockquote>
-</li>
-<li>功能测试：表示对产品中某个功能进行测试，就比如一个12306买票的方法，该功能的测试点有：买完之后 会发系统邮件、短信、还有数据库中会添加记录、缓存中会清空这个缓存等，经典的测试框架有testNg，Selenium等<blockquote>
-<p>该测试一般要求对整个产品有个比较全面的理解，还有产品上线的时候一般是需要该测试有个较高的通过率</p>
-</blockquote>
-</li>
-<li>还有<a href="http://blog.chinaunix.net/uid-20356525-id-1700448.html" target="_blank" rel="external">白盒测试和黑盒测试</a><blockquote>
-<p>测试是产品中非常重要的一个环节，如果是需要写代码的话要求比开发人员第一点，但是工资也会相应第一点，所以一般情况下测试比较难招人，处于一个比较尴尬的局面。</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>运维</p>
-<blockquote>
-<p>关于运维，你可以理解为项目的网管，整天盯着监控屏幕，看有没有什么流量异常，数据异常之类的，这个是不出问题的时候，其实运维的作用就是防止问题的出现或者在问题出现的时候尽快解决，所以压力也还是蛮大的。</p>
-</blockquote>
-<p>  现在产品的生产环境一般都是*unix，所以比较了解*unix平台，了解他的性能提高之处，网络原理、安全等，然后还要回各种脚本(shell、php、python)，同时最好还需要会各种工具(grep、sed、awk、tcpdump、strace)<br><br>  还有现在的运维好多也是自动化运维了，所以有时候也要自己开发运维工具</p>
-<p>  面试题：</p>
-<ul>
-<li><a href="http://blog.chinaunix.net/uid-29910291-id-4983371.html" target="_blank" rel="external">Linux运维工程师面试题</a></li>
-</ul>
-</li>
-<li><p>移动APP开发</p>
-<blockquote>
-<p>这个岗位是近两年兴起来的，基本像样点的公司要得招这个岗位</p>
-<ul>
-<li>Android开发：主要用到Java</li>
-<li>IOS开发：用到object-c和switf</li>
-<li>windowphone开发：用到c#（但是这个岗位真不多）</li>
-</ul>
-</blockquote>
-</li>
-<li>算法/数据挖掘<blockquote>
-<p>随着大数据的发展，这个岗位的需求越来越大，但是要求也是异常的高，一般至少都是硕士以上，需要会机器学习算法、自然语言处理、图像识别、推荐预测等方向。</p>
-</blockquote>
-</li>
-<li>Hadoop/Spark相关的工程师<blockquote>
-<p>上面的是偏算法的，这次的是偏工程的，主要是会Hadoop/Spark来对大数据进行相关处理，或者直接对这些分布式平台进行二次开发（这个要求就很高的）</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="非开发岗">非开发岗</h3><ul>
-<li>运营<blockquote>
-<p>关于运营，额，你就把他理解为龙飞的工作吧-_-i</p>
-</blockquote>
-</li>
-</ul>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2010/07/23/LeetCode/mou-dai/#comments" class="ds-thread-count comments-count-link" data-thread-key="2010/07/23/LeetCode/mou-dai/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/13/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span>
+    <a class="extend prev" rel="prev" href="/page/13/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/15/">Next<span></span></a>
   </nav>
 
 </div>
@@ -821,7 +823,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 		  
 		
 		  
@@ -857,6 +859,10 @@
 		  
 		
 		  
+			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 		  
 		
@@ -869,7 +875,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 		  
 		
 		  
@@ -898,7 +904,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 			
 		
 			
@@ -914,11 +920,11 @@
 			
 		
 			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
 			
 		
 			
@@ -946,6 +952,14 @@
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
@@ -954,15 +968,7 @@
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -1171,7 +1177,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 

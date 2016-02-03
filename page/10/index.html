@@ -92,6 +92,208 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/" title="org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem" itemprop="url">org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-16T13:24:55.000Z" itemprop="datePublished"> 发表于 2015-04-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>将自己之前写好的hadoop程序拷贝给师弟时候总是会报下面的错：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassCastException: org.apache.hadoop.fs.LocalFileSystem cannot be cast to org.apache.hadoop.hdfs.DistributedFileSystem</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.common.HdfsHelper.&lt;clinit&gt;(HdfsHelper.java:<span class="number">25</span>)</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.LogisticRegression.LRProgram.run(LRProgram.java:<span class="number">53</span>)</span><br><span class="line">	at hadoop.mapreduce.ali.recommend.LogisticRegression.LRProgram.main(LRProgram.java:<span class="number">23</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>字面自已上就是本地文件不能转为分布式文件</strong>，自己在输入文件上加hdfs前缀也是无济于事，搜索关键字了半天也没找到匹配的方案，后来终于在一个博客找到了解决方案：<br><br>将<code>hadoop/conf/</code>下面的<code>core-site.xml</code>和<code>hdfs-site.xml</code>复制到工程文件的<code>/bin/</code>目录下面就可以了（使用的是Eclipse的IDE），坑爹。</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/15/Java Source/Java-LinkedHashMap/" title="Java 源码学习之java.util.LinkedHashMap" itemprop="url">Java 源码学习之java.util.LinkedHashMap</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-15T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-04-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>LinkedHashMap</code>是基于<code>HashMap</code>实现的，但是与之不同的是<code>LinkedHashMap</code>在遍历取值时可以保序，这是通过双向链表来实现的。</p>
+</blockquote>
+<p>我们知道<code>HashMap</code>在增删改查方面非常高效，但是遗憾的时候在迭代遍历<code>HashMap</code>时是不保序的，常常我们有时候即需要这种高效的操作，同时还希望在遍历数据集时要保序的需求，所以这个时候<code>LinkedHashMap</code>就出来了，接下来文本讲解<code>LinkedHashMap</code>是如何基于<code>HashMap</code>来完成遍历保序的功能。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/15/Java Source/Java-LinkedHashMap/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/15/Java Source/Java-LinkedHashMap/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/15/Java Source/Java-LinkedHashMap/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/14/Java Source/Java-HashSet/" title="Java 源码学习之java.util.HashSet" itemprop="url">Java 源码学习之java.util.HashSet</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-14T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-04-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>HashSet</code>在针对单个项的增删改几乎具有O(1)的性能，也常常被用于快速查找需要下的集合存储，相信各位这些特性很容易联想到<code>HashMap</code>，那么各位了解这两者的区别和联系不？</p>
+</blockquote>
+<p>看了源代码估计大家会大吃一惊，这，这<code>HashSet</code>不就是<code>HashMap</code>的简化无<code>value</code>版本嘛？对，<code>HashSet</code>就是基于<code>HashMap</code>实现的(通过组合的方式)，并且几乎所有方法都是调用了<code>HashMap</code>的<code>api</code>，最大的区别是将<code>HashMap</code>的<code>value</code>直接用<code>new Object()</code>对象来替换了。所以你可以这么认为：<br /><br><code>HashSet&lt;T&gt; hashSet=new HashMap&lt;T,Object&gt;()</code></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/14/Java Source/Java-HashSet/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/14/Java Source/Java-HashSet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/14/Java Source/Java-HashSet/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/07/OSGi/OSGi-Services/" title="（译）OSGi-Services，OSGI-服务" itemprop="url">（译）OSGi-Services，OSGI-服务</a>
   </h1>
   <p class="article-author">By
@@ -570,214 +772,9 @@ B.冒泡排序
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/26/Java Source/Java-LinkedList/" title="Java 源码学习之java.util.LinkedList" itemprop="url">Java 源码学习之java.util.LinkedList</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-26T08:45:52.000Z" itemprop="datePublished"> 发表于 2015-03-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>LinkedList</code>是<code>Java</code>编程中最常用的容器类之一，它是基于双向链接实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;<code>LinkedList</code>容器在插入操作上效率很高，本文主要以他的构造函数，存储结构，增删改机制来介绍<code>LinkedList</code></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/26/Java Source/Java-LinkedList/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/26/Java Source/Java-LinkedList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/26/Java Source/Java-LinkedList/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/25/Java Source/Java-Vector/" title="Java 源码学习之java.util.Vector" itemprop="url">Java 源码学习之java.util.Vector</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-25T06:10:21.000Z" itemprop="datePublished"> 发表于 2015-03-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>Vector</code>是<code>Java</code>编程中最常用的容器类之一，它是基于动态的数组实现的，在面试时常常被与<code>ArrayList</code>作比较！</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;看过源码的小伙伴可能有相同的感觉：进入<code>Vector.Java</code>会顿一会儿，还以为自己点错进去<code>ArrayList</code>的源码文件了呢！是的，<code>Vector</code>与<code>ArrayList</code>的实现基本相似，同样是基于动态数组，同样是需要扩容，本文在接下来的源码分析中与<code>ArraryList</code>重复的部分不再累赘，如需要了解的同学请点入进<a href="http://kubicode.me/2015/03/24/Java-ArrayList/">ArrarList源码分析</a></p>
-<h2 id="Vertor的1倍扩容">Vertor的1倍扩容</h2><blockquote>
-<p>还记得<code>ArrayList</code>每次扩容为元数组的0.5倍不？<code>Vector</code>在进行扩容操作时与<code>ArrayList</code>略微不同</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/25/Java Source/Java-Vector/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/25/Java Source/Java-Vector/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/25/Java Source/Java-Vector/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/24/Java Source/Java-ArrayList/" title="Java 源码学习之java.util.ArrayList" itemprop="url">Java 源码学习之java.util.ArrayList</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-24T12:50:40.000Z" itemprop="datePublished"> 发表于 2015-03-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>ArrayList</code>是Java编程中最常用的容器类之一，它是基于动态的数组实现的，在面试时常常被与<code>Vector</code>、<code>LikedList</code>作比较！</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;本文将主要从<code>ArrayList</code>的构造函数、<code>add</code>、<code>remove</code>,<code>iterator</code>为入口进行源码分析</p>
-<h2 id="构造函数">构造函数</h2><p>&#160; &#160; &#160; &#160;在看构造函数之后先看下一下<code>ArrayList</code>类的三个重要私有变量</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/24/Java Source/Java-ArrayList/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/24/Java Source/Java-ArrayList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/24/Java Source/Java-ArrayList/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
   </nav>
 
 </div>
@@ -821,7 +818,7 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 		  
 		
 		  
@@ -857,6 +854,10 @@ B.冒泡排序
 		  
 		
 		  
+			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
 		  
 		
@@ -869,7 +870,7 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>1</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 		  
 		
 		  
@@ -898,7 +899,7 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 			
 		
 			
@@ -914,11 +915,11 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
 			
 		
 			
@@ -946,6 +947,14 @@ B.冒泡排序
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
@@ -954,15 +963,7 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Cookie/" title="Cookie">Cookie<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -1171,7 +1172,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
