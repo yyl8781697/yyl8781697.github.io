@@ -69,6 +69,8 @@
 					
 						<li><a href="/books">Books</a></li>
 					
+						<li><a href="/favorites">Favorites</a></li>
+					
 						<li><a href="/about">About</a></li>
 					
 					<li>
@@ -85,79 +87,6 @@
     </header>
     <div id="container">
       <div id="main">
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/26/Food/zhuti-huangdou-tang/" title="自己煮：猪蹄黄豆汤" itemprop="url">自己煮：猪蹄黄豆汤</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-26T14:18:25.000Z" itemprop="datePublished"> 发表于 2015-06-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>猪蹄黄豆汤的流程：</p>
-<ol>
-<li>切猪蹄（真难切。。。）</li>
-<li>将切好的猪蹄和黄豆在水中浸泡好几个小时</li>
-<li>起油锅，放一点点油</li>
-<li>将猪蹄炒30秒左右</li>
-<li>加水没过猪蹄，</li>
-<li>等水开了，放入黄豆</li>
-<li>放入料酒，八角，茴香</li>
-<li>一直煮2小时，期间加了一些水 -_-
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/26/Food/zhuti-huangdou-tang/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Food/">Food</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Food/">Food</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/26/Food/zhuti-huangdou-tang/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/26/Food/zhuti-huangdou-tang/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
 
    
     
@@ -815,9 +744,90 @@
 
 
 
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举" itemprop="url">谈谈Scala中的枚举</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-06T01:56:03.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="先谈Java中的枚举">先谈Java中的枚举</h2><p>将<code>Scala</code>的枚举之前，我们先来讲讲关于<code>Java</code>里面的枚举（相信对于广大程序猿来说都是很熟悉）：</p>
+<ul>
+<li><p>使用<code>enum</code>关键词定义</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;...&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了<code>java.lang.Enum</code></p>
+</li>
+<li>无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）</li>
+<li>枚举其实是一组<code>int</code>常量（当初它就是因为使用<code>int</code>常量的需求很大才又了枚举），它还可以在<code>swtich</code>中很方便的使用</li>
+<li><p>每个枚举变量还可以重写枚举类或者实现接口中的方法（这个蛮好用）</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;</span><br><span class="line">Mon&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"monday"</span>;&#125;</span><br><span class="line">&#125;,</span><br><span class="line">Tue&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"tuesday"</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">""</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>…（我也不知道了-_-）</p>
+</li>
+</ul>
+<h2 id="再看Scala中的枚举">再看Scala中的枚举</h2><blockquote>
+<p>你会发现，上面说的一切在<code>Scala</code>中其实并没有甚么卵用-_-，因为在<code>Scala</code>中压根就么有<code>enum</code>这个关键词，但是当初发明<code>Scala</code>大神兼<code>Java</code>的创始人并没有落下枚举。</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/06/Scala/Enum-in-Scala/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/06/Scala/Enum-in-Scala/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/06/Scala/Enum-in-Scala/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
   </nav>
 
 </div>
@@ -894,10 +904,6 @@
 		
 		  
 			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/Others/" title="Others">Others<sup>1</sup></a></li>
 		  
 		
 		  

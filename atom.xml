@@ -58,7 +58,7 @@
     <link href="http://yyl8781697.github.io/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/"/>
     <id>http://yyl8781697.github.io/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/</id>
     <published>2016-01-26T09:06:31.000Z</published>
-    <updated>2016-02-03T07:15:01.000Z</updated>
+    <updated>2016-02-04T09:51:48.000Z</updated>
     <content type="html"><![CDATA[<pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
 </code></pre><h2 id="概率排序原理">概率排序原理</h2><p>以往的<code>向量空间模型</code>是将<code>query</code>和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而<code>概率检索模型</code>是一种直接对用户需求进行相关性的建模方法,一个<code>query</code>进来，将所有的文档分为两类—-<code>相关文档</code>、<code>不相关文档</code>,这样就转为了一个相关性的分类问题,赞!</p>
 <p>对于某个文档$D$来说，$P(R|D)$表示该文档数据相关文档的概率，则$P(NR|D)$表示该文档属于不相关文档的概率，如果<code>query</code>属于相关文档的概率大于不相关文档$P(R|D)&gt;P(RN|D)$，则认为这个文档是与用户查询相关相关的.</p>
@@ -2026,28 +2026,6 @@ f就是中位数  直接返回就好啦
   </entry>
   
   <entry>
-    <title><![CDATA[各种便利的网站]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/26/Others/I-Likes-These-Websites/"/>
-    <id>http://yyl8781697.github.io/2015/08/26/Others/I-Likes-These-Websites/</id>
-    <published>2015-08-26T10:06:26.000Z</published>
-    <updated>2016-01-26T15:45:58.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>收集了对自己各种有用的网站^_^</p>
-</blockquote>
-<h2 id="学习">学习</h2><h3 id="Latex">Latex</h3><p>在线编辑器<a href="http://latex.codecogs.com/eqneditor/editor.php" target="_blank" rel="external">http://latex.codecogs.com/eqneditor/editor.php</a></p>
-<h2 id="码代">码代</h2><h2 id="娱乐">娱乐</h2>]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>收集了对自己各种有用的网站^_^</p>
-</blockquote>
-<h2 id="学习">学习</h2><h3 id="Latex">Latex</h3><p>在线编辑器<a href="http://latex.codecogs.com/eq]]>
-    </summary>
-    
-      <category term="Others" scheme="http://yyl8781697.github.io/categories/Others/"/>
-    
-  </entry>
-  
-  <entry>
     <title><![CDATA[《台大机器学习基石》Logistic Regression]]></title>
     <link href="http://yyl8781697.github.io/2015/08/21/Machine%20Learning/Logistic-Regression/"/>
     <id>http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/</id>
@@ -2716,6 +2694,112 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 <blockquote>
 <p>奥卡姆剃刀原理，能够很好的解释已知数据并且十分简单才是最好的模型。</p>
 </blockquote>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[《台大机器学习基石》VC Dimension]]></title>
+    <link href="http://yyl8781697.github.io/2015/08/15/Machine%20Learning/VC-Dimension/"/>
+    <id>http://yyl8781697.github.io/2015/08/15/Machine Learning/VC-Dimension/</id>
+    <published>2015-08-15T07:45:20.000Z</published>
+    <updated>2015-08-19T15:20:40.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
+<blockquote>
+<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br><a id="more"></a></p>
+</blockquote>
+<h3 id="证明">证明</h3><p>那能否证明<code>B(N,k)&lt;=ploy(N)</code>呢？<br>先来看下面这个表,其中当前纵向有<code>N</code>，横向表示具体的<code>k</code>值，表中的内容就是需要计算的<code>B(N,k)</code>值</p>
+<ul>
+<li><p>B(2,2)=3，B(3,2)=4 手算-_-<br>  <img src="/img/VC-Dimension/t1.png" width="500px" height="300px"><br>  因为任意两个点都不能被<code>shatter</code>，那么2个点产生的<code>dichotomies</code>不能超过3,同理3个点产生的<code>dichotomies</code>不能超过4</p>
+</li>
+<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能超过2，所以这里最大值都为1</p>
+</li>
+<li><p>B(N,k)=2<sup>N</sup>  当<code>N&lt;k</code><br>  <img src="/img/VC-Dimension/t3.png" width="500px" height="300px"><br>  这里的<code>2<sup>N</sup><2<sup>k<sup></sup></2<sup></code>必然成立，所以最大值直接取2<sup>N</sup>，不然多余选的点也都是重复的。</p>
+</li>
+<li><p>B(N,k)=2<sup>N</sup>-1  当<code>N=k</code><br>  <img src="/img/VC-Dimension/t4.png" width="500px" height="300px"><br>  在<code>N=k</code>的情况下满足全部不可能（点的所有组合为不可能），但是这里再减去一种就可以满足了</p>
+</li>
+<li><p>B(N,k)&lt;=B(N-1,k)+B(N-1,k-1)  当<code>N&gt;k</code><br>  <img src="/img/VC-Dimension/t5.png" width="500px" height="300px"><br>  表中新添的值为上限的上限，耐心地看下上图的推导-_-</p>
+<ol>
+<li>通过计算机暴力求解B(4,3)=11,(一共16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
+<li>现在将<code>x<sub>4</sub></code>这个点遮掉<br> <img src="/img/VC-Dimension/d2.png" width="500px" height="300px"></li>
+<li>同时将蓝色的遮掉<br> <img src="/img/VC-Dimension/d3.png" width="500px" height="300px"><br> 这里不能多余2个点被<code>shatter</code></li>
+<li>整理之后就可以得到如下关系式<br> <img src="/img/VC-Dimension/d4.png" width="300px" height="200px"></li>
+<li>写成通用式子为<br> <img src="/img/VC-Dimension/d5.png" width="300px" height="200px"><br> 即得解^_^</li>
+</ol>
+</li>
+</ul>
+<p>根据上限的上限的递推式，再结合数学归纳法可以得到<br><img src="/img/VC-Dimension/sg.png" width="300px" height="200px"><br>它的最高项的指数是<code>k-1</code></p>
+<p>那么现在：</p>
+<ol>
+<li><code>Growth Function</code>会被上限<code>B(N,k)</code> bound住</li>
+<li>而<code>B(N,k)</code> 又会被上限的上限bound住</li>
+<li>这个上限的上限的多项式和<code>break point</code>点有关</li>
+<li>所以可以得出结果，只要<code>break point</code>点存在，那么他的<code>Growth Function</code>最终会是一个多项式</li>
+</ol>
+<p>但是然并卵，<code>m<sub>H</sub>(N)</code>并无法直接代入到之前的</p>
+<h3 id="计算VC">计算VC</h3><p><img src="/img/VC-Dimension/rbl.png" width="400px" height="200px"></p>
+<blockquote>
+<p>主要是因为：<code>E<sub>in</sub>(h)</code>的<code>hypothesis</code>可能取值是有限个的，但<code>E<sub>out</sub>(h)</code>的可能取值是无限的。可以通过将<code>E<sub>out</sub>(h)</code> 替换为验证集(verification set) 的<code>E<sub>in</sub>‘</code>来解决这个问题。<br><img src="/img/VC-Dimension/einp.png" width="500px" height="200px"></p>
+</blockquote>
+<p>好，那么接下来主要经历如下三个步骤：</p>
+<ol>
+<li>使用<code>E<sub>in</sub>‘</code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></li>
+<li>这样最终可能出现的<code>H(x1,x2..xn,x1’,x2’…xn’)</code><br> <img src="/img/VC-Dimension/s2.png" width="500px" height="200px"></li>
+<li>使用不替换的<code>Hoeffding</code><br> <img src="/img/VC-Dimension/s3.png" width="500px" height="200px"></li>
+</ol>
+<p>最终得到了著名的<code>VC Bound</code><br><img src="/img/VC-Dimension/vc.png" width="500px" height="200px"></p>
+<pre><code>那么终于可以说明空间存在有限的break point，并且采样的资料量N够多，就可以保证找到一个<span class="function"><span class="title">Ein</span><span class="params">(h)</span></span>最小的时候，得到最小的<span class="function"><span class="title">Eout</span><span class="params">(h)</span></span>,也就是说明Learning的可行性
+</code></pre><h2 id="VC_Dimension">VC Dimension</h2><h3 id="定义">定义</h3><p>先来看一下<code>VC Dimension</code>的定义<br><img src="/img/VC-Dimension/vi.png" width="400px" height="300px"><br><code>VC Dimension</code>表示在<code>N</code>个点中能够<code>shatter</code>的最大的值，也就是<code>k-1</code>（<code>k</code>为<code>break point</code>,该值时不能<code>shatter</code>的最小值）</p>
+<p>这样的话就可以很容易计算出我们之前一直在讨论的那几种情况的<code>VC Dimension</code><br><img src="/img/VC-Dimension/vz.png" width="400px" height="300px"><br>那么我们可以知道好的<code>VC Dimension</code>应该是有限的，这样才可以保证<code>E<sub>in</sub>≈E<sub>out</sub></code><br>同时这样就就会有</p>
+<ol>
+<li><code>VC Dimension</code>与算法A无关</li>
+<li><code>VC Dimension</code>与数据p的分布无关</li>
+<li><code>VC Dimension</code>与目标函数f无关</li>
+</ol>
+<p>说了这么多，看一下<code>VC Dimension</code>与大<code>M</code>的关系<br><img src="/img/VC-Dimension/vm.png" width="500px" height="500px"><br>这样就可以看到：</p>
+<ol>
+<li><code>M</code>很小的时候，得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>会非常相似，但是可选的<code>E<sub>in</sub></code>太少了，可能到最后选择了 一个较大的<code>E<sub>in</sub></code></li>
+<li><code>M</code>很大的时候，可选的<code>E<sub>in</sub></code>比较多，可能到最后得到的<code>E<sub>in</sub></code>得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>可能不怎么想相似</li>
+<li><code>VC Dimension</code>很小的时候，与第一条一样，但是区别的是它的自由度受到了限制</li>
+<li><code>VC Dimension</code>很大的时候，与第二条一样，但是区别的是它的自由度没受限制，很自由</li>
+</ol>
+<blockquote>
+<p><code>VC Dimension</code>反映了假设空间<code>hypothesis set</code>的强大程度，<code>VC Dimension</code>越大，<code>hypothesis set</code>也越强，因为它可以<code>shatter</code>更多的点。</p>
+</blockquote>
+<h3 id="物理意义">物理意义</h3><p><code>VC Dimension</code>的物理意义是表示二元分类下的自由度是多少，而这个自由度是表示参数<code>w</code>的维度<br><img src="/img/VC-Dimension/vw.png" width="400px" height="300px"></p>
+<h3 id="模型复杂度">模型复杂度</h3><p>现在将之前任意一<code>hypothesis</code>发生坏事的概率<code>VC bound</code>变一下形<br><img src="/img/VC-Dimension/mc.png" width="500px" height="400px"><br>最终，根号里面的叫做模型复杂度，<strong>模型的复杂度越大，其泛化能力就会越低</strong>，这个模型的复杂度越与三个项有关：</p>
+<ol>
+<li><code>N</code>，抽样有多少个点</li>
+<li><code>H</code>，这里的<code>VC Dimension</code>有多大</li>
+<li><code>δ</code>，<code>E<sub>in</sub></code>与<code>E<sub>out</sub></code>相似在一个阈值内的概率</li>
+</ol>
+<p>现在在图上画出三者的关系：<br><img src="/img/VC-Dimension/tt.png" width="400px" height="300px"><br>那么可以看到随着<code>VC Dimension</code>越大，其模型复杂度也会越大,<code>E<sub>in</sub></code>会变小，但是<code>E<sub>out</sub></code>会有像图中一样一个山谷形的表现，最小的<code>E<sub>out</sub></code>会在中间</p>
+<p>所以更加深层次的可以了解到，我们并不是把<code>E<sub>in</sub></code>做的越小越好，因为这个时候可能会导致模型复杂度变大，从而最终使<code>E<sub>out</sub></code>也会变大,真正会做机器学习的人在优化<code>E<sub>in</sub></code>的同时会考虑带来的其他复杂度的代价。</p>
+<h3 id="采样复杂度">采样复杂度</h3><p><code>VC bound</code>的另一个意义就是模型复杂度<br>那就现在给你<br><img src="/img/VC-Dimension/p.png" width="400px" height="100px"><br>这些参数，那么如果计算使用最少的样本量来完成上述需求，计算过程可以参考下面<br><img src="/img/VC-Dimension/js.png" width="400px" height="200px"><br>而在理论上需要的样本是<code>N≈10000d<sub>vc</sub></code><br>但是其实在实际上<code>N≈10d<sub>vc</sub></code>即可,<br>为什么会这样呢？<br><img src="/img/VC-Dimension/ks.png" width="500px" height="400px"><br>这是因为<code>VC bound</code>推导的过程很宽松，里面很多假设都是取了上限</p>
+<blockquote>
+<p>所以，模型较复杂时(<code>N≈10d<sub>vc</sub></code> 较大)，需要更多的训练数据</p>
+</blockquote>
+<pre><code>除此外，我们为了避免overfit，一般都会加正则项。那加了正则项后，新的假设空间会得到一些限制，此时新假设空间的VC维将变小，也就是同样训练数据条件下，E<span class="keyword">in</span>更有可能等于E<span class="keyword">out</span>，所以泛化能力更强。这里从VC维的角度解释了正则项的作用。
+</code></pre><h2 id="参考">参考</h2><ul>
+<li>《台湾国立大学-机器学习基石》第六讲</li>
+<li>《台湾国立大学-机器学习基石》第七讲</li>
+<li><a href="http://www.flickering.cn/machine_learning/2015/04/vc%E7%BB%B4%E7%9A%84%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89/" target="_blank" rel="external">VC维的来龙去脉</a></li>
+</ul>
+<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
+<blockquote>
+<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br>]]>
     
     </summary>
     
