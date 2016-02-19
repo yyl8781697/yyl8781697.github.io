@@ -94,6 +94,159 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/16/Algorithm/Print-Tail-Head/" title="链表的逆序输出" itemprop="url">链表的逆序输出</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-16T15:52:12.000Z" itemprop="datePublished"> 发表于 2015-07-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="问题">问题</h2><pre><code>如何将一个链表进行逆序输出，比如<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>的链表输出为<span class="number">4321</span>
+</code></pre><h2 id="解题">解题</h2><ol>
+<li>最方便可能就是先讲原生链表翻转，再按翻转的输出，这样会破坏原有链表的结构</li>
+<li>第二种就是先遍历存放到一个数组或者栈中，然后从后往前输出即可，就需要额外的O(n)空间。</li>
+</ol>
+<p>这两种方法都是需要额外的复杂度或者空间，网络行流传更好的方法就是使用递归-_-! 神方法啊，递归一次即可。。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/16/Algorithm/Print-Tail-Head/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/16/Algorithm/Print-Tail-Head/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/16/Algorithm/Print-Tail-Head/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/16/Algorithm/LinkedList-Revert/" title="链表的翻转" itemprop="url">链表的翻转</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-16T15:28:28.000Z" itemprop="datePublished"> 发表于 2015-07-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>将链表<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>翻转成<span class="number">4</span>-&gt;<span class="number">3</span>-&gt;<span class="number">2</span>-&gt;<span class="number">1</span>。
+</code></pre><h2 id="解题">解题</h2><p>最简单就是遍历链表，然后保存到一个数组中，然后再向后构建数组，当然，这种方式不好，会有额外开销。-_-<br>这里来介绍一下另一种方法：<br>假设现在的链表是</p>
+<pre><code><span class="built_in">null</span><span class="subst">-&gt;</span><span class="number">1</span><span class="subst">-&gt;</span><span class="number">2</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
+</code></pre><p>如果我们想办法将2移到1的前面，然后3又移到2的前面，最后将4移动3的前面，这不就完了嘛？<br>好，现在开始移动：</p>
+<pre><code>    <span class="number">2</span>
+   <span class="subst">/</span> <span class="subst">\</span> 
+<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
+将<span class="number">1</span>指向<span class="number">2</span>的next，然后将<span class="number">2</span>的next指向head的next，然后head的next指向<span class="number">2</span>
+
+    <span class="number">3</span><span class="subst">-</span><span class="number">2</span>
+   <span class="subst">/</span>  <span class="subst">|</span>
+<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
+然后再移动<span class="number">3</span>
+
+    <span class="number">4</span><span class="subst">-</span><span class="number">3</span><span class="subst">-</span><span class="number">2</span>
+   <span class="subst">/</span>    <span class="subst">|</span>
+<span class="built_in">null</span>    <span class="number">1</span><span class="subst">-&gt;</span><span class="built_in">null</span>
+再移动<span class="number">4</span>
+</code></pre><blockquote>
+<p>这种方式就不需要额外的空间，也只需要遍历一遍即可。</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/16/Algorithm/LinkedList-Revert/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/16/Algorithm/LinkedList-Revert/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/16/Algorithm/LinkedList-Revert/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/07/Spark/Graphs-Applications/" title="graphx上的一些简单应用" itemprop="url">graphx上的一些简单应用</a>
   </h1>
   <p class="article-author">By
@@ -674,154 +827,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/" title="TeraSort在Hadoop中的非常非常非常简单的实现" itemprop="url">TeraSort在Hadoop中的非常非常非常简单的实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-27T10:26:12.000Z" itemprop="datePublished"> 发表于 2015-06-27</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>关于TeraSort的思想其实是非常简单的，但是查了网上好多资料，感觉把它的实现复杂化了（指的在<code>Hadoop</code>中），它们要自定义<code>InputFormat</code>，<code>RecordReader</code>等，其实我想说，实现一个TeraSort根本不需要这么麻烦，所以本文就将实现一个非常简单、非常简单、非常简单的实现记录下来，额，重要的事情说三遍。^_^</p>
-</blockquote>
-<h2 id="TeraSort简介">TeraSort简介</h2><pre><code><span class="number">1</span>TB排序通常用于衡量分布式数据处理框架的数据处理能力。TeraSort是Hadoop中的的一个排序作业，在<span class="number">2008</span>年，Hadoop在<span class="number">1</span>TB排序基准评估中赢得第一名，耗时<span class="number">209</span>秒。<span class="comment">(其实现在在TeraSort上Spark已将Hadoop甩在后面-_-)</span>
-</code></pre><p>在看排序之前，先来看一下Map-Reduce的一张非常经典的流程图：<br><img src="/img/TeraSort-in-Hadoop/shuffle.gif" alt="Map-Reduce流程图"></p>
-<p>从图种可以了解到Map-Reduce执行的整个过程中会进行两次排序，一次是在Map端的shuffle，另一次是在Reduce端的shuffle，TeraSort正好是利用这种特性来进行排序</p>
-<blockquote>
-<p>注意，这里的排序仅仅是针对<code>key</code>的。</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/27/Hadoop/TeraSort-in-Hadoop/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/26/Food/zhuti-huangdou-tang/" title="自己煮：猪蹄黄豆汤" itemprop="url">自己煮：猪蹄黄豆汤</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-26T14:18:25.000Z" itemprop="datePublished"> 发表于 2015-06-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>猪蹄黄豆汤的流程：</p>
-<ol>
-<li>切猪蹄（真难切。。。）</li>
-<li>将切好的猪蹄和黄豆在水中浸泡好几个小时</li>
-<li>起油锅，放一点点油</li>
-<li>将猪蹄炒30秒左右</li>
-<li>加水没过猪蹄，</li>
-<li>等水开了，放入黄豆</li>
-<li>放入料酒，八角，茴香</li>
-<li>一直煮2小时，期间加了一些水 -_-
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/26/Food/zhuti-huangdou-tang/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Food/">Food</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Food/">Food</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/26/Food/zhuti-huangdou-tang/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/26/Food/zhuti-huangdou-tang/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
   </nav>
 
 </div>
@@ -893,7 +901,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 		  
 		
 		  
@@ -913,7 +921,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>3</sup></a></li>
 		  
 		
 		  
@@ -942,7 +950,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
 			
 		
 			
@@ -963,6 +971,10 @@
 		
 			
 				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
 			
 		
 			
@@ -987,10 +999,6 @@
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 			
 		
 			

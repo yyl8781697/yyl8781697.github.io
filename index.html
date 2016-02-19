@@ -94,6 +94,151 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/" title="针对BM25遇到长文档时失效情况的一种高效解决方案" itemprop="url">针对BM25遇到长文档时失效情况的一种高效解决方案</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-16T09:17:19.000Z" itemprop="datePublished"> 发表于 2016-02-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
+</code></pre><h2 id="当BM25遇到长文档">当BM25遇到长文档</h2><p>文档相关性模型-<code>BM25</code>的拟合公式如下:</p>
+<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
+
+<p>其中第一部分表示<code>BIM</code>的值，第二部分表示在文档中的权重，第三部分表示在查询词中的权重，(具体符号解释参考之前的<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/">BM25介绍</a>)现将第二部分单独拿出来:</p>
+<p><center>$f(q,D)=\frac{(k_1+1) \times TF}{k_1 \times ((1-b)+b \cdot \frac{dl}{avdl} )+TF}=\frac{(k_1+1) \times c’(q,D)}{k_1+c’(q,D)}$</center><br>其中:<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/" title="Learning to rank学习基础" itemprop="url">Learning to rank学习基础</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-15T02:31:43.000Z" itemprop="datePublished"> 发表于 2016-02-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>Learning to <span class="function"><span class="title">rank</span><span class="params">(简写 LTR、L2R)</span></span> 也叫排序学习，指的是机器学习中任何用于排序的技术。
+</code></pre><h2 id="为什么要用LTR">为什么要用LTR</h2><p>传统的检索模型靠人工拟合排序公式，并通过不断的实验确定最佳的参数组合，以此来形成相关性打分。这种方式非常简单高效，应该范围也很广，比如简单的博客排序、论坛的<code>QA</code>排序等.但是也同时存在较大的问题:</p>
+<ol>
+<li>手动调参工作量太大</li>
+<li>可能会过拟合</li>
+<li>如果模型参数很多，手动调参的可用性就很低了~</li>
+</ol>
+<p>LTR与此思路不同，最合理的排序公式由机器学习算法来确定，而人则需要给机器学习提供训练数据,他的优势有:</p>
+<ol>
+<li>可以自动调节参数</li>
+<li>可以融合多方面观点的(evidences)的数据</li>
+<li>避免过拟合(通过正则项)</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/" title="在Hexo中离线安装数据工具包-Mathjax" itemprop="url">在Hexo中离线安装数据工具包-Mathjax</a>
   </h1>
   <p class="article-author">By
@@ -647,146 +792,9 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/05/Python/Numpy-Fast-Memory/" title="numpy工具包常用快速记" itemprop="url">numpy工具包常用快速记</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-05T14:54:26.000Z" itemprop="datePublished"> 发表于 2015-10-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>numpy</code>这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看<a href="http://docs.scipy.org/doc/">scipy api</a></p>
-</blockquote>
-<p>使用之前首先得引入包<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure></p>
-<h2 id="array">array</h2><p><code>np.array</code>实现了真正的数组，在<code>numpy</code>中其实就是矩阵啦，同时提供了丰富的矩阵计算方法<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/10/05/Python/Numpy-Fast-Memory/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Python/">Python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/10/05/Python/Numpy-Fast-Memory/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/10/05/Python/Numpy-Fast-Memory/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" title="关于Scala中Iterator中size/length的一个坑" itemprop="url">关于Scala中Iterator中size/length的一个坑</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-19T02:36:42.000Z" itemprop="datePublished"> 发表于 2015-09-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>Scala</code>语言是出了名的语法诡异，功能强大-_-，他的<code>Iterator</code>也是如此，还提供了亲民心的<code>size/length</code>方法，但是，但是，但是慎用!!</p>
-</blockquote>
-<p>事情是这样的</p>
-<pre><code>今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量<span class="keyword">N</span>（使用size方法来做），然后计算出一个需要采样的量<span class="keyword">n</span>,然后遍历(直接<span class="keyword">for</span>来做)这个迭代器，按自己的业务采样<span class="keyword">n</span>个记录！
-</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Scala/">Scala</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Scala/">Scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -858,7 +866,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>12</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
 		  
 		
 		  
@@ -878,7 +886,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>3</sup></a></li>
 		  
 		
 		  
@@ -907,7 +915,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
 			
 		
 			
@@ -928,6 +936,10 @@ yans-MacBook-Pro:Downloads yanyl$
 		
 			
 				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
 			
 		
 			
@@ -952,10 +964,6 @@ yans-MacBook-Pro:Downloads yanyl$
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>2</sup></a></li>
 			
 		
 			

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-02-03T06:24:54.000Z</updated>
+  <updated>2016-02-16T12:39:24.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -13,6 +13,348 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[针对BM25遇到长文档时失效情况的一种高效解决方案]]></title>
+    <link href="http://yyl8781697.github.io/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/"/>
+    <id>http://yyl8781697.github.io/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</id>
+    <published>2016-02-16T09:17:19.000Z</published>
+    <updated>2016-02-16T12:39:24.000Z</updated>
+    <content type="html"><![CDATA[<pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
+</code></pre><h2 id="当BM25遇到长文档">当BM25遇到长文档</h2><p>文档相关性模型-<code>BM25</code>的拟合公式如下:</p>
+<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
+
+<p>其中第一部分表示<code>BIM</code>的值，第二部分表示在文档中的权重，第三部分表示在查询词中的权重，(具体符号解释参考之前的<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/" target="_blank" rel="external">BM25介绍</a>)现将第二部分单独拿出来:</p>
+<p><center>$f(q,D)=\frac{(k_1+1) \times TF}{k_1 \times ((1-b)+b \cdot \frac{dl}{avdl} )+TF}=\frac{(k_1+1) \times c’(q,D)}{k_1+c’(q,D)}$</center><br>其中:<br><a id="more"></a></p>
+<p><center>$c’(q,D)=\frac{TF}{1-b+b \cdot \frac{dl}{avdl}}$</center><br>现在先来做一个假设，假设当前有个文档<code>很长很长</code>，也就是$dl$这个值很大，则可以发现$c’(q,D)$就会很小，小到接近于0，因此会导致文档部分的因子$f(q,D)$也会接近于0，几乎和这个词没有出现在这个文档一样..-_-</p>
+<p>在这种情况下，针对长文档，<code>BM25</code>的效果会比较差<br>下面的图就是<code>BM25</code>在不同文档长度下的实验</p>
+<p><img src="/img/BM25-Fails-When-The-Docments-Are-Very-Long/doc-len-comp.png" width="600px"></p>
+<p>可以发现在<code>BM25</code>中，随着文档的变长，相关性在变高，但是其被检索的概率并没有随着相关性的趋势而变高，也就是长文档使用<code>BM25</code>的效果变得比较差。</p>
+<h2 id="高效解决方案">高效解决方案</h2><p>为了避免长文档在<code>BM25</code>的相关性中被惩罚，我们需要对文档权重$f(q,D)$做一个规范化约束，但是由于<code>BM25</code>早已被公认为是一种比较有效的文档相关性，所以这个约束不能破坏掉<code>BM25</code>自身的特征.</p>
+<p>我们希望规范化约束之后保持以下三点特性:</p>
+<ol>
+<li>当$c’(q,D)=0$的时候，$f(q,D)$也为0</li>
+<li>随着$c’(q,D)$的变大，$f(q,D)$也需要呈现单调递增，但是会趋向于一个最大值</li>
+<li>随着$c’(q,D)$的减少，$f(q,D)$会单调递减趋向于一个最小值，但是这个最小值需要足够大</li>
+</ol>
+<blockquote>
+<p>就是因为原生的<code>BM25</code>不满足第3点，所以会出现在长文档下<code>BM25</code>出现失效的情况</p>
+</blockquote>
+<!-- 
+f'(q,D)=\left\{
+\begin{aligned}
+\frac{(k_1+1) \cdot [c'(q,D)+\delta ]}{k_1 + [c'(q,D)+\delta ]}  & \quad if \quad c'(q,D)>0\\
+0 & \quad otherwise\\
+\end{aligned}
+\right.
+-->
+<p>而下面的改进$f’(q,D)$正好可以满足上述三个特性:</p>
+<p><img src="/img/BM25-Fails-When-The-Docments-Are-Very-Long/gj.gif" alt=""></p>
+<p>使用时针对原来的$c’(q,D)$值增加了一个平滑项$\delta$，增加了平滑项之后依然满足<code>第1、2点</code>特性，并且当$c’(q,D)&gt;0$的时候$f’(q,D)$有一个下界:</p>
+<p><center>$\frac{(k_1+1) \cdot \delta}{k_1+ \delta}$</center><br>这样也正好可以满足<code>第3点</code>特性</p>
+<p>进行该项小改进之后的模型称为<code>BM25L</code>,遇到长文档时并不会失效，并且还保持原有的<code>BM25</code>特性.</p>
+<h2 id="实验效果验证">实验效果验证</h2><p>针对多个数据集  ，使用不同的调节参数$b$,$k_1$,$\delta$进行试验:<br><img src="/img/BM25-Fails-When-The-Docments-Are-Very-Long/exp.png"></p>
+<p>在第三章图明显可以发现<code>BM25L</code>的效果对<code>BM25</code>有较大的绝对提升，其中较优的参数范围为:</p>
+<ol>
+<li>$b \in [0,3,0.6] $</li>
+<li>$k_1 \in [1.0,2.0]$</li>
+<li>$\delta = 0.5$时最优</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.600.16&amp;rep=rep1&amp;type=pdf" target="_blank" rel="external">When Documents Are Very Long, BM25 Fails!</a></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
+</code></pre><h2 id="当BM25遇到长文档">当BM25遇到长文档</h2><p>文档相关性模型-<code>BM25</code>的拟合公式如下:</p>
+<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
+
+<p>其中第一部分表示<code>BIM</code>的值，第二部分表示在文档中的权重，第三部分表示在查询词中的权重，(具体符号解释参考之前的<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/">BM25介绍</a>)现将第二部分单独拿出来:</p>
+<p><center>$f(q,D)=\frac{(k_1+1) \times TF}{k_1 \times ((1-b)+b \cdot \frac{dl}{avdl} )+TF}=\frac{(k_1+1) \times c’(q,D)}{k_1+c’(q,D)}$</center><br>其中:<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+    
+      <category term="Search Engine" scheme="http://yyl8781697.github.io/categories/Search-Engine/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Learning to rank学习基础]]></title>
+    <link href="http://yyl8781697.github.io/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/"/>
+    <id>http://yyl8781697.github.io/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/</id>
+    <published>2016-02-15T02:31:43.000Z</published>
+    <updated>2016-02-19T06:40:07.000Z</updated>
+    <content type="html"><![CDATA[<pre><code>Learning to <span class="function"><span class="title">rank</span><span class="params">(简写 LTR、L2R)</span></span> 也叫排序学习，指的是机器学习中任何用于排序的技术。
+</code></pre><h2 id="为什么要用LTR">为什么要用LTR</h2><p>传统的检索模型靠人工拟合排序公式，并通过不断的实验确定最佳的参数组合，以此来形成相关性打分。这种方式非常简单高效，应该范围也很广，比如简单的博客排序、论坛的<code>QA</code>排序等.但是也同时存在较大的问题:</p>
+<ol>
+<li>手动调参工作量太大</li>
+<li>可能会过拟合</li>
+<li>如果模型参数很多，手动调参的可用性就很低了~</li>
+</ol>
+<p>LTR与此思路不同，最合理的排序公式由机器学习算法来确定，而人则需要给机器学习提供训练数据,他的优势有:</p>
+<ol>
+<li>可以自动调节参数</li>
+<li>可以融合多方面观点的(evidences)的数据</li>
+<li>避免过拟合(通过正则项)</li>
+</ol>
+<a id="more"></a>
+<h2 id="LTR基本框架">LTR基本框架</h2><p><code>LTR</code>的核心还是机器学习，只是目标不仅仅是简单的分类或者回归了，最主要的是产出文档的排序结果，它通常的工作框架如下:<br><img src="/img/Learning-To-Rank-Base-Knowledge/lrt_framework.png" width="400px"></p>
+<p>所描述的步骤为:<code>训练数据获取-&gt;特征提取-&gt;模型训练-&gt;测试数据预测-&gt;效果评估</code></p>
+<h2 id="训练数据的获取">训练数据的获取</h2><h4 id="人工标注">人工标注</h4><p>人工标注的数据主要有以下几大类型:</p>
+<ul>
+<li><p>单点标注</p>
+<ul>
+<li>对于每个查询文档打上绝对标签</li>
+<li>二元标注：相关 vs 不相关</li>
+<li><p>五级标注：完美(Perfect),出色(Excellent),好(Good),一般(Fair),差(Bad) ，一般后面两档属于不相关</p>
+<blockquote>
+<p>好处：标注的量少O(n)<br>坏处：难标。。。不好统一</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>两两标注</p>
+<ul>
+<li><p>对于一个查询<code>Query</code>,要标注文档$d1$比文档$d2$是否更加相关 $(q,d1)\succ (q,d2)?$</p>
+<blockquote>
+<p>好处：标注起来比较方便<br>坏处：标注量大 估计得有O(n^2)</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>列表标注</p>
+<ul>
+<li><p>对于一个查询<code>Query</code>，将人工理想的排序整个儿标好</p>
+<blockquote>
+<p>好处： 相对于上面两种，标的效果会很好<br>坏处： 这个工作量也太大了…-_-||</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="日志抽取">日志抽取</h4><p>当搜索引擎搭建起来之后用户的点击数据就变得非常好使。</p>
+<pre><code>比如，结果ABC分别位于<span class="number">123</span>位，B比<span class="literal">A</span>位置低，但却得到了更多的点击，那么B的相关性可能好于<span class="literal">A</span>.
+</code></pre><p>这种点击数据隐含了<code>Query</code>到文档的相关性好坏。所以一般会使用点击倒置的<code>高低位</code>结果作为训练数据.</p>
+<p>但是他也是存在问题的：</p>
+<ul>
+<li>用户总是习惯于从上到下浏览搜索结果</li>
+<li>用户点击有比较大的噪声</li>
+<li>一般头查询(<code>head query</code>)才存在用户点击</li>
+</ul>
+<h2 id="特征提取">特征提取</h2><p>检索系统会使用一系列特征来表示一次查询，通过模型之后最终决定文档的排序顺序，这里用$q$来表示查询,$d$表示查询的文档,$occur-term$表示$q$与$d$共现的词，则提取的特征主要有以下三大类:</p>
+<ul>
+<li>$occur-term$与$q$特征<ul>
+<li>共现在查询中的出现次数、比率等</li>
+</ul>
+</li>
+<li>$occur-term$与$d$的特征<ul>
+<li>共现在文档中的出现次数、比率等</li>
+<li>共现词与文档的相关性特征:<code>BM25系列</code></li>
+</ul>
+</li>
+<li>$d$自身特征<ul>
+<li><code>PageRank</code>值</li>
+<li><code>Spam</code>信息</li>
+<li><code>Quality</code>质量分</li>
+<li>行为分,<code>ctr</code>，<code>停留时间</code>，<code>二跳率</code>等..</li>
+</ul>
+</li>
+</ul>
+<h2 id="模型训练">模型训练</h2><p><code>LTR</code>的模型主要有单文档方法(<code>Pointwise Approach</code>)、文档对方法(<code>Pairwise Approach</code>)和列表方法(<code>Listwise Approach</code>)三大类,下面是实现他们的各种算法:</p>
+<ul>
+<li>Pointwise Approach<ul>
+<li>Regression<ul>
+<li>Least Square Retrieval Function (TOIS 1989)</li>
+<li>Regression Tree for Ordinal Class Prediction (Fundamenta Informaticae, 2000)</li>
+<li><strong>Subset Ranking using Regression (COLT 2006)</strong></li>
+</ul>
+</li>
+<li>Classification<ul>
+<li>Discriminative model for IR (SIGIR 2004)</li>
+<li><strong>McRank (NIPS 2007)</strong></li>
+</ul>
+</li>
+<li>Ordinal regression<ul>
+<li><strong>Pranking (NIPS 2002)</strong></li>
+<li>OAP-BPM (EMCL 2003)</li>
+<li>Ranking with Large Margin Principles (NIPS 2002)</li>
+<li>Constraint Ordinal Regression (ICML 2005)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Pairwise Approach<ul>
+<li>Learning to Retrieve Information (SCC 1995)</li>
+<li>Learning to Order Things (NIPS 1998)</li>
+<li><strong>Ranking SVM (ICANN 1999)</strong></li>
+<li><strong>RankBoost (JMLR 2003)</strong></li>
+<li>LDM (SIGIR 2005)</li>
+<li><strong>RankNet (ICML 2005)</strong></li>
+<li><strong>Frank (SIGIR 2007)</strong></li>
+<li>MHR(SIGIR 2007)</li>
+<li><strong>GBRank (SIGIR 2007)</strong></li>
+<li>QBRank (NIPS 2007)</li>
+<li>MPRank (ICML 2007)</li>
+<li><strong>IRSVM (SIGIR 2006)</strong></li>
+<li>LambdaRank (NIPS 2006)</li>
+</ul>
+</li>
+<li>Listwise Approach<ul>
+<li>Non-measure specific<ul>
+<li><strong>ListNet (ICML 2007)</strong></li>
+<li><strong>ListMLE (ICML 2008)</strong></li>
+<li>BoltzRank (ICML 2009)</li>
+</ul>
+</li>
+<li>Measure-specific<ul>
+<li><strong>AdaRank (SIGIR 2007)</strong></li>
+<li><strong>SVM-MAP (SIGIR 2007)</strong></li>
+<li><strong>SoftRank (LR4IR 2007)</strong></li>
+<li>RankGP (LR4IR 2007)</li>
+</ul>
+</li>
+<li>LambdaMART</li>
+</ul>
+</li>
+</ul>
+<h3 id="Pointwise_Approach">Pointwise Approach</h3><pre><code><span class="variable">Pointwise</span>的处理对象是单独的一篇文档，将文档转换为特征向量之后，机器学习模型根据从训练数据中学习到的分类或者回归函数对文档打分，打分的结果就是搜索的结果.
+</code></pre><p>其实就是将文档排序转为了文档的回归、分类和有序分类问题，其函数的框架为:</p>
+<center>$L(F(X),y)=\sum_{i=1}^{n}l(f(x_i)-y_i)$</center><br>输入:<br>- 单个文档查询对:$(x_i,y_i)$<br>- 完全忽略上下文的关系<br>- 将标注转为数字，比如<code>Perfect-&gt;5, Excellent-&gt;4, Good-&gt;3, Fair-&gt;2, Bad-&gt;1</code><br><br>输出:<br>- 排序函数,对于给定查询文档对,能够计算出得分(score)或者所属类别(classification)<br><br>关于<code>Pointwise</code>下的三个分支，这张图解释的很好:<br><center><img src="/img/Learning-To-Rank-Base-Knowledge/pointwise_flow.png" width="400px"></center>
+
+<p>其主要区别就是<code>loss function</code>不同，也就是最后的结果目标不一样:</p>
+<ul>
+<li><code>Classification</code>:输入的是5档类别（作为离散），最后通过分类模型输测试数据的所属档位(其实就是多分类)</li>
+<li><code>Regression</code>:输入的是5档或者2档（作为连续），最后通过回归模型输出测试数据的一个相关性实数(就是回归)</li>
+<li><code>Ordinal Classification</code>:输入有序的档位，一般2档(离散),最后通过分类模型的阈值给到一个档位(应该是二分类把)</li>
+</ul>
+<p>实现<code>Pointwise</code>方法的主要算法有:</p>
+<ul>
+<li>Classification<ul>
+<li>Discriminative model for IR (SIGIR 2004)</li>
+<li><strong>McRank (NIPS 2007)</strong></li>
+</ul>
+</li>
+<li>Regression<ul>
+<li>Least Square Retrieval Function (TOIS 1989)</li>
+<li>Regression Tree for Ordinal Class Prediction (Fundamenta Informaticae, 2000)</li>
+<li><strong>Subset Ranking using Regression (COLT 2006)</strong></li>
+</ul>
+</li>
+<li>Ordinal Classification<ul>
+<li><strong>Pranking (NIPS 2002)</strong></li>
+<li>OAP-BPM (EMCL 2003)</li>
+<li>Ranking with Large Margin Principles (NIPS 2002)</li>
+<li>Constraint Ordinal Regression (ICML 2005)</li>
+</ul>
+</li>
+</ul>
+<p><strong>优点:</strong></p>
+<ul>
+<li>速度快，复杂度低.</li>
+</ul>
+<p><strong>缺点:</strong></p>
+<ul>
+<li>效果一般</li>
+<li>没有考虑到文档之间的相对关系</li>
+<li>忽略了文档相关度与查询的关联，比如<code>Top Query</code>排在后面的相关性比<code>Tial Query</code>排在前面的都要高，导致训练样本不一致</li>
+</ul>
+<h3 id="Pairwise_Approach">Pairwise Approach</h3><pre><code>对于搜索任务来说，系统接收到用户查询后，返回相关文档列表，所以问题的关键是确定文档之间的先后相对顺序关系，而<span class="variable">Pairwise</span>则将重点转向对文档关系是否合理的判断.
+</code></pre><p><code>Pairwise</code>主要是讲排序问题转为了文档对顺序的判断<br>以下图为例:<br><img src="/img/Learning-To-Rank-Base-Knowledge/pairwise_example.png" width="500px"><br>对于查询<code>Q1</code>进行人工标注之后,<code>Doc2=5</code>的分数最高，其次是<code>Doc3</code>为4分，最差的是<code>Doc1</code>为3分，将此转为相对关系之后有:<code>Doc2&gt;Doc1、Doc2&gt;Doc3、Doc3&gt;Doc1</code>，而根据这个顺序关系逆向也可以得到相关性的排序顺序，所以排序问题可以很自然的转为任意两个文档关系的判断,而任意两个文档顺序的判断就称为了一个很熟悉的分类问题.<br><code>Pairwise</code>的函数框架为:</p>
+<!-- $L(F(x),y)=\sum_{i=1}^{n-1}\sum_{j=i+1}^{n}(sign(y_i-y_j),f(x_i)-f(x_j))$ -->
+<center><img src="/img/Learning-To-Rank-Base-Knowledge/pairwise_func.gif"></center>
+
+<p><strong>输入</strong>:</p>
+<ul>
+<li>同一查询的一对文档$(x_i,x_j,sign(y_i-y_j))$</li>
+<li>标注两个文档的相对关系，如果文档$x_i$比$x_j$更加相关，则$sign(y_i-y_j))=1$</li>
+<li>分布保留同一查询下的文档间关系</li>
+</ul>
+<p><strong>输出</strong>:</p>
+<ul>
+<li>排序函数给出文档对的计算得分</li>
+</ul>
+<h1 id="未完待续">未完待续</h1><h3 id="Listwise_Approach">Listwise Approach</h3><h3 id="方法对比">方法对比</h3><table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">pointwise</th>
+<th style="text-align:left">pairwise</th>
+<th style="text-align:left">listwise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">输入信息的完整度</td>
+<td style="text-align:left"><strong>不完全</strong></td>
+<td style="text-align:left"><strong>部分完全</strong></td>
+<td style="text-align:left"><strong>完全</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">输入</td>
+<td style="text-align:left">$(x,y)$</td>
+<td style="text-align:left">$(x_1,x_2,y)$</td>
+<td style="text-align:left">$(x_1,x_2…x_n,\pi)$</td>
+</tr>
+<tr>
+<td style="text-align:left">输出</td>
+<td style="text-align:left">$f(x)$</td>
+<td style="text-align:left">$f(x)$</td>
+<td style="text-align:left">$f(x)$</td>
+</tr>
+<tr>
+<td style="text-align:left">样本复杂度</td>
+<td style="text-align:left">$O(n)$</td>
+<td style="text-align:left">O(n^2)</td>
+<td style="text-align:left">O(n!)</td>
+</tr>
+<tr>
+<td style="text-align:left">表现</td>
+<td style="text-align:left"><em>差</em></td>
+<td style="text-align:left"><em>中</em></td>
+<td style="text-align:left"><em>好</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="公开数据集">公开数据集</h2><ol>
+<li><a href="http://research.microsoft.com/en-us/um/beijing/projects/letor/" target="_blank" rel="external">http://research.microsoft.com/en-us/um/beijing/projects/letor/</a></li>
+<li><a href="http://research.microsoft.com/en-us/projects/mslr/" target="_blank" rel="external">http://research.microsoft.com/en-us/projects/mslr/</a></li>
+<li><a href="http://webscope.sandbox.yahoo.com/" target="_blank" rel="external">http://webscope.sandbox.yahoo.com/</a></li>
+</ol>
+<h2 id="参考">参考</h2><ul>
+<li>《这就是搜索引擎：核心技术详解》 . 第五章</li>
+<li><a href="http://blog.crackcell.com/posts/2011/12/17/a_short_intro_2_ltr.html" target="_blank" rel="external">Learning to Rank小结</a></li>
+<li><a href="http://www.icst.pku.edu.cn/lcwm/course/WebDataMining/slides2012/8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%8F%8A%E6%8E%92%E5%BA%8F%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80.pdf" target="_blank" rel="external">机器学习及排序学习基础</a></li>
+<li><a href="http://www.contem.org/2010summer/slides/LEARNING%20TO%20RANK%20TUTORIAL%20-%20tyliu.pdf" target="_blank" rel="external">Learning to Rank for Information Retrieval</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<pre><code>Learning to <span class="function"><span class="title">rank</span><span class="params">(简写 LTR、L2R)</span></span> 也叫排序学习，指的是机器学习中任何用于排序的技术。
+</code></pre><h2 id="为什么要用LTR">为什么要用LTR</h2><p>传统的检索模型靠人工拟合排序公式，并通过不断的实验确定最佳的参数组合，以此来形成相关性打分。这种方式非常简单高效，应该范围也很广，比如简单的博客排序、论坛的<code>QA</code>排序等.但是也同时存在较大的问题:</p>
+<ol>
+<li>手动调参工作量太大</li>
+<li>可能会过拟合</li>
+<li>如果模型参数很多，手动调参的可用性就很低了~</li>
+</ol>
+<p>LTR与此思路不同，最合理的排序公式由机器学习算法来确定，而人则需要给机器学习提供训练数据,他的优势有:</p>
+<ol>
+<li>可以自动调节参数</li>
+<li>可以融合多方面观点的(evidences)的数据</li>
+<li>避免过拟合(通过正则项)</li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[在Hexo中离线安装数据工具包-Mathjax]]></title>
@@ -2571,235 +2913,6 @@ P<span class="comment">(Y=a|x)</span>=exp<span class="comment">(wa*x)</span>/<sp
 <li>而具体的p(ai|yi)和p(yi)都是能从训练样本中统计出来<br> p(ai|yi)表示该类别下该特征出现的概率<br> p(yi)表示全部类别中这个这个类别出现的概率</li>
 <li>好的，就是这么工作的^_^</li>
 </ol>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[机器学习常见面试题整理]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Common-Interview/"/>
-    <id>http://yyl8781697.github.io/2015/08/16/Machine Learning/Common-Interview/</id>
-    <published>2015-08-15T23:39:47.000Z</published>
-    <updated>2015-10-20T11:03:21.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="有监督学习和无监督学习的区别">有监督学习和无监督学习的区别</h2><ul>
-<li>有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）</li>
-<li>无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)</li>
-</ul>
-<h2 id="正则化">正则化</h2><p>正则化是针对过拟合而提出的，以为在求解模型最优的是一般优化最小的经验风险，现在在该经验风险上加入模型复杂度这一项（正则化项是模型参数向量的范数），并使用一个rate比率来权衡模型复杂度与以往经验风险的权重，如果模型复杂度越高，结构化的经验风险会越大，现在的目标就变为了结构经验风险的最优化，可以防止模型训练过度复杂，有效的降低过拟合的风险。</p>
-<blockquote>
-<p>奥卡姆剃刀原理，能够很好的解释已知数据并且十分简单才是最好的模型。</p>
-</blockquote>
-<a id="more"></a>
-<h2 id="过拟合">过拟合</h2><p>如果一味的去提高训练数据的预测能力，所选模型的复杂度往往会很高，这种现象称为过拟合。所表现的就是模型训练时候的误差很小，但在测试的时候误差很大。</p>
-<h3 id="产生的原因">产生的原因</h3><ol>
-<li>因为参数太多，会导致我们的模型复杂度上升，容易过拟合</li>
-<li>权值学习迭代次数足够多(Overtraining),拟合了训练数据中的噪声和训练样例中没有代表性的特征.</li>
-</ol>
-<h3 id="解决方法">解决方法</h3><ol>
-<li>交叉验证法</li>
-<li>减少特征</li>
-<li>正则化</li>
-<li>权值衰减</li>
-<li>验证数据</li>
-</ol>
-<h2 id="泛化能力">泛化能力</h2><p>泛化能力是指模型对未知数据的预测能力</p>
-<h2 id="生成模型和判别模型">生成模型和判别模型</h2><ol>
-<li>生成模型：由数据学习联合概率分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测的模型，即生成模型：P(Y|X)= P(X,Y)/ P(X)。（朴素贝叶斯）<br> 生成模型可以还原联合概率分布p(X,Y)，并且有较快的学习收敛速度，还可以用于隐变量的学习</li>
-<li>判别模型：由数据直接学习决策函数Y=f(X)或者条件概率分布P(Y|X)作为预测的模型，即判别模型。（k近邻、决策树）<br> 直接面对预测，往往准确率较高，直接对数据在各种程度上的抽象，所以可以简化模型</li>
-</ol>
-<h2 id="线性分类器与非线性分类器的区别以及优劣">线性分类器与非线性分类器的区别以及优劣</h2><p>如果模型是参数的线性函数，并且存在线性分类面，那么就是线性分类器，否则不是。<br>常见的线性分类器有：LR,贝叶斯分类，单层感知机、线性回归<br>常见的非线性分类器：决策树、RF、GBDT、多层感知机</p>
-<blockquote>
-<p>SVM两种都有(看线性核还是高斯核)</p>
-</blockquote>
-<ul>
-<li>线性分类器速度快、编程方便，但是可能拟合效果不会很好</li>
-<li>非线性分类器编程复杂，但是效果拟合能力强</li>
-</ul>
-<h3 id="特征比数据量还大时，选择什么样的分类器？">特征比数据量还大时，选择什么样的分类器？</h3><p>线性分类器，因为维度高的时候，数据一般在维度空间里面会比较稀疏，很有可能线性可分</p>
-<h3 id="对于维度很高的特征，你是选择线性还是非线性分类器？">对于维度很高的特征，你是选择线性还是非线性分类器？</h3><p>理由同上</p>
-<h3 id="对于维度极低的特征，你是选择线性还是非线性分类器？">对于维度极低的特征，你是选择线性还是非线性分类器？</h3><p>非线性分类器，因为低维空间可能很多特征都跑到一起了，导致线性不可分</p>
-<h2 id="ill-condition病态问题">ill-condition病态问题</h2><p>训练完的模型测试样本稍作修改就会得到差别很大的结果，就是病态问题（这简直是不能用啊）</p>
-<h2 id="L1和L2正则的区别，如何选择L1和L2正则">L1和L2正则的区别，如何选择L1和L2正则</h2><blockquote>
-<p>他们都是可以防止过拟合，降低模型复杂度</p>
-</blockquote>
-<ul>
-<li>L1是在loss function后面加上 模型参数的1范数（也就是|xi|）</li>
-<li><p>L2是在loss function后面加上 模型参数的2范数（也就是sigma(xi^2)），注意L2范数的定义是sqrt(sigma(xi^2))，在正则项上没有添加sqrt根号是为了更加容易优化</p>
-</li>
-<li><p>L1 会产生稀疏的特征</p>
-</li>
-<li>L2 会产生更多地特征但是都会接近于0 </li>
-</ul>
-<p>L1会趋向于产生少量的特征，而其他的特征都是0，而L2会选择更多的特征，这些特征都会接近于0。L1在特征选择时候非常有用，而L2就只是一种规则化而已。</p>
-<h2 id="特征向量的归一化方法">特征向量的归一化方法</h2><ol>
-<li>线性函数转换，表达式如下：y=(x-MinValue)/(MaxValue-MinValue)</li>
-<li>对数函数转换，表达式如下：y=log10 (x)</li>
-<li>反余切函数转换 ，表达式如下：y=arctan(x)*2/PI</li>
-<li>减去均值，乘以方差：y=(x-means)/ variance</li>
-</ol>
-<h2 id="特征向量的异常值处理">特征向量的异常值处理</h2><ol>
-<li>用均值或者其他统计量代替</li>
-</ol>
-<h2 id="越小的参数说明模型越简单">越小的参数说明模型越简单</h2><p>过拟合的，拟合会经过曲面的每个点，也就是说在较小的区间里面可能会有较大的曲率，这里的导数就是很大，线性模型里面的权值就是导数，所以越小的参数说明模型越简单。</p>
-<blockquote>
-<p>追加：这个其实可以看VC维相关的东西感觉更加合适</p>
-</blockquote>
-<h2 id="svm中rbf核函数与高斯和函数的比较">svm中rbf核函数与高斯和函数的比较</h2><p>高斯核函数好像是RBF核的一种</p>
-<h2 id="KMeans初始类簇中心点的选取">KMeans初始类簇中心点的选取</h2><h3 id="选择批次距离尽可能远的K个点">选择批次距离尽可能远的K个点</h3><pre><code>首先随机选取一个点作为初始点，然后选择距离与该点最远的那个点作为中心点，再选择距离与前两个点最远的店作为第三个中心店，以此类推，直至选取大k个
-</code></pre><h3 id="选用层次聚类或者Canopy算法进行初始聚类">选用层次聚类或者Canopy算法进行初始聚类</h3><h2 id="ROC、AUC">ROC、AUC</h2><p>ROC和AUC通常是用来评价一个二值分类器的好坏</p>
-<h3 id="ROC曲线">ROC曲线</h3><p>曲线坐标上：</p>
-<ul>
-<li>X轴是FPR（表示假阳率-预测结果为positive，但是实际结果为negitive，FP/(N)）</li>
-<li>Y轴式TPR（表示真阳率-预测结果为positive，而且的确真实结果也为positive的,TP/P）</li>
-</ul>
-<p>那么平面的上点(X,Y)：</p>
-<ul>
-<li>(0,1)表示所有的positive的样本都预测出来了，分类效果最好</li>
-<li>(0,0)表示预测的结果全部为negitive</li>
-<li>(1,0)表示预测的错过全部分错了，分类效果最差</li>
-<li>(1,1)表示预测的结果全部为positive<blockquote>
-<p>针对落在x=y上点，表示是采用随机猜测出来的结果</p>
-</blockquote>
-</li>
-</ul>
-<p>ROC曲线建立<br>一般默认预测完成之后会有一个概率输出p，这个概率越高，表示它对positive的概率越大。<br>现在假设我们有一个threshold，如果p&gt;threshold，那么该预测结果为positive，否则为negitive，按照这个思路，我们多设置几个threshold,那么我们就可以得到多组positive和negitive的结果了，也就是我们可以得到多组FPR和TPR值了<br>将这些(FPR,TPR)点投射到坐标上再用线连接起来就是ROC曲线了</p>
-<blockquote>
-<p>当threshold取1和0时，分别得到的就是(0,0)和(1,1)这两个点。（threshold=1，预测的样本全部为负样本，threshold=0，预测的样本全部为正样本）</p>
-</blockquote>
-<h3 id="AUC">AUC</h3><p>AUC(Area Under Curve)被定义为ROC曲线下的面积，显然这个面积不会大于1（一般情况下ROC会在x=y的上方，所以0.5&lt;AUC&lt;1）.</p>
-<blockquote>
-<p>AUC越大说明分类效果越好</p>
-</blockquote>
-<h3 id="为什么要使用ROC和AUC">为什么要使用ROC和AUC</h3><p>因为当测试集中的正负样本发生变化时，ROC曲线能基本保持不变，但是precision和recall可能就会有较大的波动。<br><a href="http://www.douban.com/note/284051363/?type=like" target="_blank" rel="external">http://www.douban.com/note/284051363/?type=like</a></p>
-<h2 id="测试集和训练集的区别">测试集和训练集的区别</h2><p>训练集用于建立模型,测试集评估模型的预测等能力</p>
-<h2 id="优化Kmeans">优化Kmeans</h2><p>使用kd树或者ball tree(这个树不懂)<br>将所有的观测实例构建成一颗kd树，之前每个聚类中心都是需要和每个观测点做依次距离计算，现在这些聚类中心根据kd树只需要计算附近的一个局部区域即可</p>
-<h2 id="数据挖掘和机器学习的区别">数据挖掘和机器学习的区别</h2><p>机器学习是数据挖掘的一个重要工具，但是数据挖掘不仅仅只有机器学习这一类方法，还有其他很多非机器学习的方法，比如图挖掘，频繁项挖掘等。感觉数据挖掘是从目的而言的，但是机器学习是从方法而言的。</p>
-<h2 id="备注">备注</h2><p>题目主要来源于网络，答案主要来源于网络或者《统计学习方法》，还有自己一小部分的总结，如果错误之处敬请指出<br>如果想要了解关于常见模型的东东可以看这篇<a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/" target="_blank" rel="external">机器学习常见算法个人总结（面试用）</a>文章</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="有监督学习和无监督学习的区别">有监督学习和无监督学习的区别</h2><ul>
-<li>有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）</li>
-<li>无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)</li>
-</ul>
-<h2 id="正则化">正则化</h2><p>正则化是针对过拟合而提出的，以为在求解模型最优的是一般优化最小的经验风险，现在在该经验风险上加入模型复杂度这一项（正则化项是模型参数向量的范数），并使用一个rate比率来权衡模型复杂度与以往经验风险的权重，如果模型复杂度越高，结构化的经验风险会越大，现在的目标就变为了结构经验风险的最优化，可以防止模型训练过度复杂，有效的降低过拟合的风险。</p>
-<blockquote>
-<p>奥卡姆剃刀原理，能够很好的解释已知数据并且十分简单才是最好的模型。</p>
-</blockquote>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》VC Dimension]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/15/Machine%20Learning/VC-Dimension/"/>
-    <id>http://yyl8781697.github.io/2015/08/15/Machine Learning/VC-Dimension/</id>
-    <published>2015-08-15T07:45:20.000Z</published>
-    <updated>2015-08-19T15:20:40.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
-<blockquote>
-<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br><a id="more"></a></p>
-</blockquote>
-<h3 id="证明">证明</h3><p>那能否证明<code>B(N,k)&lt;=ploy(N)</code>呢？<br>先来看下面这个表,其中当前纵向有<code>N</code>，横向表示具体的<code>k</code>值，表中的内容就是需要计算的<code>B(N,k)</code>值</p>
-<ul>
-<li><p>B(2,2)=3，B(3,2)=4 手算-_-<br>  <img src="/img/VC-Dimension/t1.png" width="500px" height="300px"><br>  因为任意两个点都不能被<code>shatter</code>，那么2个点产生的<code>dichotomies</code>不能超过3,同理3个点产生的<code>dichotomies</code>不能超过4</p>
-</li>
-<li><p>B(N,1)=1<br>  <img src="/img/VC-Dimension/t2.png" width="500px" height="300px"><br>  2^1=2 而最大值不能超过2，所以这里最大值都为1</p>
-</li>
-<li><p>B(N,k)=2<sup>N</sup>  当<code>N&lt;k</code><br>  <img src="/img/VC-Dimension/t3.png" width="500px" height="300px"><br>  这里的<code>2<sup>N</sup><2<sup>k<sup></sup></2<sup></code>必然成立，所以最大值直接取2<sup>N</sup>，不然多余选的点也都是重复的。</p>
-</li>
-<li><p>B(N,k)=2<sup>N</sup>-1  当<code>N=k</code><br>  <img src="/img/VC-Dimension/t4.png" width="500px" height="300px"><br>  在<code>N=k</code>的情况下满足全部不可能（点的所有组合为不可能），但是这里再减去一种就可以满足了</p>
-</li>
-<li><p>B(N,k)&lt;=B(N-1,k)+B(N-1,k-1)  当<code>N&gt;k</code><br>  <img src="/img/VC-Dimension/t5.png" width="500px" height="300px"><br>  表中新添的值为上限的上限，耐心地看下上图的推导-_-</p>
-<ol>
-<li>通过计算机暴力求解B(4,3)=11,(一共16种<code>dichotomies</code>,再从其中选不同情况的<code>dichotomies</code>来计算是否被<code>shatter</code>，最终有2<sup>16</sup>情况)<br> <img src="/img/VC-Dimension/d1.png" width="500px" height="300px"><br> 右侧着色的图中橙色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>这三个维度是一样的，<code>x<sub>4</sub></code>这个维度是不一样的（也就是传说中的成双成对），蓝色的点在<code>x<sub>1</sub></code>,<code>x<sub>2</sub></code>,<code>x<sub>3</sub></code>无法找到全部一样的</li>
-<li>现在将<code>x<sub>4</sub></code>这个点遮掉<br> <img src="/img/VC-Dimension/d2.png" width="500px" height="300px"></li>
-<li>同时将蓝色的遮掉<br> <img src="/img/VC-Dimension/d3.png" width="500px" height="300px"><br> 这里不能多余2个点被<code>shatter</code></li>
-<li>整理之后就可以得到如下关系式<br> <img src="/img/VC-Dimension/d4.png" width="300px" height="200px"></li>
-<li>写成通用式子为<br> <img src="/img/VC-Dimension/d5.png" width="300px" height="200px"><br> 即得解^_^</li>
-</ol>
-</li>
-</ul>
-<p>根据上限的上限的递推式，再结合数学归纳法可以得到<br><img src="/img/VC-Dimension/sg.png" width="300px" height="200px"><br>它的最高项的指数是<code>k-1</code></p>
-<p>那么现在：</p>
-<ol>
-<li><code>Growth Function</code>会被上限<code>B(N,k)</code> bound住</li>
-<li>而<code>B(N,k)</code> 又会被上限的上限bound住</li>
-<li>这个上限的上限的多项式和<code>break point</code>点有关</li>
-<li>所以可以得出结果，只要<code>break point</code>点存在，那么他的<code>Growth Function</code>最终会是一个多项式</li>
-</ol>
-<p>但是然并卵，<code>m<sub>H</sub>(N)</code>并无法直接代入到之前的</p>
-<h3 id="计算VC">计算VC</h3><p><img src="/img/VC-Dimension/rbl.png" width="400px" height="200px"></p>
-<blockquote>
-<p>主要是因为：<code>E<sub>in</sub>(h)</code>的<code>hypothesis</code>可能取值是有限个的，但<code>E<sub>out</sub>(h)</code>的可能取值是无限的。可以通过将<code>E<sub>out</sub>(h)</code> 替换为验证集(verification set) 的<code>E<sub>in</sub>‘</code>来解决这个问题。<br><img src="/img/VC-Dimension/einp.png" width="500px" height="200px"></p>
-</blockquote>
-<p>好，那么接下来主要经历如下三个步骤：</p>
-<ol>
-<li>使用<code>E<sub>in</sub>‘</code>来代替<code>E<sub>out</sub></code><br> <img src="/img/VC-Dimension/s1.png" width="500px" height="200px"></li>
-<li>这样最终可能出现的<code>H(x1,x2..xn,x1’,x2’…xn’)</code><br> <img src="/img/VC-Dimension/s2.png" width="500px" height="200px"></li>
-<li>使用不替换的<code>Hoeffding</code><br> <img src="/img/VC-Dimension/s3.png" width="500px" height="200px"></li>
-</ol>
-<p>最终得到了著名的<code>VC Bound</code><br><img src="/img/VC-Dimension/vc.png" width="500px" height="200px"></p>
-<pre><code>那么终于可以说明空间存在有限的break point，并且采样的资料量N够多，就可以保证找到一个<span class="function"><span class="title">Ein</span><span class="params">(h)</span></span>最小的时候，得到最小的<span class="function"><span class="title">Eout</span><span class="params">(h)</span></span>,也就是说明Learning的可行性
-</code></pre><h2 id="VC_Dimension">VC Dimension</h2><h3 id="定义">定义</h3><p>先来看一下<code>VC Dimension</code>的定义<br><img src="/img/VC-Dimension/vi.png" width="400px" height="300px"><br><code>VC Dimension</code>表示在<code>N</code>个点中能够<code>shatter</code>的最大的值，也就是<code>k-1</code>（<code>k</code>为<code>break point</code>,该值时不能<code>shatter</code>的最小值）</p>
-<p>这样的话就可以很容易计算出我们之前一直在讨论的那几种情况的<code>VC Dimension</code><br><img src="/img/VC-Dimension/vz.png" width="400px" height="300px"><br>那么我们可以知道好的<code>VC Dimension</code>应该是有限的，这样才可以保证<code>E<sub>in</sub>≈E<sub>out</sub></code><br>同时这样就就会有</p>
-<ol>
-<li><code>VC Dimension</code>与算法A无关</li>
-<li><code>VC Dimension</code>与数据p的分布无关</li>
-<li><code>VC Dimension</code>与目标函数f无关</li>
-</ol>
-<p>说了这么多，看一下<code>VC Dimension</code>与大<code>M</code>的关系<br><img src="/img/VC-Dimension/vm.png" width="500px" height="500px"><br>这样就可以看到：</p>
-<ol>
-<li><code>M</code>很小的时候，得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>会非常相似，但是可选的<code>E<sub>in</sub></code>太少了，可能到最后选择了 一个较大的<code>E<sub>in</sub></code></li>
-<li><code>M</code>很大的时候，可选的<code>E<sub>in</sub></code>比较多，可能到最后得到的<code>E<sub>in</sub></code>得到的<code>E<sub>in</sub></code>、<code>E<sub>out</sub></code>可能不怎么想相似</li>
-<li><code>VC Dimension</code>很小的时候，与第一条一样，但是区别的是它的自由度受到了限制</li>
-<li><code>VC Dimension</code>很大的时候，与第二条一样，但是区别的是它的自由度没受限制，很自由</li>
-</ol>
-<blockquote>
-<p><code>VC Dimension</code>反映了假设空间<code>hypothesis set</code>的强大程度，<code>VC Dimension</code>越大，<code>hypothesis set</code>也越强，因为它可以<code>shatter</code>更多的点。</p>
-</blockquote>
-<h3 id="物理意义">物理意义</h3><p><code>VC Dimension</code>的物理意义是表示二元分类下的自由度是多少，而这个自由度是表示参数<code>w</code>的维度<br><img src="/img/VC-Dimension/vw.png" width="400px" height="300px"></p>
-<h3 id="模型复杂度">模型复杂度</h3><p>现在将之前任意一<code>hypothesis</code>发生坏事的概率<code>VC bound</code>变一下形<br><img src="/img/VC-Dimension/mc.png" width="500px" height="400px"><br>最终，根号里面的叫做模型复杂度，<strong>模型的复杂度越大，其泛化能力就会越低</strong>，这个模型的复杂度越与三个项有关：</p>
-<ol>
-<li><code>N</code>，抽样有多少个点</li>
-<li><code>H</code>，这里的<code>VC Dimension</code>有多大</li>
-<li><code>δ</code>，<code>E<sub>in</sub></code>与<code>E<sub>out</sub></code>相似在一个阈值内的概率</li>
-</ol>
-<p>现在在图上画出三者的关系：<br><img src="/img/VC-Dimension/tt.png" width="400px" height="300px"><br>那么可以看到随着<code>VC Dimension</code>越大，其模型复杂度也会越大,<code>E<sub>in</sub></code>会变小，但是<code>E<sub>out</sub></code>会有像图中一样一个山谷形的表现，最小的<code>E<sub>out</sub></code>会在中间</p>
-<p>所以更加深层次的可以了解到，我们并不是把<code>E<sub>in</sub></code>做的越小越好，因为这个时候可能会导致模型复杂度变大，从而最终使<code>E<sub>out</sub></code>也会变大,真正会做机器学习的人在优化<code>E<sub>in</sub></code>的同时会考虑带来的其他复杂度的代价。</p>
-<h3 id="采样复杂度">采样复杂度</h3><p><code>VC bound</code>的另一个意义就是模型复杂度<br>那就现在给你<br><img src="/img/VC-Dimension/p.png" width="400px" height="100px"><br>这些参数，那么如果计算使用最少的样本量来完成上述需求，计算过程可以参考下面<br><img src="/img/VC-Dimension/js.png" width="400px" height="200px"><br>而在理论上需要的样本是<code>N≈10000d<sub>vc</sub></code><br>但是其实在实际上<code>N≈10d<sub>vc</sub></code>即可,<br>为什么会这样呢？<br><img src="/img/VC-Dimension/ks.png" width="500px" height="400px"><br>这是因为<code>VC bound</code>推导的过程很宽松，里面很多假设都是取了上限</p>
-<blockquote>
-<p>所以，模型较复杂时(<code>N≈10d<sub>vc</sub></code> 较大)，需要更多的训练数据</p>
-</blockquote>
-<pre><code>除此外，我们为了避免overfit，一般都会加正则项。那加了正则项后，新的假设空间会得到一些限制，此时新假设空间的VC维将变小，也就是同样训练数据条件下，E<span class="keyword">in</span>更有可能等于E<span class="keyword">out</span>，所以泛化能力更强。这里从VC维的角度解释了正则项的作用。
-</code></pre><h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第六讲</li>
-<li>《台湾国立大学-机器学习基石》第七讲</li>
-<li><a href="http://www.flickering.cn/machine_learning/2015/04/vc%E7%BB%B4%E7%9A%84%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89/" target="_blank" rel="external">VC维的来龙去脉</a></li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
-<blockquote>
-<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br>]]>
     
     </summary>
     
