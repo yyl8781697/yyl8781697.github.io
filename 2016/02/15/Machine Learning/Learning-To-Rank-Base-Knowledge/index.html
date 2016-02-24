@@ -212,11 +212,11 @@
 <h2 id="模型训练">模型训练</h2><p><code>LTR</code>的模型主要有单文档方法(<code>Pointwise Approach</code>)、文档对方法(<code>Pairwise Approach</code>)和列表方法(<code>Listwise Approach</code>)三大类,下面是实现他们的各种算法:</p>
 <h3 id="Pointwise_Approach">Pointwise Approach</h3><pre><code><span class="variable">Pointwise</span>的处理对象是单独的一篇文档，将文档转换为特征向量之后，机器学习模型根据从训练数据中学习到的分类或者回归函数对文档打分，打分的结果就是搜索的结果.
 </code></pre><p>其实就是将文档排序转为了文档的回归、分类和有序分类问题，其函数的框架为:</p>
-<center>$L(F(X),y)=\sum_{i=1}^{n}l(f(x_i)-y_i)$</center><br>输入:<br>- 单个文档查询对:$(x_i,y_i)$<br>- 完全忽略上下文的关系<br>- 将标注转为数字，比如<code>Perfect-&gt;5, Excellent-&gt;4, Good-&gt;3, Fair-&gt;2, Bad-&gt;1</code><br><br>输出:<br>- 排序函数,对于给定查询文档对,能够计算出得分(score)或者所属类别(classification)<br><br>关于<code>Pointwise</code>下的三个分支，这张图解释的很好:<br><center><img src="/img/Learning-To-Rank-Base-Knowledge/pointwise_flow.png" width="400px"></center>
+<center>$L(F(X),y)=\sum_{i=1}^{n}l(f(x_i)-y_i)$</center><br>输入:<br>- 单个文档查询对:$(x_i,y_i)$<br>- 完全忽略上下文的关系<br>- 将标注转为数字，比如<code>Perfect-&gt;5, Excellent-&gt;4, Good-&gt;3, Fair-&gt;2, Bad-&gt;1</code><br><br>输出:<br>- 排序函数,对于给定查询文档对,能够计算出得分(score)<br><br>关于<code>Pointwise</code>下的三个分支，这张图解释的很好:<br><center><img src="/img/Learning-To-Rank-Base-Knowledge/pointwise_flow.png" width="400px"></center>
 
 <p>其主要区别就是<code>loss function</code>不同，也就是最后的结果目标不一样:</p>
 <ul>
-<li><code>Classification</code>:输入的是5档类别（作为离散），最后通过分类模型输测试数据的所属档位(其实就是多分类)</li>
+<li><code>Classification</code>:输入的是5档类别（作为离散），最后通过分类模型输测试数据的各个档位档位的概率，然后进行加权成一个实数值</li>
 <li><code>Regression</code>:输入的是5档或者2档（作为连续），最后通过回归模型输出测试数据的一个相关性实数(就是回归)</li>
 <li><code>Ordinal Classification</code>:输入有序的档位，一般2档(离散),最后通过分类模型的阈值给到一个档位(应该是二分类把)</li>
 </ul>
@@ -294,8 +294,8 @@
 <h3 id="Listwise_Approach">Listwise Approach</h3><pre><code>与<span class="variable">Pointwise</span>和<span class="variable">Pairwise</span>不同，<span class="variable">Listwise</span>是将一个查询对应的所有搜索结果列表作为一个训练实例，因此也称为文档列方法.
 </code></pre><p>文档列方法根据$K$个训练实例训练得到最优的评分函数$F$，对于一个新的查询，函数$F$对每一个文档进行打分，之后按照得分顺序高低排序，就是对应的搜索结果.<br><code>Listwise</code>主要有两类:</p>
 <ul>
-<li><code>Non-measure specific</code>:直接指定测量指标优化,比如:$L(F(x),y)=exp(-NDCG)$</li>
-<li><code>Non-measure specific</code>:基于一个<code>query</code>优化所有文档的<code>Loss function</code>  （我怎么感觉差不多-_-)</li>
+<li><code>Measure specific</code>:损失函数与评估指标相关,比如:$L(F(x),y)=exp(-NDCG)$</li>
+<li><code>Non-measure specific</code>:损失函数与评估指标不是显示相关,考虑了信息检索中的一些独特性质</li>
 </ul>
 <p>实现<code>Listwise</code>的算法主要有:</p>
 <ul>
@@ -304,6 +304,7 @@
 <li><strong>SVM-MAP (SIGIR 2007)</strong></li>
 <li><strong>SoftRank (LR4IR 2007)</strong></li>
 <li>RankGP (LR4IR 2007)</li>
+<li>LambdaMART (inf.retr 2010)</li>
 </ul>
 </li>
 <li>Non-measure specific<ul>
@@ -312,7 +313,6 @@
 <li>BoltzRank (ICML 2009)</li>
 </ul>
 </li>
-<li>LambdaMART(还不确定归哪里-_-)</li>
 </ul>
 <blockquote>
 <p>实验表明 一般<code>Listwise</code>要好于前两种排序算法，但是其复杂度是在太高了</p>
@@ -446,7 +446,7 @@
   <center>$DCG=\sum_{i=1}^{n}{\frac{2^{y_i}-1}{log(1+i)}}$</center>
 </li>
 <li><p><code>Normalized</code>：为归一化，因为在不同的查询中可能<code>DCG</code>的值波动较大，这里计算各个query最理想的排序的<code>DCG</code>值作为归一化因子，也称为<code>IDCG</code></p>
-  <center>$NDCG=\frac{1}{IDCG} \cdot \sum_{i=1}^{n}{\frac{2^{y_i}-1$}{log(1+i)}}$</center>
+  <center>$NDCG=\frac{1}{IDCG} \cdot \sum_{i=1}^{n}{\frac{2^{y_i}-1}{log(1+i)}}$</center>
 
 </li>
 </ul>
@@ -474,6 +474,10 @@
 <li><a href="https://en.wikipedia.org/wiki/Discounted_cumulative_gain" target="_blank" rel="external">https://en.wikipedia.org/wiki/Discounted_cumulative_gain</a></li>
 <li><a href="https://www.kaggle.com/wiki/MeanAveragePrecision" target="_blank" rel="external">https://www.kaggle.com/wiki/MeanAveragePrecision</a></li>
 </ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -630,7 +634,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>3</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
 		  
 		
 		  
@@ -659,7 +663,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
 			
 		
 			
@@ -683,7 +687,7 @@
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
 			
 		
 			

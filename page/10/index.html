@@ -94,6 +94,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/21/Java Base/Enum-Override/" title="关于Java枚举的重写" itemprop="url">关于Java枚举的重写</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-21T12:34:28.000Z" itemprop="datePublished"> 发表于 2015-04-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>对于Java枚举我之前所知道的是<sup>1</sup>：</p>
+<ol>
+<li>枚举本身就是一个类。</li>
+<li>它不能有<code>public</code>的构造函数，这样做可以保证客户代码没有办法新建一个enum的实例。     </li>
+<li>所有枚举值都是<code>public static final</code>的。注意这一点只是针对于枚举值，我们可以和在普通类里面定义变量一样定义其它任何类型的非枚举变量，这些变量可以用任何你想用的修饰符。     </li>
+<li>Enum默认实现了<code>java.lang.Comparable</code>接口。     </li>
+<li>Enum覆载了了<code>toString</code>方法，因此我们如果调用<code>Color.Blue.toString()</code>,默认返回字符串”Blue”.</li>
+<li>Enum提供了一个<code>valueOf</code>方法，这个方法和<code>toString</code>方法是相对应的。调用<code>valueOf(“Blue”)</code>将返回<code>Color.Blue</code>.因此我们在自己重写<code>toString</code>方法的时候就要注意到这一点，一般来说应该相对应地重写<code>valueOf</code>方法。     </li>
+<li>Enum还提供了<code>values</code>方法，这个方法使你能够方便的遍历所有的枚举值</li>
+<li>Enum还有一个<code>oridinal</code>的方法，这个方法返回枚举值在枚举类种的顺序。</li>
+</ol>
+<p>《Effective Java》中写着单例模式推荐的方式是使用<strong>单元素的枚举类</strong>实现，在查资料过程中竟然发现枚举值里面还能重写枚举的方法：</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/21/Java Base/Enum-Override/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Base/">Java Base</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/21/Java Base/Enum-Override/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/21/Java Base/Enum-Override/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/19/Food/Coke-Chicken-feet/" title="自己煮：可口又美味的可乐鸡爪" itemprop="url">自己煮：可口又美味的可乐鸡爪</a>
   </h1>
   <p class="article-author">By
@@ -709,77 +784,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/29/Algorithm/InsertionSort/" title="2014阿里巴巴实习生笔试题-插入排序基于链表的实现" itemprop="url">2014阿里巴巴实习生笔试题-插入排序基于链表的实现</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-29T12:07:26.000Z" itemprop="datePublished"> 发表于 2015-03-29</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code><span class="number">13</span>、将一个从大到小的数组，用以下排序方法排序成从小到大的，______最快。
-A.插入排序
-B.冒泡排序
-<span class="keyword">C</span>.快速排序
-<span class="keyword">D</span>.堆排序
-</code></pre><p>&#160; &#160; &#160; &#160;该题假如是单问算法复杂度，无疑是C和D，都是O(n*logn)，但是在初始化时降序的情况下，就得另外考虑了，其实可以发现这个降序的数组对C，和D并无价值，并且还增加了排序时的比较次数，现在来看插入排序：</p>
-<pre><code>有一个已经有序的数据序列，要求在这个已经排好的数据序列中插入一个数，但要求插入后此数据序列仍然有序，这个时候就要用到一种新的排序方法<span class="comment">--插入排序</span>
-</code></pre><p>&#160; &#160; &#160; &#160;根据待排序数组是降序的情况下很容易想到插排在每次插入是只需要比较第一个元素即可，因为前面的元素都比他大，一般插入排序是基于数组实现的，每次在插入一个元素时需要将插入后的元素都向后移动一位，如果这样其复杂度也不会减少，这种可以下可以将插排基于链表来实现，这样就不需要移动数组了。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/29/Algorithm/InsertionSort/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/29/Algorithm/InsertionSort/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/29/Algorithm/InsertionSort/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
@@ -874,7 +878,7 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>3</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
 		  
 		
 		  
@@ -903,7 +907,7 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
 			
 		
 			
@@ -927,7 +931,7 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
 			
 		
 			

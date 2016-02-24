@@ -4,42 +4,46 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>《台大机器学习基石》Learning is Possible  | Kubi Code&#39;Blog</title>
+    <title>在信息检索中Term之间的Proximity计算研究 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="Hoeffding不等式下面有一个罐子罐子中的球是橙色的概率是μ，现从罐子中取出N个数量的球作为样本，其中样本中含橙色求的概率是ν，那么μ和ν是否会接近呢？">
+    <meta name="description" content="为啥要做Proximity计算先来看下信息检索/搜索引擎 的一般架构流程:
+
+对Doc进行分词,这些分词也叫做Term，然后离线做各种计算
+将这些Term灌入倒排索引中
+用户查询
+根据倒排召回命中Term的文档
+将文档根据各个Term算分排序
+
+其实可以发现这里查的Term 都是bag-of-words的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《台大机器学习基石》Learning is Possible ">
-<meta property="og:url" content="http://yyl8781697.github.io/2015/08/09/Machine Learning/Learning-Is-Possible/index.html">
+<meta property="og:title" content="在信息检索中Term之间的Proximity计算研究">
+<meta property="og:url" content="http://yyl8781697.github.io/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="Hoeffding不等式下面有一个罐子罐子中的球是橙色的概率是μ，现从罐子中取出N个数量的球作为样本，其中样本中含橙色求的概率是ν，那么μ和ν是否会接近呢？">
-<meta property="og:image" content="/img/Learning-Is-Possible/guanzi.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/hfi.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/le.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/lf.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/eio.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/rl.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/cl.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/mpla.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/plk.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/plk2.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/plk3.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/s.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/mh.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/rays.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/int.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/sc.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/mhv.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/qd.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/bp.png">
-<meta property="og:image" content="/img/Learning-Is-Possible/bps.png">
+<meta property="og:description" content="为啥要做Proximity计算先来看下信息检索/搜索引擎 的一般架构流程:
+
+对Doc进行分词,这些分词也叫做Term，然后离线做各种计算
+将这些Term灌入倒排索引中
+用户查询
+根据倒排召回命中Term的文档
+将文档根据各个Term算分排序
+
+其实可以发现这里查的Term 都是bag-of-words的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《台大机器学习基石》Learning is Possible ">
-<meta name="twitter:description" content="Hoeffding不等式下面有一个罐子罐子中的球是橙色的概率是μ，现从罐子中取出N个数量的球作为样本，其中样本中含橙色求的概率是ν，那么μ和ν是否会接近呢？">
+<meta name="twitter:title" content="在信息检索中Term之间的Proximity计算研究">
+<meta name="twitter:description" content="为啥要做Proximity计算先来看下信息检索/搜索引擎 的一般架构流程:
+
+对Doc进行分词,这些分词也叫做Term，然后离线做各种计算
+将这些Term灌入倒排索引中
+用户查询
+根据倒排召回命中Term的文档
+将文档根据各个Term算分排序
+
+其实可以发现这里查的Term 都是bag-of-words的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -112,14 +116,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/09/Machine Learning/Learning-Is-Possible/" title="《台大机器学习基石》Learning is Possible " itemprop="url">《台大机器学习基石》Learning is Possible </a>
+      <a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" title="在信息检索中Term之间的Proximity计算研究" itemprop="url">在信息检索中Term之间的Proximity计算研究</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2015-08-09T10:55:28.000Z" itemprop="datePublished"> 发表于 2015-08-09</time>
+    <time datetime="2016-02-23T12:58:43.000Z" itemprop="datePublished"> 发表于 2016-02-23</time>
     
   </p>
 </header>
@@ -128,48 +132,58 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hoeffding不等式"><span class="toc-number">1.</span> <span class="toc-text">Hoeffding不等式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用于Learning"><span class="toc-number">2.</span> <span class="toc-text">应用于Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于M的无限大问题"><span class="toc-number">3.</span> <span class="toc-text">关于M的无限大问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为啥要做Proximity计算"><span class="toc-number">1.</span> <span class="toc-text">为啥要做Proximity计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用距离度量"><span class="toc-number">2.</span> <span class="toc-text">使用距离度量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#持续研究中~~~"><span class="toc-number"></span> <span class="toc-text">持续研究中~~~</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="Hoeffding不等式">Hoeffding不等式</h2><p>下面有一个罐子<br><img src="/img/Learning-Is-Possible/guanzi.png" height="140px" width="540px"><br>罐子中的球是橙色的概率是<code>μ</code>，现从罐子中取出<code>N</code>个数量的球作为样本，其中样本中含橙色求的概率是<code>ν</code>，那么<code>μ</code>和<code>ν</code>是否会接近呢？<br><a id="more"></a><br>这里有一个叫做<code>Hoeffding不等式</code>可以来解释该问题<br><img src="/img/Learning-Is-Possible/hfi.png" height="140px" width="540px"><br>大致的表述就是<code>μ</code>与<code>ν</code>之差的绝对值小于<code>ξ</code>的概率为<code>2exp(-2ξ<sup>2</sup>N)</code>（这个概率也叫坏事发生的几率，林老师的叫法真的很kwy ^_^）,<code>ξ</code>越小，<code>μ</code>与<code>ν</code>越接近，其概率：</p>
+		<h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
+<ol>
+<li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
+<li>将这些<code>Term</code>灌入倒排索引中</li>
+<li>用户查询</li>
+<li>根据倒排召回命中<code>Term</code>的文档</li>
+<li>将文档根据各个<code>Term</code>算分排序</li>
+</ol>
+<p>其实可以发现这里查的<code>Term</code> 都是<code>bag-of-words</code>的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了：<br><a id="more"></a></p>
+<pre><code>如果搜索“红色连衣裙”,则可能会出现下面的文档:
+<span class="number">1.</span>xxxx红色连衣裙xxxx
+<span class="number">2.</span>红色高跟鞋配连衣裙
+很明显文档<span class="number">1</span>的相关性比<span class="number">2</span>要高，但是此时如果仅仅是bag-<span class="keyword">of</span>-<span class="property">words</span>模型就很难保证<span class="number">1</span>的相关性分要比<span class="number">2</span>高
+</code></pre><p>所以一般的搜索引擎还有一个叫做<code>Proximity Measures</code>的特征计算，可以理解为计算文档里面出现的<code>query Term</code>的相近程度，为了保证可行性，降低计算的复杂度，一般也只会计算两个<code>Term</code>之间的<code>Proximity</code>分</p>
+<h2 id="使用距离度量">使用距离度量</h2><p>这种方式主要是计算<code>Term</code>之间距离作为<code>Proximity</code>得分，主要分两大类:</p>
+<ol>
+<li><code>Span-based</code>:使用时将全部的<code>query term</code>丢进去一起算距离</li>
+<li><code>Distance aggregation</code>:先算两两之间的距离，再聚集起来</li>
+</ol>
+<p>假设现在有文档<code>D = t1, t2, t1, t3, t5, t4, t2, t3, t4</code>，基于<code>D</code>集合来讲讲各个距离的计算方式<br><strong>Span-based</strong></p>
 <ul>
-<li><code>ξ</code>越大，坏事发生的几率越小，但是<code>ξ</code>真的很大时，坏事发不发生已经么啥意义了-_-</li>
-<li><code>N</code>越大，坏事发生的几率越小，<code>μ</code>与<code>ν</code>会越来越接近,所以取样时大一点可以增加准确率.<blockquote>
-<p>将<code>N</code>取到总得数量，那就是<code>μ</code>=<code>ν</code></p>
-</blockquote>
-</li>
+<li><code>Span</code>:在文档中可以覆盖所有term的最小距离称为<code>Span</code>，<strong>需要包含所有重复的term</strong><br>  比如$Q=t1,t2$这个查询的$Span=7$</li>
+<li><code>MinCover</code>:在文档中可以覆盖所有term的最小距离称为<code>MinCover</code>,<strong>每个term至少被包含一次</strong><br>  比如这里的$Q=t1,t2$查询的$MinCover=1$</li>
 </ul>
-<pre><code><span class="attribute">这里的‘μ</span>=<span class="string">ν’的状态问题称为probably approximately correct（PAC）问题，表示大概差不多是对的。 </span>
-</code></pre><p>所以，取的样本够大的时候，未知的<code>μ</code>可以从已知的<code>ν</code>推论出来，并且他们俩是类似的。</p>
-<h2 id="应用于Learning">应用于Learning</h2><p>假设当前一个学习算法的最终的实际假设是<code>f(x)</code>(一般是未知的)，其<code>h(x)</code>表示采样了之后的假设，其<code>y<sub>n</sub></code>为对应样本上的目标值。<br><img src="/img/Learning-Is-Possible/le.png" height="200px" width="340px"><br>这里的<code>E<sub>out</sub>(h)</code>和<code>E<sub>in</sub>(h)</code>正好就是对应上一节的<code>μ</code>=<code>ν</code><br><code>Hoeffding不等式</code>同样是适用于Learning问题<br><img src="/img/Learning-Is-Possible/lf.png" height="240px" width="540px"><br>所以在Learning的时候，可以从<code>E<sub>in</sub>(h)</code>来推断出<code>E<sub>out</sub>(h)</code>，也就是我们的Learning目的<br><img src="/img/Learning-Is-Possible/eio.png" height="240px" width="340px"></p>
-<p>上面如果能得到一个很小的<code>E<sub>in</sub>(h)</code>，当然是皆大欢喜，此时<code>g’=f’</code>(g,f分别对应h(x)和f(x)对应的线/假设)，但是要知道其实在算法上其实有很多h可以选，那时候选择到得<code>E<sub>in</sub>(h)</code>比较大得时候，那就比较悲催了，所以真实地学习应该是：<br><img src="/img/Learning-Is-Possible/rl.png" height="240px" width="340px"><br>像<code>PLA</code>一样选一根最优的线。</p>
-<p><code>Hoeffding不等式</code>只能保证<code>E<sub>in</sub>(h)</code>和<code>E<sub>out</sub>(h)</code>会有一个较大的几率说明他俩是相似的，但是无法保证在非常多得假设下(h(x))下，<code>E<sub>in</sub>(h)</code>的值时比较小，那如果最终<code>E<sub>in</sub>(h)</code>的值比较大，那么最终学习的算法就不好了，这个也叫做踩雷过程(这也可能使由于样本原因造成的)<br><img src="/img/Learning-Is-Possible/cl.png" height="440px" width="440px"><br>现在有<code>M</code>个假设，同时数据集可能会有表中的几个样本采样出来，<code>BAD</code>标志就是表示当前假设下在对应的样本上是踩雷了(<code>E<sub>in</sub>(h)</code>)很大</p>
+<p><strong>Distance aggregation</strong></p>
 <blockquote>
-<p>但是学习算法最希望的就是自由的选择具体假设下，能够得到具体的<code>BAD</code>几率</p>
+<p>这种方式计算的最近单元是计算一个term pair的最小距离，使用$Dis(t_i,t_j;D)$来表示</p>
 </blockquote>
-<p>这里可以使用联合<code>bound</code>的方式来求总体的<code>BAD</code>几率<br><img src="/img/Learning-Is-Possible/mpla.png" height="240px" width="540px"><br>从式子中可以发现最终的几率是加上了<code>M</code>的<code>Hoeffding不等式</code>几率</p>
-<h2 id="关于M的无限大问题">关于M的无限大问题</h2><p>上面知道<code>M</code>表示所有假设，而比如在<code>PLA</code>问题中可以了解到其实平面上会有无数条线，也就是无数条假设(M)，那这样其实上一小节中计算出来的几率会变无限大吗？那不是白搭了嘛-_-</p>
-<p>这里先换个思路想一下：<br><img src="/img/Learning-Is-Possible/plk.png" height="240px" width="240px"><br>上图的<code>PLA</code>只有一个点，上面画了可能存在的三条线，其实可以发现这两条实线是一个含义，这里只有两种线而已(一虚一实)<br>再者看一下两个点的<br><img src="/img/Learning-Is-Possible/plk2.png" height="340px" width="540px"><br>它就会有四种线<br>还有看一下三个点得<br><img src="/img/Learning-Is-Possible/plk3.png" height="440px" width="540px"><br>它最终会有八种线(其实如果这三个点成一条直线或者重叠在一个点上面的话不会有这么多)<br>再推演下去会有这么一个规律<br><img src="/img/Learning-Is-Possible/s.png" height="340px" width="200px"><br>在二维上，平面上划分这些点的种类数总是小于<code>2^N</code></p>
-<p>现在假设使用<code>m<sub>H</sub>(N)</code>来表示<code>N</code>个点的时候可能出现的最大分类线种数<code>dichotomies</code><br><img src="/img/Learning-Is-Possible/mh.png" height="240px" width="540px"><br>那么这个<code>m<sub>H</sub>(N)</code>的上界就是<code>2^N</code>，这个函数也叫做成长函数(Growth Function)</p>
-<p>现在综合看一下其他维度的成长函数值:</p>
 <ul>
-<li>一维的二分类 <code>N+1</code><br>  <img src="/img/Learning-Is-Possible/rays.png" height="400px" width="400px"></li>
-<li>一维的二分类（使用中间区间分开） <code>1/2*N<sup>2</sup>+1/2*N+1</code><br>  <img src="/img/Learning-Is-Possible/int.png" height="400px" width="400px"></li>
-<li>可以绕成一圈的凸集合 <code>2<sup>N</sup></code><br>  <img src="/img/Learning-Is-Possible/sc.png" height="400px" width="400px"><blockquote>
-<p>这里类似凸集的情况下N个点可能hold住<code>2<sup>N</sup></code>分类面的情况叫<code>shattered</code></p>
+<li><code>MinDist(Minimum pair distance)</code>:计算所有pair的最小距离的最小值,<br>  <center>$MinDist=min_{q_1,q_2 \in Q \cap D,q_1 \neq q_2} Dis(q_1,q_2;D)$</center><br>比如$Q={t1,t2,t3}$，则$MinDist=min(1,2,3)=1$</li>
+<li><code>AveDist(Average pair distance)</code>:计算所有pair的最小距离的平均值，<br>  <center>$AveDist=\frac{2}{n \cdot (n+1)}min_{q_1,q_2 \in Q \cap D,q_1 \neq q_2} Dis(q_1,q_2;D)$</center><br>比如$Q={t1,t2,t3}$，则$AveDist=(1+2+3)/3=2$</li>
+<li><code>MaxDist(Maximum pair distance)</code>:与<code>MinDist</code>正好相反，它是求最大值<br>  <center>$MinDist=max_{q_1,q_2 \in Q \cap D,q_1 \neq q_2} Dis(q_1,q_2;D)$</center><br>  比如$Q={t1,t2,t3}$，则$MaxDist=max(1,2,3)=3$</li>
+</ul>
+<p>文献中实验表明:</p>
+<ol>
+<li><code>Span-based</code>为考虑到各个文档长度，以各自文档的长度最为归一化因子进行归一化之后效果要好一些</li>
+<li><code>Distance aggregation</code>系列一般比<code>Span-based</code>的效果要好</li>
+<li><code>Distance aggregation</code>中<code>MinDist</code>的效果最好</li>
+</ol>
+<p>但是在一般使用过程中不会直接将距离作为<code>Proximity</code>的值，现将$\delta(Q,D)$作为查询词在各个文档的中的距离度量，$\delta(Q,D)$最小表明查询词与文档越相关，而在使用过程中一般以这个相关性越大最好，这将这个相关性记为:$\pi(Q,D)$，则使用下面的公式来转换:</p>
+<p><center>$\pi(Q,D)=log(\alpha + exp(- \delta(Q,D)))$</center></p>
+<blockquote>
+<p>$\alpha$可以作为调节因子</p>
 </blockquote>
-</li>
-</ul>
-<p><img src="/img/Learning-Is-Possible/mhv.png" height="300px" width="500px"><br>那么好了，如果<code>m<sub>H</sub>(N)</code>能直接取代<code>M</code>,同时<code>m<sub>H</sub>(N)</code>为多项式的话，<code>N</code>越大，那个这个<code>upbound</code>会越来越小，或者接近于0<br><img src="/img/Learning-Is-Possible/qd.png" height="300px" width="500px"></p>
-<p>现在来看一个<code>break point</code>的概念<br><img src="/img/Learning-Is-Possible/bp.png" height="300px" width="400px"><br>表示第一个无法<code>shattered</code>的点,比如在上面<code>lines in 2D</code>的图里面在3个点的时候最多有8条线(2^3)，正好是<code>shattered</code>,但是到了4个点的时候最多只有14条线，此时就无法<code>shattered</code>,故4就是<code>2D-PLA</code>的<code>break point</code>，同理<br><img src="/img/Learning-Is-Possible/bps.png" height="300px" width="400px"><br>那么这里可以通过推算最终可以知道<code>m<sub>H</sub>(N)=O(N^(k-1))</code>（具体证明要看看下一个视频VC维相关）,其中这里的<code>k</code>表示<code>break point</code>，这样就可以说上上上面的<code>m<sub>H</sub>(N)</code>是有限的，关于如果代替<code>M</code>的问题还得看下个分解。</p>
-<h2 id="总结">总结</h2><p>所以当算法的该含有一个有限的<code>break point</code>的时候，并且采样的资料量<code>N</code>够多，就可以保证找到一个<code>E<sub>in</sub>(h)</code>最小的时候，得到最小的<code>E<sub>out</sub>(h)</code>,也就是说明Learning的可行性。（好绕）^_^</p>
-<h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第四讲</li>
-<li>《台湾国立大学-机器学习基石》第五讲</li>
-<li>《台湾国立大学-机器学习基石》第六讲</li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
+<p>使用这种方式的度量最大的优点就是方便，但是单独用起来效果可能不怎么理解，并且波动性较大.~</p>
+<h1 id="持续研究中~~~">持续研究中~~~</h1><h2 id="参考">参考</h2><ol>
+<li>2007-An Exploration of Proximity Measures in Information Retrieval</li>
+</ol>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -181,13 +195,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
   </div>
 
 </div>
@@ -196,7 +210,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2015/08/09/Machine Learning/Learning-Is-Possible/" data-title="《台大机器学习基石》Learning is Possible  | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yyl8781697.github.io/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" data-title="在信息检索中Term之间的Proximity计算研究 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -209,19 +223,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/08/11/Algorithm/Intelligence-Problems/" title="一些面试常见的智力题啦">
-  <strong>上一篇：</strong><br/>
-  <span>
-  一些面试常见的智力题啦</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/08/06/Machine Learning/Perceptron-Learning-Algorithm/"  title="《台大机器学习基石》Perceptron Learning Algorithm ">
+<a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/"  title="针对BM25遇到长文档时失效情况的一种高效解决方案">
  <strong>下一篇：</strong><br/> 
- <span>《台大机器学习基石》Perceptron Learning Algorithm 
+ <span>针对BM25遇到长文档时失效情况的一种高效解决方案
 </span>
 </a>
 </div>
@@ -230,7 +236,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/08/09/Machine Learning/Learning-Is-Possible/" data-title="《台大机器学习基石》Learning is Possible " data-url="http://yyl8781697.github.io/2015/08/09/Machine Learning/Learning-Is-Possible/"></div>
+	<div class="ds-thread" data-thread-key="2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" data-title="在信息检索中Term之间的Proximity计算研究" data-url="http://yyl8781697.github.io/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/"></div>
 </section>
 
 
@@ -240,7 +246,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hoeffding不等式"><span class="toc-number">1.</span> <span class="toc-text">Hoeffding不等式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用于Learning"><span class="toc-number">2.</span> <span class="toc-text">应用于Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于M的无限大问题"><span class="toc-number">3.</span> <span class="toc-text">关于M的无限大问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为啥要做Proximity计算"><span class="toc-number">1.</span> <span class="toc-text">为啥要做Proximity计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用距离度量"><span class="toc-number">2.</span> <span class="toc-text">使用距离度量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#持续研究中~~~"><span class="toc-number"></span> <span class="toc-text">持续研究中~~~</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 

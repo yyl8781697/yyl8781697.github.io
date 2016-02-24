@@ -94,6 +94,78 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" title="在信息检索中Term之间的Proximity计算研究" itemprop="url">在信息检索中Term之间的Proximity计算研究</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-23T12:58:43.000Z" itemprop="datePublished"> 发表于 2016-02-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
+<ol>
+<li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
+<li>将这些<code>Term</code>灌入倒排索引中</li>
+<li>用户查询</li>
+<li>根据倒排召回命中<code>Term</code>的文档</li>
+<li>将文档根据各个<code>Term</code>算分排序</li>
+</ol>
+<p>其实可以发现这里查的<code>Term</code> 都是<code>bag-of-words</code>的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了：<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/" title="针对BM25遇到长文档时失效情况的一种高效解决方案" itemprop="url">针对BM25遇到长文档时失效情况的一种高效解决方案</a>
   </h1>
   <p class="article-author">By
@@ -722,76 +794,6 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/" title="KNN算法中KD树的应用" itemprop="url">KNN算法中KD树的应用</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-12T03:57:39.000Z" itemprop="datePublished"> 发表于 2015-10-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
-</code></pre><p><a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#KNN算法">点我查看详情</a></p>
-<blockquote>
-<p>但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对<code>KNN</code>算法实现一个简单的<code>KD</code>树</p>
-</blockquote>
-<h2 id="KD树">KD树</h2><pre><code>KD树是一个二叉树，表示对<span class="keyword">K</span>维空间的一个划分，可以进行快速检索（那KNN计算的时候不需要对全样本进行距离的计算了）
-</code></pre><p>比如针对6个二维数据点{（2,3），（5,4），（9,6），（4,7），（8,1），（7,2）}，可以形成以下树形结构以及空间划分<br><img src="/img/KDTree-In-KNN/example.png" alt=""></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Data-Struct/">Data Struct</a><a href="/tags/Java/">Java</a><a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/10/12/Machine Learning/KDTree-In-KNN/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -886,7 +888,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>3</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
 		  
 		
 		  
@@ -915,7 +917,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
 			
 		
 			
@@ -939,7 +941,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
 			
 		
 			

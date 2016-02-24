@@ -94,6 +94,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/06/24/LeetCode/LeetCode-Reverse-Words-in-a-String/" title="LeetCode-Reverse Words in a String" itemprop="url">LeetCode-Reverse Words in a String</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-06-24T13:00:04.000Z" itemprop="datePublished"> 发表于 2014-06-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Problem:<br>Given an input string, reverse the string word by word.</p>
+<p>For example,<br>Given s = “the sky is blue”,<br>return “blue is sky the”.</p>
+<blockquote>
+<p>For C programmers: Try to solve it in-place in O(1) space.</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">reverseWords</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        String[] strs=s.trim().split(<span class="string">"\\s+"</span>);</span><br><span class="line">        StringBuilder sb=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=strs.length-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">        &#123;</span><br><span class="line">            sb.append(strs[i]);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(i!=<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                sb.append(<span class="string">" "</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>thr runtime is <code>384ms</code></p>
+<p>本来想说用二次字符串翻转来做的，比如第一次先以空格分隔翻转：<code>eht yks si eulb</code>，然后再一次进行全部翻转之后即可得到<code>blue is sky the</code>，但是代码提交到LeetCode之后他的Test Case中有去空格的Demo，老是Wrong，想想大致能用二次翻转完成就好，就没有继续调试了0-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">reverseWords2</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">byte</span>[] bs=s.getBytes();</span><br><span class="line">    <span class="keyword">int</span> length=bs.length;</span><br><span class="line">    <span class="keyword">int</span> start=<span class="number">0</span>,end=<span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=length;i++)</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="keyword">if</span>(i==length || bs[i]==<span class="number">32</span>)</span><br><span class="line">    	&#123;</span><br><span class="line">    		end=i-<span class="number">1</span>;</span><br><span class="line">    		</span><br><span class="line">    		reverse(bs,start,end);</span><br><span class="line">        	start=i+<span class="number">1</span>;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    reverse(bs,<span class="number">0</span>,length-<span class="number">1</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(bs);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="keyword">byte</span>[] bs,<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(;i&lt;j;i++,j--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">byte</span> b=bs[i];</span><br><span class="line">		bs[i]=bs[j];</span><br><span class="line">		bs[j]=b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>JUnit Test Code<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">List&lt;TestExample&gt; testExampleList=<span class="keyword">new</span> ArrayList&lt;TestExample&gt;();</span><br><span class="line">	</span><br><span class="line"><span class="annotation">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.testExampleList.add(<span class="keyword">new</span> TestExample(<span class="string">"   a   b "</span>,<span class="string">"b a"</span>));<span class="comment">//这个会失败 就没再测了</span></span><br><span class="line">	<span class="keyword">this</span>.testExampleList.add(<span class="keyword">new</span> TestExample(<span class="string">"LeetCode"</span>,<span class="string">"LeetCode"</span>));</span><br><span class="line">	<span class="keyword">this</span>.testExampleList.add(<span class="keyword">new</span> TestExample(<span class="string">"Hello World"</span>,<span class="string">"World Hello"</span>));</span><br><span class="line">	<span class="keyword">this</span>.testExampleList.add(<span class="keyword">new</span> TestExample(<span class="string">"the sky is blue"</span>,<span class="string">"blue is sky the"</span>));</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	ReverseWordsinaString reverse=<span class="keyword">new</span> ReverseWordsinaString();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(TestExample example:<span class="keyword">this</span>.testExampleList)</span><br><span class="line">	&#123;</span><br><span class="line">		Assert.assertEquals(reverse.reverseWords2(example.sourceStr),example.reverseStr);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@After</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.testExampleList.clear();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TestExample</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> String sourceStr;</span><br><span class="line">	<span class="keyword">public</span> String reverseStr;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TestExample</span><span class="params">(String sourceStr,String reverseStr)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.sourceStr=sourceStr;</span><br><span class="line">		<span class="keyword">this</span>.reverseStr=reverseStr;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/06/24/LeetCode/LeetCode-Reverse-Words-in-a-String/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/06/24/LeetCode/LeetCode-Reverse-Words-in-a-String/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/03/26/LeetCode/LeetCode-3Sum/" title="LeetCode-3Sum" itemprop="url">LeetCode-3Sum</a>
   </h1>
   <p class="article-author">By
@@ -733,70 +808,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2012/03/07/Dotnet/aspnetpager/" title="这两天自己模仿写的一个Asp.Net的显示分页方法 附加实体转换和存储过程 带源码下载" itemprop="url">这两天自己模仿写的一个Asp.Net的显示分页方法 附加实体转换和存储过程 带源码下载</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2012-03-07T12:43:20.000Z" itemprop="datePublished"> 发表于 2012-03-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>&#160; &#160; &#160; &#160;之前自己一直用Aspnetpager控件来显示项目中的分页，但是每次都要拖一个aspnetpager的控件进去，感觉很不舒服，因为现在自己写的webform都不用服务器控件了，所以自己仿照aspnetpager写了一个精简实用的返回分页显示的html方法，其他话不说了，直接上代码。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2012/03/07/Dotnet/aspnetpager/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a><a href="/tags/pager/">pager</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2012/03/07/Dotnet/aspnetpager/#comments" class="ds-thread-count comments-count-link" data-thread-key="2012/03/07/Dotnet/aspnetpager/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/13/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/15/">Next<span></span></a>
@@ -891,7 +902,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>3</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
 		  
 		
 		  
@@ -920,7 +931,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
 			
 		
 			
@@ -944,7 +955,7 @@
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
 			
 		
 			
