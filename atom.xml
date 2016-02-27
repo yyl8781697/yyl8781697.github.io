@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-02-24T07:24:38.000Z</updated>
+  <updated>2016-02-27T06:24:53.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yyl8781697.github.io/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/"/>
     <id>http://yyl8781697.github.io/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/</id>
     <published>2016-02-23T12:58:43.000Z</published>
-    <updated>2016-02-24T07:24:38.000Z</updated>
+    <updated>2016-02-27T06:24:53.000Z</updated>
     <content type="html"><![CDATA[<h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
 <ol>
 <li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
@@ -59,8 +59,7 @@
 <li><code>Distance aggregation</code>系列一般比<code>Span-based</code>的效果要好</li>
 <li><code>Distance aggregation</code>中<code>MinDist</code>的效果最好</li>
 </ol>
-<p>但是在一般使用过程中不会直接将距离作为<code>Proximity</code>的值，现将$\delta(Q,D)$作为查询词在各个文档的中的距离度量，$\delta(Q,D)$最小表明查询词与文档越相关，而在使用过程中一般以这个相关性越大最好，这将这个相关性记为:$\pi(Q,D)$，则使用下面的公式来转换:</p>
-<p><center>$\pi(Q,D)=log(\alpha + exp(- \delta(Q,D)))$</center></p>
+<p>但是在一般使用过程中不会直接将距离作为<code>Proximity</code>的值，现将$\delta(Q,D)$作为查询词在各个文档的中的距离度量，$\delta(Q,D)$最小表明查询词与文档越相关，而在使用过程中一般以这个相关性越大最好，这将这个相关性记为:$\pi(Q,D)$，则使用下面的公式来转换:<br>$$\pi(Q,D)=log(\alpha + exp(- \delta(Q,D)))$$</p>
 <blockquote>
 <p>$\alpha$可以作为调节因子</p>
 </blockquote>
