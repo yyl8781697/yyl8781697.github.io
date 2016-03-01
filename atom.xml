@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-02-27T06:24:53.000Z</updated>
+  <updated>2016-02-27T06:58:47.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yyl8781697.github.io/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/"/>
     <id>http://yyl8781697.github.io/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/</id>
     <published>2016-02-23T12:58:43.000Z</published>
-    <updated>2016-02-27T06:24:53.000Z</updated>
+    <updated>2016-02-27T06:58:47.000Z</updated>
     <content type="html"><![CDATA[<h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
 <ol>
 <li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
@@ -64,6 +64,7 @@
 <p>$\alpha$可以作为调节因子</p>
 </blockquote>
 <p>使用这种方式的度量最大的优点就是方便，但是单独用起来效果可能不怎么理解，并且波动性较大.~</p>
+<p>$$<br>f’(q,D)=\left{<br>\begin{aligned}<br>\frac{(k_1+1) \cdot [c’(q,D)+\delta ]}{k_1 + [c’(q,D)+\delta ]}  &amp; \quad if \quad c’(q,D)&gt;0\<br>0 &amp; \quad otherwise\<br>\end{aligned}<br>\right.<br>$$</p>
 <h1 id="持续研究中~~~">持续研究中~~~</h1><h2 id="参考">参考</h2><ol>
 <li>2007-An Exploration of Proximity Measures in Information Retrieval</li>
 </ol>
@@ -98,7 +99,7 @@
     <link href="http://yyl8781697.github.io/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/"/>
     <id>http://yyl8781697.github.io/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</id>
     <published>2016-02-16T09:17:19.000Z</published>
-    <updated>2016-02-23T15:58:45.000Z</updated>
+    <updated>2016-02-27T06:58:10.000Z</updated>
     <content type="html"><![CDATA[<pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
 </code></pre><h2 id="当BM25遇到长文档">当BM25遇到长文档</h2><p>文档相关性模型-<code>BM25</code>的拟合公式如下:</p>
 <center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>

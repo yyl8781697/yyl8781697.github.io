@@ -2,18 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yyl8781697.github.io/2010/03/01/LeetCode/2017-Job-Suggest/</loc>
+    <lastmod>2016-03-01T05:15:17.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yyl8781697.github.io/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/</loc>
-    <lastmod>2016-02-27T06:24:53.000Z</lastmod>
+    <lastmod>2016-02-27T06:58:47.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://yyl8781697.github.io/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</loc>
+    <lastmod>2016-02-27T06:58:10.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://yyl8781697.github.io/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/</loc>
     <lastmod>2016-02-24T07:22:24.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</loc>
-    <lastmod>2016-02-23T15:58:45.000Z</lastmod>
   </url>
   
   <url>
