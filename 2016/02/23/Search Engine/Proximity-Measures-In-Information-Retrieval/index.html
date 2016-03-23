@@ -132,7 +132,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为啥要做Proximity计算"><span class="toc-number">1.</span> <span class="toc-text">为啥要做Proximity计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用距离度量"><span class="toc-number">2.</span> <span class="toc-text">使用距离度量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#持续研究中~~~"><span class="toc-number"></span> <span class="toc-text">持续研究中~~~</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为啥要做Proximity计算"><span class="toc-number">1.</span> <span class="toc-text">为啥要做Proximity计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用距离度量"><span class="toc-number">2.</span> <span class="toc-text">使用距离度量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引入BM25模型"><span class="toc-number">3.</span> <span class="toc-text">引入BM25模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#持续研究中~~~"><span class="toc-number"></span> <span class="toc-text">持续研究中~~~</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -180,9 +180,19 @@
 <p>$\alpha$可以作为调节因子</p>
 </blockquote>
 <p>使用这种方式的度量最大的优点就是方便，但是单独用起来效果可能不怎么理解，并且波动性较大.~</p>
-<p>$$<br>f’(q,D)=\left{<br>\begin{aligned}<br>\frac{(k_1+1) \cdot [c’(q,D)+\delta ]}{k_1 + [c’(q,D)+\delta ]}  &amp; \quad if \quad c’(q,D)&gt;0\<br>0 &amp; \quad otherwise\<br>\end{aligned}<br>\right.<br>$$</p>
+<h2 id="引入BM25模型">引入BM25模型</h2><p>主要对<code>bi-term</code>进行<code>BM25</code>得分的计算，这里<code>BM25</code>的计算方式可以按传统的进行，<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/" target="_blank" rel="external">参考这个</a> </p>
+<p>关于<code>bi-term</code>的构建主要有两种方式:</p>
+<ol>
+<li>直接使用<code>B-Gram</code>:认为相邻两个<code>term</code>是有依赖的，所以可以直接使用<code>B-Gram</code>的方式来构建</li>
+<li>使用滑窗的方式:认为一个窗口里面的两两<code>term</code>有依赖，因此可以对他们进行两两组合，这个窗口大小一般会小于8</li>
+</ol>
+<blockquote>
+<p>其实更好的应该是<code>依存</code>关系来构建这个<code>bi-term</code>，不过上述的几种方式构建出来的<code>pair</code>都会很大，所以还需要其他一些方式来剪枝</p>
+</blockquote>
 <h1 id="持续研究中~~~">持续研究中~~~</h1><h2 id="参考">参考</h2><ol>
 <li>2007-An Exploration of Proximity Measures in Information Retrieval</li>
+<li>2005-A Markov random field model for term dependencies</li>
+<li>2010-How good is a span of terms?: exploiting proximity to improve web retrieval</li>
 </ol>
 <hr>
 <blockquote>
@@ -246,7 +256,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为啥要做Proximity计算"><span class="toc-number">1.</span> <span class="toc-text">为啥要做Proximity计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用距离度量"><span class="toc-number">2.</span> <span class="toc-text">使用距离度量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#持续研究中~~~"><span class="toc-number"></span> <span class="toc-text">持续研究中~~~</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为啥要做Proximity计算"><span class="toc-number">1.</span> <span class="toc-text">为啥要做Proximity计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用距离度量"><span class="toc-number">2.</span> <span class="toc-text">使用距离度量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引入BM25模型"><span class="toc-number">3.</span> <span class="toc-text">引入BM25模型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#持续研究中~~~"><span class="toc-number"></span> <span class="toc-text">持续研究中~~~</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
