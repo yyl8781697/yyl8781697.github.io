@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-03-23T07:19:32.000Z</updated>
+  <updated>2016-03-24T16:39:34.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -15,11 +15,75 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[Hadoop Streaming导入自定义module]]></title>
+    <link href="http://yyl8781697.github.io/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/"/>
+    <id>http://yyl8781697.github.io/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/</id>
+    <published>2016-03-24T16:17:54.000Z</published>
+    <updated>2016-03-24T16:39:34.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" target="_blank" rel="external">reducer</a>程序:<br><a id="more"></a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> utils_helper</span><br><span class="line"></span><br><span class="line">lastk = <span class="keyword">None</span> <span class="comment">#这里标志最后一个k  用于控制同一个key 到一个组中</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        w,c = line.split(<span class="string">'\t'</span>)</span><br><span class="line">        c = int(c) <span class="comment">#不转成int会比较麻烦  这是是计数</span></span><br><span class="line">        <span class="keyword">if</span> lastk == <span class="keyword">None</span>: <span class="comment">#这里是判断是否过来的是第一个key</span></span><br><span class="line">                lastk=w</span><br><span class="line">                count = utils_helper.add(count,c)</span><br><span class="line">        <span class="keyword">elif</span> lastk == w:</span><br><span class="line">                count += c</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br><span class="line">                lastk=w</span><br><span class="line">                count = c <span class="comment">#这里重置计数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> lastk <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br></pre></td></tr></table></figure></p>
+<p>故意使用一个自定义模块来测试<code>utils_helper.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x,y)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> x+y</span><br></pre></td></tr></table></figure></p>
+<p>如果本地跑起来是(就是本地DEBUG)就可以正常跑的，但是放到<code>Hadoop</code>集群上跑的时候,使用的启动命令为:</p>
+<pre><code>hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-2.7.0.jar \
+-<span class="ruby">input /yyl/data/line.txt \
+</span>-<span class="ruby">output /yyl/test/ouput/streaming2 \
+</span>-<span class="ruby">mapper <span class="string">"python word_count_mapper.py"</span> \
+</span>-<span class="ruby">reducer <span class="string">"python word_count_reducer.py"</span> \
+</span>-<span class="ruby">file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_mapper.py \
+</span>-<span class="ruby">file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_reducer.py \
+</span>-<span class="ruby">file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/utils_helper.py \</span>
+</code></pre><p>可以发现跑到<code>reducer</code>阶段时会报错:</p>
+<pre><code><span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">11</span>:<span class="number">40</span> INFO mapreduce<span class="class">.Job</span>: Running job: job_1458827745768_0018
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">11</span>:<span class="number">53</span> INFO mapreduce<span class="class">.Job</span>: Job job_1458827745768_0018 running <span class="keyword">in</span> uber mode : false
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">11</span>:<span class="number">53</span> INFO mapreduce<span class="class">.Job</span>:  map <span class="number">0%</span> reduce <span class="number">0%</span>
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">12</span>:<span class="number">12</span> INFO mapreduce<span class="class">.Job</span>:  map <span class="number">100%</span> reduce <span class="number">0%</span>
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">12</span>:<span class="number">22</span> INFO mapreduce<span class="class">.Job</span>: Task Id : attempt_1458827745768_0018_r_000000_0, Status : FAILED
+Error: java<span class="class">.lang</span><span class="class">.RuntimeException</span>: PipeMapRed.<span class="function"><span class="title">waitOutputThreads</span><span class="params">()</span></span>: subprocess failed with <span class="tag">code</span> <span class="number">2</span>
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.streaming</span><span class="class">.PipeMapRed</span><span class="class">.waitOutputThreads</span>(PipeMapRed<span class="class">.java</span>:<span class="number">322</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.streaming</span><span class="class">.PipeMapRed</span><span class="class">.mapRedFinished</span>(PipeMapRed<span class="class">.java</span>:<span class="number">535</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.streaming</span><span class="class">.PipeReducer</span><span class="class">.close</span>(PipeReducer<span class="class">.java</span>:<span class="number">134</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.io</span><span class="class">.IOUtils</span><span class="class">.cleanup</span>(IOUtils<span class="class">.java</span>:<span class="number">244</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.ReduceTask</span><span class="class">.runOldReducer</span>(ReduceTask<span class="class">.java</span>:<span class="number">459</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.ReduceTask</span><span class="class">.run</span>(ReduceTask<span class="class">.java</span>:<span class="number">392</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.YarnChild</span>$<span class="number">2</span>.<span class="function"><span class="title">run</span><span class="params">(YarnChild.java:<span class="number">163</span>)</span></span>
+    at java<span class="class">.security</span><span class="class">.AccessController</span><span class="class">.doPrivileged</span>(Native Method)
+    at javax<span class="class">.security</span><span class="class">.auth</span><span class="class">.Subject</span><span class="class">.doAs</span>(Subject<span class="class">.java</span>:<span class="number">415</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.security</span><span class="class">.UserGroupInformation</span><span class="class">.doAs</span>(UserGroupInformation<span class="class">.java</span>:<span class="number">1657</span>)
+    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.YarnChild</span><span class="class">.main</span>(YarnChild<span class="class">.java</span>:<span class="number">158</span>)
+</code></pre><p>这就疼了，代码应该没问题呀，尝试了好几遍之后还是这个错误。。。-_-!!</p>
+<h2 id="解决方案">解决方案</h2><p>后来在<code>stackoverflow</code>发现有人问了同样的问题，并且我使用其中一个方案解决了:</p>
+<pre><code>When Hadoop-Streaming starts <span class="keyword">the</span> python scripts, your python <span class="keyword">script</span>'s path <span class="keyword">is</span> <span class="keyword">where</span> <span class="keyword">the</span> <span class="keyword">script</span> <span class="type">file</span> really <span class="keyword">is</span>. However, hadoop starts them <span class="keyword">at</span> './', <span class="keyword">and</span> your lib.py(<span class="keyword">it</span>'s a symlink) <span class="keyword">is</span> <span class="keyword">at</span> './', too. So, <span class="keyword">try</span> <span class="keyword">to</span> add 'sys.path.append(<span class="string">"./"</span>)' <span class="keyword">before</span> you import lib.py like this: 
+import sys
+sys.path.append('./')
+import lib
+</code></pre><blockquote>
+<p><code>lib.py</code>表示自定义包</p>
+</blockquote>
+<p>应该就是<code>-file</code>上传到计算机器之后文件路径的问题产生的，不过感觉他的理由有点疑惑，按他说的如果我上传之后会通过软连接组织到同一目录下再使用，所以如果直接导入包可能会出问题，那我如果上传之前就是在同一目录下应该就不会出问题吧？？这里并不是很理解，但是至少是导入包的问题是解决了^_^</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://stackoverflow.com/questions/18150208/how-to-import-a-custom-module-in-a-mapreduce-job" target="_blank" rel="external">http://stackoverflow.com/questions/18150208/how-to-import-a-custom-module-in-a-mapreduce-job</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/">reducer</a>程序:<br>]]>
+    
+    </summary>
+    
+      <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
+    
+      <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[在信息检索中Term之间的Proximity计算研究]]></title>
     <link href="http://yyl8781697.github.io/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/"/>
     <id>http://yyl8781697.github.io/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/</id>
     <published>2016-02-23T12:58:43.000Z</published>
-    <updated>2016-03-23T07:19:32.000Z</updated>
+    <updated>2016-03-23T07:28:54.000Z</updated>
     <content type="html"><![CDATA[<h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
 <ol>
 <li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
@@ -2697,78 +2761,6 @@ f就是中位数  直接返回就好啦
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px" /><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》Linear Regression]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/19/Machine%20Learning/Linear-Regression/"/>
-    <id>http://yyl8781697.github.io/2015/08/19/Machine Learning/Linear-Regression/</id>
-    <published>2015-08-19T15:15:46.000Z</published>
-    <updated>2015-08-23T15:31:25.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>算法，假如我们现在时的问题不是解决是否发行用卡，而是该发<strong>多少额度</strong>的问题<br><img src="/img/Linear-Regression/ed.png" width="300px" height="300px"><br>也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！<br><a id="more"></a></p>
-<p>那么我们其实可以直接使用特征属性与权重的加权求和来表示需要发的信用额度即可(与<code>PLA</code>类似，但是没有激活函数：二值判断逆函数)<br><img src="/img/Linear-Regression/jq.png" width="500px" height="300px"><br>上图中表示的就是为线性回归(<code>Linear Regression</code>)，其中<code>w<sup>T</sup>x</code>就是表示为全部的假设空间(<code>hypothesis set</code>)</p>
-<p>如果当前的特征是一维的，那么这里的<code>hypothesis set</code>就表示一条线，（因为总体的特征向量里面还有一个常数值）<br><img src="/img/Linear-Regression/2d.png" width="300px" height="300px"><br>如果当前的特征是二维的，那么这里的<code>hypothesis set</code>就一个平面<br><img src="/img/Linear-Regression/3d.png" width="300px" height="300px"><br>当然特征更加多得话，最终<code>hypothesis set</code>表示一个超平面<br>其中图上红色的部分叫做误差（视频里面叫做<strong>余数</strong>），那么回归分析的目标就是将所有的误差降到最小越好<br>这里使用平方误差来衡量整体的误差<br><img src="/img/Linear-Regression/se.png" width="300px" height="100px"><br>那么从机器学习的角度来说，这里的误差就可以看做(下面这个表达式就很熟悉了)<br><img src="/img/Linear-Regression/jse.png" width="300px" height="100px"><br>相应的<br><img src="/img/Linear-Regression/jse2.png" width="300px" height="100px"><br>表示这个分类器在未来未训练数据集中产生的误差是多少<br>那么现在的线性回归的问题就是转为将<code>E<sub>in</sub>(w)</code>优化到最小。</p>
-<h2 id="Ein(w)最小化">Ein(w)最小化</h2><p>现将上面小节的中的<code>E<sub>in</sub></code>转为矩阵的运算<br><img src="/img/Linear-Regression/mt.png" width="500px" height="400px"></p>
-<ol>
-<li>向量内积可交换，将<code>w<sup>T</sup>x</code>转为<code>x<sup>T</sup>w</code></li>
-<li>将连加转为向量形式的长度（应该是二范数）</li>
-<li>将<code>w</code>单独提出来（相当于隔离出了一个特征属性向量的矩阵）</li>
-<li>最终使用缩写来进行整理</li>
-</ol>
-<p>到了这一步我们可以发现<code>E<sub>in</sub>(w)</code>只与<code>w</code>有关，那么他们的关系图是<br><img src="/img/Linear-Regression/wq.png" width="300px" height="300px"><br>可以发现<code>E<sub>in</sub>(w)</code>是连续可导，还有它是凸的<br>那么用<code>E<sub>in</sub>(w)</code>对<code>w</code>求偏导即可求导最优值(梯度为0的位置)<br><img src="/img/Linear-Regression/td.png" width="400px" height="300px"><br>这样现在问题又转为了 求<img src="/img/Linear-Regression/task.png" width="300px" height="100px"></p>
-<p>首先将<img src="/img/Linear-Regression/ei.png" width="400px" height="100px"><br>现在对其求偏导<br><img src="/img/Linear-Regression/pd.png" width="300px" height="100px"><br>完了之后再将<code>A,b</code>替换回去<img src="/img/Linear-Regression/qw.png" width="300px" height="100px"></p>
-<p>进一步将问题转换为<img src="/img/Linear-Regression/task2.png" width="400px" height="100px"><br>式子中<code>X<sup>T</sup>X</code>和<code>X<sup>T</sup>y</code>都是已知的，唯一不知道的就是<code>w</code>，这样就变为了一个一次的方程式</p>
-<ol>
-<li>假如有<code>(X<sup>T</sup>X)<sup>-1</sup></code>反矩阵的存在，那么就可以直接得到解了,并且是唯一的<br> <img src="/img/Linear-Regression/s1.png" width="250px" height="250px"></li>
-<li>但是如果<code>(X<sup>T</sup>X)<sup>-1</sup></code>反矩阵不存在，那么得到的解可能就不唯一了<br> <img src="/img/Linear-Regression/s2.png" width="250px" height="250px"></li>
-</ol>
-<p>所以这里的核心就是计算虚假的反矩阵(<code>pseudo-inverse</code>),听林老师说这个的计算很多工具都是由现成的^_^</p>
-<blockquote>
-<p>刚刚求<code>E<sub>in</sub>(w)</code>最小化的过程中看似直接用公式代替可到，但是其中的<code>pseudo-inverse</code>计算起来麻烦，最终在计算的时候还是需要迭代，然后会触发<code>E<sub>in</sub>(w)</code>和<code>E<sub>out</sub>(w)</code>的变化，是一个深度隐含的学习过程(这种是叫做<code>Analytic Solution</code>)。</p>
-</blockquote>
-<h2 id="Learning_happened">Learning happened</h2><p>那么该如果保证<code>E<sub>out</sub></code>可以是小的呢？<br>我们先来看一下<code>E<sub>in</sub></code>的平均<br><img src="/img/Linear-Regression/eip.png" width="500px" height="100px"><br>其中<code>nosie level</code>表示样本中噪声的一个情况，<code>d+1</code>表示模型的自由度，<code>N</code>表示样本的容量<br>其中单独表示<code>E<sub>in</sub>(w)</code>的话为<br><img src="/img/Linear-Regression/eipt.png" width="500px" height="200px"><br>这样就形成了两项<code>1-XX<sup>+</sup></code>和<code>y</code>，也就是相当于将输入喝输出进行了一个分离,其中<code>XX<sup>+</sup></code>叫做<code>hat matrix</code><br>关于这个<code>hat matrix</code>,它的意义是这样纸的<br><img src="/img/Linear-Regression/hm.png" width="500px" height="400px"></p>
-<ol>
-<li>红色区块表示向量<code>X</code>的一个扩散，而<code>y^</code>就是落在这个空间上</li>
-<li>目标就是求<code>y-y^</code>的最小化，也就是图种的绿色那条线（<code>y^</code>）向下投影的线</li>
-<li><code>H</code>就是表示这个空间上<code>y</code>到<code>y^</code>的一个投影</li>
-<li><code>I-H</code>就是表示误差部分<code>y-y^</code></li>
-</ol>
-<p>相应的会有<code>trace(I-H)=N-(d+1)</code></p>
-<p>好，现在再来看<code>E<sub>in</sub></code>的平均到底是什么意思<br><img src="/img/Linear-Regression/eips.png" width="500px" height="400px"></p>
-<ol>
-<li>其中如果<code>f(x)</code>为目标函数，那么目标值<code>y</code>就相当于在<code>f(x)</code>上添加噪声</li>
-<li>然后这个噪声通过<code>I-H</code>就可以转为<code>y-y^</code></li>
-</ol>
-<p>现在对噪声作评价的话，那么就可以得到<img src="/img/Linear-Regression/eint2.png" width="500px" height="60px"><br>此时<img src="/img/Linear-Regression/eint3.png" width="500px" height="60px"><br>这两个式子哲学上的意思是<code>E<sub>in</sub></code>的平均是可以看到的，所以当存在噪声的时候看到的线会偏向于噪声方向，而在<code>E<sub>out</sub></code>的平均是未知的，比最好的那个线还要向右边偏一点（没听懂-_-）</p>
-<p>他们俩会形成如下的关系线<br><img src="/img/Linear-Regression/einout.png" width="300px" height="300px"><br>它描述的是当前的样本量与平均的<code>E<sub>in</sub></code>和<code>E<sub>out</sub></code>的关系,随着样本量<code>N</code>的增长，最终会趋向于<code>nosie level</code></p>
-<p>那么就可以得到<br><img src="/img/Linear-Regression/vvv.png" width="300px" height="200px"><br>说明<code>N</code>足够大，然后他的<code>noise level</code>够小时，说明了<code>Learning happened</code></p>
-<h2 id="总结">总结</h2><ol>
-<li>线性回归最终求出的是一个加权求和的值.</li>
-</ol>
-<ul>
-<li>线性回归的<code>E<sub>in</sub></code>的采用的是最小平方误差.</li>
-<li>在计算<code>E<sub>in</sub></code>的最小化时，可以将问题转为矩阵之后就逆矩阵相关即可.</li>
-<li>通过<code>E<sub>in</sub></code>平均的计算,说明了<code>Learning happened</code>.</li>
-<li>其实线性回归去坐分类问题也是可以的^_^，第9课第4个小视频.</li>
-</ul>
-<h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第九讲</li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>算法，假如我们现在时的问题不是解决是否发行用卡，而是该发<strong>多少额度</strong>的问题<br><img src="/img/Linear-Regression/ed.png" width="300px" height="300px" /><br>也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！<br>]]>
     
     </summary>
     
