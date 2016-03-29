@@ -156,7 +156,7 @@
 <span class="attribute">Bundle-ActivationPolicy</span>: <span class="string">lazy</span>
 <span class="attribute">Bundle-RequiredExecutionEnvironment</span>: <span class="string">JavaSE-1.6 </span>
 </code></pre><p>下面的表格是<em>MANIFEST.MF</em>文件中各个标识符的解释：</p>
-<div><br><table width="100%"><br>    <tr><br>        <th width="25%">标识符</th><br>        <th>描述</th><br>    </tr><br>    <tr><br>        <td>Bundle-Name</td><br>        <td>Bundle的简短描述</td><br>    </tr><br>    <tr><br>        <td>Bundle-SymbolicName</td><br>        <td>Bundle的唯一标识符，如果这个Bundle使用了Eclipse中的扩展点功能，则必需将其标志为单例，你只需在<code>Bundle-SymbolicName</code>后面添加<code>singleton:=true</code>即可。</td><br>    </tr><br>    <tr><br>        <td>Bundle-Version</td><br>        <td>定义bundle的版本号，如果发布了一个新的版本则这个版本号必须增加。</td><br>    </tr><br>    <tr><br>        <td>Bundle-Activator</td><br>        <td>定义实现BundleActivator接口的一个activator类[可选]。bundle在激活时，将会创建一个activator类的实例，每当启动或者停止bundle时都会调用该实例的<code>start()</code>和<code>stop()</code>方法，一个OSGI的activator是配置bundle启动期间典型的使用（译者：这句不知道怎么翻译了-<em>-，你懂就好了）</em></td><br>    </tr><br>    <tr><br>        <td>Bundle-RequiredExecutionEnvironment (BREE)</td><br>        <td>指定运行包所需的 Java 版本。如果不满足这一要求，OSGi 运行时将不会加载bundle。</td><br>    </tr><br>    <tr><br>        <td>Bundle-ActivationPolicy</td><br>        <td>将它设置为<code>lazy</code>，OSGI运行时将会延迟加载这个bundle，当它只有被用到时才会开始加载(译者：原文描述的不好翻译啊，就按自己的理解来了--)。如果没有设置这个值，OSGI将会使用它的规范使用默认的方式进行加载。在Equinox中如果没有设置则根据<code>config.ini</code>来决定这个bundle是否自动启动。</td><br>    </tr><br>    <tr><br>        <td>Bundle-ClassPath</td><br>        <td>bundle加载的类路径，默认是”.”，从bundle所在的根目录进行加载，你也可以自己添加jar文件，这些jar文件称为嵌入的的jar文件。</td><br>    </tr><br></table><br></div>
+<div><br><table width="100%"><br>    <tr><br>        <th width="25%">标识符</th><br>        <th>描述</th><br>    </tr><br>    <tr><br>        <td>Bundle-Name</td><br>        <td>Bundle的简短描述</td><br>    </tr><br>    <tr><br>        <td>Bundle-SymbolicName</td><br>        <td>Bundle的唯一标识符，如果这个Bundle使用了Eclipse中的扩展点功能，则必需将其标志为单例，你只需在<code>Bundle-SymbolicName</code>后面添加<code>singleton:=true</code>即可。</td><br>    </tr><br>    <tr><br>        <td>Bundle-Version</td><br>        <td>定义bundle的版本号，如果发布了一个新的版本则这个版本号必须增加。</td><br>    </tr><br>    <tr><br>        <td>Bundle-Activator</td><br>        <td>定义实现BundleActivator接口的一个activator类[可选]。bundle在激活时，将会创建一个activator类的实例，每当启动或者停止bundle时都会调用该实例的<code>start()</code>和<code>stop()</code>方法，一个OSGI的activator是配置bundle启动期间典型的使用（译者：这句不知道怎么翻译了-_-，你懂就好了）</td><br>    </tr><br>    <tr><br>        <td>Bundle-RequiredExecutionEnvironment (BREE)</td><br>        <td>指定运行包所需的 Java 版本。如果不满足这一要求，OSGi 运行时将不会加载bundle。</td><br>    </tr><br>    <tr><br>        <td>Bundle-ActivationPolicy</td><br>        <td>将它设置为<code>lazy</code>，OSGI运行时将会延迟加载这个bundle，当它只有被用到时才会开始加载(译者：原文描述的不好翻译啊，就按自己的理解来了-_-)。如果没有设置这个值，OSGI将会使用它的规范使用默认的方式进行加载。在Equinox中如果没有设置则根据<code>config.ini</code>来决定这个bundle是否自动启动。</td><br>    </tr><br>    <tr><br>        <td>Bundle-ClassPath</td><br>        <td>bundle加载的类路径，默认是”.”，从bundle所在的根目录进行加载，你也可以自己添加jar文件，这些jar文件称为嵌入的的jar文件。</td><br>    </tr><br></table><br></div>
 
 
 <h3 id="2-5-_bundle的依赖关系和公共的API">2.5. bundle的依赖关系和公共的API</h3><p>通过MANIFEST.MF文件包可以定义其他包或包及其依赖项。OSGI在试图访问一个类的时候并没有定义对他的依赖则会抛出一个<code>ClassNotFoundException </code>的异常，它抛出的异常都是标准java虚拟机中定义的包，这些包往往都是可用的，这些可用的类都是可以在Java虚拟机中通过Jre配置文件进行配置，但是这些配置并不在本文档的讲解范围之内。<br><br><strong>bundle</strong>在<em>MANIFEST.MF </em>文件中通过<code>Export-Package</code>来定义它的API，如果包不进行显式导出则对其他<strong>bundle</strong>均为不可见。<br><br>这些所有的限制都是通过OSGI规范中的<code>classloader</code>进行强制执行的，每个<strong>bundle</strong>都有它自己的加载强，访问受限制的类是不允许的。</p>
@@ -272,7 +272,7 @@
 <p>你可以使用<code>start &lt;bundle-id&gt;</code>进行启动<br><img src="/img/OSGi_Modularity/xfirstbundle70.png.pagespeed.ic.iABkb7xQN1.png" alt=""><br><br>译者：我按这种方式尝试了好久都没成功，因为启动OSGI需要4.2中的依赖，最后在Eclipse中才能正常运行，各位如果将这种独立的方式运行成功，请在评论中进行指导</p>
 <h2 id="9-_原文链接">9. 原文链接</h2><p>参考的原文为<a href="http://www.vogella.com/tutorials/OSGi/article.html" target="_blank" rel="external">OSGi Modularity - Tutorial</a></p>
 <blockquote>
-<p>其实这里在原文中本来是版权协议的，我当然是没必要翻译了-<em>-!，<br>关于本文表格，原本是在markdownpad上排版好了，哪知在hexo渲染之后会多加好多换行符，各位就忍着点看吧，下次有空把表格改好-</em>-!，</p>
+<p>其实这里在原文中本来是版权协议的，我当然是没必要翻译了-_-!，<br>关于本文表格，原本是在markdownpad上排版好了，哪知在hexo渲染之后会多加好多换行符，各位就忍着点看吧，下次有空把表格改好-_-!，</p>
 </blockquote>
 <hr>
 <blockquote>
@@ -386,7 +386,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 		  
 		
 		  
@@ -414,7 +414,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
 		  
 		
 		  
@@ -463,7 +463,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
 			
 		
 			
@@ -483,15 +483,19 @@
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -512,10 +516,6 @@
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 			
 		
 			
@@ -821,7 +821,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
@@ -834,5 +834,3 @@ $(document).ready(function(){
   </body>
 </html>
 
-
-<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

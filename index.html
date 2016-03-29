@@ -94,6 +94,142 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/" title="McRank:一种基于多分类和梯度提升树的排序学习" itemprop="url">McRank:一种基于多分类和梯度提升树的排序学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-28T08:37:53.000Z" itemprop="datePublished"> 发表于 2016-03-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
+</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>MacRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
+<h2 id="折损累积增益">折损累积增益</h2><blockquote>
+<p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG">这里</a>).</p>
+</blockquote>
+<p>假设在指定的<code>query</code>下通过某个排序算法对$n$个文档进行排序，则可以得到<br>$$DCG=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1)$$<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/" title="从Bayesion的角度来看Logistic Regression" itemprop="url">从Bayesion的角度来看Logistic Regression</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-26T03:30:54.000Z" itemprop="datePublished"> 发表于 2016-03-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
+<p><code>Logistic Regression</code>（下面简称<code>LR</code>）是一个二分类的机器学习方法，给定一个输入向量$x_i$，输出$P(y_i|x_i)$,其中$y_i \in {0,1}$。</p>
+</blockquote>
+<p>作为一个二分类问题，$Y$的后验概率一般会写成这样:<br>$$P(Y=1|X)=\frac{1}{1+exp(- \omega - \sum_{i=1}^n {\omega_ix_i})}=\sigma(W^TX_i)$$<br>那么<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/26/Machine Learning/Bayesian-Logistic-Regression/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/" title="Hadoop Streaming导入自定义module" itemprop="url">Hadoop Streaming导入自定义module</a>
   </h1>
   <p class="article-author">By
@@ -139,6 +275,149 @@
 	
 	  	<span></span>
 		<a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/" title="[小技巧]让Hexo在使用Mathjax时支持多行公式" itemprop="url">[小技巧]让Hexo在使用Mathjax时支持多行公式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-18T01:46:24.000Z" itemprop="datePublished"> 发表于 2016-03-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
+<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span>
+<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span>
+<span class="special">&amp;</span>=g+h<span class="command">\\</span>
+<span class="special">&amp;</span> =i 
+<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
+</code></pre><p>其中:</p>
+<ol>
+<li><code>begin</code>和<code>end</code>表示公式的起始</li>
+<li><code>\\</code>符号表示换行</li>
+<li><code>&amp;</code>表示对齐</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hexo/">Hexo</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/" title="修复Hexo写Mathjax公式多个下标失效的问题" itemprop="url">修复Hexo写Mathjax公式多个下标失效的问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-16T15:25:29.000Z" itemprop="datePublished"> 发表于 2016-03-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>这应该严格意义上不算Hexo的bug，但是在写Mathjax的时候就会踩中-_-
+</code></pre><blockquote>
+<p>说起<code>Markdown</code>写文章时，加粗的第一反应是<code>**</code>，斜体的第一反应是<code>*</code>，因为各种<code>Markdown</code>格式规范的文章里面都是这么教的，但是你不知道的是<code>__</code>可以支持粗体，<code>_</code>可以支持斜体，一般而言这是没什么问题，但是当在写<code>Latex</code>（<code>Hexo</code>里使用<code>Mathjax</code>实现）数据公式时，<code>_</code>表示下标，并且使用频率很高，当一行里面有多个<code>_</code>出现时，<code>Hexo</code>进行解析导致所期待的公式失效。</p>
+</blockquote>
+<p>自从用<code>Hexo</code>写数学公式的时候，就发现一点小问题，公式复杂了，在<code>Hexo</code>里面就不<code>work</code>，起初以为是<code>Mathjax</code>的支持不完善的缘故，后来发现用了<code>Mathjax</code>的其他博客里面都可以写复杂的公式，而今天又遇到了这个问题：<br>我的公式文本是:<br><code>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$</code><br>结果生成页面查看之后却发现:<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hexo/">Hexo</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -504,287 +783,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/01/03/Linux/shell-line-no-tab/" title="用笨方法解决Shell中按行读取文件之后Tab键不见的问题" itemprop="url">用笨方法解决Shell中按行读取文件之后Tab键不见的问题</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-01-03T14:24:09.000Z" itemprop="datePublished"> 发表于 2016-01-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>Shell</code>强大灵活，但是今天在使用<code>Shell</code>处理按行读取文件时发现  读取到的行设定的<code>tab</code>分割符不见了</p>
-</blockquote>
-<p>先看一下演示的待<a href="http://kubicode.me/img/awk-study-list/score.log">处理文件</a>:<br><img src="/img/shell-line-no-tab/demo_text.png" alt=""></p>
-<p>需要做的需求就是将里面的数据使用<code>shell</code>将第一列读取出来做一些其他处理(当然如果仅仅是完成读取首列这个功能，使用<code>awk</code>是最快的，这里只是演示)</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/01/03/Linux/shell-line-no-tab/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/01/03/Linux/shell-line-no-tab/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/01/03/Linux/shell-line-no-tab/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/24/Linux/awk-study-list/" title="轻量的结构化文本处理工具-awk" itemprop="url">轻量的结构化文本处理工具-awk</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-12-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>与其说<span class="tag">awk</span>是一个强大的文本处理工具，我更加喜欢称之为轻量级的<span class="tag">C</span>语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。<span class="rule"><span class="attribute">ps</span>:<span class="value">比Excel更加方便哦,一句话：awk可以带你装b带你飞~</span></span>
-</code></pre><h2 id="初体验：九九乘法表">初体验：九九乘法表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"lets begins"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=NR;i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%sx%s=%s\t"</span>,NR,i,NR*i)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"ends"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在先看<code>awk</code>程序之前，咱先来看一下由他实现的一个九九乘法表</p>
-<pre><code>yans-MacBook-Pro:Downloads yanyl$ seq <span class="number">9</span> | awk -f chengfa.awk
-lets begins
-<span class="number">1</span><span class="variable">x1=</span><span class="number">1</span>
-<span class="number">2</span><span class="variable">x1=</span><span class="number">2</span>    <span class="number">2</span><span class="variable">x2=</span><span class="number">4</span>
-<span class="number">3</span><span class="variable">x1=</span><span class="number">3</span>    <span class="number">3</span><span class="variable">x2=</span><span class="number">6</span>    <span class="number">3</span><span class="variable">x3=</span><span class="number">9</span>
-<span class="number">4</span><span class="variable">x1=</span><span class="number">4</span>    <span class="number">4</span><span class="variable">x2=</span><span class="number">8</span>    <span class="number">4</span><span class="variable">x3=</span><span class="number">12</span>    <span class="number">4</span><span class="variable">x4=</span><span class="number">16</span>
-<span class="number">5</span><span class="variable">x1=</span><span class="number">5</span>    <span class="number">5</span><span class="variable">x2=</span><span class="number">10</span>    <span class="number">5</span><span class="variable">x3=</span><span class="number">15</span>    <span class="number">5</span><span class="variable">x4=</span><span class="number">20</span>    <span class="number">5</span><span class="variable">x5=</span><span class="number">25</span>
-<span class="number">6</span><span class="variable">x1=</span><span class="number">6</span>    <span class="number">6</span><span class="variable">x2=</span><span class="number">12</span>    <span class="number">6</span><span class="variable">x3=</span><span class="number">18</span>    <span class="number">6</span><span class="variable">x4=</span><span class="number">24</span>    <span class="number">6</span><span class="variable">x5=</span><span class="number">30</span>    <span class="number">6</span><span class="variable">x6=</span><span class="number">36</span>
-<span class="number">7</span><span class="variable">x1=</span><span class="number">7</span>    <span class="number">7</span><span class="variable">x2=</span><span class="number">14</span>    <span class="number">7</span><span class="variable">x3=</span><span class="number">21</span>    <span class="number">7</span><span class="variable">x4=</span><span class="number">28</span>    <span class="number">7</span><span class="variable">x5=</span><span class="number">35</span>    <span class="number">7</span><span class="variable">x6=</span><span class="number">42</span>    <span class="number">7</span><span class="variable">x7=</span><span class="number">49</span>
-<span class="number">8</span><span class="variable">x1=</span><span class="number">8</span>    <span class="number">8</span><span class="variable">x2=</span><span class="number">16</span>    <span class="number">8</span><span class="variable">x3=</span><span class="number">24</span>    <span class="number">8</span><span class="variable">x4=</span><span class="number">32</span>    <span class="number">8</span><span class="variable">x5=</span><span class="number">40</span>    <span class="number">8</span><span class="variable">x6=</span><span class="number">48</span>    <span class="number">8</span><span class="variable">x7=</span><span class="number">56</span>    <span class="number">8</span><span class="variable">x8=</span><span class="number">64</span>
-<span class="number">9</span><span class="variable">x1=</span><span class="number">9</span>    <span class="number">9</span><span class="variable">x2=</span><span class="number">18</span>    <span class="number">9</span><span class="variable">x3=</span><span class="number">27</span>    <span class="number">9</span><span class="variable">x4=</span><span class="number">36</span>    <span class="number">9</span><span class="variable">x5=</span><span class="number">45</span>    <span class="number">9</span><span class="variable">x6=</span><span class="number">54</span>    <span class="number">9</span><span class="variable">x7=</span><span class="number">63</span>    <span class="number">9</span><span class="variable">x8=</span><span class="number">72</span>    <span class="number">9</span><span class="variable">x9=</span><span class="number">81</span>
-ends
-yans-MacBook-Pro:Downloads yanyl$
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/24/Linux/awk-study-list/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/24/Linux/awk-study-list/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/24/Linux/awk-study-list/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" title="Hadoop Streaming 实践以及Debug" itemprop="url">Hadoop Streaming 实践以及Debug</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-11-08T01:23:38.000Z" itemprop="datePublished"> 发表于 2015-11-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>Hadoop Streaming是一个便于变成<span class="keyword">Map</span> <span class="keyword">Reduce</span>程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
-</code></pre><h2 id="Streaming实践">Streaming实践</h2><p>先直接来看一个由<code>python</code>写的<code>Streaming</code>程序，还有那个经典的word count,我们的数据集是一篇<a href="/img/Hadoop-Streaming-Primary-Learning-And-Debug/words.txt">英语作文</a>,<br>看来看他的<code>mapper</code>文件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys,re</span><br><span class="line"></span><br><span class="line">re_english = re.compile(<span class="string">u'[^a-zA-Z0-9\-]+'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin: <span class="comment">#这里你可以看做是map类中的line输入</span></span><br><span class="line">    words = re_english.sub(<span class="string">' '</span>,line.strip()) <span class="comment">#这里只提取英文数字</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> words.split():</span><br><span class="line">        <span class="keyword">print</span> <span class="string">'%s\t%s'</span> % (word, <span class="number">1</span>)  <span class="comment">#这儿就是标准的输出，用tab隔开  默认第一个值为key</span></span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/" title="在Mac的OSX系统中配置VIM" itemprop="url">在Mac的OSX系统中配置VIM</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-11-07T12:19:43.000Z" itemprop="datePublished"> 发表于 2015-11-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>本文主要参考<a href="http://www.yeyaxi.com/2011/06/how-to-enable-syntax-highlighting-for-vim-in-mac-osx/">[译]如何在Mac OS X中开启VIM语法高亮</a>,他是真的work啊^_^</p>
-</blockquote>
-<p>使用<code>vim</code>来敲代码很带感，设置<code>vim</code>是一大要事，但是在<code>Mac</code>的<code>vim</code>默认是黑白的，而且并不能像<code>Linux</code>设置<code>~/.vimrc</code>来进行配置，但是毕竟还有其他的方法，先下面一步一步走就可以了</p>
-<p>首先进入终端之后输入如下代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/vim</span><br><span class="line"></span><br><span class="line">sudo vim vimrc</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Mac/">Mac</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Mac/">Mac</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/07/Mac/Mac-OSX-Vim-highlight/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -831,7 +829,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 		  
 		
 		  
@@ -859,7 +857,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>13</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
 		  
 		
 		  
@@ -908,7 +906,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
 			
 		
 			
@@ -928,15 +926,19 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -957,10 +959,6 @@ yans-MacBook-Pro:Downloads yanyl$
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>2</sup></a></li>
 			
 		
 			
@@ -1184,7 +1182,7 @@ $(document).ready(function(){
     });
 </script>
 
-<script type="text/javascript" src="/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 
@@ -1197,5 +1195,3 @@ $(document).ready(function(){
   </body>
  </html>
 
-
-<a href="https://github.com/yyl8781697" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>

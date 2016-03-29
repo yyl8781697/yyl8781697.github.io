@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-03-24T16:39:34.000Z</updated>
+  <updated>2016-03-29T16:55:48.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -15,11 +15,160 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[McRank:一种基于多分类和梯度提升树的排序学习]]></title>
+    <link href="http://yyl8781697.github.io/2016/03/28/Machine%20Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/"/>
+    <id>http://yyl8781697.github.io/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/</id>
+    <published>2016-03-28T08:37:53.000Z</published>
+    <updated>2016-03-29T16:55:48.000Z</updated>
+    <content type="html"><![CDATA[<pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
+</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>MacRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/" target="_blank" rel="external">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
+<h2 id="折损累积增益">折损累积增益</h2><blockquote>
+<p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG" target="_blank" rel="external">这里</a>).</p>
+</blockquote>
+<p>假设在指定的<code>query</code>下通过某个排序算法对$n$个文档进行排序，则可以得到<br>$$DCG=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1)$$<br><a id="more"></a></p>
+<p>其中:</p>
+<ol>
+<li>$i$表示原文档的索引顺序</li>
+<li>$c_{[\pi_i]}=log(i+1)$</li>
+<li>$y_i$表示对应文档与<code>query</code>相关性的程度，一般用档位$\{0,1,2,3,4\}$来表示</li>
+</ol>
+<p>最终的<code>DCG</code>值越大，表示排序效果越好,假如直接根据档位降序得到的排序结果中<code>DCG</code>是最大的，实际使用中一般根据当前可能的最大<code>DCG</code>进行归一化</p>
+<h2 id="排序思想">排序思想</h2><p>现在已经知道了文档与<code>query</code>之间一般用档位衡量，而假如按档位降序的<code>DCG</code>值最高,所以排序问题可以转为指定<code>query</code>对文档相关性类别的预测，即多分类问题。</p>
+<h3 id="DNCG误差计算">DNCG误差计算</h3><p>现在可以这么理解，我们希望的是<code>DCG</code>越大越好，也即是<code>DCG</code>误差越小越好，但如果是分类问题将直接优化的是分类误差，那如果<code>DCG</code>误差能够被分类误差给<code>bouded</code>住，就可以通过优化分类误差来间接的优化<code>DCG</code>误差了.</p>
+<p>对于一个排序的置换映射函数$\pi$,<code>DCG</code>误差为$DCG_g-DCG_{\pi}$，其中$DCG_g$表示最优排序,就是根据实际的<code>query-doc</code>相关性分档降序的排序，所以肯定有$DCG_g \geq DCG_{\pi}$</p>
+<p>现给定$n$个<code>URLS</code>的顺序为$\{1,2,3…n\}$，假设分类器分配的相关结果为$\hat{y}_i \in \{0,1,2,3,4\}$，置换映射函数$\pi$直接根据相关性进行排序，高档位的排在前面，相同档位可以随意排序，则可以有以下证明:</p>
+<blockquote>
+<p>先看变量^_^<br>$y_i$表示<code>query-doc</code>的实际相关性<br>$\hat{y}_i$表示<code>query-doc</code>的分类器预测相关性<br>$c_{[g_i]}$表示根据实际相关性得到的排序<br>$c_{[\pi_i]}$表示根据预测相关性得到的排序</p>
+</blockquote>
+<p>$$\begin{equation}\begin{split}DCG_{\pi}&amp;=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1) \\<br>&amp;=\sum_{i=1}^{n}c_{[\pi_i]}(2^{\hat{y}_i}-1)+\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp;\geq \sum_{i=1}^{n}c_{[g_i]}(2^{\hat{y}_i}-1)+\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp;=\sum_{i=1}^{n}c_{[g_i]}(2^{y_i}-1)-\sum_{i=1}^{n}c_{[g_i]}(2^{y_i}-2^{\hat{y}_i})+\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp;=DCG_g+\sum_{i=1}^{n}(c_{[\pi_i]}-c_{[g_i]})(2^{y_i}-2^{\hat{y}_i})<br>\end{split}\end{equation}$$</p>
+<p>解释下不等式$\sum_{i=1}^{n}c_{[\pi_i]}(2^{\hat{y}_i}-1) \geq \sum_{i=1}^{n}c_{[g_i]}(2^{\hat{y}_i}-1)$成立的原因:$c_{[\pi_i]}$是根据相关性$\hat{y}_i$排序得到的，也就是上面提到的最优排序，得到的$DCG$值是最大的(当然这个是分类器的预测值，不是真实值，就是假象的意思-_-)，所以换一种顺序$c_{[g_i]}$其$DCG$的值必定会小于等于最大值.</p>
+<p>根据上面的推导就可以直接得到$DCG$的误差了:<br>$$\begin{equation}\begin{split}DCG_g-DCG_{\pi} &amp;\leq \sum_{i=1}^{n}(c_{[g_i]}-c_{[\pi_i]})(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp; \leq \left(\sum_{i=1}^{n}(c_{[g_i]}-c_{[\pi_i]})^2\right)^{\frac{1}{2}}\left(\sum_{i=1}^{n}(2^{y_i}-2^{\hat{y}_i})^2\right)^{\frac{1}{2}} \\<br>&amp;\leq \left(2\sum_{i+1}^{n}c_{[i]}^2-2n\prod_{i=1}^nc_{[i]}^{\frac{2}{n}}\right)^{\frac{1}{2}} 15 \left(\sum_{i=1}^{n}1_{y_i \neq \hat{y}_i}\right)^{\frac{1}{2}} \\<br>&amp;= 15\sqrt{2} \left(\sum_{i+1}^{n}c_{[i]}^2-n\prod_{i=1}^nc_{[i]}^{\frac{2}{n}}\right)^{\frac{1}{2}}\left(\sum_{i=1}^{n}1_{y_i \neq \hat{y}_i}\right)^{\frac{1}{2}}<br>\end{split}\end{equation}$$</p>
+<p>上面公式<code>1~2</code>是不等式是根据<code>柯西不等式</code>得到的，第<code>2~3行</code>平方展开的不等式成立是因为:</p>
+<ol>
+<li>$\sum_{i=1}^{n}c_{[\pi_i]}^2=\sum_{i=1}^{n}c_{[g_i]}^2=\sum_{i=1}^{n}c_{[i]}^2$,$\prod_{i=1}^{n}c_{[\pi_i]}^2=\prod_{i=1}^{n}c_{[g_i]}^2=\prod_{i=1}^{n}c_{[i]}^2$，他们虽然是顺序不一样，但是他们集合的内容是一样的，所以<code>求和</code>和<code>连乘</code>的等式是成立的。</li>
+<li>两种相关性$y_i$和$\hat{y}_i$的值在<code>0~4</code>范围内,因此有$(2^{y_i}-2^{\hat{y}_i})^2\leq 15$，因为$2^4-2^0=15$</li>
+</ol>
+<p>因此当需要最小化<code>DCG</code>误差时只需要最小化分类误差$\sum_{i=1}^{n}1_{y_i \neq \hat{y}_i}$即可，但是该误差非凸也非平滑，实际使用中使用代理损失函数进行优化:<br>$$\sum_{i=1}^{N}\sum_{k=0}^{K-1}-log(p_{i,k})1_{y_i=k}$$<br>其中$p_{i,k}$表示<code>doc</code>输入每个档位的概率，$K$是总的档位数。</p>
+<blockquote>
+<p>我感觉:上面不等式里面的排序顺序时间使用$c_{[i]}$代替了，虽然表面上和分档结果无关，因此只需要优化分档即可，但是。。。实际上$c_{[\pi_i]}$的顺序是和分档预测有关的啊….</p>
+</blockquote>
+<h3 id="分类排序">分类排序</h3><p>上面提到过有了分档结果之后可以按档位顺序降序排序，得到的<code>DCG</code>就是最优的，但是这里存在一个问题，那就是相同档位之间是可以随便排的，就是导致排序的不稳定性，为了得到一种良好的排序机制，<code>McRank</code>在实际排序中会将分类结果转为一个连续的分数，按这个分数进行排序.</p>
+<p>假设训练是$\{y_i,x_i\}_i^N$，$y_i$表示多分类的分档,则最终将会学习到的是每个类别的概率$p_{i,k}=Pr(y_i=k)$，则最后的排序分数为:<br>$$S_i=\sum_{k=0}^{K-1}p_i^kT(k)$$<br>其中$T(k)$表示随档位单调递增的函数，比如$T(k)=k$或者$T(k)=2^k$（<code>McRank</code>用的是前者）</p>
+<blockquote>
+<p>不同的单调递增函数不会对排序进行影响，同时如果对函数进行线性变换也会改变排序结果</p>
+</blockquote>
+<p>最终<code>McRank</code>是使用<code>Boosting Tree</code>进行多分类预测..</p>
+<h3 id="有序分类">有序分类</h3><blockquote>
+<p>好吧，其实上面<code>McRank</code>已经讲完了，但是Paper里面提到有序分类(<code>Ordinal Classfifcation</code>，貌似就是<code>Pointwise</code>里面的第三个分支)可以提升排序结果。</p>
+</blockquote>
+<p>这里在进行多分类时，可以发现每个类别(档位)并不是平等的，比如4档就是要比0档相关性更好，为了考虑这种的偏移，有序分类就是干这个的，多类别有序分类是学习一段区间内的累积概率$Pr(y_i&lt;k)$</p>
+<p>首先将训练数据点分类两种$\{y_i \geq 4 \}$和$\{y_i \leq 3\}$，那这样称为了一个二分类问题，这里一样使用<code>boosting Tree</code>进行分类，同样关于$\{y_i \leq 3\}$也可以分为$\{y_i \geq 3 \}$和$\{y_i \leq 2\}$，如果迭代就可以进行变相多分类.</p>
+<p>这种方式就是考虑目标类目的不均等性，带来的问题就是会增加训练开销(因为有重复计算，并且可能会带来较大的样本<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-All" target="_blank" rel="external">不均衡性</a>。。。。)</p>
+<blockquote>
+<p>还有一个坏消息。。。<code>McRank</code>的Paper实验里面这种方式并没有比普通多分类提升多少效果-_-</p>
+</blockquote>
+<h2 id="总结">总结</h2><p><code>McRank</code>是非常经典的一种<code>Pointwise</code>学习排序，将排序转为机器学习的多分类预测，并且对其排序指标<code>DCG</code>误差可以被分类误差给<code>bounded</code>住，最终将分类结果的概率转为一个连续分数进行最终的排序，在实验里面显示该方法比基于回归的<code>subRank</code>以及<code>pairwise</code>的<code>LambdaRank</code>效果更好。</p>
+<blockquote>
+<p><code>McRank</code>速度快，效果也还行，最大的问题就是<code>训练样本的构建</code>比较麻烦..</p>
+</blockquote>
+<h2 id="参考">参考</h2><ol>
+<li>Li P, Burges C J C, Wu Q. McRank: Learning to Rank Using Multiple Classification and Gradient Boosting[J]. Advances in Neural Information Processing Systems, 2007:897-904.</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
+</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>MacRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
+<h2 id="折损累积增益">折损累积增益</h2><blockquote>
+<p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG">这里</a>).</p>
+</blockquote>
+<p>假设在指定的<code>query</code>下通过某个排序算法对$n$个文档进行排序，则可以得到<br>$$DCG=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1)$$<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[从Bayesion的角度来看Logistic Regression]]></title>
+    <link href="http://yyl8781697.github.io/2016/03/26/Machine%20Learning/Bayesian-Logistic-Regression/"/>
+    <id>http://yyl8781697.github.io/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/</id>
+    <published>2016-03-26T03:30:54.000Z</published>
+    <updated>2016-03-29T16:55:42.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
+<p><code>Logistic Regression</code>（下面简称<code>LR</code>）是一个二分类的机器学习方法，给定一个输入向量$x_i$，输出$P(y_i|x_i)$,其中$y_i \in {0,1}$。</p>
+</blockquote>
+<p>作为一个二分类问题，$Y$的后验概率一般会写成这样:<br>$$P(Y=1|X)=\frac{1}{1+exp(- \omega - \sum_{i=1}^n {\omega_ix_i})}=\sigma(W^TX_i)$$<br>那么<br><a id="more"></a><br>$$P(Y=0|X)=1-\sigma(W^TX_i)$$</p>
+<p>其中$\sigma(\cdot)$表示激活函数,为$S$形状，<code>x</code>轴可以取值无限大，<code>y</code>轴只能取到$(-1,1)$<br>$$\sigma(a)=\frac{1}{1+exp(-a)}$$</p>
+<pre><code>由于LR表示简单，训练预测速度快，效果并不是很差<span class="comment">(加上正则化)</span>，所以深得学术和工业界的囍爱~^_^
+</code></pre><h2 id="使用GNB推导">使用GNB推导</h2><blockquote>
+<p>谈到LR的时候第一印象就是上面的公式，但是为啥是这个公式呢？这一小节就是从<code>GNB(Gaussion Navie Bayes)</code>的角度来看待这个问题~</p>
+</blockquote>
+<p>我们先对<code>GNB</code>模型做4个假设:</p>
+<ol>
+<li>$Y$是布尔值，服从伯努利分布，其中$\pi = P(Y=1)$</li>
+<li>其中$X_i$是连续随机变量</li>
+<li>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$(大多数情况下，简单用的$N(\mu_k,\sigma)$)</li>
+<li>在给定$Y$下，$X_i$与$X_j$条件独立</li>
+</ol>
+<p>现在让$P(Y|X)$服从<code>GBN</code>假设，通常根据贝叶斯公式可以得到以下:<br>$$P(Y=1|X)=\frac{P(X|Y=1)P(Y=1)}{P(Y=1)P(X|Y=1)+P(Y=0)P(X|Y=0)}$$</p>
+<p>再对这个式子进行进一步处理:</p>
+<p>$$<br>\begin{equation}\begin{split} P(Y=1|X)&amp;=\frac{1}{1+\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}}\quad\quad &amp;(1)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}\right)}&amp;(2)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)}{P(Y=1)}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)}\quad\quad&amp;(3)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{1-\pi}{\pi}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)} &amp;(4)<br>\end{split}\end{equation}<br>$$</p>
+<p>其中:</p>
+<ol>
+<li>式子<code>(1)-&gt;(2)</code>是加了<code>exp</code>函数与<code>ln</code>函数正好相互抵消</li>
+<li>式子<code>(2)-&gt;(3)</code>首先将<code>ln</code>函数的相乘转为相加，同时由于$X$中的各个$x_i$相互独立，所以原本写成连乘的式子又可以写成相加求和</li>
+<li>式子<code>(3)-&gt;(4)</code>中$P(Y=1)$的概率是$\pi$，则$P(Y=0)$的概率是$1-\pi$</li>
+</ol>
+<p>在给定假设<code>3</code>情况下，对$\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}$进行进一步展开:<br>$$\begin{equation}\begin{split} \sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)} &amp;=\sum_iln\frac{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i0})^2}{2\sigma_i^2})}{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i1})^2}{2\sigma_i^2})}  &amp;(5)\\<br>&amp;= \sum_iln  exp\left(\frac{(x_i-\mu_{i1})^2-(x_i-\mu_{i0})^2}{2\sigma_i^2}\right) &amp;(6)\\<br>&amp;= \sum_i \left(\frac{(x_i^2-2x_i\mu_{i1}+\mu_{i1}^2)-(x_i^2-2x_i\mu_{i0}+\mu_{i0}^2)}{2\sigma_i^2}\right) \quad\quad &amp;(7)\\<br>&amp;= \sum_i \left(\frac{2x_i(\mu_{i0}-\mu{i1})+\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(8)\\<br>&amp;= \sum_i \left(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(9)<br>\end{split}\end{equation}$$</p>
+<ol>
+<li>式子<code>(5)</code>根据假设<code>3</code>而得到，它是服从高斯分布</li>
+<li>式子<code>(5)-&gt;(6)</code>是消除了公共因此，并且将指数上的相除转为了相减</li>
+<li>式子<code>(6)-&gt;(7)</code>是对<code>ln</code>和<code>exp</code>进行了相互抵消，并且对其平方公式进行了展开</li>
+<li>式子<code>(7)-&gt;(8)</code>是展开式中除去了公有的变量</li>
+<li>式子<code>(8)-&gt;(9)</code>将$x_i$显眼得提了出来</li>
+</ol>
+<p>现从新将上面的展开式丢到$P(Y=1|X)$中则可以得到<br>$$P(Y=1|X)=\frac{1}{1+exp \left(ln\frac{1-\pi}{\pi}+\sum_i(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2})\right)}$$</p>
+<p>相应地，则可以将其写为:<br>$$P(Y=1|X)=\frac{1}{1+exp (\omega_0+\sum_i\omega_ix_i)}$$</p>
+<blockquote>
+<p>可以发现这个式子就是<code>LR</code>的式子了</p>
+</blockquote>
+<p>其权重$\{\omega_1…\omega_n\}$为<br>$$\omega_i=\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}$$<br>其偏置$\omega_0$为:<br>$$\omega_0=ln\frac{1-\pi}{\pi}+\sum_i\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}$$</p>
+<h2 id="总结">总结</h2><p>文本是学习了从贝叶斯角度来看<code>LR</code>式子的来源，根据大家熟知的朴素贝叶斯公式，将定其特定类别下的特征符合高斯分布，根据贝叶斯公式一步步推导出了<code>LR</code>式子的样纸，还是很神奇的。^_^</p>
+<h2 id="参考">参考</h2><p>1 <a href="http://web.cse.ohio-state.edu/~kulis/teaching/788_sp12/scribe_notes/lecture6.pdf" target="_blank" rel="external">http://web.cse.ohio-state.edu/~kulis/teaching/788_sp12/scribe_notes/lecture6.pdf</a>(基本就是看了这个，不过里面公式有不少笔误的。。)</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
+<p><code>Logistic Regression</code>（下面简称<code>LR</code>）是一个二分类的机器学习方法，给定一个输入向量$x_i$，输出$P(y_i|x_i)$,其中$y_i \in {0,1}$。</p>
+</blockquote>
+<p>作为一个二分类问题，$Y$的后验概率一般会写成这样:<br>$$P(Y=1|X)=\frac{1}{1+exp(- \omega - \sum_{i=1}^n {\omega_ix_i})}=\sigma(W^TX_i)$$<br>那么<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Hadoop Streaming导入自定义module]]></title>
     <link href="http://yyl8781697.github.io/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/"/>
     <id>http://yyl8781697.github.io/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/</id>
     <published>2016-03-24T16:17:54.000Z</published>
-    <updated>2016-03-24T16:39:34.000Z</updated>
+    <updated>2016-03-25T01:51:05.000Z</updated>
     <content type="html"><![CDATA[<h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" target="_blank" rel="external">reducer</a>程序:<br><a id="more"></a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> utils_helper</span><br><span class="line"></span><br><span class="line">lastk = <span class="keyword">None</span> <span class="comment">#这里标志最后一个k  用于控制同一个key 到一个组中</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        w,c = line.split(<span class="string">'\t'</span>)</span><br><span class="line">        c = int(c) <span class="comment">#不转成int会比较麻烦  这是是计数</span></span><br><span class="line">        <span class="keyword">if</span> lastk == <span class="keyword">None</span>: <span class="comment">#这里是判断是否过来的是第一个key</span></span><br><span class="line">                lastk=w</span><br><span class="line">                count = utils_helper.add(count,c)</span><br><span class="line">        <span class="keyword">elif</span> lastk == w:</span><br><span class="line">                count += c</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br><span class="line">                lastk=w</span><br><span class="line">                count = c <span class="comment">#这里重置计数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> lastk <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br></pre></td></tr></table></figure></p>
 <p>故意使用一个自定义模块来测试<code>utils_helper.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x,y)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> x+y</span><br></pre></td></tr></table></figure></p>
 <p>如果本地跑起来是(就是本地DEBUG)就可以正常跑的，但是放到<code>Hadoop</code>集群上跑的时候,使用的启动命令为:</p>
@@ -75,6 +224,128 @@ import lib
       <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
     
       <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[[小技巧]让Hexo在使用Mathjax时支持多行公式]]></title>
+    <link href="http://yyl8781697.github.io/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/"/>
+    <id>http://yyl8781697.github.io/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/</id>
+    <published>2016-03-18T01:46:24.000Z</published>
+    <updated>2016-03-28T15:42:26.000Z</updated>
+    <content type="html"><![CDATA[<p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
+<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span>
+<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span>
+<span class="special">&amp;</span>=g+h<span class="command">\\</span>
+<span class="special">&amp;</span> =i 
+<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
+</code></pre><p>其中:</p>
+<ol>
+<li><code>begin</code>和<code>end</code>表示公式的起始</li>
+<li><code>\\</code>符号表示换行</li>
+<li><code>&amp;</code>表示对齐</li>
+</ol>
+<a id="more"></a>
+<p>结果渲染到html页面之后结果是这样的:<br><img src="/img/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/error.png" with="500px"></p>
+<p>完全没换行啊，而且又有莫名其妙的空格，按照之前的经验，估计是<code>markdown</code>渲染的<code>html</code>的时候出了问题<br><img src="/img/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/error_code.png"></p>
+<p>发现两个问题:</p>
+<ol>
+<li><code>&amp;</code>符号被转义成了<code>&amp;amp;</code></li>
+<li>双反斜杠<code>\\</code>被转义成功了<code>\</code></li>
+</ol>
+<p>这就是公式没换行的原因，肯定是<code>marked.js</code>里面做了处理，不过仔细看<code>Mathjax</code>脚本的配置项中有一项为<code>processEscapes: true</code>，说明<code>MathJax</code>是支持转义符号的，所以类似<code>&amp;amp;</code>是不需要额外处理的。</p>
+<p>那么压力就到了解反斜杠问题，最粗暴的是讲反斜杠的转义从<code>marked.js</code>里面去掉，但是可能会影响其他功能，既然两根反斜杠是转为一根，而<code>Latex</code>是两个换行，最简单的方法就是写4个反斜杠:</p>
+<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span><span class="command">\\</span>
+<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span><span class="command">\\</span>
+<span class="special">&amp;</span>=g+h<span class="command">\\</span><span class="command">\\</span>
+<span class="special">&amp;</span> =i 
+<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
+</code></pre><p>就可以得到期待的结果了:</p>
+<center><img src="/img/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/right.png"></center>
+
+<p>这种处理就不影响<code>Hexo</code>自身的功能，又可以满足多行公式的书写^_^</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
+<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span>
+<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span>
+<span class="special">&amp;</span>=g+h<span class="command">\\</span>
+<span class="special">&amp;</span> =i 
+<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
+</code></pre><p>其中:</p>
+<ol>
+<li><code>begin</code>和<code>end</code>表示公式的起始</li>
+<li><code>\\</code>符号表示换行</li>
+<li><code>&amp;</code>表示对齐</li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Hexo" scheme="http://yyl8781697.github.io/tags/Hexo/"/>
+    
+      <category term="Hexo" scheme="http://yyl8781697.github.io/categories/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[修复Hexo写Mathjax公式多个下标失效的问题]]></title>
+    <link href="http://yyl8781697.github.io/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/"/>
+    <id>http://yyl8781697.github.io/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/</id>
+    <published>2016-03-16T15:25:29.000Z</published>
+    <updated>2016-03-28T01:47:42.000Z</updated>
+    <content type="html"><![CDATA[<pre><code>这应该严格意义上不算Hexo的bug，但是在写Mathjax的时候就会踩中-_-
+</code></pre><blockquote>
+<p>说起<code>Markdown</code>写文章时，加粗的第一反应是<code>**</code>，斜体的第一反应是<code>*</code>，因为各种<code>Markdown</code>格式规范的文章里面都是这么教的，但是你不知道的是<code>__</code>可以支持粗体，<code>_</code>可以支持斜体，一般而言这是没什么问题，但是当在写<code>Latex</code>（<code>Hexo</code>里使用<code>Mathjax</code>实现）数据公式时，<code>_</code>表示下标，并且使用频率很高，当一行里面有多个<code>_</code>出现时，<code>Hexo</code>进行解析导致所期待的公式失效。</p>
+</blockquote>
+<p>自从用<code>Hexo</code>写数学公式的时候，就发现一点小问题，公式复杂了，在<code>Hexo</code>里面就不<code>work</code>，起初以为是<code>Mathjax</code>的支持不完善的缘故，后来发现用了<code>Mathjax</code>的其他博客里面都可以写复杂的公式，而今天又遇到了这个问题：<br>我的公式文本是:<br><code>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$</code><br>结果生成页面查看之后却发现:<br><a id="more"></a></p>
+<p><img src="/img/Fix-Hexo-Bug-In-Mathjax/error_display.png" width="500px"><br>这完全不是我期待的。。。数据公式完全没呈现，并且还变斜体了..<br>最初怀疑是不是公式写错了，结果每个公式去<a href="http://latex.codecogs.com/eqneditor/editor.php" target="_blank" rel="external">在线Latex编辑器</a>里面测试之后都是通过的。。。 这难道<code>Mathjax</code>又不支持了吗？？</p>
+<p>趁着周末，得把这个问题解决一把~搞个单页再引用<code>Mathjax</code>之后上面的公式是<code>work</code>的，看<code>Hexo</code>里面渲染的html惊奇的发现:<br><img src="/img/Fix-Hexo-Bug-In-Mathjax/error_code.png" width="500px"><br>下划线<code>_</code>被渲染成<code>&lt;em&gt;</code>标签了，难怪<code>Mathjax</code>公式无法呈现了，<br>接下来<code>Hexo</code>的<code>Markdown</code>渲染引擎:</p>
+<pre><code>yans-MacBook-Pro:node_modules yanyl$ grep -r \<span class="variable">&lt;em\&gt;</span> .
+./hexo/node_modules/bunyan/docs/bunyan.<span class="number">1</span>.html:<span class="variable">&lt;em&gt;</span>names<span class="variable">&lt;/em&gt;</span> or numeric values. (See 'Log Levels' below.)<span class="variable">&lt;/p&gt;</span><span class="variable">&lt;/dd&gt;</span>
+./hexo/node_modules/bunyan/docs/bunyan.<span class="number">1</span>.html:<span class="variable">&lt;dt&gt;</span><span class="variable">&lt;code&gt;</span>-L<span class="variable">&lt;/code&gt;</span>, <span class="variable">&lt;code&gt;</span>--time local<span class="variable">&lt;/code&gt;</span><span class="variable">&lt;/dt&gt;</span><span class="variable">&lt;dd&gt;</span><span class="variable">&lt;p&gt;</span>Display the time field <span class="keyword">in</span> <span class="variable">&lt;em&gt;</span>local<span class="variable">&lt;/em&gt;</span> time, rather than the <span class="keyword">default</span> UTC
+./hexo-renderer-marked/node_modules/marked/lib/marked.js:  return '<span class="variable">&lt;em&gt;</span>' + text + '<span class="variable">&lt;/em&gt;</span>';
+./hexo-renderer-marked/node_modules/marked/marked.<span class="keyword">min</span>.js:(function(){var <span class="built_in">block</span>={newline:/^\n+
+</code></pre><blockquote>
+<p>最后一个<code>marked.min.js</code>因为是单行的，所以后面的不贴了</p>
+</blockquote>
+<p><code>&lt;em&gt;</code>标签的渲染应该就在<code>marked.js</code>或者<code>marked.min.js</code>中，</p>
+<pre><code>yans-MacBook-<span class="string">Pro:</span>node_modules yanyl$ grep -r <span class="string">"marked.js"</span> .
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span>bower.<span class="string">json:</span>  <span class="string">"main"</span>: <span class="string">"lib/marked.js"</span>,
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span>component.<span class="string">json:</span>  <span class="string">"scripts"</span>: [<span class="string">"lib/marked.js"</span>],
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span>component.<span class="string">json:</span>  <span class="string">"main"</span>: <span class="string">"lib/marked.js"</span>,
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span><span class="string">Makefile:</span>    <span class="annotation">@cp</span> lib/marked.js marked.js
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span><span class="string">Makefile:</span>    <span class="annotation">@uglifyjs</span> --comments <span class="string">'/\*[^\0]+?Copyright[^\0]+?\*/'</span> -o marked.min.js lib/marked.js
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span><span class="string">Makefile:</span>    <span class="annotation">@rm</span> marked.js
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span>man/marked.1:.TH marked <span class="number">1</span> <span class="string">"2014-01-31"</span> <span class="string">"v0.3.1"</span> <span class="string">"marked.js"</span>
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span><span class="keyword">package</span>.<span class="string">json:</span>  <span class="string">"main"</span>: <span class="string">"./lib/marked.js"</span>,
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span>README.<span class="string">md:</span>  &lt;script src=<span class="string">"lib/marked.js"</span>&gt;&lt;/script&gt;
+yans-MacBook-<span class="string">Pro:</span>node_modules yanyl$ grep -r <span class="string">"marked.min.js"</span> .
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span><span class="string">Makefile:</span>    <span class="annotation">@uglifyjs</span> --comments <span class="string">'/\*[^\0]+?Copyright[^\0]+?\*/'</span> -o marked.min.js lib/marked.js
+.<span class="regexp">/hexo-renderer-marked/</span>node_modules<span class="regexp">/marked/</span><span class="string">Makefile:</span>    <span class="annotation">@rm</span> marked.min.js
+</code></pre><p>进一步查找可以发现<code>marked.min.js</code>是<code>marked.js</code>的一个压缩版本，并无其他的模块使用，那么进入<code>marked.js</code>中，可以找到<code>&lt;em&gt;</code>的渲染规则:<br><img src="/img/Fix-Hexo-Bug-In-Mathjax/fix1.png" width="500px"><br>和<br><img src="/img/Fix-Hexo-Bug-In-Mathjax/fix2.png" width="500px"></p>
+<p>可以发现<code>&lt;em&gt;</code>标签除了<code>*</code>可以渲染，<code>_</code>同样也可以渲染，那么这样就通了<br>解决问题最方便的方法就是关于<code>_</code>渲染，直接将<code>|</code>左侧的<code>_</code>正则匹配删除即可</p>
+<p>然后再重新生成页面，刷新可以发现：<br><img src="/img/Fix-Hexo-Bug-In-Mathjax/correct_display.png" width="500px"><br>终于得到期望的结果了</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<pre><code>这应该严格意义上不算Hexo的bug，但是在写Mathjax的时候就会踩中-_-
+</code></pre><blockquote>
+<p>说起<code>Markdown</code>写文章时，加粗的第一反应是<code>**</code>，斜体的第一反应是<code>*</code>，因为各种<code>Markdown</code>格式规范的文章里面都是这么教的，但是你不知道的是<code>__</code>可以支持粗体，<code>_</code>可以支持斜体，一般而言这是没什么问题，但是当在写<code>Latex</code>（<code>Hexo</code>里使用<code>Mathjax</code>实现）数据公式时，<code>_</code>表示下标，并且使用频率很高，当一行里面有多个<code>_</code>出现时，<code>Hexo</code>进行解析导致所期待的公式失效。</p>
+</blockquote>
+<p>自从用<code>Hexo</code>写数学公式的时候，就发现一点小问题，公式复杂了，在<code>Hexo</code>里面就不<code>work</code>，起初以为是<code>Mathjax</code>的支持不完善的缘故，后来发现用了<code>Mathjax</code>的其他博客里面都可以写复杂的公式，而今天又遇到了这个问题：<br>我的公式文本是:<br><code>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$</code><br>结果生成页面查看之后却发现:<br>]]>
+    
+    </summary>
+    
+      <category term="Hexo" scheme="http://yyl8781697.github.io/tags/Hexo/"/>
+    
+      <category term="Hexo" scheme="http://yyl8781697.github.io/categories/Hexo/"/>
     
   </entry>
   
@@ -2399,368 +2670,6 @@ f就是中位数  直接返回就好啦
 ]]></content>
     <summary type="html">
     <![CDATA[<h2 id="Model_Select_problem">Model Select problem</h2><p>在机器学习的世界里面有非常多的模型（基石这个课暂时只讲了<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>，<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/">Linear Regression</a>,<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/">Logistic Regression</a>），各个模型也会有自己不同的特点，有各自长处，也有各自的短处,并且除模型之外，还有其他的附属选择，比如<a href="http://kubicode.me/2015/09/05/Machine%20Learning/Regularization/">Regularization</a>的类型，或者具体参数的值，比如<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/#Gradient_Descent">Gradient Descent</a>里面的步长等，我们知道，现在机器学习的目的就是得到最小化的<code>E<sub>out</sub></code>（也就是测试误差啦），那么现在给你一批数据，然后会出现上述那么多的选择，如果做才能得到最小的<code>E<sub>out</sub></code>呢？<br><img src="/img/Validation/goal.png" height="200px" width="500px" /><br>也就是我们要找到一个最好的模型<code>H<sub>m<sup><em></sup></sub></code>，使得<code>E<sub>out</sub>(g<sub>m<sup></em></sup></sub>)</code>最小。<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》Regularization]]></title>
-    <link href="http://yyl8781697.github.io/2015/09/05/Machine%20Learning/Regularization/"/>
-    <id>http://yyl8781697.github.io/2015/09/05/Machine Learning/Regularization/</id>
-    <published>2015-09-05T08:36:48.000Z</published>
-    <updated>2015-09-08T12:37:08.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="Regularization">Regularization</h2><p>正则化(<code>Regularization</code>)是缓解<code>Overfitting</code>非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：<br><img src="/img/Regularization/reg_target.png" height="300px" width="500px"></p>
-<p>那这种正则化过程又该如何做呢？<br>其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的<a href="http://kubicode.me/2015/09/01/Machine%20Learning/Overfitting/" target="_blank" rel="external">点击我</a>)<br><a id="more"></a><br>并且我们还知道低次多项式的假设空间是包含在高次多项式中的<br><img src="/img/Regularization/contains.png" height="150px" width="250px"><br>那么也就是说我们如果能把高次的多项式慢慢退回到合适的低次多项式中，就可以缓解<code>Overfitting</code>问题</p>
-<p>这里来看一下<code>H<sub>2</sub></code>和<code>H<sub>10</sub></code>的多项式关系<br><img src="/img/Regularization/h10h2.png" height="250px" width="500px"><br>可以发现<code>H<sub>2</sub></code>的多项式仅仅是在<code>H<sub>10</sub></code>添加了红色的约束即可形成</p>
-<p>那这样给我们的启发是在<code>H<sub>10</sub></code>多项式退回到<code>H<sub>2</sub></code>多项式时可以加约束来操作<br>现在可以将上述的启发套用到求<code>min(E<sub>in</sub>)</code><br><img src="/img/Regularization/h10h2p.png" height="300px" width="700px"></p>
-<ol>
-<li>上图左侧：求<code>H<sub>10</sub></code>的<code>min(E<sub>in</sub>)</code>可以按具体模型正常求解,这样相对来说可以得到一个更小的<code>E<sub>in</sub></code></li>
-<li>上图中间：求<code>H<sub>2</sub></code>的时候可以在红色约束(后面8个权重值均为0)的基础上求<code>H<sub>10</sub></code>的<code>min(E<sub>in</sub>)</code></li>
-<li>上图右侧：让约束来的更加宽松一点，只要存在8个权重的值为0，这里可以用<code>H‘<sub>2</sub></code>来表示，产生的<code>hypothesis</code>也叫做<code>sparse hypothesis</code>，因为大部分权重值都为0呀^_^</li>
-</ol>
-<blockquote>
-<p>这里就会有：<code>H<sub>2</sub> ⊂ H‘<sub>2</sub> ⊂ H<sub>10</sub></code></p>
-</blockquote>
-<p>现在看似求解<code>H‘<sub>2</sub></code>的<code>min(E<sub>in</sub>)</code>即可，但是遗憾的是他是一个NP难题-_-!!<br>只能继续改进了：原来在<code>H‘<sub>2</sub></code>中对不等于0的权重进行计数设定一个阈值，这个过程可以转为将权重平方和小于一个阈值来操作，这样就有了：<br><img src="/img/Regularization/hc.png" height="300px" width="250px"><br>这样就转为了一个类似的最佳化问题，并且可以解决原来<code>H‘<sub>2</sub></code>离散约束，这个<code>hypothesis</code>叫做<code>H(c)</code>,这个<code>H(c)</code>产生的权重要么非常稀疏，要么都是比较小的。<br>这样产生的权重值叫做<code>W<sub>reg</sub></code>，它也是通过<code>H(c)</code>来完成<code>Regularization</code>的优化解决方案。</p>
-<p>现在使用<code>H(c)</code>的求解<code>Linear Regression</code>，将其转为矩阵形式求解为：<br><img src="/img/Regularization/lrReg.png" height="300px" width="400px"><br>则根据约束条件我们可以知道在约束下最优的解是在半径为<code>sqrt(C)</code>的球里面找到一个权重<code>w</code>使得原始的<code>E<sub>in</sub></code>最小<br>我们现在需要做的就是在条件下求最佳化问题：<br><img src="/img/Regularization/opt.png" height="300px" width="300px"></p>
-<blockquote>
-<p>原始问题是沿着梯度反方向滚到谷底即可，也就是椭圆中的<code>W<sub>lin</sub></code>,现在的话该点就会被限制在球内，则我们可以知道最佳点一定是在球的边缘。</p>
-</blockquote>
-<p>则现在<code>w</code>可以滚动的规则为：</p>
-<ol>
-<li>球的切面方向量的垂直方向为<code>normal</code>，但是只能往该方向的垂直方向滚动(绿色的向量)，不然就会违背了<code>w</code>在球内的约束条件</li>
-<li>要往梯度的反方向滚动(蓝色的方向)，但是为了不违反在球内的条件，所以只能在梯度反方向的分量滚动，并且该方法还必须垂直于<code>normal</code></li>
-</ol>
-<p>所以<code>w</code>滚动的方向是梯度反方向中能垂直球的切面方向量的垂直方向（有点绕。。简单的说，就是蓝色方向与红色垂直的方向滚动），这样即可以满足在球内的约束条件，又可以进一步的优化<code>E<sub>in</sub></code>,直达梯度的反方向与求的切面方向垂直的方向平行，就达到最优了。</p>
-<p>因为最终需要那两个方向是平行的，也样通过拉格朗日乘法可以将其写到一个式子里面去<br><img src="/img/Regularization/lagrange.png" height="250px" width="300px"></p>
-<p>现在假设当前的模型是<code>Linear Regression</code><br><img src="/img/Regularization/par.png" height="250px" width="300px"></p>
-<p>这样只需要求<code>w<sub>reg</sub></code>即可<br><img src="/img/Regularization/wreg.png" height="100px" width="300px"></p>
-<p>现在延生看待这个问题的话<br><img src="/img/Regularization/lrg.png" height="350px" width="500px"><br>其中，在原始基础上添加的<code>w<sup>T</sup>w</code>称作正则项，这里的<code>λ</code>需要取正数大于等于0</p>
-<blockquote>
-<p>这种方式最大的优势就是将原本的阈值<code>C</code>，现在如果知道<code>λ</code>的话就可以在一个式子里面进行直接求解了</p>
-</blockquote>
-<p>关于<code>λ</code>产生的影响的结果图<br><img src="/img/Regularization/lamdba.png" height="300px" width="700px"><br>可以发现</p>
-<ol>
-<li><code>λ</code>如果不加的会产生<code>Overfitting</code></li>
-<li><code>λ</code>加一点点就可以缓解<code>Overfitting</code></li>
-<li>但是<code>λ</code>加太多的话会产生<code>underfitting</code></li>
-</ol>
-<p>这种正则化的方式叫做<code>weight-decay</code>，会把权重值变小（因为球面上权重向量的各个值都会比较小^_^）。</p>
-<h2 id="Regularization_and_VC_theory">Regularization and VC theory</h2><p>通过求带有约束的<code>E<sub>in</sub></code>可以相继得到<code>augmented Error</code>和<code>VC Bound</code><br><img src="/img/Regularization/vct.jpg" height="400px" width="500px"></p>
-<blockquote>
-<p>这里在最优化<code>augmented Error</code>的同时其实在间接的求<code>VC Bound</code></p>
-</blockquote>
-<p>再来看一下他们俩的区别：</p>
-<ul>
-<li><code>augmented Error</code>它的正则项<code>w<sup>T</sup>w=Ω(W)</code>是表示一个<code>hypothesis</code>的复杂程度</li>
-<li><code>VC Bound</code>的<code>Ω(H)</code>是表示整个<code>hypothesis set</code>的复杂程度</li>
-</ul>
-<p>那么如果<code>λ/N*Ω(W)</code>与<code>Ω(H)</code>之间存在关联的话，就可以说最小化<code>E<sub>aug</sub></code>是比通过<code>E<sub>in</sub></code>来求<code>E<sub>out</sub></code>的更好的一个代理</p>
-<p>再来看具体的一个模型复杂度的一个问题<br><img src="/img/Regularization/complex.png" height="200px" width="400px"></p>
-<ul>
-<li>原始求<code>E<sub>in</sub></code>他需要的VC复杂度为<code>d<sub>vc</sub>(H)=d+1</code>，需要在整个<code>hypothesis set</code>中找</li>
-<li>在<code>E<sub>aug</sub></code>中他是被限制在了<code>H(C)</code>中，所以所需的VC复杂度为<code>d<sub>vc</sub>(H(C))=d<sub>EFF</sub>(H,min E<sub>aug</sub>)</code>,他只考虑了<code>w</code>比较小的情况</li>
-</ul>
-<blockquote>
-<p>所以<code>E<sub>aug</sub></code>有效的VC复杂度要比原来的<code>E<sub>in</sub></code>小很多</p>
-</blockquote>
-<h2 id="L2_VS_L1_Regularization">L2 VS L1 Regularization</h2><p>上面提到的<code>||W||<sup>2</sup></code>的正则化称为<code>L2 Regulariation</code>,这里再来看一个 <code>L1 Regularization</code><br><img src="/img/Regularization/l1l2.png" height="400px" width="700px"><br><code>L1 Regularization</code>主要是在原始<code>E<sub>in</sub></code>上添加了权重向量的绝对值求和<code>||W||<sub>1</sub></code>,它可以产生更为稀疏的权重值，因为<code>||W||<sub>1</sub></code>在多维中可以看做菱形体，根据上面求球体最优的方法，在上面提到的最有约束中我们可以知道w滚动的方向是菱形体法向量垂直的方法（该垂直方向是梯度方向的一个放量），直到滚到菱形体角上的时候，该垂直方向将与梯度方向平行，也就是到了最优，而菱形体角上各个权重的值会是比较稀疏的，也就是说<code>L1 Regularization</code>可以将特征稀疏化（特征稀疏化可以减少存储空间，又可以加快计算速度，只是。。这个稀疏化很不方便优化）。</p>
-<p>参考上图对比一下<code>L2 Regulariation</code>和<code>L1 Regulariation</code>：</p>
-<ul>
-<li><code>L2 Regulariation</code>：凸函数，可以求导，并且很方便优化，最后通过正则化之后得到权重值都会偏小</li>
-<li><code>L1 Regulariation</code>：凸函数，但是角上无法求导，也就是说优化比较难，通过正则化之后得到的权重值比较稀疏，对于计算和存储都是很大的优势。</li>
-</ul>
-<blockquote>
-<p>关于<code>E<sub>aug</sub></code>中正则项的<code>λ</code>参数的取值最好是按照噪声大小来定^_^</p>
-</blockquote>
-<h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第十四讲</li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="Regularization">Regularization</h2><p>正则化(<code>Regularization</code>)是缓解<code>Overfitting</code>非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：<br><img src="/img/Regularization/reg_target.png" height="300px" width="500px" /></p>
-<p>那这种正则化过程又该如何做呢？<br>其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的<a href="http://kubicode.me/2015/09/01/Machine%20Learning/Overfitting/">点击我</a>)<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》Overfitting]]></title>
-    <link href="http://yyl8781697.github.io/2015/09/01/Machine%20Learning/Overfitting/"/>
-    <id>http://yyl8781697.github.io/2015/09/01/Machine Learning/Overfitting/</id>
-    <published>2015-09-01T15:24:58.000Z</published>
-    <updated>2015-09-03T16:44:44.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="What_is_Overfitting">What is Overfitting</h2><p>假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合<br>将得到如下的结果<br><img src="/img/Overfitting/4fit2.png" height="240px" width="240px"><br>可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的<code>E<sub>in</sub>=0</code>，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现<code>E<sub>out</sub></code>会很高，<br>这种低<code>E<sub>in</sub></code>高<code>E<sub>out</sub></code>就是叫做泛化能力差(<code>BAD generalization</code>)，也是往往我们在做训练预测时不希望看到的。<br><a id="more"></a></p>
-<p>此时再来回顾一下VC维中经典的一张图<br><img src="/img/Overfitting/vc.png" height="240px" width="240px"><br>可以看到VC维在<code>d<sup>*</sup><sub>vc</sub></code>的时候可以有最小的<code>E<sub>out</sub></code><br>但是在<code>d<sup>*</sup><sub>vc</sub></code>的右侧，可以发现VC维在不断增大时，<code>E<sub>in</sub></code>不断减小，但是<code>E<sub>out</sub></code>会不断增大，这种就是过拟合了（<code>Overfitting</code>）</p>
-<blockquote>
-<p>其实在<code>d<sup>*</sup><sub>vc</sub></code>的左侧叫做欠拟合<code>underfitting</code>，这种情况一般通过增加特征或者向高维映射来进行解决，但是<code>Overfitting</code>是由于一般是VC维太大造成的，不容易解决</p>
-</blockquote>
-<p><code>Overfitting</code>产生的主要原因有</p>
-<ol>
-<li>使用了太多的VC维，也就是模型太复杂了（类似刚刚用4次方的线）</li>
-<li>噪声<code>Nosie</code>太多，这些噪声都被训练函数给拟合学习了</li>
-<li>数据量太少</li>
-</ol>
-<h2 id="The_Role_of_Noise_and_Data_Size">The Role of Noise and Data Size</h2><p>以二维平面上的函数为例，现在平面上有这么一些点：</p>
-<ol>
-<li>一种是以十次多项式产生的点，但是加上了一些噪声</li>
-<li>另一种时以五十次多项式产生的店，但是没有噪声</li>
-</ol>
-<p><img src="/img/Overfitting/case1.png" height="300px" width="500px"><br>分别使用一个二次多项式(<code>H<sub>2</sub></code>)和一个十次多项式<code>H<sub>10</sub></code>用回归的方式去拟合这两个平面上的点</p>
-<p>最终拟合得结果为<br><img src="/img/Overfitting/case2.png" height="350px" width="500px"><br>从两个平面上均可以惊奇的发现：</p>
-<ul>
-<li><code>H<sub>2</sub></code>的<code>E<sub>in</sub></code>比<code>H<sub>10</sub></code>的大，但是在<code>E<sub>out</sub></code>却比<code>H<sub>10</sub></code>小的多</li>
-<li><code>H<sub>10</sub></code>的<code>E<sub>in</sub></code>可以做到很小，但是观察图<code>H<sub>10</sub></code>在图上的高低之处正好与原图相反</li>
-</ul>
-<blockquote>
-<p>也就是说从<code>H<sub>2</sub></code>切换到<code>H<sub>10</sub></code>时，<code>E<sub>in</sub></code>变小了，但是<code>E<sub>out</sub></code>增加了，也就是此时发生了<code>Overfitting</code></p>
-</blockquote>
-<p>这里比较有意思的是原来是十次项产生的点用十次项的线来拟合，该<code>E<sub>out</sub></code>竟然比二次项的线要高很多-_-，这是为何呢？？</p>
-<p>可以看看这两个多项式的学习曲线（这个是针对<code>Liner Regression</code>）<br><img src="/img/Overfitting/curves.png" height="300px" width="500px"><br>其中：</p>
-<ol>
-<li>当样本量无限多的时候，<code>E<sub>in</sub></code>会接近于<code>E<sub>out</sub></code>，否在在有限样本时，<code>E<sub>in</sub></code>总小于<code>E<sub>out</sub></code>，因为训练出来的线总是往训练样本靠拢，这样在预测样本上的时候这个靠拢的距离就会变大。</li>
-<li>随着样本量的增加，<code>E<sub>in</sub></code>会慢慢增加，但是<code>E<sub>out</sub></code>会慢慢减少</li>
-<li>当样本量较少的时候(也就是左边的区域)，这里随着<code>E<sub>in</sub></code>的减少，<code>E<sub>out</sub></code>会增加，也就是出现了<code>Overfitting</code>的情况，应该就是出现了<code>Overfitting</code>的情况，只是左侧的图(十次多项式)更加明显而已</li>
-</ol>
-<blockquote>
-<p>所以啊，可以看出使用简单的模型有多重要^_^</p>
-</blockquote>
-<p>这里再来进一步进行一些<code>Overfitting</code>的实验<br>现在有一个多项次函数和高斯噪声产生的点<br><img src="/img/Overfitting/yf.png" height="200px" width="300px"><br>有三个参数：</p>
-<ol>
-<li><code>σ<sup>2</sup></code>表示高斯噪声的强度</li>
-<li><code>Q<sub>f</sub></code>表示目标多项次函数的复杂度(比如50次多项式 就是<code>Q<sub>f</sub>=50</code>)</li>
-<li><code>N</code>表示训练数据量的大小</li>
-</ol>
-<p>还是用<code>H<sub>2</sub></code>(<code>g<sub>2</sub></code>)和<code>H<sub>10</sub></code>(<code>g<sub>10</sub></code>)进行实验，根据上一个实验的经验，这里肯定成立的是<code>E<sub>in</sub>(g<sub>10</sub>)&lt;E<sub>in</sub>(g<sub>2</sub>)</code>,现在设定<code>Overfitting</code>的度量为<code>E<sub>out</sub>(g<sub>10</sub>)-E<sub>out</sub>(g<sub>2</sub>)</code>，如果这个差值越大，说明<code>Overfitting</code>得越厉害。</p>
-<p>那这样直接看实验结果图</p>
-<blockquote>
-<p>这里横纵坐标是用上面三个参数中选的，还有平面上的颜色表示<code>Overfitting</code>的程度，也就是右侧的那个小纵条，越往上升，<code>Overfitting</code>得越厉害（度量的差值越大）。</p>
-</blockquote>
-<p>先来看噪声强度<code>σ<sup>2</sup></code>和样本数量<code>N</code>对<code>Overfitting</code>的影响<br><img src="/img/Overfitting/isv.png" height="250px" width="250px"><br>从图中可以看到：</p>
-<ul>
-<li>样本数量越少，噪声强度越大的时候，<code>Overfitting</code>得越厉害</li>
-<li>样本数量越多，噪声强度越小的时候，<code>Overfitting</code>的程度很轻<blockquote>
-<p>恩，这想想也是，结果挺合理的^_^</p>
-</blockquote>
-</li>
-</ul>
-<p>再来看看一张比较扭曲的图：目标多项次函数的复杂度<code>Q<sub>f</sub></code>和样本数量<code>N</code>对<code>Overfitting</code>的影响<br><img src="/img/Overfitting/iqv.png" height="250px" width="250px"><br>其实这张图大致上和上面的趋势是一直的，只不过在较少样本同时在较小的复杂度情况下也可以得到较小的<code>Overfitting</code>。</p>
-<blockquote>
-<p>额。。。这个原因我也不是很了解，先去问问其他大神！！</p>
-</blockquote>
-<p>上面两个图中的纵坐标中：</p>
-<ol>
-<li>高斯噪声也叫做随机噪声(<code>stochastic noise</code>)</li>
-<li>目标的复杂度也叫做确定性噪声(<code>deterministic nosie</code>)<br> 这个怎么说呢，比如一个十次项的目标函数产生的点，用一个二次项来拟合，那么这些点中必定有一些是在二次项之外的，那这不就是噪声了嘛，所以这个噪声是可以计算出来的</li>
-</ol>
-<p>他们俩都会对<code>Overfitting</code>都会有影响，并且影响都很类似，不过差别就是<code>deterministic nosie</code>和训练的模型是有改关的。</p>
-<h2 id="Solution_for_Overfitting">Solution for Overfitting</h2><p>既然了解了<code>Overfitting</code>出现的原因以及导致的后果，那咱们该如何处理呢？大致有以下几种方法</p>
-<ol>
-<li>使用简单的模型<br> 根据之前VC维的理论，简单的模型VC维较低，可以得到较低的<code>E<sub>int</sub></code></li>
-<li>剪枝或者数据清洗<br> 其实是为了降低噪声带来的影响</li>
-<li>数据的提示<br> 在原特征上再挖掘有用特征，这样可以弥补训练样本少带来的问题</li>
-<li>正则项<br> 额。好东西，不过下个视频才讲-_-</li>
-<li>验证<br> 应该可以理解为交叉验证把？</li>
-</ol>
-<h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第十三讲</li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="What_is_Overfitting">What is Overfitting</h2><p>假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合<br>将得到如下的结果<br><img src="/img/Overfitting/4fit2.png" height="240px" width="240px" /><br>可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的<code>E<sub>in</sub>=0</code>，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现<code>E<sub>out</sub></code>会很高，<br>这种低<code>E<sub>in</sub></code>高<code>E<sub>out</sub></code>就是叫做泛化能力差(<code>BAD generalization</code>)，也是往往我们在做训练预测时不希望看到的。<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》Multiclass-Classification]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/30/Machine%20Learning/Multiclass-Classification/"/>
-    <id>http://yyl8781697.github.io/2015/08/30/Machine Learning/Multiclass-Classification/</id>
-    <published>2015-08-30T01:27:19.000Z</published>
-    <updated>2015-09-01T15:30:59.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="Multiclass-Classification">Multiclass-Classification</h2><p><a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>,<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/" target="_blank" rel="external">Logistic Regression</a>这些算法的最初出现都是基于2分类的(Binary Classification)，但是生活中会出很多多分类的问题出现（比如选择题：四选一，视觉的识别，手写体的识别之类的）</p>
-<p><img src="/img/Multiclass-Classification/mc.png" height="300px" width="500px"><br><img src="/img/Multiclass-Classification/mcw.png" height="100px" width="300px"><br>那么我们如何才能使用这些二分类的模型来完成多分类的需求呢？<br><a id="more"></a></p>
-<h2 id="One-Vs-All">One-Vs-All</h2><p>这里可以先采用一对多的方法来进行多分类，以上面的4个不同形状的多边形分类为例：<br>这是将方块作为一类，其余作为另一类<br><img src="/img/Multiclass-Classification/oa1.png" height="300px" width="500px"><br>也其实就是一个二分类问题了，通过这个分类器我们可以至少将方块给区分出来<br><img src="/img/Multiclass-Classification/bc.png" height="100px" width="350px"></p>
-<p>这是一个菱形作为一类的方案<br><img src="/img/Multiclass-Classification/oa2.png" height="300px" width="500px"></p>
-<p>同理就会有4个区分不同形状的分类器<br><img src="/img/Multiclass-Classification/oa3.png" height="300px" width="500px"></p>
-<p>那么原图上四个角可以进行很容易得分类的<br><img src="/img/Multiclass-Classification/oa4.png" height="250px" width="250px"></p>
-<p>那么问题来了：<br><img src="/img/Multiclass-Classification/oa5.png" height="250px" width="250px"></p>
-<ul>
-<li>在1，2，3，4四个区域是每个单分类器的交集处，就会出现不知道这个分类应该属于哪个类额</li>
-<li>还有在5这个区域，没有一个分类器去涉及它，就会成为了4不管区域了-_-</li>
-</ul>
-<p>这里可以用一个软性(<code>softly</code>)的方法来解决这个问题<br><img src="/img/Multiclass-Classification/s1.png" height="250px" width="250px"><br>颜色越深的区域属于这个类的概率越大，也就是<br><img src="/img/Multiclass-Classification/sp.png" height="100px" width="350px"><br>那么之后形成的4个形状各自的分类器为<br><img src="/img/Multiclass-Classification/s24.png" height="300px" width="500px"><br>使用这种软性分类器最终的多分类判别方式是<br><img src="/img/Multiclass-Classification/ccpb.png" height="100px" width="350px"><br>也就是它会取分类概率那大的那个类别作为预测出来的分类<br>这种软性多分类的分类能力为<br><img src="/img/Multiclass-Classification/s24s.png" height="250px" width="250px"><br>可以发现图中的4中形状的类别都基本已经分开了</p>
-<p>现在以<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/" target="_blank" rel="external">Logistic Regression</a>为例来总结一下<code>One-Vs-All</code>的多分类过程<br><img src="/img/Multiclass-Classification/lmc.png" height="300px" width="500px"></p>
-<ol>
-<li>首先是遍历每个类别，被遍历的类别作为<code>positive</code>，其余的类作为<code>negitive</code>类别，使用<code>Logistic Regression</code>来训练一个分类器</li>
-<li>这样遍历完了之后就可以得到<code>k</code>（表示类别的种类数）分类器（这样也可以将每个分类器对应到一个类别）</li>
-<li>在预测阶段输入一个样本，计算出概率最高的分类器作为预测的类别</li>
-</ol>
-<p>这种分类方法：</p>
-<ul>
-<li>优点：效率很高，有多少个类别就训练多少个分类器就可以完成多分类，并且普适性还比较广，可以应用于能输出值或者概率的分类器</li>
-<li>缺点：就是有较大的样本不平衡，比如现在有很多个类别，每个类别都是只占其中一点点的样本，那么每个单模型在训练的时候可能都是偏向于<code>negitive</code>，最终在预测的时候就是相当于在一端偏向<code>negitive</code>的模型中找<code>positive</code>的分类器</li>
-</ul>
-<h2 id="One-Vs-One">One-Vs-One</h2><p>相当于<code>One-Vs-All</code>的方法，这里的<code>One-Vs-One</code>是从多个类别里面随便选两个出来进行分类,<br>比如还是以上面的四种形状分类为例，先单独拿出菱形和方块这两种类别<br><img src="/img/Multiclass-Classification/oo1.png" height="300px" width="500px"><br>然后单独对这两个类别做一个二分类<br><img src="/img/Multiclass-Classification/oo12.png" height="100px" width="300px"></p>
-<p>还可以做<br>方块和三角形<br><img src="/img/Multiclass-Classification/oo2.png" height="200px" width="200px"><br>方块和星星<br><img src="/img/Multiclass-Classification/oo3.png" height="200px" width="200px"><br>等等还有其他的。。它在四种类别中就会有6种不同的方法(N(4,2),用于表示4的2组合)<br><img src="/img/Multiclass-Classification/oo5.png" height="250px" width="600px"></p>
-<pre><code>现在将这个问题想做是4支队伍，两两对战，然后取出一组成绩最好的作为预测类别，也就是一种投票分类
-</code></pre><p>所以关于上述分类的公式是<br><img src="/img/Multiclass-Classification/eq.png" height="150px" width="600px"></p>
-<p>再来撸一下<code>One-Vs-One</code>的流程:</p>
-<ol>
-<li>遍历<code>k</code>个类别，两两之间进行组合，那么就会有<code>C(k,2)</code>组</li>
-<li>对那么多组进行一个单独进行分类训练</li>
-<li>训练完了之后最终模型的预测输出使用投票的方法</li>
-</ol>
-<p><img src="/img/Multiclass-Classification/lc.png" height="300px" width="500px"></p>
-<p>这种分类方法有</p>
-<ol>
-<li>优点：高效，别看它分为了<code>N(k,2)</code>个模型，但是每个训练的时候他的训练样本只有针对训练类做一下，并且还比较稳定</li>
-<li>缺点：预测的时间会变久，需要更加多得训练</li>
-</ol>
-<h2 id="总结">总结</h2><p>假设现在有<code>k</code>个类别，现在需要使用多分类的方法去预测一个样本属于具体哪个类</p>
-<ul>
-<li><code>One-Vs-All</code>:其中一个类别作为一类，剩余其他类作为一类训练一个二分类模型，按次方法共训练<code>k</code>模型，一般可以认为一个模型对应一个类别，预测时候取概率最大的那个模型即可<br>  优点：训练速度快<br>  缺点：会导致样本不平衡</li>
-<li><code>One-Vs-One</code>:两两类别之间取数据进行二分类模型的训练，按此方法共训练<code>N(k,2)</code>个模型,在预测的时候使用投票的方法作为最终结果<br>  优点：高效（因为每个单模型并不是训练全部数据），稳定<br>  缺点：预测时间会变很久</li>
-</ul>
-<h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第十一讲</li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="Multiclass-Classification">Multiclass-Classification</h2><p><a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>,<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/">Logistic Regression</a>这些算法的最初出现都是基于2分类的(Binary Classification)，但是生活中会出很多多分类的问题出现（比如选择题：四选一，视觉的识别，手写体的识别之类的）</p>
-<p><img src="/img/Multiclass-Classification/mc.png" height="300px" width="500px" /><br><img src="/img/Multiclass-Classification/mcw.png" height="100px" width="300px" /><br>那么我们如何才能使用这些二分类的模型来完成多分类的需求呢？<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《台大机器学习基石》Logistic Regression]]></title>
-    <link href="http://yyl8781697.github.io/2015/08/21/Machine%20Learning/Logistic-Regression/"/>
-    <id>http://yyl8781697.github.io/2015/08/21/Machine Learning/Logistic-Regression/</id>
-    <published>2015-08-21T13:07:01.000Z</published>
-    <updated>2015-11-25T02:11:25.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/" target="_blank" rel="external">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px"><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br><a id="more"></a></p>
-<blockquote>
-<p>这个也叫<code>Soft Binary Classification</code>，因为这里的概率可以根据一个阈值来判断是否属于哪一类</p>
-</blockquote>
-<p>刚刚可以看到目标函数<code>f(x)</code>的值是属于一个[0,1]范围的值，理所应当，我们理想的训练数据应该是这样的<br><img src="/img/Logistic-Regression/ind1.png" height="300px" width="300px"><br>想法虽好，然是实际上训练目标的概率值很难得到（比如一个患者你过了两三个月之后也许可以观察到该用户是否会患上心脏病，但是你可能是无法知道他患心脏病的真实概率的）<br>所以我们拿到的真实数据是这样的<br><img src="/img/Logistic-Regression/ind2.png" height="300px" width="300px"><br>这样也可以你可以看成为上上概率训练数据一个有噪声的版本，每个标签值对应的0或者1都是直接在概率阈值上进行了一个分类了</p>
-<p>那么现在的目标就是在原来（二分类）的数据上，以[0,1]范围为目标找到一个好的假设(<code>hypothesis</code>)</p>
-<p>那么首先可以想到的是按<code>Linear Regression</code>一样在特征值和权重向量上进行一个加权<br><img src="/img/Logistic-Regression/fw.png" height="400px" width="300px"><br>得到加权之后的<code>score</code>之后，我们希望<code>score</code>越高，最终得到的概率值越大（但是不能大于1），<code>score</code>越低，最终的概率值越小（不能小于0），那正好可以通过下面的函数的转换来完成刚刚的需求<br><img src="/img/Logistic-Regression/lf.png" height="300px" width="400px"><br>这个函数也叫做<code>logistic function</code><br><img src="/img/Logistic-Regression/logit.png" height="100px" width="400px"><br>其中里面的<code>s</code>就是相当于<code>score</code></p>
-<p>最终我们可以得到的模型函数为<br><img src="/img/Logistic-Regression/lh.png" height="300px" width="400px"><br>这也就是<code>Logistic Regression</code>的表示</p>
-<h2 id="Cross-Entropy_Error">Cross-Entropy Error</h2><p>根据<code>Logistic Regression</code>的目标函数<code>f(x)</code>可以很容易得到如下关系<br><img src="/img/Logistic-Regression/fx.png" height="100px" width="500px"></p>
-<p>假如现在有如下的数据<br><img src="/img/Logistic-Regression/cd.png" height="100px" width="500px"><br>那么这批数据产生的概率是<br><img src="/img/Logistic-Regression/d1.png" height="300px" width="300px"><br>使用<code>f(x)</code>替换可以得到<br><img src="/img/Logistic-Regression/d2.png" height="300px" width="300px"></p>
-<p>现在以<code>hypothesis</code>的角度来看，通过<code>h(x)</code>产生的样本情况为<br><img src="/img/Logistic-Regression/h1.png" height="300px" width="300px"></p>
-<p>如果<code>h(x)≈f(x)</code>,那么我们就可以说通过<code>h(x)</code>产生的样本的可能性与真正<code>f(x)</code>产生的数据很接近<br>那么我们现在找<br><img src="/img/Logistic-Regression/lhp.png" height="200px" width="500px"><br>这个是建立在<code>f(x)</code>产生的数据的可能性很大的基础上，所以现在也相应的就是求<code>h(x)</code>产生的样本的可能性也要很大。<br>用式子表达出来就是这个<br><img src="/img/Logistic-Regression/hn.png" height="100px" width="500px"><br>又因为<code>logistic function</code>的写对称性（<code>1-h(x)=h(-x)</code>），上面的式子可以转为<br><img src="/img/Logistic-Regression/hn2.png" height="100px" width="500px"><br>上面带负号的正好可以看做负样本(<code>y<sub>n</sub>=-1</code>)，带正好的也正好可以看做正样本(<code>y<sub>n</sub>=+1</code>)，同时对于每个<code>hypothesis</code>来说上图中灰色部分(产生各个数据的概率,不含目标)都是一样的，所以现在可以将上述式子简写为<br><img src="/img/Logistic-Regression/like.png" height="100px" width="500px"></p>
-<blockquote>
-<p>它是一个正比函数，<code>y<sub>n</sub></code>正好可以替换为原来的正负1</p>
-</blockquote>
-<p>现在要做的就是找到合适的<code>h(x)</code>，使的上述的可能性最高<br>把<code>h</code>用气w来替换为<br><img src="/img/Logistic-Regression/hwt.png" height="100px" width="500px"><br>为了求其最优化，我们将上述式子的连乘转为连加，通过添加一个<code>ln</code>函数(单调递增)，同时使用添加负号来由求最大化转为最小化(方便求)<br> <img src="/img/Logistic-Regression/cee.png" height="150px" width="500px">（式子2）<br>这里继续使用<code>logistic function</code>函数进行替换，可以有<br> <img src="/img/Logistic-Regression/ecc2.png" height="250px" width="500px"><br>(替换技巧ln a/b=ln a- ln b和ln 1=0)<br>紫色背景的表示对x<sub>n</sub>，y<sub>n</sub>的Error，通过累加再求平均就是很熟悉的<code>E<sub>in</sub></code>了,这个Error就叫做<code>Cross-Entropy Error</code></p>
-<h2 id="Gradient_Descent">Gradient Descent</h2><p>求式子2中的最小值最直观的就是对其求梯度并且其梯度在0的地方就是最小(也是最优)</p>
-<blockquote>
-<p>这里能用上述的方法来求是因为<code>Logistic Regression</code>的<code>E<sub>in</sub></code>是可导可微的，并且是凸的</p>
-</blockquote>
-<p>现在将其对<code>w</code>求偏导<br> <img src="/img/Logistic-Regression/pwf.png" height="400px" width="500px"><br>上面求的是梯度里面的一个<code>Component</code>，那么对所有的<code>Component</code>都整理起来可以得到<br><img src="/img/Logistic-Regression/zpwf.png" height="100px" width="500px"><br>目标就变成了求上述梯度为0的情况<br><img src="/img/Logistic-Regression/tdt.png" height="250px" width="250px"><br>但是可以看到上述的梯度并不是一个一次的方程式，也就是无法直接求出具体的值(不能像<code>Linear Regression</code>中那样直接求出)</p>
-<p>不过现在根据需要求解的问题看成现在这样<br><img src="/img/Logistic-Regression/gdt.png" height="250px" width="250px"><br>梯度的函数可以看成图种的曲线，而相应的参数<code>w</code>可以看成图种的那个球，每次都朝着错误的方向<code>v</code>滚，将球从上面滚到最低处，也就是得到梯度为0的情况<br><img src="/img/Logistic-Regression/aga.png" height="200px" width="400px"><br>其中<code>v</code>为球滚动的方向（后面可以知道是梯度的反方向），还有<code>η</code>表示步伐的长度(为正数，越大会滚的越快)<br>现在的问题就是转为了如果很快滚下去，并且是走对方向（真实中并不是一个二维空间，往往是一个多维空间）</p>
-<p>在曲线上很小很小的一个区间内可以看作是一个线段，那这样就可以在曲线上的一个点出来，然后走出一小段的线段来，那这样可以通过多维度的泰勒展开可以得到<br><img src="/img/Logistic-Regression/aag.png" height="200px" width="500px"></p>
-<blockquote>
-<p>这里的<code>η</code>很小的时候，这个线段的逼近 还是很不错的</p>
-</blockquote>
-<p>上面公式中的灰色标志是表示与<code>v</code>没什么关系，在求解最小化的过程中有颜色部分两个向量内积的最小，那这样的话两个向量完全反方向就是最小的，也就是说<code>v</code>走的是梯度反方向，并且需要注意的是他是单位向量，所以这里就会有<br><img src="/img/Logistic-Regression/odo.png" height="200px" width="500px"><br>那么参数更新的方式就会有<br><img src="/img/Logistic-Regression/paraUpdate.png" height="200px" width="500px"></p>
-<pre><code>这个就是梯度下降法<span class="comment">(Gradient Descent)</span>，也是一种较为简单的，有效的优化方法
-</code></pre><p>好，到了这里<code>v</code>可以求了，那么<code>η</code>这个需要给定的参数取多少合适呢？<br><img src="/img/Logistic-Regression/eta.png" height="300px" width="400px"><br>从上图中可以发现：</p>
-<ol>
-<li><code>η</code>很小：那么整个参数更新过程就会很慢，不过准确性（与最小值的接近程度）应该还是可以保证的</li>
-<li><code>η</code>很大，那么这个参数过程就会很不稳定，那么他的最终的准确性可能就会较低</li>
-</ol>
-<p>比较推荐的是采用一种自适应的方法来做<br><img src="/img/Logistic-Regression/jr.png" height="300px" width="200px"><br>当梯度较大的时候，<code>η</code>也跨的较大，那么当梯度慢慢减小的时候，<code>η</code>也同时慢慢减少，也就是说<code>η</code>与梯度值会呈正相关的关系，那么这样在保证了准确性的同时，又可以加快速度^_^<br>此时根据<code>η</code>正比于梯度值的特性可以惊奇的发现<br><img src="/img/Logistic-Regression/xjr.png" height="250px" width="500px"><br>（图种<span style="color:red">红色</span>的<code>η</code>为原生值，<span style="color:purple">紫色</span>的<code>η</code>为正比的比率）<br>在整个参数的更新过程中可以将梯度值的计算消除掉，这里的<span style="color:purple">紫色</span>的<code>η</code>也称为学习速率</p>
-<p>现在<code>Logistic Regression</code>使用<code>Gradient Descent</code>来计算的过程为<br><img src="/img/Logistic-Regression/lrgd.png" height="400px" width="500px"></p>
-<ol>
-<li>首先将<code>w</code>初始化为0向量</li>
-<li>不断迭代的遍历样本</li>
-<li>每遍历一次样本时都计算当前样本的梯度(可以发现每个样本的梯度都需要遍历整个样本之后才能计算得到-_-)</li>
-<li>计算完梯度之后往梯度的反方向更新权值<code>w</code></li>
-<li>不断进行2~4的步骤，直到<code>E<sub>in</sub></code>足够小或者迭代次数足够多</li>
-<li>返回最后一个更新的<code>w</code>就作为我们的最优<code>hypothesis</code></li>
-</ol>
-<blockquote>
-<p>推导了这么久，但是最终发现整个计算过程还是比较简单清晰地，而且还有点像<code>PLA</code>的<code>Pocket Algorithm</code></p>
-</blockquote>
-<h2 id="Stochastic_Gradient_Descent">Stochastic Gradient Descent</h2><p>现在这里再重新理解一下<code>Gradient Descent</code>算法：每次迭代在计算其中一个样本的梯度的时候，都需要遍历所有的样本对梯度的贡献进行求和，然后取平均值作为最后的梯度，是不是感觉代价偏大(<strong>牵一发而动全身的感觉</strong>-_-，特别是在现在大数据的情况下，这效率应该会很慢)<br>现在我们是希望求得这个梯度的方向，但是不希望通过遍历所有样本求和求平均来得到梯度，有一个巧妙的方法就是将这个过程看过一个随机过程的平均，随便去抽一个样本然后将其作为梯度<br><img src="/img/Logistic-Regression/tor.png" height="200px" width="400px"><br>这种方式我们将随机的一个样本偏微分算出来的梯度称为随机梯度(Stochastic Gradient)，最终真实地梯度与这种随机方式求出来的梯度的期望是一致的<br><img src="/img/Logistic-Regression/tg.png" height="200px" width="400px"></p>
-<pre><code>上面的过程就好比：现在有<span class="number">10000</span>个数字，需要求这些数字的平均数，最普通的方法就是<span class="number">10000</span>求和再求平均，但是遍历<span class="number">10000</span>次的复杂度认为太大，另一种解决方法就随机抽一小批数据<span class="comment">(比如100)</span>再求和求平均，其实这两个期望是很类似的，现在另一种trick的方法是直接只抽一个数字，把它认为就是这<span class="number">10000</span>个数字的平均数，现在再想想抽数字抽好多次最后结果喝第一次求和的期望也是类似的
-</code></pre><blockquote>
-<p>这个方式可以认为：随机得梯度=真实梯度+一些噪声</p>
-</blockquote>
-<p>这样的话在更新参数这一块的代价较大的梯度计算即可直接替换为轻量级的随机梯度，在足够多次的迭代之后，这个真实梯度的平均也会约等于随机梯度的平均<br>那么最终<code>Stochastic Gradient Descent(SGD)</code>算法的表示为<br><img src="/img/Logistic-Regression/sgd.png" height="200px" width="400px"><br>在整个算法计算过程中除了随机梯度计算的区别，还有其终止条件就是足够多的迭代，但是取的是<code>E<sub>in</sub></code>最小的那组作为最优</p>
-<blockquote>
-<p>貌似林老师爆出来关于<code>η</code>参数的取值最优是0.1126 经验参数值哦^_^</p>
-</blockquote>
-<p><code>SGD</code>优势有:</p>
-<ol>
-<li>轻量级计算</li>
-<li>适合于大数据（因为复杂度低，计算梯度是O(1)）</li>
-<li>还可以进行<code>online learning</code></li>
-<li>。。。其实我想说比较容易实现并行</li>
-</ol>
-<p>劣势：就是可能不稳定</p>
-<h2 id="总结">总结</h2><p><code>Logistic Regression(LR)</code>是一个线性的二分类模型，主要有以下优缺点<br>优点：</p>
-<ol>
-<li>实现简单；</li>
-<li>分类时计算量非常小，速度很快，存储资源低，也很容易并行；(在大量数据情况下这个模型非常适用，这也是好多广告系统首选的原因)</li>
-<li>在处理分类问题的同时还可能给出一个概率值(这个值有时候蛮有用的)</li>
-<li>优化方法多：除了GD和SGD，应该还有拟牛顿法、BFGS、L-BFGS</li>
-</ol>
-<p>缺点：</p>
-<ol>
-<li>容易欠拟合，一般准确度不太高</li>
-<li>只能处理两分类问题（在此基础上衍生出来的softmax可以用于多分类），且必须线性可分；</li>
-</ol>
-<h2 id="参考">参考</h2><ul>
-<li>《台湾国立大学-机器学习基石》第十讲</li>
-<li>《台湾国立大学-机器学习基石》第十一讲</li>
-</ul>
-<p>配图均来自《台湾国立大学-机器学习基石》</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="Logistic_Regression">Logistic Regression</h2><p>前两篇文章中的模型<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>和<a href="http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/">Linear Regression</a>可以解决的问题是判断一个患者是否会心脏病，但是实际生活中里面里面可能给出的报告的是患者患心脏病的一个概率：<br><img src="/img/Logistic-Regression/har.png" height="240px" width="240px" /><br>这样的话从模型的角度来说更希望的是得到一个发生在患心脏病的概率<code>f(x)=P(+1|x)∈[0,1]</code>,<br>这个概率值越大，患心脏病的概率越大，反之则越小<br>]]>
     
     </summary>
     
