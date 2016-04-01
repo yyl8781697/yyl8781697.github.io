@@ -94,6 +94,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/06/30/LeetCode/LeetCode-LRU-Cache/" title="LeetCode-LRU Cache" itemprop="url">LeetCode-LRU Cache</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-06-30T13:00:04.000Z" itemprop="datePublished"> 发表于 2014-06-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Problem:<br>Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.</p>
+<p><code>get(key)</code> - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.<br><code>set(key, value)</code> - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer,Integer&gt; <span class="number">_</span>cache;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> <span class="number">_</span>capacity;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Node <span class="number">_</span>head=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Node <span class="number">_</span>end=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>head=<span class="keyword">new</span> Node();</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>end=<span class="keyword">new</span> Node();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>head.next=<span class="keyword">this</span><span class="number">._</span>end;</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>end.next=<span class="keyword">null</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>capacity=capacity;</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>cache=<span class="keyword">new</span> HashMap&lt;Integer,Integer&gt;(capacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    	<span class="keyword">int</span> ret=-<span class="number">1</span>;</span><br><span class="line">    	</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span><span class="number">._</span>cache.containsKey(key))</span><br><span class="line">        &#123;</span><br><span class="line">        	ret=<span class="keyword">this</span><span class="number">._</span>cache.get(key);</span><br><span class="line">        	<span class="keyword">this</span>.moveToFirst(key);</span><br><span class="line">        &#125;</span><br><span class="line">        	</span><br><span class="line">        	</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">this</span><span class="number">._</span>cache.containsKey(key))</span><br><span class="line">        &#123;</span><br><span class="line">        	<span class="keyword">if</span>(<span class="number">_</span>cache.size()&gt;=<span class="keyword">this</span><span class="number">._</span>capacity)</span><br><span class="line">        	&#123;</span><br><span class="line">        		<span class="keyword">this</span><span class="number">._</span>cache.remove(<span class="keyword">this</span>.popKey());</span><br><span class="line">        	&#125;</span><br><span class="line">        	</span><br><span class="line">        	<span class="keyword">this</span>.insertToFirst(key);</span><br><span class="line">         &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        	<span class="keyword">this</span>.moveToFirst(key);</span><br><span class="line">         &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">this</span><span class="number">._</span>cache.put(key, value);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">moveToFirst</span><span class="params">(Integer key)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">    	Node node=<span class="keyword">this</span><span class="number">._</span>head;</span><br><span class="line">    	Node node2=<span class="keyword">null</span>;</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">while</span>(node.next!=<span class="keyword">null</span>)</span><br><span class="line">    	&#123;</span><br><span class="line">    		</span><br><span class="line">    		<span class="keyword">if</span>(key.equals(node.key))</span><br><span class="line">    		&#123;</span><br><span class="line">    			<span class="keyword">break</span>;</span><br><span class="line">    		&#125;</span><br><span class="line">    		node2=node;</span><br><span class="line">    		node=node.next;</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	node2.next=node.next;</span><br><span class="line">    	node.next=<span class="keyword">this</span><span class="number">._</span>head.next;</span><br><span class="line">    	<span class="keyword">this</span><span class="number">._</span>head.next=node;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">insertToFirst</span><span class="params">(Integer key)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">    	Node node=<span class="keyword">new</span> Node(key);</span><br><span class="line">    	node.next=<span class="keyword">this</span><span class="number">._</span>head.next;</span><br><span class="line">    	<span class="keyword">this</span><span class="number">._</span>head.next=node;</span><br><span class="line">    	</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> Integer <span class="title">popKey</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">    	<span class="keyword">int</span> key=-<span class="number">1</span>;</span><br><span class="line">    	Node node=<span class="keyword">this</span><span class="number">._</span>head;</span><br><span class="line">    	Node node2=<span class="keyword">null</span>;</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">while</span>(node.next!=<span class="keyword">this</span><span class="number">._</span>end)</span><br><span class="line">    	&#123;</span><br><span class="line">    		node2=node;</span><br><span class="line">    		node=node.next;</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	key=node.key;</span><br><span class="line">    	node2.next=<span class="keyword">this</span><span class="number">._</span>end;</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">return</span> key;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    	<span class="keyword">public</span> Integer key;</span><br><span class="line">    	    	</span><br><span class="line">    	<span class="keyword">public</span> Node next;</span><br><span class="line">    	</span><br><span class="line">    	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span></span><br><span class="line">    	</span>&#123;</span><br><span class="line">    		</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Integer key)</span></span><br><span class="line">    	</span>&#123;</span><br><span class="line">    		<span class="keyword">this</span>.key=key;</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	<span class="function"><span class="keyword">public</span> Node <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">    		Node node=<span class="keyword">new</span> Node();</span><br><span class="line">    		node.key=<span class="keyword">this</span>.key;</span><br><span class="line">    		node.next=<span class="keyword">this</span>.next;</span><br><span class="line">    		</span><br><span class="line">    		<span class="keyword">return</span> node;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实在Java中最方便实现LRUCache的方法就是使用<code>LinkedHashMap</code>，天然的集成了该功能，但是LeetCode在这题中并没有引用<code>LinkedHashMap</code>的包，-_-</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> <span class="keyword">extends</span> <span class="title">LinkedHashMap</span>&lt;<span class="title">Integer</span>,<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> maxCacheNum=<span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(capacity,<span class="number">0.75f</span>,<span class="keyword">true</span>);<span class="comment">//这里第三个参数一定要为true，这样就表示该LinkedHashMap是使用了访问速度来链表</span></span><br><span class="line">		<span class="keyword">this</span>.maxCacheNum=capacity;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">super</span>.containsKey(key))</span><br><span class="line">        &#123;</span><br><span class="line">        	<span class="keyword">return</span> <span class="keyword">super</span>.get(key);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        	<span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.put(key, value);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 重写删除最少用元素的方法</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="annotation">@Override</span> </span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry&lt;Integer,Integer&gt; eldest)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.size()&gt;maxCacheNum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/06/30/LeetCode/LeetCode-LRU-Cache/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/06/30/LeetCode/LeetCode-LRU-Cache/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/06/29/LeetCode/LeetCode-Flatten-Binary-Tree-to-Linked-List/" title="LeetCode-Flatten Binary Tree to Linked List " itemprop="url">LeetCode-Flatten Binary Tree to Linked List </a>
   </h1>
   <p class="article-author">By
@@ -767,75 +838,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2013/05/06/Dotnet/Mongodb-Pager/" title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码" itemprop="url">基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2013-05-06T03:27:59.000Z" itemprop="datePublished"> 发表于 2013-05-06</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>&#160; &#160; &#160; &#160;最近在设计的日志服务中需要用到Mongodb这个Nosql数据库（<a href="http://baike.baidu.com/view/3385614.htm">不知道Mongodb的点我</a>），由于是用于纯存日志，而且日志量巨大，百万千万级的，所以需要用到它的分页查询。<br>不过LZ也是刚刚接触这个数据库，不是很了解里面的命令语法，便在网上查了一些资料，结果 结果说mongodb自带的简单很方便的Skip方式的分页效率很低，无奈，无奈得用其他的，<br>&#160; &#160; &#160; &#160;有多篇文章都推荐Where+Limit的方式分页，说他效率比Skip方式高多了，但是好多资料都是讲一些思路，并没有很具体，但是也很有帮助拉，现在简单的来讲一下这个分页思路（Skip的方式那么简单就不讲啦）：<br>假设一张表中（Mongodb用集合来代替）有如下条数据：1,3,4,5,6,7,8,9,20,30,50,51,52,59,60（仅仅标志该记录的ID号 你可以理解为主键）<br>现在的也尺寸PageSize=4，那么</p>
-<ul>
-<li>第一页的数据为1,3,4,5，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;0 因为上一页是没有记录 所以用0来代替</li>
-<li>第二页的数据为6,7,8,9,20，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;5 这里的5就是上一页的最后一条记录</li>
-<li>第二页的数据为30,50,51,52,，这个用where的方式解释为SQL语句为Select top 4 * from table where id&gt;20 </li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2013/05/06/Dotnet/Mongodb-Pager/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/CSharp/">CSharp</a><a href="/tags/Mongodb/">Mongodb</a><a href="/tags/pager/">pager</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2013/05/06/Dotnet/Mongodb-Pager/#comments" class="ds-thread-count comments-count-link" data-thread-key="2013/05/06/Dotnet/Mongodb-Pager/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/13/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/15/">Next<span></span></a>
@@ -910,7 +912,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>15</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
 		  
 		
 		  
@@ -959,11 +961,15 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>7</sup></a></li>
 			
 		
 			
@@ -976,10 +982,6 @@
 		
 			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
 			
 		
 			
@@ -1049,6 +1051,12 @@
           <li>
             
             	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
             
           </li>
         
