@@ -123,7 +123,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本介绍"><span class="toc-number">1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练样本设计"><span class="toc-number">2.</span> <span class="toc-text">训练样本设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本思想"><span class="toc-number">3.</span> <span class="toc-text">基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RankSvm排序"><span class="toc-number">4.</span> <span class="toc-text">RankSvm排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本介绍"><span class="toc-number">1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练样本设计"><span class="toc-number">2.</span> <span class="toc-text">训练样本设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本思想"><span class="toc-number">3.</span> <span class="toc-text">基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RankSvm排序"><span class="toc-number">4.</span> <span class="toc-text">RankSvm排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -182,6 +182,10 @@
 <p><center><img src="/img/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/binary_classifiy.png" width="400px"></center><br>上面是表示两个不同的<code>query</code>所表示的特征空间，不同的形状表示文档与对应<code>query</code>的相关性档位,三角形$x_1$表示相关性档位高，圆圈$x_2$表示相关性档位一般，叉叉$x_3$表示相关性档位差。<br>将这些样本转为<code>Pair</code>对之后可以有：</p>
 <p><center><img src="/img/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/pair_wise_result.png" width="400px"></center><br>可以发现$x_1-x_3$和$x_1-x_2$为正样本，而$x_2-x_1$和$x_3-x_1$为负样本，因此可以形成对应的训练数据进行训练,其实这样形成的样本是对称的，因此在实际使用中一般只保留一侧即可。</p>
 <h2 id="总结">总结</h2><p><code>RankSvm</code>很好的解决原始训练样本构建难的问题，根据点击日志构建样本，既考虑了<code>doc</code>之间的顺序，又保证了可持续性，并且其<code>Pair</code>对的训练正好可以使用<code>Svm</code>进行求最优化，而<code>Svm</code>分类器已经是非常成熟并且广泛使用的一种机器学习算法。<br>因此<code>RankSvm</code>虽然在2002年就提出，但是至今在工业界还是广泛使用，但是现在的主要难点是样本<code>Pair</code>对的构建，针对不同的场景也不同的策略，不一定只是根据点击顺序，实际使用中还要考虑新样本数据。</p>
+<h2 id="参考">参考</h2><ol>
+<li>Optimizing Search Engines using Clickthrough Data</li>
+<li>《Learning to Rank for Information Retrieval and Natural Language Processing》</li>
+</ol>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -244,7 +248,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本介绍"><span class="toc-number">1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练样本设计"><span class="toc-number">2.</span> <span class="toc-text">训练样本设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本思想"><span class="toc-number">3.</span> <span class="toc-text">基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RankSvm排序"><span class="toc-number">4.</span> <span class="toc-text">RankSvm排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本介绍"><span class="toc-number">1.</span> <span class="toc-text">基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练样本设计"><span class="toc-number">2.</span> <span class="toc-text">训练样本设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本思想"><span class="toc-number">3.</span> <span class="toc-text">基本思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RankSvm排序"><span class="toc-number">4.</span> <span class="toc-text">RankSvm排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
