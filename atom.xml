@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-04-04T01:54:34.000Z</updated>
+  <updated>2016-04-04T01:58:32.000Z</updated>
   <id>http://yyl8781697.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yyl8781697.github.io/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/"/>
     <id>http://yyl8781697.github.io/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</id>
     <published>2016-03-30T12:49:53.000Z</published>
-    <updated>2016-04-04T01:54:34.000Z</updated>
+    <updated>2016-04-04T01:58:32.000Z</updated>
     <content type="html"><![CDATA[<pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
 并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
 </code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
@@ -27,7 +27,7 @@
 <li>需要人工/专家标注</li>
 <li>诱导用户对展现的搜索结果进行反馈</li>
 </ol>
-<p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。</p>
+<p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。<br><a id="more"></a></p>
 <p>而RankSvm只需要根据搜索引擎的点击日志构建<code>Pair</code>对即可，相对于先前的工作在算法的实用性上有了非常大的改善。</p>
 <h2 id="训练样本设计">训练样本设计</h2><p>一般搜索引擎都会记录用户搜索后展现的结果以及用户的点击情况，这种日志成本较低，并且改造系统也较为方便，而RankSvm的训练样本就是从这种点击日志中进行提取。</p>
 <p>由于用户点击的<code>doc</code>概率和排序的位置影响很大，虽然一般都是偏爱相关性较大的<code>doc</code>，但是如果这种<code>doc</code>排在很后面的话其实用户也几乎不会点，所有<code>rankSvm</code>就只考虑top级别的点击日志，一般为<code>top 10</code></p>
@@ -83,7 +83,13 @@
     <summary type="html">
     <![CDATA[<pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
 并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
-</code></p]]>
+</code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
+<ol>
+<li>需要人工/专家标注</li>
+<li>诱导用户对展现的搜索结果进行反馈</li>
+</ol>
+<p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。<br>]]>
+    
     </summary>
     
       <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
