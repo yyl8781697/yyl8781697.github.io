@@ -183,8 +183,8 @@
 <p><center><img src="/img/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/pair_wise_result.png" width="400px"></center><br>可以发现$x_1-x_3$和$x_1-x_2$为正样本，而$x_2-x_1$和$x_3-x_1$为负样本，因此可以形成对应的训练数据进行训练,其实这样形成的样本是对称的，因此在实际使用中一般只保留一侧即可。</p>
 <h2 id="总结">总结</h2><p><code>RankSvm</code>很好的解决原始训练样本构建难的问题，根据点击日志构建样本，既考虑了<code>doc</code>之间的顺序，又保证了可持续性，并且其<code>Pair</code>对的训练正好可以使用<code>Svm</code>进行求最优化，而<code>Svm</code>分类器已经是非常成熟并且广泛使用的一种机器学习算法。<br>因此<code>RankSvm</code>虽然在2002年就提出，但是至今在工业界还是广泛使用，但是现在的主要难点是样本<code>Pair</code>对的构建，针对不同的场景也不同的策略，不一定只是根据点击顺序，实际使用中还要考虑新样本数据。</p>
 <h2 id="参考">参考</h2><ol>
-<li>Optimizing Search Engines using Clickthrough Data</li>
-<li>《Learning to Rank for Information Retrieval and Natural Language Processing》</li>
+<li>Joachims T. Optimizing search engines using clickthrough data[C]// Proceedings of the eighth ACM SIGKDD international conference on Knowledge discovery and data mining. ACM, 2002:133-142.</li>
+<li>《Learning to Rank for Information Retrieval and Natural Language Processing》.Hang Li</li>
 </ol>
 <hr>
 <blockquote>
