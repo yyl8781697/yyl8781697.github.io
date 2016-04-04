@@ -19,9 +19,6 @@
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="给定一个用户需求(query),如果搜索系统展示的搜索结果是根据文档和query的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
 概率排序原理以往的向量空间模型是将query和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而概率检索模型是一种直接对用户需求进行相关性的建模方法,一个query进来，将所有的文档分为两类—-相关文档、不相关文档,">
-<meta property="og:image" content="/img/Study-BM25-For-Query-Document-Relevance/eq_zs.gif">
-<meta property="og:image" content="/img/Study-BM25-For-Query-Document-Relevance/eq_2.gif">
-<meta property="og:image" content="/img/Study-BM25-For-Query-Document-Relevance/eq_5.gif">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="概率检索模型BM25系列-文档相关性检索的利器">
 <meta name="twitter:description" content="给定一个用户需求(query),如果搜索系统展示的搜索结果是根据文档和query的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
@@ -135,24 +132,13 @@
 <p>最终得到的相关性概率估算为:</p>
 <center>$\frac{P(D|R)}{P(D|NR)}=\frac{p_1 \times (1-p_2) \times p_3 \times (1-p_4) \times p_5}{s_1 \times (1-s_2) \times s_3 \times (1-s_4) \times s_5}$</center>
 
-<p>现在将其推广之后可以有通用的式子：<br><!-- 
-\frac{P(D|R)}{P(D|NR)}= \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}
---></p>
-<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_zs.gif" alt=""></center>
-
+<p>现在将其推广之后可以有通用的式子：</p>
+<p>$$\frac{P(D|R)}{P(D|NR)}= \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}$$</p>
 <blockquote>
 <p>$d_i=1$表示在文档中出现的单词，$d_i=0$表示没在文档中出现的单词:</p>
 </blockquote>
 <p>在这里进一步对上述公式进行等价变换之后有:</p>
-<!-- 
-\\
-\frac{P(D|R)}{P(D|NR)}=\prod_{i:d_i=1} \frac{p_i}{s_i} \times \left ( \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \times \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \right ) \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}\\
-= \left ( \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \right ) \times  \left ( \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i} \right )  \\
-=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} \times \prod_i \frac{1-pi}{1-s_i} \\
-=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} 
--->
-<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_2.gif" alt=""></center>
-
+<p>$$\begin{equation}\begin{split} \frac{P(D|R)}{P(D|NR)} &amp;=\prod_{i:d_i=1} \frac{p_i}{s_i} \times \left ( \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \times \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \right ) \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}\\<br>&amp;= \left ( \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \right ) \times  \left ( \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i} \right )  \\<br>&amp;=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} \times \prod_i \frac{1-pi}{1-s_i} \\<br>&amp;=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)}<br>\end{split}\end{equation}$$</p>
 <p>其中上面式子第三步的第二部分$\prod_i \frac{1-pi}{1-s_i} $表示各个单词在所有文档中出现的概率，所以这个式子的值和具体文档并没有什么关系，在排序中不起作用，才可以简化到第4步.</p>
 <p>为了方便计算，将上述连乘公式取$log$:</p>
 <center>$log(\frac{P(D|R)}{P(D|NR)}) =  \sum_{i:d_i=1} log \frac{p_i(1-s_i)}{s_i(1-p_i)}$</center>
@@ -241,20 +227,18 @@
 <p>在<code>BM25</code>模型中，文档被当做一个整体进行进行词频的统计，而忽视了不同区域的重要性，<code>BM25F</code>模型正是抓住了这点进行了相应的改进。</p>
 </blockquote>
 <p><code>BM25F</code>模型在计算相关性时候，会对文档分割成不同的域来进行加权统计，非常适用于网页搜索，因为在一个网页有<code>标题信息</code>、<code>meta信息</code>、<code>页面内容信息</code>等，而<code>标题信息</code>无疑是最重要的，其次是<code>meta信息</code>，最后才是<code>网页内容</code>，<code>BM25F</code>在计算相关性的，会将网页分为不用的区域，在各个区域分别统计自己的词频。<br>所以<code>BM25F</code>模型的计算公式为:</p>
-<center>$\sum_{i:q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \times \frac{f_i^u}{k_1+f_i^u}$</center>
-
+<p>$$\sum_{i:q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \times \frac{f_i^u}{k_1+f_i^u}$$</p>
 <blockquote>
 <p><code>BM25F</code>的第1部分还是<code>BIM</code>的值</p>
 </blockquote>
 <p>其中与<code>BM25</code>主要的差别体现在$f_i^u$因子上,它是单词$i$在各个区域不同的得分,计算公式如下:</p>
-<!-- f_i^u=\sum_{k=1}^uw_k \times \frac{f_{ui}}{B_u}-->
-<center><img src="/img/Study-BM25-For-Query-Document-Relevance/eq_5.gif" alt=""></center><br><center>$B_u=((1-b_u)+b_u \times  \frac{ul_u}{uvul_u})$</center>
-
+<p>$$f_i^u=\sum_{k=1}^uw_k \times \frac{f_{ui}}{B_u}$$</p>
+<p>$$B_u=((1-b_u)+b_u \times  \frac{ul_u}{uvul_u})$$</p>
 <p>上面的公式表示:</p>
 <ol>
 <li>文档$D$来个不同的$u$个域</li>
 <li>各个域对应的权重为$W_k$</li>
-<li><code>f<sub>i</sub><sup>u</sup></code>为第<code>i</code>个单词在各个域中的 $\frac{f_{ui}}{B_u}$ 的加权和</li>
+<li>$f_i^u$为第$i$个单词在各个域中的 $\frac{f_{ui}}{B_u}$ 的加权和</li>
 <li>$f_{ui}$表示词频</li>
 <li>$B_u$表示各个域的长度情况</li>
 <li>$ul_u$为实际域的实际长度,$uvul_u$表示域的平均长度</li>
