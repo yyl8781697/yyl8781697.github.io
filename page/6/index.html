@@ -14,7 +14,7 @@
     <meta name="description" content="Hexo|yyl8781697 github|kubi code|blog|c#|java|scala|hadoop|spark|mongodb|redis">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Kubi Code'Blog">
-<meta property="og:url" content="http://yyl8781697.github.io/page/6/index.html">
+<meta property="og:url" content="http://kubicode.me/page/6/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="Hexo|yyl8781697 github|kubi code|blog|c#|java|scala|hadoop|spark|mongodb|redis">
 <meta name="twitter:card" content="summary">
@@ -75,10 +75,11 @@
 					
 					<li>
  					
-						<form class="search" action="" target="_blank">
-							<label>Search</label>
-						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
-						</form>
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
 					
 					</li>
 				</ul>
@@ -87,6 +88,209 @@
     </header>
     <div id="container">
       <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/" title="左边的数都小于等 于它,右边的数都大于等于它" itemprop="url">左边的数都小于等 于它,右边的数都大于等于它</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-25T00:52:50.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
+</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/Left-Lte-Right-Gte/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/24/Algorithm/x-exponent/" title="数值的整数次方" itemprop="url">数值的整数次方</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-24T12:05:12.000Z" itemprop="datePublished"> 发表于 2015-07-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
+</code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还需要考虑：</p>
+<ol>
+<li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
+<li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
+<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/24/Algorithm/x-exponent/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/24/Algorithm/x-exponent/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/24/Algorithm/x-exponent/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/" title="把数组排成最小的数" itemprop="url">把数组排成最小的数</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-20T12:31:43.000Z" itemprop="datePublished"> 发表于 2015-07-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="number">32132</span>。请给出解决问题的算法，并证明该算法。
+</code></pre><h2 id="解析">解析</h2><p>假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。<br>如果ab&lt;ba,则会有a&lt;b，所以这题的关键就是构建a,b的比较器</p>
+<blockquote>
+<p>不得不说，这个思路太妙了^_^<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/20/Algorithm/Minimum-Combination-in-Array/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
 
    
     
@@ -565,230 +769,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/16/Algorithm/Print-Tail-Head/" title="链表的逆序输出" itemprop="url">链表的逆序输出</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-16T15:52:12.000Z" itemprop="datePublished"> 发表于 2015-07-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="问题">问题</h2><pre><code>如何将一个链表进行逆序输出，比如<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>的链表输出为<span class="number">4321</span>
-</code></pre><h2 id="解题">解题</h2><ol>
-<li>最方便可能就是先讲原生链表翻转，再按翻转的输出，这样会破坏原有链表的结构</li>
-<li>第二种就是先遍历存放到一个数组或者栈中，然后从后往前输出即可，就需要额外的O(n)空间。</li>
-</ol>
-<p>这两种方法都是需要额外的复杂度或者空间，网络行流传更好的方法就是使用递归-_-! 神方法啊，递归一次即可。。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/16/Algorithm/Print-Tail-Head/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/16/Algorithm/Print-Tail-Head/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/16/Algorithm/Print-Tail-Head/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/16/Algorithm/LinkedList-Revert/" title="链表的翻转" itemprop="url">链表的翻转</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-16T15:28:28.000Z" itemprop="datePublished"> 发表于 2015-07-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>将链表<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>翻转成<span class="number">4</span>-&gt;<span class="number">3</span>-&gt;<span class="number">2</span>-&gt;<span class="number">1</span>。
-</code></pre><h2 id="解题">解题</h2><p>最简单就是遍历链表，然后保存到一个数组中，然后再向后构建数组，当然，这种方式不好，会有额外开销。-_-<br>这里来介绍一下另一种方法：<br>假设现在的链表是</p>
-<pre><code><span class="built_in">null</span><span class="subst">-&gt;</span><span class="number">1</span><span class="subst">-&gt;</span><span class="number">2</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-</code></pre><p>如果我们想办法将2移到1的前面，然后3又移到2的前面，最后将4移动3的前面，这不就完了嘛？<br>好，现在开始移动：</p>
-<pre><code>    <span class="number">2</span>
-   <span class="subst">/</span> <span class="subst">\</span> 
-<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">3</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-将<span class="number">1</span>指向<span class="number">2</span>的next，然后将<span class="number">2</span>的next指向head的next，然后head的next指向<span class="number">2</span>
-
-    <span class="number">3</span><span class="subst">-</span><span class="number">2</span>
-   <span class="subst">/</span>  <span class="subst">|</span>
-<span class="built_in">null</span>  <span class="number">1</span><span class="subst">-&gt;</span><span class="number">4</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-然后再移动<span class="number">3</span>
-
-    <span class="number">4</span><span class="subst">-</span><span class="number">3</span><span class="subst">-</span><span class="number">2</span>
-   <span class="subst">/</span>    <span class="subst">|</span>
-<span class="built_in">null</span>    <span class="number">1</span><span class="subst">-&gt;</span><span class="built_in">null</span>
-再移动<span class="number">4</span>
-</code></pre><blockquote>
-<p>这种方式就不需要额外的空间，也只需要遍历一遍即可。</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/16/Algorithm/LinkedList-Revert/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/16/Algorithm/LinkedList-Revert/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/16/Algorithm/LinkedList-Revert/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/07/Spark/Graphs-Applications/" title="graphx上的一些简单应用" itemprop="url">graphx上的一些简单应用</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-07T14:59:23.000Z" itemprop="datePublished"> 发表于 2015-07-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>本文是温习<a href="http://www.csdn.net/article/2014-08-07/2821097">快刀初试：Spark GraphX在淘宝的实践</a>这篇文章中明风大神提到得几个graphx的应用,并且自己使用graphx将其实现一下^_^</p>
-</blockquote>
-<h2 id="看实验用的图：">看实验用的图：</h2><p><img src="/img/Graphx-Application/sampleG.jpg" alt=""></p>
-<p>该图可以使用如下代码来进行标示<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">sc=new</span> <span class="title">SparkContext</span>(</span>);</span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edge=List</span>(</span><span class="comment">//边的信息</span></span><br><span class="line">    (<span class="number">1</span>,<span class="number">2</span>),(<span class="number">1</span>,<span class="number">3</span>),(<span class="number">2</span>,<span class="number">3</span>),(<span class="number">3</span>,<span class="number">4</span>),(<span class="number">3</span>,<span class="number">5</span>),(<span class="number">3</span>,<span class="number">6</span>),</span><br><span class="line">    (<span class="number">4</span>,<span class="number">5</span>),(<span class="number">5</span>,<span class="number">6</span>),(<span class="number">7</span>,<span class="number">8</span>),(<span class="number">7</span>,<span class="number">9</span>),(<span class="number">8</span>,<span class="number">9</span>))</span><br><span class="line">   </span><br><span class="line"><span class="comment">//构建边的rdd</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">edgeRdd=sc</span>.<span class="title">parallelize</span>(</span>edge).map(x=&gt;&#123;</span><br><span class="line">  <span class="type">Edge</span>(x._1.toLong,x._2.toLong,<span class="type">None</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//构建图 顶点Int类型</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">g=Graph</span>.<span class="title">fromEdges</span>(</span>edgeRdd, <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/07/Spark/Graphs-Applications/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Spark/">Spark</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Spark/">Spark</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/07/Spark/Graphs-Applications/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/07/Spark/Graphs-Applications/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
   </nav>
 
 </div>
@@ -808,7 +791,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
 		  
 		
 		  
@@ -860,7 +843,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
 		  
 		
 		  
@@ -897,7 +880,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
 			
 		
 			
@@ -905,11 +888,11 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
 			
 		
 			

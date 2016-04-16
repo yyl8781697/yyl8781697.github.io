@@ -18,7 +18,7 @@
 需要人工/专家标">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RankSvm-基于点击数据的搜索排序算法">
-<meta property="og:url" content="http://yyl8781697.github.io/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/index.html">
+<meta property="og:url" content="http://kubicode.me/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
 并且基于Pair的构建的训练样本也更为接近排序概念
@@ -90,10 +90,11 @@
 					
 					<li>
  					
-						<form class="search" action="" target="_blank">
-							<label>Search</label>
-						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
-						</form>
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
 					
 					</li>
 				</ul>
@@ -175,7 +176,7 @@
 <p>$$ y=\left\{<br>\begin{aligned}<br>+1 &amp; \quad if \quad \vec{w} \Phi(q,d_i)&gt;\vec{w} \Phi(q,d_j) \\<br>-1 &amp; \quad otherwise\\<br>\end{aligned}<br>\right.$$</p>
 <p>则最终可以将约束可以写成:<br>$$y_i \cdot \vec{w} \left(\Phi(q,d_i)-\Phi(q,d_j)\right) \geq 1 - \xi_{i,j,1}$$</p>
 <blockquote>
-<p>其中传统的偏置项$b$可以写进$\vec {w}$中</p>
+<p>其中传统的偏置项在<code>RankSvm</code>是不需要的，以为正好<code>Pair</code>相减时就消掉了</p>
 </blockquote>
 <p>这样就可以完全将上面构建的样本转为一个分类问题，使用<code>SVM</code>的对偶形式进行求解，并且还可以使用核函数进行非线性的分类^_^</p>
 <p>训练完<code>Svm</code>之后，在正真排序时只需要将原始$doc$的特征向量输入<code>Svm</code>模型即可:<br>$$resv(q,d_i)= \vec{w} \Phi(q,d_i) = \sum_l^n a_{l}^*y_i(\Phi(q,d_i) \cdot \Phi(q,d_l)) $$</p>
@@ -212,7 +213,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" data-title="RankSvm-基于点击数据的搜索排序算法 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kubicode.me/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" data-title="RankSvm-基于点击数据的搜索排序算法 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -225,6 +226,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/" title="Learning To Rank中Pairwise方法的学习">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Learning To Rank中Pairwise方法的学习</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/"  title="McRank:一种基于多分类和梯度提升树的排序学习">
@@ -238,7 +247,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" data-title="RankSvm-基于点击数据的搜索排序算法" data-url="http://yyl8781697.github.io/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/"></div>
+	<div class="ds-thread" data-thread-key="2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" data-title="RankSvm-基于点击数据的搜索排序算法" data-url="http://kubicode.me/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/"></div>
 </section>
 
 
@@ -266,7 +275,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
 		  
 		
 		  
@@ -318,7 +327,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
 		  
 		
 		  
@@ -355,7 +364,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
 			
 		
 			
@@ -363,11 +372,11 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
 			
 		
 			

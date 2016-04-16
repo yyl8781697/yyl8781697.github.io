@@ -14,7 +14,7 @@
     <meta name="description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;最近在设计的日志服务中需要用到Mongodb这个Nosql数据库（不知道Mongodb的点我），由于是用于纯存日志，而且日志量巨大，百万千万级的，所以需要用到它的分页查询。不过LZ也是刚刚接触这个数据库，不是很了解里面的命令语法，便在网上查了一些资料，结果 结果说mongodb自带的简单很方便的Skip方式的分页效率很低，无奈，无奈得用其他的，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码">
-<meta property="og:url" content="http://yyl8781697.github.io/2013/05/06/Dotnet/Mongodb-Pager/index.html">
+<meta property="og:url" content="http://kubicode.me/2013/05/06/Dotnet/Mongodb-Pager/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="&amp;#160; &amp;#160; &amp;#160; &amp;#160;最近在设计的日志服务中需要用到Mongodb这个Nosql数据库（不知道Mongodb的点我），由于是用于纯存日志，而且日志量巨大，百万千万级的，所以需要用到它的分页查询。不过LZ也是刚刚接触这个数据库，不是很了解里面的命令语法，便在网上查了一些资料，结果 结果说mongodb自带的简单很方便的Skip方式的分页效率很低，无奈，无奈得用其他的，">
 <meta property="og:image" content="http://images.cnitblog.com/blog/240080/201305/06111534-3bb09da477bb41ff87ee4de960edb2d3.jpg">
@@ -77,10 +77,11 @@
 					
 					<li>
  					
-						<form class="search" action="" target="_blank">
-							<label>Search</label>
-						<input name="s" type="hidden" value= 439f8b724bc712e367d66b5e348997bd## e.g. &quot;783281470518440642&quot;  for your baidu search id ><input type="text" name="q" size="30" placeholder="搜索"><br>
-						</form>
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
 					
 					</li>
 				</ul>
@@ -160,7 +161,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yyl8781697.github.io/2013/05/06/Dotnet/Mongodb-Pager/" data-title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kubicode.me/2013/05/06/Dotnet/Mongodb-Pager/" data-title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -194,7 +195,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2013/05/06/Dotnet/Mongodb-Pager/" data-title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码" data-url="http://yyl8781697.github.io/2013/05/06/Dotnet/Mongodb-Pager/"></div>
+	<div class="ds-thread" data-thread-key="2013/05/06/Dotnet/Mongodb-Pager/" data-title="基于C#在Mongodb的Skip-Limit和Where-Limit的分页对比 并且含mongodb帮助类的源码" data-url="http://kubicode.me/2013/05/06/Dotnet/Mongodb-Pager/"></div>
 </section>
 
 
@@ -222,7 +223,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>33</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
 		  
 		
 		  
@@ -274,7 +275,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>16</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
 		  
 		
 		  
@@ -311,7 +312,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>36</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
 			
 		
 			
@@ -319,11 +320,11 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
 			
 		
 			

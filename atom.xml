@@ -3,9 +3,9 @@
   <title><![CDATA[Kubi Code'Blog]]></title>
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
-  <link href="http://yyl8781697.github.io/"/>
-  <updated>2016-04-04T02:06:23.000Z</updated>
-  <id>http://yyl8781697.github.io/</id>
+  <link href="http://kubicode.me/"/>
+  <updated>2016-04-16T12:05:53.000Z</updated>
+  <id>http://kubicode.me/</id>
   
   <author>
     <name><![CDATA[Kubi Code]]></name>
@@ -15,11 +15,115 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[聊聊机器学习中的损失函数]]></title>
+    <link href="http://kubicode.me/2016/04/11/Machine%20Learning/Say-About-Loss-Function/"/>
+    <id>http://kubicode.me/2016/04/11/Machine Learning/Say-About-Loss-Function/</id>
+    <published>2016-04-11T13:06:23.000Z</published>
+    <updated>2016-04-16T12:05:53.000Z</updated>
+    <content type="html"><![CDATA[<p>机器学习算法一般都是对损失函数(<code>Loss Function</code>)求最优，大部分损失函数都是包含两项：<code>损失误差项(loss term)</code>以及<code>正则项(regularization term)</code>:<br>$$J(w)=\sum_iL(m_i(w))+\lambda R(w)$$</p>
+<h2 id="损失误差项">损失误差项</h2><p>常用的损失误差项有5种:</p>
+<ol>
+<li><code>Gold Standard</code></li>
+<li><code>Hinge</code>:Svm</li>
+<li><code>log</code>:logistic regression(cross entropy error)</li>
+<li><code>squared</code>:linear regression</li>
+<li><code>Exponential</code>:Boosting</li>
+</ol>
+<a id="more"></a>
+<h3 id="Gold_Standard_Loss">Gold Standard Loss</h3><p><code>Gold Standard</code>又称<code>0-1</code>误差，其结果又称为<code>犯错</code>与<code>不犯错</code>,用途比较广(比如<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">PLA</a>模型)，其损失函数也是相当的简单:<br>$$ y=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad m \geq 0 \\<br>1 &amp; \quad if \quad m \le 0\\<br>\end{aligned}<br>\right.$$</p>
+<h3 id="Hinge_Loss">Hinge Loss</h3><p><code>Hinge</code>的叫法来源于其损失函数的图形，为一个折线，通用函数方式为:<br>$$L(m_i) = max(0,1-m_i(w))$$</p>
+<p><code>Hinge</code>可以解 间距最大化 问题，带有代表性的就是<code>svm</code>,最初的<code>svm</code>优化函数如下:<br>$$\underset{w,\zeta}{argmin} \frac{1}{2}||w||^2+ C\sum_i \zeta_i \\<br>st.\quad \forall y_iw^Tx_i \geq 1- \zeta_i \\<br>\zeta_i \geq 0 $$</p>
+<p>将约束项进行变形则为:<br>$$\zeta_i \geq 1-y_iw^Tx_i$$<br>则可以将损失函数进一步写为:<br>$$\begin{equation}\begin{split}J(w)&amp;=\frac{1}{2}||w||^2 + C\sum_i max(0,1-y_iw^Tx_i) \\<br>&amp;= \frac{1}{2}||w||^2 + C\sum_i max(0,1-m_i(w)) \\<br>&amp;= \frac{1}{2}||w||^2 + C\sum_i L_{Linge}(m_i)<br>\end{split}\end{equation}$$</p>
+<p>因此<code>svm</code>的损失函数可以看成<code>L2-Norm</code>和<code>Hinge</code>损失误差之和.</p>
+<h3 id="Log_Loss">Log Loss</h3><p><code>log</code>类型损失函数的优势可以将连乘转为求和，由于是单调函数，不会改变原结果，并且还很方面求最优，因此<code>log</code>类型的损失函数函数也非常常用，比较著名的一种就是交叉熵(<code>cross entropy</code>)，也就是<code>logistic regression</code>用的损失函数:<br>$$J(w)=\lambda||w||^2+\sum_i y_i log g_w(x_i)+(1-y_i)(log 1-g_w(x_i),y_i \in\{0,1\}$$<br>其中:<br>$$g_w(x_i)=\frac{1}{1+e^{-f_w(x_i)}} \\<br>f_w(x_i) = w^Tx_i<br>$$</p>
+<h3 id="Squared_Loss">Squared Loss</h3><p>平方误差，线性回归中最常用:<br>$$L_2(m)=(f_w(x)-y)^2=(m-1)^2$$</p>
+<h3 id="Exponential_Loss">Exponential Loss</h3><p>指数误差，在<code>boosting</code>算法中比较常见:<br>$$J(w)=\lambda R(w)+\sum_i exp(-y_if_w(x_i)) \\<br>L_{exp}(m_i) = exp(-m_i(w))<br>$$</p>
+<h3 id="误差项对比">误差项对比</h3><p>上面5种误差项的函数为:</p>
+<center><img src="/img/Say-About-Loss-Function/error_function.png" width="400px"></center><br>&gt;黑色为<code>Squared Loss</code>,<span style="color:red">红色</span>为<code>Hinge Loss</code>,<span style="color:yellow">黄色</span>为:<code>Log Loss</code>,<span style="color:green">绿色</span>为:<code>Exponential Loss</code>,<span style="color:blue">蓝色</span>为:<code>Gold Standard</code><br><br>观察图中:<br><br>1. <code>Hinge Loss</code>中当$m_i(w) &gt; 1$ 时，其损失项始终未0，当$m_i(w) &lt; 1$时，其损失项的值呈线性增长（正好符合<code>svm</code>的需求）.<br>2. <code>Squared、Log、Exponential</code>三种损失函数已经<code>Hinge</code>的左侧都是凸函数，并且<code>Gold Stantard</code>损失为他们的下界:<br>    $$\zeta_{01} \leq  \hat{\zeta}_{01}(h)+fudge$$<br>3. 当需要求最大似然时(也就是概率最大化)，使用<code>Log Loss</code>最合适，但是一般会加上一个负号将其转换为求最小<br>4. 损失函数和的<code>凸特征</code>以及有<code>界</code>是非常重要的，可以防止在一些可以求得无穷的工作上白白浪费时间。有时候为了让函数有界和凸特征，一般会使用一些代理函数来进行替换。<br><br>##正则项<br>&gt;加入正在项是为了降低模型复杂度，在一定程度上可以有效防止模型过拟合<br><br>常用的正则项有:<br>$$<br>R_2 = \frac{1}{2}||w||^2 \\<br>R_1 = \sum_i |w_i| \\<br>R_0 = |\{i:w_i \neq 0 \}|<br>$$<br>这些正则项可以通用的写成:<br>$$R_p =(\sum_i |w_i|^p)^{\frac{1}{p}}$$<br><br>其中：<br>1. $R_2$最常用，因为它是凸函数，非常方便可以用<code>梯度下降法</code>最优化<br>2. $R_1$含有特征选择功能，因此经过$R_1$计算之后会有大量的0权重出现，这样的话我们在实际计算中只需要计算有值特征即可，可以加快速算法的运行速度<br>3. $R_0$，额~这个暂时不知道哪里用-_-<br><br>当$p \leqslant 1$时其正则项就为非凸函数了<br><center><img src="/img/Say-About-Loss-Function/reg.png" width="600px"></center>
+
+
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://www.ics.uci.edu/~dramanan/teaching/ics273a_winter08/lectures/lecture14.pdf" target="_blank" rel="external">http://www.ics.uci.edu/~dramanan/teaching/ics273a_winter08/lectures/lecture14.pdf</a></li>
+<li><a href="https://www.wikiwand.com/en/Hinge_loss" target="_blank" rel="external">https://www.wikiwand.com/en/Hinge_loss</a></li>
+<li><a href="http://www.cnblogs.com/rocketfan/p/4081585.html" target="_blank" rel="external">http://www.cnblogs.com/rocketfan/p/4081585.html</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>机器学习算法一般都是对损失函数(<code>Loss Function</code>)求最优，大部分损失函数都是包含两项：<code>损失误差项(loss term)</code>以及<code>正则项(regularization term)</code>:<br>$$J(w)=\sum_iL(m_i(w))+\lambda R(w)$$</p>
+<h2 id="损失误差项">损失误差项</h2><p>常用的损失误差项有5种:</p>
+<ol>
+<li><code>Gold Standard</code></li>
+<li><code>Hinge</code>:Svm</li>
+<li><code>log</code>:logistic regression(cross entropy error)</li>
+<li><code>squared</code>:linear regression</li>
+<li><code>Exponential</code>:Boosting</li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Learning To Rank中Pairwise方法的学习]]></title>
+    <link href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/"/>
+    <id>http://kubicode.me/2016/04/10/Machine Learning/LTR-Pairwise-Study/</id>
+    <published>2016-04-10T09:05:18.000Z</published>
+    <updated>2016-04-11T13:08:38.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛，其中<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" target="_blank" rel="external">RankSvm</a>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。^_^</p>
+</blockquote>
+<h2 id="IRSVM">IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
+<h3 id="问题1:位置误差">问题1:位置误差</h3><a id="more"></a>
+<pre><code><span class="tag">Example1</span>:
+档位<span class="pseudo">:3</span>,2,1
+排序1<span class="pseudo">:2</span> 3 2 1 1 1 1
+排序2<span class="pseudo">:3</span> 2 1 2 1 1 1
+</code></pre><p>从样例1中可以看到如果是按$\tau$最大化进行优化的话，<code>排序1</code>中<code>2 3</code>为不一致pair,排序2中<code>1 2</code>为不一致pair，因此他们的$\tau$得分是一致的，但是明显可以看到排序2的应该为更优，因为越<code>top</code>级别的重要性越大<br>因此<code>IRSVM</code>考虑了计算$\tau$时将位置顺序纳入误差</p>
+<h3 id="问题2:长度误差">问题2:长度误差</h3><pre><code><span class="tag">Example2</span>:
+档位<span class="pseudo">:3</span>,2,1
+排序3<span class="pseudo">:3</span> 2 2 1 1 1 1
+排序4<span class="pseudo">:3</span> 3 2 2 2 1 1 1 1 1
+</code></pre><p>现观察样例2，可以发现<code>排序3</code>和<code>排序4</code>中均未出现<code>不一致pair</code>的文档对，因此他们的$\tau$得分是一样的，并且均为1，但是<code>排序3</code>中存在<code>28</code>个文档对，而<code>排序4</code>中存在<code>45</code>个文档对，所以<code>排序4</code>存在更多的训练数据，因此<code>排序4</code>的数据相当于<code>RankSvm</code>来说更加重要。<br>因此<code>IRSVM</code>将召回的文档个数纳入了排序</p>
+<blockquote>
+<p>其实这点比较纠结，实际使用中会进行数据过滤，而且最终训练的时候也一般都是取<code>top10</code>进行训练，所以这个问题并不会很明显</p>
+</blockquote>
+<h3 id="优化学习方法">优化学习方法</h3><p>所以<code>IRSVM</code>考虑了不同排序位置的不同重要性，以及各个<code>query</code>召回的数量，对原始的<code>RankSVM</code>损失函数进行修改得到如下:<br>$$\underset{w}{min} \sum_{i=1}^N \tau_{k(i)} \mu_{q(i))} [1-y_i(w,x_i^{(1)}-x_i^{(2)})]_+ + \lambda||w||^2$$</p>
+<p>其实重要是添加了位置得分因子$\tau_{k(i)}$，使用<code>NDCG@1</code>中的方法进行折损，以及添加了<code>query</code>召回的文档长度因子$\mu_{q(i)}$，使用的是最简单粗暴的$\frac{1}{n_q}$进行计算，其中$n_q$表示召回的文档数量。</p>
+<p>[2]中提出<code>IRSVM</code>的时候还使用了<code>SGD</code>和<code>线性规划</code>进行了优化</p>
+<h2 id="参考">参考</h2><ol>
+<li>《Learning to Rank for Information Retrieval and Natural Language Processing》.Hang Li</li>
+<li>Cao Y, Xu J, Liu T Y, et al. Adapting ranking SVM to document retrieval[C]// SIGIR 2006: Proceedings of the International ACM SIGIR Conference on Research and Development in Information Retrieval, Seattle, Washington, Usa, August. 2006:186-193.</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛，其中<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/">RankSvm</a>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。^_^</p>
+</blockquote>
+<h2 id="IRSVM">IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
+<h3 id="问题1:位置误差">问题1:位置误差</h3>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[RankSvm-基于点击数据的搜索排序算法]]></title>
-    <link href="http://yyl8781697.github.io/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/"/>
-    <id>http://yyl8781697.github.io/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</id>
+    <link href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/"/>
+    <id>http://kubicode.me/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</id>
     <published>2016-03-30T12:49:53.000Z</published>
-    <updated>2016-04-04T02:06:23.000Z</updated>
+    <updated>2016-04-04T15:21:20.000Z</updated>
     <content type="html"><![CDATA[<pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
 并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
 </code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
@@ -68,7 +172,7 @@
 <p>$$ y=\left\{<br>\begin{aligned}<br>+1 &amp; \quad if \quad \vec{w} \Phi(q,d_i)&gt;\vec{w} \Phi(q,d_j) \\<br>-1 &amp; \quad otherwise\\<br>\end{aligned}<br>\right.$$</p>
 <p>则最终可以将约束可以写成:<br>$$y_i \cdot \vec{w} \left(\Phi(q,d_i)-\Phi(q,d_j)\right) \geq 1 - \xi_{i,j,1}$$</p>
 <blockquote>
-<p>其中传统的偏置项$b$可以写进$\vec {w}$中</p>
+<p>其中传统的偏置项在<code>RankSvm</code>是不需要的，以为正好<code>Pair</code>相减时就消掉了</p>
 </blockquote>
 <p>这样就可以完全将上面构建的样本转为一个分类问题，使用<code>SVM</code>的对偶形式进行求解，并且还可以使用核函数进行非线性的分类^_^</p>
 <p>训练完<code>Svm</code>之后，在正真排序时只需要将原始$doc$的特征向量输入<code>Svm</code>模型即可:<br>$$resv(q,d_i)= \vec{w} \Phi(q,d_i) = \sum_l^n a_{l}^*y_i(\Phi(q,d_i) \cdot \Phi(q,d_l)) $$</p>
@@ -96,18 +200,18 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[McRank:一种基于多分类和梯度提升树的排序学习]]></title>
-    <link href="http://yyl8781697.github.io/2016/03/28/Machine%20Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/"/>
-    <id>http://yyl8781697.github.io/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/</id>
+    <link href="http://kubicode.me/2016/03/28/Machine%20Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/"/>
+    <id>http://kubicode.me/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/</id>
     <published>2016-03-28T08:37:53.000Z</published>
     <updated>2016-03-30T07:45:10.000Z</updated>
     <content type="html"><![CDATA[<pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
@@ -179,18 +283,18 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[从Bayesion的角度来看Logistic Regression]]></title>
-    <link href="http://yyl8781697.github.io/2016/03/26/Machine%20Learning/Bayesian-Logistic-Regression/"/>
-    <id>http://yyl8781697.github.io/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/</id>
+    <link href="http://kubicode.me/2016/03/26/Machine%20Learning/Bayesian-Logistic-Regression/"/>
+    <id>http://kubicode.me/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/</id>
     <published>2016-03-26T03:30:54.000Z</published>
     <updated>2016-03-29T16:55:42.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
@@ -247,16 +351,16 @@
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[Hadoop Streaming导入自定义module]]></title>
-    <link href="http://yyl8781697.github.io/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/"/>
-    <id>http://yyl8781697.github.io/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/</id>
+    <link href="http://kubicode.me/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/"/>
+    <id>http://kubicode.me/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/</id>
     <published>2016-03-24T16:17:54.000Z</published>
     <updated>2016-03-25T01:51:05.000Z</updated>
     <content type="html"><![CDATA[<h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" target="_blank" rel="external">reducer</a>程序:<br><a id="more"></a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> utils_helper</span><br><span class="line"></span><br><span class="line">lastk = <span class="keyword">None</span> <span class="comment">#这里标志最后一个k  用于控制同一个key 到一个组中</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        w,c = line.split(<span class="string">'\t'</span>)</span><br><span class="line">        c = int(c) <span class="comment">#不转成int会比较麻烦  这是是计数</span></span><br><span class="line">        <span class="keyword">if</span> lastk == <span class="keyword">None</span>: <span class="comment">#这里是判断是否过来的是第一个key</span></span><br><span class="line">                lastk=w</span><br><span class="line">                count = utils_helper.add(count,c)</span><br><span class="line">        <span class="keyword">elif</span> lastk == w:</span><br><span class="line">                count += c</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br><span class="line">                lastk=w</span><br><span class="line">                count = c <span class="comment">#这里重置计数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> lastk <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br></pre></td></tr></table></figure></p>
@@ -311,16 +415,16 @@ import lib
     
     </summary>
     
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
+      <category term="Hadoop" scheme="http://kubicode.me/tags/Hadoop/"/>
     
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
+      <category term="Hadoop" scheme="http://kubicode.me/categories/Hadoop/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[[小技巧]让Hexo在使用Mathjax时支持多行公式]]></title>
-    <link href="http://yyl8781697.github.io/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/"/>
-    <id>http://yyl8781697.github.io/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/</id>
+    <link href="http://kubicode.me/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/"/>
+    <id>http://kubicode.me/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/</id>
     <published>2016-03-18T01:46:24.000Z</published>
     <updated>2016-03-28T15:42:26.000Z</updated>
     <content type="html"><![CDATA[<p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
@@ -375,16 +479,16 @@ import lib
     
     </summary>
     
-      <category term="Hexo" scheme="http://yyl8781697.github.io/tags/Hexo/"/>
+      <category term="Hexo" scheme="http://kubicode.me/tags/Hexo/"/>
     
-      <category term="Hexo" scheme="http://yyl8781697.github.io/categories/Hexo/"/>
+      <category term="Hexo" scheme="http://kubicode.me/categories/Hexo/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[修复Hexo写Mathjax公式多个下标失效的问题]]></title>
-    <link href="http://yyl8781697.github.io/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/"/>
-    <id>http://yyl8781697.github.io/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/</id>
+    <link href="http://kubicode.me/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/"/>
+    <id>http://kubicode.me/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/</id>
     <published>2016-03-16T15:25:29.000Z</published>
     <updated>2016-03-28T01:47:42.000Z</updated>
     <content type="html"><![CDATA[<pre><code>这应该严格意义上不算Hexo的bug，但是在写Mathjax的时候就会踩中-_-
@@ -433,16 +537,16 @@ yans-MacBook-<span class="string">Pro:</span>node_modules yanyl$ grep -r <span c
     
     </summary>
     
-      <category term="Hexo" scheme="http://yyl8781697.github.io/tags/Hexo/"/>
+      <category term="Hexo" scheme="http://kubicode.me/tags/Hexo/"/>
     
-      <category term="Hexo" scheme="http://yyl8781697.github.io/categories/Hexo/"/>
+      <category term="Hexo" scheme="http://kubicode.me/categories/Hexo/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[在信息检索中Term之间的Proximity计算研究]]></title>
-    <link href="http://yyl8781697.github.io/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/"/>
-    <id>http://yyl8781697.github.io/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/</id>
+    <link href="http://kubicode.me/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/"/>
+    <id>http://kubicode.me/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/</id>
     <published>2016-02-23T12:58:43.000Z</published>
     <updated>2016-03-23T07:28:54.000Z</updated>
     <content type="html"><![CDATA[<h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
@@ -521,18 +625,18 @@ yans-MacBook-<span class="string">Pro:</span>node_modules yanyl$ grep -r <span c
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/categories/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/categories/Search-Engine/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[针对BM25遇到长文档时失效情况的一种高效解决方案]]></title>
-    <link href="http://yyl8781697.github.io/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/"/>
-    <id>http://yyl8781697.github.io/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</id>
+    <link href="http://kubicode.me/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/"/>
+    <id>http://kubicode.me/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</id>
     <published>2016-02-16T09:17:19.000Z</published>
     <updated>2016-02-27T06:58:10.000Z</updated>
     <content type="html"><![CDATA[<pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
@@ -593,18 +697,18 @@ f'(q,D)=\left\{
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/categories/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/categories/Search-Engine/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[Learning to rank学习基础]]></title>
-    <link href="http://yyl8781697.github.io/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/"/>
-    <id>http://yyl8781697.github.io/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/</id>
+    <link href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/"/>
+    <id>http://kubicode.me/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/</id>
     <published>2016-02-15T02:31:43.000Z</published>
     <updated>2016-02-24T07:22:24.000Z</updated>
     <content type="html"><![CDATA[<pre><code>Learning to <span class="function"><span class="title">rank</span><span class="params">(简写 LTR、L2R)</span></span> 也叫排序学习，指的是机器学习中任何用于排序的技术。
@@ -970,18 +1074,64 @@ f'(q,D)=\left\{
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[求二进制中1的个数]]></title>
+    <link href="http://kubicode.me/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/"/>
+    <id>http://kubicode.me/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/</id>
+    <published>2016-02-12T12:26:05.000Z</published>
+    <updated>2016-04-12T15:20:11.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目">题目</h2><pre><code>求一个二进制数字中1出现的个数
+</code></pre><blockquote>
+<p>这道题目面试非常常见，但是工作中也很实用，以32位int整形为例，下面列举一下一些经典的做法(主要是做记录用^_^)</p>
+</blockquote>
+<h2 id="遍历法">遍历法</h2><p>这个是最简单的方法，向右移位，判断最低位是否为1进行计数即可!</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 普通遍历法</span><br><span class="line"> *<span class="javadoctag"> @param</span> n</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">traverseCount</span><span class="params">(<span class="keyword">int</span> n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(n&gt;<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		n = n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">		count++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>该方法最直观，不过复杂度是<code>O(N)</code></p>
+<h2 id="快速查找法">快速查找法</h2><p>为啥说快速呢，因为这里的复杂度是和1个个数有关，有多少1就循环多少次，该方法的设计也非常巧妙<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 快速计数法</span><br><span class="line"> *<span class="javadoctag"> @param</span> n</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">quickCount</span><span class="params">(<span class="keyword">int</span> n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(n&gt;<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		n &amp;= (n-<span class="number">1</span>);</span><br><span class="line">		count ++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>大致可以这么理解</p>
+<pre><code>假设当前的<span class="keyword">n</span>=7
+<span class="keyword">n</span>          <span class="keyword">n</span>-1
+0111    0110
+0110    0101
+0100    0000
+</code></pre><p>复杂度是<code>O(K)</code>,其中<code>K</code>为二进制数中1个数，非常实用</p>
+<h2 id="查表法">查表法</h2><p>一般整形的位数是固定的，假如我们知道每种情况下的1的个数，其实直接查表即可，但是如果是32位的整形枚举这个表的可能性不是很大，但是巧妙的方法是可以将其分割成4个8位的数字，而8位的数字就只有256种情况了，可以直接方法预设的表中<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查表法</span><br><span class="line"> *<span class="javadoctag"> @param</span> n</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">searchTableCount</span><span class="params">(<span class="keyword">int</span> n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] table = </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, </span><br><span class="line">        <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, </span><br><span class="line">        <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, </span><br><span class="line">        <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, </span><br><span class="line">        <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, </span><br><span class="line">        <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, </span><br><span class="line">        <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, </span><br><span class="line">        <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, </span><br><span class="line">        <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, </span><br><span class="line">        <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, </span><br><span class="line">        <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, </span><br><span class="line">        <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, </span><br><span class="line">        <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, </span><br><span class="line">        <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, </span><br><span class="line">        <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, </span><br><span class="line">        <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">7</span>, <span class="number">8</span>, </span><br><span class="line">    &#125;; </span><br><span class="line">	<span class="comment">//直接查表得到</span></span><br><span class="line">	<span class="keyword">return</span> table[n&amp;<span class="number">0xFF</span>] + table[(n&gt;&gt;<span class="number">8</span>)&amp;<span class="number">0xFF</span>] +table[(n&gt;&gt;<span class="number">16</span>)&amp;<span class="number">0xFF</span>] +table[(n&gt;&gt;<span class="number">24</span>)&amp;<span class="number">0xFF</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>该方法的复杂度是<code>O(N/8)</code>,占的空间也不是特别多，也是比较实用的一种</p>
+<p>还有一些神奇的方法可以看<a href="http://www.cnblogs.com/graphics/archive/2010/06/21/1752421.html" target="_blank" rel="external">http://www.cnblogs.com/graphics/archive/2010/06/21/1752421.html</a>,写得非常赞</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目">题目</h2><pre><code>求一个二进制数字中1出现的个数
+</code></pre><blockquote>
+<p>这道题目面试非常常见，但是工作中也很实用，以32位int整形为例，下面列举一下一些经典的做法(主要是做记录用^_^)</p>
+</blockquote>
+<h2 id="遍历法">遍历法</h2><p>这个是最简单的方法，向右移位，判断最低位是否为1进行计数即可!</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 普通遍历法</span><br><span class="line"> *<span class="javadoctag"> @param</span> n</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">traverseCount</span><span class="params">(<span class="keyword">int</span> n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(n&gt;<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		n = n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">		count++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://kubicode.me/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://kubicode.me/categories/Algorithm/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[在Hexo中离线安装数据工具包-Mathjax]]></title>
-    <link href="http://yyl8781697.github.io/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/"/>
-    <id>http://yyl8781697.github.io/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/</id>
+    <link href="http://kubicode.me/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/"/>
+    <id>http://kubicode.me/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/</id>
     <published>2016-01-27T09:30:11.000Z</published>
     <updated>2016-02-03T06:24:54.000Z</updated>
     <content type="html"><![CDATA[<pre><code>这里与其说安装，还是不如直接拷贝相应文件到hexo目录
@@ -1011,16 +1161,16 @@ f'(q,D)=\left\{
     
     </summary>
     
-      <category term="Hexo" scheme="http://yyl8781697.github.io/tags/Hexo/"/>
+      <category term="Hexo" scheme="http://kubicode.me/tags/Hexo/"/>
     
-      <category term="Hexo" scheme="http://yyl8781697.github.io/categories/Hexo/"/>
+      <category term="Hexo" scheme="http://kubicode.me/categories/Hexo/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[概率检索模型BM25系列-文档相关性检索的利器]]></title>
-    <link href="http://yyl8781697.github.io/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/"/>
-    <id>http://yyl8781697.github.io/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/</id>
+    <link href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/"/>
+    <id>http://kubicode.me/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/</id>
     <published>2016-01-26T09:06:31.000Z</published>
     <updated>2016-04-02T14:20:39.000Z</updated>
     <content type="html"><![CDATA[<pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
@@ -1168,18 +1318,18 @@ f'(q,D)=\left\{
     
     </summary>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/tags/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
-      <category term="Search Engine" scheme="http://yyl8781697.github.io/categories/Search-Engine/"/>
+      <category term="Search Engine" scheme="http://kubicode.me/categories/Search-Engine/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[用笨方法解决Shell中按行读取文件之后Tab键不见的问题]]></title>
-    <link href="http://yyl8781697.github.io/2016/01/03/Linux/shell-line-no-tab/"/>
-    <id>http://yyl8781697.github.io/2016/01/03/Linux/shell-line-no-tab/</id>
+    <link href="http://kubicode.me/2016/01/03/Linux/shell-line-no-tab/"/>
+    <id>http://kubicode.me/2016/01/03/Linux/shell-line-no-tab/</id>
     <published>2016-01-03T14:24:09.000Z</published>
     <updated>2016-01-03T15:03:02.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
@@ -1206,18 +1356,18 @@ f'(q,D)=\left\{
     
     </summary>
     
-      <category term="Linux" scheme="http://yyl8781697.github.io/tags/Linux/"/>
+      <category term="Linux" scheme="http://kubicode.me/tags/Linux/"/>
     
-      <category term="Vim" scheme="http://yyl8781697.github.io/tags/Vim/"/>
+      <category term="Vim" scheme="http://kubicode.me/tags/Vim/"/>
     
-      <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
+      <category term="Linux" scheme="http://kubicode.me/categories/Linux/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[轻量的结构化文本处理工具-awk]]></title>
-    <link href="http://yyl8781697.github.io/2015/12/24/Linux/awk-study-list/"/>
-    <id>http://yyl8781697.github.io/2015/12/24/Linux/awk-study-list/</id>
+    <link href="http://kubicode.me/2015/12/24/Linux/awk-study-list/"/>
+    <id>http://kubicode.me/2015/12/24/Linux/awk-study-list/</id>
     <published>2015-12-23T16:06:41.000Z</published>
     <updated>2016-01-03T02:38:47.000Z</updated>
     <content type="html"><![CDATA[<pre><code>与其说<span class="tag">awk</span>是一个强大的文本处理工具，我更加喜欢称之为轻量级的<span class="tag">C</span>语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。<span class="rule"><span class="attribute">ps</span>:<span class="value">比Excel更加方便哦,一句话：awk可以带你装b带你飞~</span></span>
@@ -1728,18 +1878,18 @@ yans-MacBook-Pro:Downloads yanyl$
     
     </summary>
     
-      <category term="Linux" scheme="http://yyl8781697.github.io/tags/Linux/"/>
+      <category term="Linux" scheme="http://kubicode.me/tags/Linux/"/>
     
-      <category term="Vim" scheme="http://yyl8781697.github.io/tags/Vim/"/>
+      <category term="Vim" scheme="http://kubicode.me/tags/Vim/"/>
     
-      <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
+      <category term="Linux" scheme="http://kubicode.me/categories/Linux/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[Hadoop Streaming 实践以及Debug]]></title>
-    <link href="http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/"/>
-    <id>http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/</id>
+    <link href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/"/>
+    <id>http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/</id>
     <published>2015-11-08T01:23:38.000Z</published>
     <updated>2015-11-08T12:23:38.000Z</updated>
     <content type="html"><![CDATA[<pre><code>Hadoop Streaming是一个便于变成<span class="keyword">Map</span> <span class="keyword">Reduce</span>程序的工具包，这个工具包可以支持各种可执行/脚本语言来创建Mapper和Reducer，利用Hadoop的优势进行大数据的处理，这些语言仅仅只需要支持*unix的表示输出输入即可(python,c,c++,perl,akw etc.)
@@ -1950,16 +2100,16 @@ has    <span class="number">4</span>
     
     </summary>
     
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/tags/Hadoop/"/>
+      <category term="Hadoop" scheme="http://kubicode.me/tags/Hadoop/"/>
     
-      <category term="Hadoop" scheme="http://yyl8781697.github.io/categories/Hadoop/"/>
+      <category term="Hadoop" scheme="http://kubicode.me/categories/Hadoop/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[在Mac的OSX系统中配置VIM]]></title>
-    <link href="http://yyl8781697.github.io/2015/11/07/Mac/Mac-OSX-Vim-highlight/"/>
-    <id>http://yyl8781697.github.io/2015/11/07/Mac/Mac-OSX-Vim-highlight/</id>
+    <link href="http://kubicode.me/2015/11/07/Mac/Mac-OSX-Vim-highlight/"/>
+    <id>http://kubicode.me/2015/11/07/Mac/Mac-OSX-Vim-highlight/</id>
     <published>2015-11-07T12:19:43.000Z</published>
     <updated>2015-11-07T12:39:50.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
@@ -1981,16 +2131,16 @@ has    <span class="number">4</span>
     
     </summary>
     
-      <category term="Mac" scheme="http://yyl8781697.github.io/tags/Mac/"/>
+      <category term="Mac" scheme="http://kubicode.me/tags/Mac/"/>
     
-      <category term="Mac" scheme="http://yyl8781697.github.io/categories/Mac/"/>
+      <category term="Mac" scheme="http://kubicode.me/categories/Mac/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[来来来，学习Shell的命令]]></title>
-    <link href="http://yyl8781697.github.io/2015/11/04/Linux/Shell-Command-List/"/>
-    <id>http://yyl8781697.github.io/2015/11/04/Linux/Shell-Command-List/</id>
+    <link href="http://kubicode.me/2015/11/04/Linux/Shell-Command-List/"/>
+    <id>http://kubicode.me/2015/11/04/Linux/Shell-Command-List/</id>
     <published>2015-11-04T14:34:28.000Z</published>
     <updated>2015-11-27T08:29:34.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
@@ -2369,18 +2519,18 @@ everything <span class="keyword">is</span> here
     
     </summary>
     
-      <category term="Linux" scheme="http://yyl8781697.github.io/tags/Linux/"/>
+      <category term="Linux" scheme="http://kubicode.me/tags/Linux/"/>
     
-      <category term="Vim" scheme="http://yyl8781697.github.io/tags/Vim/"/>
+      <category term="Vim" scheme="http://kubicode.me/tags/Vim/"/>
     
-      <category term="Linux" scheme="http://yyl8781697.github.io/categories/Linux/"/>
+      <category term="Linux" scheme="http://kubicode.me/categories/Linux/"/>
     
   </entry>
   
   <entry>
     <title><![CDATA[KNN算法中KD树的应用]]></title>
-    <link href="http://yyl8781697.github.io/2015/10/12/Machine%20Learning/KDTree-In-KNN/"/>
-    <id>http://yyl8781697.github.io/2015/10/12/Machine Learning/KDTree-In-KNN/</id>
+    <link href="http://kubicode.me/2015/10/12/Machine%20Learning/KDTree-In-KNN/"/>
+    <id>http://kubicode.me/2015/10/12/Machine Learning/KDTree-In-KNN/</id>
     <published>2015-10-12T03:57:39.000Z</published>
     <updated>2015-10-12T08:10:44.000Z</updated>
     <content type="html"><![CDATA[<h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
@@ -2447,215 +2597,13 @@ f就是中位数  直接返回就好啦
     
     </summary>
     
-      <category term="Data Struct" scheme="http://yyl8781697.github.io/tags/Data-Struct/"/>
+      <category term="Data Struct" scheme="http://kubicode.me/tags/Data-Struct/"/>
     
-      <category term="Java" scheme="http://yyl8781697.github.io/tags/Java/"/>
+      <category term="Java" scheme="http://kubicode.me/tags/Java/"/>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/tags/Machine-Learning/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Machine Learning" scheme="http://yyl8781697.github.io/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[numpy工具包常用快速记]]></title>
-    <link href="http://yyl8781697.github.io/2015/10/05/Python/Numpy-Fast-Memory/"/>
-    <id>http://yyl8781697.github.io/2015/10/05/Python/Numpy-Fast-Memory/</id>
-    <published>2015-10-05T14:54:26.000Z</published>
-    <updated>2015-10-08T02:33:12.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>numpy</code>这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看<a href="http://docs.scipy.org/doc/" target="_blank" rel="external">scipy api</a></p>
-</blockquote>
-<p>使用之前首先得引入包<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure></p>
-<h2 id="array">array</h2><p><code>np.array</code>实现了真正的数组，在<code>numpy</code>中其实就是矩阵啦，同时提供了丰富的矩阵计算方法<br><a id="more"></a></p>
-<h3 id="np-array"><a href="http://docs.scipy.org/doc/numpy/reference/c-api.array.html#index-0" target="_blank" rel="external">np.array</a></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])  <span class="comment">#一维数组</span></span><br><span class="line">np.array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])  <span class="comment">#二维数组</span></span><br></pre></td></tr></table></figure>
-<h3 id="np-arange"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" target="_blank" rel="external">np.arange</a></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.arange(<span class="number">10</span>) <span class="comment">#使用指定range来创建数组 array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])</span></span><br><span class="line">np.arange(<span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>)  <span class="comment">#开始，终止(不包含)，步长  array([1, 3, 5, 7])</span></span><br></pre></td></tr></table></figure>
-<h3 id="np-linspace"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.linspace.html#numpy.linspace" target="_blank" rel="external">np.linspace</a></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>) <span class="comment">#开始，终止，创建元素个数   array([ 0.    0.25  0.5   0.75  1.  ])</span></span><br><span class="line">np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>,endpoint=<span class="keyword">False</span>) <span class="comment">#endpoint这个参数控制最后一个终止值是否被包含，默认Ture，array([ 0.   0.2  0.4  0.6  0.8])</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>arange与linspace都是在指定范围内生成均匀的变量，只是前者是按步长进行生成，后者是按指定的数量进行生成</p>
-</blockquote>
-<h3 id="np-ones"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ones.html#numpy.ones" target="_blank" rel="external">np.ones</a></h3><blockquote>
-<p>快速生成值为1的矩阵</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">np.ones(<span class="number">5</span>)  <span class="comment">#array([ 1.,  1.,  1.,  1.,  1.])</span></span><br><span class="line">np.ones((<span class="number">2</span>,<span class="number">2</span>)) <span class="comment">#生成一个2x2的值为1的矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 1.,  1.],</span><br><span class="line">       [ 1.,  1.]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
-<h3 id="np-zeros"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html#numpy.zeros" target="_blank" rel="external">np.zeros</a></h3><blockquote>
-<p>快速生成值为1的矩阵</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">np.zeros(<span class="number">5</span>) <span class="comment">#array([ 0.,  0.,  0.,  0.,  0.])</span></span><br><span class="line">np.zeros((<span class="number">2</span>,<span class="number">2</span>)) <span class="comment">#生成一个2x2的值为0的矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 0.,  0.],</span><br><span class="line">       [ 0.,  0.]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
-<h3 id="np-eye"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.eye.html#numpy.eye" target="_blank" rel="external">np.eye</a></h3><blockquote>
-<p>快速生成值为1的对角矩阵</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">np.eye(<span class="number">3</span>)</span><br><span class="line"><span class="string">"""</span><br><span class="line">[[ 1.  0.  0.]</span><br><span class="line"> [ 0.  1.  0.]</span><br><span class="line"> [ 0.  0.  1.]]</span><br><span class="line">"""</span></span><br><span class="line"></span><br><span class="line">np.eye(<span class="number">3</span>,k=<span class="number">1</span>)  <span class="comment">#这里的k可以指定对角的索引位置 默认是0，也就是真正的对角</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">[[ 0.  1.  0.]</span><br><span class="line"> [ 0.  0.  1.]</span><br><span class="line"> [ 0.  0.  0.]]</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
-<h3 id="np-diag"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.diag.html#numpy.diag" target="_blank" rel="external">np.diag</a></h3><blockquote>
-<p>提取普通矩阵的对角</p>
-<ul>
-<li>若普通矩阵是1维矩阵，则直接将该1维矩阵转为对角矩阵</li>
-<li>若普通矩阵是2维矩阵，则提取该对角线(k)的矩阵并返回一个1维矩阵</li>
-</ul>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">np.diag(np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]))  <span class="comment">#将4x1的矩阵转为只有对角线上有值的方正</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">[[1 0 0 0]</span><br><span class="line"> [0 2 0 0]</span><br><span class="line"> [0 0 3 0]</span><br><span class="line"> [0 0 0 4]]</span><br><span class="line">"""</span></span><br><span class="line"></span><br><span class="line">np.diag(np.ones((<span class="number">3</span>,<span class="number">3</span>))) <span class="comment">#提取对角线上的元素 转为了1维矩阵 [ 1.  1.  1.]</span></span><br><span class="line"><span class="comment">#若继续想要对角方正，则需呀再一次转换</span></span><br><span class="line">np.diag(np.diag(np.ones((<span class="number">3</span>,<span class="number">3</span>))))</span><br><span class="line"><span class="string">"""</span><br><span class="line">[[ 1.  0.  0.]</span><br><span class="line"> [ 0.  1.  0.]</span><br><span class="line"> [ 0.  0.  1.]]</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
-<h3 id="矩阵的四则运算">矩阵的四则运算</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">a=np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>,<span class="number">3</span>)  <span class="comment">##0~8的3x3矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[0, 1, 2],</span><br><span class="line">       [3, 4, 5],</span><br><span class="line">       [6, 7, 8]])</span><br><span class="line">"""</span></span><br><span class="line"></span><br><span class="line">b=np.array(range(<span class="number">9</span>)[::-<span class="number">1</span>]).reshape(<span class="number">3</span>,<span class="number">3</span>)  <span class="comment">##8~0的3x3矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[8, 7, 6],</span><br><span class="line">       [5, 4, 3],</span><br><span class="line">       [2, 1, 0]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
-<p>加减乘除都可以按这个走<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">a+<span class="number">1</span> <span class="comment">#在每个元素上+1</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[1, 2, 3],</span><br><span class="line">       [4, 5, 6],</span><br><span class="line">       [7, 8, 9]])</span><br><span class="line">"""</span></span><br><span class="line">a+b <span class="comment">#两个矩阵相加</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[8, 8, 8],</span><br><span class="line">       [8, 8, 8],</span><br><span class="line">       [8, 8, 8]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure></p>
-<p>还可以做幂次方<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a**<span class="number">2</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 0,  1,  4],</span><br><span class="line">       [ 9, 16, 25],</span><br><span class="line">       [36, 49, 64]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure></p>
-<p>还可以倒着运算<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span>**a</span><br><span class="line">array([[  <span class="number">1</span>,   <span class="number">2</span>,   <span class="number">4</span>],</span><br><span class="line">       [  <span class="number">8</span>,  <span class="number">16</span>,  <span class="number">32</span>],</span><br><span class="line">       [ <span class="number">64</span>, <span class="number">128</span>, <span class="number">256</span>]])</span><br></pre></td></tr></table></figure></p>
-<h3 id="summary">summary</h3><ol>
-<li>关于取值，还是按[index]的方式即可取</li>
-<li>还有很方便的函数：<ul>
-<li>求和:sum</li>
-<li>转置：T</li>
-<li>最大最小：max,min</li>
-<li>方差：var,标准差：std</li>
-<li>均值：mean</li>
-</ul>
-</li>
-</ol>
-<h2 id="random">random</h2><blockquote>
-<p>用于产生强大的随机数呀,并且可以指定具体的矩阵形状</p>
-</blockquote>
-<h3 id="np-random-rand"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.rand.html#numpy.random.rand" target="_blank" rel="external">np.random.rand</a></h3><blockquote>
-<p>产生均匀的0~1之间的随机数</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">np.random.rand(<span class="number">4</span>) <span class="comment">#生成1x4的随机矩阵 array([ 0.78374518,  0.64304815,  0.01667375,  0.50154654])</span></span><br><span class="line">np.random.rand(<span class="number">2</span>,<span class="number">3</span>)  <span class="comment">#生成2x3的随机矩阵</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 0.20500983,  0.66468726,  0.55619774],</span><br><span class="line">       [ 0.37256962,  0.86550713,  0.05781776]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
-<h3 id="np-random-randn"><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.randn.html#numpy.random.randn" target="_blank" rel="external">np.random.randn</a></h3><blockquote>
-<p>生成服从高斯分布的随机矩阵</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">np.random.randn(<span class="number">4</span>)  <span class="comment">#生成N(0,1)分布的的1x4的矩阵 array([ 0.72481524, -0.1976192 , -0.48224937, -0.8019294 ])</span></span><br><span class="line"><span class="comment">#如果想执行方差和均值的话，可以这么干sigma * np.random.randn(...) + mu</span></span><br><span class="line"><span class="number">2.5</span> * np.random.randn(<span class="number">2</span>, <span class="number">4</span>) + <span class="number">3</span>  <span class="comment">#比如这个就是服从N~(3,6.25)的高斯分布</span></span><br><span class="line"><span class="string">"""</span><br><span class="line">array([[ 5.2147326 ,  0.90325509,  1.39212656,  5.97713821],</span><br><span class="line">       [-0.26270206,  3.09619677,  2.21054634,  2.94103359]])</span><br><span class="line">"""</span></span><br></pre></td></tr></table></figure>
-<h2 id="参考">参考</h2><ul>
-<li><a href="http://docs.scipy.org/doc/numpy/genindex.html" target="_blank" rel="external">numpy api</a></li>
-<li><a href="http://www.scipy-lectures.org/" target="_blank" rel="external">http://www.scipy-lectures.org/</a>  其实上面写的这里都有-_-</li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>numpy</code>这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看<a href="http://docs.scipy.org/doc/">scipy api</a></p>
-</blockquote>
-<p>使用之前首先得引入包<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure></p>
-<h2 id="array">array</h2><p><code>np.array</code>实现了真正的数组，在<code>numpy</code>中其实就是矩阵啦，同时提供了丰富的矩阵计算方法<br>]]>
-    
-    </summary>
-    
-      <category term="Python" scheme="http://yyl8781697.github.io/tags/Python/"/>
-    
-      <category term="Python" scheme="http://yyl8781697.github.io/categories/Python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[关于Scala中Iterator中size/length的一个坑]]></title>
-    <link href="http://yyl8781697.github.io/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/"/>
-    <id>http://yyl8781697.github.io/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/</id>
-    <published>2015-09-19T02:36:42.000Z</published>
-    <updated>2015-09-19T04:18:46.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>Scala</code>语言是出了名的语法诡异，功能强大-_-，他的<code>Iterator</code>也是如此，还提供了亲民心的<code>size/length</code>方法，但是，但是，但是慎用!!</p>
-</blockquote>
-<p>事情是这样的</p>
-<pre><code>今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量<span class="keyword">N</span>（使用size方法来做），然后计算出一个需要采样的量<span class="keyword">n</span>,然后遍历(直接<span class="keyword">for</span>来做)这个迭代器，按自己的业务采样<span class="keyword">n</span>个记录！
-</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。<br><a id="more"></a></p>
-<p>后来发现问题就是处在这个<code>size</code>方法。。</p>
-<p><code>Iterator</code>大致是满足如下继承关系的:<br><code>AbstractIterator-&gt;Iterator-&gt;TraversableOnce-&gt;GenTraversableOnce</code></p>
-<p>在<code>TraversableOnce</code>这个<code>trait</code>中对<code>size</code>方法进行了实现，<br>现在来看源码：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">size</span>:</span> <span class="type">Int</span> = &#123;</span><br><span class="line"><span class="keyword">var</span> result = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> (x &lt;- self) result += <span class="number">1</span>   <span class="comment">//额，它的计数是直接遍历得来的..</span></span><br><span class="line">result</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在<code>Iterator</code>这个<code>trait</code>中对<code>length</code>方法进行了实现，<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Returns the number of elements in this iterator.</span><br><span class="line">*  $willNotTerminateInf</span><br><span class="line">*</span><br><span class="line">*  @note Reuse: $consumesIterator</span><br><span class="line">*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">length</span>:</span> <span class="type">Int</span> = <span class="keyword">this</span>.size</span><br></pre></td></tr></table></figure></p>
-<p>可以发现<code>size/length</code>是通过遍历迭代器累加来计数的，这样就是导致使用了<code>size/length</code>之后就无法再取迭代器里面的值，然后就出现了上述<code>for</code>根本无法进入。。-_-||</p>
-<p>然后就会出现这样的测试结果<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">it=List</span>(</span><span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>).iterator</span><br><span class="line"><span class="type">System</span>.out.println(it.size);</span><br><span class="line"><span class="type">System</span>.out.println(it.size);</span><br></pre></td></tr></table></figure></p>
-<pre><code>4
-0
-</code></pre><p>这是因为<code>collection.iterator</code>会产生一个新的迭代器实例<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="comment">/*IterableLike*/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iterator</span>:</span> <span class="type">Iterator</span>[<span class="type">A</span>] = <span class="keyword">new</span> <span class="type">AbstractIterator</span>[<span class="type">A</span>] &#123;</span><br><span class="line"><span class="keyword">var</span> these = self</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hasNext</span>:</span> <span class="type">Boolean</span> = !these.isEmpty</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">next</span>(</span>): <span class="type">A</span> =</span><br><span class="line">  <span class="keyword">if</span> (hasNext) &#123;</span><br><span class="line">    <span class="function"><span class="keyword">val</span> <span class="title">result</span> =</span> these.head; these = these.tail; result</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="type">Iterator</span>.empty.next</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Have to clear `these` so the iterator is exhausted like</span><br><span class="line"> *  it would be without the optimization.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toList</span>:</span> <span class="type">List</span>[<span class="type">A</span>] = &#123;</span><br><span class="line">  <span class="function"><span class="keyword">val</span> <span class="title">xs</span> =</span> these.toList</span><br><span class="line">  these = newBuilder.result</span><br><span class="line">  xs</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>第一次<code>size</code>完了之后就已经将该迭代器遍历掉了-_-</p>
-<blockquote>
-<p>个人感觉<code>Iterator.size</code>这个方法简直是一个坑，还不如像<code>java</code>一样不提供该方法，所以慎用慎用..</p>
-</blockquote>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>Scala</code>语言是出了名的语法诡异，功能强大-_-，他的<code>Iterator</code>也是如此，还提供了亲民心的<code>size/length</code>方法，但是，但是，但是慎用!!</p>
-</blockquote>
-<p>事情是这样的</p>
-<pre><code>今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量<span class="keyword">N</span>（使用size方法来做），然后计算出一个需要采样的量<span class="keyword">n</span>,然后遍历(直接<span class="keyword">for</span>来做)这个迭代器，按自己的业务采样<span class="keyword">n</span>个记录！
-</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。<br>]]>
-    
-    </summary>
-    
-      <category term="Scala" scheme="http://yyl8781697.github.io/tags/Scala/"/>
-    
-      <category term="Scala" scheme="http://yyl8781697.github.io/categories/Scala/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[python里面的一些小记（方便自己查询）]]></title>
-    <link href="http://yyl8781697.github.io/2015/09/12/Python/python-little-memory/"/>
-    <id>http://yyl8781697.github.io/2015/09/12/Python/python-little-memory/</id>
-    <published>2015-09-12T01:37:18.000Z</published>
-    <updated>2016-03-23T01:06:21.000Z</updated>
-    <content type="html"><![CDATA[<pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
-</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些东西</h2><blockquote>
-<p>当然下面的判断完全可以自己使用正则表达式来些，但是有一句话是<code>杀鸡焉用牛刀</code>,下面的api使用起来就会非常便捷</p>
-</blockquote>
-<p><code>s</code>为字符串</p>
-<ol>
-<li><code>s.isalnum()</code> 所有字符都是数字或者字母</li>
-<li><code>s.isalpha()</code> 所有字符都是字母</li>
-<li><code>s.isdigit()</code> 所有字符都是数字</li>
-<li><code>s.islower()</code> 所有字符都是小写</li>
-<li><code>s.isupper()</code> 所有字符都是大写</li>
-<li><code>s.istitle()</code> 所有单词都是首字母大写，像标题</li>
-<li><code>s.isspace()</code> 所有字符都是空白字符、<code>\t</code>、<code>\n</code>、<code>\r</code></li>
-</ol>
-<h2 id="自带的排序函数">自带的排序函数</h2><p><code>python</code>中有两种排序方式:</p>
-<ol>
-<li><code>list.sort(func=None, key=None, reverse=False)</code>:这种排序会改变<code>list</code>自身的数据</li>
-<li><code>sorted(list,func=None, key=None, reverse=False)</code>:这种会重新生成一个新的<code>list</code></li>
-</ol>
-<p>最简单的栗子:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort()</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
-<p>会输出</p>
-<pre><code>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">7</span>]
-</code></pre><p>反向排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort(reverse=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
-<p>会输出</p>
-<pre><code>[<span class="number">7</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]
-</code></pre><p>对指定关键字进行排序:</p>
-<pre><code><span class="keyword">list</span>=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">50</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">3</span>)]
-<span class="keyword">list</span>.sort(key=lambda x:x[<span class="number">1</span>])
-<span class="keyword">print</span> <span class="keyword">list</span>
-</code></pre><p>可以看到结果:</p>
-<pre><code><span class="collection">[<span class="list">(<span class="keyword">'e'</span>, <span class="number">3</span>)</span>, <span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">50</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
-</code></pre><blockquote>
-<p>若不指定，貌似是按第一个关键词排序</p>
-</blockquote>
-<p>还有两种方式均可以完成指定关键词方式:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.sort(<span class="keyword">lambda</span> x,y:cmp(x[<span class="number">1</span>],y[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
-<p>按多关键字排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=<span class="keyword">lambda</span> x:(x[<span class="number">1</span>],x[<span class="number">0</span>]))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>,<span class="number">0</span>))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure>
-<pre><code><span class="collection">[<span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'e'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
-</code></pre><blockquote>
-<p><code>sorted</code>传参一样，只是会返回一个新的实例而已</p>
-</blockquote>
-<h2 id="异常处理">异常处理</h2><p>语法结构<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	block</span><br><span class="line"><span class="keyword">except</span> [Exception <span class="keyword">as</span> e]:</span><br><span class="line">	do...</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	do...</span><br></pre></td></tr></table></figure></p>
-<p>for Example:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	<span class="number">1</span>/<span class="number">0</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'err'</span></span><br><span class="line">	<span class="keyword">raise</span> e</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'end'</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="动态载入库">动态载入库</h2><blockquote>
-<p>有时候需要载入的库是动态的，类似Java的反射</p>
-</blockquote>
-<p><code>const_en.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="string">"xiaoming"</span></span><br></pre></td></tr></table></figure></p>
-<p><code>const_ch.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">name=<span class="string">"小明"</span></span><br></pre></td></tr></table></figure></p>
-<p><code>test.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_en'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_ch'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br></pre></td></tr></table></figure></p>
-<p>可以看到输出结果:</p>
-<pre><code><span class="title">xiaoming</span>
-小明
-</code></pre><h1 id="下面应该回持续更新">下面应该回持续更新</h1>]]></content>
-    <summary type="html">
-    <![CDATA[<pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
-</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些]]>
-    </summary>
-    
-      <category term="Python" scheme="http://yyl8781697.github.io/tags/Python/"/>
-    
-      <category term="Python" scheme="http://yyl8781697.github.io/categories/Python/"/>
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
   </entry>
   

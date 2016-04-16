@@ -2,772 +2,787 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</loc>
-    <lastmod>2016-04-04T02:06:23.000Z</lastmod>
+    <loc>http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/</loc>
+    <lastmod>2016-04-16T17:40:56.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/</loc>
+    <loc>http://kubicode.me/2015/05/31/Mac/My-Tools-Used-In-Mac/</loc>
+    <lastmod>2016-04-16T12:15:58.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/04/11/Machine%20Learning/Say-About-Loss-Function/</loc>
+    <lastmod>2016-04-16T12:05:53.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/favorites/index.html</loc>
+    <lastmod>2016-04-14T11:52:33.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/</loc>
+    <lastmod>2016-04-12T15:20:11.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/</loc>
+    <lastmod>2016-04-11T13:08:38.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</loc>
+    <lastmod>2016-04-04T15:21:20.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/</loc>
     <lastmod>2016-04-02T14:20:39.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/03/28/Machine%20Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/</loc>
+    <loc>http://kubicode.me/2016/03/28/Machine%20Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/</loc>
     <lastmod>2016-03-30T07:45:10.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/03/26/Machine%20Learning/Bayesian-Logistic-Regression/</loc>
+    <loc>http://kubicode.me/2016/03/26/Machine%20Learning/Bayesian-Logistic-Regression/</loc>
     <lastmod>2016-03-29T16:55:42.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/</loc>
+    <loc>http://kubicode.me/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/</loc>
     <lastmod>2016-03-28T15:42:26.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/</loc>
+    <loc>http://kubicode.me/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/</loc>
     <lastmod>2016-03-28T01:47:42.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/about/index.html</loc>
+    <loc>http://kubicode.me/about/index.html</loc>
     <lastmod>2016-03-26T05:20:55.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/</loc>
+    <loc>http://kubicode.me/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/</loc>
     <lastmod>2016-03-25T01:51:05.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/</loc>
+    <loc>http://kubicode.me/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/</loc>
     <lastmod>2016-03-23T07:28:54.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/09/12/Python/python-little-memory/</loc>
+    <loc>http://kubicode.me/2015/09/12/Python/python-little-memory/</loc>
     <lastmod>2016-03-23T01:06:21.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/31/Mac/My-Tools-Used-In-Mac/</loc>
-    <lastmod>2016-03-08T07:34:37.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2010/03/01/LeetCode/2017-Job-Suggest/</loc>
+    <loc>http://kubicode.me/2010/03/01/LeetCode/2017-Job-Suggest/</loc>
     <lastmod>2016-03-01T06:05:26.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2010/07/23/LeetCode/mou-dai/</loc>
+    <loc>http://kubicode.me/2010/07/23/LeetCode/mou-dai/</loc>
     <lastmod>2016-03-01T05:17:09.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</loc>
+    <loc>http://kubicode.me/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</loc>
     <lastmod>2016-02-27T06:58:10.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/</loc>
+    <loc>http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/</loc>
     <lastmod>2016-02-24T07:22:24.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/favorites/index.html</loc>
-    <lastmod>2016-02-15T02:33:12.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/</loc>
+    <loc>http://kubicode.me/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/</loc>
     <lastmod>2016-02-03T06:24:54.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2016/01/03/Linux/shell-line-no-tab/</loc>
+    <loc>http://kubicode.me/2016/01/03/Linux/shell-line-no-tab/</loc>
     <lastmod>2016-01-03T15:03:02.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/12/24/Linux/awk-study-list/</loc>
+    <loc>http://kubicode.me/2015/12/24/Linux/awk-study-list/</loc>
     <lastmod>2016-01-03T02:38:47.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/11/04/Linux/Shell-Command-List/</loc>
+    <loc>http://kubicode.me/2015/11/04/Linux/Shell-Command-List/</loc>
     <lastmod>2015-11-27T08:29:34.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/21/Machine%20Learning/Logistic-Regression/</loc>
+    <loc>http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/</loc>
     <lastmod>2015-11-25T02:11:25.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/</loc>
+    <loc>http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/</loc>
     <lastmod>2015-11-08T12:23:38.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/11/07/Mac/Mac-OSX-Vim-highlight/</loc>
+    <loc>http://kubicode.me/2015/11/07/Mac/Mac-OSX-Vim-highlight/</loc>
     <lastmod>2015-11-07T12:39:50.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/14/Linux/Vim-Command-List/</loc>
+    <loc>http://kubicode.me/2015/05/14/Linux/Vim-Command-List/</loc>
     <lastmod>2015-11-05T01:48:51.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/books/index.html</loc>
+    <loc>http://kubicode.me/books/index.html</loc>
     <lastmod>2015-10-22T17:00:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Common-Interview/</loc>
+    <loc>http://kubicode.me/2015/08/16/Machine%20Learning/Common-Interview/</loc>
     <lastmod>2015-10-20T11:03:21.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/04/Akka/Study-Akka-First/</loc>
+    <loc>http://kubicode.me/2015/06/04/Akka/Study-Akka-First/</loc>
     <lastmod>2015-10-12T08:11:56.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/10/12/Machine%20Learning/KDTree-In-KNN/</loc>
+    <loc>http://kubicode.me/2015/10/12/Machine%20Learning/KDTree-In-KNN/</loc>
     <lastmod>2015-10-12T08:10:44.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/10/05/Python/Numpy-Fast-Memory/</loc>
+    <loc>http://kubicode.me/2015/10/05/Python/Numpy-Fast-Memory/</loc>
     <lastmod>2015-10-08T02:33:12.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/02/Algorithm/MinStack/</loc>
+    <loc>http://kubicode.me/2015/07/02/Algorithm/MinStack/</loc>
     <lastmod>2015-09-19T08:03:16.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/</loc>
+    <loc>http://kubicode.me/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/</loc>
     <lastmod>2015-09-19T04:18:46.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/09/07/Machine%20Learning/Validation/</loc>
+    <loc>http://kubicode.me/2015/09/07/Machine%20Learning/Validation/</loc>
     <lastmod>2015-09-10T13:21:06.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/09/05/Machine%20Learning/Regularization/</loc>
+    <loc>http://kubicode.me/2015/09/05/Machine%20Learning/Regularization/</loc>
     <lastmod>2015-09-08T12:37:08.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/09/01/Machine%20Learning/Overfitting/</loc>
+    <loc>http://kubicode.me/2015/09/01/Machine%20Learning/Overfitting/</loc>
     <lastmod>2015-09-03T16:44:44.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/30/Machine%20Learning/Multiclass-Classification/</loc>
+    <loc>http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/</loc>
     <lastmod>2015-09-01T15:30:59.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/09/Machine%20Learning/Learning-Is-Possible/</loc>
+    <loc>http://kubicode.me/2015/08/09/Machine%20Learning/Learning-Is-Possible/</loc>
     <lastmod>2015-08-23T15:42:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/19/Machine%20Learning/Linear-Regression/</loc>
+    <loc>http://kubicode.me/2015/08/19/Machine%20Learning/Linear-Regression/</loc>
     <lastmod>2015-08-23T15:31:25.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/</loc>
+    <loc>http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/</loc>
     <lastmod>2015-08-23T15:31:14.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/</loc>
-    <lastmod>2015-08-23T10:58:45.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://yyl8781697.github.io/2015/08/15/Machine%20Learning/VC-Dimension/</loc>
+    <loc>http://kubicode.me/2015/08/15/Machine%20Learning/VC-Dimension/</loc>
     <lastmod>2015-08-19T15:20:40.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/19/Food/Coke-Chicken-feet/</loc>
+    <loc>http://kubicode.me/2015/04/19/Food/Coke-Chicken-feet/</loc>
     <lastmod>2015-08-16T00:19:25.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/11/Algorithm/Intelligence-Problems/</loc>
+    <loc>http://kubicode.me/2015/08/11/Algorithm/Intelligence-Problems/</loc>
     <lastmod>2015-08-16T00:15:08.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/04/Algorithm/IsBSTPostOrder/</loc>
+    <loc>http://kubicode.me/2015/08/04/Algorithm/IsBSTPostOrder/</loc>
     <lastmod>2015-08-04T14:16:17.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/04/Algorithm/Delete-Specify-String/</loc>
+    <loc>http://kubicode.me/2015/08/04/Algorithm/Delete-Specify-String/</loc>
     <lastmod>2015-08-04T13:37:16.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/04/Algorithm/Stock/</loc>
+    <loc>http://kubicode.me/2015/08/04/Algorithm/Stock/</loc>
     <lastmod>2015-08-03T22:44:12.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/03/Algorithm/Short-Abstract/</loc>
+    <loc>http://kubicode.me/2015/08/03/Algorithm/Short-Abstract/</loc>
     <lastmod>2015-08-03T15:28:14.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/03/Algorithm/Min-Abs-ThreeNumber/</loc>
+    <loc>http://kubicode.me/2015/08/03/Algorithm/Min-Abs-ThreeNumber/</loc>
     <lastmod>2015-08-03T15:16:52.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/03/Algorithm/Max-Min-in-Array/</loc>
+    <loc>http://kubicode.me/2015/08/03/Algorithm/Max-Min-in-Array/</loc>
     <lastmod>2015-08-03T15:16:25.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/08/02/Algorithm/Permutation-and-Combination/</loc>
+    <loc>http://kubicode.me/2015/08/02/Algorithm/Permutation-and-Combination/</loc>
     <lastmod>2015-08-02T15:08:08.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/30/Java%20Base/Java-AOP-Study/</loc>
+    <loc>http://kubicode.me/2015/07/30/Java%20Base/Java-AOP-Study/</loc>
     <lastmod>2015-07-31T16:36:34.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/30/Algorithm/Queue-Stack/</loc>
+    <loc>http://kubicode.me/2015/07/30/Algorithm/Queue-Stack/</loc>
     <lastmod>2015-07-30T15:59:37.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/30/Algorithm/Put-x-To-Head/</loc>
+    <loc>http://kubicode.me/2015/07/30/Algorithm/Put-x-To-Head/</loc>
     <lastmod>2015-07-30T14:42:12.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/30/Algorithm/Put-Array-To-Tree/</loc>
+    <loc>http://kubicode.me/2015/07/30/Algorithm/Put-Array-To-Tree/</loc>
     <lastmod>2015-07-29T16:21:39.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/27/Algorithm/Find-Same-Char/</loc>
+    <loc>http://kubicode.me/2015/07/27/Algorithm/Find-Same-Char/</loc>
     <lastmod>2015-07-27T15:54:03.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/26/Linux/Find-Command/</loc>
+    <loc>http://kubicode.me/2015/07/26/Linux/Find-Command/</loc>
     <lastmod>2015-07-27T15:22:07.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/25/Algorithm/Left-Lte-Right-Gte/</loc>
+    <loc>http://kubicode.me/2015/07/25/Algorithm/Left-Lte-Right-Gte/</loc>
     <lastmod>2015-07-27T13:51:47.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/25/Algorithm/The-Longest-Palindrome/</loc>
+    <loc>http://kubicode.me/2015/07/25/Algorithm/The-Longest-Palindrome/</loc>
     <lastmod>2015-07-25T12:06:04.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/</loc>
+    <loc>http://kubicode.me/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/</loc>
     <lastmod>2015-07-25T03:02:13.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/29/Data%20Struct/Binary-Search-Tree/</loc>
+    <loc>http://kubicode.me/2015/06/29/Data%20Struct/Binary-Search-Tree/</loc>
     <lastmod>2015-07-25T01:30:18.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/01/Algorithm/Binary-Search-Tree-2-Double-LinkedList/</loc>
+    <loc>http://kubicode.me/2015/07/01/Algorithm/Binary-Search-Tree-2-Double-LinkedList/</loc>
     <lastmod>2015-07-25T01:26:49.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/03/Algorithm/Single-Linked-Cycle-Y/</loc>
+    <loc>http://kubicode.me/2015/07/03/Algorithm/Single-Linked-Cycle-Y/</loc>
     <lastmod>2015-07-25T01:25:48.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/05/Algorithm/1-2-n/</loc>
+    <loc>http://kubicode.me/2015/07/05/Algorithm/1-2-n/</loc>
     <lastmod>2015-07-25T01:25:30.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/07/Spark/Graphs-Applications/</loc>
+    <loc>http://kubicode.me/2015/07/07/Spark/Graphs-Applications/</loc>
     <lastmod>2015-07-25T01:25:13.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/16/Algorithm/LinkedList-Revert/</loc>
+    <loc>http://kubicode.me/2015/07/16/Algorithm/LinkedList-Revert/</loc>
     <lastmod>2015-07-25T01:25:01.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/</loc>
+    <loc>http://kubicode.me/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/</loc>
     <lastmod>2015-07-25T01:24:28.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/</loc>
+    <loc>http://kubicode.me/2015/06/18/Spark/Connect-Component-From-Baidu-Interview-Using-Spark-V2/</loc>
     <lastmod>2015-07-25T01:24:24.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/</loc>
+    <loc>http://kubicode.me/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/</loc>
     <lastmod>2015-07-25T01:23:54.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/24/Scala/Study-And-User-JSON4S/</loc>
+    <loc>http://kubicode.me/2015/05/24/Scala/Study-And-User-JSON4S/</loc>
     <lastmod>2015-07-25T01:23:38.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/28/Effective%20Java/Serialization/</loc>
+    <loc>http://kubicode.me/2015/06/28/Effective%20Java/Serialization/</loc>
     <lastmod>2015-07-25T01:22:35.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/09/Effective%20Java/Method/</loc>
+    <loc>http://kubicode.me/2015/06/09/Effective%20Java/Method/</loc>
     <lastmod>2015-07-25T01:22:32.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/23/Effective%20Java/Generic/</loc>
+    <loc>http://kubicode.me/2015/05/23/Effective%20Java/Generic/</loc>
     <lastmod>2015-07-25T01:22:22.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/24/Effective%20Java/Exception/</loc>
+    <loc>http://kubicode.me/2015/06/24/Effective%20Java/Exception/</loc>
     <lastmod>2015-07-25T01:22:15.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/30/Effective%20Java/Enum-And-Annotation/</loc>
+    <loc>http://kubicode.me/2015/05/30/Effective%20Java/Enum-And-Annotation/</loc>
     <lastmod>2015-07-25T01:22:08.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/25/Effective%20Java/Concurrent/</loc>
+    <loc>http://kubicode.me/2015/06/25/Effective%20Java/Concurrent/</loc>
     <lastmod>2015-07-25T01:22:02.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/15/Effective%20Java/Common-Program-Desgin/</loc>
+    <loc>http://kubicode.me/2015/06/15/Effective%20Java/Common-Program-Desgin/</loc>
     <lastmod>2015-07-25T01:21:55.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/31/Spark/Build-Spark-Source-And-Compile/</loc>
+    <loc>http://kubicode.me/2015/05/31/Spark/Build-Spark-Source-And-Compile/</loc>
     <lastmod>2015-07-25T01:21:30.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/</loc>
+    <loc>http://kubicode.me/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/</loc>
     <lastmod>2015-07-25T01:20:51.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/06/Scala/Enum-in-Scala/</loc>
+    <loc>http://kubicode.me/2015/06/06/Scala/Enum-in-Scala/</loc>
     <lastmod>2015-07-25T01:20:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/26/Food/zhuti-huangdou-tang/</loc>
+    <loc>http://kubicode.me/2015/06/26/Food/zhuti-huangdou-tang/</loc>
     <lastmod>2015-07-25T01:19:33.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/06/Food/Spicy-fish/</loc>
+    <loc>http://kubicode.me/2015/06/06/Food/Spicy-fish/</loc>
     <lastmod>2015-07-25T01:19:28.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/</loc>
+    <loc>http://kubicode.me/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/</loc>
     <lastmod>2015-07-25T01:19:24.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/28/Food/hongshaorou-dun-tudou/</loc>
+    <loc>http://kubicode.me/2015/06/28/Food/hongshaorou-dun-tudou/</loc>
     <lastmod>2015-07-25T01:19:20.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/21/Java%20Base/Enum-Override/</loc>
+    <loc>http://kubicode.me/2015/04/21/Java%20Base/Enum-Override/</loc>
     <lastmod>2015-07-25T01:18:47.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/22/Effective%20Java/Create-Destory-Object/</loc>
+    <loc>http://kubicode.me/2015/04/22/Effective%20Java/Create-Destory-Object/</loc>
     <lastmod>2015-07-25T01:18:24.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/26/Scala/Scala-In-My-Eyes/</loc>
+    <loc>http://kubicode.me/2015/04/26/Scala/Scala-In-My-Eyes/</loc>
     <lastmod>2015-07-25T01:17:53.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/03/Effective%20Java/The-Methods-General-To-All-Object/</loc>
+    <loc>http://kubicode.me/2015/05/03/Effective%20Java/The-Methods-General-To-All-Object/</loc>
     <lastmod>2015-07-25T01:17:23.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/03/Java%20Base/You-Donnot-Kown-About-The-Clone/</loc>
+    <loc>http://kubicode.me/2015/05/03/Java%20Base/You-Donnot-Kown-About-The-Clone/</loc>
     <lastmod>2015-07-25T01:16:51.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/08/Effective%20Java/Class-And-Interface/</loc>
+    <loc>http://kubicode.me/2015/05/08/Effective%20Java/Class-And-Interface/</loc>
     <lastmod>2015-07-25T01:14:52.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/27/Hadoop/TeraSort-in-Hadoop/</loc>
+    <loc>http://kubicode.me/2015/06/27/Hadoop/TeraSort-in-Hadoop/</loc>
     <lastmod>2015-07-25T01:14:25.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/</loc>
+    <loc>http://kubicode.me/2015/06/21/Hadoop/Hadoop-Join-but-No-Memory-in-Reducer/</loc>
     <lastmod>2015-07-25T01:14:14.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/10/Hadoop/Hadoop-Remove-DataNode/</loc>
+    <loc>http://kubicode.me/2015/05/10/Hadoop/Hadoop-Remove-DataNode/</loc>
     <lastmod>2015-07-25T01:13:48.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/29/Algorithm/InsertionSort/</loc>
+    <loc>http://kubicode.me/2015/03/29/Algorithm/InsertionSort/</loc>
     <lastmod>2015-07-25T01:11:48.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/07/OSGi/OSGi-Services/</loc>
+    <loc>http://kubicode.me/2015/04/07/OSGi/OSGi-Services/</loc>
     <lastmod>2015-07-25T01:11:15.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/04/OSGi/OSGi-Modularity/</loc>
+    <loc>http://kubicode.me/2015/04/04/OSGi/OSGi-Modularity/</loc>
     <lastmod>2015-07-25T01:11:08.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/02/OSGi/OSGi-HelloWorld/</loc>
+    <loc>http://kubicode.me/2015/04/02/OSGi/OSGi-HelloWorld/</loc>
     <lastmod>2015-07-25T01:11:01.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/24/Data%20Struct/bitTree-traversal/</loc>
+    <loc>http://kubicode.me/2015/03/24/Data%20Struct/bitTree-traversal/</loc>
     <lastmod>2015-07-25T01:10:18.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/25/Java%20Source/Java-Vector/</loc>
+    <loc>http://kubicode.me/2015/03/25/Java%20Source/Java-Vector/</loc>
     <lastmod>2015-07-25T01:10:09.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/26/Java%20Source/Java-LinkedList/</loc>
+    <loc>http://kubicode.me/2015/03/26/Java%20Source/Java-LinkedList/</loc>
     <lastmod>2015-07-25T01:09:45.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/15/Java%20Source/Java-LinkedHashMap/</loc>
+    <loc>http://kubicode.me/2015/04/15/Java%20Source/Java-LinkedHashMap/</loc>
     <lastmod>2015-07-25T01:09:41.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/30/Java%20Source/Java-HashTable/</loc>
+    <loc>http://kubicode.me/2015/03/30/Java%20Source/Java-HashTable/</loc>
     <lastmod>2015-07-25T01:09:31.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/14/Java%20Source/Java-HashSet/</loc>
+    <loc>http://kubicode.me/2015/04/14/Java%20Source/Java-HashSet/</loc>
     <lastmod>2015-07-25T01:09:21.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/27/Java%20Source/Java-HashMap/</loc>
+    <loc>http://kubicode.me/2015/03/27/Java%20Source/Java-HashMap/</loc>
     <lastmod>2015-07-25T01:09:11.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/24/Java%20Source/Java-ArrayList/</loc>
+    <loc>http://kubicode.me/2015/03/24/Java%20Source/Java-ArrayList/</loc>
     <lastmod>2015-07-25T01:09:04.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2012/02/01/Dotnet/SqlTransaction/</loc>
+    <loc>http://kubicode.me/2012/02/01/Dotnet/SqlTransaction/</loc>
     <lastmod>2015-07-25T01:08:21.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2012/03/07/Dotnet/aspnetpager/</loc>
+    <loc>http://kubicode.me/2012/03/07/Dotnet/aspnetpager/</loc>
     <lastmod>2015-07-25T01:07:59.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2012/10/08/PHP/php-pager/</loc>
+    <loc>http://kubicode.me/2012/10/08/PHP/php-pager/</loc>
     <lastmod>2015-07-25T01:07:08.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2012/10/09/Javascript/javascript-cookie/</loc>
+    <loc>http://kubicode.me/2012/10/09/Javascript/javascript-cookie/</loc>
     <lastmod>2015-07-25T01:06:18.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2012/12/07/Dotnet/csharp-socket-udp/</loc>
+    <loc>http://kubicode.me/2012/12/07/Dotnet/csharp-socket-udp/</loc>
     <lastmod>2015-07-25T01:05:54.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2013/02/25/Dotnet/handler-jquery-ajax/</loc>
+    <loc>http://kubicode.me/2013/02/25/Dotnet/handler-jquery-ajax/</loc>
     <lastmod>2015-07-25T01:05:35.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2013/04/28/Dotnet/RSA/</loc>
+    <loc>http://kubicode.me/2013/04/28/Dotnet/RSA/</loc>
     <lastmod>2015-07-25T01:05:13.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2013/05/06/Dotnet/Mongodb-Pager/</loc>
+    <loc>http://kubicode.me/2013/05/06/Dotnet/Mongodb-Pager/</loc>
     <lastmod>2015-07-25T01:02:57.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2013/05/09/Dotnet/ajaxframework/</loc>
+    <loc>http://kubicode.me/2013/05/09/Dotnet/ajaxframework/</loc>
     <lastmod>2015-07-25T01:02:09.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/01/17/Search%20Engine/search-engine/</loc>
+    <loc>http://kubicode.me/2014/01/17/Search%20Engine/search-engine/</loc>
     <lastmod>2015-07-25T01:00:19.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/16/Algorithm/Print-Tail-Head/</loc>
+    <loc>http://kubicode.me/2015/07/16/Algorithm/Print-Tail-Head/</loc>
     <lastmod>2015-07-24T13:46:25.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/17/Algorithm/DeleteNode-In-O1/</loc>
+    <loc>http://kubicode.me/2015/07/17/Algorithm/DeleteNode-In-O1/</loc>
     <lastmod>2015-07-24T13:46:13.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/18/Algorithm/Put-Upside-Down-Stack/</loc>
+    <loc>http://kubicode.me/2015/07/18/Algorithm/Put-Upside-Down-Stack/</loc>
     <lastmod>2015-07-24T13:45:57.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/18/Algorithm/CardStraight/</loc>
+    <loc>http://kubicode.me/2015/07/18/Algorithm/CardStraight/</loc>
     <lastmod>2015-07-24T13:45:45.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/19/Algorithm/OddEvenSplit/</loc>
+    <loc>http://kubicode.me/2015/07/19/Algorithm/OddEvenSplit/</loc>
     <lastmod>2015-07-24T13:45:23.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/19/Algorithm/SubCollection/</loc>
+    <loc>http://kubicode.me/2015/07/19/Algorithm/SubCollection/</loc>
     <lastmod>2015-07-24T13:45:08.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/19/Algorithm/Longest/</loc>
+    <loc>http://kubicode.me/2015/07/19/Algorithm/Longest/</loc>
     <lastmod>2015-07-24T13:44:51.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/24/Algorithm/x-exponent/</loc>
+    <loc>http://kubicode.me/2015/07/24/Algorithm/x-exponent/</loc>
     <lastmod>2015-07-24T13:44:23.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/19/Algorithm/TrainTickets/</loc>
+    <loc>http://kubicode.me/2015/07/19/Algorithm/TrainTickets/</loc>
     <lastmod>2015-07-24T13:43:52.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/07/20/Algorithm/Minimum-Combination-in-Array/</loc>
+    <loc>http://kubicode.me/2015/07/20/Algorithm/Minimum-Combination-in-Array/</loc>
     <lastmod>2015-07-24T13:43:42.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/31/Food/Braised-chicken-claw/</loc>
+    <loc>http://kubicode.me/2015/05/31/Food/Braised-chicken-claw/</loc>
     <lastmod>2015-06-06T12:58:19.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/</loc>
+    <loc>http://kubicode.me/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/</loc>
     <lastmod>2015-05-16T02:53:09.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/21/Hexo/</loc>
+    <loc>http://kubicode.me/2015/03/21/Hexo/</loc>
     <lastmod>2015-05-03T16:13:27.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/20/LeetCode/LeetCode-Reverse%20Bits/</loc>
+    <loc>http://kubicode.me/2014/07/20/LeetCode/LeetCode-Reverse%20Bits/</loc>
     <lastmod>2015-04-25T08:26:32.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/05/LeetCode/LeetCode-Linked-List-Cycle/</loc>
+    <loc>http://kubicode.me/2014/07/05/LeetCode/LeetCode-Linked-List-Cycle/</loc>
     <lastmod>2015-04-25T08:16:20.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/</loc>
+    <loc>http://kubicode.me/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/</loc>
     <lastmod>2015-04-25T08:10:58.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/20/LeetCode/LeetCode-Rotate-Array/</loc>
+    <loc>http://kubicode.me/2014/07/20/LeetCode/LeetCode-Rotate-Array/</loc>
     <lastmod>2015-04-25T08:07:34.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/</loc>
+    <loc>http://kubicode.me/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/</loc>
     <lastmod>2015-04-25T08:03:18.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/12/LeetCode/LeetCode-Single-Number-II/</loc>
+    <loc>http://kubicode.me/2014/07/12/LeetCode/LeetCode-Single-Number-II/</loc>
     <lastmod>2015-04-25T07:55:48.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Single-Number/</loc>
+    <loc>http://kubicode.me/2014/07/10/LeetCode/LeetCode-Single-Number/</loc>
     <lastmod>2015-04-25T07:51:34.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/</loc>
+    <loc>http://kubicode.me/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/</loc>
     <lastmod>2015-04-25T07:46:32.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/08/LeetCode/LeetCode-Clone-Graph/</loc>
+    <loc>http://kubicode.me/2014/07/08/LeetCode/LeetCode-Clone-Graph/</loc>
     <lastmod>2015-04-25T07:42:50.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/07/LeetCode/LeetCode-Candy/</loc>
+    <loc>http://kubicode.me/2014/07/07/LeetCode/LeetCode-Candy/</loc>
     <lastmod>2015-04-25T07:40:32.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/06/LeetCode/LeetCode-Reorder-List/</loc>
+    <loc>http://kubicode.me/2014/07/06/LeetCode/LeetCode-Reorder-List/</loc>
     <lastmod>2015-04-25T07:38:04.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/05/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-III/</loc>
+    <loc>http://kubicode.me/2014/07/05/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-III/</loc>
     <lastmod>2015-04-25T07:37:42.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/</loc>
+    <loc>http://kubicode.me/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/</loc>
     <lastmod>2015-04-25T07:18:46.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2015/03/31/Algorithm/abcSort/</loc>
+    <loc>http://kubicode.me/2015/03/31/Algorithm/abcSort/</loc>
     <lastmod>2015-04-25T07:17:46.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/01/LeetCode/LeetCode-Triangle/</loc>
+    <loc>http://kubicode.me/2014/07/01/LeetCode/LeetCode-Triangle/</loc>
     <lastmod>2015-04-25T07:17:38.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/06/24/LeetCode/LeetCode-Reverse-Words-in-a-String/</loc>
+    <loc>http://kubicode.me/2014/06/24/LeetCode/LeetCode-Reverse-Words-in-a-String/</loc>
     <lastmod>2015-04-25T07:17:34.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/06/26/LeetCode/LeetCode-Reverse-Integer/</loc>
+    <loc>http://kubicode.me/2014/06/26/LeetCode/LeetCode-Reverse-Integer/</loc>
     <lastmod>2015-04-25T07:17:30.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/06/27/LeetCode/LeetCode-Path-Sum/</loc>
+    <loc>http://kubicode.me/2014/06/27/LeetCode/LeetCode-Path-Sum/</loc>
     <lastmod>2015-04-25T07:17:26.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/06/28/LeetCode/LeetCode-Path-Sum-II/</loc>
+    <loc>http://kubicode.me/2014/06/28/LeetCode/LeetCode-Path-Sum-II/</loc>
     <lastmod>2015-04-25T07:17:24.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/01/LeetCode/LeetCode-Pascal's-Triangle-II/</loc>
+    <loc>http://kubicode.me/2014/07/01/LeetCode/LeetCode-Pascal's-Triangle-II/</loc>
     <lastmod>2015-04-25T07:17:20.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/02/LeetCode/LeetCode-Pascal's%20Triangle/</loc>
+    <loc>http://kubicode.me/2014/07/02/LeetCode/LeetCode-Pascal's%20Triangle/</loc>
     <lastmod>2015-04-25T07:17:16.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/06/25/LeetCode/LeetCode-Max-Points-on-a-Line/</loc>
+    <loc>http://kubicode.me/2014/06/25/LeetCode/LeetCode-Max-Points-on-a-Line/</loc>
     <lastmod>2015-04-25T07:16:46.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/06/30/LeetCode/LeetCode-LRU-Cache/</loc>
+    <loc>http://kubicode.me/2014/06/30/LeetCode/LeetCode-LRU-Cache/</loc>
     <lastmod>2015-04-25T07:16:42.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/06/29/LeetCode/LeetCode-Flatten-Binary-Tree-to-Linked-List/</loc>
+    <loc>http://kubicode.me/2014/06/29/LeetCode/LeetCode-Flatten-Binary-Tree-to-Linked-List/</loc>
     <lastmod>2015-04-25T07:16:38.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/03/26/LeetCode/LeetCode-3Sum/</loc>
+    <loc>http://kubicode.me/2014/03/26/LeetCode/LeetCode-3Sum/</loc>
     <lastmod>2015-04-25T07:16:34.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/</loc>
+    <loc>http://kubicode.me/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/</loc>
     <lastmod>2015-04-25T07:16:26.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/</loc>
+    <loc>http://kubicode.me/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/</loc>
     <lastmod>2015-04-25T07:16:24.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://yyl8781697.github.io/404.html</loc>
+    <loc>http://kubicode.me/404.html</loc>
     <lastmod>2015-03-21T07:41:18.000Z</lastmod>
   </url>
   
