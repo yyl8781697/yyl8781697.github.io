@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-04-16T12:05:53.000Z</updated>
+  <updated>2016-04-17T12:25:41.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://kubicode.me/2016/04/11/Machine%20Learning/Say-About-Loss-Function/"/>
     <id>http://kubicode.me/2016/04/11/Machine Learning/Say-About-Loss-Function/</id>
     <published>2016-04-11T13:06:23.000Z</published>
-    <updated>2016-04-16T12:05:53.000Z</updated>
+    <updated>2016-04-17T12:25:41.000Z</updated>
     <content type="html"><![CDATA[<p>机器学习算法一般都是对损失函数(<code>Loss Function</code>)求最优，大部分损失函数都是包含两项：<code>损失误差项(loss term)</code>以及<code>正则项(regularization term)</code>:<br>$$J(w)=\sum_iL(m_i(w))+\lambda R(w)$$</p>
 <h2 id="损失误差项">损失误差项</h2><p>常用的损失误差项有5种:</p>
 <ol>
@@ -39,7 +39,30 @@
 <h3 id="Squared_Loss">Squared Loss</h3><p>平方误差，线性回归中最常用:<br>$$L_2(m)=(f_w(x)-y)^2=(m-1)^2$$</p>
 <h3 id="Exponential_Loss">Exponential Loss</h3><p>指数误差，在<code>boosting</code>算法中比较常见:<br>$$J(w)=\lambda R(w)+\sum_i exp(-y_if_w(x_i)) \\<br>L_{exp}(m_i) = exp(-m_i(w))<br>$$</p>
 <h3 id="误差项对比">误差项对比</h3><p>上面5种误差项的函数为:</p>
-<center><img src="/img/Say-About-Loss-Function/error_function.png" width="400px"></center><br>&gt;黑色为<code>Squared Loss</code>,<span style="color:red">红色</span>为<code>Hinge Loss</code>,<span style="color:yellow">黄色</span>为:<code>Log Loss</code>,<span style="color:green">绿色</span>为:<code>Exponential Loss</code>,<span style="color:blue">蓝色</span>为:<code>Gold Standard</code><br><br>观察图中:<br><br>1. <code>Hinge Loss</code>中当$m_i(w) &gt; 1$ 时，其损失项始终未0，当$m_i(w) &lt; 1$时，其损失项的值呈线性增长（正好符合<code>svm</code>的需求）.<br>2. <code>Squared、Log、Exponential</code>三种损失函数已经<code>Hinge</code>的左侧都是凸函数，并且<code>Gold Stantard</code>损失为他们的下界:<br>    $$\zeta_{01} \leq  \hat{\zeta}_{01}(h)+fudge$$<br>3. 当需要求最大似然时(也就是概率最大化)，使用<code>Log Loss</code>最合适，但是一般会加上一个负号将其转换为求最小<br>4. 损失函数和的<code>凸特征</code>以及有<code>界</code>是非常重要的，可以防止在一些可以求得无穷的工作上白白浪费时间。有时候为了让函数有界和凸特征，一般会使用一些代理函数来进行替换。<br><br>##正则项<br>&gt;加入正在项是为了降低模型复杂度，在一定程度上可以有效防止模型过拟合<br><br>常用的正则项有:<br>$$<br>R_2 = \frac{1}{2}||w||^2 \\<br>R_1 = \sum_i |w_i| \\<br>R_0 = |\{i:w_i \neq 0 \}|<br>$$<br>这些正则项可以通用的写成:<br>$$R_p =(\sum_i |w_i|^p)^{\frac{1}{p}}$$<br><br>其中：<br>1. $R_2$最常用，因为它是凸函数，非常方便可以用<code>梯度下降法</code>最优化<br>2. $R_1$含有特征选择功能，因此经过$R_1$计算之后会有大量的0权重出现，这样的话我们在实际计算中只需要计算有值特征即可，可以加快速算法的运行速度<br>3. $R_0$，额~这个暂时不知道哪里用-_-<br><br>当$p \leqslant 1$时其正则项就为非凸函数了<br><center><img src="/img/Say-About-Loss-Function/reg.png" width="600px"></center>
+<center><img src="/img/Say-About-Loss-Function/error_function.png" width="400px"></center>
+
+<blockquote>
+<p>黑色为<code>Squared Loss</code>,<span style="color:red">红色</span>为<code>Hinge Loss</code>,<span style="color:yellow">黄色</span>为:<code>Log Loss</code>,<span style="color:green">绿色</span>为:<code>Exponential Loss</code>,<span style="color:blue">蓝色</span>为:<code>Gold Standard</code></p>
+</blockquote>
+<p>观察图中:</p>
+<ol>
+<li><code>Hinge Loss</code>中当$m_i(w) &gt; 1$ 时，其损失项始终未0，当$m_i(w) &lt; 1$时，其损失项的值呈线性增长（正好符合<code>svm</code>的需求）.</li>
+<li><code>Squared、Log、Exponential</code>三种损失函数已经<code>Hinge</code>的左侧都是凸函数，并且<code>Gold Stantard</code>损失为他们的下界:<br> $$\zeta_{01} \leq  \hat{\zeta}_{01}(h)+fudge$$</li>
+<li>当需要求最大似然时(也就是概率最大化)，使用<code>Log Loss</code>最合适，但是一般会加上一个负号将其转换为求最小</li>
+<li>损失函数和的<code>凸特征</code>以及有<code>界</code>是非常重要的，可以防止在一些可以求得无穷的工作上白白浪费时间。有时候为了让函数有界和凸特征，一般会使用一些代理函数来进行替换。</li>
+</ol>
+<h2 id="正则项">正则项</h2><blockquote>
+<p>加入正在项是为了降低模型复杂度，在一定程度上可以有效防止模型过拟合</p>
+</blockquote>
+<p>常用的正则项有:<br>$$<br>R_2 = \frac{1}{2}||w||^2 \\<br>R_1 = \sum_i |w_i| \\<br>R_0 = |\{i:w_i \neq 0 \}|<br>$$<br>这些正则项可以通用的写成:<br>$$R_p =(\sum_i |w_i|^p)^{\frac{1}{p}}$$</p>
+<p>其中：</p>
+<ol>
+<li>$R_2$最常用，因为它是凸函数，非常方便可以用<code>梯度下降法</code>最优化</li>
+<li>$R_1$含有特征选择功能，因此经过$R_1$计算之后会有大量的0权重出现，这样的话我们在实际计算中只需要计算有值特征即可，可以加快速算法的运行速度</li>
+<li>$R_0$，额~这个暂时不知道哪里用-_-</li>
+</ol>
+<p>当$p \leqslant 1$时其正则项就为非凸函数了</p>
+<center><img src="/img/Say-About-Loss-Function/reg.png" width="600px"></center>
 
 
 <h2 id="参考">参考</h2><ol>

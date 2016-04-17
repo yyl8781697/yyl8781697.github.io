@@ -126,7 +126,7 @@ log:logistic regression(cros">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#损失误差项"><span class="toc-number">1.</span> <span class="toc-text">损失误差项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gold_Standard_Loss"><span class="toc-number">1.1.</span> <span class="toc-text">Gold Standard Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hinge_Loss"><span class="toc-number">1.2.</span> <span class="toc-text">Hinge Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Log_Loss"><span class="toc-number">1.3.</span> <span class="toc-text">Log Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Squared_Loss"><span class="toc-number">1.4.</span> <span class="toc-text">Squared Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exponential_Loss"><span class="toc-number">1.5.</span> <span class="toc-text">Exponential Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#误差项对比"><span class="toc-number">1.6.</span> <span class="toc-text">误差项对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">2.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#损失误差项"><span class="toc-number">1.</span> <span class="toc-text">损失误差项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gold_Standard_Loss"><span class="toc-number">1.1.</span> <span class="toc-text">Gold Standard Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hinge_Loss"><span class="toc-number">1.2.</span> <span class="toc-text">Hinge Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Log_Loss"><span class="toc-number">1.3.</span> <span class="toc-text">Log Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Squared_Loss"><span class="toc-number">1.4.</span> <span class="toc-text">Squared Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exponential_Loss"><span class="toc-number">1.5.</span> <span class="toc-text">Exponential Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#误差项对比"><span class="toc-number">1.6.</span> <span class="toc-text">误差项对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则项"><span class="toc-number">2.</span> <span class="toc-text">正则项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -149,7 +149,30 @@ log:logistic regression(cros">
 <h3 id="Squared_Loss">Squared Loss</h3><p>平方误差，线性回归中最常用:<br>$$L_2(m)=(f_w(x)-y)^2=(m-1)^2$$</p>
 <h3 id="Exponential_Loss">Exponential Loss</h3><p>指数误差，在<code>boosting</code>算法中比较常见:<br>$$J(w)=\lambda R(w)+\sum_i exp(-y_if_w(x_i)) \\<br>L_{exp}(m_i) = exp(-m_i(w))<br>$$</p>
 <h3 id="误差项对比">误差项对比</h3><p>上面5种误差项的函数为:</p>
-<center><img src="/img/Say-About-Loss-Function/error_function.png" width="400px"></center><br>&gt;黑色为<code>Squared Loss</code>,<span style="color:red">红色</span>为<code>Hinge Loss</code>,<span style="color:yellow">黄色</span>为:<code>Log Loss</code>,<span style="color:green">绿色</span>为:<code>Exponential Loss</code>,<span style="color:blue">蓝色</span>为:<code>Gold Standard</code><br><br>观察图中:<br><br>1. <code>Hinge Loss</code>中当$m_i(w) &gt; 1$ 时，其损失项始终未0，当$m_i(w) &lt; 1$时，其损失项的值呈线性增长（正好符合<code>svm</code>的需求）.<br>2. <code>Squared、Log、Exponential</code>三种损失函数已经<code>Hinge</code>的左侧都是凸函数，并且<code>Gold Stantard</code>损失为他们的下界:<br>    $$\zeta_{01} \leq  \hat{\zeta}_{01}(h)+fudge$$<br>3. 当需要求最大似然时(也就是概率最大化)，使用<code>Log Loss</code>最合适，但是一般会加上一个负号将其转换为求最小<br>4. 损失函数和的<code>凸特征</code>以及有<code>界</code>是非常重要的，可以防止在一些可以求得无穷的工作上白白浪费时间。有时候为了让函数有界和凸特征，一般会使用一些代理函数来进行替换。<br><br>##正则项<br>&gt;加入正在项是为了降低模型复杂度，在一定程度上可以有效防止模型过拟合<br><br>常用的正则项有:<br>$$<br>R_2 = \frac{1}{2}||w||^2 \\<br>R_1 = \sum_i |w_i| \\<br>R_0 = |\{i:w_i \neq 0 \}|<br>$$<br>这些正则项可以通用的写成:<br>$$R_p =(\sum_i |w_i|^p)^{\frac{1}{p}}$$<br><br>其中：<br>1. $R_2$最常用，因为它是凸函数，非常方便可以用<code>梯度下降法</code>最优化<br>2. $R_1$含有特征选择功能，因此经过$R_1$计算之后会有大量的0权重出现，这样的话我们在实际计算中只需要计算有值特征即可，可以加快速算法的运行速度<br>3. $R_0$，额~这个暂时不知道哪里用-_-<br><br>当$p \leqslant 1$时其正则项就为非凸函数了<br><center><img src="/img/Say-About-Loss-Function/reg.png" width="600px"></center>
+<center><img src="/img/Say-About-Loss-Function/error_function.png" width="400px"></center>
+
+<blockquote>
+<p>黑色为<code>Squared Loss</code>,<span style="color:red">红色</span>为<code>Hinge Loss</code>,<span style="color:yellow">黄色</span>为:<code>Log Loss</code>,<span style="color:green">绿色</span>为:<code>Exponential Loss</code>,<span style="color:blue">蓝色</span>为:<code>Gold Standard</code></p>
+</blockquote>
+<p>观察图中:</p>
+<ol>
+<li><code>Hinge Loss</code>中当$m_i(w) &gt; 1$ 时，其损失项始终未0，当$m_i(w) &lt; 1$时，其损失项的值呈线性增长（正好符合<code>svm</code>的需求）.</li>
+<li><code>Squared、Log、Exponential</code>三种损失函数已经<code>Hinge</code>的左侧都是凸函数，并且<code>Gold Stantard</code>损失为他们的下界:<br> $$\zeta_{01} \leq  \hat{\zeta}_{01}(h)+fudge$$</li>
+<li>当需要求最大似然时(也就是概率最大化)，使用<code>Log Loss</code>最合适，但是一般会加上一个负号将其转换为求最小</li>
+<li>损失函数和的<code>凸特征</code>以及有<code>界</code>是非常重要的，可以防止在一些可以求得无穷的工作上白白浪费时间。有时候为了让函数有界和凸特征，一般会使用一些代理函数来进行替换。</li>
+</ol>
+<h2 id="正则项">正则项</h2><blockquote>
+<p>加入正在项是为了降低模型复杂度，在一定程度上可以有效防止模型过拟合</p>
+</blockquote>
+<p>常用的正则项有:<br>$$<br>R_2 = \frac{1}{2}||w||^2 \\<br>R_1 = \sum_i |w_i| \\<br>R_0 = |\{i:w_i \neq 0 \}|<br>$$<br>这些正则项可以通用的写成:<br>$$R_p =(\sum_i |w_i|^p)^{\frac{1}{p}}$$</p>
+<p>其中：</p>
+<ol>
+<li>$R_2$最常用，因为它是凸函数，非常方便可以用<code>梯度下降法</code>最优化</li>
+<li>$R_1$含有特征选择功能，因此经过$R_1$计算之后会有大量的0权重出现，这样的话我们在实际计算中只需要计算有值特征即可，可以加快速算法的运行速度</li>
+<li>$R_0$，额~这个暂时不知道哪里用-_-</li>
+</ol>
+<p>当$p \leqslant 1$时其正则项就为非凸函数了</p>
+<center><img src="/img/Say-About-Loss-Function/reg.png" width="600px"></center>
 
 
 <h2 id="参考">参考</h2><ol>
@@ -219,7 +242,7 @@ log:logistic regression(cros">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#损失误差项"><span class="toc-number">1.</span> <span class="toc-text">损失误差项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gold_Standard_Loss"><span class="toc-number">1.1.</span> <span class="toc-text">Gold Standard Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hinge_Loss"><span class="toc-number">1.2.</span> <span class="toc-text">Hinge Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Log_Loss"><span class="toc-number">1.3.</span> <span class="toc-text">Log Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Squared_Loss"><span class="toc-number">1.4.</span> <span class="toc-text">Squared Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exponential_Loss"><span class="toc-number">1.5.</span> <span class="toc-text">Exponential Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#误差项对比"><span class="toc-number">1.6.</span> <span class="toc-text">误差项对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">2.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#损失误差项"><span class="toc-number">1.</span> <span class="toc-text">损失误差项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Gold_Standard_Loss"><span class="toc-number">1.1.</span> <span class="toc-text">Gold Standard Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hinge_Loss"><span class="toc-number">1.2.</span> <span class="toc-text">Hinge Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Log_Loss"><span class="toc-number">1.3.</span> <span class="toc-text">Log Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Squared_Loss"><span class="toc-number">1.4.</span> <span class="toc-text">Squared Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exponential_Loss"><span class="toc-number">1.5.</span> <span class="toc-text">Exponential Loss</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#误差项对比"><span class="toc-number">1.6.</span> <span class="toc-text">误差项对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则项"><span class="toc-number">2.</span> <span class="toc-text">正则项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
@@ -412,12 +435,6 @@ log:logistic regression(cros">
   <div class="linkslist">
   <p class="asidetitle">友情链接</p>
     <ul>
-        
-          <li>
-            
-            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
-            
-          </li>
         
           <li>
             
