@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-04-17T12:25:41.000Z</updated>
+  <updated>2016-04-21T16:17:29.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,204 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[AdaBoost学习总结]]></title>
+    <link href="http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/"/>
+    <id>http://kubicode.me/2016/04/18/Machine Learning/AdaBoost-Study-Summary/</id>
+    <published>2016-04-18T12:30:55.000Z</published>
+    <updated>2016-04-21T16:17:29.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
+</blockquote>
+<h2 id="简介">简介</h2><p>痛点:大部分强分类器(<code>LR</code>，<code>svm</code>)分类效果还不错，但是可能会遇到过拟合问题，并且训练相对复杂，耗时~<br>另外大部分弱分类器(<code>阈值分类器</code>,<code>单桩决策树(decision stump)</code>等)，他们分类的效果差，可能是极差，只会出现欠拟合，但是他们训练预测快，很快~</p>
+<blockquote>
+<p><code>天下武功，唯快不破</code>，<code>做减法不易，但是做加法就相对简单了</code>^_^ 这就是<code>提升方法</code>.</p>
+</blockquote>
+<p><code>提升方法</code>需要解决的两个问题:</p>
+<ol>
+<li>在每一轮训练时如何改变数据的权值或概率分布?</li>
+<li>如何将弱分类器组合成一个强分类器?</li>
+</ol>
+<p><code>AdaBoost</code>对此进行了很好的解决:</p>
+<ol>
+<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分队，同时减少分对样本的权重.</li>
+<li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
+</ol>
+<a id="more"></a>
+<h2 id="前向分步算法">前向分步算法</h2><p>讲<code>AdaBoost</code>之前，就不得不提到<code>前向分步算法</code>,先来看一个加法模型:<br>$$f(x)=\sum_{m=1}^M \beta_m b(x;\gamma_m)$$其中:</p>
+<ul>
+<li>$b(x;\gamma_m)$表示基函数</li>
+<li>$\gamma_m$表示基函数的参数</li>
+<li>$\beta_m$表示基函数的系数</li>
+<li>最终加权求和之后形成最终的函数(强模型)</li>
+</ul>
+<p>假设损失函数为$L(y,f(x))$,则在训练$f(x)$时就是优化损失函数到最小化的问题:<br>$$\underset{\beta,\gamma}{min} \sum_{i=1}^N L\left( y_i,\sum_{m=1}^M \beta_m b(x;\gamma_m) \right)$$</p>
+<p>如果直接优化这个损失函数无疑是一个相当复杂的问题:里面嵌入有太多了函数了…，而<code>前向分步算法</code>的策略是:</p>
+<pre><code>如果从前往后每一步都是学习一个基函数以及系数，令其逐步逼近优化目标函数，那么复杂度就可以大大简化了<span class="attr_selector">[分而治之]</span>
+</code></pre><p>因此每一步只需要如下的损失函数即可:<br>$$\underset{\beta,\gamma}{min} \sum_{i=1}^N L \left( y_i,\beta b(x;\gamma) \right)$$</p>
+<p>下面就是<code>前向分步算法</code>的具体步骤:<br><strong>Input</strong>:</p>
+<ul>
+<li>训练数据集$T=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$，其中$y_i \in \{+1,-1\}$</li>
+<li>损失函数:$L(y,f(x))$</li>
+<li>基函数数量:$M$</li>
+<li>基函数集合$\{b(x;\gamma_m)\}$</li>
+</ul>
+<p><strong>Output</strong>:</p>
+<ul>
+<li>加法模型$f(x)$</li>
+</ul>
+<p><strong>procedure</strong>:</p>
+<ol>
+<li>初始化$f_0(x)=0$</li>
+<li>循环$m \in \{1….M\}$<ol>
+<li>最小化基函数损失函数:$$\underset{\beta_m,\gamma_m}{argmin} \sum_{i=1}^N L\left( y_i,\beta_m b(x;\gamma_m) \right)$$</li>
+<li>更新加法模型:$$f_m(x)=f_{m-1}(x)+\beta_m b(x;\gamma_m)$$</li>
+</ol>
+</li>
+<li>最终得到加法模型:$$f(x)=f_M(x)=\sum_{m=1}^M \beta_m b(x;\gamma_m)$$</li>
+</ol>
+<p><code>前向分步算法</code>通过分而治之的方式求得了损失函数值最小的<code>加法函数</code></p>
+<blockquote>
+<p>整个算法的学习过程可以有很大的想象空间^_^</p>
+</blockquote>
+<h2 id="AdaBoost算法逻辑">AdaBoost算法逻辑</h2><p>上面一小节介绍了<code>前向分步算法</code>，但是留下来三个问题:</p>
+<ol>
+<li>对其损失函数$L(y,f(x))$有啥要求?</li>
+<li>基函数的系数$\beta$又是怎么计算的?</li>
+<li>基函数$b(x;\gamma)$如何设计比较合理?</li>
+</ol>
+<p><code>AdaBoost</code>正是对此进行一一填坑，它使用<code>指数损失函数</code>、<code>根据分类错误类来计算基函数系数</code>和  。。  基函数到没有指定，不过一般使用<code>阈值函数</code>或者<code>单桩决策树</code>来作为基函数</p>
+<blockquote>
+<p>因此也可认为<code>AdaBoost</code>是模型为加法模型、损失函数为指数函数、学习算法为前向分步算法的二分类学习方法.</p>
+</blockquote>
+<p>先来看下<code>AdaBoost</code>的算法逻辑图:</p>
+<p><center><img src="/img/AdaBoost-Study-Summary/exec.png" width="400px"></center></p>
+<blockquote>
+<p>说明:此图来自<code>PRML Fig14.1</code>[2]，本文的数学符号主要采用[1]的风格，因此有:$y_m(x)\rightarrow G_m(x)$、$Y_M(x) \rightarrow G(x)$</p>
+</blockquote>
+<p>从图中大致可以发现<code>AdaBoost</code>依次训练多个弱分类器，每个分类器训练完成之后产出一个权重给予下个分类器，下个分类器在此权重上继续进行训练，全部训练完成之后根据弱分类器的系数组合成强分类器，也就是最终的分类模型~</p>
+<p>下面就是<code>AdaBoost</code>的具体步骤:<br><strong>Input</strong>:</p>
+<ul>
+<li>训练数据集$T=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$，其中$y_i \in \{+1,-1\}$</li>
+<li>弱分类器数量:$M$</li>
+<li>弱分类器集合$\{G_m(x)\}$</li>
+</ul>
+<p><strong>Output</strong>:</p>
+<ul>
+<li>最终模型$G(x)$  （注意：<code>产出的最终模型并不直接是加法模型哦</code>~）</li>
+</ul>
+<p><strong>procedure</strong>:</p>
+<ol>
+<li>初始化训练权值的分布:$$D_1=(w_{1,1},\cdot \cdot \cdot , w_{1,i},\cdot \cdot \cdot ,w_{1,N}),w_{1,i}=\frac{1}{N}$$<blockquote>
+<p>ps.其实初始化还有其他方式的 such as:初始化为$\frac{0.5}{N_+}$和$\frac{0.5}{N_-}$，其中$N_+$和$N_-$分别代表正负样本的数量，有$N=N_++N_-$</p>
+</blockquote>
+</li>
+<li>循环$m \in \{1….M\}$<ol>
+<li>使用带权重分布$D_m$的训练集进行训练，得到基本的弱分类器:$G_m(x)$</li>
+<li>计算$G_m(x)$在训练数据集上的分类误差率:$$e_m=P(G_x(x) \neq y_i) = \sum_{i=1}^N w_{m,i} I(G_m(x_i) \neq y_i)$$其中$$ I(G_m(x_i) \neq y_i)=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad G_m(x_i) = y_i \\<br>1 &amp; \quad if \quad G_m(x_i) \neq y_i\\<br>\end{aligned}<br>\right.$$<blockquote>
+<p>其实就是<code>错误率</code>:分错样本数量占总样本量的比例.</p>
+</blockquote>
+</li>
+<li>计算$G_m(x)$的系数:$$\alpha_m = \frac{1}{2} ln \frac{1-e_m}{e_m}$$</li>
+<li><strong>更新训练数据集的权值分布(这点是核心)</strong>:$D_{m+1}=(w_{m+1,1},\cdot \cdot \cdot , w_{m+1,i},\cdot \cdot \cdot ,w_{m+1,N})$<br>其中:$$w_{m+1,i} = \frac{w_{m,i}}{Z_m} e^{-\alpha_m y_i G_m(x_i)}$$ 这里$Z_m$为规范化因子:$$Z_m = \sum_{i=1}^{N} w_{m,i} e^{-\alpha_m y_i G_m(x_i)}$$</li>
+</ol>
+</li>
+<li>构建加法模型:$$f(x)=\sum_{m=1}^M \alpha_m G_m(x)$$产出最终的分类器:$$G(x)=sign(f(x))=sign\left( \sum_{m=1}^M \alpha_m G_m(x) \right)$$其中:$$sign(f(x))=\left\{<br>\begin{aligned}<br>-1 &amp; \quad if \quad f(x) &lt; 0 \\<br>1 &amp; \quad if \quad f(x) \geq 0\\<br>\end{aligned}<br>\right.$$</li>
+</ol>
+<p>对算法过程中几个重要的点进行一个简单的解释:</p>
+<ul>
+<li><p>分类器误差率$e_m$对其权重$\alpha_m$的影响:<br><center><img src="/img/AdaBoost-Study-Summary/alpha.png" width="400px"></center><br>从图中可以发现:</p>
+<ol>
+<li>$e_m$为0.5时其权重$\alpha_m$为0，表示此分类器在最终模型中不起任何作用</li>
+<li>$e_m &lt; 0.5$时其$\alpha_m &gt; 0$，表示对最终模型起正向作用,$e_m$的值越小，起到的作用越大</li>
+<li>$e_m &gt; 0.5$时其$\alpha_m &lt; 0$，表示对最终模型起父向作用，$e_m$的值越大,起到的负作用也越大</li>
+<li>$e_m$不会出现等于0 的情况，因为到了0的时候弱分类器已经全部分正确，也不需要继续更新权重再次训练了</li>
+<li>$e_m$也不会出现等于1的情况，因为1表示弱分类器全错，除了程序出问题，应该任何一个弱分类器不会训练到全错的情况吧^_^</li>
+</ol>
+</li>
+<li><p>数据权重的更新策略:<br>原始的更新策略是这样的:$$w_{m+1,i} = \frac{w_{m,i}}{Z_m} e^{-\alpha_m y_i G_m(x_i)}$$原始标签$y_i$和弱分类器结果的输出$G_m(x)$都是$\{+1,-1\}$二值，因此可以将上述更新方式写成:$$w_{m+1,i}=  \left\{<br>\begin{aligned}<br>\frac{w_{m,i}}{Z_m} \times e^{\alpha_m} &amp; \quad if \quad y_i \neq G_m(x)\\<br>\frac{w_{m,i}}{Z_m} \times \frac{1}{e^{\alpha_m}} &amp; \quad if \quad y_i = G_m(x)\\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>观察$w_{m+1,i}$更新时三个元素均恒大于0（$w_{m,i}$可以从$w_1$开始推），因此$w_{m+1,i}$也是恒大于0 ，并且$\sum_{i=1}^N w_{m,i}=1$<br>我们将分类错误率小于0.5的弱分类器称为好分类器，其系数$\alpha_{good}&gt;0$，同时将分类错误率小于0.5的弱分类器称为坏分类器，则其系数$\alpha_{had}&lt;0$，则再观察变形了的权重更新:</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li>如果当前分类器是好分类器，样本$(x_i,y_i)$被错误分类时,$e^{\alpha_m} &gt; 1$,其$w_{m+1,i}$将会被放大，反之正确分类样本的权值将会被缩小</li>
+<li>如果当前分类器为坏分类器，样本$(x_i,y_i)$被错误分类时,$e^{\alpha_m} &lt; 1$,其$w_{m+1,i}$将会被缩小，反之正确分类样本的权值将会被放大<blockquote>
+<p>这其实应该与误分类样本的权值被放大$e^{2\alpha_m}=\frac{e_m}{1-e_m}$倍一个道理，因为$\frac{e_m}{1-e_m}$不一定恒大于1啊~^_^</p>
+</blockquote>
+</li>
+</ol>
+<ul>
+<li>弱分类器的权重系数$\alpha_m$:<br>这个权重系数表示了弱分类器$G_m(x)$的重要性，但是$a_m$之和并不为1，另外$G_m(x)$输出的是-1或者1的分类，所以最终模型可以看做一个加权的投票系统^_^</li>
+</ul>
+<h2 id="AdaBoost-最小化指数误差">AdaBoost-最小化指数误差</h2><p>假如<code>AdaBoost</code>使用的是指数损失函数，则其损失函数为:$$L(y,f(x))=\sum_{i=1}^N e^{-y_if(x)}$$为了优化其损失函数，<code>AdaBoost</code>采用了前向分步算法进行逐步优化,第<code>m</code>轮的迭代需要得到的$\alpha_m$,$G_m$和$f_m(x)$，其中有$$f_m(x)=f_{m-1}(x)+\alpha_m G_m(x)$$，假设前面的$f_{m-1}(x)$已经为最优，则当前需要优化的是:<br>$$L(y,f_m(x))=\sum_{i=1}^N e^{-y_i(f_{m-1}(x)+\alpha_m G_m(x))}$$因为有$\bar{w}_{m,i}=e^{-y_if(x)}$（关于这个式子的成立并不是很理解-_-）所以上述优化目标可以写为$$L(y,f_m(x))= \sum_{i=1}^N \bar{w}_{m,i} e^{-y_i\alpha_m G_m(x)}$$<br>因为我们求的是关于$\alpha_m$和$G_m(x)$的最优化，所以$\bar{w}_{m,i}$相对来说就是常量了.现在假设第$m$轮迭代中有$T_m$个样本分类正确，有$M_m$个样本分类错误，则其优化目标又可以写为:<br>$$\begin{equation}\begin{split} L(y,f_m(x))&amp;=e^{-\alpha_m} \sum_{n \in T_m} w_{m,n}+e^{\alpha_m} \sum_{n \in M_m} w_{m,n}\\<br>&amp;= \left( e^{-\alpha_m} \sum_{n \in T_m} w_{m,n} + e^{-\alpha_m} \sum_{n \in M_m} w_{m,n} \right)+ \left( e^{\alpha_m} \sum_{n \in M_m} w_{m,n} - e^{-\alpha_m} \sum_{n \in M_m} w_{m,n} \right) \\<br>&amp;= e^{-\alpha_m} \sum_{i=1}^N w_{m,i} + (e^{\alpha_m}-e^{-\alpha_m}) \sum_{n=1}^N w_{m,i}I(y_i \neq G_m(x_i))<br>\end{split}\end{equation}$$</p>
+<p>接下来惯例的方法就是对$L(y,f_m(x))$求$\alpha$和$G_m(x)$的偏导数，其实在求$G_m(x)$最优时可以发现可以发现第一项和第二项前面的系数并不影响最优化，所以需要求的就是上面步骤中<code>误差率</code>的最优化:$$e_m=P(G_x(x) \neq y_i) = \sum_{i=1}^N w_{m,i} I(G_m(x_i) \neq y_i)$$<br>而得到了最优的$G_m(x)$之后代入$L(y,f_m(x))$求偏导又可以得到最小的$\alpha_m$为:$$\alpha_m = \frac{1}{2} ln \frac{1-e_m}{e_m}$$<br>又是一面熟悉的场景^_^<br>所以可以说<code>AdaBoost</code>整个过程是一直在优化最新函数的指数误差，只是在实际训练时按<code>前向分步算法</code>只需优化当前的误差率即可.</p>
+<h2 id="AdaBoost训练误差分析">AdaBoost训练误差分析</h2><pre><code>这里的边界是我自己的理解，与<span class="attr_selector">[1]</span>稍有区别
+</code></pre><p>上一小节我们知道在每一步求$\sum_{i=1}^N w_{m,i} I(G_m(x_i) \neq y_i)$的最小化时，其实是在优化最终模型的损失函数$\sum_{i=1}^N e^{-y_if(x)}$,关于模型最终的损失函数有这样一个界限:<br>$$\frac{1}{N} \sum_{i=1}^N I(f(x) \neq y_i) \leq \frac{1}{N} \sum_{i=1}^N e^{-y_if(x)} =  \prod_m Z_m$$<br>因为$e^{-y_if(x)}$一定不会小于0，并且当$f(x) \neq y_i$时，$e^{-y_if(x)}$恒大于1，因此第一、二项的不等式是成立的。接下来看后面的那个等式：</p>
+<blockquote>
+<p>这里的推导需要用到$Z_m$的变形:$w_{m,i}e^{-\alpha_my_iG_m(x)} = Z_mw_{m+1,i}$</p>
+</blockquote>
+<p>$$\begin{equation}\begin{split} \frac{1}{N} \sum_{i=1}^N e^{-y_if(x)} &amp;= \frac{1}{N} \sum_{i=1}^N e^{-\sum_{m=1}^M \alpha_my_iG_m(x_i)} \\<br>&amp;= \sum_{i=1}^N w_{1,i} \prod_{m=1}^M e^{-\alpha_m y_i G_m(x_i)} \\<br>&amp;= Z_1 \sum_{i=1}^N w_{2,i} \prod_{m=2}^M e^{-\alpha_my_iG_m(x_i)} \\<br>&amp;= Z_1 Z_2 \sum_{i=1}^N w_{3,i} \prod_{m=2}^M e^{-\alpha_my_iG_m(x_i)} \\<br>&amp;… \\<br>&amp;= Z_1 Z_2 … Z_{m-1}\sum_{i=1}^N w_{M,i}  e^{-\alpha_My_iG_M(x_i)} \\<br>&amp;= \prod_{m=1}^M Z_m<br>\end{split}\end{equation}$$</p>
+<p>因此可以发现最优化(最小化)损失函数可以降低最终模型的错误率，同时其错误率与$Z_m$也是有关系的.</p>
+<h2 id="AdaBoost黑科技">AdaBoost黑科技</h2><h3 id="Real_AdaBoost">Real AdaBoost</h3><p>上面的<code>AdaBoost</code>的介绍中可以发现$G_m(x)$返回的是-1 或者1 （也就是直接离散值），其实这种方式的返回始终会有一定的<code>gap</code>，那么假如$G_m(x)$输出的是$p(x)=P(y=1|x)$,也就是$x$特征下输出值为1的概率.此时我们最优化的函数为:$$e^{-y \left(f_{m-1}(x)+G_m(p(x) \right)}$$而$G_m(x)=\frac{1}{2} ln \frac{x}{1-x}$<br>这种方式将会修复一定的<code>gap</code>，并且在某些实验中效果也是要好于直接离散的<code>AdaBoost</code></p>
+<h3 id="提前终止">提前终止</h3><p>一般情况下是弱分类器训练$M$个才停止，而提前终止只是在训练多个层之后组成的最终分类器的结果已经小于一个置信度的误差，有一种方法可以加快这种判断:</p>
+<ol>
+<li>一般训练数据里面负样本会远多于正样本</li>
+<li>在多个级联的弱分类器在被训练之后，如果正样本被误分为负样本了，则人工将这样正样本进行标记并去去除（质量差的）</li>
+<li>那么如果每一轮都是有50%的负样本被监测去重，那么久可以大大减小计算量</li>
+<li>最终看假阳性和假阴性来判断是否终止</li>
+</ol>
+<blockquote>
+<p>这种方式靠谱吗？要不就是我理解/翻译错了</p>
+</blockquote>
+<p>这种提前终止的方法可以降低过拟合的可能性^_^</p>
+<h3 id="剪枝">剪枝</h3><p>剪枝指的是去除性能较差的弱分类器，提升效率。最简单的方法是:每个弱分类器都自己的系数和测试误差率极其分布，<code>margineantu</code>则提出的建议为:</p>
+<ol>
+<li>弱分类器的选择应该分类多样性</li>
+<li>如果两个弱分类器很相似，则可以将其中一个给去掉,同时增加相似弱分类器的系数(这里其实就是相当于剪枝了)</li>
+</ol>
+<h2 id="总结">总结</h2><p><code>AdaBoost</code>秉承<code>三个凑皮匠，顶个诸葛亮</code>的原则，与其说<code>AdaBoost</code>是一个机器学习算法，我更觉得他应该是一个经典的机器学习框架，其优点有:</p>
+<ol>
+<li>可以较为方便的控制过拟合(不能说避免过拟合，在弱分类器很强的情况下还真会过拟合的吧？看$GBRT$)</li>
+<li>有非常强的自适应性</li>
+<li>如果弱分类器很简单，则训练预测速度将会很快，毕竟最终复杂度是在弱分类器上乘以$M$</li>
+<li>分类效果好，实现简单</li>
+<li>可扩展性强~弱分类器可以随意换，甚至损失函数也可以换(比如换最小平方误差)</li>
+</ol>
+<p>当然也有缺点:</p>
+<ol>
+<li>相邻两个分类器训练有依赖关系，所以在并行实现下还是需要精心设计。</li>
+</ol>
+<h2 id="参考:">参考:</h2><p>[1] 《统计学习方法》.李航.第八章<br>[2] 《Pattern Recognition And Machine Learning》.Christopher Bishop.chapter 14</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
+</blockquote>
+<h2 id="简介">简介</h2><p>痛点:大部分强分类器(<code>LR</code>，<code>svm</code>)分类效果还不错，但是可能会遇到过拟合问题，并且训练相对复杂，耗时~<br>另外大部分弱分类器(<code>阈值分类器</code>,<code>单桩决策树(decision stump)</code>等)，他们分类的效果差，可能是极差，只会出现欠拟合，但是他们训练预测快，很快~</p>
+<blockquote>
+<p><code>天下武功，唯快不破</code>，<code>做减法不易，但是做加法就相对简单了</code>^_^ 这就是<code>提升方法</code>.</p>
+</blockquote>
+<p><code>提升方法</code>需要解决的两个问题:</p>
+<ol>
+<li>在每一轮训练时如何改变数据的权值或概率分布?</li>
+<li>如何将弱分类器组合成一个强分类器?</li>
+</ol>
+<p><code>AdaBoost</code>对此进行了很好的解决:</p>
+<ol>
+<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分队，同时减少分对样本的权重.</li>
+<li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[聊聊机器学习中的损失函数]]></title>
@@ -2547,86 +2745,6 @@ everything <span class="keyword">is</span> here
       <category term="Vim" scheme="http://kubicode.me/tags/Vim/"/>
     
       <category term="Linux" scheme="http://kubicode.me/categories/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[KNN算法中KD树的应用]]></title>
-    <link href="http://kubicode.me/2015/10/12/Machine%20Learning/KDTree-In-KNN/"/>
-    <id>http://kubicode.me/2015/10/12/Machine Learning/KDTree-In-KNN/</id>
-    <published>2015-10-12T03:57:39.000Z</published>
-    <updated>2015-10-12T08:10:44.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
-</code></pre><p><a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#KNN算法" target="_blank" rel="external">点我查看详情</a></p>
-<blockquote>
-<p>但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对<code>KNN</code>算法实现一个简单的<code>KD</code>树</p>
-</blockquote>
-<h2 id="KD树">KD树</h2><pre><code>KD树是一个二叉树，表示对<span class="keyword">K</span>维空间的一个划分，可以进行快速检索（那KNN计算的时候不需要对全样本进行距离的计算了）
-</code></pre><p>比如针对6个二维数据点{（2,3），（5,4），（9,6），（4,7），（8,1），（7,2）}，可以形成以下树形结构以及空间划分<br><img src="/img/KDTree-In-KNN/example.png" alt=""></p>
-<a id="more"></a>
-<p>该树的功能就是在高维空间下进行一个快速的最近邻查询。先来看定义的树的类结构<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Node</span>&gt;</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span>[] data;<span class="comment">//树上节点的数据  是一个多维的向量</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">double</span> distance;<span class="comment">//与当前查询点的距离  初始化的时候是没有的</span></span><br><span class="line">	<span class="keyword">public</span> Node left,right,parent;<span class="comment">//左右子节点  以及父节点</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> dim=-<span class="number">1</span>;<span class="comment">//维度  建立树的时候判断的维度</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">double</span>[] data)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 返回指定索引上的数值</span><br><span class="line">	 *<span class="javadoctag"> @param</span> index</span><br><span class="line">	 *<span class="javadoctag"> @return</span></span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getData</span><span class="params">(<span class="keyword">int</span> index)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(data==<span class="keyword">null</span> || data.length&lt;=index)</span><br><span class="line">			<span class="keyword">return</span> Integer.MIN_VALUE;</span><br><span class="line">		<span class="keyword">return</span> data[index];</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Node o)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">this</span>.distance&gt;o.distance)</span><br><span class="line">			<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">		<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(<span class="keyword">this</span>.distance==o.distance)</span></span><br><span class="line">			return 0</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 计算距离 这里返回欧式距离</span><br><span class="line">	 *<span class="javadoctag"> @param</span> that</span><br><span class="line">	 *<span class="javadoctag"> @return</span></span><br><span class="line">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">computeDistance</span><span class="params">(Node that)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">this</span>.data==<span class="keyword">null</span> || that.data==<span class="keyword">null</span> || <span class="keyword">this</span>.data.length!=that.data.length)</span><br><span class="line">			<span class="keyword">return</span> Double.MAX_VALUE;<span class="comment">//出问题了  距离最远</span></span><br><span class="line">		<span class="keyword">double</span> d=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="keyword">this</span>.data.length;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			d+=Math.pow(<span class="keyword">this</span>.data[i]-that.data[i], <span class="number">2</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> Math.sqrt(d);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(data==<span class="keyword">null</span> || data.length==<span class="number">0</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		StringBuilder sb=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;data.length;i++)</span><br><span class="line">			sb.append(data[i]+<span class="string">" "</span>);</span><br><span class="line">		sb.append(<span class="string">" d:"</span>+<span class="keyword">this</span>.distance);</span><br><span class="line">		<span class="keyword">return</span> sb.toString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="建立KD树">建立KD树</h3><p>在<code>d</code>维的空间上循环找子区域的中位数进行划分的过程。<br>假设现在有<code>d</code>维空间的数据集<code>T={x<sub>1</sub>,x<sub>2</sub>,x<sub>3</sub>,…x<sub>n</sub>},xi={a<sub>1</sub>,a<sub>2</sub>,a<sub>3</sub>..a<sub>d</sub>}</code></p>
-<ol>
-<li>首先构造根节点，以坐标<code>a<sub>1</sub></code>的中位数<code>b</code>为切分点，将根结点对应的矩形局域划分为两个区域，区域1中<code>a1&lt;b</code>,区域2中<code>a1&gt;b</code>，中位数所在的节点就是树上的节点</li>
-<li>构造叶子节点，分别以上面两个区域中<code>a<sub>2</sub></code>的中位数作为切分点，再次将他们两两划分，作为深度1的叶子节点，（如果<code>a<sub>2</sub></code>=中位数，则<code>a<sub>2</sub></code>的实例落在切分面）</li>
-<li>不断重复2的操作，深度为<code>j</code>的叶子节点划分的时候，索取的<code>a<sub>i</sub></code> 的<code>i=j%d+1</code>，直到两个子区域没有实例时停止</li>
-</ol>
-<p>所以我们首先需要在高维的数据中针对某一维进行一个中位数的查找的，这里最快捷的就是借用快排的方法</p>
-<pre><code>假设f为快排的排头，进行一轮对比之后如果f所在的索引大于<span class="built_in">size</span>/<span class="number">2</span>，则此时只需要对左边进行递归排序就可以了，若小于<span class="built_in">size</span>/<span class="number">2</span>，则只需对右边区域进行递归排序，如果等于<span class="built_in">size</span>/<span class="number">2</span>  则说明
-f就是中位数  直接返回就好啦
-</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 使用快排进进行一个中位数的查找  完了之后返回的数组size/2即中位数</span><br><span class="line"> *<span class="javadoctag"> @param</span> nodeList</span><br><span class="line"> *<span class="javadoctag"> @param</span> index</span><br><span class="line"> *<span class="javadoctag"> @param</span> left</span><br><span class="line"> *<span class="javadoctag"> @param</span> right</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">quickSortForMedian</span><span class="params">(List&lt;Node&gt; nodeList,<span class="keyword">int</span> index,<span class="keyword">int</span> left,<span class="keyword">int</span> right)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(left&gt;=right || nodeList.size()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	</span><br><span class="line">	Node kn=nodeList.get(left);</span><br><span class="line">	<span class="keyword">double</span> k=kn.getData(index);<span class="comment">//取得向量指定索引的值</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> i=left,j=right;</span><br><span class="line">	<span class="keyword">while</span>(i&lt;j)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">while</span>(nodeList.get(j).getData(index)&gt;=k &amp;&amp; i&lt;j)</span><br><span class="line">			j--;</span><br><span class="line">		nodeList.set(i, nodeList.get(j));</span><br><span class="line">		<span class="keyword">while</span>(nodeList.get(i).getData(index)&lt;=k &amp;&amp; i&lt;j)</span><br><span class="line">			i++;</span><br><span class="line">		nodeList.set(j, nodeList.get(i));</span><br><span class="line">	&#125;</span><br><span class="line">	nodeList.set(i, kn);</span><br><span class="line">	<span class="keyword">if</span>(i==nodeList.size()/<span class="number">2</span>)</span><br><span class="line">		<span class="keyword">return</span> ;<span class="comment">//完成中位数的排序了</span></span><br><span class="line">	<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(i&lt;nodeList.size()</span>/2)</span><br><span class="line">	</span>&#123;</span><br><span class="line">		quickSortForMedian(nodeList,index,i+<span class="number">1</span>,right);<span class="comment">//只需要排序右边就可以了</span></span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		quickSortForMedian(nodeList,index,left,i-<span class="number">1</span>);<span class="comment">//只需要排序左边就可以了</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有了中位数查找，接下来就可以使用递归来进行树的建立了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 构建kd树  返回根节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> nodeList</span><br><span class="line"> *<span class="javadoctag"> @param</span> index</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Node <span class="title">buildKDTree</span><span class="params">(List&lt;Node&gt; nodeList,<span class="keyword">int</span> index)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(nodeList==<span class="keyword">null</span> || nodeList.size()==<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	quickSortForMedian(nodeList,index,<span class="number">0</span>,nodeList.size()-<span class="number">1</span>);<span class="comment">//中位数排序</span></span><br><span class="line">	Node root=nodeList.get(nodeList.size()/<span class="number">2</span>);<span class="comment">//中位数 当做根节点</span></span><br><span class="line">	root.dim=index;</span><br><span class="line">	List&lt;Node&gt; leftNodeList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();<span class="comment">//放入左侧区域的节点  包括包含与中位数等值的节点-_-</span></span><br><span class="line">	List&lt;Node&gt; rightNodeList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(Node node:nodeList)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(root!=node)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(node.getData(index)&lt;=root.getData(index))</span><br><span class="line">				leftNodeList.add(node);<span class="comment">//左子区域 包含与中位数等值的节点</span></span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				rightNodeList.add(node);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> newIndex=index+<span class="number">1</span>;<span class="comment">//进入下一个维度</span></span><br><span class="line">	<span class="keyword">if</span>(newIndex&gt;=root.data.length)</span><br><span class="line">		newIndex=<span class="number">0</span>;<span class="comment">//从0维度开始再算</span></span><br><span class="line">	root.left=buildKDTree(leftNodeList,newIndex);<span class="comment">//添加左右子区域</span></span><br><span class="line">	root.right=buildKDTree(rightNodeList,newIndex);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(root.left!=<span class="keyword">null</span>)</span><br><span class="line">		root.left.parent=root;<span class="comment">//添加父指针  </span></span><br><span class="line">	<span class="keyword">if</span>(root.right!=<span class="keyword">null</span>)</span><br><span class="line">		root.right.parent=root;<span class="comment">//添加父指针  </span></span><br><span class="line">	<span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="KD树搜索">KD树搜索</h3><ol>
-<li>首先从根节点开始递归往下找到包含<code>q</code>的叶子节点，每一层都是找对应的<code>x<sub>i</sub></code></li>
-<li>将这个叶子节点认为是当前的“近似最近点”</li>
-<li>递归向上回退，如果以<code>q</code>圆心，以“近似最近点”为半径的球与根节点的另一半子区域边界相交，则说明另一半子区域中存在与<code>q</code>更近的点，则进入另一个子区域中查找该点并且更新”近似最近点“</li>
-<li>重复3的步骤，直到另一子区域与球体不相交或者退回根节点</li>
-<li>最后更新的”近似最近点“与<code>q</code>真正的最近点</li>
-</ol>
-<p>这里注意按上述方式找到的与查询点最近的那个点，但是我们在<code>KNN</code>的时候是查询<code>k</code>个最近点，<code>topK</code>问题嘛，这里我们就使用了一个最大堆的维护来保证最近的<code>k</code>个点<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 维护一个k的最大堆</span><br><span class="line"> *<span class="javadoctag"> @param</span> listNode</span><br><span class="line"> *<span class="javadoctag"> @param</span> newNode</span><br><span class="line"> *<span class="javadoctag"> @param</span> k</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">maintainMaxHeap</span><span class="params">(List&lt;Node&gt; listNode,Node newNode,<span class="keyword">int</span> k)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(listNode.size()&lt;k)</span><br><span class="line">	&#123;</span><br><span class="line">		maxHeapFixUp(listNode,newNode);<span class="comment">//不足k个堆   直接向上修复</span></span><br><span class="line">	&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(newNode.distance&lt;listNode.get(<span class="number">0</span>)</span>.distance)</span>&#123;</span><br><span class="line">		<span class="comment">//比堆顶的要小   还需要向下修复 覆盖堆顶</span></span><br><span class="line">		maxHeapFixDown(listNode,newNode);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 从上往下修复  将会覆盖第一个节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> listNode</span><br><span class="line"> *<span class="javadoctag"> @param</span> newNode</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">maxHeapFixDown</span><span class="params">(List&lt;Node&gt; listNode,Node newNode)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	listNode.set(<span class="number">0</span>, newNode);</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> j=i*<span class="number">2</span>+<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(j&lt;listNode.size())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(j+<span class="number">1</span>&lt;listNode.size() &amp;&amp; listNode.get(j).distance&lt;listNode.get(j+<span class="number">1</span>).distance)</span><br><span class="line">			j++;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(listNode.get(i).distance&gt;=listNode.get(j).distance)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		</span><br><span class="line">		Node t=listNode.get(i);</span><br><span class="line">		listNode.set(i, listNode.get(j));</span><br><span class="line">		listNode.set(j, t);</span><br><span class="line">		</span><br><span class="line">		i=j;</span><br><span class="line">		j=i*<span class="number">2</span>+<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">maxHeapFixUp</span><span class="params">(List&lt;Node&gt; listNode,Node newNode)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	listNode.add(newNode);</span><br><span class="line">	<span class="keyword">int</span> j=listNode.size()-<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> i=(j+<span class="number">1</span>)/<span class="number">2</span>-<span class="number">1</span>;<span class="comment">//i是parent节点</span></span><br><span class="line">	<span class="keyword">while</span>(i&gt;=<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">if</span>(listNode.get(i).distance&gt;=listNode.get(j).distance)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		</span><br><span class="line">		Node t=listNode.get(i);</span><br><span class="line">		listNode.set(i, listNode.get(j));</span><br><span class="line">		listNode.set(j, t);</span><br><span class="line">		</span><br><span class="line">		j=i;</span><br><span class="line">		i=(j+<span class="number">1</span>)/<span class="number">2</span>-<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>好，现在就可以按照上述的思路来进行搜索了，搜索过程中维护一个k堆<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查询最近邻</span><br><span class="line"> *<span class="javadoctag"> @param</span> root kd树</span><br><span class="line"> *<span class="javadoctag"> @param</span> q 查询点</span><br><span class="line"> *<span class="javadoctag"> @param</span> k</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Node&gt; <span class="title">searchKNN</span><span class="params">(Node root,Node q,<span class="keyword">int</span> k)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	List&lt;Node&gt; knnList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();</span><br><span class="line">	Node almostNNode=searchLeaf(root,q);<span class="comment">//近似最近点</span></span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span>(almostNNode!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">double</span> curD=q.computeDistance(almostNNode);<span class="comment">//最近近似点与查询点的距离 也就是球体的半径</span></span><br><span class="line">		almostNNode.distance=curD;</span><br><span class="line">		maintainMaxHeap(knnList,almostNNode,k);</span><br><span class="line">		<span class="keyword">if</span>(almostNNode.parent!=<span class="keyword">null</span> &amp;&amp;</span><br><span class="line">				curD&gt;Math.abs(q.getData(almostNNode.parent.dim)-almostNNode.parent.getData(almostNNode.parent.dim)))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//这样可能在另一个子区域中存在更加近似的点</span></span><br><span class="line">			Node brother=getBrother(almostNNode);</span><br><span class="line">			brother.distance=q.computeDistance(brother);</span><br><span class="line">			maintainMaxHeap(knnList,brother,k);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		almostNNode=almostNNode.parent;<span class="comment">//返回上一级</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> knnList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 获取兄弟节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> node</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Node <span class="title">getBrother</span><span class="params">(Node node)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(node==node.parent.left)</span><br><span class="line">		<span class="keyword">return</span> node.parent.right;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">return</span> node.parent.left;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查询到叶子节点</span><br><span class="line"> *<span class="javadoctag"> @param</span> root</span><br><span class="line"> *<span class="javadoctag"> @param</span> q</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Node <span class="title">searchLeaf</span><span class="params">(Node root,Node q)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	Node leaf=root,next=<span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">int</span> index=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(leaf.left!=<span class="keyword">null</span> || leaf.right!=<span class="keyword">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(q.getData(index)&lt;leaf.getData(index))</span><br><span class="line">		&#123;</span><br><span class="line">			next=leaf.left;<span class="comment">//进入左侧</span></span><br><span class="line">		&#125;<span class="function"><span class="keyword">else</span> <span class="title">if</span><span class="params">(q.getData(index)</span>&gt;leaf.<span class="title">getData</span><span class="params">(index)</span>)</span><br><span class="line">		</span>&#123;</span><br><span class="line">			next=leaf.right;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="comment">//当取到中位数时  判断左右子区域哪个更加近</span></span><br><span class="line">			<span class="keyword">if</span>(q.computeDistance(leaf.left)&lt;q.computeDistance(leaf.right))</span><br><span class="line">				next=leaf.left;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				next=leaf.right;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(next==<span class="keyword">null</span>)</span><br><span class="line">			<span class="keyword">break</span>;<span class="comment">//下一个节点是空时  结束了</span></span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">			leaf=next;</span><br><span class="line">			<span class="keyword">if</span>(++index&gt;=root.data.length)</span><br><span class="line">				index=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> leaf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意这里在判断查询点<code>q</code>与另一个子区域的边界是否相交时是需要判断半径与（<code>q</code>和父节点影响构建维数上的值之差即可）</p>
-</blockquote>
-<h2 id="栗子">栗子</h2><p>还是以上面的6个数据点进行构建<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Node&gt; nodeList=<span class="keyword">new</span> ArrayList&lt;Node&gt;();</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2</span>,<span class="number">3</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">5</span>,<span class="number">4</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">9</span>,<span class="number">6</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">4</span>,<span class="number">7</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">8</span>,<span class="number">1</span>&#125;));</span><br><span class="line">nodeList.add(<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">7</span>,<span class="number">2</span>&#125;));</span><br><span class="line"></span><br><span class="line">KDTree kdTree=<span class="keyword">new</span> KDTree();</span><br><span class="line">Node root=kdTree.buildKDTree(nodeList,<span class="number">0</span>);</span><br><span class="line">System.out.println(root);</span><br></pre></td></tr></table></figure></p>
-<p>对(2.1,3.1)进行查询<br><img src="/img/KDTree-In-KNN/search1.jpg" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(kdTree.searchKNN(root,<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2.1</span>,<span class="number">3.1</span>&#125;),<span class="number">2</span>));</span><br></pre></td></tr></table></figure></p>
-<p>可以发现最近的两个点</p>
-<pre><code>[<span class="number">5.0</span> <span class="number">4.0</span>  d:<span class="number">3.0364452901377956</span>, <span class="number">2.0</span> <span class="number">3.0</span>  d:<span class="number">0.14142135623730964</span>]
-</code></pre><p>完全符合预期</p>
-<p>再来看(2,4.5)这个查询点<br><img src="/img/KDTree-In-KNN/search2.jpg" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(kdTree.searchKNN(root,<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2</span>,<span class="number">4.5</span>&#125;),<span class="number">1</span>));</span><br><span class="line">System.out.println(kdTree.searchKNN(root,<span class="keyword">new</span> Node(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">2</span>,<span class="number">4.5</span>&#125;),<span class="number">3</span>));</span><br></pre></td></tr></table></figure></p>
-<pre><code>[<span class="number">2.0</span> <span class="number">3.0</span>  d:<span class="number">1.5</span>]
-[<span class="number">4.0</span> <span class="number">7.0</span>  d:<span class="number">3.2015621187164243</span>, <span class="number">2.0</span> <span class="number">3.0</span>  d:<span class="number">1.5</span>, <span class="number">5.0</span> <span class="number">4.0</span>  d:<span class="number">3.0413812651491097</span>]
-</code></pre><p>首先最近邻的叶子节点是(4,7) 但是其半径会与另一子区域相交，所以继续进行(2,3)进行距离计算</p>
-<blockquote>
-<p>完整的源代码<a href="http://www.oschina.net/code/snippet_174837_51436" target="_blank" rel="external">在这儿有</a>!</p>
-</blockquote>
-<h2 id="参考">参考</h2><ol>
-<li>《统计学习方法》第三章</li>
-<li><a href="http://blog.csdn.net/qll125596718/article/details/8426458" target="_blank" rel="external">http://blog.csdn.net/qll125596718/article/details/8426458</a>这篇文章举例比较详细</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
-</code></pre><p><a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#KNN算法">点我查看详情</a></p>
-<blockquote>
-<p>但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对<code>KNN</code>算法实现一个简单的<code>KD</code>树</p>
-</blockquote>
-<h2 id="KD树">KD树</h2><pre><code>KD树是一个二叉树，表示对<span class="keyword">K</span>维空间的一个划分，可以进行快速检索（那KNN计算的时候不需要对全样本进行距离的计算了）
-</code></pre><p>比如针对6个二维数据点{（2,3），（5,4），（9,6），（4,7），（8,1），（7,2）}，可以形成以下树形结构以及空间划分<br><img src="/img/KDTree-In-KNN/example.png" alt=""></p>]]>
-    
-    </summary>
-    
-      <category term="Data Struct" scheme="http://kubicode.me/tags/Data-Struct/"/>
-    
-      <category term="Java" scheme="http://kubicode.me/tags/Java/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
   </entry>
   

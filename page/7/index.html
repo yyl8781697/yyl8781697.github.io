@@ -95,6 +95,72 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/17/Algorithm/DeleteNode-In-O1/" title="在O(1)时间内删除一个单链表上指定的节点" itemprop="url">在O(1)时间内删除一个单链表上指定的节点</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-16T23:19:56.000Z" itemprop="datePublished"> 发表于 2015-07-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>在<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span></span>时间内删除一个单链表上指定的节点
+</code></pre><h2 id="解题">解题</h2><p>这题主要是需要O(1)的复杂度，我们之前一般删除节点的方法都是找到要删除节点p，然后p.parent.next=p.next就可以了，但是那个复杂度是O(n)</p>
+<p>不过这里有一种我称为狸猫换太子的方法来解决这个问题<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/17/Algorithm/DeleteNode-In-O1/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/17/Algorithm/DeleteNode-In-O1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/17/Algorithm/DeleteNode-In-O1/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/16/Algorithm/Print-Tail-Head/" title="链表的逆序输出" itemprop="url">链表的逆序输出</a>
   </h1>
   <p class="article-author">By
@@ -753,81 +819,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/28/Effective Java/Serialization/" title="《Effective Java》第十一章：序列化" itemprop="url">《Effective Java》第十一章：序列化</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-27T16:08:34.000Z" itemprop="datePublished"> 发表于 2015-06-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。</p>
-<h2 id="第74条：谨慎地实现Serializable接口">第74条：谨慎地实现Serializable接口</h2><p>只要添加<code>implements Serializable</code>，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：</p>
-<ul>
-<li>一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。<ol>
-<li>一旦一个类实现<code>Serializable</code>接口，它的字节流编码就变成了导出API的一部分，一旦这个类被广泛使用，往往必须永远支持这种序列化形式。</li>
-<li>如果接受了默认的序列化形式，并且以后又要改变这个类的内部实现，结果可能会导致序列化形式不兼容</li>
-<li>序列化会使类的演变受到限制，这种限制与序列化版本UID有关，每个可序列化的类都有一个唯一标识符<code>serialVersionUID</code>，如果没有指定，则系统会根据类的具体实现来进行自动生成，所以你修改了类，并且没有显示的指定UID，那么兼容性就会被破坏。</li>
-</ol>
-</li>
-<li>它增加了Bug和安全漏洞的可能性<br>  序列化机制是一种语言之外的对象创建机制，所以反序列化是一个“隐藏的构造器”，具体与其他构造器相同的特点，所以反序列化过程也必须保证有构造器建立起来的约束关系，并且不允许攻击者在访问构造器过程中的内部对象，所以默认的反序列化机制很容易是对象约束遭到破坏，以及遭受非法的访问。</li>
-<li>随着类发行新的版本，相关测试的负担也增加了<br>  新的版本发布之后，要检查是否可以“在新版本中序列化一个实例，然后在旧版本中依然可以反序列化”，这个测试除了二进制兼容性以外，还要测试语义兼容性。所有测试的难度都是相当大啊！</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/28/Effective Java/Serialization/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/28/Effective Java/Serialization/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/28/Effective Java/Serialization/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
@@ -902,7 +893,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
 		  
 		
 		  
@@ -947,7 +938,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
 			
 		
 			
@@ -1041,6 +1032,18 @@
           <li>
             
             	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
             
           </li>
         

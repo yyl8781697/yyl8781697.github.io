@@ -95,6 +95,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/28/Effective Java/Serialization/" title="《Effective Java》第十一章：序列化" itemprop="url">《Effective Java》第十一章：序列化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-27T16:08:34.000Z" itemprop="datePublished"> 发表于 2015-06-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>“将一个对象编码成一个字节流”，这个过程称为对象序列化，相反的过程称为反序列化。</p>
+<h2 id="第74条：谨慎地实现Serializable接口">第74条：谨慎地实现Serializable接口</h2><p>只要添加<code>implements Serializable</code>，就可以使一个类可被序列化，写法上虽然看上去很简单，但是如果你认为真的这么简单的话就会付出很大的代价：</p>
+<ul>
+<li>一旦一个可序列化类被发布，就大大降低了“改变这个类的实现”的灵活性。<ol>
+<li>一旦一个类实现<code>Serializable</code>接口，它的字节流编码就变成了导出API的一部分，一旦这个类被广泛使用，往往必须永远支持这种序列化形式。</li>
+<li>如果接受了默认的序列化形式，并且以后又要改变这个类的内部实现，结果可能会导致序列化形式不兼容</li>
+<li>序列化会使类的演变受到限制，这种限制与序列化版本UID有关，每个可序列化的类都有一个唯一标识符<code>serialVersionUID</code>，如果没有指定，则系统会根据类的具体实现来进行自动生成，所以你修改了类，并且没有显示的指定UID，那么兼容性就会被破坏。</li>
+</ol>
+</li>
+<li>它增加了Bug和安全漏洞的可能性<br>  序列化机制是一种语言之外的对象创建机制，所以反序列化是一个“隐藏的构造器”，具体与其他构造器相同的特点，所以反序列化过程也必须保证有构造器建立起来的约束关系，并且不允许攻击者在访问构造器过程中的内部对象，所以默认的反序列化机制很容易是对象约束遭到破坏，以及遭受非法的访问。</li>
+<li>随着类发行新的版本，相关测试的负担也增加了<br>  新的版本发布之后，要检查是否可以“在新版本中序列化一个实例，然后在旧版本中依然可以反序列化”，这个测试除了二进制兼容性以外，还要测试语义兼容性。所有测试的难度都是相当大啊！</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/28/Effective Java/Serialization/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/28/Effective Java/Serialization/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/28/Effective Java/Serialization/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/27/Hadoop/TeraSort-in-Hadoop/" title="TeraSort在Hadoop中的非常非常非常简单的实现" itemprop="url">TeraSort在Hadoop中的非常非常非常简单的实现</a>
   </h1>
   <p class="article-author">By
@@ -750,76 +825,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/09/Effective Java/Method/" title="《Effective Java》第七章：方法" itemprop="url">《Effective Java》第七章：方法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-09T15:44:24.000Z" itemprop="datePublished"> 发表于 2015-06-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>本章主要讨论方法设计的几个方面：</p>
-<ul>
-<li>如何处理参数和返回值</li>
-<li>如何设计方法签名</li>
-<li>如何为方法编写文档</li>
-</ul>
-<h2 id="第38条：检查参数的有效性">第38条：检查参数的有效性</h2><p>这条就是教我们对于公有方法，最好在方法体上的开头处加上参数检查，并且在文档中清楚地指出这些限制，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 求模</span><br><span class="line"> *<span class="javadoctag"> @param</span> m</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> *<span class="javadoctag"> @throws</span> ArithmeticException 如何m小于等于0时抛出异常</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigInteger <span class="title">mod</span><span class="params">(BigInteger m)</span> <span class="keyword">throws</span> ArithmeticException</span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(m.signum()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArithmeticException(<span class="string">"Moduls &lt;= 0:"</span>+m);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//do something</span></span><br><span class="line">	<span class="keyword">return</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/09/Effective Java/Method/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/09/Effective Java/Method/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/09/Effective Java/Method/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
@@ -894,7 +899,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>18</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
 		  
 		
 		  
@@ -939,7 +944,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
 			
 		
 			
@@ -1033,6 +1038,18 @@
           <li>
             
             	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
             
           </li>
         
