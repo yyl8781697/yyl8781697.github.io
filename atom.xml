@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-04-21T16:17:29.000Z</updated>
+  <updated>2016-04-21T16:21:02.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/"/>
     <id>http://kubicode.me/2016/04/18/Machine Learning/AdaBoost-Study-Summary/</id>
     <published>2016-04-18T12:30:55.000Z</published>
-    <updated>2016-04-21T16:17:29.000Z</updated>
+    <updated>2016-04-21T16:21:02.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
 </blockquote>
@@ -183,7 +183,7 @@
 <ol>
 <li>相邻两个分类器训练有依赖关系，所以在并行实现下还是需要精心设计。</li>
 </ol>
-<h2 id="参考:">参考:</h2><p>[1] 《统计学习方法》.李航.第八章<br>[2] 《Pattern Recognition And Machine Learning》.Christopher Bishop.chapter 14</p>
+<h2 id="参考:">参考:</h2><p>[1] 《统计学习方法》.李航.第八章<br>[2] 《Pattern Recognition And Machine Learning》.Christopher Bishop.chapter 14<br>[3]  <a href="https://en.wikipedia.org/wiki/AdaBoost" target="_blank" rel="external">https://en.wikipedia.org/wiki/AdaBoost</a></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<blockquote>
