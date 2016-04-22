@@ -4,28 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>最短摘要生成 | Kubi Code&#39;Blog</title>
+    <title>解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误 | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="题目最短摘要生成
-给定一个字符串，以及一系列查询词，在这个字符串中找到一个子串，该子串包含全部的查询词，求这个最短子串
-解析两个指针，begin和end首先使用end往右边移动一直移动到全部包含查询字符集q的位置然后将begin也向右边移动，直达再移动一次begin-end区间里面的数据将不再包含q此时记录begin和end以及其最小的间距然后begin右移一位，end继续右边移动直至全部包含，周">
+    <meta name="description" content="今天在尝试使用scikit-learn的AdaBoost模型时一直报错，
+Traceback (most recent call last):
+File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+File &quot;/Library/Python/2.7/site-packages/sklearn/__init__.py&quot;, line 57, in &amp;lt;mo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="最短摘要生成">
-<meta property="og:url" content="http://kubicode.me/2015/08/03/Algorithm/Short-Abstract/index.html">
+<meta property="og:title" content="解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误">
+<meta property="og:url" content="http://kubicode.me/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="题目最短摘要生成
-给定一个字符串，以及一系列查询词，在这个字符串中找到一个子串，该子串包含全部的查询词，求这个最短子串
-解析两个指针，begin和end首先使用end往右边移动一直移动到全部包含查询字符集q的位置然后将begin也向右边移动，直达再移动一次begin-end区间里面的数据将不再包含q此时记录begin和end以及其最小的间距然后begin右移一位，end继续右边移动直至全部包含，周">
+<meta property="og:description" content="今天在尝试使用scikit-learn的AdaBoost模型时一直报错，
+Traceback (most recent call last):
+File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+File &quot;/Library/Python/2.7/site-packages/sklearn/__init__.py&quot;, line 57, in &amp;lt;mo">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="最短摘要生成">
-<meta name="twitter:description" content="题目最短摘要生成
-给定一个字符串，以及一系列查询词，在这个字符串中找到一个子串，该子串包含全部的查询词，求这个最短子串
-解析两个指针，begin和end首先使用end往右边移动一直移动到全部包含查询字符集q的位置然后将begin也向右边移动，直达再移动一次begin-end区间里面的数据将不再包含q此时记录begin和end以及其最小的间距然后begin右移一位，end继续右边移动直至全部包含，周">
+<meta name="twitter:title" content="解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误">
+<meta name="twitter:description" content="今天在尝试使用scikit-learn的AdaBoost模型时一直报错，
+Traceback (most recent call last):
+File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+File &quot;/Library/Python/2.7/site-packages/sklearn/__init__.py&quot;, line 57, in &amp;lt;mo">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -99,14 +102,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/03/Algorithm/Short-Abstract/" title="最短摘要生成" itemprop="url">最短摘要生成</a>
+      <a href="/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/" title="解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误" itemprop="url">解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2015-08-03T15:21:15.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    <time datetime="2016-04-22T01:33:55.000Z" itemprop="datePublished"> 发表于 2016-04-22</time>
     
   </p>
 </header>
@@ -115,18 +118,35 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">2.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="题目">题目</h2><pre><code>最短摘要生成
-给定一个字符串，以及一系列查询词，在这个字符串中找到一个子串，该子串包含全部的查询词，求这个最短子串
-</code></pre><h2 id="解析">解析</h2><p>两个指针，begin和end<br>首先使用end往右边移动一直移动到全部包含查询字符集q的位置<br>然后将begin也向右边移动，直达再移动一次begin-end区间里面的数据将不再包含q<br>此时记录begin和end以及其最小的间距<br>然后begin右移一位，end继续右边移动直至全部包含，周而复始<br><a id="more"></a></p>
-<h2 id="代码">代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> minBegin=-<span class="number">1</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> minEnd=-<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> curBegin=-<span class="number">1</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> curEnd=-<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 最短摘要生成的匹配</span><br><span class="line"> * 两个指针，begin和end</span><br><span class="line"> * 首先使用end往右边移动一直移动到全部包含查询字符集q的位置</span><br><span class="line"> * 然后将begin也向右边移动，直达再移动一次begin-end区间里面的数据将不再包含q</span><br><span class="line"> * 此时记录begin和end以及其最小的间距</span><br><span class="line"> * 然后begin右移一位，end继续右边移动直至全部包含，周而复始</span><br><span class="line"> * 代码中查询是否全部包含使用了位操作，这样更加快^_^</span><br><span class="line"> *<span class="javadoctag"> @param</span> data</span><br><span class="line"> *<span class="javadoctag"> @param</span> q</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">match</span><span class="params">(String data,<span class="keyword">char</span>[] q)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> matchs=<span class="number">0</span>;<span class="comment">//存储匹配的情况</span></span><br><span class="line">	<span class="keyword">int</span> matchIndex=-<span class="number">1</span>;</span><br><span class="line">	curBegin=-<span class="number">1</span>;</span><br><span class="line">	curEnd=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(curEnd&lt;data.length())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>((matchIndex=indexOf(q,data.charAt(curEnd)))&gt;=<span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span>(curBegin==-<span class="number">1</span>)</span><br><span class="line">				curBegin=curEnd;<span class="comment">//初始化第一次开始匹配项</span></span><br><span class="line">			</span><br><span class="line">			matchs|=<span class="number">1</span>&lt;&lt;matchIndex;<span class="comment">//存储到匹配库</span></span><br><span class="line">			<span class="keyword">if</span>(matchs==(<span class="number">1</span>&lt;&lt;q.length)-<span class="number">1</span>)<span class="comment">//全部匹配</span></span><br><span class="line">			&#123;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">if</span>(minBegin==-<span class="number">1</span> || (minEnd-minBegin)&gt;(curEnd-curBegin))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">//更新最短摘要</span></span><br><span class="line">					minBegin=curBegin;</span><br><span class="line">					minEnd=curEnd;</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				matchs^=indexOf(q,data.charAt(curBegin));<span class="comment">//去掉首位匹配</span></span><br><span class="line">				<span class="keyword">while</span>(data.charAt(++curBegin)&lt;<span class="number">0</span>);<span class="comment">//将首位匹配移至第二位</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		curEnd++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(minBegin!=-<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">char</span>[] rc=<span class="keyword">new</span> <span class="keyword">char</span>[minEnd-minBegin+<span class="number">1</span>];</span><br><span class="line">		<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span>(minBegin&lt;=minEnd)</span><br><span class="line">		&#123;</span><br><span class="line">			rc[i++]=data.charAt(minBegin++);<span class="comment">//取值</span></span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		minBegin=-<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">return</span> String.valueOf(rc);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 查找当前字符在数组中的位置</span><br><span class="line"> *<span class="javadoctag"> @param</span> q</span><br><span class="line"> *<span class="javadoctag"> @param</span> d</span><br><span class="line"> *<span class="javadoctag"> @return</span> 没有找到则返回-1</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(<span class="keyword">char</span>[] q,<span class="keyword">char</span> d)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> index=-<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;q.length;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(q[i]==d)</span><br><span class="line">		&#123;</span><br><span class="line">			index=i;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试的代码为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span>[] q=&#123;<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'s'</span>,<span class="string">'d'</span>&#125;;</span><br><span class="line">	String data=<span class="string">"hello are you bottom of ado the is bot doke astringadb"</span>;</span><br><span class="line">	<span class="comment">//String data="abd";</span></span><br><span class="line">	</span><br><span class="line">	System.out.println(<span class="keyword">new</span> ShortAbstract().match(data, q));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>输出的结果为</p>
-<pre><code>are you bottom <span class="keyword">of</span> ado <span class="keyword">the</span> <span class="keyword">is</span>
-</code></pre><hr>
+		<p>今天在尝试使用scikit-learn的<code>AdaBoost</code>模型时一直报错，</p>
+<pre><code>Traceback (most recent call last):
+File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;
+File <span class="string">"/Library/Python/2.7/site-packages/sklearn/__init__.py"</span>, line <span class="number">57</span>, <span class="keyword">in</span> &lt;module&gt;
+from <span class="class">.base</span> import clone
+File <span class="string">"/Library/Python/2.7/site-packages/sklearn/base.py"</span>, line <span class="number">11</span>, <span class="keyword">in</span> &lt;module&gt;
+from <span class="class">.utils</span><span class="class">.fixes</span> import signature
+File <span class="string">"/Library/Python/2.7/site-packages/sklearn/utils/__init__.py"</span>, line <span class="number">10</span>, <span class="keyword">in</span> &lt;module&gt;
+from <span class="class">.murmurhash</span> import murmurhash3_32
+File <span class="string">"numpy.pxd"</span>, line <span class="number">155</span>, <span class="keyword">in</span> init sklearn<span class="class">.utils</span><span class="class">.murmurhash</span> (sklearn/utils/murmurhash<span class="class">.c</span>:<span class="number">5029</span>)
+ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recompiling
+</code></pre><p>以为是<code>numpy</code>包的问题:卸载重装之后还是照样有问题-_-<br><a id="more"></a><br>网上给的建议大都是直接卸载再全部重装，将<code>numpy</code>、<code>scipy</code>和<code>scikit-learn</code>全部卸载了，然后</p>
+<pre><code>pip <span class="keyword">install</span> -U numpy scipy scikit-learn
+</code></pre><p>装起来。结果一样有问题-_-</p>
+<p>继续查资料时终于发现有用的方法了:<br><a href="http://scikit-learn-general.narkive.com/kMA6mRCk/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling" target="_blank" rel="external">http://scikit-learn-general.narkive.com/kMA6mRCk/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling</a></p>
+<p>就是不用使用<code>pip install scikit-learn</code>安装，卸载之后直接使用git上<code>https://github.com/scikit-learn/scikit-learn</code>的自己安装</p>
+<pre><code>git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/scikit-learn/scikit-learn
+<span class="keyword">make</span>
+sudo <span class="keyword">python</span> setup.<span class="keyword">py</span> install
+</code></pre><p>ps：这个时候直接安装可能会出</p>
+<pre><code><span class="attribute">RuntimeError</span>: <span class="string">Running cythonize failed!</span>
+</code></pre><p>Error提示,这时候安装一下<code>cpython</code>即可</p>
+<pre><code>pip <span class="keyword">install</span> cython
+</code></pre><p>最后全部安装完之后就可以正常使用了^_^</p>
+<hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
 </blockquote>
@@ -137,13 +157,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  <span></span> <a href="/tags/Python/">Python</a>
   </div>
 
 </div>
@@ -152,7 +172,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://kubicode.me/2015/08/03/Algorithm/Short-Abstract/" data-title="最短摘要生成 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kubicode.me/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/" data-title="解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -165,19 +185,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/08/04/Algorithm/Stock/" title="股票买卖，获得最大的收益">
-  <strong>上一篇：</strong><br/>
-  <span>
-  股票买卖，获得最大的收益</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/"  title="找一个数组中绝对值和最小的三个元素">
+<a href="/2016/04/18/Machine Learning/AdaBoost-Study-Summary/"  title="AdaBoost学习总结">
  <strong>下一篇：</strong><br/> 
- <span>找一个数组中绝对值和最小的三个元素
+ <span>AdaBoost学习总结
 </span>
 </a>
 </div>
@@ -186,7 +198,7 @@
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2015/08/03/Algorithm/Short-Abstract/" data-title="最短摘要生成" data-url="http://kubicode.me/2015/08/03/Algorithm/Short-Abstract/"></div>
+	<div class="ds-thread" data-thread-key="2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/" data-title="解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误" data-url="http://kubicode.me/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/"></div>
 </section>
 
 
@@ -196,7 +208,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解析"><span class="toc-number">2.</span> <span class="toc-text">解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-number">3.</span> <span class="toc-text">代码</span></a></li></ol>
+ 
  
   </div>
 

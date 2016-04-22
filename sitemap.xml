@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/</loc>
+    <lastmod>2016-04-22T01:51:20.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/</loc>
-    <lastmod>2016-04-21T16:21:02.000Z</lastmod>
+    <lastmod>2016-04-22T01:49:25.000Z</lastmod>
   </url>
   
   <url>

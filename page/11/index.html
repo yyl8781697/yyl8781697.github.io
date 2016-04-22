@@ -95,6 +95,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/22/Effective Java/Create-Destory-Object/" title="《Effective Java》第二章：创建和销毁对象" itemprop="url">《Effective Java》第二章：创建和销毁对象</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-22T12:33:05.000Z" itemprop="datePublished"> 发表于 2015-04-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>本章的主题是创建和销毁对象：何时以及如何创建对象，何时以及如何避免创建对象，如何确保它们能够适时得销毁，以及如何管理对象和销毁之前必须进行的各种清理动作。</p>
+<h2 id="第1条：考虑用静态工厂方法代替构造器">第1条：考虑用静态工厂方法代替构造器</h2><blockquote>
+<p>这条感觉就是推荐我们尽量使用静态方法来生成实例对象。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Boolean <span class="title">valueOf</span><span class="params">(<span class="keyword">boolean</span> b)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> b?Boolean.TRUE:Boolean.FALSE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>推荐的理由如下：</p>
+<ol>
+<li>静态构造方法有自己的名称。（这理由是不是有点。。，个人感觉绝大部分程序猿在创建对象时都是首先尝试<code>new Construct()</code>）</li>
+<li>不必在每次调用它们时都创建一个新的对象。(单例中比较常用吧)</li>
+<li>它们可以返回原返回类型的任何子类型的对象。（<strong>这个特征的确是比较有优势一点</strong>）</li>
+<li>在创建参数化类型实例的时候，它们使代码变得更加简洁。</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/22/Effective Java/Create-Destory-Object/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/22/Effective Java/Create-Destory-Object/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/22/Effective Java/Create-Destory-Object/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/21/Java Base/Enum-Override/" title="关于Java枚举的重写" itemprop="url">关于Java枚举的重写</a>
   </h1>
   <p class="article-author">By
@@ -717,74 +792,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/30/Java Source/Java-HashTable/" title="Java 源码学习之java.util.Hashtable" itemprop="url">Java 源码学习之java.util.Hashtable</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-30T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-03-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>Hashtable</code>是<code>Java</code>编程中较为常用的容器类之一，在面试时常常被与<code>HashMap</code>作比较！</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;为什么要常与<code>HashMap</code>作比较呢?因为他们的源码是极其相似啊，网上也常常有人说<code>HashMap</code>是基于<code>Hashtable</code>实现的吧，因为<code>Hashtable</code>在<code>Java1.0</code>中就有了，但是<code>HashMap</code>在<code>Java1.2</code>才出现。<br>&#160; &#160; &#160; &#160;本文讲解<code>Hashtable</code>时不再累赘，实现的原理大致都和<a href="http://kubicode.me/2015/03/27/Java-HashMap/">HashMap</a>一样，这里主要讲<code>Hashtable</code>与<code>HashMap</code>几个不同点。</p>
-<h2 id="不支持null">不支持null</h2><p>&#160; &#160; &#160; &#160;我们知道<code>HashMap</code>是支持<code>null</code>的键和值的，每次遇到<code>null</code>时直接用0来作桶号，来看下<code>Hashtable</code>对<code>null</code>的处理</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/30/Java Source/Java-HashTable/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/30/Java Source/Java-HashTable/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/30/Java Source/Java-HashTable/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
@@ -871,7 +878,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Python/" title="Python">Python<sup>2</sup></a></li>
+			<li><a href="/categories/Python/" title="Python">Python<sup>3</sup></a></li>
 		  
 		
 		  
@@ -964,7 +971,7 @@
 			
 		
 			
-				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
 			
 		
 			
