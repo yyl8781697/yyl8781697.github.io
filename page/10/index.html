@@ -95,6 +95,83 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/30/Effective Java/Enum-And-Annotation/" title="《Effective Java》第六章：枚举和注解" itemprop="url">《Effective Java》第六章：枚举和注解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-30T15:57:33.000Z" itemprop="datePublished"> 发表于 2015-05-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="第30条：用枚举代替int常量">第30条：用枚举代替int常量</h2><p>在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式就是声明一组具名的<code>int</code>常量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_FUJI			=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_PIPPIN		=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_GRANNY_SMITH	=<span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
+<p>但是它又诸多的缺点：</p>
+<ul>
+<li>在类型安全性和使用方便性方面没有任何帮助。</li>
+<li>如果关联的<code>int</code>放生了变化，客户端必须得重新编译。</li>
+<li>打印调试的时候只能打印数字</li>
+</ul>
+<p>上述<code>int</code>常量如何使用枚举类实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> APPLE&#123;FUJI,PIPPIN,GRANNY_SMITH&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>除了编码简单之外，枚举的特点还有：</p>
+<ul>
+<li>枚举是类型安全的（所有可以作为单例的泛型化来使用）。</li>
+<li>可以增加或者重新排列枚举类型中的常量，而无需重新编译它的客户端代码。</li>
+<li>可以通过<code>toString</code>方法来打印可视的字符串。</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/30/Effective Java/Enum-And-Annotation/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/30/Effective Java/Enum-And-Annotation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/Effective Java/Enum-And-Annotation/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/24/Scala/Study-And-User-JSON4S/" title="学习和使用Scala的Json解析类库-JSON4S" itemprop="url">学习和使用Scala的Json解析类库-JSON4S</a>
   </h1>
   <p class="article-author">By
@@ -781,75 +858,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/26/Scala/Scala-In-My-Eyes/" title="我眼中的Scala-简洁不简单" itemprop="url">我眼中的Scala-简洁不简单</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-26T12:53:19.000Z" itemprop="datePublished"> 发表于 2015-04-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>&#160; &#160; &#160; &#160;由于实验需要在半年前开始接触<code>Scala</code>，之前也学习/使用过<a href="http://www.tiobe.com/content/paperinfo/tpci/tpci_definition.htm">TIOBE</a>榜上Top20中一半左右的编程语言，感觉还是<code>Scala</code>给我印象最深，最近没怎么做相关的开发感觉都开始慢慢淡忘了，上周在技术分享时我对<code>Scala</code>作了一些总结，顺便在这里写下。</p>
-<blockquote>
-<p><code>Scala</code>注意，本文主要是描述我所了解的<code>Scala</code>相关的基础语法，和<code>Java</code>相同得在这里就不再累赘。</p>
-</blockquote>
-<h2 id="我眼中的Scala">我眼中的Scala</h2><pre><code><span class="keyword">Scala</span>是一种基于JVM的编程语言，集成了面向对象和函数式编程的特性，既能处理脚本化得临时任务，又能处理高并发场景下分布式大数据应用。
-</code></pre><p>&#160; &#160; &#160; &#160;<code>Java</code>就是因为有<code>JVM</code>虚拟机才成就了现在的辉煌，<code>Scala</code>同样是运行在<code>JVM</code>，大致可以看做Java的升级版，由于现在大数据大势所趋，各种大数据框架的出现导致了<code>Scala</code>强势崛起！<br>&#160; &#160; &#160; &#160;编程初学者最先接触的应该就是”Hello,World”，而WordCount可以看做大数据编程的入门必学技能，所以现在我们在”Hello,World”上实现CharCount：<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Scala Application</span></span><br><span class="line"><span class="function"><span class="keyword">val</span> <span class="title">str=</span>"<span class="title">Hello</span>,<span class="title">wrold</span>"</span><br><span class="line"></span><span class="function"><span class="keyword">val</span> <span class="title">data=str</span></span><br><span class="line"></span>	.split(<span class="type">Array</span>(',',' '))</span><br><span class="line">	.flatMap(<span class="keyword">for</span>(c&lt;-_) <span class="keyword">yield</span> (c,<span class="number">1</span>))  <span class="comment">//好Api</span></span><br><span class="line">	.groupBy(_._1)</span><br><span class="line">	.mapValues(_.size)</span><br><span class="line">		</span><br><span class="line">println(data)</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/26/Scala/Scala-In-My-Eyes/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Scala/">Scala</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Scala/">Scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/26/Scala/Scala-In-My-Eyes/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/26/Scala/Scala-In-My-Eyes/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
@@ -924,7 +932,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>20</sup></a></li>
 		  
 		
 		  
@@ -969,7 +977,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
 			
 		
 			

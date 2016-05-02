@@ -1,0 +1,754 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>从Gradient Boosting 到GBT | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="本文大部分参考(译)自wiki[1]如果说Gradient Boosting是一种机器学习算法框架的话，我想GBT(Gradient Boosting Tree)看做它的实现更为合适
+
+Gradient Boosting原理
+与其他Boosting方法一样，Gradient Boosting通过迭代将弱分类器合并成一个强分类器的方法。
+
+对于标准的$(x_i,y_i)$训练集，Gradient B">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Gradient Boosting 到GBT">
+<meta property="og:url" content="http://kubicode.me/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="本文大部分参考(译)自wiki[1]如果说Gradient Boosting是一种机器学习算法框架的话，我想GBT(Gradient Boosting Tree)看做它的实现更为合适
+
+Gradient Boosting原理
+与其他Boosting方法一样，Gradient Boosting通过迭代将弱分类器合并成一个强分类器的方法。
+
+对于标准的$(x_i,y_i)$训练集，Gradient B">
+<meta property="og:image" content="/img/From-Gradient-Boosting-to-GBT/loss_functions.png">
+<meta property="og:image" content="/img/From-Gradient-Boosting-to-GBT/cart.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从Gradient Boosting 到GBT">
+<meta name="twitter:description" content="本文大部分参考(译)自wiki[1]如果说Gradient Boosting是一种机器学习算法框架的话，我想GBT(Gradient Boosting Tree)看做它的实现更为合适
+
+Gradient Boosting原理
+与其他Boosting方法一样，Gradient Boosting通过迭代将弱分类器合并成一个强分类器的方法。
+
+对于标准的$(x_i,y_i)$训练集，Gradient B">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/" title="从Gradient Boosting 到GBT" itemprop="url">从Gradient Boosting 到GBT</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-24T15:51:08.000Z" itemprop="datePublished"> 发表于 2016-04-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_Boosting原理"><span class="toc-number">1.</span> <span class="toc-text">Gradient Boosting原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_Boosting算法"><span class="toc-number">2.</span> <span class="toc-text">Gradient Boosting算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_tree_boosting"><span class="toc-number">3.</span> <span class="toc-text">Gradient tree boosting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则化"><span class="toc-number">4.</span> <span class="toc-text">正则化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#调整树的个数"><span class="toc-number">4.1.</span> <span class="toc-text">调整树的个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shrinkage"><span class="toc-number">4.2.</span> <span class="toc-text">Shrinkage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stochastic_gradient_boosting"><span class="toc-number">4.3.</span> <span class="toc-text">Stochastic gradient boosting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#叶子节点的数量"><span class="toc-number">4.4.</span> <span class="toc-text">叶子节点的数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用惩罚项"><span class="toc-number">4.5.</span> <span class="toc-text">使用惩罚项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>本文大部分参考(译)自wiki[1]<br>如果说<code>Gradient Boosting</code>是一种机器学习算法框架的话，我想<code>GBT(Gradient Boosting Tree)</code>看做它的实现更为合适</p>
+</blockquote>
+<h2 id="Gradient_Boosting原理">Gradient Boosting原理</h2><blockquote>
+<p>与其他<code>Boosting</code>方法一样，<code>Gradient Boosting</code>通过迭代将弱分类器合并成一个强分类器的方法。</p>
+</blockquote>
+<p>对于标准的$(x_i,y_i)$训练集，<code>Gradient Boosting</code>在迭代到第$m$次时，可能会得到一个分类能力不是很强的$f_m$模型，但是他下次迭代并不改变$f_m$，而是生成一个这样的新模型:$$f_{m+1} = f_m+G_{m+1}$$使得$f_{m+1}$较$f_m$而言拥有更为强大的分类能力，那么问题来了,这个$G_{m+1}$该如何训练呢?<br><a id="more"></a></p>
+<p>现在假如训练完$G_{m+1}$可以得到完美的$f_{m+1}$，那么也就是有:$$f_{m+1} = f_m+G_{m+1}=y$$<br>这个式子可以写成$$G_{m+1}=y-f_m$$ 其中$y-f_m$表示上一次迭代得到分类器预测结果与真实结果的差值，我们一般称之为的<code>残差</code>(residual)，因此也可以理解为<code>Gradient Boosting</code>在每一轮训练新的分类器将会拟合<code>残差</code>进行最优化</p>
+<h2 id="Gradient_Boosting算法">Gradient Boosting算法</h2><p>假设现有训练集$\left\{ (x_1,y_1),(x_2,y_2)…(x_n,y_n)  \right\}$，其中$x$是特征向量，$y$是相应的训练目标，在给定相应的损失函数$L(y,f(x))$,我们的目标是找到一个近似的函数$f(x)$使得与真实函数$f^*(x)$的损失最小期望值最接近:$$f^* = \underset{f}{argmin} E_{x,y} \left[ L(y,f(x)) \right]$$</p>
+<p><code>Gradient Boosting</code>方法假设$y$是一个实值，而$f(x)$近似目标函数是一个弱分类器$G_m(x)$加权求和的形式$$f(x)=\sum_{m=1}^M \gamma_mG_m(x)+const$$ 根据经验风险最小化的原则，近似函数$f(x)$将会尝试对训练集上的平均损失函数进行最小化，它从一个常量函数进行起步，并且通过贪心的方式进行逐步优化<br>$$<br>f_0(x) = \underset{\gamma}{argmin} \sum_{i=1}^n L(y_i,\gamma) \\<br>f_m(x) = f_{m-1}(x) + \underset{G \in H}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+G_m(x_i) \right)<br>$$<br>然而，对于$L$为任意的损失函数时,在选择每一步最佳的$G_m(x_i)$时将会很难优化。<br>这里使用最速下降法(<a href="https://en.wikipedia.org/wiki/Gradient_descent" target="_blank" rel="external">steepest descent</a>)来解决这个问题<br>,在使用这种方法时，对于损失函数$L(y,G)$不要将其看做一个函数，而是将其看做通过函数得到的值的向量$G(x_1),G(x_2)…G(x_n)$,那么这样的话我们就可以将模型的式子写成如下的等式:<br>$$<br>f_m(x) = f_{m-1}(x) - \gamma_m \sum_{i=1}^n \triangledown_G L \left( y_i,f_{m-1}(x_i) \right) \\<br>\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left ( y_i,f_{m-1}(x_i)-\gamma \frac{\partial L(y_i,f_{m-1}(x_i))}{\partial G(x_i)}  \right )<br>$$<br>上面第一个式子表示根据梯度的负方向进行更新,第二个式子表明了$\gamma$使用线性搜索进行计算。</p>
+<p>下面就是具体的<code>gradient boosting</code>步骤:<br><strong>Input</strong>:</p>
+<ul>
+<li>训练数据集$T=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$</li>
+<li>可导的损失函数:$L(y,f(x))$</li>
+<li>迭代的次数:$M$</li>
+</ul>
+<p><strong>Output</strong>:</p>
+<ul>
+<li>最终模型$f(x)$</li>
+</ul>
+<p><strong>Procedure</strong>:</p>
+<ol>
+<li>使用一个常量进行模型的初始化$$f_0(x) = \underset{\gamma}{argmin} \sum_{i=1}^n L(y_i,\gamma) $$</li>
+<li>循环$m \in \{1….M\}$<ol>
+<li>计算残差$$r_{im}=-\left[ \frac{\partial L(y_i,f(x_i))}{\partial f(x_i)}  \right]_{f(x_i)=f_{m-1}(x_i)} \quad i=1…n$$</li>
+<li>使用训练集$\{ (x_i,r_{im}) \}$对弱分类器$G_m(x)$进行拟合</li>
+<li>通过线性搜索进行乘子$\gamma_m$的计算$$\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+\gamma_m G_m(x_i) \right)$$</li>
+<li>进行模型的更新:$$f_m(x) = f_{m-1}(x)+\gamma_m G_m(x)$$</li>
+</ol>
+</li>
+<li>输出最终的模型$f_M(x)$</li>
+</ol>
+<p>下面是来自[2]中的对于不同损失函数下不同残差的计算<br><img src="/img/From-Gradient-Boosting-to-GBT/loss_functions.png" width="500px"><br>可以发现当损失函数为最小平方差时残差就是真实值与预测值的差值</p>
+<h2 id="Gradient_tree_boosting">Gradient tree boosting</h2><p>提升树(Gradient tree boosting)故名思议就是使用决策树(一般使用<code>CART</code>树)来作为弱分类器.<br>提升树在第$m$步迭代时将会使用决策树$G_m(x)$来集合残差，现在假设这棵树有$J$个叶子节点，则决策树将会将空间划分为$J$个不相交的区域$R_{1m},R_{2m}…R_{3m}$，以及每个区域都是预测一个常量值，则树模型$G_m(x)$对于特征$x$的输入将可以写成$$G_m(x)=\sum_{j=1}^J b_{jm}I(x \in R_{jm})$$，其中$b_{jm}$表示每个区域的预测值，上面的介绍可以用下图来表示:</p>
+<center><img src="/img/From-Gradient-Boosting-to-GBT/cart.png" width="400px"></center>
+
+<p>在实际使用时，$b_{jm}$也会与一个乘子$\gamma_m$相乘,最终模型的训练与上面一小节的介绍一致:<br>$$<br>f_m(x)=f_{m-1}(x)+\gamma_mG_m(x) \\<br>\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+\gamma_m G_m(x_i) \right)<br>$$</p>
+<blockquote>
+<p>可以发现树的模型是关键，一般来时$4 \leq J \leq 8$比较合适，有时候$J=2$就足够了，并且$j &gt; 10$比较少用</p>
+</blockquote>
+<h2 id="正则化">正则化</h2><blockquote>
+<p>其实用过<code>Gradient Boosting</code>的同学应该有同感，<code>Gradient Boosting</code>类型的模型(<code>GBDT</code>)调参很重要-_-，大致可以发现这些参数就是正则化的关键</p>
+</blockquote>
+<h3 id="调整树的个数">调整树的个数</h3><p>树的个数$M$越多，过拟合的情况可能越为严重，这里树的个数一般使用交叉验证的误差来调整确定</p>
+<h3 id="Shrinkage">Shrinkage</h3><p><code>Shrinkage</code>又称学习率，是指在<code>Gradient Boosting</code>训练时不训练全部的残差，而是:$$f_m(x)=f_{m-1}(x)+v \cdot \gamma_mG_m(x) \quad 0 &lt; v \leq 1$$<br>经验表明较小的学习率($v &lt; 0.1$)将会取得较为明显的正则化效果，但是学习率太小会导致训练次数增加..</p>
+<blockquote>
+<p>感觉这个大致可以这么理解，如果$v=1$，弱分类器犯错一次真的就错了，但是如果$v &lt; 1$时，如果某个分类器犯错了，其他的的弱分类器可能还可以补救^_^</p>
+</blockquote>
+<h3 id="Stochastic_gradient_boosting">Stochastic gradient boosting</h3><p>随机梯度提升法，表示每一轮迭代时并不是拿所有的数据进行训练，所以按无放回的随机取一定的比率$\eta$进行训练，这里的$ 0.5 &lt; \eta &lt; 0.8$将会取得较为不错的正则化效果，同时随机取样本进行训练还能加快模型的训练速度，并且每次迭代中未被抽中的样本还可以作为(out of bag)[<a href="https://en.wikipedia.org/wiki/Out-of-bag_error]进行估计" target="_blank" rel="external">https://en.wikipedia.org/wiki/Out-of-bag_error]进行估计</a></p>
+<h3 id="叶子节点的数量">叶子节点的数量</h3><p>一般这个叶子节点的数量不宜太多（其实可以理解为节点数越多，模型复杂度越高…）</p>
+<h3 id="使用惩罚项">使用惩罚项</h3><p>额~貌似<code>L2</code>之类的惩罚项也是可以被加入进去</p>
+<h2 id="总结">总结</h2><p><code>Gradient Boosting</code>是非常金典而又重要的提升方法，他与<a href="http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/" target="_blank" rel="external">AdaBoost</a>一样都是讲弱分类器合成强分类，但是其大致区别有:</p>
+<ol>
+<li><code>Gradient Boosting</code>通过残差来变量的改变错误分类的权重,而<code>AdaBoost</code>就真的直接去修改分类错误的训练权重了</li>
+<li><code>Gradient Boosting</code>接入的分类器一般完整的决策树居多，但是<code>AdaBoost</code>一般使用二层决策树</li>
+</ol>
+<p><code>Gradient Boosting</code>中最有代表性的就是<code>GBDT</code>,该模型虽好，可不要贪杯~使用时理解数据以及正确调参才是王道</p>
+<h2 id="参考">参考</h2><p>[1]. <a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="external">wiki Gradient boosting</a><br>[2]. The Elements of Statistical Learning<br>[3]. 《统计学习方法》.李航.第八章</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/" data-title="从Gradient Boosting 到GBT | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/"  title="解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误">
+ <strong>下一篇：</strong><br/> 
+ <span>解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/" data-title="从Gradient Boosting 到GBT" data-url="http://kubicode.me/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_Boosting原理"><span class="toc-number">1.</span> <span class="toc-text">Gradient Boosting原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_Boosting算法"><span class="toc-number">2.</span> <span class="toc-text">Gradient Boosting算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient_tree_boosting"><span class="toc-number">3.</span> <span class="toc-text">Gradient tree boosting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则化"><span class="toc-number">4.</span> <span class="toc-text">正则化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#调整树的个数"><span class="toc-number">4.1.</span> <span class="toc-text">调整树的个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shrinkage"><span class="toc-number">4.2.</span> <span class="toc-text">Shrinkage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stochastic_gradient_boosting"><span class="toc-number">4.3.</span> <span class="toc-text">Stochastic gradient boosting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#叶子节点的数量"><span class="toc-number">4.4.</span> <span class="toc-text">叶子节点的数量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用惩罚项"><span class="toc-number">4.5.</span> <span class="toc-text">使用惩罚项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>20</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

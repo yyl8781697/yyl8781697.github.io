@@ -95,6 +95,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/" title="修复Hexo写Mathjax公式多个下标失效的问题" itemprop="url">修复Hexo写Mathjax公式多个下标失效的问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-16T15:25:29.000Z" itemprop="datePublished"> 发表于 2016-03-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>这应该严格意义上不算Hexo的bug，但是在写Mathjax的时候就会踩中-_-
+</code></pre><blockquote>
+<p>说起<code>Markdown</code>写文章时，加粗的第一反应是<code>**</code>，斜体的第一反应是<code>*</code>，因为各种<code>Markdown</code>格式规范的文章里面都是这么教的，但是你不知道的是<code>__</code>可以支持粗体，<code>_</code>可以支持斜体，一般而言这是没什么问题，但是当在写<code>Latex</code>（<code>Hexo</code>里使用<code>Mathjax</code>实现）数据公式时，<code>_</code>表示下标，并且使用频率很高，当一行里面有多个<code>_</code>出现时，<code>Hexo</code>进行解析导致所期待的公式失效。</p>
+</blockquote>
+<p>自从用<code>Hexo</code>写数学公式的时候，就发现一点小问题，公式复杂了，在<code>Hexo</code>里面就不<code>work</code>，起初以为是<code>Mathjax</code>的支持不完善的缘故，后来发现用了<code>Mathjax</code>的其他博客里面都可以写复杂的公式，而今天又遇到了这个问题：<br>我的公式文本是:<br><code>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$</code><br>结果生成页面查看之后却发现:<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hexo/">Hexo</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/16/Hexo/Fix-Hexo-Bug-In-Mathjax/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" title="在信息检索中Term之间的Proximity计算研究" itemprop="url">在信息检索中Term之间的Proximity计算研究</a>
   </h1>
   <p class="article-author">By
@@ -723,74 +791,6 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/" title="在Mac的OSX系统中配置VIM" itemprop="url">在Mac的OSX系统中配置VIM</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-11-07T12:19:43.000Z" itemprop="datePublished"> 发表于 2015-11-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>本文主要参考<a href="http://www.yeyaxi.com/2011/06/how-to-enable-syntax-highlighting-for-vim-in-mac-osx/">[译]如何在Mac OS X中开启VIM语法高亮</a>,他是真的work啊^_^</p>
-</blockquote>
-<p>使用<code>vim</code>来敲代码很带感，设置<code>vim</code>是一大要事，但是在<code>Mac</code>的<code>vim</code>默认是黑白的，而且并不能像<code>Linux</code>设置<code>~/.vimrc</code>来进行配置，但是毕竟还有其他的方法，先下面一步一步走就可以了</p>
-<p>首先进入终端之后输入如下代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/vim</span><br><span class="line"></span><br><span class="line">sudo vim vimrc</span><br></pre></td></tr></table></figure></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Mac/">Mac</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Mac/">Mac</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/07/Mac/Mac-OSX-Vim-highlight/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -865,7 +865,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>19</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>20</sup></a></li>
 		  
 		
 		  
@@ -910,7 +910,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
 			
 		
 			

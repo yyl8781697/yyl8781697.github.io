@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/</loc>
+    <lastmod>2016-05-02T15:48:21.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/</loc>
     <lastmod>2016-04-22T01:51:20.000Z</lastmod>
   </url>

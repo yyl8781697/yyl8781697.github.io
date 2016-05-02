@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-04-22T01:51:20.000Z</updated>
+  <updated>2016-05-02T15:48:21.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,92 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[从Gradient Boosting 到GBT]]></title>
+    <link href="http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/"/>
+    <id>http://kubicode.me/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/</id>
+    <published>2016-04-24T15:51:08.000Z</published>
+    <updated>2016-05-02T15:48:21.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>本文大部分参考(译)自wiki[1]<br>如果说<code>Gradient Boosting</code>是一种机器学习算法框架的话，我想<code>GBT(Gradient Boosting Tree)</code>看做它的实现更为合适</p>
+</blockquote>
+<h2 id="Gradient_Boosting原理">Gradient Boosting原理</h2><blockquote>
+<p>与其他<code>Boosting</code>方法一样，<code>Gradient Boosting</code>通过迭代将弱分类器合并成一个强分类器的方法。</p>
+</blockquote>
+<p>对于标准的$(x_i,y_i)$训练集，<code>Gradient Boosting</code>在迭代到第$m$次时，可能会得到一个分类能力不是很强的$f_m$模型，但是他下次迭代并不改变$f_m$，而是生成一个这样的新模型:$$f_{m+1} = f_m+G_{m+1}$$使得$f_{m+1}$较$f_m$而言拥有更为强大的分类能力，那么问题来了,这个$G_{m+1}$该如何训练呢?<br><a id="more"></a></p>
+<p>现在假如训练完$G_{m+1}$可以得到完美的$f_{m+1}$，那么也就是有:$$f_{m+1} = f_m+G_{m+1}=y$$<br>这个式子可以写成$$G_{m+1}=y-f_m$$ 其中$y-f_m$表示上一次迭代得到分类器预测结果与真实结果的差值，我们一般称之为的<code>残差</code>(residual)，因此也可以理解为<code>Gradient Boosting</code>在每一轮训练新的分类器将会拟合<code>残差</code>进行最优化</p>
+<h2 id="Gradient_Boosting算法">Gradient Boosting算法</h2><p>假设现有训练集$\left\{ (x_1,y_1),(x_2,y_2)…(x_n,y_n)  \right\}$，其中$x$是特征向量，$y$是相应的训练目标，在给定相应的损失函数$L(y,f(x))$,我们的目标是找到一个近似的函数$f(x)$使得与真实函数$f^*(x)$的损失最小期望值最接近:$$f^* = \underset{f}{argmin} E_{x,y} \left[ L(y,f(x)) \right]$$</p>
+<p><code>Gradient Boosting</code>方法假设$y$是一个实值，而$f(x)$近似目标函数是一个弱分类器$G_m(x)$加权求和的形式$$f(x)=\sum_{m=1}^M \gamma_mG_m(x)+const$$ 根据经验风险最小化的原则，近似函数$f(x)$将会尝试对训练集上的平均损失函数进行最小化，它从一个常量函数进行起步，并且通过贪心的方式进行逐步优化<br>$$<br>f_0(x) = \underset{\gamma}{argmin} \sum_{i=1}^n L(y_i,\gamma) \\<br>f_m(x) = f_{m-1}(x) + \underset{G \in H}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+G_m(x_i) \right)<br>$$<br>然而，对于$L$为任意的损失函数时,在选择每一步最佳的$G_m(x_i)$时将会很难优化。<br>这里使用最速下降法(<a href="https://en.wikipedia.org/wiki/Gradient_descent" target="_blank" rel="external">steepest descent</a>)来解决这个问题<br>,在使用这种方法时，对于损失函数$L(y,G)$不要将其看做一个函数，而是将其看做通过函数得到的值的向量$G(x_1),G(x_2)…G(x_n)$,那么这样的话我们就可以将模型的式子写成如下的等式:<br>$$<br>f_m(x) = f_{m-1}(x) - \gamma_m \sum_{i=1}^n \triangledown_G L \left( y_i,f_{m-1}(x_i) \right) \\<br>\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left ( y_i,f_{m-1}(x_i)-\gamma \frac{\partial L(y_i,f_{m-1}(x_i))}{\partial G(x_i)}  \right )<br>$$<br>上面第一个式子表示根据梯度的负方向进行更新,第二个式子表明了$\gamma$使用线性搜索进行计算。</p>
+<p>下面就是具体的<code>gradient boosting</code>步骤:<br><strong>Input</strong>:</p>
+<ul>
+<li>训练数据集$T=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$</li>
+<li>可导的损失函数:$L(y,f(x))$</li>
+<li>迭代的次数:$M$</li>
+</ul>
+<p><strong>Output</strong>:</p>
+<ul>
+<li>最终模型$f(x)$</li>
+</ul>
+<p><strong>Procedure</strong>:</p>
+<ol>
+<li>使用一个常量进行模型的初始化$$f_0(x) = \underset{\gamma}{argmin} \sum_{i=1}^n L(y_i,\gamma) $$</li>
+<li>循环$m \in \{1….M\}$<ol>
+<li>计算残差$$r_{im}=-\left[ \frac{\partial L(y_i,f(x_i))}{\partial f(x_i)}  \right]_{f(x_i)=f_{m-1}(x_i)} \quad i=1…n$$</li>
+<li>使用训练集$\{ (x_i,r_{im}) \}$对弱分类器$G_m(x)$进行拟合</li>
+<li>通过线性搜索进行乘子$\gamma_m$的计算$$\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+\gamma_m G_m(x_i) \right)$$</li>
+<li>进行模型的更新:$$f_m(x) = f_{m-1}(x)+\gamma_m G_m(x)$$</li>
+</ol>
+</li>
+<li>输出最终的模型$f_M(x)$</li>
+</ol>
+<p>下面是来自[2]中的对于不同损失函数下不同残差的计算<br><img src="/img/From-Gradient-Boosting-to-GBT/loss_functions.png" width="500px"><br>可以发现当损失函数为最小平方差时残差就是真实值与预测值的差值</p>
+<h2 id="Gradient_tree_boosting">Gradient tree boosting</h2><p>提升树(Gradient tree boosting)故名思议就是使用决策树(一般使用<code>CART</code>树)来作为弱分类器.<br>提升树在第$m$步迭代时将会使用决策树$G_m(x)$来集合残差，现在假设这棵树有$J$个叶子节点，则决策树将会将空间划分为$J$个不相交的区域$R_{1m},R_{2m}…R_{3m}$，以及每个区域都是预测一个常量值，则树模型$G_m(x)$对于特征$x$的输入将可以写成$$G_m(x)=\sum_{j=1}^J b_{jm}I(x \in R_{jm})$$，其中$b_{jm}$表示每个区域的预测值，上面的介绍可以用下图来表示:</p>
+<center><img src="/img/From-Gradient-Boosting-to-GBT/cart.png" width="400px"></center>
+
+<p>在实际使用时，$b_{jm}$也会与一个乘子$\gamma_m$相乘,最终模型的训练与上面一小节的介绍一致:<br>$$<br>f_m(x)=f_{m-1}(x)+\gamma_mG_m(x) \\<br>\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+\gamma_m G_m(x_i) \right)<br>$$</p>
+<blockquote>
+<p>可以发现树的模型是关键，一般来时$4 \leq J \leq 8$比较合适，有时候$J=2$就足够了，并且$j &gt; 10$比较少用</p>
+</blockquote>
+<h2 id="正则化">正则化</h2><blockquote>
+<p>其实用过<code>Gradient Boosting</code>的同学应该有同感，<code>Gradient Boosting</code>类型的模型(<code>GBDT</code>)调参很重要-_-，大致可以发现这些参数就是正则化的关键</p>
+</blockquote>
+<h3 id="调整树的个数">调整树的个数</h3><p>树的个数$M$越多，过拟合的情况可能越为严重，这里树的个数一般使用交叉验证的误差来调整确定</p>
+<h3 id="Shrinkage">Shrinkage</h3><p><code>Shrinkage</code>又称学习率，是指在<code>Gradient Boosting</code>训练时不训练全部的残差，而是:$$f_m(x)=f_{m-1}(x)+v \cdot \gamma_mG_m(x) \quad 0 &lt; v \leq 1$$<br>经验表明较小的学习率($v &lt; 0.1$)将会取得较为明显的正则化效果，但是学习率太小会导致训练次数增加..</p>
+<blockquote>
+<p>感觉这个大致可以这么理解，如果$v=1$，弱分类器犯错一次真的就错了，但是如果$v &lt; 1$时，如果某个分类器犯错了，其他的的弱分类器可能还可以补救^_^</p>
+</blockquote>
+<h3 id="Stochastic_gradient_boosting">Stochastic gradient boosting</h3><p>随机梯度提升法，表示每一轮迭代时并不是拿所有的数据进行训练，所以按无放回的随机取一定的比率$\eta$进行训练，这里的$ 0.5 &lt; \eta &lt; 0.8$将会取得较为不错的正则化效果，同时随机取样本进行训练还能加快模型的训练速度，并且每次迭代中未被抽中的样本还可以作为(out of bag)[<a href="https://en.wikipedia.org/wiki/Out-of-bag_error]进行估计" target="_blank" rel="external">https://en.wikipedia.org/wiki/Out-of-bag_error]进行估计</a></p>
+<h3 id="叶子节点的数量">叶子节点的数量</h3><p>一般这个叶子节点的数量不宜太多（其实可以理解为节点数越多，模型复杂度越高…）</p>
+<h3 id="使用惩罚项">使用惩罚项</h3><p>额~貌似<code>L2</code>之类的惩罚项也是可以被加入进去</p>
+<h2 id="总结">总结</h2><p><code>Gradient Boosting</code>是非常金典而又重要的提升方法，他与<a href="http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/" target="_blank" rel="external">AdaBoost</a>一样都是讲弱分类器合成强分类，但是其大致区别有:</p>
+<ol>
+<li><code>Gradient Boosting</code>通过残差来变量的改变错误分类的权重,而<code>AdaBoost</code>就真的直接去修改分类错误的训练权重了</li>
+<li><code>Gradient Boosting</code>接入的分类器一般完整的决策树居多，但是<code>AdaBoost</code>一般使用二层决策树</li>
+</ol>
+<p><code>Gradient Boosting</code>中最有代表性的就是<code>GBDT</code>,该模型虽好，可不要贪杯~使用时理解数据以及正确调参才是王道</p>
+<h2 id="参考">参考</h2><p>[1]. <a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="external">wiki Gradient boosting</a><br>[2]. The Elements of Statistical Learning<br>[3]. 《统计学习方法》.李航.第八章</p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>本文大部分参考(译)自wiki[1]<br>如果说<code>Gradient Boosting</code>是一种机器学习算法框架的话，我想<code>GBT(Gradient Boosting Tree)</code>看做它的实现更为合适</p>
+</blockquote>
+<h2 id="Gradient_Boosting原理">Gradient Boosting原理</h2><blockquote>
+<p>与其他<code>Boosting</code>方法一样，<code>Gradient Boosting</code>通过迭代将弱分类器合并成一个强分类器的方法。</p>
+</blockquote>
+<p>对于标准的$(x_i,y_i)$训练集，<code>Gradient Boosting</code>在迭代到第$m$次时，可能会得到一个分类能力不是很强的$f_m$模型，但是他下次迭代并不改变$f_m$，而是生成一个这样的新模型:$$f_{m+1} = f_m+G_{m+1}$$使得$f_{m+1}$较$f_m$而言拥有更为强大的分类能力，那么问题来了,这个$G_{m+1}$该如何训练呢?<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误]]></title>
@@ -2385,37 +2471,6 @@ has    <span class="number">4</span>
       <category term="Hadoop" scheme="http://kubicode.me/tags/Hadoop/"/>
     
       <category term="Hadoop" scheme="http://kubicode.me/categories/Hadoop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[在Mac的OSX系统中配置VIM]]></title>
-    <link href="http://kubicode.me/2015/11/07/Mac/Mac-OSX-Vim-highlight/"/>
-    <id>http://kubicode.me/2015/11/07/Mac/Mac-OSX-Vim-highlight/</id>
-    <published>2015-11-07T12:19:43.000Z</published>
-    <updated>2015-11-07T12:39:50.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>本文主要参考<a href="http://www.yeyaxi.com/2011/06/how-to-enable-syntax-highlighting-for-vim-in-mac-osx/" target="_blank" rel="external">[译]如何在Mac OS X中开启VIM语法高亮</a>,他是真的work啊^_^</p>
-</blockquote>
-<p>使用<code>vim</code>来敲代码很带感，设置<code>vim</code>是一大要事，但是在<code>Mac</code>的<code>vim</code>默认是黑白的，而且并不能像<code>Linux</code>设置<code>~/.vimrc</code>来进行配置，但是毕竟还有其他的方法，先下面一步一步走就可以了</p>
-<p>首先进入终端之后输入如下代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/vim</span><br><span class="line"></span><br><span class="line">sudo vim vimrc</span><br></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<p>然后再打开的文件中插入下面的配置<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> ai                  <span class="string">" auto indenting</span><br><span class="line"></span><span class="keyword">set</span> <span class="keyword">history</span>=<span class="number">100</span>         <span class="string">" keep 100 lines of history</span><br><span class="line"></span><span class="keyword">set</span> ruler               <span class="string">" show the cursor position</span><br><span class="line"></span><span class="keyword">syntax</span> <span class="keyword">on</span>               <span class="string">" syntax highlighting</span><br><span class="line"></span><span class="keyword">set</span> hlsearch            <span class="string">" highlight the last searched term</span><br><span class="line"></span><span class="keyword">filetype</span> plugin <span class="keyword">on</span>      <span class="string">" use the file type plugins</span><br><span class="line"></span><span class="keyword">set</span> <span class="keyword">ts</span>=<span class="number">4</span>                <span class="string">" tab space =4</span><br><span class="line"></span><span class="keyword">set</span> expandtab</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">number</span>				<span class="string">" show line number</span><br><span class="line"></span><span class="keyword">set</span> <span class="built_in">shiftwidth</span>          <span class="string">" 这个貌是可以用于批量缩进的时候设置为4个空格</span><br><span class="line"></span><span class="keyword">highlight</span> Comment ctermfg=green guifg=green  <span class="string">"高亮备注为绿色</span><br><span class="line"></span></span><br><span class="line"><span class="string">" When editing a file, always jump to the last cursor position</span><br><span class="line"></span><span class="keyword">autocmd</span> BufReadPost *</span><br><span class="line">\ <span class="keyword">if</span> ! <span class="built_in">exists</span>(<span class="string">"g:leave_my_cursor_position_alone"</span>) |</span><br><span class="line">\ <span class="keyword">if</span> <span class="built_in">line</span>(<span class="string">"'\""</span>) &gt; <span class="number">0</span> &amp;&amp; <span class="built_in">line</span> (<span class="string">"'\""</span>) &lt;= <span class="built_in">line</span>(<span class="string">"$"</span>) |</span><br><span class="line">\ <span class="keyword">exe</span> <span class="string">"normal g'\""</span> |</span><br><span class="line">\ <span class="keyword">endif</span> |</span><br><span class="line">\ <span class="keyword">endif</span></span><br></pre></td></tr></table></figure></p>
-<p>接着退出之后随便使用<code>vim</code>打开一个文件之后可以看到颜色亮起来了<br><img src="/img/Mac-OSX-Vim-highlight/vim_highlight.png" alt=""></p>
-<p>瞬间就带感了，其他的设置都可以去在刚刚的文件里面进行配置</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>本文主要参考<a href="http://www.yeyaxi.com/2011/06/how-to-enable-syntax-highlighting-for-vim-in-mac-osx/">[译]如何在Mac OS X中开启VIM语法高亮</a>,他是真的work啊^_^</p>
-</blockquote>
-<p>使用<code>vim</code>来敲代码很带感，设置<code>vim</code>是一大要事，但是在<code>Mac</code>的<code>vim</code>默认是黑白的，而且并不能像<code>Linux</code>设置<code>~/.vimrc</code>来进行配置，但是毕竟还有其他的方法，先下面一步一步走就可以了</p>
-<p>首先进入终端之后输入如下代码<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/vim</span><br><span class="line"></span><br><span class="line">sudo vim vimrc</span><br></pre></td></tr></table></figure></p>]]>
-    
-    </summary>
-    
-      <category term="Mac" scheme="http://kubicode.me/tags/Mac/"/>
-    
-      <category term="Mac" scheme="http://kubicode.me/categories/Mac/"/>
     
   </entry>
   
