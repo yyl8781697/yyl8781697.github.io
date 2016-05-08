@@ -95,6 +95,75 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" title="GBRank:一种基于回归的学习排序算法" itemprop="url">GBRank:一种基于回归的学习排序算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-05-08T09:30:39.000Z" itemprop="datePublished"> 发表于 2016-05-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>GBRank</code>是一种<code>pairwise</code>的学习排序算法，他是基于回归来解决<code>pair</code>对的先后排序问题。在<code>GBRank</code>中，使用的回归算法是<code>GBT(Gradient Boosting Tree)</code>，可以参考<a href="http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/#Gradient_tree_boosting">这个</a>，<code>pairwise</code>相关的可以参考<a href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/">这个</a></p>
+</blockquote>
+<h2 id="算法原理">算法原理</h2><p>一般来说在搜索引擎里面，相关性越高的越应该排在前面。现在<code>query-doc</code>的特征使用向量$x$或者$y$表示，假设现在有一个文档对$\left \langle x_i,y_i \right \rangle$，当$x_i$排在$y_i$前面时，我们使用$x_i \succ y_i$来表示。</p>
+<p>我们含顺序的<code>pair</code>对用如下集合表示(也就是真的$x_i$真的排在$y_i$前面):$$S=\{ \left \langle x_i,y_i \right \rangle | x_i \succ y_i,i = 1…N \}$$</p>
+<p>现假设学习的排序函数为$h$，我们希望当$h(x_i)&gt;h(y_i)$时，满足$x_i \succ y_i$的数量越多越好.<br>现在将$h$的风险函数用如下式子表示:$$R(h) = \frac{1}{2} \sum_{i=1}^N \left( max\{0,h(y_i)-h(x_i)\} \right)^2$$<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/" title="从Gradient Boosting 到GBT" itemprop="url">从Gradient Boosting 到GBT</a>
   </h1>
   <p class="article-author">By
@@ -406,9 +475,10 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
     <div class="article-content">
         
         <blockquote>
-<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛，其中<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/">RankSvm</a>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。^_^</p>
+<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛^_^</p>
 </blockquote>
-<h2 id="IRSVM">IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
+<h2 id="2002-RankSvm">2002-RankSvm</h2><p><code>RankSvm</code>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。<br><code>RankSvm</code>的学习记录在<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/">这里</a></p>
+<h2 id="2006-IRSVM">2006-IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
 <h3 id="问题1:位置误差">问题1:位置误差</h3>
         
         
@@ -725,81 +795,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/" title="[小技巧]让Hexo在使用Mathjax时支持多行公式" itemprop="url">[小技巧]让Hexo在使用Mathjax时支持多行公式</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-18T01:46:24.000Z" itemprop="datePublished"> 发表于 2016-03-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
-<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span>
-<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span>
-<span class="special">&amp;</span>=g+h<span class="command">\\</span>
-<span class="special">&amp;</span> =i 
-<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
-</code></pre><p>其中:</p>
-<ol>
-<li><code>begin</code>和<code>end</code>表示公式的起始</li>
-<li><code>\\</code>符号表示换行</li>
-<li><code>&amp;</code>表示对齐</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hexo/">Hexo</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -874,7 +869,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>20</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
 		  
 		
 		  
@@ -919,7 +914,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
 			
 		
 			
@@ -927,11 +922,11 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>8</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>7</sup></a></li>
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
 			
 		
 			
