@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/about/index.html</loc>
+    <lastmod>2016-05-28T07:59:43.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/</loc>
     <lastmod>2016-05-08T15:28:16.000Z</lastmod>
   </url>
@@ -29,11 +34,6 @@
   <url>
     <loc>http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/</loc>
     <lastmod>2016-04-22T01:49:25.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/about/index.html</loc>
-    <lastmod>2016-04-18T12:49:51.000Z</lastmod>
   </url>
   
   <url>
