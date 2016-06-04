@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-05-08T15:27:47.000Z</updated>
+  <updated>2016-06-04T07:13:16.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,103 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[RankNet:基于梯度下降的学习排序]]></title>
+    <link href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/"/>
+    <id>http://kubicode.me/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</id>
+    <published>2016-05-30T11:51:21.000Z</published>
+    <updated>2016-06-04T07:13:16.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet</code>就是使用神经网络算法来使得这个概率最大化.</p>
+</blockquote>
+<h2 id="算法原理">算法原理</h2><p>假设现在有一对文档$D_i$和$D_j$,给定一个目标概率$\bar{P}_{i,j}$,以表示文档$D_i$将会排在文档$D_j$的前面.</p>
+<ol>
+<li>如果$\bar{P}_{i,j}=1$,表示$D_i$一定会排在$D_j$前面</li>
+<li>如果$\bar{P}_{i,j}=0.5$,表示$D_i$和$D_j$的前后关系将无法确定</li>
+<li>如果$\bar{P}_{i,j}=0$,表示$D_i$一定不会排在$D_j$前面</li>
+</ol>
+<p>现在有一个实值的排序函数$f$,如果$f(x_i) &gt; f(x_j)$，则会有$D_i \triangleright D_j$(表示$D_i$会排在$D_j$前面)</p>
+<blockquote>
+<p>这里$x$是为文档$D$所表示的特征向量</p>
+</blockquote>
+<p>我们现在将$P(D_i \triangleright D_j)$前后顺序的预测概率表示为$P_{i,j}$,同时定义$o_i \equiv f(x_i)$ 以及 $o_{i,j}=f(x_i)-f(x_j)$，则我们可以<code>logistic</code>函数来表示$P_{i,j}$:<br>$$P_{i,j} \equiv \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} \equiv \frac{1}{1+e^{-o_{i,j}}}$$</p>
+<p>为了衡量预测概率$P_{i,j}$与期望/目标概率$\bar{P}_{i,j}$的接近程度，这里使用<code>Cross Entropy</code>作为损失函数:<br>$$C_{i,j} = -\bar{P}_{i,j} log P_{i,j} - (1-\bar{P}_{i,j}) log (1-P_{i,j})$$</p>
+<p>将$P_{i,j}$代入损失函数$C_{i,j}$之后即可得到:<br>$$\begin{equation}\begin{split}C_{i,j}&amp;=-\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (1-\frac{e^{o_{i,j}}}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (\frac{1}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} \left( log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - log (\frac{1}{1+e^{o_{i,j}}}) \right) - log (\frac{1}{1+e^{o_{i,j}}})  \\<br>&amp;= -\bar{P}_{i,j}  o_{i,j} + log(1+e^{o_{i,j}})<br>\end{split}\end{equation}$$</p>
+<p>下面的图是当$\bar{P}_{i,j} \in \{0,0.5,1\}$时的损失函数情况:<br><img src="/img/RankNet-Learning-to-Rank-using-Gradient-Descent/lossfunction.png" style="align:center;margin:0 auto" width="400px"></p>
+<p>当$\bar{P}_{i,j} = 1$的时候，<code>Cross Entropy</code>的损失函数将会变为:$$C_{i,j}=log(1+e^{-o_{i,j}})$$<br>直接会变为一个<code>log</code>型的损失函数，其中$o_i-o_j$越大，损失函数的值也就会越小，这也是我们所期望训练的结果(表示我们的样本全部成立)</p>
+<p>现我们损失函数$C_{i,j}$求$o$的偏导:<br>$$\frac{ \partial{C}}{ \partial{o_i}} = \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) =\left( -\bar{P}_{i,j}+P_{i,j} \right) = -\frac{ \partial{C}}{ \partial{o_j}}$$</p>
+<blockquote>
+<p>其实可以发现就是在$-\bar{P}_{i,j}+P_{i,j} $时就是我们的目标</p>
+</blockquote>
+<p>现我们认为$w$为$o=f(x:w)$的一个权重,也就是我们最终希望求解的值，而这个参数我们就可以使用<code>随机梯度下降法来求解</code>:<br>$$w_k \rightarrow  w_k - \eta \frac{\partial{C}}{\partial{w_k}} = w_k - \eta \left( \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}} \right)$$</p>
+<p>其中$\eta$表示学习率，一般取一个比较小的数（比如:$1e-3$,$1e-5$）<br>另外我们可以求得$C$的增量变化:<br>$$\Delta C = \sum_k \frac{\partial{C}}{\partial{w_k}} \Delta w_k = \sum_k \frac{\partial{C}}{\partial{w_k}} \left( - \eta \frac{\partial{C}}{\partial{w_k}} \right) = - \eta \sum_k \left( \frac{\partial{C}}{\partial{w_k}} \right)^2  &lt; 0 $$</p>
+<ol>
+<li>$\Delta C &lt; 0 $表示随着权重参数$w$的变化，损失函数$C$会越来越小</li>
+<li>另外当梯度$\frac{\partial{C}}{\partial{w_k}} = 0$时，才会让损失函数达到最小值</li>
+</ol>
+<p>上面的式子告诉我们通过梯度下降法求解<code>RankNet</code>时，就算<code>算分</code>函数没有好的梯度或者不可求导时任可以进行权重的更新（因为最终可以通过损失函数和权重$w$进行求），但是有的要求权重$w$与最终的算法$o$是相关的。</p>
+<h2 id="合并概率">合并概率</h2><p>理想的情况下，$\bar{o}$的输出得到的模型应该是这样纸的:$$\bar{P}_{i,j}=\frac{e^{\bar{o}_{i,j}}}{1+e^{\bar{o}_{i,j}}}$$</p>
+<blockquote>
+<p>其中$\bar{o}_{i,j}=\bar{o}_i-\bar{o}_j$</p>
+</blockquote>
+<p>上面的模型需要$\bar{P}_{i,j}$保持一致性，也就是如果$D_i$的相关性要高于$D_j$,$D_j$的相关性同时也是要高于$D_k$，则$D_i$的相关性也是一定要高于$D_j$，如果没有保持一致性，其实上面的理论就不好使了。。。<br>现给定$\bar{P}_{i,j}$和$\bar{P}_{j,k}$时会有:</p>
+<p>$$\begin{equation}\begin{split} \bar{P}_{i,k}&amp;= \frac{e^{\bar{o}_{i,k}}}{1+e^{\bar{o}_{i,k}}}\\<br>&amp;= \frac{e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{1+e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}} \\<br>&amp;= \frac{ \frac{e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})} }{ \frac{1+e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})}} \\<br>&amp;= \frac{\bar{P}_{i,j} \bar{P}_{j,k}}{\frac{(1+e^{\bar{o}_{i,j}}+e^{\bar{o}_{j,k}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})+(2e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})-(e^{\bar{o}_{i,j}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})-(e^{\bar{o}_{j,k}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})}} \\<br>&amp;= \frac{\bar{P}_{i,j} \bar{P}_{j,k}}{1+2\bar{P}_{i,j}\bar{P}_{j,k}-\bar{P}_{i,j}-\bar{P}_{j,k}}<br>\end{split}\end{equation}$$</p>
+<blockquote>
+<p>其中第一步是基于这个来的:$$\begin{equation}\begin{split}e^{\bar{o}_{i,k}}&amp;=e^{\bar{o}_i-\bar{o}_k} \\<br>&amp;= e^{\bar{o}_i-\bar{o}_j+\bar{o}_j-\bar{o}_k}\\<br>&amp;= e^{\bar{o}_{i,j}+\bar{o}_{j,k}}  \\<br>&amp;= e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}}<br>\end{split}\end{equation}$$</p>
+</blockquote>
+<p>当$\bar{P}_{i,j}=\bar{P}_{i,k}=P$时，其$\bar{P}_{i,k}$的取值情况为:<br><img src="/img/RankNet-Learning-to-Rank-using-Gradient-Descent/pik.png" width="400px"></p>
+<ol>
+<li>$P=0$时，有$\bar{P}_{i,k}=P=0$ 表示:$D_i$排$D_j$后面,$D_j$排$D_j$的后面，则$D_i$也一定排$D_j$的后面</li>
+<li>$0 &lt; P &lt; 0.5$时，$\bar{P}_{i,k} &lt; P$</li>
+<li>$P=0.5$时，有$\bar{P}_{i,k}=P=0.5$ 表示:$D_i$有一般概率排$D_j$前面,$D_j$也有一半的概率排$D_j$的前面，则$D_i$同样也是一半的概率排$D_j$的前面</li>
+<li>$0.5 &lt; P &lt; 1$时，$\bar{P}_{i,k} &gt; P$</li>
+<li>$P=1$时，有$\bar{P}_{i,k}=P=1$ 表示:$D_i$排$D_j$前面,$D_j$排$D_j$的前面，则$D_i$也一定排$D_j$的前面</li>
+</ol>
+<blockquote>
+<p>从上面的图中可以看到，其实目标概率是都可以保持一致性的.</p>
+</blockquote>
+<h2 id="神经网络训练">神经网络训练</h2><p><code>RankNet</code>使用的是一个2层的神经网络作为算分模型$f(x:w,b)$,他在排序分数的公式是:<br>$$o = f(x:w,b) = f^{(2)}  \left( \sum_l w_l^{(2)} \cdot f^{(1)}  \left( \sum_k w_{lk}^{(1)}x_k +b^{(1)} \right) +b^{(2)} \right)$$</p>
+<p>其中:</p>
+<ol>
+<li>$x_k$表示输入的$k$个特征元素</li>
+<li>$w$表示每一层的权重,$b$表示每一层的偏置，上标$(\cdot)$表示当前所属的神经网络的层数</li>
+<li>下标$l$表示第一层的单元数量</li>
+<li>$f$使用<code>sigmoid</code>作为激活函数</li>
+</ol>
+<p>这里我们输入的样本是<code>pair</code>对$\{(x_i,x_j),\bar{P}_{i,j}\}$,其中$\bar{P}_{i,j}$就是我们的目标概率,根据第一小节(算法原理)中指到的，使用梯度下降法进行求解:<br>$$\begin{equation}\begin{split} \frac{\partial{C}}{\partial{w}} &amp;= \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}}  \\<br>&amp;=  \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right)\\<br>&amp;=  \lambda_{i,j} \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right) \\<br>\end{split}\end{equation}$$<br>$ $</p>
+<blockquote>
+<p>记$\lambda_{i,j} =  \frac{\partial{C}}{\partial{o_i}}  = -\frac{\partial{C}}{\partial{o_j}} \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) $</p>
+</blockquote>
+<p>在对于上面的二层神经网络求解时:<br>$$\frac{\partial{C}}{\partial{b^{(2)}}} = \lambda_{i,j}({f’}_i^{(2)}-{f’}_i^{(2)}) = \Delta_i^{(2)} - \Delta_j^{(2)} \\<br>\frac{\partial{C}}{\partial{w^{(2)}}} = \Delta_i^{(2)}f_i^{(1)}  - \Delta_j^{(2)}f_j^{(1)} \\<br>\frac{\partial{C}}{\partial{b^{(1)}}} = \Delta_i^{(2)}f_i^{(1)}w^{(2)}   - \Delta_j^{(2)}f_j^{(1)}w^{(2)} \\<br>\frac{\partial{C}}{\partial{w_k^{(1)}}} = \Delta_i^{(2)} x_{i,k} - \Delta_j^{(2)} x_{j,k}<br>$$<br>这样神经网络就可以使用<code>前向预测</code>和<code>后向反馈</code>来进行训练了,只是其后向反馈阶段是需要通过<code>pair</code>进行计算的。</p>
+<h2 id="神经网络加速">神经网络加速</h2><p>上面的是对于每一对<code>pair</code>都会进行一次权重的更新，其实是可以对同一个排序下的所有文档<code>pair</code>全部带入神经网络进行前向预测，然后计算总差分并进行误差后向反馈，这样将大大减少误差反向传播的次数，其更新的公式为:<br>$$\Delta w = -\eta \sum_{\{i,j\}\in I}  \left(\lambda_{i,j} \frac{\partial{o_i}}{\partial{w_k}} - \lambda_{i,j} \frac{\partial{o_j}}{\partial{w_k}}\right) = -\eta \sum_i \lambda_i \frac{\partial{o_i}}{\partial{w_k}} $$<br>其中:<br>$$\lambda_i = \sum_{j:\{i,j\} \in I} \lambda_{i,j} - \sum_{j:\{j,i\} \in I} \lambda_{i,j}$$</p>
+<blockquote>
+<p>$I$表示$\{i,j\}$两个文档满足$D_i \triangleright D_j$,也就是$\bar{P}_{i,j}=1$</p>
+</blockquote>
+<p>这种方式可以看做是一种mini-batch的梯度下降算法，可以大大加快原始的神经网络训练.</p>
+<h2 id="总结">总结</h2><p><code>RankNet</code>训练希望文档<code>pair</code>对的前后排序概率与目标概率一致，用交叉熵作为损失函数，在实际排序中使用了神经网络作为算分排序函数，同时可以有<code>min-batch</code>的批量训练方法。据说微软的<code>Bing</code>之前使用着他.</p>
+<h2 id="参考">参考</h2><ol>
+<li>Burges, Chris, et al. “Learning to rank using gradient descent.” Proceedings of the 22nd international conference on Machine learning. ACM, 2005.</li>
+<li>Burges, Christopher JC. “From ranknet to lambdarank to lambdamart: An overview.” Learning 11 (2010): 23-581.</li>
+<li>Li, Hang. “Learning to rank for information retrieval and natural language processing.” Synthesis Lectures on Human Language Technologies 7.3 (2014): 1-121.</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet]]>
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[GBRank:一种基于回归的学习排序算法]]></title>
@@ -1801,528 +1898,6 @@ f'(q,D)=\left\{
 </blockquote>
 <p>先看一下演示的待<a href="http://kubicode.me/img/awk-study-list/score.log">处理文件</a>:<br><img src="/img/shell-line-no-tab/demo_text.png" alt=""></p>
 <p>需要做的需求就是将里面的数据使用<code>shell</code>将第一列读取出来做一些其他处理(当然如果仅仅是完成读取首列这个功能，使用<code>awk</code>是最快的，这里只是演示)</p>]]>
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://kubicode.me/tags/Linux/"/>
-    
-      <category term="Vim" scheme="http://kubicode.me/tags/Vim/"/>
-    
-      <category term="Linux" scheme="http://kubicode.me/categories/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[轻量的结构化文本处理工具-awk]]></title>
-    <link href="http://kubicode.me/2015/12/24/Linux/awk-study-list/"/>
-    <id>http://kubicode.me/2015/12/24/Linux/awk-study-list/</id>
-    <published>2015-12-23T16:06:41.000Z</published>
-    <updated>2016-01-03T02:38:47.000Z</updated>
-    <content type="html"><![CDATA[<pre><code>与其说<span class="tag">awk</span>是一个强大的文本处理工具，我更加喜欢称之为轻量级的<span class="tag">C</span>语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。<span class="rule"><span class="attribute">ps</span>:<span class="value">比Excel更加方便哦,一句话：awk可以带你装b带你飞~</span></span>
-</code></pre><h2 id="初体验：九九乘法表">初体验：九九乘法表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"lets begins"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=NR;i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%sx%s=%s\t"</span>,NR,i,NR*i)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"ends"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在先看<code>awk</code>程序之前，咱先来看一下由他实现的一个九九乘法表</p>
-<pre><code>yans-MacBook-Pro:Downloads yanyl$ seq <span class="number">9</span> | awk -f chengfa.awk
-lets begins
-<span class="number">1</span><span class="variable">x1=</span><span class="number">1</span>
-<span class="number">2</span><span class="variable">x1=</span><span class="number">2</span>    <span class="number">2</span><span class="variable">x2=</span><span class="number">4</span>
-<span class="number">3</span><span class="variable">x1=</span><span class="number">3</span>    <span class="number">3</span><span class="variable">x2=</span><span class="number">6</span>    <span class="number">3</span><span class="variable">x3=</span><span class="number">9</span>
-<span class="number">4</span><span class="variable">x1=</span><span class="number">4</span>    <span class="number">4</span><span class="variable">x2=</span><span class="number">8</span>    <span class="number">4</span><span class="variable">x3=</span><span class="number">12</span>    <span class="number">4</span><span class="variable">x4=</span><span class="number">16</span>
-<span class="number">5</span><span class="variable">x1=</span><span class="number">5</span>    <span class="number">5</span><span class="variable">x2=</span><span class="number">10</span>    <span class="number">5</span><span class="variable">x3=</span><span class="number">15</span>    <span class="number">5</span><span class="variable">x4=</span><span class="number">20</span>    <span class="number">5</span><span class="variable">x5=</span><span class="number">25</span>
-<span class="number">6</span><span class="variable">x1=</span><span class="number">6</span>    <span class="number">6</span><span class="variable">x2=</span><span class="number">12</span>    <span class="number">6</span><span class="variable">x3=</span><span class="number">18</span>    <span class="number">6</span><span class="variable">x4=</span><span class="number">24</span>    <span class="number">6</span><span class="variable">x5=</span><span class="number">30</span>    <span class="number">6</span><span class="variable">x6=</span><span class="number">36</span>
-<span class="number">7</span><span class="variable">x1=</span><span class="number">7</span>    <span class="number">7</span><span class="variable">x2=</span><span class="number">14</span>    <span class="number">7</span><span class="variable">x3=</span><span class="number">21</span>    <span class="number">7</span><span class="variable">x4=</span><span class="number">28</span>    <span class="number">7</span><span class="variable">x5=</span><span class="number">35</span>    <span class="number">7</span><span class="variable">x6=</span><span class="number">42</span>    <span class="number">7</span><span class="variable">x7=</span><span class="number">49</span>
-<span class="number">8</span><span class="variable">x1=</span><span class="number">8</span>    <span class="number">8</span><span class="variable">x2=</span><span class="number">16</span>    <span class="number">8</span><span class="variable">x3=</span><span class="number">24</span>    <span class="number">8</span><span class="variable">x4=</span><span class="number">32</span>    <span class="number">8</span><span class="variable">x5=</span><span class="number">40</span>    <span class="number">8</span><span class="variable">x6=</span><span class="number">48</span>    <span class="number">8</span><span class="variable">x7=</span><span class="number">56</span>    <span class="number">8</span><span class="variable">x8=</span><span class="number">64</span>
-<span class="number">9</span><span class="variable">x1=</span><span class="number">9</span>    <span class="number">9</span><span class="variable">x2=</span><span class="number">18</span>    <span class="number">9</span><span class="variable">x3=</span><span class="number">27</span>    <span class="number">9</span><span class="variable">x4=</span><span class="number">36</span>    <span class="number">9</span><span class="variable">x5=</span><span class="number">45</span>    <span class="number">9</span><span class="variable">x6=</span><span class="number">54</span>    <span class="number">9</span><span class="variable">x7=</span><span class="number">63</span>    <span class="number">9</span><span class="variable">x8=</span><span class="number">72</span>    <span class="number">9</span><span class="variable">x9=</span><span class="number">81</span>
-ends
-yans-MacBook-Pro:Downloads yanyl$
-</code></pre><a id="more"></a>
-<p>是不是着实惊艳了一把，程序暂时不解释，不错，为了更好更加方便得处理<code>Linux</code>下的文本，文本就记录学习<code>awk</code>神器的基本用法^_^</p>
-<h2 id="awk基础结构">awk基础结构</h2><p><code>awk</code>基础结构如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'BEGIN&#123;commands&#125; &#123;commands&#125; END&#123;commands&#125;'</span> filename</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>这个命令敲下去之后，<code>awk</code>回去按行读取<code>filename</code>的文本进行操作，里面的程序就是你对应的文本处理逻辑，还有这里的文件输入也可以改为标准的<code>stdin</code>的形式哦~</p>
-</blockquote>
-<p>很清晰，<code>awk</code>可以分为3块:</p>
-<ol>
-<li><code>BEGIN</code>:可以理解为程序的初始化，可以自定一些变量，或者定义文件的分隔符等</li>
-<li>{}模式块：这里会从文件或者输入里面按行读取，在这里可以使用<code>内建变量</code>或者列的值<code>$i</code> 或者自定义变量等，然后使用控制结果或者内置函数来进行相应的文本处理逻辑</li>
-<li><code>END</code>:程序执行结束块，可以做一些<code>Summary</code>类型或者其他的输出</li>
-</ol>
-<blockquote>
-<p>其实模式快可以省略，默认是执行<code>{print}</code> 打印行内容，其实其他两块也可以省略-_-</p>
-</blockquote>
-<p>所以总结来说<code>awk</code>的结构其实可以直接看做一个循环体<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BEGINE <span class="comment">#进行初始化</span></span><br><span class="line"><span class="keyword">while</span></span><br><span class="line">	&#123;commands&#125; <span class="comment">#内部循环的处理逻辑</span></span><br><span class="line">END <span class="comment">#结尾</span></span><br></pre></td></tr></table></figure></p>
-<p>需要注意的是：</p>
-<ol>
-<li><code>awk</code>语法的是包含在引号或者双引号里面的</li>
-<li>程序复杂的话可以写成<code>awk</code>结尾的文件，然后使用<code>awk -f xxx.awk filename</code>来进行执行</li>
-</ol>
-<blockquote>
-<p>当然了,刚刚都说了<code>awk</code>的优势在于轻量级，下面更多的<code>demo</code>都是行内的语法，并不会专门去写成<code>*.awk</code>文件再来执行^_^</p>
-</blockquote>
-<h2 id="列的操作">列的操作</h2><h3 id="列的输出">列的输出</h3><p>演示之前先看使用的实验文本文件<a href="/img/awk-study-list/score.log">成绩表score.log</a></p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ <span class="keyword">cat</span> <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-301    xiaoming    math    95
-301    xiaoming    chinese    58
-301    xiaoming    english    68
-301    xiaohong    math    77
-301    xiaohong    chinese    88
-301    xiaohong    english    75
-302    peter    math    35
-302    peter    chinese    45
-302    peter    english    95
-</code></pre><blockquote>
-<p>这里的列于列之间是使用<code>tab</code>隔开的</p>
-</blockquote>
-<p>先来看一下最简单的输出,假设我只关心年龄和成绩</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk '{<span class="keyword">print</span> <span class="label">$2</span>,<span class="label">$4}</span>' <span class="keyword">score</span>.<span class="literal">log</span>
-name <span class="keyword">score</span>
-xiaoming 95
-xiaoming 58
-xiaoming 68
-xiaohong 77
-xiaohong 88
-xiaohong 75
-peter 35
-peter 45
-peter 95
-</code></pre><blockquote>
-<p>这里的取列是使用<code>$i~n</code>  从1开始计数，比如<code>$1</code>是第一列，<code>$4</code>是第4列，其中<code>$0</code>表示整好</p>
-</blockquote>
-<p>但是发现没对齐，我想将其对个齐：</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk '{printf(<span class="string">"%-8s\t%-8s\n"</span>,<span class="label">$2</span>,<span class="label">$4</span>)}' <span class="keyword">score</span>.<span class="literal">log</span>
-name        <span class="keyword">score</span>
-xiaoming    95
-xiaoming    58
-xiaoming    68
-xiaohong    77
-xiaohong    88
-xiaohong    75
-peter       35
-peter       45
-peter       95
-</code></pre><blockquote>
-<p>就是就是使用了标准了<code>C</code>语言风格的<code>printf</code>函数了</p>
-</blockquote>
-<h3 id="列的过滤">列的过滤</h3><p>我感觉里面比较强大的就是使用<code>awk</code>进行各种过滤操作了，简直了<br>现在我只是想查看小明的成绩</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$2</span>==<span class="string">"xiaoming"</span>' <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-301    xiaoming    math    95
-301    xiaoming    chinese    58
-301    xiaoming    english    68
-</code></pre><blockquote>
-<p>这里支持and(<code>&amp;&amp;</code>)和or(<code>||</code>)的操作，同时<code>NR</code>表示当前的行号，<code>NR==1</code>就是为了保留表头</p>
-</blockquote>
-<p>同时<code>awk</code>还支持<code>C</code>语言系的各种比较符号<code>!=, &gt;, &lt;, &gt;=, &lt;=</code><br>查看不及格的小兔崽子-_-</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$4</span>&lt;60' <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-301    xiaoming    chinese    58
-302    peter    math    35
-302    peter    chinese    45
-</code></pre><p>这里除了支持直接判断的语法，还支持字符串的匹配，使用<code>~</code>符号（这个有点强大），使用语法为<code>~/pattern/</code><br>现在来看一下姓小的同学</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$2</span>~/xiao/' <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-301    xiaoming    math    95
-301    xiaoming    chinese    58
-301    xiaoming    english    68
-301    xiaohong    math    77
-301    xiaohong    chinese    88
-301    xiaohong    english    75
-</code></pre><p>还可以进行模式非匹配，要<code>!~</code>即可</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>:Downloads yanyl$ awk 'NR==1 || <span class="label">$2</span>!~/xiao/' <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-302    peter    math    35
-302    peter    chinese    45
-302    peter    english    95
-</code></pre><h2 id="变量">变量</h2><h3 id="变量定义使用">变量定义使用</h3><p><code>awk</code>里面变量的几个点:</p>
-<ol>
-<li>里面的变量命名和<code>C</code>系一样</li>
-<li>变量区分大小写</li>
-<li>变量一般都是数字和字符串类型</li>
-<li>在初始化时，数字类型初始化为0，字符串类型初始化为空，并且在运行期间可变，同时不需要向<code>C</code>一样显示的初始化变量</li>
-</ol>
-<p>这里来看一个最简单的变量的创建与读写</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '{name=<span class="string">"zhangsan"</span>} END{<span class="keyword">print</span> name}' <span class="keyword">score</span>.<span class="literal">log</span>
-zhangsan
-yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '{age=23} END{<span class="keyword">print</span> age}' <span class="keyword">score</span>.<span class="literal">log</span>
-23
-</code></pre><blockquote>
-<p>这里想想<code>python</code>的变量就可以了哦~</p>
-</blockquote>
-<p>另外参数不一定要在<code>awk</code>语句中初始化，还可以在输入文件中进行传递，语法格式为<code>awk &#39;statment&#39; var=value file</code>的方式</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '<span class="label">$4</span>&gt;ms' ms=60 <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-301    xiaoming    math    95
-301    xiaoming    english    68
-301    xiaohong    math    77
-301    xiaohong    chinese    88
-301    xiaohong    english    75
-302    peter    english    95
-yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '<span class="label">$4</span>&gt;ms' ms=90 <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-301    xiaoming    math    95
-302    peter    english    95
-</code></pre><p>这里示例是用于展示在输入文件的时候传一个<code>ms</code>变量，来控制过滤最小分数，应该还是蛮方便的</p>
-<h3 id="类型转换">类型转换</h3><blockquote>
-<p>这里的类型转换只有数字类型和字符串类型的转换啦-_-</p>
-</blockquote>
-<p>记住一个原则<code>+号表示数字类型的操作，会忽略字符串，而空才是正常字符串的拼接</code></p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span>+three}'
-5
-yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span> three}'
-23
-yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span>+<span class="string">"s"</span>+three}'
-5
-yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{<span class="keyword">two</span>=2;three=3;<span class="keyword">print</span> <span class="keyword">two</span> <span class="string">"s"</span> three}'
-2s3
-</code></pre><blockquote>
-<p>还有关于详细的转换参考<a href="http://www.gnu.org/software/gawk/manual/gawk.html#Variables" target="_blank" rel="external">这里</a></p>
-</blockquote>
-<h3 id="内建变量">内建变量</h3><p>下面贴出的都是一些内置变量，在自己创建变量的时候请勿将变量名创建为下面的内置变量名</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">变量名</th>
-<th style="text-align:left">变量描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>$0</code></td>
-<td style="text-align:left">表示当前正行的内容</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>$1~$n</code></td>
-<td style="text-align:left">表示第几个列的值，这些列是使用<code>FS</code>变量进行分割的</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>FS</code></td>
-<td style="text-align:left">列的分割符，默认是空格或者<code>tab</code></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>NF</code></td>
-<td style="text-align:left">表示当前文件中列的个数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>NR</code></td>
-<td style="text-align:left">表示当前读取的行数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>FNR</code></td>
-<td style="text-align:left">这个表示当前文件自己标的行号</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>NR</code></td>
-<td style="text-align:left">表示当前读取的行数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>RS</code></td>
-<td style="text-align:left">表示输入记录的换行符，默认为换行符<code>\n</code></td>
-</tr>
-<tr>
-<td style="text-align:left"><code>OFS</code></td>
-<td style="text-align:left">表示输出记录的分割符，默认是空格</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>ORS</code></td>
-<td style="text-align:left">表示输出记录的分割符，默认是换行符</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>FILENAME</code></td>
-<td style="text-align:left">当前输出的文件名</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>ARGC</code></td>
-<td style="text-align:left">传入参数的个数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>ARGV</code></td>
-<td style="text-align:left">传入参数的数组</td>
-</tr>
-</tbody>
-</table>
-<p>上面是列出了一些常用的内置变量，详细的可以看<a href="http://www.gnu.org/software/gawk/manual/gawk.html#Built_002din-Variables" target="_blank" rel="external">这里</a></p>
-<blockquote>
-<p>个人感觉最常用的就是<code>$i</code>犀利以及<code>FS</code>、<code>NR</code>之类的了^_^</p>
-</blockquote>
-<h2 id="控制流程">控制流程</h2><blockquote>
-<p><code>awk</code>提供了类<code>C</code>系语言的强大的控制流程语法，可以发现绝大部门语法和<code>C</code>是一样的</p>
-</blockquote>
-<h3 id="if判断">if判断</h3><p><code>if</code>语法是你超级熟悉的<code>if (condition) then-body [else else-body]</code><br>现在需要给每个人每门成绩打一个标签，85分以上优秀，60及以上良好，否则。。。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (NR==<span class="number">1</span>) <span class="comment">#这里针对第一行  额外操作   追加一个标签列</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">print</span> <span class="variable">$0</span> <span class="string">"\tlabel"</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	    <span class="keyword">if</span>(<span class="variable">$4</span> &gt;= <span class="number">85</span>)</span><br><span class="line">	        label = <span class="string">"excellent"</span></span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable">$4</span> &gt;= <span class="number">60</span>)</span><br><span class="line">	        label = <span class="string">"well"</span></span><br><span class="line">	    <span class="keyword">else</span></span><br><span class="line">	        label = <span class="string">"shit"</span></span><br><span class="line"></span><br><span class="line">	    <span class="built_in">print</span> <span class="variable">$0</span> <span class="string">"\t"</span> label</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>将这个<code>awk</code>文件进行执行之后可以看到</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk -f <span class="keyword">test</span>.awk <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>    <span class="keyword">label</span>
-301    xiaoming    math    95    excellent
-301    xiaoming    chinese    58    shit
-301    xiaoming    english    68    well
-301    xiaohong    math    77    well
-301    xiaohong    chinese    88    excellent
-301    xiaohong    english    75    well
-302    peter    math    35    shit
-302    peter    chinese    45    shit
-302    peter    english    95    excellent
-</code></pre><p>这里注意，你如果想把控制语句写到一行，就必须得使用<code>{}</code>显示标注执行主体，<code>;</code>来标注结束，就是像下面这么任性我也是没办法</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk '{<span class="keyword">if</span> (NR==1){<span class="keyword">print</span> <span class="label">$0</span> <span class="string">"\tlabel"</span>;}<span class="keyword">else</span>{<span class="keyword">if</span>(<span class="label">$4</span> &gt;= 85){<span class="keyword">label</span> = <span class="string">"excellent"</span>;}<span class="keyword">else</span> <span class="keyword">if</span> (<span class="label">$4</span> &gt;= 60){<span class="keyword">label</span> = <span class="string">"well"</span>;}<span class="keyword">else</span>{<span class="keyword">label</span> = <span class="string">"shit"</span>;}<span class="keyword">print</span> <span class="label">$0</span> <span class="string">"\t"</span> <span class="keyword">label</span>;}}' <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>    <span class="keyword">label</span>
-301    xiaoming    math    95    excellent
-301    xiaoming    chinese    58    shit
-301    xiaoming    english    68    well
-301    xiaohong    math    77    well
-301    xiaohong    chinese    88    excellent
-301    xiaohong    english    75    well
-302    peter    math    35    shit
-302    peter    chinese    45    shit
-302    peter    english    95    excellent
-</code></pre><h3 id="while循环">while循环</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (condition)</span><br><span class="line">  body</span><br></pre></td></tr></table></figure>
-<p><code>while</code>还是很方便使用</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk 'BEGIN{i=1;<span class="keyword">sum</span>=0;<span class="keyword">while</span>(i&lt;10) {<span class="keyword">sum</span>+=i;i++;} <span class="keyword">print</span> <span class="keyword">sum</span> }'
-45
-</code></pre><p>从1累加到9的实现</p>
-<h3 id="do-while循环">do-while循环</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">  body</span><br><span class="line"><span class="keyword">while</span> (condition)</span><br></pre></td></tr></table></figure>
-<h3 id="for循环">for循环</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (initialization; condition; increment)</span><br><span class="line">  body</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这个方法在最上面的初体验里面就有了</p>
-</blockquote>
-<h3 id="switch">switch</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">switch (expression) &#123;</span><br><span class="line"><span class="keyword">case</span> value or regular expression:</span><br><span class="line">    <span class="keyword">case</span>-body</span><br><span class="line">default:</span><br><span class="line">    default-body</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这个在<code>gnu awk</code>的手册中说明支持，但是自己捣鼓了半天也没结果，下次深入了再贴出来</p>
-</blockquote>
-<h3 id="next控制">next控制</h3><p>既然有了上面那么强大的<code>C</code>系控制，肯定也少不了<code>break</code>和<code>continue</code>，在<code>awk</code>中都是支持的，而且用法都一样，所以这里不再一一描述，有意思的是来说一下这个<code>next</code>关键字</p>
-<pre><code><span class="keyword">next</span>:在文章最上面描述的awk的结构的中间部分是一个天然的循环，<span class="keyword">next</span>关键词就是让你在这个天然的循环中跳转到下一行处理,就像<span class="keyword">continue</span>
-</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$4</span>&lt;<span class="number">60</span>)</span><br><span class="line">        next <span class="comment">#小于60的直接过掉  不做处理</span></span><br><span class="line">    <span class="built_in">print</span> <span class="variable">$0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面程序是用来过掉不及格的同学的</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk -f <span class="keyword">test</span>.awk <span class="keyword">score</span>.<span class="literal">log</span>
-<span class="keyword">class</span>    name    course    <span class="keyword">score</span>
-301    xiaoming    math    95
-301    xiaoming    english    68
-301    xiaohong    math    77
-301    xiaohong    chinese    88
-301    xiaohong    english    75
-302    peter    english    95
-</code></pre><h3 id="nextfile控制">nextfile控制</h3><p>另外一个与<code>next</code>类似的就是<code>nextfile</code> ，表示跳到下一个输入文件(因为<code>awk</code>一下子可以有多个输入文件呀)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$0</span>~/score/)</span><br><span class="line">        next <span class="comment">#含有score字符串的直接过掉</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$4</span>&lt;n)</span><br><span class="line">        nextfile</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> n <span class="string">"\t"</span> <span class="variable">$0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到结果</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ awk -f <span class="keyword">test</span>.awk <span class="keyword">n</span>=58 <span class="keyword">score</span>.<span class="keyword">log</span> <span class="keyword">n</span>=88 <span class="keyword">score</span>.<span class="literal">log</span>
-58    301    xiaoming    math    95
-58    301    xiaoming    chinese    58
-58    301    xiaoming    english    68
-58    301    xiaohong    math    77
-58    301    xiaohong    chinese    88
-58    301    xiaohong    english    75
-88    301    xiaoming    math    95
-</code></pre><p>都是符合预期的<br>同时还有一个<code>exit</code>关键词不再介绍，结束程序用的</p>
-<h2 id="数组">数组</h2><h3 id="创建与使用">创建与使用</h3><p><code>awk</code>为了更好更加强大的处理出具，他也提供了数组这个功能，但是略有特点:</p>
-<ol>
-<li>数组的索引不一定是要连续数据，而且还可以字符串与汉字混合（据官网doc解释，<code>awk</code>将数字型的索引都转成了字符串）</li>
-<li>使用数组签不需要显示声明他的长度</li>
-<li>很多产生数组的函数  产生完了之后都是从1开始的（注意这个，不然得坑爹了）</li>
-</ol>
-<p>来看一个比较全面的使用数组的列子<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">	<span class="comment">#可以直接给数组赋值了，不需要定义</span></span><br><span class="line">    arr[<span class="string">"color"</span>]=<span class="string">"red"</span>;</span><br><span class="line">    arr[<span class="string">"age"</span>]=<span class="number">23</span></span><br><span class="line">    arr[<span class="number">99</span>]=<span class="number">999</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">#使用for each的方式取值，当然也可以for的三段式取值</span></span><br><span class="line">    <span class="keyword">for</span>(x <span class="keyword">in</span> arr)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">print</span> x <span class="string">":"</span> arr[x];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到输出结果中将数组的索引和值都打印出来了</p>
-<pre><code>yans-MacBook-Pro-<span class="number">2</span>:awk_test yanyl$ seq <span class="number">1</span> | awk -f test.awk
-<span class="label">age:</span><span class="number">23</span>
-<span class="label">color:</span>red
-<span class="number">99</span>:<span class="number">999</span>
-</code></pre><p>但是需要注意的是你不能这么写<br><code>if(arr[&quot;name&quot;] == &quot;xiaoming&quot;)</code>，也许<code>awk</code>不会报错，但是也不会有正确结果出来，所以你可以些么写 <code>if(&quot;name&quot; in arr)</code>先进行一个是否有索引的判断，这样比较安全<br>其他的技巧自己看详情的doc拉</p>
-<blockquote>
-<p>我感觉<code>awk</code>的里面的数组俨然是一个<code>LinkedHashMap</code>-_-</p>
-</blockquote>
-<h3 id="删除">删除</h3><p>删除的语法也很简单<code>delete array[index-expression]</code>，<br>比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    arr[<span class="string">"color"</span>]=<span class="string">"red"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">"color"</span> <span class="keyword">in</span> arr)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">"yes"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">"no"</span></span><br><span class="line"></span><br><span class="line">   delete arr[<span class="string">"color"</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="string">"color"</span> <span class="keyword">in</span> arr)</span><br><span class="line">        <span class="built_in">print</span> <span class="string">"yes"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">print</span> <span class="string">"no"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>进行一个打印之后可以发现</p>
-<pre><code>yans-MacBook-<span class="keyword">Pro</span>-2:awk_test yanyl$ seq 1 | awk -f <span class="keyword">test</span>.awk
-yes
-<span class="keyword">no</span>
-</code></pre><p>在第二次判断数组是否存在该元素的时 可以发现已经删除掉了<br>如果想删除全部元素就可以直接使用这个语法：<code>delete array</code>,但是要注意的是 删除了之后之后这个变量还是数组类型，此时无法被用于赋值字符串或者数字:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    arr[<span class="string">"color"</span>]=<span class="string">"red"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    delete arr</span><br><span class="line">    arr=<span class="number">4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这种方式在进行第二次赋值的时候会发错</p>
-<pre><code>yans-MacBook-Pro-2:awk_test yanyl$ seq 1 | awk -f test.awk
-awk: can't assign to arr; it's an<span class="instruction"> array </span>name.
- input record number 1, file
- source line number 9
-</code></pre><blockquote>
-<p>关于其余的<a href="http://www.gnu.org/software/gawk/manual/gawk.html#Multiscanning" target="_blank" rel="external">多维数组</a>还是去看文档把~</p>
-</blockquote>
-<h2 id="内置函数">内置函数</h2><p><code>awk</code>的另一个强大之处就是提供了很丰富的内置函数，写起来非常方便!</p>
-<h3 id="算术函数">算术函数</h3><table>
-<thead>
-<tr>
-<th style="text-align:left">函数名称</th>
-<th style="text-align:left">介绍</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>atan2(y,x)</code></td>
-<td style="text-align:left">反正切函数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>cos(x)</code></td>
-<td style="text-align:left">余弦函数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>sin(x)</code></td>
-<td style="text-align:left">正弦函数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>exp(x)</code></td>
-<td style="text-align:left"><code>e</code>的幂次方,任意数的幂次方可以使用<code>x**y</code>来算</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>log(x)</code></td>
-<td style="text-align:left">自然数的对数</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>sqrt(x)</code></td>
-<td style="text-align:left">平方根</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>int(x)</code></td>
-<td style="text-align:left">整数的值</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>rand()</code></td>
-<td style="text-align:left">任意随机数，大于0小于1，注意得加<code>srand()</code>方法设置种子</td>
-</tr>
-</tbody>
-</table>
-<p>这里仅演示<code>rand()</code>随机数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    srand();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">print</span> rand();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>执行得到</p>
-<pre><code>yans-MacBook-Pro-<span class="number">2</span>:awk_<span class="built_in">test</span> yanyl$ seq <span class="number">9</span> | awk <span class="operator">-f</span> test.awk
-<span class="number">0.107174</span>
-<span class="number">0.117314</span>
-<span class="number">0.89198</span>
-<span class="number">0.700518</span>
-<span class="number">0.269547</span>
-<span class="number">0.503197</span>
-<span class="number">0.402781</span>
-<span class="number">0.958053</span>
-<span class="number">0.523041</span>
-</code></pre><blockquote>
-<p>注意，如果不加<code>srand()</code>方法，则多次执行还是原来的随机数…</p>
-</blockquote>
-<h3 id="字符串函数">字符串函数</h3><table>
-<thead>
-<tr>
-<th style="text-align:left">函数名称</th>
-<th style="text-align:left">介绍</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>asort(source [, dest [, how ] ])</code></td>
-<td style="text-align:left">对数组的值进行排序</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>asorti(source [, dest [, how ] ])</code></td>
-<td style="text-align:left">对数组的索引进行排序</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>gensub(regexp, replacement, how [, target])</code></td>
-<td style="text-align:left">正则替换，<code>how</code>为替换的个数，为<code>g or G</code>的时候替换全部，还可以将匹配到的部分使用<code>/N</code>的格式来取</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>gsub(regexp, replacement [, target])</code></td>
-<td style="text-align:left">正则替换</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>index(in, find)</code></td>
-<td style="text-align:left">查找指定字符串的索引位置，不存在时返回0, 还是注意它不支持正则</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>length([string])</code></td>
-<td style="text-align:left">查找字符串的长度，如果查找变量未指定的时候，返回0（当做查一个数组）</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>match(string, regexp [, array])</code></td>
-<td style="text-align:left">正则查找字符串 返回找到的位置，如果传了<code>array</code>参数，查找的字符串将会丢入这个数组</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>split(string, array [, fieldsep [, seps ] ])</code></td>
-<td style="text-align:left">将字符串分割到数组</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>strtonum(str)</code></td>
-<td style="text-align:left">将字符串转为数字</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>sub(regexp, replacement [, target])</code></td>
-<td style="text-align:left">替换指定字符串</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>substr(string, start [, length ])</code></td>
-<td style="text-align:left">截取指定字符串</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>sub(regexp, replacement [, target])</code></td>
-<td style="text-align:left">替换指定字符串</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>tolower(string)</code></td>
-<td style="text-align:left">转小写</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>toupper(string)</code></td>
-<td style="text-align:left">转大写</td>
-</tr>
-</tbody>
-</table>
-<p>演示几个常用的<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    str=<span class="string">"abc-def"</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> substr(str,<span class="number">3</span>,<span class="number">2</span>) <span class="comment">#截取字符串</span></span><br><span class="line">    sub(/<span class="built_in">cd</span>/,<span class="string">"CD"</span>,str) <span class="comment">#转大写</span></span><br><span class="line">    <span class="built_in">print</span> str</span><br><span class="line">    split(str,arr,<span class="string">"-"</span>) <span class="comment">#分割字符串</span></span><br><span class="line">    <span class="keyword">for</span>(i <span class="keyword">in</span> arr)</span><br><span class="line">        <span class="built_in">print</span> arr[i]</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span> index(str,<span class="string">"c-d"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>可以看到结果</p>
-<pre><code>yans-<span class="constant">MacBook-Pro-</span><span class="number">2</span><span class="symbol">:awk_test</span> yanyl<span class="variable">$ </span>seq <span class="number">1</span> | awk -f test.awk
-c-
-abc-<span class="function"><span class="keyword">def</span>
-<span class="title">def</span></span>
-abc
-<span class="number">3</span>
-</code></pre><h3 id="自定义函数">自定义函数</h3><p><code>awk</code>很强大的一点就是支持自定义函数<br>自定义函数的语法如下</p>
-<pre><code><span class="function"><span class="keyword">function</span></span> <span class="keyword">name</span>([<span class="type">parameter</span>-list])
-{
-     body-of-<span class="function"><span class="keyword">function</span></span>
-}
-</code></pre><p>还是非常简单的熟悉啊</p>
-<blockquote>
-<p>由于<code>awk</code>是读取整个代码之后再运行的，所以自定义函数也不需要放在调用者之前，可以放任何地方,如有也返回值也直接使用<code>return</code>即可</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"><span class="comment">#file = test.awk</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    sayhello(<span class="string">"tom"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> sayhello(name)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hello,%s\n"</span>,name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>调用可以有</p>
-<pre><code>yans-MacBook-Pro-<span class="number">2</span>:awk_<span class="built_in">test</span> yanyl$ seq <span class="number">1</span> | awk <span class="operator">-f</span> test.awk
-hello,tom
-</code></pre><blockquote>
-<p>函数里面想使用局部变量就必须将其放到传参中</p>
-</blockquote>
-<h2 id="总结">总结</h2><ol>
-<li><code>awk</code>里面只有<code>数值</code>、<code>字符串</code>、<code>数组</code>三种变量</li>
-<li><code>awk</code>的数组其实索引从<code>1</code>开始!!!</li>
-<li><code>awk</code>的大部分语法和C一样，但是不需要预定义变量</li>
-<li><code>awk</code>非常轻量级，处理结构化的文本文件非常的方便</li>
-<li><code>awk</code>还有其他很多功能，参见官方文档，因为主要是用其轻量，所以这里不再一一介绍</li>
-</ol>
-<h2 id="参考">参考</h2><ol>
-<li><a href="http://www.ibm.com/developerworks/cn/education/aix/au-gawk/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/education/aix/au-gawk/</a></li>
-<li><a href="http://www.gnu.org/software/gawk/manual/gawk.html#Getopt-Function" target="_blank" rel="external">awk guid</a></li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external"></a></p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<pre><code>与其说<span class="tag">awk</span>是一个强大的文本处理工具，我更加喜欢称之为轻量级的<span class="tag">C</span>语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。<span class="rule"><span class="attribute">ps</span>:<span class="value">比Excel更加方便哦,一句话：awk可以带你装b带你飞~</span></span>
-</code></pre><h2 id="初体验：九九乘法表">初体验：九九乘法表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"lets begins"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=NR;i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%sx%s=%s\t"</span>,NR,i,NR*i)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"ends"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在先看<code>awk</code>程序之前，咱先来看一下由他实现的一个九九乘法表</p>
-<pre><code>yans-MacBook-Pro:Downloads yanyl$ seq <span class="number">9</span> | awk -f chengfa.awk
-lets begins
-<span class="number">1</span><span class="variable">x1=</span><span class="number">1</span>
-<span class="number">2</span><span class="variable">x1=</span><span class="number">2</span>    <span class="number">2</span><span class="variable">x2=</span><span class="number">4</span>
-<span class="number">3</span><span class="variable">x1=</span><span class="number">3</span>    <span class="number">3</span><span class="variable">x2=</span><span class="number">6</span>    <span class="number">3</span><span class="variable">x3=</span><span class="number">9</span>
-<span class="number">4</span><span class="variable">x1=</span><span class="number">4</span>    <span class="number">4</span><span class="variable">x2=</span><span class="number">8</span>    <span class="number">4</span><span class="variable">x3=</span><span class="number">12</span>    <span class="number">4</span><span class="variable">x4=</span><span class="number">16</span>
-<span class="number">5</span><span class="variable">x1=</span><span class="number">5</span>    <span class="number">5</span><span class="variable">x2=</span><span class="number">10</span>    <span class="number">5</span><span class="variable">x3=</span><span class="number">15</span>    <span class="number">5</span><span class="variable">x4=</span><span class="number">20</span>    <span class="number">5</span><span class="variable">x5=</span><span class="number">25</span>
-<span class="number">6</span><span class="variable">x1=</span><span class="number">6</span>    <span class="number">6</span><span class="variable">x2=</span><span class="number">12</span>    <span class="number">6</span><span class="variable">x3=</span><span class="number">18</span>    <span class="number">6</span><span class="variable">x4=</span><span class="number">24</span>    <span class="number">6</span><span class="variable">x5=</span><span class="number">30</span>    <span class="number">6</span><span class="variable">x6=</span><span class="number">36</span>
-<span class="number">7</span><span class="variable">x1=</span><span class="number">7</span>    <span class="number">7</span><span class="variable">x2=</span><span class="number">14</span>    <span class="number">7</span><span class="variable">x3=</span><span class="number">21</span>    <span class="number">7</span><span class="variable">x4=</span><span class="number">28</span>    <span class="number">7</span><span class="variable">x5=</span><span class="number">35</span>    <span class="number">7</span><span class="variable">x6=</span><span class="number">42</span>    <span class="number">7</span><span class="variable">x7=</span><span class="number">49</span>
-<span class="number">8</span><span class="variable">x1=</span><span class="number">8</span>    <span class="number">8</span><span class="variable">x2=</span><span class="number">16</span>    <span class="number">8</span><span class="variable">x3=</span><span class="number">24</span>    <span class="number">8</span><span class="variable">x4=</span><span class="number">32</span>    <span class="number">8</span><span class="variable">x5=</span><span class="number">40</span>    <span class="number">8</span><span class="variable">x6=</span><span class="number">48</span>    <span class="number">8</span><span class="variable">x7=</span><span class="number">56</span>    <span class="number">8</span><span class="variable">x8=</span><span class="number">64</span>
-<span class="number">9</span><span class="variable">x1=</span><span class="number">9</span>    <span class="number">9</span><span class="variable">x2=</span><span class="number">18</span>    <span class="number">9</span><span class="variable">x3=</span><span class="number">27</span>    <span class="number">9</span><span class="variable">x4=</span><span class="number">36</span>    <span class="number">9</span><span class="variable">x5=</span><span class="number">45</span>    <span class="number">9</span><span class="variable">x6=</span><span class="number">54</span>    <span class="number">9</span><span class="variable">x7=</span><span class="number">63</span>    <span class="number">9</span><span class="variable">x8=</span><span class="number">72</span>    <span class="number">9</span><span class="variable">x9=</span><span class="number">81</span>
-ends
-yans-MacBook-Pro:Downloads yanyl$
-</code></pre>]]>
     
     </summary>
     

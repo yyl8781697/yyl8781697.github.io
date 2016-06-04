@@ -166,7 +166,7 @@
 <h2 id="逻辑回归和线性回归">逻辑回归和线性回归</h2><blockquote>
 <p>参考[2,3,4]</p>
 </blockquote>
-<p><code>LR</code>回归是一个线性的二分类模型，主要是<code>计算在某个样本特征下事件发生的概率</code>，比如根据用户的浏览购买情况作为特征来计算它是否会购买这个商品，抑或是它是否会点击这个商品。然后<code>LR</code>的最终值是根据一个线性和函数再通过一个<code>sigmod</code>函数来求得，这个线性和函数权重与特征值的累加以及加上偏置求出来的，所以在训练<code>LR</code>时也就是在训练线性和函数的各个权重值<code>w</code>。</p>
+<p><code>LR</code>回归是一个线性的二分类模型，主要是<code>计算在某个样本特征下事件发生的概率</code>，比如根据用户的浏览购买情况作为特征来计算它是否会购买这个商品，抑或是它是否会点击这个商品。然后<code>LR</code>的最终值是根据一个线性和函数再通过一个<code>sigmoid</code>函数来求得，这个线性和函数权重与特征值的累加以及加上偏置求出来的，所以在训练<code>LR</code>时也就是在训练线性和函数的各个权重值<code>w</code>。</p>
 <p>$$h_w(x) = \frac{1}{1+e^{-(w^Tx+b)}}$$</p>
 <p>关于这个权重值<code>w</code>一般使用最大似然法来估计,假设现在有样本$\{x_i,y_i\}$,其中$x_i$表示样本的特征，$y_i \in \{0,1\}$表示样本的分类真实值，$y_i=1$的概率是$p_i$,则$y_i=0$的概率是$1-p_i$，那么观测概率为:<br>$$p(y_i)=p_i^{y_i}*(1-p_i)^{1-y_i}$$<br>则最大似然函数为:<br>$$\prod \left(h_w(x_i)^{y_i}*(1-h_w(x_i))^{1-y_i}\right)$$</p>
 <p>对这个似然函数取对数之后就会得到的表达式<br>$$L(w)=\sum_i \left( y_i*logh_w(x_i)-(1-y_i)*log(1-h_w(x_i)) \right)=\sum_i \left(y_i*(w^Tx_i)-log(1+e^{w^Tx_i})\right)$$<br>估计这个$L(w)$的极大值就可以得到$w$的估计值。</p>
@@ -630,7 +630,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
 		  
 		
 		  
@@ -671,11 +671,11 @@
 			
 		
 			
-				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
 			
 		
 			
@@ -683,7 +683,7 @@
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>8</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>9</sup></a></li>
 			
 		
 			

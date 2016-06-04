@@ -95,6 +95,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/" title="Hadoop Streaming导入自定义module" itemprop="url">Hadoop Streaming导入自定义module</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-03-24T16:17:54.000Z" itemprop="datePublished"> 发表于 2016-03-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/">reducer</a>程序:<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/" title="[小技巧]让Hexo在使用Mathjax时支持多行公式" itemprop="url">[小技巧]让Hexo在使用Mathjax时支持多行公式</a>
   </h1>
   <p class="article-author">By
@@ -721,86 +785,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/12/24/Linux/awk-study-list/" title="轻量的结构化文本处理工具-awk" itemprop="url">轻量的结构化文本处理工具-awk</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-12-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-12-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>与其说<span class="tag">awk</span>是一个强大的文本处理工具，我更加喜欢称之为轻量级的<span class="tag">C</span>语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。<span class="rule"><span class="attribute">ps</span>:<span class="value">比Excel更加方便哦,一句话：awk可以带你装b带你飞~</span></span>
-</code></pre><h2 id="初体验：九九乘法表">初体验：九九乘法表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"lets begins"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=NR;i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%sx%s=%s\t"</span>,NR,i,NR*i)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"ends"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在先看<code>awk</code>程序之前，咱先来看一下由他实现的一个九九乘法表</p>
-<pre><code>yans-MacBook-Pro:Downloads yanyl$ seq <span class="number">9</span> | awk -f chengfa.awk
-lets begins
-<span class="number">1</span><span class="variable">x1=</span><span class="number">1</span>
-<span class="number">2</span><span class="variable">x1=</span><span class="number">2</span>    <span class="number">2</span><span class="variable">x2=</span><span class="number">4</span>
-<span class="number">3</span><span class="variable">x1=</span><span class="number">3</span>    <span class="number">3</span><span class="variable">x2=</span><span class="number">6</span>    <span class="number">3</span><span class="variable">x3=</span><span class="number">9</span>
-<span class="number">4</span><span class="variable">x1=</span><span class="number">4</span>    <span class="number">4</span><span class="variable">x2=</span><span class="number">8</span>    <span class="number">4</span><span class="variable">x3=</span><span class="number">12</span>    <span class="number">4</span><span class="variable">x4=</span><span class="number">16</span>
-<span class="number">5</span><span class="variable">x1=</span><span class="number">5</span>    <span class="number">5</span><span class="variable">x2=</span><span class="number">10</span>    <span class="number">5</span><span class="variable">x3=</span><span class="number">15</span>    <span class="number">5</span><span class="variable">x4=</span><span class="number">20</span>    <span class="number">5</span><span class="variable">x5=</span><span class="number">25</span>
-<span class="number">6</span><span class="variable">x1=</span><span class="number">6</span>    <span class="number">6</span><span class="variable">x2=</span><span class="number">12</span>    <span class="number">6</span><span class="variable">x3=</span><span class="number">18</span>    <span class="number">6</span><span class="variable">x4=</span><span class="number">24</span>    <span class="number">6</span><span class="variable">x5=</span><span class="number">30</span>    <span class="number">6</span><span class="variable">x6=</span><span class="number">36</span>
-<span class="number">7</span><span class="variable">x1=</span><span class="number">7</span>    <span class="number">7</span><span class="variable">x2=</span><span class="number">14</span>    <span class="number">7</span><span class="variable">x3=</span><span class="number">21</span>    <span class="number">7</span><span class="variable">x4=</span><span class="number">28</span>    <span class="number">7</span><span class="variable">x5=</span><span class="number">35</span>    <span class="number">7</span><span class="variable">x6=</span><span class="number">42</span>    <span class="number">7</span><span class="variable">x7=</span><span class="number">49</span>
-<span class="number">8</span><span class="variable">x1=</span><span class="number">8</span>    <span class="number">8</span><span class="variable">x2=</span><span class="number">16</span>    <span class="number">8</span><span class="variable">x3=</span><span class="number">24</span>    <span class="number">8</span><span class="variable">x4=</span><span class="number">32</span>    <span class="number">8</span><span class="variable">x5=</span><span class="number">40</span>    <span class="number">8</span><span class="variable">x6=</span><span class="number">48</span>    <span class="number">8</span><span class="variable">x7=</span><span class="number">56</span>    <span class="number">8</span><span class="variable">x8=</span><span class="number">64</span>
-<span class="number">9</span><span class="variable">x1=</span><span class="number">9</span>    <span class="number">9</span><span class="variable">x2=</span><span class="number">18</span>    <span class="number">9</span><span class="variable">x3=</span><span class="number">27</span>    <span class="number">9</span><span class="variable">x4=</span><span class="number">36</span>    <span class="number">9</span><span class="variable">x5=</span><span class="number">45</span>    <span class="number">9</span><span class="variable">x6=</span><span class="number">54</span>    <span class="number">9</span><span class="variable">x7=</span><span class="number">63</span>    <span class="number">9</span><span class="variable">x8=</span><span class="number">72</span>    <span class="number">9</span><span class="variable">x9=</span><span class="number">81</span>
-ends
-yans-MacBook-Pro:Downloads yanyl$
-</code></pre>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/12/24/Linux/awk-study-list/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/12/24/Linux/awk-study-list/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/12/24/Linux/awk-study-list/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -875,7 +859,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>21</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
 		  
 		
 		  
@@ -916,11 +900,11 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
 			
 		
 			
@@ -928,7 +912,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>8</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>9</sup></a></li>
 			
 		
 			

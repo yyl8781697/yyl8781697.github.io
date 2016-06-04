@@ -2,6 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</loc>
+    <lastmod>2016-06-04T07:13:16.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2015/08/16/Machine%20Learning/Common-Interview/</loc>
+    <lastmod>2016-06-04T07:13:14.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/favorites/index.html</loc>
+    <lastmod>2016-06-02T03:41:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/</loc>
+    <lastmod>2016-05-31T04:02:40.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/about/index.html</loc>
     <lastmod>2016-05-28T07:59:43.000Z</lastmod>
   </url>
@@ -42,18 +62,8 @@
   </url>
   
   <url>
-    <loc>http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/</loc>
-    <lastmod>2016-04-16T17:40:56.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://kubicode.me/2015/05/31/Mac/My-Tools-Used-In-Mac/</loc>
     <lastmod>2016-04-16T12:15:58.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/favorites/index.html</loc>
-    <lastmod>2016-04-14T11:52:33.000Z</lastmod>
   </url>
   
   <url>
@@ -164,11 +174,6 @@
   <url>
     <loc>http://kubicode.me/books/index.html</loc>
     <lastmod>2015-10-22T17:00:06.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2015/08/16/Machine%20Learning/Common-Interview/</loc>
-    <lastmod>2015-10-20T11:03:21.000Z</lastmod>
   </url>
   
   <url>
