@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-06-04T07:13:16.000Z</updated>
+  <updated>2016-06-04T07:18:23.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/"/>
     <id>http://kubicode.me/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</id>
     <published>2016-05-30T11:51:21.000Z</published>
-    <updated>2016-06-04T07:13:16.000Z</updated>
+    <updated>2016-06-04T07:18:23.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet</code>就是使用神经网络算法来使得这个概率最大化.</p>
 </blockquote>
@@ -33,6 +33,7 @@
 <blockquote>
 <p>这里$x$是为文档$D$所表示的特征向量</p>
 </blockquote>
+<a id="more"></a>
 <p>我们现在将$P(D_i \triangleright D_j)$前后顺序的预测概率表示为$P_{i,j}$,同时定义$o_i \equiv f(x_i)$ 以及 $o_{i,j}=f(x_i)-f(x_j)$，则我们可以<code>logistic</code>函数来表示$P_{i,j}$:<br>$$P_{i,j} \equiv \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} \equiv \frac{1}{1+e^{-o_{i,j}}}$$</p>
 <p>为了衡量预测概率$P_{i,j}$与期望/目标概率$\bar{P}_{i,j}$的接近程度，这里使用<code>Cross Entropy</code>作为损失函数:<br>$$C_{i,j} = -\bar{P}_{i,j} log P_{i,j} - (1-\bar{P}_{i,j}) log (1-P_{i,j})$$</p>
 <p>将$P_{i,j}$代入损失函数$C_{i,j}$之后即可得到:<br>$$\begin{equation}\begin{split}C_{i,j}&amp;=-\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (1-\frac{e^{o_{i,j}}}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (\frac{1}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} \left( log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - log (\frac{1}{1+e^{o_{i,j}}}) \right) - log (\frac{1}{1+e^{o_{i,j}}})  \\<br>&amp;= -\bar{P}_{i,j}  o_{i,j} + log(1+e^{o_{i,j}})<br>\end{split}\end{equation}$$</p>
@@ -100,7 +101,19 @@
 ]]></content>
     <summary type="html">
     <![CDATA[<blockquote>
-<p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet]]>
+<p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet</code>就是使用神经网络算法来使得这个概率最大化.</p>
+</blockquote>
+<h2 id="算法原理">算法原理</h2><p>假设现在有一对文档$D_i$和$D_j$,给定一个目标概率$\bar{P}_{i,j}$,以表示文档$D_i$将会排在文档$D_j$的前面.</p>
+<ol>
+<li>如果$\bar{P}_{i,j}=1$,表示$D_i$一定会排在$D_j$前面</li>
+<li>如果$\bar{P}_{i,j}=0.5$,表示$D_i$和$D_j$的前后关系将无法确定</li>
+<li>如果$\bar{P}_{i,j}=0$,表示$D_i$一定不会排在$D_j$前面</li>
+</ol>
+<p>现在有一个实值的排序函数$f$,如果$f(x_i) &gt; f(x_j)$，则会有$D_i \triangleright D_j$(表示$D_i$会排在$D_j$前面)</p>
+<blockquote>
+<p>这里$x$是为文档$D$所表示的特征向量</p>
+</blockquote>]]>
+    
     </summary>
     
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>

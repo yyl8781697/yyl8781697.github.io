@@ -143,6 +143,7 @@
 <blockquote>
 <p>这里$x$是为文档$D$所表示的特征向量</p>
 </blockquote>
+<a id="more"></a>
 <p>我们现在将$P(D_i \triangleright D_j)$前后顺序的预测概率表示为$P_{i,j}$,同时定义$o_i \equiv f(x_i)$ 以及 $o_{i,j}=f(x_i)-f(x_j)$，则我们可以<code>logistic</code>函数来表示$P_{i,j}$:<br>$$P_{i,j} \equiv \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} \equiv \frac{1}{1+e^{-o_{i,j}}}$$</p>
 <p>为了衡量预测概率$P_{i,j}$与期望/目标概率$\bar{P}_{i,j}$的接近程度，这里使用<code>Cross Entropy</code>作为损失函数:<br>$$C_{i,j} = -\bar{P}_{i,j} log P_{i,j} - (1-\bar{P}_{i,j}) log (1-P_{i,j})$$</p>
 <p>将$P_{i,j}$代入损失函数$C_{i,j}$之后即可得到:<br>$$\begin{equation}\begin{split}C_{i,j}&amp;=-\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (1-\frac{e^{o_{i,j}}}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (\frac{1}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} \left( log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - log (\frac{1}{1+e^{o_{i,j}}}) \right) - log (\frac{1}{1+e^{o_{i,j}}})  \\<br>&amp;= -\bar{P}_{i,j}  o_{i,j} + log(1+e^{o_{i,j}})<br>\end{split}\end{equation}$$</p>

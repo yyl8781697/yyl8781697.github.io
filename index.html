@@ -121,74 +121,11 @@
 <blockquote>
 <p>这里$x$是为文档$D$所表示的特征向量</p>
 </blockquote>
-<p>我们现在将$P(D_i \triangleright D_j)$前后顺序的预测概率表示为$P_{i,j}$,同时定义$o_i \equiv f(x_i)$ 以及 $o_{i,j}=f(x_i)-f(x_j)$，则我们可以<code>logistic</code>函数来表示$P_{i,j}$:<br>$$P_{i,j} \equiv \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} \equiv \frac{1}{1+e^{-o_{i,j}}}$$</p>
-<p>为了衡量预测概率$P_{i,j}$与期望/目标概率$\bar{P}_{i,j}$的接近程度，这里使用<code>Cross Entropy</code>作为损失函数:<br>$$C_{i,j} = -\bar{P}_{i,j} log P_{i,j} - (1-\bar{P}_{i,j}) log (1-P_{i,j})$$</p>
-<p>将$P_{i,j}$代入损失函数$C_{i,j}$之后即可得到:<br>$$\begin{equation}\begin{split}C_{i,j}&amp;=-\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (1-\frac{e^{o_{i,j}}}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (\frac{1}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} \left( log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - log (\frac{1}{1+e^{o_{i,j}}}) \right) - log (\frac{1}{1+e^{o_{i,j}}})  \\<br>&amp;= -\bar{P}_{i,j}  o_{i,j} + log(1+e^{o_{i,j}})<br>\end{split}\end{equation}$$</p>
-<p>下面的图是当$\bar{P}_{i,j} \in \{0,0.5,1\}$时的损失函数情况:<br><img src="/img/RankNet-Learning-to-Rank-using-Gradient-Descent/lossfunction.png" style="align:center;margin:0 auto" width="400px"></p>
-<p>当$\bar{P}_{i,j} = 1$的时候，<code>Cross Entropy</code>的损失函数将会变为:$$C_{i,j}=log(1+e^{-o_{i,j}})$$<br>直接会变为一个<code>log</code>型的损失函数，其中$o_i-o_j$越大，损失函数的值也就会越小，这也是我们所期望训练的结果(表示我们的样本全部成立)</p>
-<p>现我们损失函数$C_{i,j}$求$o$的偏导:<br>$$\frac{ \partial{C}}{ \partial{o_i}} = \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) =\left( -\bar{P}_{i,j}+P_{i,j} \right) = -\frac{ \partial{C}}{ \partial{o_j}}$$</p>
-<blockquote>
-<p>其实可以发现就是在$-\bar{P}_{i,j}+P_{i,j} $时就是我们的目标</p>
-</blockquote>
-<p>现我们认为$w$为$o=f(x:w)$的一个权重,也就是我们最终希望求解的值，而这个参数我们就可以使用<code>随机梯度下降法来求解</code>:<br>$$w_k \rightarrow  w_k - \eta \frac{\partial{C}}{\partial{w_k}} = w_k - \eta \left( \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}} \right)$$</p>
-<p>其中$\eta$表示学习率，一般取一个比较小的数（比如:$1e-3$,$1e-5$）<br>另外我们可以求得$C$的增量变化:<br>$$\Delta C = \sum_k \frac{\partial{C}}{\partial{w_k}} \Delta w_k = \sum_k \frac{\partial{C}}{\partial{w_k}} \left( - \eta \frac{\partial{C}}{\partial{w_k}} \right) = - \eta \sum_k \left( \frac{\partial{C}}{\partial{w_k}} \right)^2  &lt; 0 $$</p>
-<ol>
-<li>$\Delta C &lt; 0 $表示随着权重参数$w$的变化，损失函数$C$会越来越小</li>
-<li>另外当梯度$\frac{\partial{C}}{\partial{w_k}} = 0$时，才会让损失函数达到最小值</li>
-</ol>
-<p>上面的式子告诉我们通过梯度下降法求解<code>RankNet</code>时，就算<code>算分</code>函数没有好的梯度或者不可求导时任可以进行权重的更新（因为最终可以通过损失函数和权重$w$进行求），但是有的要求权重$w$与最终的算法$o$是相关的。</p>
-<h2 id="合并概率">合并概率</h2><p>理想的情况下，$\bar{o}$的输出得到的模型应该是这样纸的:$$\bar{P}_{i,j}=\frac{e^{\bar{o}_{i,j}}}{1+e^{\bar{o}_{i,j}}}$$</p>
-<blockquote>
-<p>其中$\bar{o}_{i,j}=\bar{o}_i-\bar{o}_j$</p>
-</blockquote>
-<p>上面的模型需要$\bar{P}_{i,j}$保持一致性，也就是如果$D_i$的相关性要高于$D_j$,$D_j$的相关性同时也是要高于$D_k$，则$D_i$的相关性也是一定要高于$D_j$，如果没有保持一致性，其实上面的理论就不好使了。。。<br>现给定$\bar{P}_{i,j}$和$\bar{P}_{j,k}$时会有:</p>
-<p>$$\begin{equation}\begin{split} \bar{P}_{i,k}&amp;= \frac{e^{\bar{o}_{i,k}}}{1+e^{\bar{o}_{i,k}}}\\<br>&amp;= \frac{e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{1+e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}} \\<br>&amp;= \frac{ \frac{e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})} }{ \frac{1+e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})}} \\<br>&amp;= \frac{\bar{P}_{i,j} \bar{P}_{j,k}}{\frac{(1+e^{\bar{o}_{i,j}}+e^{\bar{o}_{j,k}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})+(2e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})-(e^{\bar{o}_{i,j}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})-(e^{\bar{o}_{j,k}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})}} \\<br>&amp;= \frac{\bar{P}_{i,j} \bar{P}_{j,k}}{1+2\bar{P}_{i,j}\bar{P}_{j,k}-\bar{P}_{i,j}-\bar{P}_{j,k}}<br>\end{split}\end{equation}$$</p>
-<blockquote>
-<p>其中第一步是基于这个来的:$$\begin{equation}\begin{split}e^{\bar{o}_{i,k}}&amp;=e^{\bar{o}_i-\bar{o}_k} \\<br>&amp;= e^{\bar{o}_i-\bar{o}_j+\bar{o}_j-\bar{o}_k}\\<br>&amp;= e^{\bar{o}_{i,j}+\bar{o}_{j,k}}  \\<br>&amp;= e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}}<br>\end{split}\end{equation}$$</p>
-</blockquote>
-<p>当$\bar{P}_{i,j}=\bar{P}_{i,k}=P$时，其$\bar{P}_{i,k}$的取值情况为:<br><img src="/img/RankNet-Learning-to-Rank-using-Gradient-Descent/pik.png" width="400px"></p>
-<ol>
-<li>$P=0$时，有$\bar{P}_{i,k}=P=0$ 表示:$D_i$排$D_j$后面,$D_j$排$D_j$的后面，则$D_i$也一定排$D_j$的后面</li>
-<li>$0 &lt; P &lt; 0.5$时，$\bar{P}_{i,k} &lt; P$</li>
-<li>$P=0.5$时，有$\bar{P}_{i,k}=P=0.5$ 表示:$D_i$有一般概率排$D_j$前面,$D_j$也有一半的概率排$D_j$的前面，则$D_i$同样也是一半的概率排$D_j$的前面</li>
-<li>$0.5 &lt; P &lt; 1$时，$\bar{P}_{i,k} &gt; P$</li>
-<li>$P=1$时，有$\bar{P}_{i,k}=P=1$ 表示:$D_i$排$D_j$前面,$D_j$排$D_j$的前面，则$D_i$也一定排$D_j$的前面</li>
-</ol>
-<blockquote>
-<p>从上面的图中可以看到，其实目标概率是都可以保持一致性的.</p>
-</blockquote>
-<h2 id="神经网络训练">神经网络训练</h2><p><code>RankNet</code>使用的是一个2层的神经网络作为算分模型$f(x:w,b)$,他在排序分数的公式是:<br>$$o = f(x:w,b) = f^{(2)}  \left( \sum_l w_l^{(2)} \cdot f^{(1)}  \left( \sum_k w_{lk}^{(1)}x_k +b^{(1)} \right) +b^{(2)} \right)$$</p>
-<p>其中:</p>
-<ol>
-<li>$x_k$表示输入的$k$个特征元素</li>
-<li>$w$表示每一层的权重,$b$表示每一层的偏置，上标$(\cdot)$表示当前所属的神经网络的层数</li>
-<li>下标$l$表示第一层的单元数量</li>
-<li>$f$使用<code>sigmoid</code>作为激活函数</li>
-</ol>
-<p>这里我们输入的样本是<code>pair</code>对$\{(x_i,x_j),\bar{P}_{i,j}\}$,其中$\bar{P}_{i,j}$就是我们的目标概率,根据第一小节(算法原理)中指到的，使用梯度下降法进行求解:<br>$$\begin{equation}\begin{split} \frac{\partial{C}}{\partial{w}} &amp;= \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}}  \\<br>&amp;=  \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right)\\<br>&amp;=  \lambda_{i,j} \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right) \\<br>\end{split}\end{equation}$$<br>$ $</p>
-<blockquote>
-<p>记$\lambda_{i,j} =  \frac{\partial{C}}{\partial{o_i}}  = -\frac{\partial{C}}{\partial{o_j}} \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) $</p>
-</blockquote>
-<p>在对于上面的二层神经网络求解时:<br>$$\frac{\partial{C}}{\partial{b^{(2)}}} = \lambda_{i,j}({f’}_i^{(2)}-{f’}_i^{(2)}) = \Delta_i^{(2)} - \Delta_j^{(2)} \\<br>\frac{\partial{C}}{\partial{w^{(2)}}} = \Delta_i^{(2)}f_i^{(1)}  - \Delta_j^{(2)}f_j^{(1)} \\<br>\frac{\partial{C}}{\partial{b^{(1)}}} = \Delta_i^{(2)}f_i^{(1)}w^{(2)}   - \Delta_j^{(2)}f_j^{(1)}w^{(2)} \\<br>\frac{\partial{C}}{\partial{w_k^{(1)}}} = \Delta_i^{(2)} x_{i,k} - \Delta_j^{(2)} x_{j,k}<br>$$<br>这样神经网络就可以使用<code>前向预测</code>和<code>后向反馈</code>来进行训练了,只是其后向反馈阶段是需要通过<code>pair</code>进行计算的。</p>
-<h2 id="神经网络加速">神经网络加速</h2><p>上面的是对于每一对<code>pair</code>都会进行一次权重的更新，其实是可以对同一个排序下的所有文档<code>pair</code>全部带入神经网络进行前向预测，然后计算总差分并进行误差后向反馈，这样将大大减少误差反向传播的次数，其更新的公式为:<br>$$\Delta w = -\eta \sum_{\{i,j\}\in I}  \left(\lambda_{i,j} \frac{\partial{o_i}}{\partial{w_k}} - \lambda_{i,j} \frac{\partial{o_j}}{\partial{w_k}}\right) = -\eta \sum_i \lambda_i \frac{\partial{o_i}}{\partial{w_k}} $$<br>其中:<br>$$\lambda_i = \sum_{j:\{i,j\} \in I} \lambda_{i,j} - \sum_{j:\{j,i\} \in I} \lambda_{i,j}$$</p>
-<blockquote>
-<p>$I$表示$\{i,j\}$两个文档满足$D_i \triangleright D_j$,也就是$\bar{P}_{i,j}=1$</p>
-</blockquote>
-<p>这种方式可以看做是一种mini-batch的梯度下降算法，可以大大加快原始的神经网络训练.</p>
-<h2 id="总结">总结</h2><p><code>RankNet</code>训练希望文档<code>pair</code>对的前后排序概率与目标概率一致，用交叉熵作为损失函数，在实际排序中使用了神经网络作为算分排序函数，同时可以有<code>min-batch</code>的批量训练方法。据说微软的<code>Bing</code>之前使用着他.</p>
-<h2 id="参考">参考</h2><ol>
-<li>Burges, Chris, et al. “Learning to rank using gradient descent.” Proceedings of the 22nd international conference on Machine learning. ACM, 2005.</li>
-<li>Burges, Christopher JC. “From ranknet to lambdarank to lambdamart: An overview.” Learning 11 (2010): 23-581.</li>
-<li>Li, Hang. “Learning to rank for information retrieval and natural language processing.” Synthesis Lectures on Human Language Technologies 7.3 (2014): 1-121.</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
         
         
         <p class="article-more-link">
+          
+            <a href="/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#more">Read More</a>
           
        </p>
     </div>
