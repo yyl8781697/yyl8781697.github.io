@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/</loc>
+    <lastmod>2016-07-10T08:49:51.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/about/index.html</loc>
+    <lastmod>2016-07-10T08:25:33.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</loc>
     <lastmod>2016-07-02T08:49:09.000Z</lastmod>
   </url>
@@ -22,11 +32,6 @@
   </url>
   
   <url>
-    <loc>http://kubicode.me/about/index.html</loc>
-    <lastmod>2016-05-28T07:59:43.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/</loc>
     <lastmod>2016-05-08T15:28:16.000Z</lastmod>
   </url>
@@ -34,11 +39,6 @@
   <url>
     <loc>http://kubicode.me/2016/05/08/Machine%20Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/</loc>
     <lastmod>2016-05-08T15:27:47.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/</loc>
-    <lastmod>2016-05-07T07:00:26.000Z</lastmod>
   </url>
   
   <url>

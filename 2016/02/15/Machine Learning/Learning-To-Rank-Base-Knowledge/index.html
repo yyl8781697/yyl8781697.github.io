@@ -30,7 +30,6 @@
 <meta property="og:image" content="/img/Learning-To-Rank-Base-Knowledge/lrt_framework.png">
 <meta property="og:image" content="/img/Learning-To-Rank-Base-Knowledge/pointwise_flow.png">
 <meta property="og:image" content="/img/Learning-To-Rank-Base-Knowledge/pairwise_example.png">
-<meta property="og:image" content="/img/Learning-To-Rank-Base-Knowledge/pairwise_func.gif">
 <meta property="og:image" content="/img/Learning-To-Rank-Base-Knowledge/pairwise_flow.png">
 <meta property="og:image" content="/img/Learning-To-Rank-Base-Knowledge/map_demo.png">
 <meta name="twitter:card" content="summary">
@@ -130,7 +129,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用LTR"><span class="toc-number">1.</span> <span class="toc-text">为什么要用LTR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LTR基本框架"><span class="toc-number">2.</span> <span class="toc-text">LTR基本框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练数据的获取"><span class="toc-number">3.</span> <span class="toc-text">训练数据的获取</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#人工标注"><span class="toc-number">3.0.1.</span> <span class="toc-text">人工标注</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#日志抽取"><span class="toc-number">3.0.2.</span> <span class="toc-text">日志抽取</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征提取"><span class="toc-number">4.</span> <span class="toc-text">特征提取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型训练"><span class="toc-number">5.</span> <span class="toc-text">模型训练</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pointwise_Approach"><span class="toc-number">5.1.</span> <span class="toc-text">Pointwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pairwise_Approach"><span class="toc-number">5.2.</span> <span class="toc-text">Pairwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Listwise_Approach"><span class="toc-number">5.3.</span> <span class="toc-text">Listwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法对比"><span class="toc-number">5.4.</span> <span class="toc-text">方法对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#评估指标"><span class="toc-number">6.</span> <span class="toc-text">评估指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MAP"><span class="toc-number">6.1.</span> <span class="toc-text">MAP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NDCG"><span class="toc-number">6.2.</span> <span class="toc-text">NDCG</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#公开数据集"><span class="toc-number">7.</span> <span class="toc-text">公开数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用LTR"><span class="toc-number">1.</span> <span class="toc-text">为什么要用LTR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LTR基本框架"><span class="toc-number">2.</span> <span class="toc-text">LTR基本框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练数据的获取"><span class="toc-number">3.</span> <span class="toc-text">训练数据的获取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#人工标注"><span class="toc-number">3.1.</span> <span class="toc-text">人工标注</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志抽取"><span class="toc-number">3.2.</span> <span class="toc-text">日志抽取</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征提取"><span class="toc-number">4.</span> <span class="toc-text">特征提取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型训练"><span class="toc-number">5.</span> <span class="toc-text">模型训练</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pointwise_Approach"><span class="toc-number">5.1.</span> <span class="toc-text">Pointwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pairwise_Approach"><span class="toc-number">5.2.</span> <span class="toc-text">Pairwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Listwise_Approach"><span class="toc-number">5.3.</span> <span class="toc-text">Listwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法对比"><span class="toc-number">5.4.</span> <span class="toc-text">方法对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#评估指标"><span class="toc-number">6.</span> <span class="toc-text">评估指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MAP"><span class="toc-number">6.1.</span> <span class="toc-text">MAP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NDCG"><span class="toc-number">6.2.</span> <span class="toc-text">NDCG</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#公开数据集"><span class="toc-number">7.</span> <span class="toc-text">公开数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
@@ -150,7 +149,7 @@
 <a id="more"></a>
 <h2 id="LTR基本框架">LTR基本框架</h2><p><code>LTR</code>的核心还是机器学习，只是目标不仅仅是简单的分类或者回归了，最主要的是产出文档的排序结果，它通常的工作框架如下:<br><img src="/img/Learning-To-Rank-Base-Knowledge/lrt_framework.png" width="400px"></p>
 <p>所描述的步骤为:<code>训练数据获取-&gt;特征提取-&gt;模型训练-&gt;测试数据预测-&gt;效果评估</code></p>
-<h2 id="训练数据的获取">训练数据的获取</h2><h4 id="人工标注">人工标注</h4><p>人工标注的数据主要有以下几大类型:</p>
+<h2 id="训练数据的获取">训练数据的获取</h2><h3 id="人工标注">人工标注</h3><p>人工标注的数据主要有以下几大类型:</p>
 <ul>
 <li><p>单点标注</p>
 <ul>
@@ -182,7 +181,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="日志抽取">日志抽取</h4><p>当搜索引擎搭建起来之后用户的点击数据就变得非常好使。</p>
+<h3 id="日志抽取">日志抽取</h3><p>当搜索引擎搭建起来之后用户的点击数据就变得非常好使。</p>
 <pre><code>比如，结果ABC分别位于<span class="number">123</span>位，B比<span class="literal">A</span>位置低，但却得到了更多的点击，那么B的相关性可能好于<span class="literal">A</span>.
 </code></pre><p>这种点击数据隐含了<code>Query</code>到文档的相关性好坏。所以一般会使用点击倒置的<code>高低位</code>结果作为训练数据.</p>
 <p>但是他也是存在问题的：</p>
@@ -191,6 +190,9 @@
 <li>用户点击有比较大的噪声</li>
 <li>一般头查询(<code>head query</code>)才存在用户点击</li>
 </ul>
+<blockquote>
+<p>这里的日志提取可以参考<a href="http://club.alibabatech.org/article_detail.htm?articleId=54" target="_blank" rel="external">Learning to rank在淘宝的应用</a>,干货！！！</p>
+</blockquote>
 <h2 id="特征提取">特征提取</h2><p>检索系统会使用一系列特征来表示一次查询，通过模型之后最终决定文档的排序顺序，这里用$q$来表示查询,$d$表示查询的文档,$occur-term$表示$q$与$d$共现的词，则提取的特征主要有以下三大类:</p>
 <ul>
 <li>$occur-term$与$q$特征<ul>
@@ -212,14 +214,22 @@
 </ul>
 <h2 id="模型训练">模型训练</h2><p><code>LTR</code>的模型主要有单文档方法(<code>Pointwise Approach</code>)、文档对方法(<code>Pairwise Approach</code>)和列表方法(<code>Listwise Approach</code>)三大类,下面是实现他们的各种算法:</p>
 <h3 id="Pointwise_Approach">Pointwise Approach</h3><pre><code><span class="variable">Pointwise</span>的处理对象是单独的一篇文档，将文档转换为特征向量之后，机器学习模型根据从训练数据中学习到的分类或者回归函数对文档打分，打分的结果就是搜索的结果.
-</code></pre><p>其实就是将文档排序转为了文档的回归、分类和有序分类问题，其函数的框架为:</p>
-<center>$L(F(X),y)=\sum_{i=1}^{n}l(f(x_i)-y_i)$</center><br>输入:<br>- 单个文档查询对:$(x_i,y_i)$<br>- 完全忽略上下文的关系<br>- 将标注转为数字，比如<code>Perfect-&gt;5, Excellent-&gt;4, Good-&gt;3, Fair-&gt;2, Bad-&gt;1</code><br><br>输出:<br>- 排序函数,对于给定查询文档对,能够计算出得分(score)<br><br>关于<code>Pointwise</code>下的三个分支，这张图解释的很好:<br><center><img src="/img/Learning-To-Rank-Base-Knowledge/pointwise_flow.png" width="400px"></center>
-
+</code></pre><p>其实就是将文档排序转为了文档的回归、分类和有序分类问题，其函数的框架为:<br>$$L(F(X),y)=\sum_{i=1}^{n}l(f(x_i)-y_i)$$<br>输入:</p>
+<ul>
+<li>单个文档查询对:$(x_i,y_i)$</li>
+<li>完全忽略上下文的关系</li>
+<li>将标注转为数字，比如<code>Perfect-&gt;5, Excellent-&gt;4, Good-&gt;3, Fair-&gt;2, Bad-&gt;1</code></li>
+</ul>
+<p>输出:</p>
+<ul>
+<li>排序函数,对于给定查询文档对,能够计算出得分(score)</li>
+</ul>
+<p>关于<code>Pointwise</code>下的三个分支，这张图解释的很好:<br><img src="/img/Learning-To-Rank-Base-Knowledge/pointwise_flow.png" width="400px"></p>
 <p>其主要区别就是<code>loss function</code>不同，也就是最后的结果目标不一样:</p>
 <ul>
 <li><code>Classification</code>:输入的是5档类别（作为离散），最后通过分类模型输测试数据的各个档位档位的概率，然后进行加权成一个实数值</li>
 <li><code>Regression</code>:输入的是5档或者2档（作为连续），最后通过回归模型输出测试数据的一个相关性实数(就是回归)</li>
-<li><code>Ordinal Classification</code>:输入有序的档位，一般2档(离散),最后通过分类模型的阈值给到一个档位(应该是二分类把)</li>
+<li><code>Ordinal Classification</code>:输入的档位是有序的,比如像上面一样输入5档，但是他们的权重不一样，可能权重最高档位的分类（二分类），再进行次高档位的分词，依次下去(<code>McRank</code>的paper有讲)</li>
 </ul>
 <p>实现<code>Pointwise</code>方法的主要算法有:</p>
 <ul>
@@ -252,11 +262,10 @@
 <li>没有考虑到文档之间的相对关系</li>
 <li>忽略了文档相关度与查询的关联，比如<code>Top Query</code>排在后面的相关性比<code>Tial Query</code>排在前面的都要高，导致训练样本不一致</li>
 </ul>
-<h3 id="Pairwise_Approach">Pairwise Approach</h3><pre><code>对于搜索任务来说，系统接收到用户查询后，返回相关文档列表，所以问题的关键是确定文档之间的先后相对顺序关系，而<span class="variable">Pairwise</span>则将重点转向对文档关系是否合理的判断.
+<h3 id="Pairwise_Approach">Pairwise Approach</h3><pre><code>对于搜索任务来说，系统接收到用户查询后，返回相关文档列表，所以问题的关键是确定文档之间的先后相对顺序关系，
+而<span class="variable">Pairwise</span>则将重点转向对文档关系是否合理的判断.
 </code></pre><p><code>Pairwise</code>主要是讲排序问题转为了文档对顺序的判断<br>以下图为例:<br><img src="/img/Learning-To-Rank-Base-Knowledge/pairwise_example.png" width="500px"><br>对于查询<code>Q1</code>进行人工标注之后,<code>Doc2=5</code>的分数最高，其次是<code>Doc3</code>为4分，最差的是<code>Doc1</code>为3分，将此转为相对关系之后有:<code>Doc2&gt;Doc1、Doc2&gt;Doc3、Doc3&gt;Doc1</code>，而根据这个顺序关系逆向也可以得到相关性的排序顺序，所以排序问题可以很自然的转为任意两个文档关系的判断,而任意两个文档顺序的判断就称为了一个很熟悉的分类问题.<br><code>Pairwise</code>的函数框架为:</p>
-<!-- $L(F(x),y)=\sum_{i=1}^{n-1}\sum_{j=i+1}^{n}(sign(y_i-y_j),f(x_i)-f(x_j))$ -->
-<center><img src="/img/Learning-To-Rank-Base-Knowledge/pairwise_func.gif"></center>
-
+<p>$$L(F(x),y)=\sum_{i=1}^{n-1}\sum_{j=i+1}^{n}(sign(y_i-y_j),f(x_i)-f(x_j))$$</p>
 <p><strong>输入</strong>:</p>
 <ul>
 <li>同一查询的一对文档$(x_i,x_j,sign(y_i-y_j))$</li>
@@ -267,10 +276,7 @@
 <ul>
 <li>排序函数给出文档对的计算得分</li>
 </ul>
-<p>关于<code>Pairwise</code>最终的算分，其实分类和回归都可以实现:</p>
-<center><img src="/img/Learning-To-Rank-Base-Knowledge/pairwise_flow.png" width="400px"></center>
-
-
+<p>关于<code>Pairwise</code>最终的算分，其实分类和回归都可以实现:<br><img src="/img/Learning-To-Rank-Base-Knowledge/pairwise_flow.png" width="400px"></p>
 <p>实现<code>Pairwise Approach</code>方法的主要算法有:</p>
 <ul>
 <li>Learning to Retrieve Information (SCC 1995)</li>
@@ -361,9 +367,7 @@
 </tbody>
 </table>
 <h2 id="评估指标">评估指标</h2><h3 id="MAP">MAP</h3><p><code>MAP</code>(<code>Mean Average Precision</code>)表示文档在排序中的平均精度均值，是用于衡量个query查询见过的平均精度值<code>AP</code>,<br>系统检索出来的相关文档越靠前(rank 越高)，MAP就可能越高。如果系统没有返回相关文档，则准确率默认为0。</p>
-<p>所以对于计算<code>AP</code>的值就是关键了,<code>MAP</code>对文档只分为两档:相关与不相关，则<code>AP</code>表示为</p>
-<center>$AP=\frac{\sum_{i:relvance}^{n}P_i/R_i}{n}$</center>
-
+<p>所以对于计算<code>AP</code>的值就是关键了,<code>MAP</code>对文档只分为两档:相关与不相关，则<code>AP</code>表示为<br>$$AP=\frac{\sum_{i:relvance}^{n}P_i/R_i}{n}$$</p>
 <blockquote>
 <p>其中$P_i$表示所有召回文档中相关文档的相对次序，$R_i$表示所有被召回的相关文档中在所有文档中的次序</p>
 </blockquote>
@@ -429,26 +433,19 @@
 <p>最终计算的$AP=(1/1+2/3+3/4+4/5+5/6+6/10)/6=0.78$</p>
 <h3 id="NDCG">NDCG</h3><p><code>NDCG</code>表示表示归一化折损累积增益，主要是衡量实际相关性越高的文档排在越前面，它的全称是<code>Normalized Discounted Cumulative Gain</code>,也正好代表了4个部分的含义:</p>
 <ul>
-<li><p><code>Gain</code>:表示增益，一般相关性越高，增益值也是越大</p>
-  <center>$G_i=2^{y_i}-1$</center>
-
+<li><p><code>Gain</code>:表示增益，一般相关性越高，增益值也是越大<br>  $$G_i=2^{y_i}-1$$</p>
 <blockquote>
 <p>其中$y_i$表示文档相关性档位，一般档位越高，相关性越大</p>
 </blockquote>
 </li>
-<li><p><code>Discounted</code>:一般认为排序位置 带来的权重不同，所以会有一个折损因子</p>
-  <center>$DG_i=\frac{2^{y_i}-1}{log(1+i)}$</center>
-
+<li><p><code>Discounted</code>:一般认为排序位置 带来的权重不同，所以会有一个折损因子<br>  $$DG_i=\frac{2^{y_i}-1}{log(1+i)}$$</p>
 <blockquote>
 <p>其中$i$为文档的排序位置，从1开始</p>
 </blockquote>
 </li>
-<li><p><code>Cumulative</code>：表示在一次<code>query</code>查询中所有的增益累加</p>
-  <center>$DCG=\sum_{i=1}^{n}{\frac{2^{y_i}-1}{log(1+i)}}$</center>
+<li><p><code>Cumulative</code>：表示在一次<code>query</code>查询中所有的增益累加<br>  $$DCG=\sum_{i=1}^{n}{\frac{2^{y_i}-1}{log(1+i)}}$$</p>
 </li>
-<li><p><code>Normalized</code>：为归一化，因为在不同的查询中可能<code>DCG</code>的值波动较大，这里计算各个query最理想的排序的<code>DCG</code>值作为归一化因子，也称为<code>IDCG</code></p>
-  <center>$NDCG=\frac{1}{IDCG} \cdot \sum_{i=1}^{n}{\frac{2^{y_i}-1}{log(1+i)}}$</center>
-
+<li><p><code>Normalized</code>：为归一化，因为在不同的查询中可能<code>DCG</code>的值波动较大，这里计算各个query最理想的排序的<code>DCG</code>值作为归一化因子，也称为<code>IDCG</code><br>  $$NDCG=\frac{1}{IDCG} \cdot \sum_{i=1}^{n}{\frac{2^{y_i}-1}{log(1+i)}}$$</p>
 </li>
 </ul>
 <p><code>NDCG</code>的可使用性更加广泛了，但是还是存在以下三点限制:</p>
@@ -546,7 +543,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用LTR"><span class="toc-number">1.</span> <span class="toc-text">为什么要用LTR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LTR基本框架"><span class="toc-number">2.</span> <span class="toc-text">LTR基本框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练数据的获取"><span class="toc-number">3.</span> <span class="toc-text">训练数据的获取</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#人工标注"><span class="toc-number">3.0.1.</span> <span class="toc-text">人工标注</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#日志抽取"><span class="toc-number">3.0.2.</span> <span class="toc-text">日志抽取</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征提取"><span class="toc-number">4.</span> <span class="toc-text">特征提取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型训练"><span class="toc-number">5.</span> <span class="toc-text">模型训练</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pointwise_Approach"><span class="toc-number">5.1.</span> <span class="toc-text">Pointwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pairwise_Approach"><span class="toc-number">5.2.</span> <span class="toc-text">Pairwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Listwise_Approach"><span class="toc-number">5.3.</span> <span class="toc-text">Listwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法对比"><span class="toc-number">5.4.</span> <span class="toc-text">方法对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#评估指标"><span class="toc-number">6.</span> <span class="toc-text">评估指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MAP"><span class="toc-number">6.1.</span> <span class="toc-text">MAP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NDCG"><span class="toc-number">6.2.</span> <span class="toc-text">NDCG</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#公开数据集"><span class="toc-number">7.</span> <span class="toc-text">公开数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要用LTR"><span class="toc-number">1.</span> <span class="toc-text">为什么要用LTR</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LTR基本框架"><span class="toc-number">2.</span> <span class="toc-text">LTR基本框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#训练数据的获取"><span class="toc-number">3.</span> <span class="toc-text">训练数据的获取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#人工标注"><span class="toc-number">3.1.</span> <span class="toc-text">人工标注</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志抽取"><span class="toc-number">3.2.</span> <span class="toc-text">日志抽取</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#特征提取"><span class="toc-number">4.</span> <span class="toc-text">特征提取</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型训练"><span class="toc-number">5.</span> <span class="toc-text">模型训练</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pointwise_Approach"><span class="toc-number">5.1.</span> <span class="toc-text">Pointwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pairwise_Approach"><span class="toc-number">5.2.</span> <span class="toc-text">Pairwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Listwise_Approach"><span class="toc-number">5.3.</span> <span class="toc-text">Listwise Approach</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法对比"><span class="toc-number">5.4.</span> <span class="toc-text">方法对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#评估指标"><span class="toc-number">6.</span> <span class="toc-text">评估指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MAP"><span class="toc-number">6.1.</span> <span class="toc-text">MAP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NDCG"><span class="toc-number">6.2.</span> <span class="toc-text">NDCG</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#公开数据集"><span class="toc-number">7.</span> <span class="toc-text">公开数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">9.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
