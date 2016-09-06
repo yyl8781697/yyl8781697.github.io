@@ -2,6 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2016/08/28/Machine%20Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/</loc>
+    <lastmod>2016-09-06T15:59:12.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</loc>
+    <lastmod>2016-09-01T09:31:32.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/04/29/Python/Python-Install-on-CentOS/</loc>
+    <lastmod>2016-08-29T08:22:44.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/</loc>
+    <lastmod>2016-07-28T13:12:39.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</loc>
+    <lastmod>2016-07-26T17:22:22.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/</loc>
     <lastmod>2016-07-10T08:49:51.000Z</lastmod>
   </url>
@@ -9,11 +34,6 @@
   <url>
     <loc>http://kubicode.me/about/index.html</loc>
     <lastmod>2016-07-10T08:25:33.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</loc>
-    <lastmod>2016-07-02T08:49:09.000Z</lastmod>
   </url>
   
   <url>
@@ -29,11 +49,6 @@
   <url>
     <loc>http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/</loc>
     <lastmod>2016-05-31T04:02:40.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/</loc>
-    <lastmod>2016-05-08T15:28:16.000Z</lastmod>
   </url>
   
   <url>
@@ -69,11 +84,6 @@
   <url>
     <loc>http://kubicode.me/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/</loc>
     <lastmod>2016-04-12T15:20:11.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</loc>
-    <lastmod>2016-04-04T15:21:20.000Z</lastmod>
   </url>
   
   <url>

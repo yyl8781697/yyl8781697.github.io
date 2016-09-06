@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-07-02T08:49:09.000Z</updated>
+  <updated>2016-09-06T15:59:12.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -15,11 +15,70 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[LambdaRank-支持非平滑损失函数的学习排序算法]]></title>
+    <link href="http://kubicode.me/2016/08/28/Machine%20Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/"/>
+    <id>http://kubicode.me/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/</id>
+    <published>2016-08-28T14:44:59.000Z</published>
+    <updated>2016-09-06T15:59:12.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
+<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速" target="_blank" rel="external">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br><a id="more"></a></p>
+<p><center><img src="/img/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/rank.png" alt=""><br>图1</center><br>如图1，每个线条表示一个文档，位置越上面表示排序越靠前，其中蓝色线条表示相关的文档，灰色则是不相关的文档，计算左侧得到的<code>Pairwise Error</code>为13，此时将最上面的蓝色线条下移3个位置，将下面的蓝色线条上移5个位置，则其<code>Pairwise Error</code>下降到了11。然而传统的排序评估指标<code>NDCG</code>或者<code>ERR</code>都是比较关心靠前的位置，类似刚刚右侧的变化并不希望出现。<br>而<code>LambdaRank</code>可以支持对这种非平滑的评估指标(比如<code>NDCG</code>)进行直接的优化.</p>
+<h2 id="LambdaRank原理">LambdaRank原理</h2><p>在图1右侧中，我们用$D_i$和$D_j$分别表示上下两个相关的文档，对于训练时下一次的移动中，我们更加愿意看到红色箭头的变化，因为此时$D_i$移动头部比$D_j$移动到头部明显代价更小，并且同样能减少损失函数.<br>对于$i &lt;&lt; j$这种情况($D_i$排在前面)，<code>LambdaRank</code>将会有:<br>$$|\frac{\partial C}{\partial o_i}| &gt;&gt; |\frac{\partial C}{\partial o_j}|$$</p>
+<p>同时，<code>LambdaRank</code>并不是显示对的优化函数进行求导在求最优，而是<br>$$\frac{\partial C}{\partial o_i} = -\lambda_i(o_1,l_1…o_n,l_n)$$，</p>
+<blockquote>
+<p>$o_i$表示给定query下文档的打分值,$l_i$表示该文档对应的标签</p>
+</blockquote>
+<p>可以看到这个梯度是依赖<code>query</code>下全部文档的分数以及其标签,这也应该是算一个<code>ListWise</code>的学习方法了,其中式子中带了符号表示$\lambda_i$为正数时将会在排序列表中向上移动同时会降低损失函数的值.<br>那么问题来了，这个$\lambda$函数该如何选呢?</p>
+<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速" target="_blank" rel="external">RankNet</a>的神经网络加速算法中，其<br>$$\lambda_{i,j} =  \frac{\partial{C}}{\partial{o_i}}  = -\frac{\partial{C}}{\partial{o_j}} =  -\frac{1}{1+e^{o_i-o_j}} $$</p>
+<blockquote>
+<p>这里目标概率$\overline{P}_{i,j}=1$</p>
+</blockquote>
+<p><code>LambdaRank</code>的机智之处就是在计算$\lambda_{i,j}$的时候引入了优化指标的梯度,变成了<br>$$\lambda_{i,j} =  -\frac{1}{1+e^{o_i-o_j}} |\Delta Z|$$<br>其中$\Delta Z$表示将文档$D_i$和$D_j$的位置相关调换之后重新计算得到的评估指标的差值（此时其他的文档顺序是不变的）<br>即可从新计算得到$\lambda_i$为:<br>$$\lambda_i = \sum_{j:\{i,j\} \in I} \lambda_{i,j} - \sum_{j:\{j,i\} \in I} \lambda_{i,j}$$<br>这个$\lambda$可以理解为上面图中的箭头<code>方向和强度</code></p>
+<ol>
+<li>符号表示方向，正好为向上移动</li>
+<li>大小表示强度，绝对值越大，表示移动的距离越大</li>
+</ol>
+<p>接下来<code>LambdaRank</code>具体的训练和使用方式就即可和<code>RankNet</code>一致了.</p>
+<p>这个的$\Delta Z$可以替换成任何评估指标(比如<code>NDCG</code>、<code>ERR</code>)了，这样的话其实$LambdaRank$就可以变相的直接对学习排序的评估指标进行优化了，解决了之前评估指标由于是非凸无法进行优化的问题</p>
+<blockquote>
+<p>这个具体的证明要看去原始paper了[1],是一个不是很容易理解的东西 -_-||</p>
+</blockquote>
+<h2 id="总结">总结</h2><p>$LambdaRank$其实是做了两个大贡献:</p>
+<ol>
+<li>一是对传统的<code>RankNet</code>提出了一个加速算法（我直接将其丢了<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速" target="_blank" rel="external">RankNet</a>的学习中）</li>
+<li>二是在<code>RankNet</code>的优化目标的基础上添加了一个基于评估指标的梯度$\Delta Z$因子，可以变相的直接对学习排序的评估指标进行优化</li>
+</ol>
+<p>虽然貌似没有见一些其他工业上说明使用了该算法，但是该算法对于鼎鼎大名的<code>LambdaMart</code>的启发无疑是最大的。</p>
+<h2 id="参考">参考</h2><ol>
+<li>Schölkopf, B, Platt, J, Hofmann, T. Learning to Rank with Nonsmooth Cost Functions[C]// MIT Press, 2007:193 - 200.</li>
+<li>Burges, Christopher JC. “From ranknet to lambdarank to lambdamart: An overview.” Learning 11 (2010): 23-581.</li>
+<li>Li, Hang. “Learning to rank for information retrieval and natural language processing.” Synthesis Lectures on Human Language Technologies 7.3 (2014): 1-121.</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
+<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[RankNet:基于梯度下降的学习排序]]></title>
     <link href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/"/>
     <id>http://kubicode.me/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</id>
     <published>2016-05-30T11:51:21.000Z</published>
-    <updated>2016-07-02T08:49:09.000Z</updated>
+    <updated>2016-09-01T09:31:32.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet</code>就是使用神经网络算法来使得这个概率最大化.</p>
 </blockquote>
@@ -41,12 +100,12 @@
 <p>当$\bar{P}_{i,j} = 1$的时候，<code>Cross Entropy</code>的损失函数将会变为:$$C_{i,j}=log(1+e^{-o_{i,j}})$$<br>直接会变为一个<code>log</code>型的损失函数，其中$o_i-o_j$越大，损失函数的值也就会越小，这也是我们所期望训练的结果(表示我们的样本全部成立)</p>
 <p>现我们损失函数$C_{i,j}$求$o$的偏导:<br>$$\frac{ \partial{C}}{ \partial{o_i}} = \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) =\left( -\bar{P}_{i,j}+P_{i,j} \right) = -\frac{ \partial{C}}{ \partial{o_j}}$$</p>
 <blockquote>
-<p>其实可以发现就是在$-\bar{P}_{i,j}+P_{i,j} $时就是我们的目标</p>
+<p>其实可以发现就是在$-\bar{P}_{i,j}+P_{i,j}=0 $时就是我们的目标<br>另外请注意这里的$P_{i,j}$其实就是<code>文献2</code>中的$S_{i,j}$，但是由于他们的取值范围不一致 $P_{i,j} \in \{0,0.5,1\}$,$S_{i,j} \in \{-1,0,1\}$，因此导致了<code>文献2</code>中对于<code>C</code>的偏导与本文的有微小的偏差</p>
 </blockquote>
 <p>现我们认为$w$为$o=f(x:w)$的一个权重,也就是我们最终希望求解的值，而这个参数我们就可以使用<code>随机梯度下降法来求解</code>:<br>$$w_k \rightarrow  w_k - \eta \frac{\partial{C}}{\partial{w_k}} = w_k - \eta \left( \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}} \right)$$</p>
 <p>其中$\eta$表示学习率，一般取一个比较小的数（比如:$1e-3$,$1e-5$）<br>另外我们可以求得$C$的增量变化:<br>$$\Delta C = \sum_k \frac{\partial{C}}{\partial{w_k}} \Delta w_k = \sum_k \frac{\partial{C}}{\partial{w_k}} \left( - \eta \frac{\partial{C}}{\partial{w_k}} \right) = - \eta \sum_k \left( \frac{\partial{C}}{\partial{w_k}} \right)^2  &lt; 0 $$</p>
 <ol>
-<li>$\Delta C &lt; 0 $表示随着权重参数$w$的变化，损失函数$C$会越来越小</li>
+<li>$\Delta C &lt; 0 $表示随着权重参数$w$的沿着负梯度的变化，损失函数$C$会越来越小</li>
 <li>另外当梯度$\frac{\partial{C}}{\partial{w_k}} = 0$时，才会让损失函数达到最小值</li>
 </ol>
 <p>上面的式子告诉我们通过梯度下降法求解<code>RankNet</code>时，就算<code>算分</code>函数没有好的梯度或者不可求导时任可以进行权重的更新（直接对$o$进行梯度下降，但是其梯度方向需要自己指定，并且要求权重$w$与最终的算法$o$是相关的）。</p>
@@ -78,16 +137,23 @@
 <li>下标$l$表示第一层的单元数量</li>
 <li>$f$使用<code>sigmoid</code>作为激活函数</li>
 </ol>
-<p>这里我们输入的样本是<code>pair</code>对$\{(x_i,x_j),\bar{P}_{i,j}\}$,其中$\bar{P}_{i,j}$就是我们的目标概率,根据第一小节(算法原理)中指到的，使用梯度下降法进行求解:<br>$$\begin{equation}\begin{split} \frac{\partial{C}}{\partial{w}} &amp;= \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}}  \\<br>&amp;=  \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right)\\<br>&amp;=  \lambda_{i,j} \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right) \\<br>\end{split}\end{equation}$$<br>$ $</p>
-<blockquote>
-<p>记$\lambda_{i,j} =  \frac{\partial{C}}{\partial{o_i}}  = -\frac{\partial{C}}{\partial{o_j}} \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) $</p>
-</blockquote>
 <p>在对于上面的二层神经网络求解时:<br>$$\frac{\partial{C}}{\partial{b^{(2)}}} = \lambda_{i,j}({f’}_i^{(2)}-{f’}_i^{(2)}) = \Delta_i^{(2)} - \Delta_j^{(2)} \\<br>\frac{\partial{C}}{\partial{w^{(2)}}} = \Delta_i^{(2)}f_i^{(1)}  - \Delta_j^{(2)}f_j^{(1)} \\<br>\frac{\partial{C}}{\partial{b^{(1)}}} = \Delta_i^{(2)}f_i^{(1)}w^{(2)}   - \Delta_j^{(2)}f_j^{(1)}w^{(2)} \\<br>\frac{\partial{C}}{\partial{w_k^{(1)}}} = \Delta_i^{(2)} x_{i,k} - \Delta_j^{(2)} x_{j,k}<br>$$<br>这样神经网络就可以使用<code>前向预测</code>和<code>后向反馈</code>来进行训练了,只是其后向反馈阶段是需要通过<code>pair</code>进行计算的。</p>
-<h2 id="神经网络加速">神经网络加速</h2><p>上面的是对于每一对<code>pair</code>都会进行一次权重的更新，其实是可以对同一个排序下的所有文档<code>pair</code>全部带入神经网络进行前向预测，然后计算总差分并进行误差后向反馈，这样将大大减少误差反向传播的次数，其更新的公式为:<br>$$\Delta w = -\eta \sum_{\{i,j\}\in I}  \left(\lambda_{i,j} \frac{\partial{o_i}}{\partial{w_k}} - \lambda_{i,j} \frac{\partial{o_j}}{\partial{w_k}}\right) = -\eta \sum_i \lambda_i \frac{\partial{o_i}}{\partial{w_k}} $$<br>其中:<br>$$\lambda_i = \sum_{j:\{i,j\} \in I} \lambda_{i,j} - \sum_{j:\{j,i\} \in I} \lambda_{i,j}$$</p>
+<h2 id="神经网络加速">神经网络加速</h2><p>这里我们输入的样本是<code>pair</code>对$\{(x_i,x_j),\bar{P}_{i,j}\}$,其中$\bar{P}_{i,j}$就是我们的目标概率,根据第一小节(算法原理)中指到的，使用梯度下降法进行求解:<br>$$\begin{equation}\begin{split} \frac{\partial{C}}{\partial{w_k}} &amp;= \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}}  \\<br>&amp;=  \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right)\\<br>&amp;=  \lambda_{i,j} \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right) \\<br>\end{split}\end{equation}$$</p>
 <blockquote>
-<p>$I$表示$\{i,j\}$两个文档满足$D_i \triangleright D_j$,也就是$\bar{P}_{i,j}=1$</p>
+<p>记$\lambda_{i,j} =  \frac{\partial{C}}{\partial{o_i}}  = -\frac{\partial{C}}{\partial{o_j}} = \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) $</p>
 </blockquote>
-<p>这种方式可以看做是一种mini-batch的梯度下降算法，可以大大加快原始的神经网络训练.</p>
+<p>上面的是对于每一对<code>pair</code>都会进行一次权重的更新，其实是可以对同一个query下的所有文档<code>pair</code>全部带入神经网络进行前向预测，然后计算总差分并进行误差后向反馈，这样将大大减少误差反向传播的次数，其更新的公式为:</p>
+<p>$$\Delta w_k = -\eta \sum_{\{i,j\}\in I}  \left(\lambda_{i,j} \frac{\partial{o_i}}{\partial{w_k}} - \lambda_{i,j} \frac{\partial{o_j}}{\partial{w_k}}\right) = -\eta \sum_i \lambda_i \frac{\partial{o_i}}{\partial{w_k}} $$</p>
+<blockquote>
+<p>$I$表示某个<code>query</code>下所有不同排序的<code>pair</code>出现一次的集合，$\{i,j\}$表示两个文档满足$D_i \triangleright D_j$,也就是$\bar{P}_{i,j}=1$</p>
+</blockquote>
+<p>这里要着重介绍一下$\lambda_i$:</p>
+<p>$\lambda$可以理解为某个给定query（给定排序）下第$i$个文档$D_i$的一个<code>值</code>,为了计算$\lambda_i$，需要找到这个排序下所有排在$D_i$前面的文档$D_j$（此时有$\{i,j\} \in I$），以及所有排在$D_i$后面的文档$D_k$（有$\{k,i\} \in I$）,同时针对$\lambda_{i,j}$的文档进行累加，对于$\lambda_{k,i}$的文档进行累减.</p>
+<blockquote>
+<p>比如  当前排序下只有一个pair,有$I=\{\{1,2\}\}$，则有$\lambda_1 = \lambda_{1,2} = -\lambda_2$<br>又比如，当前排序下有三个pair，有$I=\{\{1,2\},\{1,3\},\{2,3\}\}$,则有$\lambda_1 = \lambda_{1,2}+\lambda_{1,3}$、$\lambda_2 = \lambda_{2,3}+\lambda_{1,2}$、$\lambda_3 = -\lambda_{1,3}-\lambda_{2,3}$</p>
+</blockquote>
+<p>对于表示成式子为:<br>$$\lambda_i = \sum_{j:\{i,j\} \in I} \lambda_{i,j} - \sum_{j:\{j,i\} \in I} \lambda_{i,j}$$</p>
+<p>因此，我们可以认为$\lambda_i$为在某个给定<code>query</code>的$D_i$需要移动的方向以及移动的强度,另外这种方式可以看做是一种mini-batch的梯度下降算法，不要将全部的<code>pair</code>进行反向传播,其复杂度可以降到$O(n_q)$可以大大加快原始的神经网络训练.这也为<code>LambdaRank</code>奠定了基础（其实很多在<code>LambdaRank</code>的paper提出来的）</p>
 <h2 id="总结">总结</h2><p><code>RankNet</code>训练希望文档<code>pair</code>对的前后排序概率与目标概率一致，用交叉熵作为损失函数，在实际排序中使用了神经网络作为算分排序函数，同时可以有<code>min-batch</code>的批量训练方法。据说微软的<code>Bing</code>之前使用着他.</p>
 <h2 id="参考">参考</h2><ol>
 <li>Burges, Chris, et al. “Learning to rank using gradient descent.” Proceedings of the 22nd international conference on Machine learning. ACM, 2005.</li>
@@ -197,6 +263,43 @@
       <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
       <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[在CentOS上自己安装python]]></title>
+    <link href="http://kubicode.me/2016/04/29/Python/Python-Install-on-CentOS/"/>
+    <id>http://kubicode.me/2016/04/29/Python/Python-Install-on-CentOS/</id>
+    <published>2016-04-29T07:50:41.000Z</published>
+    <updated>2016-08-29T08:22:44.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
+</blockquote>
+<h3 id="下载python2-6-5">下载python2.6.5</h3><p>直接在这个地址进行下载即可<a href="https://www.python.org/download/releases/2.6.5/" target="_blank" rel="external">https://www.python.org/download/releases/2.6.5/</a></p>
+<h3 id="进行解压">进行解压</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">tar</span> xvf Python-<span class="number">2</span>.<span class="number">6</span>.<span class="number">5</span>.tgz</span><br></pre></td></tr></table></figure>
+<h3 id="编译安装">编译安装</h3><p>先配置安装的前缀<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/configure --prefix=/u</span>sr<span class="regexp">/local/</span>python2.<span class="number">6.5</span></span><br></pre></td></tr></table></figure></p>
+<p>然后真正的执行编译安装<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意如果是非管理员用户 请在两个<code>make</code>前面都加上<code>sudo</code></p>
+</blockquote>
+<h3 id="添加快捷方式">添加快捷方式</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>local<span class="regexp">/python2.6.5/</span>bin<span class="regexp">/python /u</span>sr<span class="regexp">/bin/</span>python</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果原来快捷方式存在  那么先删除，再添加</p>
+</blockquote>
+<h3 id="完工">完工</h3><pre><code><span class="keyword">python</span> --<span class="keyword">version</span>
+Python <span class="number">2.6</span>.<span class="number">5</span> 
+</code></pre><h3 id="参考">参考</h3><p><a href="http://blog.csdn.net/jationxiaozi/article/details/7665691" target="_blank" rel="external">CentOS5.5下安装python2.6</a>   实用，但是排版太难看了-_-</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
+</blockquote>
+<h3 id=]]>
+    </summary>
+    
+      <category term="Python" scheme="http://kubicode.me/tags/Python/"/>
+    
+      <category term="Python" scheme="http://kubicode.me/categories/Python/"/>
     
   </entry>
   
@@ -630,7 +733,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
     <link href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/"/>
     <id>http://kubicode.me/2016/04/10/Machine Learning/LTR-Pairwise-Study/</id>
     <published>2016-04-10T09:05:18.000Z</published>
-    <updated>2016-05-08T15:28:16.000Z</updated>
+    <updated>2016-07-28T13:12:39.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛^_^</p>
 </blockquote>
@@ -653,6 +756,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 <h3 id="优化学习方法">优化学习方法</h3><p>所以<code>IRSVM</code>考虑了不同排序位置的不同重要性，以及各个<code>query</code>召回的数量，对原始的<code>RankSVM</code>损失函数进行修改得到如下:<br>$$\underset{w}{min} \sum_{i=1}^N \tau_{k(i)} \mu_{q(i))} [1-y_i(w,x_i^{(1)}-x_i^{(2)})]_+ + \lambda||w||^2$$</p>
 <p>其实重要是添加了位置得分因子$\tau_{k(i)}$，使用<code>NDCG@1</code>中的方法进行折损，以及添加了<code>query</code>召回的文档长度因子$\mu_{q(i)}$，使用的是最简单粗暴的$\frac{1}{n_q}$进行计算，其中$n_q$表示召回的文档数量。</p>
 <p>[2]中提出<code>IRSVM</code>的时候还使用了<code>SGD</code>和<code>线性规划</code>进行了优化</p>
+<h2 id="2005-RankNet">2005-RankNet</h2><p><code>RankNet</code>的相关学习记录<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/" target="_blank" rel="external">在这里</a></p>
 <h2 id="2007-GBRank">2007-GBRank</h2><p><code>GBRank</code>的相关学习记录<a href="http://kubicode.me/2016/05/08/Machine%20Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" target="_blank" rel="external">在这里</a></p>
 <h2 id="参考">参考</h2><ol>
 <li>《Learning to Rank for Information Retrieval and Natural Language Processing》.Hang Li</li>
@@ -680,7 +784,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
     <link href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/"/>
     <id>http://kubicode.me/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</id>
     <published>2016-03-30T12:49:53.000Z</published>
-    <updated>2016-04-04T15:21:20.000Z</updated>
+    <updated>2016-07-26T17:22:22.000Z</updated>
     <content type="html"><![CDATA[<pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
 并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
 </code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
@@ -711,7 +815,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 <p>$r_a$为真实排序，$r_b$为算法排序</p>
 </blockquote>
 <p>比如实际文档中的顺序为:<br>$$d_1{\overset{r^*}{&lt;}}d_2{\overset{r^*}{&lt;}}d_3{\overset{r^*}{&lt;}}d_4{\overset{r^*}{&lt;}}d_5$$<br>但是算法的排序顺序为:<br>$$d_3{\overset{\hat{r}}{&lt;}}d_1{\overset{\hat{r}}{&lt;}}d_2{\overset{\hat{r}}{&lt;}}d_4{\overset{\hat{r}}{&lt;}}d_5$$</p>
-<p>因此可以发现算法排序中有3对<code>pair</code>不一致了($\{d_2,d_3\}$,$\{d_1,d_2\}$,$\{d_1,d_3\}$)，所以$Q=3$，$Q=7$，最终的$\tau(r,\hat{r})=\frac{7-3}{10}=4$<br>$\tau$的值越大，表示排序效果越接近真实，比如上面的$\tau(r,r)=\frac{10-0}{10}=1$</p>
+<p>因此可以发现算法排序中有3对<code>pair</code>不一致了($\{d_2,d_3\}$,$\{d_1,d_2\}$,$\{d_1,d_3\}$)，所以$Q=3$，$P=7$，最终的$\tau(r,\hat{r})=\frac{7-3}{10}=4$<br>$\tau$的值越大，表示排序效果越接近真实，比如上面的$\tau(r,r)=\frac{10-0}{10}=1$</p>
 <blockquote>
 <p><code>RankSvm</code>还证明了由$Q$的倒数正相关的一个式子为平均准确率指标的下界(具体证明看原文附录):<br>$$AvgPrec(\hat{r}) \geq \frac{1}{R} \left[Q+\binom{R+1}{2}\right]^{-1} \left(\sum_{i=1}^{R} \sqrt{i}\right)^2$$<br>$R$为排序出现的文档中与query相关文档数量(这个是<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#MAP" target="_blank" rel="external">Mean Average Precision</a>中的标注，与<code>Pair</code>对的样本稍微有点差别)<br>从这个角度也可以看到$\tau$来衡量排序效果好坏的合理性.</p>
 </blockquote>
@@ -1720,203 +1824,6 @@ f'(q,D)=\left\{
       <category term="Hexo" scheme="http://kubicode.me/tags/Hexo/"/>
     
       <category term="Hexo" scheme="http://kubicode.me/categories/Hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[概率检索模型BM25系列-文档相关性检索的利器]]></title>
-    <link href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/"/>
-    <id>http://kubicode.me/2016/01/26/Search Engine/Study-BM25-For-Query-Document-Relevance/</id>
-    <published>2016-01-26T09:06:31.000Z</published>
-    <updated>2016-04-02T14:20:39.000Z</updated>
-    <content type="html"><![CDATA[<pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
-</code></pre><h2 id="概率排序原理">概率排序原理</h2><p>以往的<code>向量空间模型</code>是将<code>query</code>和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而<code>概率检索模型</code>是一种直接对用户需求进行相关性的建模方法,一个<code>query</code>进来，将所有的文档分为两类—-<code>相关文档</code>、<code>不相关文档</code>,这样就转为了一个相关性的分类问题,赞!</p>
-<p>对于某个文档$D$来说，$P(R|D)$表示该文档数据相关文档的概率，则$P(NR|D)$表示该文档属于不相关文档的概率，如果<code>query</code>属于相关文档的概率大于不相关文档$P(R|D)&gt;P(RN|D)$，则认为这个文档是与用户查询相关相关的.</p>
-<a id="more"></a>
-<p>现在使用贝叶斯公式将其转一下:</p>
-<center>$P(R|D)&gt;P(NR|D) &lt;=&gt;\frac{P(D|R)P(R)}{P(D)}&gt;\frac{P(D|NR)P(NR)}{P(D)} &lt;=&gt; \frac{P(D|R)}{P(D|NR)}&gt;\frac{P(NR)}{P(R)}$</center>
-
-<p>在搜索排序过程中不需要真正的分类，只需要保证相关性由高到底排序即可，所以只需要$\frac{P(D|R)}{P(D|NR)}$降序即可，<br>这样就最终转为计算$P(D|R)$,$P(D|NR)$的值即可.</p>
-<h2 id="二元独立模型(BIM)">二元独立模型(BIM)</h2><pre><code><span class="xml">词汇独立性假设:文档里面出现的词没有任何关联，这样一个文档的出现就可以转为各个单词出现概率的乘积（虽然这种假设有违实际，但是算起来简单的啊</span><span class="keyword">^_</span><span class="xml">^）</span>
-</code></pre><p>上述提到的文档$D$表示为<code>{1,0,1,0,1}</code>，用$p_i$来表示第$i$个单词在相关文档出现的概率,则在已知<code>相关文档</code>集合的情况下，观察到$D$的概率为:<br>    <center>$P(D|R)=p_1 \times (1-p_2) \times p_3 \times (1-p_4) \times p_5$ </center></p>
-<blockquote>
-<p>第<code>1,3,5</code>表示这个单词在$D$中出现,所以其贡献概率为$p_i$，而第<code>2,4</code>这两个单词并没有在$D$中出现，所以其贡献的概率为$1-p_i$ </p>
-</blockquote>
-<p>同理在<code>不相关文档</code>中观察到的概率为:<br>    <center>$P(D|R)=s_1 \times (1-s_2) \times s_3 \times (1-s_4) \times s_5$ </center></p>
-<p>最终得到的相关性概率估算为:</p>
-<center>$\frac{P(D|R)}{P(D|NR)}=\frac{p_1 \times (1-p_2) \times p_3 \times (1-p_4) \times p_5}{s_1 \times (1-s_2) \times s_3 \times (1-s_4) \times s_5}$</center>
-
-<p>现在将其推广之后可以有通用的式子：</p>
-<p>$$\frac{P(D|R)}{P(D|NR)}= \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}$$</p>
-<blockquote>
-<p>$d_i=1$表示在文档中出现的单词，$d_i=0$表示没在文档中出现的单词:</p>
-</blockquote>
-<p>在这里进一步对上述公式进行等价变换之后有:</p>
-<p>$$\begin{equation}\begin{split} \frac{P(D|R)}{P(D|NR)} &amp;=\prod_{i:d_i=1} \frac{p_i}{s_i} \times \left ( \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \times \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \right ) \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i}\\<br>&amp;= \left ( \prod_{i:d_i=1} \frac{p_i}{s_i} \times \prod_{i:d_i=1} \frac{1-s_i}{1-p_i} \right ) \times  \left ( \prod_{i:d_i=1} \frac{1-p_i}{1-s_i} \times \prod_{i:d_i=0} \frac{1-p_i}{1-s_i} \right )  \\<br>&amp;=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)} \times \prod_i \frac{1-pi}{1-s_i} \\<br>&amp;=\prod_{i:d_i=1} \frac{p_i(1-s_i)}{s_i(1-p_i)}<br>\end{split}\end{equation}$$</p>
-<p>其中上面式子第三步的第二部分$\prod_i \frac{1-pi}{1-s_i} $表示各个单词在所有文档中出现的概率，所以这个式子的值和具体文档并没有什么关系，在排序中不起作用，才可以简化到第4步.</p>
-<p>为了方便计算，将上述连乘公式取$log$:</p>
-<center>$log(\frac{P(D|R)}{P(D|NR)}) =  \sum_{i:d_i=1} log \frac{p_i(1-s_i)}{s_i(1-p_i)}$</center>
-
-<p>有了上述最终可计算的式子之后，我们就只需要统计文档$D$中的各个单词在<code>相关文档</code>/<code>不相关文档</code>中出现的概率即可:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left"></th>
-<th style="text-align:left">相关文档</th>
-<th style="text-align:left">不相关文档</th>
-<th style="text-align:left">文档数量</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">$d_i=1$</td>
-<td style="text-align:left">$r_i$</td>
-<td style="text-align:left">$n_i-r_i$</td>
-<td style="text-align:left">$n_i$</td>
-</tr>
-<tr>
-<td style="text-align:left">$d_i=0$</td>
-<td style="text-align:left">$R-r_i$</td>
-<td style="text-align:left">$(N-R)-(n_i-r_i)$</td>
-<td style="text-align:left">$N-n_i$</td>
-</tr>
-<tr>
-<td style="text-align:left">文档数量</td>
-<td style="text-align:left">$R$</td>
-<td style="text-align:left">$N-R$</td>
-<td style="text-align:left">$N$</td>
-</tr>
-</tbody>
-</table>
-<p>上面的表格表示各个单词在文档集合中的<code>相关文档</code>/<code>不相关文档</code>出现数量,同时为了避免$log(0)$出现，加上平滑之后可以计算得到:</p>
-<center>$p_i=\frac{r_i+0.5}{R+1}$</center><br><center>$s_i=\frac{(n_i-r_i)+0.5}{(N-R)+1}$</center>
-
-<p>则最终可以得到如下公式:</p>
-<center>$\sum_{q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)}$</center>
-
-<p>上面的公式表示对于同时出现查询$q_i$以及文档$d_i$的时候，对$q_i$在$d_i$中出现的单词在<code>相关文档</code>/<code>不相关文档</code>进行统计，即可得到查询与文档的相关性估计值.</p>
-<blockquote>
-<p>在不确定哪些文档是相关的，哪些文档是不相关的的时候，可以给公式的估算因子直接赋予固定值，则该公式将会蜕化为$IDF$因子.</p>
-</blockquote>
-<h2 id="BM25_模型">BM25 模型</h2><h3 id="模型概述">模型概述</h3><blockquote>
-<p>上一小节中的<code>BIM模型</code>效果并不佳，也没有考虑单词权重，但是他给<code>BM25模型</code>打下了深深的基础</p>
-</blockquote>
-<pre><code>B<span class="title">M25</span> 模型在BIM模型的基础上考虑了查询词在Query以及Doc中的权重，并通过实验引入了一些经验参数。B<span class="title">M25</span>模型是目前最成功的内容排序模型.
-</code></pre><p>改进之后的<code>BM25</code>模型的拟合公式如下:</p>
-<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
-
-<p>上面的式子中:</p>
-<ol>
-<li>第1部分即为上一小节的二元独立模型BIM计算得分</li>
-<li>第2部分是查询词在$D$中的权重，其中$f_i$代表词在文档中的词频,$K$因子代表了对文档长度的考虑，其计算公式为$K=k_1((1-b)+b \cdot \frac{dl}{avdl})$<ol>
-<li>$k_1$为经验参数,这里的$k_1$一般设置为1.2,</li>
-<li>$b$为调节因子，将$b$设为0时，文档长度因素将不起作用，经验表明一般$b=0.75$</li>
-<li>$dl$代表当前文档的长度</li>
-<li>$avdl$代表所有文档的平均长度</li>
-</ol>
-</li>
-<li>第3部分是查询词在自身的权重,$qf_i$表示在查询中的词频,$k_2$也为调节因子，因为在短查询下这部分一般为1，为了放大这部分的差异，$k_2$一般取值为<code>0~1000</code></li>
-</ol>
-<blockquote>
-<p>综合看来,<code>BM25</code>模型结合了<code>BIM</code>因子、<code>文档长度</code>、<code>文档词频</code>和<code>查询词频</code>进行公式融合，并利用$k_1$、$k_2$、$b$对各种因子进行权重的调整.</p>
-</blockquote>
-<h3 id="栗子">栗子</h3><p>假设当前以<code>乔布斯 IPAD2</code>这个查询词为例，来计算在某文档$D$中<code>BM25相关性</code>的值，由于不知道文档集中相关与不相关的分类，所以这里直接将相关文档个数$r$置为0,则将得到的<code>BIM</code>因子为:<br>    <center>$Rel_{BIM}=log \frac {(0+0.5)((N-0)-(n_i-0)+0.5)}{(n_i-0+0.5)(0-0+0.5)}=log \frac{N-n_i+0.5}{n_i+0.5}$</center></p>
-<p>其他数值假定如下:</p>
-<ol>
-<li>文档的集合总数$N=100000$</li>
-<li>包含<code>乔布斯</code>的文档个数为$n_{乔布斯}=1000$</li>
-<li>包含<code>IPAD2</code>的文档个数为$n_{IPAD2}=100$</li>
-<li>文档$D$中出现<code>乔布斯</code>的词频为$f_{乔布斯}=8$</li>
-<li>文档$D$中出现<code>IPAD2</code>的词频为$f_{IPAD2}=8$</li>
-<li>查询词频均为$qf_i=1$</li>
-<li>调节因子$k_1=1.2$</li>
-<li>调节因子$k_2=200$</li>
-<li>调节因子$b=0.75$</li>
-<li>设文档$D$的长度为平均长度的1.5倍($\frac{dl}{avdl}=1.5$),即$K=1.2 \times (0.25+0.75 \times 1.5)=1.65$</li>
-</ol>
-<p>则最终可以计算到的<code>BM25</code>结果为:</p>
-<p>$Rel_{BM25}=log \frac{100000-1000+0.5}{1000+0.5} \times \frac{(1.2+1) \times 8}{1.65+8} \times \frac{(200+1) \times 1}{200+1}+ log \frac{100000-1000+0.5}{1000+0.5} \times \frac{(1.2+1) \times 5}{1.65+5} \times \frac{(200+1) \times 1}{200+1} = 8.59$</p>
-<p>每个文档按上述公式计算得到相关性排序即可.</p>
-<h2 id="BM25F_模型">BM25F 模型</h2><blockquote>
-<p>在<code>BM25</code>模型中，文档被当做一个整体进行进行词频的统计，而忽视了不同区域的重要性，<code>BM25F</code>模型正是抓住了这点进行了相应的改进。</p>
-</blockquote>
-<p><code>BM25F</code>模型在计算相关性时候，会对文档分割成不同的域来进行加权统计，非常适用于网页搜索，因为在一个网页有<code>标题信息</code>、<code>meta信息</code>、<code>页面内容信息</code>等，而<code>标题信息</code>无疑是最重要的，其次是<code>meta信息</code>，最后才是<code>网页内容</code>，<code>BM25F</code>在计算相关性的，会将网页分为不用的区域，在各个区域分别统计自己的词频。<br>所以<code>BM25F</code>模型的计算公式为:</p>
-<p>$$\sum_{i:q_i=d_i=1} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \times \frac{f_i^u}{k_1+f_i^u}$$</p>
-<blockquote>
-<p><code>BM25F</code>的第1部分还是<code>BIM</code>的值</p>
-</blockquote>
-<p>其中与<code>BM25</code>主要的差别体现在$f_i^u$因子上,它是单词$i$在各个区域不同的得分,计算公式如下:</p>
-<p>$$f_i^u=\sum_{k=1}^uw_k \times \frac{f_{ui}}{B_u}$$</p>
-<p>$$B_u=((1-b_u)+b_u \times  \frac{ul_u}{uvul_u})$$</p>
-<p>上面的公式表示:</p>
-<ol>
-<li>文档$D$来个不同的$u$个域</li>
-<li>各个域对应的权重为$W_k$</li>
-<li>$f_i^u$为第$i$个单词在各个域中的 $\frac{f_{ui}}{B_u}$ 的加权和</li>
-<li>$f_{ui}$表示词频</li>
-<li>$B_u$表示各个域的长度情况</li>
-<li>$ul_u$为实际域的实际长度,$uvul_u$表示域的平均长度</li>
-<li>$b_u$则为各个域长度的调节因子</li>
-</ol>
-<h2 id="总结">总结</h2><p><code>BM25</code>系列的模型主要是考虑查询词到文档里面的各种词频，含有大量自由的调节因子，最终给出查询到文档的相关性，模型都是比较简单的，但是里面提高的相关文档和不相关文档的引入将比较麻烦，有实际场景可以一试。</p>
-<h2 id="参考">参考</h2><ol>
-<li>《这就是搜索引擎：核心技术详解》 . 第五章</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<pre><code>给定一个用户需求(<span class="keyword">query</span>),如果搜索系统展示的搜索结果是根据文档和<span class="keyword">query</span>的相关性由高向低排序的，那么这个搜索引擎是最优的。在文档集合的基础上计算其相关性估计是其核心~
-</code></pre><h2 id="概率排序原理">概率排序原理</h2><p>以往的<code>向量空间模型</code>是将<code>query</code>和文档使用向量表示然后计算其内容相似性来进行相关性估计的，而<code>概率检索模型</code>是一种直接对用户需求进行相关性的建模方法,一个<code>query</code>进来，将所有的文档分为两类—-<code>相关文档</code>、<code>不相关文档</code>,这样就转为了一个相关性的分类问题,赞!</p>
-<p>对于某个文档$D$来说，$P(R|D)$表示该文档数据相关文档的概率，则$P(NR|D)$表示该文档属于不相关文档的概率，如果<code>query</code>属于相关文档的概率大于不相关文档$P(R|D)&gt;P(RN|D)$，则认为这个文档是与用户查询相关相关的.</p>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/categories/Search-Engine/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[用笨方法解决Shell中按行读取文件之后Tab键不见的问题]]></title>
-    <link href="http://kubicode.me/2016/01/03/Linux/shell-line-no-tab/"/>
-    <id>http://kubicode.me/2016/01/03/Linux/shell-line-no-tab/</id>
-    <published>2016-01-03T14:24:09.000Z</published>
-    <updated>2016-01-03T15:03:02.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>Shell</code>强大灵活，但是今天在使用<code>Shell</code>处理按行读取文件时发现  读取到的行设定的<code>tab</code>分割符不见了</p>
-</blockquote>
-<p>先看一下演示的待<a href="http://kubicode.me/img/awk-study-list/score.log" target="_blank" rel="external">处理文件</a>:<br><img src="/img/shell-line-no-tab/demo_text.png" alt=""></p>
-<p>需要做的需求就是将里面的数据使用<code>shell</code>将第一列读取出来做一些其他处理(当然如果仅仅是完成读取首列这个功能，使用<code>awk</code>是最快的，这里只是演示)</p>
-<a id="more"></a>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"></span></span><br><span class="line">cat score.log | <span class="keyword">while</span> <span class="built_in">read</span> line  <span class="comment">#按行读取文件</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">    grade=`<span class="built_in">echo</span> <span class="variable">$line</span> | awk -F <span class="string">"\t"</span> <span class="string">'&#123;print $1&#125;'</span>` <span class="comment">#读取首列（年级）</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$grade</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<p>执行这个文件并且使用管道<code>| vim -</code> 打印只之后可以发现格式不对，按行打印了，并且其原先的分隔符<code>tab</code>也消失了<br><img src="/img/shell-line-no-tab/no_tab.png" alt=""></p>
-<p>后来查到据说<code>shell</code>的默认分隔符是空格的原因,所以一种最直接的方式就是去<code>.bashrc</code>里面修改分割符,但是这么做可能会影响其他的<code>shell程序</code><br>所以比较保险的一种方法就是先将行中的<code>tab</code>替换，再对替换后的数据进行操作<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span><br><span class="line"></span></span><br><span class="line">cat score.log | awk <span class="string">'gsub("\t","\001",$0)'</span> | <span class="keyword">while</span> <span class="built_in">read</span> line  <span class="comment">#按行读取文件</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    grade=`<span class="built_in">echo</span> <span class="variable">$line</span> | awk -F <span class="string">"\001"</span> <span class="string">'&#123;print $1&#125;'</span>` <span class="comment">#读取首列（年级）</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$grade</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></p>
-<p>先做了独立的<code>tab</code>去掉之后就可以很顺利地看到需要的结果了</p>
-<p><img src="/img/shell-line-no-tab/ok.png" alt=""></p>
-<blockquote>
-<p>这个方法虽然比较简单，但是非常实用~</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>Shell</code>强大灵活，但是今天在使用<code>Shell</code>处理按行读取文件时发现  读取到的行设定的<code>tab</code>分割符不见了</p>
-</blockquote>
-<p>先看一下演示的待<a href="http://kubicode.me/img/awk-study-list/score.log">处理文件</a>:<br><img src="/img/shell-line-no-tab/demo_text.png" alt=""></p>
-<p>需要做的需求就是将里面的数据使用<code>shell</code>将第一列读取出来做一些其他处理(当然如果仅仅是完成读取首列这个功能，使用<code>awk</code>是最快的，这里只是演示)</p>]]>
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://kubicode.me/tags/Linux/"/>
-    
-      <category term="Vim" scheme="http://kubicode.me/tags/Vim/"/>
-    
-      <category term="Linux" scheme="http://kubicode.me/categories/Linux/"/>
     
   </entry>
   

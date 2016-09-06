@@ -95,6 +95,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/" title="LambdaRank-支持非平滑损失函数的学习排序算法" itemprop="url">LambdaRank-支持非平滑损失函数的学习排序算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-28T14:44:59.000Z" itemprop="datePublished"> 发表于 2016-08-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
+<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/" title="RankNet:基于梯度下降的学习排序" itemprop="url">RankNet:基于梯度下降的学习排序</a>
   </h1>
   <p class="article-author">By
@@ -221,6 +286,85 @@
 	
 	  	<span></span>
 		<a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/29/Python/Python-Install-on-CentOS/" title="在CentOS上自己安装python" itemprop="url">在CentOS上自己安装python</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-29T07:50:41.000Z" itemprop="datePublished"> 发表于 2016-04-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
+</blockquote>
+<h3 id="下载python2-6-5">下载python2.6.5</h3><p>直接在这个地址进行下载即可<a href="https://www.python.org/download/releases/2.6.5/" target="_blank" rel="external">https://www.python.org/download/releases/2.6.5/</a></p>
+<h3 id="进行解压">进行解压</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">tar</span> xvf Python-<span class="number">2</span>.<span class="number">6</span>.<span class="number">5</span>.tgz</span><br></pre></td></tr></table></figure>
+<h3 id="编译安装">编译安装</h3><p>先配置安装的前缀<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/configure --prefix=/u</span>sr<span class="regexp">/local/</span>python2.<span class="number">6.5</span></span><br></pre></td></tr></table></figure></p>
+<p>然后真正的执行编译安装<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意如果是非管理员用户 请在两个<code>make</code>前面都加上<code>sudo</code></p>
+</blockquote>
+<h3 id="添加快捷方式">添加快捷方式</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>local<span class="regexp">/python2.6.5/</span>bin<span class="regexp">/python /u</span>sr<span class="regexp">/bin/</span>python</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果原来快捷方式存在  那么先删除，再添加</p>
+</blockquote>
+<h3 id="完工">完工</h3><pre><code><span class="keyword">python</span> --<span class="keyword">version</span>
+Python <span class="number">2.6</span>.<span class="number">5</span> 
+</code></pre><h3 id="参考">参考</h3><p><a href="http://blog.csdn.net/jationxiaozi/article/details/7665691" target="_blank" rel="external">CentOS5.5下安装python2.6</a>   实用，但是排版太难看了-_-</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/29/Python/Python-Install-on-CentOS/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/29/Python/Python-Install-on-CentOS/" data-count-type="comments">&nbsp;</a>
 	
 </div>
 
@@ -671,142 +815,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/" title="McRank:一种基于多分类和梯度提升树的排序学习" itemprop="url">McRank:一种基于多分类和梯度提升树的排序学习</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-28T08:37:53.000Z" itemprop="datePublished"> 发表于 2016-03-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
-</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>MacRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
-<h2 id="折损累积增益">折损累积增益</h2><blockquote>
-<p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG">这里</a>).</p>
-</blockquote>
-<p>假设在指定的<code>query</code>下通过某个排序算法对$n$个文档进行排序，则可以得到<br>$$DCG=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1)$$<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/" title="从Bayesion的角度来看Logistic Regression" itemprop="url">从Bayesion的角度来看Logistic Regression</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-26T03:30:54.000Z" itemprop="datePublished"> 发表于 2016-03-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
-<p><code>Logistic Regression</code>（下面简称<code>LR</code>）是一个二分类的机器学习方法，给定一个输入向量$x_i$，输出$P(y_i|x_i)$,其中$y_i \in {0,1}$。</p>
-</blockquote>
-<p>作为一个二分类问题，$Y$的后验概率一般会写成这样:<br>$$P(Y=1|X)=\frac{1}{1+exp(- \omega - \sum_{i=1}^n {\omega_ix_i})}=\sigma(W^TX_i)$$<br>那么<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/26/Machine Learning/Bayesian-Logistic-Regression/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -881,7 +889,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
 		  
 		
 		  
@@ -893,7 +901,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Python/" title="Python">Python<sup>3</sup></a></li>
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
 		  
 		
 		  
@@ -922,7 +930,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
 			
 		
 			
@@ -934,7 +942,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>9</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>10</sup></a></li>
 			
 		
 			
@@ -966,6 +974,10 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
@@ -983,10 +995,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
 			
 		
 			

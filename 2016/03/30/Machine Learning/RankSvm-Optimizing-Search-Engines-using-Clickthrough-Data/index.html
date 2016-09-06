@@ -158,7 +158,7 @@
 <p>$r_a$为真实排序，$r_b$为算法排序</p>
 </blockquote>
 <p>比如实际文档中的顺序为:<br>$$d_1{\overset{r^*}{&lt;}}d_2{\overset{r^*}{&lt;}}d_3{\overset{r^*}{&lt;}}d_4{\overset{r^*}{&lt;}}d_5$$<br>但是算法的排序顺序为:<br>$$d_3{\overset{\hat{r}}{&lt;}}d_1{\overset{\hat{r}}{&lt;}}d_2{\overset{\hat{r}}{&lt;}}d_4{\overset{\hat{r}}{&lt;}}d_5$$</p>
-<p>因此可以发现算法排序中有3对<code>pair</code>不一致了($\{d_2,d_3\}$,$\{d_1,d_2\}$,$\{d_1,d_3\}$)，所以$Q=3$，$Q=7$，最终的$\tau(r,\hat{r})=\frac{7-3}{10}=4$<br>$\tau$的值越大，表示排序效果越接近真实，比如上面的$\tau(r,r)=\frac{10-0}{10}=1$</p>
+<p>因此可以发现算法排序中有3对<code>pair</code>不一致了($\{d_2,d_3\}$,$\{d_1,d_2\}$,$\{d_1,d_3\}$)，所以$Q=3$，$P=7$，最终的$\tau(r,\hat{r})=\frac{7-3}{10}=4$<br>$\tau$的值越大，表示排序效果越接近真实，比如上面的$\tau(r,r)=\frac{10-0}{10}=1$</p>
 <blockquote>
 <p><code>RankSvm</code>还证明了由$Q$的倒数正相关的一个式子为平均准确率指标的下界(具体证明看原文附录):<br>$$AvgPrec(\hat{r}) \geq \frac{1}{R} \left[Q+\binom{R+1}{2}\right]^{-1} \left(\sum_{i=1}^{R} \sqrt{i}\right)^2$$<br>$R$为排序出现的文档中与query相关文档数量(这个是<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#MAP" target="_blank" rel="external">Mean Average Precision</a>中的标注，与<code>Pair</code>对的样本稍微有点差别)<br>从这个角度也可以看到$\tau$来衡量排序效果好坏的合理性.</p>
 </blockquote>
@@ -327,7 +327,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>22</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
 		  
 		
 		  
@@ -339,7 +339,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Python/" title="Python">Python<sup>3</sup></a></li>
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
 		  
 		
 		  
@@ -368,7 +368,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
 			
 		
 			
@@ -380,7 +380,7 @@
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>9</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>10</sup></a></li>
 			
 		
 			
@@ -412,6 +412,10 @@
 			
 		
 			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
@@ -429,10 +433,6 @@
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
 			
 		
 			
