@@ -341,7 +341,7 @@
 <li>将当前样本划分成两类，一类是划分特征的类别等于最优划分点，另一类就是不等于</li>
 <li>针对这两类递归进行上述的划分工作，直达所有叶子指向同一样本目标或者叶子个数小于一定的阈值</li>
 </ol>
-<p>gini用来度量分布不均匀性（或者说不纯），总体的类别越杂乱，GINI指数就越大（跟熵的概念很相似）<br>$$gini(a_i)=1-\sum_i(p_i^2)$$ $p_i$当前数据集中第i类样本的比例<br>gini越小，表示样本分布越均匀（0的时候就表示只有一类了），越大越不均匀<br>基尼增益$$gini\_gain=\sum_i(\frac{N_i}{N*gini(a_i)})$$ 表示当前属性的一个混乱  $\frac{N_i}{N}$表示当前类别占所有类别的概率<br>最终Cart选择GiniGain最小的特征作为划分特征</p>
+<p>gini用来度量分布不均匀性（或者说不纯），总体的类别越杂乱，GINI指数就越大（跟熵的概念很相似）<br>$$gini(a_i)=1-\sum_i(p_i^2)$$ $p_i$当前数据集中第i类样本的比例<br>gini越小，表示样本分布越均匀（0的时候就表示只有一类了），越大越不均匀<br>基尼增益$$gini\_gain=\sum_i(\frac{N_i}{N}*gini(a_i))$$ 表示当前属性的一个混乱  $\frac{N_i}{N}$表示当前类别占所有类别的概率<br>最终Cart选择GiniGain最小的特征作为划分特征</p>
 <p>以ID3中的贷款的那棵树为样例：<br>基尼指数有房产:$gini(have\_house)=1-\left((\frac{3}{7})^2+(\frac{4}{7})^2\right) $<br>基尼指数无房产:$gini(no\_house)=1-\left((\frac{1}{3})^2+(\frac{2}{3})^2\right)$<br>基尼增益为:$gini\_gain=\frac{7}{10}*gini(have\_house)+\frac{3}{10}*gini(no\_house) $</p>
 <p>回归树：</p>
 <blockquote>
