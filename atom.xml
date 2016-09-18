@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-09-06T15:59:12.000Z</updated>
+  <updated>2016-09-18T16:39:41.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,61 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[使用Python画ROC曲线以及AUC值]]></title>
+    <link href="http://kubicode.me/2016/09/19/Machine%20Learning/AUC-Calculation-by-Python/"/>
+    <id>http://kubicode.me/2016/09/19/Machine Learning/AUC-Calculation-by-Python/</id>
+    <published>2016-09-18T16:02:43.000Z</published>
+    <updated>2016-09-18T16:39:41.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="AUC介绍">AUC介绍</h2><p><code>AUC</code>(Area Under Curve)是机器学习二分类模型中非常常用的评估指标，相比于<code>F1-Score</code>对项目的不平衡有更大的容忍性，目前常见的机器学习库中(比如<a href="http://scikit-learn.org/stable/" target="_blank" rel="external">scikit-learn</a>)一般也都是集成该指标的计算，其计算原理可以参考这个<a href="https://www.douban.com/note/284051363/?type=like" target="_blank" rel="external">ROC和AUC介绍以及如何计算AUC
+</a>，但是有时候模型是单独的或者自己编写的，此时想要评估训练模型的好坏就得自己搞一个<code>AUC</code>计算模块，本文在查询资料时发现<code>libsvm-tools</code><sup>1</sup>有一个非常通俗易懂的<code>auc</code>计算，因此抠出来用作日后之用。<br><a id="more"></a></p>
+<h2 id="AUC计算">AUC计算</h2><p><code>AUC</code>的计算分为下面三个步骤：</p>
+<ol>
+<li>计算数据的准备，如果模型训练时只有训练集的话一般使用交叉验证的方式来计算，如果有评估集(<code>evaluate</code>)一般就可以直接计算了，数据的格式一般就是需要预测得分以及其目标类别（注意是目标类别，不是预测得到的类别）</li>
+<li>根据阈值划分得到横（X:<code>False Positive Rate</code>）以及纵（Y:<code>True Positive Rate</code>）点</li>
+<li>将坐标点连成曲线之后计算其曲线下面积,就是<code>AUC</code>的值</li>
+</ol>
+<p>直接上python代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> pylab <span class="keyword">as</span> pl</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> log,exp,sqrt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">evaluate_result=<span class="string">"you file path"</span></span><br><span class="line">db = []  <span class="comment">#[score,nonclk,clk]</span></span><br><span class="line">pos, neg = <span class="number">0</span>, <span class="number">0</span> </span><br><span class="line"><span class="keyword">with</span> open(evaluate_result,<span class="string">'r'</span>) <span class="keyword">as</span> fs:</span><br><span class="line">	<span class="keyword">for</span> line <span class="keyword">in</span> fs:</span><br><span class="line">		nonclk,clk,score = line.strip().split(<span class="string">'\t'</span>)</span><br><span class="line">		nonclk = int(nonclk)</span><br><span class="line">		clk = int(clk)</span><br><span class="line">		score = float(score)</span><br><span class="line">		db.append([score,nonclk,clk])</span><br><span class="line">		pos += clk</span><br><span class="line">		neg += nonclk</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">db = sorted(db, key=<span class="keyword">lambda</span> x:x[<span class="number">0</span>], reverse=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#计算ROC坐标点</span></span><br><span class="line">xy_arr = []</span><br><span class="line">tp, fp = <span class="number">0.</span>, <span class="number">0.</span>			</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(db)):</span><br><span class="line">	tp += db[i][<span class="number">2</span>]</span><br><span class="line">	fp += db[i][<span class="number">1</span>]</span><br><span class="line">	xy_arr.append([fp/neg,tp/pos])</span><br><span class="line"></span><br><span class="line"><span class="comment">#计算曲线下面积</span></span><br><span class="line">auc = <span class="number">0.</span>			</span><br><span class="line">prev_x = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> x,y <span class="keyword">in</span> xy_arr:</span><br><span class="line">	<span class="keyword">if</span> x != prev_x:</span><br><span class="line">		auc += (x - prev_x) * y</span><br><span class="line">		prev_x = x</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">"the auc is %s."</span>%auc</span><br><span class="line"></span><br><span class="line">x = [_v[<span class="number">0</span>] <span class="keyword">for</span> _v <span class="keyword">in</span> xy_arr]</span><br><span class="line">y = [_v[<span class="number">1</span>] <span class="keyword">for</span> _v <span class="keyword">in</span> xy_arr]</span><br><span class="line">pl.title(<span class="string">"ROC curve of %s (AUC = %.4f)"</span> % (<span class="string">'svm'</span>,auc))</span><br><span class="line">pl.xlabel(<span class="string">"False Positive Rate"</span>)</span><br><span class="line">pl.ylabel(<span class="string">"True Positive Rate"</span>)</span><br><span class="line">pl.plot(x, y)<span class="comment"># use pylab to plot x and y</span></span><br><span class="line">pl.show()<span class="comment"># show the plot on the screen</span></span><br></pre></td></tr></table></figure></p>
+<p>输入的数据集可以参考<a href="/img/AUC-Calculation-by-Python/evaluate_result.txt">svm预测结果</a><br>其格式为:</p>
+<pre><code>nonclk <span class="string">\t</span> clk <span class="string">\t</span> score
+</code></pre><p>其中：</p>
+<ol>
+<li><code>nonclick</code>:未点击的数据，可以看做负样本的数量</li>
+<li><code>clk</code>:点击的数量，可以看做正样本的数量</li>
+<li><code>score</code>:预测的分数，以该分数为group进行正负样本的预统计可以减少<code>AUC</code>的计算量</li>
+</ol>
+<p>运行的结果为:</p>
+<center><img src="/img/AUC-Calculation-by-Python/auc.png" width="500px"></center>
+
+
+<blockquote>
+<p>如果本机没安装<code>pylab</code>可以直接注释依赖以及画图部分</p>
+</blockquote>
+<h2 id="注意">注意</h2><p>上面贴的代码:</p>
+<ol>
+<li>只能计算二分类的结果（至于二分类的标签随便处理）</li>
+<li>上面代码中每个<code>score</code>都做了一次阈值，其实这样效率是相当低的，可以对样本进行采样或者在计算横轴坐标时进行等分计算</li>
+</ol>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/#roc_curve_for_binary_svm" target="_blank" rel="external">http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/#roc_curve_for_binary_svm</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="AUC介绍">AUC介绍</h2><p><code>AUC</code>(Area Under Curve)是机器学习二分类模型中非常常用的评估指标，相比于<code>F1-Score</code>对项目的不平衡有更大的容忍性，目前常见的机器学习库中(比如<a href="http://scikit-learn.org/stable/">scikit-learn</a>)一般也都是集成该指标的计算，其计算原理可以参考这个<a href="https://www.douban.com/note/284051363/?type=like">ROC和AUC介绍以及如何计算AUC
+</a>，但是有时候模型是单独的或者自己编写的，此时想要评估训练模型的好坏就得自己搞一个<code>AUC</code>计算模块，本文在查询资料时发现<code>libsvm-tools</code><sup>1</sup>有一个非常通俗易懂的<code>auc</code>计算，因此抠出来用作日后之用。<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[LambdaRank-支持非平滑损失函数的学习排序算法]]></title>
@@ -451,7 +506,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
     <link href="http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/"/>
     <id>http://kubicode.me/2016/04/18/Machine Learning/AdaBoost-Study-Summary/</id>
     <published>2016-04-18T12:30:55.000Z</published>
-    <updated>2016-04-22T01:49:25.000Z</updated>
+    <updated>2016-09-08T03:58:57.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
 </blockquote>
@@ -466,7 +521,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 </ol>
 <p><code>AdaBoost</code>对此进行了很好的解决:</p>
 <ol>
-<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分队，同时减少分对样本的权重.</li>
+<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
 <li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
 </ol>
 <a id="more"></a>
@@ -636,7 +691,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 </ol>
 <p><code>AdaBoost</code>对此进行了很好的解决:</p>
 <ol>
-<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分队，同时减少分对样本的权重.</li>
+<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
 <li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
 </ol>]]>
     
@@ -1785,45 +1840,6 @@ f'(q,D)=\left\{
       <category term="Algorithm" scheme="http://kubicode.me/tags/Algorithm/"/>
     
       <category term="Algorithm" scheme="http://kubicode.me/categories/Algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[在Hexo中离线安装数据工具包-Mathjax]]></title>
-    <link href="http://kubicode.me/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/"/>
-    <id>http://kubicode.me/2016/01/27/Hexo/Offline-Install-Mathjax-In-Hexo-Jacman/</id>
-    <published>2016-01-27T09:30:11.000Z</published>
-    <updated>2016-02-03T06:24:54.000Z</updated>
-    <content type="html"><![CDATA[<pre><code>这里与其说安装，还是不如直接拷贝相应文件到hexo目录
-</code></pre><p>最近尝试在写<code>blog</code>的时候用<code>Latex</code>来写数学公式，写起来还是极其方便灵活滴，但是，但是其速度慢如爬蜗牛，一般修改一下，在刷新一下要<code>4~5s</code>才能将公式渲染出来，其书写效率也太低了，总之我不能忍，所以准备将其<code>MathJax</code>放在本地.</p>
-<ol>
-<li>一方面是希望加快公式的渲染速度</li>
-<li>另一方面也是希望能支持我在断网的情况下也能正常使用<code>Mathjax</code></li>
-</ol>
-<a id="more"></a>
-<p>我用的是<a href="http://wuchong.me/" target="_blank" rel="external">Jark</a>大神的<code>jacman</code>主题，在简单<code>grep</code>查找之后可以发现<code>MathJax</code>的引用在:<br><code>/themes/jacman/layout/_partial/mathjax.ejs</code>这里，可以发现也就远程引用了官网cdn的一个js<br><code>&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;</code></p>
-<p>在<a href="http://docs.mathjax.org/en/latest/installation.html" target="_blank" rel="external">http://docs.mathjax.org/en/latest/installation.html</a>可以下载到<code>Mathjax</code>的离线包（建议乖乖直接下包，别去爬<code>cdn</code>里面的目录，心累）。</p>
-<p>离线包解压之后的<code>unpacked</code>目录里面有整理好直接引用的资源文件(尼玛，之类有<code>16m</code>，难怪慢如蜗牛..)</p>
-<p>在<code>/themes/jacman/source/js</code>新建一个<code>mathjax/2.5-latest</code>的目录，将<code>unpacked</code>下的文件整个儿拷贝过去,修改<code>mathjax.ejs</code>中的引用<br><code>&lt;script type=&quot;text/javascript&quot; src=&quot;/js/mathjax/2.5-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;</code></p>
-<p>清空目录，再重新生成文件,启动服务器，跑起来看公式 只能说   <code>如丝般顺滑</code> ^_^</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<pre><code>这里与其说安装，还是不如直接拷贝相应文件到hexo目录
-</code></pre><p>最近尝试在写<code>blog</code>的时候用<code>Latex</code>来写数学公式，写起来还是极其方便灵活滴，但是，但是其速度慢如爬蜗牛，一般修改一下，在刷新一下要<code>4~5s</code>才能将公式渲染出来，其书写效率也太低了，总之我不能忍，所以准备将其<code>MathJax</code>放在本地.</p>
-<ol>
-<li>一方面是希望加快公式的渲染速度</li>
-<li>另一方面也是希望能支持我在断网的情况下也能正常使用<code>Mathjax</code></li>
-</ol>]]>
-    
-    </summary>
-    
-      <category term="Hexo" scheme="http://kubicode.me/tags/Hexo/"/>
-    
-      <category term="Hexo" scheme="http://kubicode.me/categories/Hexo/"/>
     
   </entry>
   

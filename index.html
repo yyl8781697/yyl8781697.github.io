@@ -95,6 +95,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/" title="使用Python画ROC曲线以及AUC值" itemprop="url">使用Python画ROC曲线以及AUC值</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-09-18T16:02:43.000Z" itemprop="datePublished"> 发表于 2016-09-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="AUC介绍">AUC介绍</h2><p><code>AUC</code>(Area Under Curve)是机器学习二分类模型中非常常用的评估指标，相比于<code>F1-Score</code>对项目的不平衡有更大的容忍性，目前常见的机器学习库中(比如<a href="http://scikit-learn.org/stable/">scikit-learn</a>)一般也都是集成该指标的计算，其计算原理可以参考这个<a href="https://www.douban.com/note/284051363/?type=like">ROC和AUC介绍以及如何计算AUC
+</a>，但是有时候模型是单独的或者自己编写的，此时想要评估训练模型的好坏就得自己搞一个<code>AUC</code>计算模块，本文在查询资料时发现<code>libsvm-tools</code><sup>1</sup>有一个非常通俗易懂的<code>auc</code>计算，因此抠出来用作日后之用。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/09/19/Machine Learning/AUC-Calculation-by-Python/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/" title="LambdaRank-支持非平滑损失函数的学习排序算法" itemprop="url">LambdaRank-支持非平滑损失函数的学习排序算法</a>
   </h1>
   <p class="article-author">By
@@ -556,7 +621,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 </ol>
 <p><code>AdaBoost</code>对此进行了很好的解决:</p>
 <ol>
-<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分队，同时减少分对样本的权重.</li>
+<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
 <li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
 </ol>
         
@@ -744,80 +809,9 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" title="RankSvm-基于点击数据的搜索排序算法" itemprop="url">RankSvm-基于点击数据的搜索排序算法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-30T12:49:53.000Z" itemprop="datePublished"> 发表于 2016-03-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
-并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
-</code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
-<ol>
-<li>需要人工/专家标注</li>
-<li>诱导用户对展现的搜索结果进行反馈</li>
-</ol>
-<p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -889,7 +883,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
 		  
 		
 		  
@@ -930,7 +924,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 			
 		
 			

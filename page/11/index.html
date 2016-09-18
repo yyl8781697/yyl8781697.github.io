@@ -95,6 +95,90 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/14/Linux/Vim-Command-List/" title="Vim命令合集(转载)" itemprop="url">Vim命令合集(转载)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-14T13:32:08.000Z" itemprop="datePublished"> 发表于 2015-05-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="命令历史">命令历史</h2><p>以<code>:</code>和<code>/</code>开头的命令都有历史纪录，可以首先键入<code>:</code>或<code>/</code>然后按上下箭头来选择某个历史命令。</p>
+<h2 id="启动vim">启动vim</h2><p>在命令行窗口中输入以下命令即可</p>
+<ul>
+<li><code>vim</code> 直接启动vim</li>
+<li><code>vim filename</code> 打开vim并创建名为filename的文件</li>
+</ul>
+<h2 id="文件命令">文件命令</h2><ul>
+<li><code>vim file</code>  打开单个文件</li>
+<li><code>vim file1 file2 file3 …</code>  同时打开多个文件</li>
+<li><code>:open file</code>  在vim窗口中打开一个新文件</li>
+<li><code>:split file</code>  在新窗口中打开文件</li>
+<li><code>:bn</code>  切换到下一个文件</li>
+<li><code>:bp</code>  切换到上一个文件</li>
+<li><code>:args</code>  查看当前打开的文件列表，当前正在编辑的文件会用[]括起来。</li>
+<li>打开远程文件，比如ftp或者share folder<br><code>:e ftp://192.168.10.76/abc.txt</code><br><code>:e \qadrive\test\1.txt</code></li>
+</ul>
+<h2 id="vim的模式">vim的模式</h2><ul>
+<li>正常模式（按<code>Esc</code>或<code>Ctrl+[</code>进入） 左下角显示文件名或为空</li>
+<li>插入模式（按<code>i</code>键进入） 左下角显示—INSERT—</li>
+<li>可视模式（不知道如何进入） 左下角显示—VISUAL—</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/14/Linux/Vim-Command-List/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/14/Linux/Vim-Command-List/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/14/Linux/Vim-Command-List/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/" title="记录在Hadoop2.2.0中剔除一个DataNode" itemprop="url">记录在Hadoop2.2.0中剔除一个DataNode</a>
   </h1>
   <p class="article-author">By
@@ -758,76 +842,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/15/Java Source/Java-LinkedHashMap/" title="Java 源码学习之java.util.LinkedHashMap" itemprop="url">Java 源码学习之java.util.LinkedHashMap</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-15T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-04-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>LinkedHashMap</code>是基于<code>HashMap</code>实现的，但是与之不同的是<code>LinkedHashMap</code>在遍历取值时可以保序，这是通过双向链表来实现的。</p>
-</blockquote>
-<p>我们知道<code>HashMap</code>在增删改查方面非常高效，但是遗憾的时候在迭代遍历<code>HashMap</code>时是不保序的，常常我们有时候即需要这种高效的操作，同时还希望在遍历数据集时要保序的需求，所以这个时候<code>LinkedHashMap</code>就出来了，接下来文本讲解<code>LinkedHashMap</code>是如何基于<code>HashMap</code>来完成遍历保序的功能。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/15/Java Source/Java-LinkedHashMap/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/15/Java Source/Java-LinkedHashMap/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/15/Java Source/Java-LinkedHashMap/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
   </nav>
 
 </div>
@@ -899,7 +916,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
 		  
 		
 		  
@@ -940,7 +957,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 			
 		
 			

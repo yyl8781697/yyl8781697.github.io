@@ -95,6 +95,130 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/09/12/Python/python-little-memory/" title="python里面的一些小记（方便自己查询）" itemprop="url">python里面的一些小记（方便自己查询）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-12T01:37:18.000Z" itemprop="datePublished"> 发表于 2015-09-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
+</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些东西</h2><blockquote>
+<p>当然下面的判断完全可以自己使用正则表达式来些，但是有一句话是<code>杀鸡焉用牛刀</code>,下面的api使用起来就会非常便捷</p>
+</blockquote>
+<p><code>s</code>为字符串</p>
+<ol>
+<li><code>s.isalnum()</code> 所有字符都是数字或者字母</li>
+<li><code>s.isalpha()</code> 所有字符都是字母</li>
+<li><code>s.isdigit()</code> 所有字符都是数字</li>
+<li><code>s.islower()</code> 所有字符都是小写</li>
+<li><code>s.isupper()</code> 所有字符都是大写</li>
+<li><code>s.istitle()</code> 所有单词都是首字母大写，像标题</li>
+<li><code>s.isspace()</code> 所有字符都是空白字符、<code>\t</code>、<code>\n</code>、<code>\r</code></li>
+</ol>
+<h2 id="自带的排序函数">自带的排序函数</h2><p><code>python</code>中有两种排序方式:</p>
+<ol>
+<li><code>list.sort(func=None, key=None, reverse=False)</code>:这种排序会改变<code>list</code>自身的数据</li>
+<li><code>sorted(list,func=None, key=None, reverse=False)</code>:这种会重新生成一个新的<code>list</code></li>
+</ol>
+<p>最简单的栗子:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort()</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
+<p>会输出</p>
+<pre><code>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">7</span>]
+</code></pre><p>反向排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort(reverse=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
+<p>会输出</p>
+<pre><code>[<span class="number">7</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]
+</code></pre><p>对指定关键字进行排序:</p>
+<pre><code><span class="keyword">list</span>=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">50</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">3</span>)]
+<span class="keyword">list</span>.sort(key=lambda x:x[<span class="number">1</span>])
+<span class="keyword">print</span> <span class="keyword">list</span>
+</code></pre><p>可以看到结果:</p>
+<pre><code><span class="collection">[<span class="list">(<span class="keyword">'e'</span>, <span class="number">3</span>)</span>, <span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">50</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
+</code></pre><blockquote>
+<p>若不指定，貌似是按第一个关键词排序</p>
+</blockquote>
+<p>还有两种方式均可以完成指定关键词方式:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.sort(<span class="keyword">lambda</span> x,y:cmp(x[<span class="number">1</span>],y[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>按多关键字排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=<span class="keyword">lambda</span> x:(x[<span class="number">1</span>],x[<span class="number">0</span>]))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>,<span class="number">0</span>))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure>
+<pre><code><span class="collection">[<span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'e'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
+</code></pre><blockquote>
+<p><code>sorted</code>传参一样，只是会返回一个新的实例而已</p>
+</blockquote>
+<h2 id="异常处理">异常处理</h2><p>语法结构<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	block</span><br><span class="line"><span class="keyword">except</span> [Exception <span class="keyword">as</span> e]:</span><br><span class="line">	do...</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	do...</span><br></pre></td></tr></table></figure></p>
+<p>for Example:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	<span class="number">1</span>/<span class="number">0</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'err'</span></span><br><span class="line">	<span class="keyword">raise</span> e</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'end'</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="动态载入库">动态载入库</h2><blockquote>
+<p>有时候需要载入的库是动态的，类似Java的反射</p>
+</blockquote>
+<p><code>const_en.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="string">"xiaoming"</span></span><br></pre></td></tr></table></figure></p>
+<p><code>const_ch.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">name=<span class="string">"小明"</span></span><br></pre></td></tr></table></figure></p>
+<p><code>test.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_en'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_ch'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br></pre></td></tr></table></figure></p>
+<p>可以看到输出结果:</p>
+<pre><code><span class="title">xiaoming</span>
+小明
+</code></pre><h2 id="参数中*和**的使用">参数中*和**的使用</h2><p>在<code>Python</code>函数的入参列表中经常会看到*和**,他们其实并不是代表指针或者引擎，其中<br><code>*</code>表示传递任意个无名字参数，放置在一个元组中，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">array_para_test</span><span class="params">(a,b,*c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">array_para_test(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
+<p>它的最终输出将会是</p>
+<pre><code><span class="number">1</span> <span class="number">2</span>
+<span class="list">(<span class="keyword">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span>
+</code></pre><p><code>**</code>表示任意个有名字的参数，用于存放在字典中进行访问，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dict_para_test</span><span class="params">(a,b,**c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">dict_para_test(<span class="number">1</span>,<span class="number">2</span>,name=<span class="string">"tome"</span>,age=<span class="number">23</span>)</span><br></pre></td></tr></table></figure></p>
+<p>他的最终输出是</p>
+<pre><code><span class="number">1</span> <span class="number">2</span>
+{<span class="string">'age'</span>: <span class="number">23</span>, <span class="string">'name'</span>: <span class="string">'tome'</span>}
+</code></pre><h1 id="下面应该回持续更新">下面应该回持续更新</h1>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/12/Python/python-little-memory/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/12/Python/python-little-memory/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/09/07/Machine Learning/Validation/" title="《台大机器学习基石》Validation" itemprop="url">《台大机器学习基石》Validation</a>
   </h1>
   <p class="article-author">By
@@ -693,77 +817,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/11/Algorithm/Intelligence-Problems/" title="一些面试常见的智力题啦" itemprop="url">一些面试常见的智力题啦</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-11T15:10:06.000Z" itemprop="datePublished"> 发表于 2015-08-11</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>考智力，脑子不好使咋办？？只有记下来^_^</p>
-</blockquote>
-<h2 id="烧香/绳子计时1小时15分钟">烧香/绳子计时1小时15分钟</h2><pre><code>烧一根不均匀的绳,从头烧到尾总共需要 1 个小时。现在有若干条材质相同的绳子,问 如何用烧绳的方法来计时一个小时十五分钟呢?
-</code></pre><p>假设现在有三根绳子A和B和C，现在将A的两端都点着，B的一端都点着<br>半小时过去后，A就烧没了，此时B应该还有半小时的时长可以烧，但是现在把B的另一端也点着<br>又过了十五分钟，B也烧没了，这个时候把C的两端也都点着<br>又过了半小时，C也烧没了<br>好了，一小时十五分钟就这么烧到了^_^<br>其实主要思路还是两端  一端 烧得搭配</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/11/Algorithm/Intelligence-Problems/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/11/Algorithm/Intelligence-Problems/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/11/Algorithm/Intelligence-Problems/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/5/">Next<span></span></a>
   </nav>
 
 </div>
@@ -835,7 +891,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
 		  
 		
 		  
@@ -876,7 +932,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 			
 		
 			

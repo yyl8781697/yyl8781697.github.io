@@ -136,7 +136,7 @@ s">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断字符串的一些东西"><span class="toc-number">1.</span> <span class="toc-text">判断字符串的一些东西</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自带的排序函数"><span class="toc-number">2.</span> <span class="toc-text">自带的排序函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理"><span class="toc-number">3.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态载入库"><span class="toc-number">4.</span> <span class="toc-text">动态载入库</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#下面应该回持续更新"><span class="toc-number"></span> <span class="toc-text">下面应该回持续更新</span></a>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断字符串的一些东西"><span class="toc-number">1.</span> <span class="toc-text">判断字符串的一些东西</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自带的排序函数"><span class="toc-number">2.</span> <span class="toc-text">自带的排序函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理"><span class="toc-number">3.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态载入库"><span class="toc-number">4.</span> <span class="toc-text">动态载入库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数中*和**的使用"><span class="toc-number">5.</span> <span class="toc-text">参数中*和**的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#下面应该回持续更新"><span class="toc-number"></span> <span class="toc-text">下面应该回持续更新</span></a>
 		
 		</div>
 		
@@ -194,6 +194,14 @@ s">
 <p>可以看到输出结果:</p>
 <pre><code><span class="title">xiaoming</span>
 小明
+</code></pre><h2 id="参数中*和**的使用">参数中*和**的使用</h2><p>在<code>Python</code>函数的入参列表中经常会看到*和**,他们其实并不是代表指针或者引擎，其中<br><code>*</code>表示传递任意个无名字参数，放置在一个元组中，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">array_para_test</span><span class="params">(a,b,*c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">array_para_test(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
+<p>它的最终输出将会是</p>
+<pre><code><span class="number">1</span> <span class="number">2</span>
+<span class="list">(<span class="keyword">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span>
+</code></pre><p><code>**</code>表示任意个有名字的参数，用于存放在字典中进行访问，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dict_para_test</span><span class="params">(a,b,**c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">dict_para_test(<span class="number">1</span>,<span class="number">2</span>,name=<span class="string">"tome"</span>,age=<span class="number">23</span>)</span><br></pre></td></tr></table></figure></p>
+<p>他的最终输出是</p>
+<pre><code><span class="number">1</span> <span class="number">2</span>
+{<span class="string">'age'</span>: <span class="number">23</span>, <span class="string">'name'</span>: <span class="string">'tome'</span>}
 </code></pre><h1 id="下面应该回持续更新">下面应该回持续更新</h1>  
 	</div>
 		<footer class="article-footer clearfix">
@@ -260,7 +268,7 @@ s">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断字符串的一些东西"><span class="toc-number">1.</span> <span class="toc-text">判断字符串的一些东西</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自带的排序函数"><span class="toc-number">2.</span> <span class="toc-text">自带的排序函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理"><span class="toc-number">3.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态载入库"><span class="toc-number">4.</span> <span class="toc-text">动态载入库</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#下面应该回持续更新"><span class="toc-number"></span> <span class="toc-text">下面应该回持续更新</span></a>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#判断字符串的一些东西"><span class="toc-number">1.</span> <span class="toc-text">判断字符串的一些东西</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自带的排序函数"><span class="toc-number">2.</span> <span class="toc-text">自带的排序函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异常处理"><span class="toc-number">3.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#动态载入库"><span class="toc-number">4.</span> <span class="toc-text">动态载入库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数中*和**的使用"><span class="toc-number">5.</span> <span class="toc-text">参数中*和**的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#下面应该回持续更新"><span class="toc-number"></span> <span class="toc-text">下面应该回持续更新</span></a>
  
   </div>
 
@@ -330,7 +338,7 @@ s">
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>23</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
 		  
 		
 		  
@@ -371,7 +379,7 @@ s">
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 			
 		
 			
