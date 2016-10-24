@@ -1,0 +1,716 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>语言模型在信息检索中的平滑方法 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="引言在信息检索中文本相关性计算是至关重要的一个特征，关于文本相关性计算时用的比较多的有:词频/频率、tf/idf/tf*idf、bm25、布尔模型、空间向量模型以及语言模型，本文主要是对于[1]的一些学习理解，虽然[1]历史久远，但是可行性高，同时目前也有不少搜索引擎在使用[1]的方法，主要介绍的是语言模型在信息检索中使用的平滑方法，主要侧重点就是性能。
+Language Model现假设quer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="语言模型在信息检索中的平滑方法">
+<meta property="og:url" content="http://kubicode.me/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="引言在信息检索中文本相关性计算是至关重要的一个特征，关于文本相关性计算时用的比较多的有:词频/频率、tf/idf/tf*idf、bm25、布尔模型、空间向量模型以及语言模型，本文主要是对于[1]的一些学习理解，虽然[1]历史久远，但是可行性高，同时目前也有不少搜索引擎在使用[1]的方法，主要介绍的是语言模型在信息检索中使用的平滑方法，主要侧重点就是性能。
+Language Model现假设quer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="语言模型在信息检索中的平滑方法">
+<meta name="twitter:description" content="引言在信息检索中文本相关性计算是至关重要的一个特征，关于文本相关性计算时用的比较多的有:词频/频率、tf/idf/tf*idf、bm25、布尔模型、空间向量模型以及语言模型，本文主要是对于[1]的一些学习理解，虽然[1]历史久远，但是可行性高，同时目前也有不少搜索引擎在使用[1]的方法，主要介绍的是语言模型在信息检索中使用的平滑方法，主要侧重点就是性能。
+Language Model现假设quer">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" title="语言模型在信息检索中的平滑方法" itemprop="url">语言模型在信息检索中的平滑方法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-10-24T11:58:01.000Z" itemprop="datePublished"> 发表于 2016-10-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Language_Model"><span class="toc-number">2.</span> <span class="toc-text">Language Model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Smoothing_Methods"><span class="toc-number">3.</span> <span class="toc-text">Smoothing Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Jelinek-Mercer"><span class="toc-number">3.1.</span> <span class="toc-text">Jelinek-Mercer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dirichlet"><span class="toc-number">3.2.</span> <span class="toc-text">Dirichlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Absolute_discount"><span class="toc-number">3.3.</span> <span class="toc-text">Absolute discount</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="引言">引言</h2><p>在信息检索中文本相关性计算是至关重要的一个特征，关于文本相关性计算时用的比较多的有:<code>词频/频率</code>、<code>tf/idf/tf*idf</code>、<code>bm25</code>、<code>布尔模型</code>、<code>空间向量模型</code>以及<code>语言模型</code>，本文主要是对于<code>[1]</code>的一些学习理解，虽然<code>[1]</code>历史久远，但是可行性高，同时目前也有不少搜索引擎在使用<code>[1]</code>的方法，主要介绍的是语言模型在信息检索中使用的平滑方法，主要侧重点就是性能。</p>
+<h2 id="Language_Model">Language Model</h2><p>现假设<code>query</code>是基于文档<code>d</code>进行生成的,那么给定一个<code>query</code>$q=q_1q_2..q_n$以及一个文档$d=d_1d_2…d_n$,我们比较关心的是$p(d|q)$这个条件概率，即在观察到$q$的情况下生成$d$的一个概率，假设文档中的词是相关独立的，根据贝叶斯公式，则有:<br>$$p(d|q) \propto p(q|d)p(d)$$<br><a id="more"></a><br>由于在给定$q$下，不同文档的$p(q)$是一样的，这里关注的是排序，所以可以直接将$p(q)$进行移除，另外式子右侧的$p(d)$为文档$d$对于任何$q$的相关性先验，在$p(q|d)$就是在给定$d$下生成$q$的概率，也就是文档$d$到$q$的匹配程度.<br>为了简单起见，我们假设$p(d)$是均匀分布的，这样的话$p(d)$就不会影响排序，那么信息检索的问题就会转为一个一元语言模型:<br>$$p(q|d) = \prod_i p(q_i|d)$$<br>大多数平滑的方法都会使用两类分布:</p>
+<ol>
+<li>一类是对于在文档中出现的词的模型$p_s(w|d)$</li>
+<li>另一个是没有出现在文档中的词的模型$p_u(w|d)$</li>
+</ol>
+<p>这样的话在一个$q$中根据词在文档中的出现与否可以写为:<br>$$\begin{equation}\begin{split}log p(q|d)&amp;= \sum_i log p(q_i|d) \\<br>&amp;= \sum_{i:c(q_i;d)&gt;0} log p_s(q_i|d) + \sum_{i:c(q_i|d)=0} log p_u(q_i|d) \\<br>&amp;= \sum_{i:c(q_i;d)&gt;0} log p_s(q_i|d) - \sum_{i:c(q_i;d)&gt;0} log p_u(q_i|d) + \sum_{i:c(q_i;d)&gt;0} log p_u(q_i|d) + \sum_{i:c(q_i|d)=0} log p_u(q_i|d) \\<br>&amp;= \sum_{i:c(q_i|d)&gt;0} log \frac{p_s(q_i|d)}{p_u(q_i|d)} + \sum_i log p_u(q_i|d) \\<br>\end{split}\end{equation}$$</p>
+<p>其中未在文档中出现的词的概率典型的表示方法就是该词在所有集合中出现的频率:<br>$$p_u(q_i|d) = \alpha_d p(q_i|C)$$</p>
+<blockquote>
+<p>其中$\alpha_d$为独立于文档的一个常量，$p(q_i|C)$为集合中的语言模型，这样我们就会有</p>
+</blockquote>
+<p>$$log p(q|d) = \sum_{i:c(q_i:d)&gt;0} log \frac{p_s(q_i|d)}{\alpha_d p(q_i|C)} + n log \alpha_d + \sum_i log p(q_i|C)$$</p>
+<blockquote>
+<p>其中$n$为$q$的长度，上面式子的右侧与$d$并没有关系，所以直接去掉也不会影响排序</p>
+</blockquote>
+<p>这样的话检索函数就变成了两部分，第一部分为$q$与$d$相匹配<code>term</code>的权重，第二部分为与$q$无关的一个常量，一般是用于对非匹配<code>term</code>的平滑。</p>
+<p>这时候再看下第一部分，其实可以上面$p(q_i|C)$大致可以看为<code>IDF</code>,而$p_s(q_i|d)$又非常向tf,因为上面的Language Model与<code>tf*idf</code>路线还是挺像的。</p>
+<h2 id="Smoothing_Methods">Smoothing Methods</h2><p>看了上面的描述，接下来主要讲一下对于$p(w|d)$的估计，最简单的使用数数的方式，最大似然法进行估计为:<br>$$p_{ml}(w|d) = \frac{w;d}{\sum_w c(w;d)}$$</p>
+<blockquote>
+<p>其实就是词在文档中出现的频率</p>
+</blockquote>
+<p>这种方式对于没出现在文档中的词将会低估（其实就是每值了），因为对于没有在文档中出现的词会给予一个非0概率的平滑。<br>通常我们会对出现在文档中的词的概率进行一个折损，同时对于未出现在文档中的词的概率给予一个额外的值:<br>$$ p(w|d)=\left\{<br>\begin{aligned}<br>p_s(w|d) &amp; \quad if \quad word \quad w \quad is \quad seen \\<br>\alpha_d p(w|C) &amp; \quad otherwise\\<br>\end{aligned}<br>\right.$$</p>
+<p>同时$\alpha_d$将会依赖$d$，如果$p(w|d)$给定的情况下，我们将会有:<br>$$\alpha_d = \frac{1-\sum_{w:c(w:d)&gt;0} p_s(w|d)}{1-\sum_{w:c(w:d)&gt;0}p(w|C)}$$</p>
+<p>因此这里最大的问题是需要计算$p_s(w|d)$,因为在信息检索中对于性能的要求将其高，因此为考虑性能和效果，下面主要简单的介绍三种平滑方式</p>
+<h3 id="Jelinek-Mercer">Jelinek-Mercer</h3><p>这种方式是融合了最大似然发以及一个置信因子来控制各个模型<br>$$p_{\lambda} = (1-\lambda)p_{ml}(w|d) + \lambda p(w|C)$$</p>
+<blockquote>
+<p>这种方式非常的高效</p>
+</blockquote>
+<h3 id="Dirichlet">Dirichlet</h3><p>他其实是贝叶斯平滑，然后使用了<code>Dirichlet</code>先验，使用这种可以得到<br>$$p_{\mu}(w|d) = \frac{c(w;d) + \mu p(w|C)}{\sum_w c(w;d)+ \mu}$$</p>
+<h3 id="Absolute_discount">Absolute discount</h3><p>这种方式主要是通过降低可见词的概率来完成的,类似<code>Jelinek-Mercer</code>方法,与$1-\lambda$不同的是  使用减去一个常量来完成:<br>$$p_{\delta } = \frac{max(c(w:d)-\delta,0)}{\sum_w c(w:d)} + \sigma p(w|C)$$</p>
+<blockquote>
+<p>其中$\delta \in [0,1]$,为一个折损常量，$\sigma = \delta|d|_{\mu}/|d|$,所以所有的概率之和为1</p>
+</blockquote>
+<p>看上面三种平滑的计算方式都是非常的简单，并且$\alpha$都是可以离线计算，其最终的复杂度为<code>O(k|q|)</code></p>
+<h2 id="总结">总结</h2><p>这三种方法比较经典，并且可实现性强，值得一试~</p>
+<h2 id="参考">参考</h2><ol>
+<li>Zhai, Chengxiang, and John Lafferty. “A study of smoothing methods for language models applied to ad hoc information retrieval.” Proceedings of the 24th annual international ACM SIGIR conference on Research and development in information retrieval. ACM, 2001.</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" data-title="语言模型在信息检索中的平滑方法 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/"  title="使用Python画ROC曲线以及AUC值">
+ <strong>下一篇：</strong><br/> 
+ <span>使用Python画ROC曲线以及AUC值
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" data-title="语言模型在信息检索中的平滑方法" data-url="http://kubicode.me/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引言"><span class="toc-number">1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Language_Model"><span class="toc-number">2.</span> <span class="toc-text">Language Model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Smoothing_Methods"><span class="toc-number">3.</span> <span class="toc-text">Smoothing Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Jelinek-Mercer"><span class="toc-number">3.1.</span> <span class="toc-text">Jelinek-Mercer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dirichlet"><span class="toc-number">3.2.</span> <span class="toc-text">Dirichlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Absolute_discount"><span class="toc-number">3.3.</span> <span class="toc-text">Absolute discount</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

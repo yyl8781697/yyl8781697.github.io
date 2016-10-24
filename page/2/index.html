@@ -95,6 +95,75 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/" title="Learning To Rank中Pairwise方法的学习" itemprop="url">Learning To Rank中Pairwise方法的学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-10T09:05:18.000Z" itemprop="datePublished"> 发表于 2016-04-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛^_^</p>
+</blockquote>
+<h2 id="2002-RankSvm">2002-RankSvm</h2><p><code>RankSvm</code>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。<br><code>RankSvm</code>的学习记录在<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/">这里</a></p>
+<h2 id="2006-IRSVM">2006-IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
+<h3 id="问题1:位置误差">问题1:位置误差</h3>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/10/Machine Learning/LTR-Pairwise-Study/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" title="RankSvm-基于点击数据的搜索排序算法" itemprop="url">RankSvm-基于点击数据的搜索排序算法</a>
   </h1>
   <p class="article-author">By
@@ -180,7 +249,7 @@
     <div class="article-content">
         
         <pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
-</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>MacRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
+</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>McRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
 <h2 id="折损累积增益">折损累积增益</h2><blockquote>
 <p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG">这里</a>).</p>
 </blockquote>
@@ -720,75 +789,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/" title="求二进制中1的个数" itemprop="url">求二进制中1的个数</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-02-12T12:26:05.000Z" itemprop="datePublished"> 发表于 2016-02-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>求一个二进制数字中1出现的个数
-</code></pre><blockquote>
-<p>这道题目面试非常常见，但是工作中也很实用，以32位int整形为例，下面列举一下一些经典的做法(主要是做记录用^_^)</p>
-</blockquote>
-<h2 id="遍历法">遍历法</h2><p>这个是最简单的方法，向右移位，判断最低位是否为1进行计数即可!</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 普通遍历法</span><br><span class="line"> *<span class="javadoctag"> @param</span> n</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">traverseCount</span><span class="params">(<span class="keyword">int</span> n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(n&gt;<span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		n = n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">		count++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/12/Algorithm/The-One-Occur-in-Bitnum/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -863,7 +863,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
 		  
 		
 		  
@@ -904,7 +904,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
 			
 		
 			
@@ -916,7 +916,7 @@
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>10</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>11</sup></a></li>
 			
 		
 			

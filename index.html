@@ -95,6 +95,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" title="语言模型在信息检索中的平滑方法" itemprop="url">语言模型在信息检索中的平滑方法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-10-24T11:58:01.000Z" itemprop="datePublished"> 发表于 2016-10-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="引言">引言</h2><p>在信息检索中文本相关性计算是至关重要的一个特征，关于文本相关性计算时用的比较多的有:<code>词频/频率</code>、<code>tf/idf/tf*idf</code>、<code>bm25</code>、<code>布尔模型</code>、<code>空间向量模型</code>以及<code>语言模型</code>，本文主要是对于<code>[1]</code>的一些学习理解，虽然<code>[1]</code>历史久远，但是可行性高，同时目前也有不少搜索引擎在使用<code>[1]</code>的方法，主要介绍的是语言模型在信息检索中使用的平滑方法，主要侧重点就是性能。</p>
+<h2 id="Language_Model">Language Model</h2><p>现假设<code>query</code>是基于文档<code>d</code>进行生成的,那么给定一个<code>query</code>$q=q_1q_2..q_n$以及一个文档$d=d_1d_2…d_n$,我们比较关心的是$p(d|q)$这个条件概率，即在观察到$q$的情况下生成$d$的一个概率，假设文档中的词是相关独立的，根据贝叶斯公式，则有:<br>$$p(d|q) \propto p(q|d)p(d)$$<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/" title="使用Python画ROC曲线以及AUC值" itemprop="url">使用Python画ROC曲线以及AUC值</a>
   </h1>
   <p class="article-author">By
@@ -740,75 +805,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/" title="Learning To Rank中Pairwise方法的学习" itemprop="url">Learning To Rank中Pairwise方法的学习</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-10T09:05:18.000Z" itemprop="datePublished"> 发表于 2016-04-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛^_^</p>
-</blockquote>
-<h2 id="2002-RankSvm">2002-RankSvm</h2><p><code>RankSvm</code>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。<br><code>RankSvm</code>的学习记录在<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/">这里</a></p>
-<h2 id="2006-IRSVM">2006-IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
-<h3 id="问题1:位置误差">问题1:位置误差</h3>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/10/Machine Learning/LTR-Pairwise-Study/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -883,7 +879,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>24</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
 		  
 		
 		  
@@ -924,7 +920,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
 			
 		
 			
@@ -936,7 +932,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>10</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>11</sup></a></li>
 			
 		
 			
