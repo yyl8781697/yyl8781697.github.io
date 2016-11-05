@@ -1,0 +1,767 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用点击图来计算Query-Doc的文本相关性 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="文本相关性在信息检索中文本相关性是排序因子中非常重要的一个特征，大部分的文本相关性特征是直接根据query和doc上的term进行各种匹配、各种计算得到的， 比如词频/频率、tf/idf/tf*idf、bm25、布尔模型、空间向量模型以及语言模型,今天看到参考[1]这篇paper，提到了可以将点击日志构成二部图,根据二部分进行向量传播，最终收敛之后进行文本相关性的计算，也算是比较新颖了，下文就主要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用点击图来计算Query-Doc的文本相关性">
+<meta property="og:url" content="http://kubicode.me/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="文本相关性在信息检索中文本相关性是排序因子中非常重要的一个特征，大部分的文本相关性特征是直接根据query和doc上的term进行各种匹配、各种计算得到的， 比如词频/频率、tf/idf/tf*idf、bm25、布尔模型、空间向量模型以及语言模型,今天看到参考[1]这篇paper，提到了可以将点击日志构成二部图,根据二部分进行向量传播，最终收敛之后进行文本相关性的计算，也算是比较新颖了，下文就主要">
+<meta property="og:image" content="/img/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/co-click-graph.png">
+<meta property="og:image" content="/img/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/absent_graph.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用点击图来计算Query-Doc的文本相关性">
+<meta name="twitter:description" content="文本相关性在信息检索中文本相关性是排序因子中非常重要的一个特征，大部分的文本相关性特征是直接根据query和doc上的term进行各种匹配、各种计算得到的， 比如词频/频率、tf/idf/tf*idf、bm25、布尔模型、空间向量模型以及语言模型,今天看到参考[1]这篇paper，提到了可以将点击日志构成二部图,根据二部分进行向量传播，最终收敛之后进行文本相关性的计算，也算是比较新颖了，下文就主要">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/" title="使用点击图来计算Query-Doc的文本相关性" itemprop="url">使用点击图来计算Query-Doc的文本相关性</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-03T12:07:18.000Z" itemprop="datePublished"> 发表于 2016-11-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文本相关性"><span class="toc-number">1.</span> <span class="toc-text">文本相关性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#已有点击行为的向量计算"><span class="toc-number">2.</span> <span class="toc-text">已有点击行为的向量计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缺少点击行为的向量计算"><span class="toc-number">3.</span> <span class="toc-text">缺少点击行为的向量计算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#提取Unit向量"><span class="toc-number">3.1.</span> <span class="toc-text">提取Unit向量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算Unit向量权重"><span class="toc-number">3.2.</span> <span class="toc-text">计算Unit向量权重</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预估向量"><span class="toc-number">3.3.</span> <span class="toc-text">预估向量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="文本相关性">文本相关性</h2><p>在信息检索中文本相关性是排序因子中非常重要的一个特征，大部分的文本相关性特征是直接根据<code>query</code>和<code>doc</code>上的<code>term</code>进行各种匹配、各种计算得到的， 比如<code>词频/频率</code>、<code>tf/idf/tf*idf</code>、<code>bm25</code>、<code>布尔模型</code>、<code>空间向量模型</code>以及<code>语言模型</code>,今天看到参考[1]这篇paper，提到了可以将点击日志构成二部图,根据二部分进行向量传播，最终收敛之后进行文本相关性的计算，也算是比较新颖了，下文就主要是对该paper的一个学习以及自己理解的记录。<br>该paper提出的三个贡献:</p>
+<ol>
+<li>可以使<code>query</code>和<code>doc</code>在同一空间上生成词向量考虑</li>
+<li>对于未曾有点击行为的<code>query</code>和<code>doc</code>也可以进行该空间词向量的估计</li>
+<li>最终计算的效率较高，可以用于商业的搜索引擎</li>
+</ol>
+<blockquote>
+<p>如果已知了<code>query</code>和<code>doc</code>在同一空间上的向量表示，这样文本相关性就可以直接使用相似度的计算方式来得到了~<br><a id="more"></a></p>
+</blockquote>
+<h2 id="已有点击行为的向量计算">已有点击行为的向量计算</h2><p>在搜索场景下用户输入query，对搜索的结果进行点击反馈，将所有用户的搜索行为收集起来之后可以形成一张大的<code>Click-Graph</code>，为了简单，我们使用二部分来表示，其中左侧为$Query$，右侧为$Doc$，如果$q_i$到$d_j$存在点击行为，则左右侧将会有一条边连接，连上的权重及<code>点击的次数</code></p>
+<center><img src="/img/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/co-click-graph.png" width="400px"></center>
+
+<p>现在假设语料的长度为$V$,则$Query$构成的矩阵为$|Query| \times V$，以及$Doc$构成的矩阵为$|Doc| \times V$，那么现在的任务就是如何计算这两个矩阵!</p>
+<blockquote>
+<p>其实这个语料就是上面所说道的$Query$和$Doc$同处的向量空间,一般值$Query$里面抠出来的<code>Term</code>或者$Doc$里面的<code>title</code>/<code>content</code>抠出来的<code>term</code>.</p>
+</blockquote>
+<p>这里使用的是<code>向量传播</code>来对$Query$和$Doc$进行计算，计算之前有这么这个假设:</p>
+<ol>
+<li><code>点击二部图</code>上的边连接的$q_i$和$d_i$是有相关性的(或者说有较高的相关性)</li>
+<li>$q_i$上的<code>term</code>与$d_i$上的<code>title</code>/<code>content</code>的<code>term</code>应该是存在联系的</li>
+</ol>
+<p>目前暂不考虑缺少行为的$Query$和$Doc$，向量传播模型的步骤为:</p>
+<ol>
+<li>随意选择一侧进行向量初始化（$Query$和$Doc$端均可），我们使用$Query$向量来进行初始化$Q_i^0$,其中$Q_i^0$使用<code>one-hot</code>来表示，同时用$L2$进行归一化<blockquote>
+<p>$i$表示第$Query$中的第$i$个,$0$表示第1次迭代（也就是初始化~）</p>
+</blockquote>
+</li>
+<li>则第$D_j^n$个值($n&gt;=1$)的更新根据被点击$Query$的向量进行加权求和即可:<br> $$D_j^n=\frac{1}{||\sum_{i=1}^{|Query|}C_{i,j} \cdot Q_i^{n-1}||_2} \sum_{i=1}^{Query}C_{i,j} \cdot Q_i^{n-1}$$<blockquote>
+<p>其中$Q_i^n$就是上一次迭代的$Query$向量，同样$D_j^n$也会进行一个$L2$正则化。</p>
+</blockquote>
+</li>
+<li>$Doc$的向量表示进行了一次迭代更新之后继续更新$Query$的向量，这里是根据$Query$下公共点击的文档信息进行更新，其方式与$Doc$的更新是一样的:<br> $$Q_i^n=\frac{1}{||\sum_{i=1}^{|Doc|}C_{i,j} \cdot D_i^{n-1}||_2} \sum_{i=1}^{Doc}C_{i,j} \cdot D_i^{n-1}$$</li>
+<li>按<code>2</code>、<code>3</code>的步骤不断进行迭代，直至收敛，其产出的$Query$的$Doc$的向量就都在一个空间内，同时还可以计算相似度/相关性</li>
+</ol>
+<p>这里以上的图为例再说一下计算过程:</p>
+<ol>
+<li>初始化$Query$的向量:<ul>
+<li>$Q_1:\{yahoo:\frac{1}{\sqrt{2}},finance:\frac{1}{\sqrt{2}},mail:0\}$</li>
+<li>$Q_2:\{yahoo:1,finance:0,mail:0\}$</li>
+<li>$Q_3:\{yahoo:\frac{1}{\sqrt{2}},finance:0,mail:\frac{1}{\sqrt{2}}\}$<blockquote>
+<p>因为图中$Query$的语料三个<code>term</code>，所以这里初始化为3维.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>根据上一次$Query$的迭代信息以及与$Doc$的点击信息来更新$Doc$的向量:<ul>
+<li>$D_1=\frac{(\frac{3}{8}Q_1 + \frac{5}{8}Q_2)}{||\frac{3}{8}Q_1 + \frac{5}{8}Q_2||_2}$</li>
+<li>$D_2=\frac{(\frac{1}{5}Q_2 + \frac{4}{5}Q_3)}{||\frac{1}{5}Q_2 + \frac{4}{5}Q_3||_2}$</li>
+</ul>
+</li>
+<li>然后就是不断的迭代就行了，这样已经很清晰了</li>
+</ol>
+<p>了解过一些信息检索或者链接分析的朋友可能会马上想到，咦~这好像<code>Hits</code>这个算法。的确是的，在计算过程中极为相似，不过<code>Hits</code>权重主要是计算<code>Hubs</code>与<code>Authority</code>两端的权重，而[1]中迭代完得到的是各个向量，有异曲同工之妙~<br>另外在实际的query量级一般都是百万以上，这样$Query$的语料的量就很大了,而搜索引擎中需要计算的性能要求极高，，所以一般进行稀疏存储，并且只取一些重要的<code>term</code>来对$Query$进行表示</p>
+<h2 id="缺少点击行为的向量计算">缺少点击行为的向量计算</h2><p>但是实际应用中用户搜索之后带来了点击行为的只是一小部分就，如果仅按照上述点击传播的方式来计算的话无query点击的文档将会将会无法得到正常的向量，同时一些新的$\hat{Query}$（从未有用户搜索过的query）也就无法得到正常的向量数据，所以需要一种对于这种缺失行为的$\hat{Query}$和$\hat{Doc}$进行向量表示估计.</p>
+<p>由于在线计算相关性时对于已有行为的$Query-Doc$和缺失行为的是一视同仁的，因此为了在线计算时不应该因为训练数据产生偏差，所以需要与已有行为的$Qeury-Doc$向量在同一个空间内，同时考虑已有行为的$Query$和$Doc$的向量均已计算得到，我们还借助这些数据来预估缺失行为的向量.</p>
+<h3 id="提取Unit向量">提取Unit向量</h3><p>既然未行为的$\hat{Query}$与$\hat{Doc}$之间没有任何边向量，那我们可以通过有行为的$Query$进行造边，先将$\hat{Query}$分解为各种<code>Unit</code>，这样就有$u_i \in unit(q_i)$,如果存在$Query$含有$u_i$，则将$u_i$对对应的$Query$之间形成一条虚拟的边,同时称含有$u_i$的所有$Query$的集合为$O_{u_i}$</p>
+<blockquote>
+<p>这里分解时可以按<code>n-gram</code>进行分解，但是某个$Query$进行分解之后不能有<code>overlap</code></p>
+</blockquote>
+<p><center><img src="/img/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/absent_graph.png" width="700px"></center><br>这种边的构建方式如上图，$q_1$、$q_2$和$q_3$均都包含了<code>yahoo</code>这个词，则在他们之间形成这条虚线的边。<br>接下来我们可以理解$Query-Doc$之间的向量传播方法，我们当然也可以完成$Unit-Doc$的传播.<br>$u_i$会有$q_i$有边相连，而$q_i$与$d_i$又有变相连，因此我们可以间接认为$u_i$与$d_i$也是有边相连。<br>现假设$q_k$包含了$u_i$，同时$q_k$与$d_j$存在点击行为，$P_{i,k,j}$表示为这个二折线的权重，则该权重其实为$q_k$与$d_j$的点击次数，那么我们就会有<br>$$P_{i,j} = \sum_{k=1}^{|O_{u_i}|} P_{i,k,j}$$<br>其演示就是上图的右侧部分，<code>yahoo</code>与$d_1$之间的权重为8，与$d_2$之间的权重为5，既然到了这一步，我们就可以按照上一小节的传播方式来计算,这样就可以巧妙的得到$U_i$的向量:<br>$$U_i^n=\frac{1}{||\sum_{i=1}^{|Doc|}P_{i,j} \cdot D_i^{n-1}||_2} \sum_{i=1}^{Doc}P_{i,j} \cdot D_i^{n-1}$$</p>
+<p>上面得到的是关于$\hat{Query}$上<code>unit</code>的向量，同样的我们也可以从$\hat{Doc}$这一侧出发，来计算$\hat{Doc}$<br>相关的<code>unit</code></p>
+<h3 id="计算Unit向量权重">计算Unit向量权重</h3><p>有了<code>unit</code>的向量之后，接下来要解决的问题就是如何得到$\hat{Query}$或者$\hat{Doc}$的向量了，其实最简单的方法就是将他们各自的<code>unit</code>进行平均即可,不过[1]使用线性回来来解决该权重问题，在进行权重训练时使用最小平方差:<br>$$\underset{w}{min} \sum_{i=1}^{|T|} || T_i-\sum_{u_j \in U_{T_i}^{all}} W_j \cdot U_j||_2^2$$</p>
+<blockquote>
+<p>$T_i$是使用有点击行为的$Query$计算得到的向量，也就是我们所认为的<code>gold-set</code><br>这样求出来的$W$就是各个$unit_i$不同的权重</p>
+</blockquote>
+<h3 id="预估向量">预估向量</h3><p>根据上面两个步骤得到的<code>unit</code>的向量和权重之后，得到整体的$\hat{Query}$或者$\hat{Doc}$就很方便了，由于<code>unit</code>本身就是$\hat{Query}$或者$\hat{Doc}$分解出来的，这里基础数据也都已经计算完成了，所以直接进行加权求和即可:<br>$$q_v=\sum_{u_i \in u_q} W_iU_i$$<br>和<br>$$d_v=\sum_{u_i \in u_d} W_iU_i$$</p>
+<p>这样一来缺失形式的向量数据也都可以计算出来了</p>
+<h2 id="总结">总结</h2><p>该方法成功的借助了点击日志对于相关性进行估计（其实我觉得这种方式得到的文本相关性与ctr的预估会有部分重叠了），并且在实现上:</p>
+<ol>
+<li>已有点击数据的$Query$和$Doc$的向量直接离线就按完成</li>
+<li>缺失点击的$\hat{Query}$和$\hat{Doc}$可以利用离线计算的<code>unit</code>向量在线直接进行加权求和即可</li>
+<li>对于在线存储均使用稀疏方式并只存<code>top-k</code>，因此存储并不是问题</li>
+<li>在线计算相关性可以直接按相似度计算，复杂度为$k log k$所以并不是很高~</li>
+</ol>
+<p>可实现性还是比较强的，但是对于一些未登录词就无能为力了….</p>
+<blockquote>
+<p>关于改算法的最终实现结果去看paper吧，效果自然是还可以的</p>
+</blockquote>
+<p>看了这篇paper，其实还是有点其他启发:</p>
+<ol>
+<li>如果搜索了query之后对于未点击的文档是不是可以进行降权（因为点击的文档是进行加权的）</li>
+<li>再想想，~其实直接使用来计算文本相关性风险还是挺大</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>2016-Learning Query and Document Relevance from a Web-scale Click Graph</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/" data-title="使用点击图来计算Query-Doc的文本相关性 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/"  title="语言模型在信息检索中的平滑方法">
+ <strong>下一篇：</strong><br/> 
+ <span>语言模型在信息检索中的平滑方法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/" data-title="使用点击图来计算Query-Doc的文本相关性" data-url="http://kubicode.me/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#文本相关性"><span class="toc-number">1.</span> <span class="toc-text">文本相关性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#已有点击行为的向量计算"><span class="toc-number">2.</span> <span class="toc-text">已有点击行为的向量计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缺少点击行为的向量计算"><span class="toc-number">3.</span> <span class="toc-text">缺少点击行为的向量计算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#提取Unit向量"><span class="toc-number">3.1.</span> <span class="toc-text">提取Unit向量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算Unit向量权重"><span class="toc-number">3.2.</span> <span class="toc-text">计算Unit向量权重</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预估向量"><span class="toc-number">3.3.</span> <span class="toc-text">预估向量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

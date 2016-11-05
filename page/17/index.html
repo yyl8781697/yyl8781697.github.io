@@ -95,6 +95,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2012/02/01/Dotnet/SqlTransaction/" title="Asp.net 在三层架构中事务的使用" itemprop="url">Asp.net 在三层架构中事务的使用</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2012-02-01T08:07:20.000Z" itemprop="datePublished"> 发表于 2012-02-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>&#160; &#160; &#160; &#160;在我知道的.net中，执行事务有两种方法，一种是自动事物，使用起来相当简单，但是需要配置服务器，如果你用的是web共享主机，即没有权限配置自己的服务器，那就没必要用这种了，接下来我讲下.net中最普通的事务。<br>&#160; &#160; &#160; &#160;接触3层也有一段时间了，了解水平一般，前段时间在想在三层中怎么使用事务呢，放在哪呢？Sqlherper ? AL?BLL?。然后我就疯狂的百度，好几次都是未果（因为做的都是小项目，不用事务也关系不大），今天我再次查时，<br>好好的看了csdn上的以讨论，<a href="http://topic.csdn.net/u/20091101/19/f21697d7-8f0c-4eb3-8e59-d0fe2f0b04b0.html，">http://topic.csdn.net/u/20091101/19/f21697d7-8f0c-4eb3-8e59-d0fe2f0b04b0.html，</a><br>结合前辈和高手们的意见，自己改了一个出来。我的想法是将事务逻辑写在业务逻辑层，数据库的处理还都是在SQLHELPER，<br>BLL层通过事务SqlTransaction传值访问DAL，再访问Sqlhelper。接下来是分块的代码。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2012/02/01/Dotnet/SqlTransaction/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2012/02/01/Dotnet/SqlTransaction/#comments" class="ds-thread-count comments-count-link" data-thread-key="2012/02/01/Dotnet/SqlTransaction/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2010/07/23/LeetCode/mou-dai/" title="某呆需要的资料-沉底" itemprop="url">某呆需要的资料-沉底</a>
   </h1>
   <p class="article-author">By
@@ -307,7 +371,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
 		  
 		
 		  
@@ -340,7 +404,7 @@
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>11</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>12</sup></a></li>
 			
 		
 			

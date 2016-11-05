@@ -137,7 +137,7 @@ Language Model现假设quer">
 <blockquote>
 <p>其实就是词在文档中出现的频率</p>
 </blockquote>
-<p>这种方式对于没出现在文档中的词将会低估（其实就是每值了），因为对于没有在文档中出现的词会给予一个非0概率的平滑。<br>通常我们会对出现在文档中的词的概率进行一个折损，同时对于未出现在文档中的词的概率给予一个额外的值:<br>$$ p(w|d)=\left\{<br>\begin{aligned}<br>p_s(w|d) &amp; \quad if \quad word \quad w \quad is \quad seen \\<br>\alpha_d p(w|C) &amp; \quad otherwise\\<br>\end{aligned}<br>\right.$$</p>
+<p>这种方式对于没出现在文档中的词将会低估（其实就是没值了），因为对于没有在文档中出现的词会给予一个非0概率的平滑。<br>通常我们会对出现在文档中的词的概率进行一个折损，同时对于未出现在文档中的词的概率给予一个额外的值:<br>$$ p(w|d)=\left\{<br>\begin{aligned}<br>p_s(w|d) &amp; \quad if \quad word \quad w \quad is \quad seen \\<br>\alpha_d p(w|C) &amp; \quad otherwise\\<br>\end{aligned}<br>\right.$$</p>
 <p>同时$\alpha_d$将会依赖$d$，如果$p(w|d)$给定的情况下，我们将会有:<br>$$\alpha_d = \frac{1-\sum_{w:c(w:d)&gt;0} p_s(w|d)}{1-\sum_{w:c(w:d)&gt;0}p(w|C)}$$</p>
 <p>因此这里最大的问题是需要计算$p_s(w|d)$,因为在信息检索中对于性能的要求将其高，因此为考虑性能和效果，下面主要简单的介绍三种平滑方式</p>
 <h3 id="Jelinek-Mercer">Jelinek-Mercer</h3><p>这种方式是融合了最大似然发以及一个置信因子来控制各个模型<br>$$p_{\lambda} = (1-\lambda)p_{ml}(w|d) + \lambda p(w|C)$$</p>
@@ -147,13 +147,52 @@ Language Model现假设quer">
 <h3 id="Dirichlet">Dirichlet</h3><p>他其实是贝叶斯平滑，然后使用了<code>Dirichlet</code>先验，使用这种可以得到<br>$$p_{\mu}(w|d) = \frac{c(w;d) + \mu p(w|C)}{\sum_w c(w;d)+ \mu}$$</p>
 <h3 id="Absolute_discount">Absolute discount</h3><p>这种方式主要是通过降低可见词的概率来完成的,类似<code>Jelinek-Mercer</code>方法,与$1-\lambda$不同的是  使用减去一个常量来完成:<br>$$p_{\delta } = \frac{max(c(w:d)-\delta,0)}{\sum_w c(w:d)} + \sigma p(w|C)$$</p>
 <blockquote>
-<p>其中$\delta \in [0,1]$,为一个折损常量，$\sigma = \delta|d|_{\mu}/|d|$,所以所有的概率之和为1</p>
+<p>其中$\delta \in [0,1]$,为一个折损常量，$\sigma = \delta|d|_u/|d|$,所以所有的概率之和为1，$|d|_u$为文档中不同<code>term</code>的数量,$|d|$为文档中<code>term</code>的总数量</p>
 </blockquote>
-<p>看上面三种平滑的计算方式都是非常的简单，并且$\alpha$都是可以离线计算，其最终的复杂度为<code>O(k|q|)</code></p>
-<h2 id="总结">总结</h2><p>这三种方法比较经典，并且可实现性强，值得一试~</p>
+<p>另外注意$max(c(w:d)-\delta,0)$中的$c(w:d)$应该是归一化0~1了，这样才可以和$\delta$相减</p>
+<p>对于这三种平滑方式的一个表格表示（非常清晰）:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">平滑方法</th>
+<th style="text-align:center">$p_s(w &#124; d)$</th>
+<th style="text-align:center">$\alpha_d$</th>
+<th style="text-align:center">参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>Jelinek-Mercer</code></td>
+<td style="text-align:center">$(1-\lambda)p_{ml}(w &#124; d) + \lambda p(w &#124; C)$</td>
+<td style="text-align:center">$\lambda$</td>
+<td style="text-align:center">$\lambda$</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Dirichlet</code></td>
+<td style="text-align:center">$\frac{c(w;d) + \mu p(w &#124; C)}{\sum_w c(w;d)+ \mu}$</td>
+<td style="text-align:center">$\frac{\mu}{\sum_w c(w;d)+\mu}$</td>
+<td style="text-align:center">$\mu$</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Absolute discount</code></td>
+<td style="text-align:center">$\frac{max(c(w:d)-\delta,0)}{\sum_w c(w:d)} + \frac{\delta &#124; d &#124; _{u}}{ &#124; d &#124;} p(w &#124; C)$</td>
+<td style="text-align:center">$\frac{\delta &#124; d &#124; _{u}}{ &#124; d &#124;} $</td>
+<td style="text-align:center">$\delta$</td>
+</tr>
+</tbody>
+</table>
+<p>看上面三种平滑的计算方式都是非常的简单，并且$\alpha$都是可以离线计算，其最终的复杂度为$O(k|q|)$,$k为文档的平均长度$</p>
+<blockquote>
+<p>其实复杂度不用这么多，如果在线查找term时使用二分的话  复杂度仅为$O(log(k)|q|)$</p>
+</blockquote>
+<h2 id="总结">总结</h2><p>这三种方法比较经典，并且可实现性强，$p_s(w|d)$和$\alpha_d$全部都可以离线计算完成，在线只需要进行简单的求和即可,值得一试~</p>
 <h2 id="参考">参考</h2><ol>
 <li>Zhai, Chengxiang, and John Lafferty. “A study of smoothing methods for language models applied to ad hoc information retrieval.” Proceedings of the 24th annual international ACM SIGIR conference on Research and development in information retrieval. ACM, 2001.</li>
 </ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -189,6 +228,14 @@ Language Model现假设quer">
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/" title="使用点击图来计算Query-Doc的文本相关性">
+  <strong>上一篇：</strong><br/>
+  <span>
+  使用点击图来计算Query-Doc的文本相关性</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/"  title="使用Python画ROC曲线以及AUC值">
@@ -302,7 +349,7 @@ Language Model现假设quer">
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>4</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
 		  
 		
 		  
@@ -335,7 +382,7 @@ Language Model现假设quer">
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>11</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>12</sup></a></li>
 			
 		
 			
