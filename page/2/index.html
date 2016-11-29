@@ -95,6 +95,86 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/18/Machine Learning/AdaBoost-Study-Summary/" title="AdaBoost学习总结" itemprop="url">AdaBoost学习总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-18T12:30:55.000Z" itemprop="datePublished"> 发表于 2016-04-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
+</blockquote>
+<h2 id="简介">简介</h2><p>痛点:大部分强分类器(<code>LR</code>，<code>svm</code>)分类效果还不错，但是可能会遇到过拟合问题，并且训练相对复杂，耗时~<br>另外大部分弱分类器(<code>阈值分类器</code>,<code>单桩决策树(decision stump)</code>等)，他们分类的效果差，可能是极差，只会出现欠拟合，但是他们训练预测快，很快~</p>
+<blockquote>
+<p><code>天下武功，唯快不破</code>，<code>做减法不易，但是做加法就相对简单了</code>^_^ 这就是<code>提升方法</code>.</p>
+</blockquote>
+<p><code>提升方法</code>需要解决的两个问题:</p>
+<ol>
+<li>在每一轮训练时如何改变数据的权值或概率分布?</li>
+<li>如何将弱分类器组合成一个强分类器?</li>
+</ol>
+<p><code>AdaBoost</code>对此进行了很好的解决:</p>
+<ol>
+<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
+<li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/18/Machine Learning/AdaBoost-Study-Summary/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/18/Machine Learning/AdaBoost-Study-Summary/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/18/Machine Learning/AdaBoost-Study-Summary/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/11/Machine Learning/Say-About-Loss-Function/" title="聊聊机器学习中的损失函数" itemprop="url">聊聊机器学习中的损失函数</a>
   </h1>
   <p class="article-author">By
@@ -716,75 +796,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/" title="针对BM25遇到长文档时失效情况的一种高效解决方案" itemprop="url">针对BM25遇到长文档时失效情况的一种高效解决方案</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-02-16T09:17:19.000Z" itemprop="datePublished"> 发表于 2016-02-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
-</code></pre><h2 id="当BM25遇到长文档">当BM25遇到长文档</h2><p>文档相关性模型-<code>BM25</code>的拟合公式如下:</p>
-<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
-
-<p>其中第一部分表示<code>BIM</code>的值，第二部分表示在文档中的权重，第三部分表示在查询词中的权重，(具体符号解释参考之前的<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/">BM25介绍</a>)现将第二部分单独拿出来:</p>
-<p><center>$f(q,D)=\frac{(k_1+1) \times TF}{k_1 \times ((1-b)+b \cdot \frac{dl}{avdl} )+TF}=\frac{(k_1+1) \times c’(q,D)}{k_1+c’(q,D)}$</center><br>其中:<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -859,7 +870,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
 		  
 		
 		  
@@ -900,7 +911,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
 			
 		
 			

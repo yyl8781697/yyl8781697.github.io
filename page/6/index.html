@@ -95,6 +95,78 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/" title="找一个数组中绝对值和最小的三个元素" itemprop="url">找一个数组中绝对值和最小的三个元素</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-03T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>找一个数组中绝对值和最小的三个元素
+</code></pre><h2 id="解析">解析</h2><p>暴力的方法是O(n^3)，肯定还存在其他更加优的方法</p>
+<ol>
+<li>将数组升序排序</li>
+<li>固定一个数字，然后从两端开始找，如果sum&lt;0 则left++ 否则right—  同时记录最小的minSum<blockquote>
+<p>注意，两端向中间找的时候如果遇到当前固定的数字需要跳过</p>
+</blockquote>
+</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/08/03/Algorithm/Min-Abs-ThreeNumber/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/03/Algorithm/Max-Min-in-Array/" title="对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？" itemprop="url">对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？</a>
   </h1>
   <p class="article-author">By
@@ -716,77 +788,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" title="求旋转数组中的最小值" itemprop="url">求旋转数组中的最小值</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-25T02:42:58.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>题目:把一个数组最开始的若干个元素搬到数组的末尾,我们称之为数组的旋转。输入一个 排好序的数组的一个旋转,
-输出旋转数组的最小元素。例如数组<span class="list">{3, 4, 5, 1, 2}</span>为<span class="list">{1, 2, 3, 4, 5}</span>的一个旋转,该数 组的最小值为 <span class="number">1</span>。
-</code></pre><h2 id="解析">解析</h2><blockquote>
-<p>该题最容易想到的就是遍历，但是他的复杂度是O(n)，而作为面试题肯定是需要我们找出一种更优的方法</p>
-</blockquote>
-<p>这里使用可以二分法来解决该问题,假设数组a的长度为n，现在使用二分法过程中左端索引s,右端索引t，则中间位置为m=s+(t-s)/2<br>首先可以知道旋转数组在旋转之后a[0]&gt;a[n-1]是肯定成立的，</p>
-<p>当a[s]&lt;=a[m]的时候，我们应该进去右侧继续查找，比如a[0]<a[2] 接下来我们只需要找a[3~4]即可（注意a[m]都已经大于a[s]了，所以这里取右侧的时候m舍去的）
-同理，当a[s]>a[m]的时候 进入左侧继续搜索，直到<br>可以发现当a[s]&lt;=a[t]的时候  a[s]肯定就是最小值了。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -861,7 +862,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
 		  
 		
 		  
@@ -902,7 +903,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
 			
 		
 			

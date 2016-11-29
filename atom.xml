@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-11-05T16:38:27.000Z</updated>
+  <updated>2016-11-29T13:28:19.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -15,11 +15,98 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[Softmax的二三事]]></title>
+    <link href="http://kubicode.me/2016/11/27/Machine%20Learning/Something-for-Softmax/"/>
+    <id>http://kubicode.me/2016/11/27/Machine Learning/Something-for-Softmax/</id>
+    <published>2016-11-27T08:24:28.000Z</published>
+    <updated>2016-11-29T13:28:19.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Softmax_介绍">Softmax 介绍</h2><p>多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(<code>MNIST手写体识别</code>)，对于多分类任务常用的机器学习方法有:</p>
+<ol>
+<li>借助<code>二分类</code>，使用<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-All" target="_blank" rel="external">One vs All</a>或者<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-One" target="_blank" rel="external">One vs One</a>来完成多分类</li>
+<li>使用<a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#朴素贝叶斯" target="_blank" rel="external">朴素贝叶斯</a>来完成多分类</li>
+<li>决策树类模型~</li>
+<li>。。。</li>
+</ol>
+<a id="more"></a>
+<p>同时本文要说到的<code>Softmax</code>是一个是<code>Logistic</code>模型上的一个扩展，可以轻松的完成多分类任务，它是一个有监督的学习，不过可以和相当热门的神经网络可以轻松结合起来.</p>
+<h2 id="Logistic回顾">Logistic回顾</h2><p><code>Logistic</code>模型是一个非常基础而又高效的<code>二分类</code>模型，并且由于其最终值会归一化到0~1，因此也很多场景下也会作为<code>回归</code>模型使用，比如<code>ctr预估</code>。<br><code>Logistic</code>的输入数据是<br>    $$\{(x^1,y^1),(x^2,y^2)…(x^m,y^m)\}$$</p>
+<p>其中$x^i$为输入的特征向量，$y^i$即为要训练的目标，在<code>二分类</code>中，一般$y^i \in \{0,1\}$，则<code>Logistic</code>的算分函数为<br>$$h_{\theta}(x) = \frac{1}{1+e^{-\theta^Tx}}$$</p>
+<p>使用最大似然法进行参数估计,其似然函数为<br>$$\prod h_{\theta}(x^i)^{y^i} \times (1-h_{\theta}(x^i))^{(1-y^i)}$$</p>
+<p>对其进行负的对数转换之后则最终的损失函数为<br>$$ J(\theta) = -\frac{1}{m} \sum_{i=1}^m \left [ y^i \text{log}h_{\theta}(x^i) + (1-y^i)\text{log}(1-h_{\theta}(x^i)) \right ]    $$</p>
+<p>在<code>Logistic</code>模型中我们可以发现我们最终需要求的是$\theta$向量.</p>
+<h2 id="Softmax_模型">Softmax 模型</h2><p>在<code>Softmax</code>模型中，其输入也是类似向量的设计<br>    $$\{(x^1,y^1),(x^2,y^2)…(x^m,y^m)\}$$</p>
+<p>只是这个的$y^i \in \{1,2,…k\}$有$k$个类别，而最终要求的应该是这个值<br>$$P(y=k_j | x)$$<br>也就是类别$k_j$可能的概率，也就是会形成一个$k$维的输出<br>$$<br>h_{\theta}(x^i)=\begin{bmatrix} P(y^i=1|\theta_1,x_i)<br>\\ P(y^i=2|\theta_2,x_i)<br>\\ …<br>\\ P(y^i=k|\theta_k,x_i)<br>\end{bmatrix}<br>=<br>\frac{1}{\sum_{s=1}^k e^{-\theta_s^Tx_i}}<br>\begin{bmatrix} e^{-\theta_1^Tx_i}<br>\\ e^{-\theta_2^Tx_i}<br>\\ …<br>\\ e^{-\theta_k^Tx_i}<br>\end{bmatrix}<br>$$</p>
+<p>则我们整个模型最终要求的是一个$\theta$<code>矩阵</code>(注意,在<code>Logistic</code>中求是一个向量),矩阵的每一行$\theta_i$其实就是与输入参数$x$相乘的向量~</p>
+<blockquote>
+<p>注意:分子$\frac{1}{\sum_{s=1}^k e^{-\theta_s^Tx_i}}$是为了让最终所有类别的概率之和为<code>1</code></p>
+</blockquote>
+<p>每个类别j的概率为:<br>$$p_j=\frac{e^{-\theta_j^Tx}}{\sum_{s=1}^k e^{-\theta_s^Tx}}$$</p>
+<h2 id="Softmax的损失函数">Softmax的损失函数</h2><p>同样,<code>Softmax</code>使用最大似然法进行参数的估计,则似然函数为<br>$$\prod_i^m \prod_{j=1}^k p_j^{I\{y^i = k_j\}}$$</p>
+<blockquote>
+<p>其中$I\{y^i = k_j\}$为二值函数，当且仅当$y^i == k_j$时为1，否则为0</p>
+</blockquote>
+<p>对其<code>取负的对数</code>可以得到其损失函数:<br>$$J(\theta) = -\frac{1}{m} \left[ \sum_{i=1}^m \sum_{j=1}^k I\{y^i = k_j\} \text{log} p_j \right]$$</p>
+<p>假设我们使用梯度下降法对损失函数进行优化，因此对$\theta$进行求导,在求导之前先算下面这个:<br>$$ \frac{\delta p_j}{\delta \theta_i}=\left\{<br>\begin{aligned}<br>\frac{\frac{e^{-\theta_j^Tx}}{\delta \theta_{\color{Red} j}}\sum_{s=1}^k e^{-\theta_s^Tx}-\frac{\sum_{s=1}^k e^{-\theta_s^Tx}}{\delta \theta_{\color{Red} j}}e^{-\theta_s^Tx}}{(\sum_{s=1}^k e^{-\theta_s^Tx})^2} &amp;= x p_j(1-p_j)  &amp; \quad if i=j \\<br>\frac{\frac{e^{-\theta_j^Tx}}{\delta \theta_{\color{Red} i}}\sum_{s=1}^k e^{-\theta_s^Tx}-\frac{\sum_{s=1}^k e^{-\theta_s^Tx}}{\delta \theta_{\color{Red} i}}e^{-\theta_j^Tx}}{(\sum_{s=1}^k e^{-\theta_s^Tx})^2} &amp;= x p_ip_j &amp; \quad if i \neq j\\<br>\end{aligned}<br>\right.$$</p>
+<p>有了上面的基础之后，我们对于$J(\theta)$进行求导，就可以得到如下的梯度:</p>
+<p>$$\begin{equation}\begin{split} \triangledown_{\theta_j}J(\theta) &amp;= -\frac{1}{m} \left[ \sum_{i=1}^m \sum_{j=1}^k I\{y^i = k_j\} \frac{1}{p_j} \frac{\delta p_j}{\delta \theta_j  }  \right]\\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m \left ( I\{y^i = k_i\} \frac{1}{p_i} x^i p_i(1-p_i) -  \sum_{j=1,j \neq i}^k I\{y^i = k_j\} \frac{1}{p_j} x^i p_i p_j \right )  \right ] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_i\} (1-p_i) -   \sum_{j=1,j \neq i}^k I\{y^i = k_j\}  p_i \right )  \right ] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_{\color{Red} i}\} - I\{y^i = k_i\}p_i -   \sum_{j=1,j \neq i}^k I\{y^i = k_j\}  p_i \right )  \right ] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_{\color{Red} j}\} -  \sum_{j=1}^k I\{y^i = k_j\} p_i \right )  \right ]  \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_j\} - p_i \right )  \right ]<br>\end{split}\end{equation}$$</p>
+<p>注意有:</p>
+<ul>
+<li>$\sum_{j=1}^k I\{y^i = k_j\} = 1 $ ,因为样本必定会落到一个类别上</li>
+<li>同时上面式子里面红色的${\color{Red} j}$是因为左侧分离出来,其中分离的条件是$i=j$</li>
+</ul>
+<p>上面的梯度最终将会是一个向量的形式,$\frac{\delta J(\theta)}{\delta \theta_{j,l}}$表示第$j$的类别的第$l$个特征的梯度方式，有了该梯度了之后，最终可以得到如下的参数更新:<br>$$\theta_j = \theta_j - \alpha \triangledown_{\theta_j}J(\theta) \quad j \in \{1,…k\}$$</p>
+<p>到了这一步，整体看到就和二分类的<code>Logistic</code>很像了，上面是使用梯度下降法的求解，当然还可以使用类似<code>L-BFGS</code>算法进行优化~<br>另外关于其<code>L1</code>和<code>L2</code>的正则项也是可以参考<code>Logistic</code></p>
+<h2 id="Softmax与Logistic的联系">Softmax与Logistic的联系</h2><p>在<code>Softmax</code>的$k=2$时(其实就是二分类了)，再来观察<code>Softmax</code>的一些式子</p>
+<h3 id="算分函数">算分函数</h3><p>$$\begin{equation}\begin{split} h_\theta(x^i) &amp;= \frac{1}{e^{-\theta_1^Tx_i}+e^{-\theta_2^Tx_i}}<br>\begin{bmatrix} e^{-\theta_1^Tx_i}<br>\\ e^{-\theta_2^Tx_i}<br>\end{bmatrix} \\<br>&amp;= \frac{1}{e^{-(\theta_1-\theta_1)^Tx_i}+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\begin{bmatrix} e^{-(\theta_1-\theta_1)^Tx_i}<br>\\ e^{-(\theta_2-\theta_1)^Tx_i}<br>\end{bmatrix} \\<br>&amp;= \begin{bmatrix}  \frac{1}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\\ \frac{e^{-(\theta_2-\theta_1)^Tx_i}}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\end{bmatrix} \\<br>&amp;= \begin{bmatrix}  \frac{1}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\\ 1- \frac{1}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\end{bmatrix} \\<br>\end{split}\end{equation}$$</p>
+<blockquote>
+<p>在上面第一到第二步减去$\theta_1$任成立的原因是，<code>Softmax</code>的参数过多，是一个大矩阵，里面存在着冗余的参数:<br>$$\begin{equation}\begin{split} h_{\theta_j}(x^i) &amp;= \frac{e^{-\theta_jx^i}}{\sum_{s=1}^k e^{-\theta_sx^i}} \\<br>&amp;= \frac{e^{-(\theta_j-\phi)x^i}}{\sum_{s=1}^k e^{-(\theta_s-\phi)x^i}} \\<br>&amp;= \frac{e^{-\theta_jx^i}e^{-\phi x^i}}{\sum_{s=1}^k e^{-\theta_sx^i}e^{-\phi x^i}} \\<br>&amp;= \frac{e^{-\theta_jx^i}}{\sum_{s=1}^k e^{-\theta_sx^i}}<br>\end{split}\end{equation}$$<br>因此，参数矩阵中减去同一个<code>向量</code>并不会影响最终的优化结果~关于参数过度化问题可以参考<a href="http://ufldl.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92#Softmax.E5.9B.9E.E5.BD.92.E6.A8.A1.E5.9E.8B.E5.8F.82.E6.95.B0.E5.8C.96.E7.9A.84.E7.89.B9.E7.82.B9" target="_blank" rel="external">这里</a></p>
+</blockquote>
+<p>所以当$k=2$时<code>Softmax</code>的算分函数其实就是<code>Logistic</code>的变形~</p>
+<h3 id="损失函数">损失函数</h3><p><code>Softmax</code>的损失函数为<br>$$\begin{equation}\begin{split} J(\theta) &amp;= -\frac{1}{m} \left[ \sum_{i=1}^m \sum_{j=1}^2 I\{y^i = k_j\} \text{log} p_j \right] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m  I\{y^i = k_1\} \text{log} p_1 + I\{y^i = k_2\} \text{log} p_2  \right] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m  I\{y^i = k_1\} \text{log} p_1 + (1-I\{y^i = k_1\}) \text{log} (1-p_1)  \right]  \\<br>\end{split}\end{equation}$$</p>
+<blockquote>
+<p>因为:$I\{y^i = k_1\} + I\{y^i = k_2\}  =1$ 以及 $p_1+p_2=1$</p>
+</blockquote>
+<p>最终也就变成了<code>Logistic</code>的损失函数形式了</p>
+<h2 id="总结">总结</h2><ol>
+<li><code>Softmax</code>模型其实是<code>Logistic</code>对于多分类上面的扩展</li>
+<li><code>Softmax</code>最终产出的每一类的概率之和为1</li>
+<li><code>Softmax</code>其实并不是一个损失函数（因为看到很多文章中都会很自然的写道<code>Softmax损失函数</code>）,它自己求优化时还是使用者交叉熵的这一套</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://ufldl.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92#Softmax.E5.9B.9E.E5.BD.92.E6.A8.A1.E5.9E.8B.E5.8F.82.E6.95.B0.E5.8C.96.E7.9A.84.E7.89.B9.E7.82.B9" target="_blank" rel="external">Softmax回归 ufldl</a><blockquote>
+<p>文本大致组织按这个参考来的，因为它写的实在太好了，自己在造一遍轮子，以便记忆^_^</p>
+</blockquote>
+</li>
+<li><a href="http://math.stackexchange.com/questions/945871/derivative-of-softmax-loss-function" target="_blank" rel="external">Derivative of Softmax loss function</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Softmax_介绍">Softmax 介绍</h2><p>多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(<code>MNIST手写体识别</code>)，对于多分类任务常用的机器学习方法有:</p>
+<ol>
+<li>借助<code>二分类</code>，使用<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-All">One vs All</a>或者<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-One">One vs One</a>来完成多分类</li>
+<li>使用<a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#朴素贝叶斯">朴素贝叶斯</a>来完成多分类</li>
+<li>决策树类模型~</li>
+<li>。。。</li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[使用点击图来计算Query-Doc的文本相关性]]></title>
     <link href="http://kubicode.me/2016/11/03/Search%20Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/"/>
     <id>http://kubicode.me/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/</id>
     <published>2016-11-03T12:07:18.000Z</published>
-    <updated>2016-11-05T16:38:27.000Z</updated>
+    <updated>2016-11-07T01:59:53.000Z</updated>
     <content type="html"><![CDATA[<h2 id="文本相关性">文本相关性</h2><p>在信息检索中文本相关性是排序因子中非常重要的一个特征，大部分的文本相关性特征是直接根据<code>query</code>和<code>doc</code>上的<code>term</code>进行各种匹配、各种计算得到的， 比如<code>词频/频率</code>、<code>tf/idf/tf*idf</code>、<code>bm25</code>、<code>布尔模型</code>、<code>空间向量模型</code>以及<code>语言模型</code>,今天看到参考[1]这篇paper，提到了可以将点击日志构成二部图,根据二部分进行向量传播，最终收敛之后进行文本相关性的计算，也算是比较新颖了，下文就主要是对该paper的一个学习以及自己理解的记录。<br>该paper提出的三个贡献:</p>
 <ol>
 <li>可以使<code>query</code>和<code>doc</code>在同一空间上生成词向量考虑</li>
@@ -1551,78 +1638,6 @@ yans-MacBook-<span class="string">Pro:</span>node_modules yanyl$ grep -r <span c
 <li>将文档根据各个<code>Term</code>算分排序</li>
 </ol>
 <p>其实可以发现这里查的<code>Term</code> 都是<code>bag-of-words</code>的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了：<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/categories/Search-Engine/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[针对BM25遇到长文档时失效情况的一种高效解决方案]]></title>
-    <link href="http://kubicode.me/2016/02/16/Search%20Engine/BM25-Fails-When-The-Docments-Are-Very-Long/"/>
-    <id>http://kubicode.me/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/</id>
-    <published>2016-02-16T09:17:19.000Z</published>
-    <updated>2016-02-27T06:58:10.000Z</updated>
-    <content type="html"><![CDATA[<pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
-</code></pre><h2 id="当BM25遇到长文档">当BM25遇到长文档</h2><p>文档相关性模型-<code>BM25</code>的拟合公式如下:</p>
-<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
-
-<p>其中第一部分表示<code>BIM</code>的值，第二部分表示在文档中的权重，第三部分表示在查询词中的权重，(具体符号解释参考之前的<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/" target="_blank" rel="external">BM25介绍</a>)现将第二部分单独拿出来:</p>
-<p><center>$f(q,D)=\frac{(k_1+1) \times TF}{k_1 \times ((1-b)+b \cdot \frac{dl}{avdl} )+TF}=\frac{(k_1+1) \times c’(q,D)}{k_1+c’(q,D)}$</center><br>其中:<br><a id="more"></a></p>
-<p><center>$c’(q,D)=\frac{TF}{1-b+b \cdot \frac{dl}{avdl}}$</center><br>现在先来做一个假设，假设当前有个文档<code>很长很长</code>，也就是$dl$这个值很大，则可以发现$c’(q,D)$就会很小，小到接近于0，因此会导致文档部分的因子$f(q,D)$也会接近于0，几乎和这个词没有出现在这个文档一样..-_-</p>
-<p>在这种情况下，针对长文档，<code>BM25</code>的效果会比较差<br>下面的图就是<code>BM25</code>在不同文档长度下的实验</p>
-<p><img src="/img/BM25-Fails-When-The-Docments-Are-Very-Long/doc-len-comp.png" width="600px"></p>
-<p>可以发现在<code>BM25</code>中，随着文档的变长，相关性在变高，但是其被检索的概率并没有随着相关性的趋势而变高，也就是长文档使用<code>BM25</code>的效果变得比较差。</p>
-<h2 id="高效解决方案">高效解决方案</h2><p>为了避免长文档在<code>BM25</code>的相关性中被惩罚，我们需要对文档权重$f(q,D)$做一个规范化约束，但是由于<code>BM25</code>早已被公认为是一种比较有效的文档相关性，所以这个约束不能破坏掉<code>BM25</code>自身的特征.</p>
-<p>我们希望规范化约束之后保持以下三点特性:</p>
-<ol>
-<li>当$c’(q,D)=0$的时候，$f(q,D)$也为0</li>
-<li>随着$c’(q,D)$的变大，$f(q,D)$也需要呈现单调递增，但是会趋向于一个最大值</li>
-<li>随着$c’(q,D)$的减少，$f(q,D)$会单调递减趋向于一个最小值，但是这个最小值需要足够大</li>
-</ol>
-<blockquote>
-<p>就是因为原生的<code>BM25</code>不满足第3点，所以会出现在长文档下<code>BM25</code>出现失效的情况</p>
-</blockquote>
-<!-- 
-f'(q,D)=\left\{
-\begin{aligned}
-\frac{(k_1+1) \cdot [c'(q,D)+\delta ]}{k_1 + [c'(q,D)+\delta ]}  & \quad if \quad c'(q,D)>0\\
-0 & \quad otherwise\\
-\end{aligned}
-\right.
--->
-<p>而下面的改进$f’(q,D)$正好可以满足上述三个特性:</p>
-<p><img src="/img/BM25-Fails-When-The-Docments-Are-Very-Long/gj.gif" alt=""></p>
-<p>使用时针对原来的$c’(q,D)$值增加了一个平滑项$\delta$，增加了平滑项之后依然满足<code>第1、2点</code>特性，并且当$c’(q,D)&gt;0$的时候$f’(q,D)$有一个下界:</p>
-<p><center>$\frac{(k_1+1) \cdot \delta}{k_1+ \delta}$</center><br>这样也正好可以满足<code>第3点</code>特性</p>
-<p>进行该项小改进之后的模型称为<code>BM25L</code>,遇到长文档时并不会失效，并且还保持原有的<code>BM25</code>特性.</p>
-<h2 id="实验效果验证">实验效果验证</h2><p>针对多个数据集  ，使用不同的调节参数$b$,$k_1$,$\delta$进行试验:<br><img src="/img/BM25-Fails-When-The-Docments-Are-Very-Long/exp.png"></p>
-<p>在第三章图明显可以发现<code>BM25L</code>的效果对<code>BM25</code>有较大的绝对提升，其中较优的参数范围为:</p>
-<ol>
-<li>$b \in [0,3,0.6] $</li>
-<li>$k_1 \in [1.0,2.0]$</li>
-<li>$\delta = 0.5$时最优</li>
-</ol>
-<h2 id="参考">参考</h2><ol>
-<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.600.16&amp;rep=rep1&amp;type=pdf" target="_blank" rel="external">When Documents Are Very Long, BM25 Fails!</a></li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<pre><code>B<span class="title">M25</span>在长文档下会失效，文本是记录SIGIR上的一个Paper的解决方案~
-</code></pre><h2 id="当BM25遇到长文档">当BM25遇到长文档</h2><p>文档相关性模型-<code>BM25</code>的拟合公式如下:</p>
-<center>$\sum_{i\in Q} log \frac {(r_i+0.5)((N-R)-(n_i-r_i)+0.5)}{(n_i-r_i+0.5)(R-r_i+0.5)} \cdot \frac{(k_1+1)f_i}{K+f_i} \cdot \frac{(k_2+1)qf_i}{k_2+qf_i}$</center>
-
-<p>其中第一部分表示<code>BIM</code>的值，第二部分表示在文档中的权重，第三部分表示在查询词中的权重，(具体符号解释参考之前的<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/">BM25介绍</a>)现将第二部分单独拿出来:</p>
-<p><center>$f(q,D)=\frac{(k_1+1) \times TF}{k_1 \times ((1-b)+b \cdot \frac{dl}{avdl} )+TF}=\frac{(k_1+1) \times c’(q,D)}{k_1+c’(q,D)}$</center><br>其中:<br>]]>
     
     </summary>
     

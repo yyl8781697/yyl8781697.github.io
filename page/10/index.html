@@ -95,6 +95,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/09/Effective Java/Method/" title="《Effective Java》第七章：方法" itemprop="url">《Effective Java》第七章：方法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-09T15:44:24.000Z" itemprop="datePublished"> 发表于 2015-06-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>本章主要讨论方法设计的几个方面：</p>
+<ul>
+<li>如何处理参数和返回值</li>
+<li>如何设计方法签名</li>
+<li>如何为方法编写文档</li>
+</ul>
+<h2 id="第38条：检查参数的有效性">第38条：检查参数的有效性</h2><p>这条就是教我们对于公有方法，最好在方法体上的开头处加上参数检查，并且在文档中清楚地指出这些限制，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 求模</span><br><span class="line"> *<span class="javadoctag"> @param</span> m</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> *<span class="javadoctag"> @throws</span> ArithmeticException 如何m小于等于0时抛出异常</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigInteger <span class="title">mod</span><span class="params">(BigInteger m)</span> <span class="keyword">throws</span> ArithmeticException</span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(m.signum()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArithmeticException(<span class="string">"Moduls &lt;= 0:"</span>+m);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//do something</span></span><br><span class="line">	<span class="keyword">return</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/09/Effective Java/Method/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/09/Effective Java/Method/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/09/Effective Java/Method/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/06/Food/Spicy-fish/" title="自己煮：麻辣鱼" itemprop="url">自己煮：麻辣鱼</a>
   </h1>
   <p class="article-author">By
@@ -743,83 +813,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/23/Effective Java/Generic/" title="《Effective Java》第五章：泛型" itemprop="url">《Effective Java》第五章：泛型</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-23T15:05:33.000Z" itemprop="datePublished"> 发表于 2015-05-23</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>泛型，可以告诉编译器每个集合中接受哪些对象类型，编译器会自动地为你的插入进行转化，并在编译时告知是否插入了类型错误的对象。(貌似<code>Java</code>里面的泛型都是<strong>伪泛型</strong>吧-_-|)</p>
-<h2 id="第23条：请不要再新代码中使用原生态类型">第23条：请不要再新代码中使用原生态类型</h2><blockquote>
-<p>什么是原生态类型？</p>
-</blockquote>
-<p>类似<code>List&lt;E&gt;</code>,<code>Collection&lt;E&gt;</code>泛型的定义都有一个原生态类型，那就是<code>List</code>,<code>Collection</code>，用他们定义类型也不会出错.</p>
-<blockquote>
-<p>为什么不要使用原生态类型</p>
-</blockquote>
-<p>使用原生态类型的集合类可以插入各种不同的类型，他们在编译时不会进行类型检查，但是运行时遇到错误就会抛出，这样是很不安全的。</p>
-<blockquote>
-<p>我在不确定或者不在乎集合类型的情况下，是不是用原生态类型最好？</p>
-</blockquote>
-<p>还是不要用，可以使用无限制的通配符来替代，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numElementsInCommon</span><span class="params">(Set&lt;?&gt; s1,Set&lt;?&gt; s2)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(Object o:s1)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(s2.contains(o))</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>它是类型安全的，但是无法猜测放入了哪些对象，此时可以使用<strong>泛型</strong>或者<strong>有限制的通配符类型</strong>（下文会描述）。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/23/Effective Java/Generic/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/23/Effective Java/Generic/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/23/Effective Java/Generic/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
@@ -894,7 +887,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
 		  
 		
 		  
@@ -935,7 +928,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
 			
 		
 			

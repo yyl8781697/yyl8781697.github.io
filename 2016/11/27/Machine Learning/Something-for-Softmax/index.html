@@ -1,0 +1,753 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Softmax的二三事 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="Softmax 介绍多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(MNIST手写体识别)，对于多分类任务常用的机器学习方法有:
+
+借助二分类，使用One vs All或者One vs One来完成多分类
+使用朴素贝叶斯来完成多分类
+决策树类模型~
+。。。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Softmax的二三事">
+<meta property="og:url" content="http://kubicode.me/2016/11/27/Machine Learning/Something-for-Softmax/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="Softmax 介绍多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(MNIST手写体识别)，对于多分类任务常用的机器学习方法有:
+
+借助二分类，使用One vs All或者One vs One来完成多分类
+使用朴素贝叶斯来完成多分类
+决策树类模型~
+。。。">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Softmax的二三事">
+<meta name="twitter:description" content="Softmax 介绍多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(MNIST手写体识别)，对于多分类任务常用的机器学习方法有:
+
+借助二分类，使用One vs All或者One vs One来完成多分类
+使用朴素贝叶斯来完成多分类
+决策树类模型~
+。。。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/27/Machine Learning/Something-for-Softmax/" title="Softmax的二三事" itemprop="url">Softmax的二三事</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-27T08:24:28.000Z" itemprop="datePublished"> 发表于 2016-11-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax_介绍"><span class="toc-number">1.</span> <span class="toc-text">Softmax 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic回顾"><span class="toc-number">2.</span> <span class="toc-text">Logistic回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax_模型"><span class="toc-number">3.</span> <span class="toc-text">Softmax 模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax的损失函数"><span class="toc-number">4.</span> <span class="toc-text">Softmax的损失函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax与Logistic的联系"><span class="toc-number">5.</span> <span class="toc-text">Softmax与Logistic的联系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算分函数"><span class="toc-number">5.1.</span> <span class="toc-text">算分函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#损失函数"><span class="toc-number">5.2.</span> <span class="toc-text">损失函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="Softmax_介绍">Softmax 介绍</h2><p>多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(<code>MNIST手写体识别</code>)，对于多分类任务常用的机器学习方法有:</p>
+<ol>
+<li>借助<code>二分类</code>，使用<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-All" target="_blank" rel="external">One vs All</a>或者<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-One" target="_blank" rel="external">One vs One</a>来完成多分类</li>
+<li>使用<a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#朴素贝叶斯" target="_blank" rel="external">朴素贝叶斯</a>来完成多分类</li>
+<li>决策树类模型~</li>
+<li>。。。</li>
+</ol>
+<a id="more"></a>
+<p>同时本文要说到的<code>Softmax</code>是一个是<code>Logistic</code>模型上的一个扩展，可以轻松的完成多分类任务，它是一个有监督的学习，不过可以和相当热门的神经网络可以轻松结合起来.</p>
+<h2 id="Logistic回顾">Logistic回顾</h2><p><code>Logistic</code>模型是一个非常基础而又高效的<code>二分类</code>模型，并且由于其最终值会归一化到0~1，因此也很多场景下也会作为<code>回归</code>模型使用，比如<code>ctr预估</code>。<br><code>Logistic</code>的输入数据是<br>    $$\{(x^1,y^1),(x^2,y^2)…(x^m,y^m)\}$$</p>
+<p>其中$x^i$为输入的特征向量，$y^i$即为要训练的目标，在<code>二分类</code>中，一般$y^i \in \{0,1\}$，则<code>Logistic</code>的算分函数为<br>$$h_{\theta}(x) = \frac{1}{1+e^{-\theta^Tx}}$$</p>
+<p>使用最大似然法进行参数估计,其似然函数为<br>$$\prod h_{\theta}(x^i)^{y^i} \times (1-h_{\theta}(x^i))^{(1-y^i)}$$</p>
+<p>对其进行负的对数转换之后则最终的损失函数为<br>$$ J(\theta) = -\frac{1}{m} \sum_{i=1}^m \left [ y^i \text{log}h_{\theta}(x^i) + (1-y^i)\text{log}(1-h_{\theta}(x^i)) \right ]    $$</p>
+<p>在<code>Logistic</code>模型中我们可以发现我们最终需要求的是$\theta$向量.</p>
+<h2 id="Softmax_模型">Softmax 模型</h2><p>在<code>Softmax</code>模型中，其输入也是类似向量的设计<br>    $$\{(x^1,y^1),(x^2,y^2)…(x^m,y^m)\}$$</p>
+<p>只是这个的$y^i \in \{1,2,…k\}$有$k$个类别，而最终要求的应该是这个值<br>$$P(y=k_j | x)$$<br>也就是类别$k_j$可能的概率，也就是会形成一个$k$维的输出<br>$$<br>h_{\theta}(x^i)=\begin{bmatrix} P(y^i=1|\theta_1,x_i)<br>\\ P(y^i=2|\theta_2,x_i)<br>\\ …<br>\\ P(y^i=k|\theta_k,x_i)<br>\end{bmatrix}<br>=<br>\frac{1}{\sum_{s=1}^k e^{-\theta_s^Tx_i}}<br>\begin{bmatrix} e^{-\theta_1^Tx_i}<br>\\ e^{-\theta_2^Tx_i}<br>\\ …<br>\\ e^{-\theta_k^Tx_i}<br>\end{bmatrix}<br>$$</p>
+<p>则我们整个模型最终要求的是一个$\theta$<code>矩阵</code>(注意,在<code>Logistic</code>中求是一个向量),矩阵的每一行$\theta_i$其实就是与输入参数$x$相乘的向量~</p>
+<blockquote>
+<p>注意:分子$\frac{1}{\sum_{s=1}^k e^{-\theta_s^Tx_i}}$是为了让最终所有类别的概率之和为<code>1</code></p>
+</blockquote>
+<p>每个类别j的概率为:<br>$$p_j=\frac{e^{-\theta_j^Tx}}{\sum_{s=1}^k e^{-\theta_s^Tx}}$$</p>
+<h2 id="Softmax的损失函数">Softmax的损失函数</h2><p>同样,<code>Softmax</code>使用最大似然法进行参数的估计,则似然函数为<br>$$\prod_i^m \prod_{j=1}^k p_j^{I\{y^i = k_j\}}$$</p>
+<blockquote>
+<p>其中$I\{y^i = k_j\}$为二值函数，当且仅当$y^i == k_j$时为1，否则为0</p>
+</blockquote>
+<p>对其<code>取负的对数</code>可以得到其损失函数:<br>$$J(\theta) = -\frac{1}{m} \left[ \sum_{i=1}^m \sum_{j=1}^k I\{y^i = k_j\} \text{log} p_j \right]$$</p>
+<p>假设我们使用梯度下降法对损失函数进行优化，因此对$\theta$进行求导,在求导之前先算下面这个:<br>$$ \frac{\delta p_j}{\delta \theta_i}=\left\{<br>\begin{aligned}<br>\frac{\frac{e^{-\theta_j^Tx}}{\delta \theta_{\color{Red} j}}\sum_{s=1}^k e^{-\theta_s^Tx}-\frac{\sum_{s=1}^k e^{-\theta_s^Tx}}{\delta \theta_{\color{Red} j}}e^{-\theta_s^Tx}}{(\sum_{s=1}^k e^{-\theta_s^Tx})^2} &amp;= x p_j(1-p_j)  &amp; \quad if i=j \\<br>\frac{\frac{e^{-\theta_j^Tx}}{\delta \theta_{\color{Red} i}}\sum_{s=1}^k e^{-\theta_s^Tx}-\frac{\sum_{s=1}^k e^{-\theta_s^Tx}}{\delta \theta_{\color{Red} i}}e^{-\theta_j^Tx}}{(\sum_{s=1}^k e^{-\theta_s^Tx})^2} &amp;= x p_ip_j &amp; \quad if i \neq j\\<br>\end{aligned}<br>\right.$$</p>
+<p>有了上面的基础之后，我们对于$J(\theta)$进行求导，就可以得到如下的梯度:</p>
+<p>$$\begin{equation}\begin{split} \triangledown_{\theta_j}J(\theta) &amp;= -\frac{1}{m} \left[ \sum_{i=1}^m \sum_{j=1}^k I\{y^i = k_j\} \frac{1}{p_j} \frac{\delta p_j}{\delta \theta_j  }  \right]\\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m \left ( I\{y^i = k_i\} \frac{1}{p_i} x^i p_i(1-p_i) -  \sum_{j=1,j \neq i}^k I\{y^i = k_j\} \frac{1}{p_j} x^i p_i p_j \right )  \right ] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_i\} (1-p_i) -   \sum_{j=1,j \neq i}^k I\{y^i = k_j\}  p_i \right )  \right ] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_{\color{Red} i}\} - I\{y^i = k_i\}p_i -   \sum_{j=1,j \neq i}^k I\{y^i = k_j\}  p_i \right )  \right ] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_{\color{Red} j}\} -  \sum_{j=1}^k I\{y^i = k_j\} p_i \right )  \right ]  \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m x^i \left ( I\{y^i = k_j\} - p_i \right )  \right ]<br>\end{split}\end{equation}$$</p>
+<p>注意有:</p>
+<ul>
+<li>$\sum_{j=1}^k I\{y^i = k_j\} = 1 $ ,因为样本必定会落到一个类别上</li>
+<li>同时上面式子里面红色的${\color{Red} j}$是因为左侧分离出来,其中分离的条件是$i=j$</li>
+</ul>
+<p>上面的梯度最终将会是一个向量的形式,$\frac{\delta J(\theta)}{\delta \theta_{j,l}}$表示第$j$的类别的第$l$个特征的梯度方式，有了该梯度了之后，最终可以得到如下的参数更新:<br>$$\theta_j = \theta_j - \alpha \triangledown_{\theta_j}J(\theta) \quad j \in \{1,…k\}$$</p>
+<p>到了这一步，整体看到就和二分类的<code>Logistic</code>很像了，上面是使用梯度下降法的求解，当然还可以使用类似<code>L-BFGS</code>算法进行优化~<br>另外关于其<code>L1</code>和<code>L2</code>的正则项也是可以参考<code>Logistic</code></p>
+<h2 id="Softmax与Logistic的联系">Softmax与Logistic的联系</h2><p>在<code>Softmax</code>的$k=2$时(其实就是二分类了)，再来观察<code>Softmax</code>的一些式子</p>
+<h3 id="算分函数">算分函数</h3><p>$$\begin{equation}\begin{split} h_\theta(x^i) &amp;= \frac{1}{e^{-\theta_1^Tx_i}+e^{-\theta_2^Tx_i}}<br>\begin{bmatrix} e^{-\theta_1^Tx_i}<br>\\ e^{-\theta_2^Tx_i}<br>\end{bmatrix} \\<br>&amp;= \frac{1}{e^{-(\theta_1-\theta_1)^Tx_i}+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\begin{bmatrix} e^{-(\theta_1-\theta_1)^Tx_i}<br>\\ e^{-(\theta_2-\theta_1)^Tx_i}<br>\end{bmatrix} \\<br>&amp;= \begin{bmatrix}  \frac{1}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\\ \frac{e^{-(\theta_2-\theta_1)^Tx_i}}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\end{bmatrix} \\<br>&amp;= \begin{bmatrix}  \frac{1}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\\ 1- \frac{1}{1+e^{-(\theta_2-\theta_1)^Tx_i}}<br>\end{bmatrix} \\<br>\end{split}\end{equation}$$</p>
+<blockquote>
+<p>在上面第一到第二步减去$\theta_1$任成立的原因是，<code>Softmax</code>的参数过多，是一个大矩阵，里面存在着冗余的参数:<br>$$\begin{equation}\begin{split} h_{\theta_j}(x^i) &amp;= \frac{e^{-\theta_jx^i}}{\sum_{s=1}^k e^{-\theta_sx^i}} \\<br>&amp;= \frac{e^{-(\theta_j-\phi)x^i}}{\sum_{s=1}^k e^{-(\theta_s-\phi)x^i}} \\<br>&amp;= \frac{e^{-\theta_jx^i}e^{-\phi x^i}}{\sum_{s=1}^k e^{-\theta_sx^i}e^{-\phi x^i}} \\<br>&amp;= \frac{e^{-\theta_jx^i}}{\sum_{s=1}^k e^{-\theta_sx^i}}<br>\end{split}\end{equation}$$<br>因此，参数矩阵中减去同一个<code>向量</code>并不会影响最终的优化结果~关于参数过度化问题可以参考<a href="http://ufldl.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92#Softmax.E5.9B.9E.E5.BD.92.E6.A8.A1.E5.9E.8B.E5.8F.82.E6.95.B0.E5.8C.96.E7.9A.84.E7.89.B9.E7.82.B9" target="_blank" rel="external">这里</a></p>
+</blockquote>
+<p>所以当$k=2$时<code>Softmax</code>的算分函数其实就是<code>Logistic</code>的变形~</p>
+<h3 id="损失函数">损失函数</h3><p><code>Softmax</code>的损失函数为<br>$$\begin{equation}\begin{split} J(\theta) &amp;= -\frac{1}{m} \left[ \sum_{i=1}^m \sum_{j=1}^2 I\{y^i = k_j\} \text{log} p_j \right] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m  I\{y^i = k_1\} \text{log} p_1 + I\{y^i = k_2\} \text{log} p_2  \right] \\<br>&amp;= -\frac{1}{m} \left[ \sum_{i=1}^m  I\{y^i = k_1\} \text{log} p_1 + (1-I\{y^i = k_1\}) \text{log} (1-p_1)  \right]  \\<br>\end{split}\end{equation}$$</p>
+<blockquote>
+<p>因为:$I\{y^i = k_1\} + I\{y^i = k_2\}  =1$ 以及 $p_1+p_2=1$</p>
+</blockquote>
+<p>最终也就变成了<code>Logistic</code>的损失函数形式了</p>
+<h2 id="总结">总结</h2><ol>
+<li><code>Softmax</code>模型其实是<code>Logistic</code>对于多分类上面的扩展</li>
+<li><code>Softmax</code>最终产出的每一类的概率之和为1</li>
+<li><code>Softmax</code>其实并不是一个损失函数（因为看到很多文章中都会很自然的写道<code>Softmax损失函数</code>）,它自己求优化时还是使用者交叉熵的这一套</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://ufldl.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92#Softmax.E5.9B.9E.E5.BD.92.E6.A8.A1.E5.9E.8B.E5.8F.82.E6.95.B0.E5.8C.96.E7.9A.84.E7.89.B9.E7.82.B9" target="_blank" rel="external">Softmax回归 ufldl</a><blockquote>
+<p>文本大致组织按这个参考来的，因为它写的实在太好了，自己在造一遍轮子，以便记忆^_^</p>
+</blockquote>
+</li>
+<li><a href="http://math.stackexchange.com/questions/945871/derivative-of-softmax-loss-function" target="_blank" rel="external">Derivative of Softmax loss function</a></li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2016/11/27/Machine Learning/Something-for-Softmax/" data-title="Softmax的二三事 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/"  title="使用点击图来计算Query-Doc的文本相关性">
+ <strong>下一篇：</strong><br/> 
+ <span>使用点击图来计算Query-Doc的文本相关性
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="2016/11/27/Machine Learning/Something-for-Softmax/" data-title="Softmax的二三事" data-url="http://kubicode.me/2016/11/27/Machine Learning/Something-for-Softmax/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax_介绍"><span class="toc-number">1.</span> <span class="toc-text">Softmax 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logistic回顾"><span class="toc-number">2.</span> <span class="toc-text">Logistic回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax_模型"><span class="toc-number">3.</span> <span class="toc-text">Softmax 模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax的损失函数"><span class="toc-number">4.</span> <span class="toc-text">Softmax的损失函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Softmax与Logistic的联系"><span class="toc-number">5.</span> <span class="toc-text">Softmax与Logistic的联系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算分函数"><span class="toc-number">5.1.</span> <span class="toc-text">算分函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#损失函数"><span class="toc-number">5.2.</span> <span class="toc-text">损失函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"kubiCode"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

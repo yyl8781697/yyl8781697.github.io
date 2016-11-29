@@ -95,6 +95,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/11/27/Machine Learning/Something-for-Softmax/" title="Softmax的二三事" itemprop="url">Softmax的二三事</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-27T08:24:28.000Z" itemprop="datePublished"> 发表于 2016-11-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Softmax_介绍">Softmax 介绍</h2><p>多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(<code>MNIST手写体识别</code>)，对于多分类任务常用的机器学习方法有:</p>
+<ol>
+<li>借助<code>二分类</code>，使用<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-All">One vs All</a>或者<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-One">One vs One</a>来完成多分类</li>
+<li>使用<a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#朴素贝叶斯">朴素贝叶斯</a>来完成多分类</li>
+<li>决策树类模型~</li>
+<li>。。。</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/11/27/Machine Learning/Something-for-Softmax/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/11/27/Machine Learning/Something-for-Softmax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/11/27/Machine Learning/Something-for-Softmax/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/" title="使用点击图来计算Query-Doc的文本相关性" itemprop="url">使用点击图来计算Query-Doc的文本相关性</a>
   </h1>
   <p class="article-author">By
@@ -724,86 +794,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/18/Machine Learning/AdaBoost-Study-Summary/" title="AdaBoost学习总结" itemprop="url">AdaBoost学习总结</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-18T12:30:55.000Z" itemprop="datePublished"> 发表于 2016-04-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
-</blockquote>
-<h2 id="简介">简介</h2><p>痛点:大部分强分类器(<code>LR</code>，<code>svm</code>)分类效果还不错，但是可能会遇到过拟合问题，并且训练相对复杂，耗时~<br>另外大部分弱分类器(<code>阈值分类器</code>,<code>单桩决策树(decision stump)</code>等)，他们分类的效果差，可能是极差，只会出现欠拟合，但是他们训练预测快，很快~</p>
-<blockquote>
-<p><code>天下武功，唯快不破</code>，<code>做减法不易，但是做加法就相对简单了</code>^_^ 这就是<code>提升方法</code>.</p>
-</blockquote>
-<p><code>提升方法</code>需要解决的两个问题:</p>
-<ol>
-<li>在每一轮训练时如何改变数据的权值或概率分布?</li>
-<li>如何将弱分类器组合成一个强分类器?</li>
-</ol>
-<p><code>AdaBoost</code>对此进行了很好的解决:</p>
-<ol>
-<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
-<li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/18/Machine Learning/AdaBoost-Study-Summary/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/18/Machine Learning/AdaBoost-Study-Summary/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/18/Machine Learning/AdaBoost-Study-Summary/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -878,7 +868,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>25</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
 		  
 		
 		  
@@ -919,7 +909,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
 			
 		
 			
