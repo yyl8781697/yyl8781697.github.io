@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2016/12/12/Machine%20Learning/Maximum-Entropy-Model/</loc>
+    <lastmod>2016-12-21T16:14:24.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2016/11/27/Machine%20Learning/Something-for-Softmax/</loc>
     <lastmod>2016-11-29T13:28:19.000Z</lastmod>
   </url>

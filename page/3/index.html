@@ -95,6 +95,78 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" title="在信息检索中Term之间的Proximity计算研究" itemprop="url">在信息检索中Term之间的Proximity计算研究</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-02-23T12:58:43.000Z" itemprop="datePublished"> 发表于 2016-02-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
+<ol>
+<li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
+<li>将这些<code>Term</code>灌入倒排索引中</li>
+<li>用户查询</li>
+<li>根据倒排召回命中<code>Term</code>的文档</li>
+<li>将文档根据各个<code>Term</code>算分排序</li>
+</ol>
+<p>其实可以发现这里查的<code>Term</code> 都是<code>bag-of-words</code>的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了：<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/02/16/Search Engine/BM25-Fails-When-The-Docments-Are-Very-Long/" title="针对BM25遇到长文档时失效情况的一种高效解决方案" itemprop="url">针对BM25遇到长文档时失效情况的一种高效解决方案</a>
   </h1>
   <p class="article-author">By
@@ -719,79 +791,6 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/11/04/Linux/Shell-Command-List/" title="来来来，学习Shell的命令" itemprop="url">来来来，学习Shell的命令</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-11-04T14:34:28.000Z" itemprop="datePublished"> 发表于 2015-11-04</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>Shell脚本是非常强的大一个脚本语言，但是不用会手生，所以在此记录Shell脚本的相应关键点，也做查字典用^_^</p>
-</blockquote>
-<h2 id="变量">变量</h2><h3 id="变量定义">变量定义</h3><p>先来简单的看一下变量定义的规则</p>
-<ol>
-<li>在<code>Shell</code>中，使用变量之前不需要事先声明，只是通过使用它们来创建它们；</li>
-<li>在默认情况下，所有变量都被看做是字符串，并以字符串来存储；</li>
-<li><code>Shell</code>变量是区分大小写的；</li>
-<li>在赋值变量的时候等号两端不能有空格-_-</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/11/04/Linux/Shell-Command-List/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/11/04/Linux/Shell-Command-List/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/04/Linux/Shell-Command-List/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -866,7 +865,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -907,7 +906,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>30</sup></a></li>
 			
 		
 			

@@ -95,6 +95,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/12/12/Machine Learning/Maximum-Entropy-Model/" title="最大熵模型" itemprop="url">最大熵模型</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-12-12T01:39:30.000Z" itemprop="datePublished"> 发表于 2016-12-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="最大熵原理">最大熵原理</h2><p><code>熵</code>：其物理意义是体系混乱程度的衡量，在热力学中<code>熵</code>越大表示物质越混乱，但同时也为越稳定~<br>现假设离线随机变量$X$的概率分布为$P(X)$,则其熵为定义为:<br>$$H(P)= -\sum_x P(x) \text{log} P(x)$$</p>
+<p>当$X$为均匀分布时，熵值最大:<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/12/12/Machine Learning/Maximum-Entropy-Model/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/12/12/Machine Learning/Maximum-Entropy-Model/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/12/Machine Learning/Maximum-Entropy-Model/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/11/27/Machine Learning/Something-for-Softmax/" title="Softmax的二三事" itemprop="url">Softmax的二三事</a>
   </h1>
   <p class="article-author">By
@@ -719,81 +784,6 @@ Python <span class="number">2.6</span>.<span class="number">5</span>
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/" title="解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误" itemprop="url">解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-22T01:33:55.000Z" itemprop="datePublished"> 发表于 2016-04-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>今天在尝试使用scikit-learn的<code>AdaBoost</code>模型时一直报错，</p>
-<pre><code>Traceback (most recent call last):
-File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/__init__.py"</span>, line <span class="number">57</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.base</span> import clone
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/base.py"</span>, line <span class="number">11</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.utils</span><span class="class">.fixes</span> import signature
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/utils/__init__.py"</span>, line <span class="number">10</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.murmurhash</span> import murmurhash3_32
-File <span class="string">"numpy.pxd"</span>, line <span class="number">155</span>, <span class="keyword">in</span> init sklearn<span class="class">.utils</span><span class="class">.murmurhash</span> (sklearn/utils/murmurhash<span class="class">.c</span>:<span class="number">5029</span>)
-ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recompiling
-</code></pre><p>以为是<code>numpy</code>包的问题:卸载重装之后还是照样有问题-_-<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Python/">Python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -868,7 +858,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>26</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -909,7 +899,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>30</sup></a></li>
 			
 		
 			

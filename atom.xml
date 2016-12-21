@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2016-11-29T13:28:19.000Z</updated>
+  <updated>2016-12-21T16:14:24.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,113 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[最大熵模型]]></title>
+    <link href="http://kubicode.me/2016/12/12/Machine%20Learning/Maximum-Entropy-Model/"/>
+    <id>http://kubicode.me/2016/12/12/Machine Learning/Maximum-Entropy-Model/</id>
+    <published>2016-12-12T01:39:30.000Z</published>
+    <updated>2016-12-21T16:14:24.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="最大熵原理">最大熵原理</h2><p><code>熵</code>：其物理意义是体系混乱程度的衡量，在热力学中<code>熵</code>越大表示物质越混乱，但同时也为越稳定~<br>现假设离线随机变量$X$的概率分布为$P(X)$,则其熵为定义为:<br>$$H(P)= -\sum_x P(x) \text{log} P(x)$$</p>
+<p>当$X$为均匀分布时，熵值最大:<br><a id="more"></a></p>
+<center><img src="/img/Maximum-Entropy-Model/binary_ent.png" width="400px"></center>
+
+<blockquote>
+<p>上图是两个类别的示例，可以看到这两个类别的<code>概率一样</code>时其熵值最大</p>
+</blockquote>
+<p>在机器学习领域，我们通常以最小化风险为目标，其实就是将熵进行最大化.<br>最大熵模型亦是如此，直观的说，<code>最大熵模型就是在满足现有的约束条件之下，将那部分不确定的都设为等可能（熵最大）</code>，<br>下面看一个简单的例子:<br>假设现在有一个随机变量$X$可能取值为$\{A,B,C\}$,现在需要来估计各个值的概率:$P(A)$,$P(B)$,$P(C)$</p>
+<p>其实这些概率值肯定会满足如下条件:<br>$$P(A)+P(B)+P(C)=1$$<br>但是满足这个约束条件的概率分布有无限多个，如果没有其他信息的条件下，则取值风险最小的方法是:<br>$$P(A)=P(B)=P(C)=\frac{1}{3}$$<br>现告诉你取$P(A)$的概率为$\frac{1}{2}$,则根据熵最大的原理其他两个概率取值将会为<br>$$P(B) = P(C) = \frac{1}{4}$$<br>也就是$B$和$C$是等概率的，假如接下来还有其他可知的约束条件的话，在满足其他约束条件的情况下继续进行等概率分布.上面的整个划分的过程也就是遵循了<code>最大熵原理</code></p>
+<p>现假如用欧式空间的单纯形来表示随机变量$X$的话，定义单纯形中的任意一点到$x$到达相应顶点对应边的距离为取值概率，并且三边距离之和为1，这两种取值情况:<br>$$P(A)=1,P(B)=P(C)=0 \\<br>P(A)=P(B)=P(C)=\frac{1}{3}$$<br>可以依次使用下面两个图来表示</p>
+<center><img src="/img/Maximum-Entropy-Model/complex1.png" width="400px"></center>
+
+<p>知道了上面单纯形的表示方法之后，根据下图其最大熵原理可以得到如下的刻画:</p>
+<ol>
+<li>不加任何约束的时候，可以用图(a)表示，整个取值空间为单纯形上的任何一点，只需要找到熵最大的情况即可</li>
+<li>当添加约束<code>C1</code>的时候，将需要在满足<code>C1</code>的情况下再寻找熵最大的取值(也就是图(b))</li>
+<li>图(c)表示在图(b)的<code>C1</code>基础上继续增加了<code>C2</code>的约束，此时对两个约束进行了满足之后取值空间将会被固定在<code>C1</code>和$C2$的交点上，只有一个唯一解</li>
+<li>假设图(d)里面在<code>C1</code>的基础了增加了<code>C2</code>，但是此时<code>C1</code>和<code>C2</code>并无交点，在这两者约束下将会无解<center><img src="/img/Maximum-Entropy-Model/complex2.png"></center>
+
+</li>
+</ol>
+<h2 id="最大熵模型介绍">最大熵模型介绍</h2><blockquote>
+<p>最大熵模型其实就是在<code>满足已有约束的条件下求得熵最大的过程</code>,最终会转为一个<code>解约束最优化</code>的问题</p>
+</blockquote>
+<p>现将最大熵原理应用到分类的最大熵模型:<br>假设现有训练数据集<br>$$T=\{(x_1,y_1),(x_2,y_2),….(x_n,y_n)\}$$<br>最大熵模型就是分别根据已有的输入$X$和输出$Y$集合去学习训练数据的条件概率分布$P(y|x)$，应用最大熵原理去学习分类能力最好的模型.<br>根据最大熵原理，是需要在满足约束的情况对已有数据求得熵最大，那在最大熵分类模型里面的<code>约束条件</code>又是啥呢？</p>
+<p>对于给定的训练数据集，我们可以确定联合分布$P(X,Y)$的<code>经验分布</code>$\tilde{P}(X,Y)$以及边缘分布$P(X)$的<code>经验分布</code>$\tilde{P}(X)$，即:<br>$$\tilde{P}(X=x,Y=y)=\frac{count(X=x,Y=y)}{N} \\ \tilde{P}(X=x) = \frac{count(X=x)}{N}$$</p>
+<blockquote>
+<p>其中$count(\cdot)$表示满足条件在样本中的计数，$N$表示总的训练样本容量</p>
+</blockquote>
+<p>现在引入<code>特征函数</code>$f(x,y)$，它是描述输入$x$与输出$y$之间满足的某一事实，为了方便起见，我们将$f(x,y)$定义为二值函数:<br>$$ f(x,y)=\left\{<br>\begin{aligned}<br>1 &amp; \quad \text{x,y满足某一事实} \\<br>0 &amp; \quad \text{否则} \\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>上面的特征函数比较抽象，下面借用别人的栗子来说明一下:<br>假设我们需要来判断<code>打</code>字是量词还是动词，目前有下面的训练数据集:<br>$$<br>(x_1,y_1) = (\text{一打火柴},\text{量词}) \\<br>(x_2,y_2) = (\text{三打啤酒},\text{量词}) \\<br>(x_3,y_3) = (\text{五打袋子},\text{量词}) \\<br>(x_4,y_4) = (\text{打电话},\text{动词}) \\<br>(x_5,y_5) = (\text{打篮球},\text{动词})<br>$$<br>通过观察我们可以发现<code>打</code>前面位<code>数字</code>时，<code>打</code>为<code>量词</code>，如果<code>打</code>后面跟着的是<code>名词</code>,则打为<code>动词</code>，为基于刚刚观察的两个实时我们用特征函数来表示则为:<br>$$ f_1(x,y)=\left\{<br>\begin{aligned}<br>1 &amp; \quad \text{“打”的前面为数字} \\<br>0 &amp; \quad \text{否则} \\<br>\end{aligned}<br>\right.$$<br>$$ f_2(x,y)=\left\{<br>\begin{aligned}<br>1 &amp; \quad \text{“打”的后面为名词} \\<br>0 &amp; \quad \text{否则} \\<br>\end{aligned}<br>\right.$$<br>有了特征函数之后，我们将现有的数据代入这两个特征函数即有:<br>$$f_1(x_1,y_1) = f_1(x_2,y_2) = f_1(x_3,y_3) = 1,f_1(x_4,y_4) = f_1(x_5,y_5) = 0 \\<br>f_2(x_1,y_1) = f_2(x_2,y_2) = f_2(x_3,y_3) = 0,f_2(x_4,y_4) = f_2(x_5,y_5) = 1<br>$$</p>
+</blockquote>
+<p>对于任意的特征函数$f(x,y)$,<br>现记$E_{\tilde{P}}(f)$表示特征函数$f$在训练数据集$T$上关于$\tilde{P}(x,y)$的数学期望，有:<br>$$E_{\tilde{P}}(f) = \sum_{x,y} \tilde{P}(x,y) f(x,y)$$<br>另记$E_{P}(f)$表示特征函数$f$在训练数据集$T$上关于$P(x,y)$的数学期望，有:<br>$$E_{P}(f) = \sum_{x,y} P(x,y) f(x,y)$$<br>但是$P(x,y)$是未知的，而我们的目标是为了计算$P(y|x)$，根据<code>Bayes</code>我们可以做如下转换<br>$$P(x,y) = P(y|x) \cdot p(x)$$<br>虽说$p(x)$仍为未知，但是我们此时可以使用$\tilde{P}(x)$进行近似,也就是最终有:<br>$$E_{P}(f) = \sum_{x,y} P(y|x) \tilde{P}(x) f(x,y)$$</p>
+<p>我们希望上述两个期望值是一值的（应该也是符合既定事实的吧?），这样就会有:<br>$$E_{\tilde{P}}(f) = E_{P}(f)$$<br>或者<br>$$ \sum_{x,y} \tilde{P}(x,y) f(x,y) = \sum_{x,y} P(y|x) \tilde{P}(x) f(x,y)$$</p>
+<p>上述式子就可以作为模型的<code>约束条件</code>，假如有$n$个特征函数，则就会有$n$个约束条件(实际中一般特征的维度就是约束条件的个数)<br>用$C$来表示满足约束的模型集合:<br>$$C=\{P|E_{\tilde{P}}(f) = E_{P}(f),I=1,2,3..n\}$$<br>满足约束条件同时使用$P(y|x)$的熵最大的模型即为最大熵模型~</p>
+<p>到了这里我们还差一个熵的定义，我们的目标是为了获取条件概率的分布，因为也使用了相应的<code>条件熵</code><br>$$H(P)= - \sum_{x,y}  \tilde{P}(x) P(y|x) log P(y|x)$$</p>
+<blockquote>
+<p>向上面一样,$P(x)$用$\tilde{P}(x)$进行了近似</p>
+</blockquote>
+<p>这样我们就可以给出最大熵模型的完成公式描述了:<br>$$<br>\begin{align}<br>\underset{P \in C}{max} &amp;\quad H(P) = - \sum_{x,y}  \tilde{P}(x) P(y|x) \text{log} P(y|x) \\<br>st. &amp;\quad E_{P}(f) = E_{\tilde{P}}(f),I=1,2,3..n \\<br>&amp;\quad \sum_y P(y|x)=1<br>\end{align}<br>$$</p>
+<h2 id="最大熵模型学习">最大熵模型学习</h2><p>最大熵模型的学习就是求解最大熵的过程，按照优化的习惯，我们一般会将<code>最大化</code>问题转为<code>最小化</code>再进行优化:<br>$$<br>\begin{align}<br>\underset{P \in C}{min} &amp;\quad -H(P) =  \sum_{x,y}  \tilde{P}(x) P(y|x) \text{log} P(y|x) \\<br>st. &amp;\quad  E_{\tilde{P}}(f)- E_{P}(f) = 0,I=1,2,3..n \\<br>&amp;\quad 1-\sum_y P(y|x)=0<br>\end{align}<br>$$</p>
+<p>接下来我们求解的思路是:</p>
+<ol>
+<li>接下来的求解方式是利用拉格朗日乘子将带约束的最优化问题转为等价无约束优化，它是一个<code>极小极大问题</code></li>
+<li>然后利用对偶的等价性，将上述<code>极小极大问题</code>转为对偶的<code>极大极小问题</code></li>
+</ol>
+<h3 id="原始问题与对偶问题">原始问题与对偶问题</h3><p>首先我们引入拉格朗日乘子$w_0,w_1,w_2….w_n$,定义拉格朗日函数为$L(P,W)$<br>$$<br>\begin{align}<br>L(P,W) &amp;= -H(P) + w_0\left(1-\sum_y P(y|x) \right) + \sum_{i=1}^n w_i\left( E_{\tilde{P}}(f)- E_{P}(f) \right) \\<br> &amp;= \sum_{x,y}  \tilde{P}(x) P(y|x) \text{log} P(y|x) + w_0\left(1-\sum_y P(y|x) \right)    \\<br>&amp;\quad + \sum_{i=1}^n w_i\left( \sum_{x,y} \tilde{P}(x,y) f(x,y)- \sum_{x,y} P(y|x) \tilde{P}(x) f(x,y) \right)<br>\end{align}<br>$$</p>
+<p>则最优化的原始问题为:<br>$$\underset{P \in C}{\text{min}}  \underset{W}{\text{max}} L(P,W)$$<br>则转为等价的对偶问题为:<br>$$ \underset{W}{\text{max}} \underset{P \in C}{\text{min}} L(P,W)$$</p>
+<p>其中$L(P,W)$是关于$P$的凸函数,那我们首先求对偶的极小化部分$ \underset{P \in C}{\text{min}} L(P,W)$,它是关于$W$的函数，将其记为:<br>$$\varphi(w) =  \underset{P \in C}{\text{min}} L(P,W) = L(P_w,W)$$<br>其中<br>$$P_w = \underset{P \in C}{\text{argmin}} L(P,W) = P_w(y|x)$$</p>
+<blockquote>
+<p>关于这里，我认为我们需要求解的是$P(y|x)$，同时可以将$L(P,W)$看为关于$P(y|x)$的函数,所以为了上面的解，需要下面的偏导~</p>
+</blockquote>
+<h3 id="指数形式求解">指数形式求解</h3><p>先对$L(P,W)$求$P(y|x)$的偏导,<br>$$<br>\begin{align}<br>\frac{\delta L(P,W)}{\delta P(y|x)} &amp;=  \left( \sum_{x,y}  \tilde{P}(x)  \text{log} P(y|x) + \sum_{x,y}  \tilde{P}(x)  \right) - \sum_yw_0 -\sum_{i=1}^n w_i \tilde{P}(x) f_i(x,y) \\<br> &amp;=  \sum_{x,y} \tilde{P}(x) \left( \text{log} P(y|x) + 1-w_0- \sum_{i=1}^n w_i  f_i(x,y) \right)<br> \end{align}<br>$$</p>
+<p>这里对于$\tilde{P}(x)&gt;0$，在求最小值是其偏导数为0，因此会有:<br>$$P(y|x) = e^{\sum_{i=1}^n w_i  f_i(x,y)+w_0-1} = \frac{e^{\sum_{i=1}^n w_i  f_i(x,y)}}{e^{1-w_0}}$$</p>
+<p>因为有$\sum_yP(y|x)=1$,则可以有:<br>$$e^{1-w_0} = \sum_y e^{\sum_{i=1}^n w_i  f_i(x,y)} $$<br>最终我们可以将$P_w(y|x)$表示为:<br>$$P_w(y|x) = \frac{1}{Z_w(x)} e^{\sum_{i=1}^n w_i  f_i(x,y)} $$<br>其中<br>$$Z_w(x) = \sum_y e^{\sum_{i=1}^n w_i  f_i(x,y)}$$</p>
+<blockquote>
+<p>$Z_w(x)$被称为规范化因子，上面样式的算分与逻辑回归非常相似，所以又称为<code>对数线性模型</code>，同时又经过了规范化因子之后可以发现其最后的算分与<code>Softmax</code>极其相似</p>
+</blockquote>
+<p>这里上面两个式子就是表示$P_w = P_w(y|x)$的最大熵模型，其中向量$W$即为模型的参数<br>现在求解了内部的极小化之后，还需要求解外部的极大化<br>$$\underset{w}{\text{max}} \varphi(W) $$<br>其解标记为$W^{*}$<br>$$W^{*} = \underset{w}{\text{max}} \varphi(W) $$<br>模型参数$W^{*}$就是对对偶的极大化，得到的$W^{*}$可以表示为$W^{*} \in C$，最终$P_{w^{*}} = P_{w^{*}}(y|x)$即为模型的最终解。也就是最大熵模型需要解对偶函数 $\varphi(W)$的极大化~</p>
+<h3 id="最大似然估计">最大似然估计</h3><p>在求解上面极大化之前，我们先来看下最大熵模型的极大似然法:<br>已知其经验概率分布$\tilde{P}(X,Y)$和其条件概率分布$P(Y|X)$，可以得到其对数似然函数为:<br>$$<br>\begin{align}<br>LL_{\tilde{P}}(P_w) &amp;=  \text{log} \prod_{x,y} P(y|x)^{\tilde{P}(x,y)} \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y) \text{log} P(y|x) \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y) \text{log} \frac{e^{\sum_{i=1}^n w_i  f_i(x,y)}}{Z_w(x)}  \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y) \text{log} e^{\sum_{i=1}^n w_i  f_i(x,y)} - \sum_{x,y} \tilde{P}(x,y) \text{log} Z_w(x) \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y) \sum_{i=1}^n w_i  f_i(x,y) - \sum_{x,y} \tilde{P}(x,y) \text{log} Z_w(x) \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y) \sum_{i=1}^n w_i  f_i(x,y) - \sum_{x,y} \tilde{P}(x) \tilde{P}(y|x) \text{log} Z_w(x) \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y) \sum_{i=1}^n w_i  f_i(x,y) - \sum_x \tilde{P}(x) {\color{Blue}{\sum_y \tilde{P}(y|x)}} \text{log} Z_w(x) \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y) \sum_{i=1}^n w_i  f_i(x,y) - \sum_x \tilde{P}(x) \text{log} Z_w(x) \quad    \text{利用} {\color{Blue} {\sum_y \tilde{P}(y|x)=1}}<br> \end{align}<br>$$</p>
+<p>回头再将$P(y|x)$的解代入到对偶函数$\varphi(W)$中:<br>$$<br>\begin{align}<br>\varphi(w) &amp;=  \sum_{x,y}  \tilde{P}(x) P(y|x) \text{log} P(y|x) + w_0\left(1-\sum_y P(y|x) \right)    \\<br>&amp;\quad + \sum_{i=1}^n w_i\left( \sum_{x,y} \tilde{P}(x,y) f(x,y)- \sum_{x,y} P(y|x) \tilde{P}(x) f(x,y) \right) \\<br>&amp;= \sum_{x,y}  \tilde{P}(x) P(y|x) \left(\sum_{i=1}^n w_i f_i(x,y) - \text{log}Z_w(x) \right) \\<br>&amp;\quad +  \sum_{i=1}^n w_i\left( \sum_{x,y} \tilde{P}(x,y) f(x,y)- \sum_{x,y} P(y|x) \tilde{P}(x) f(x,y) \right) \\<br>&amp;= {\color{Red}{\sum_{x,y}  \tilde{P}(x) P(y|x) \sum_{i=1}^n w_i f_i(x,y)}}  - \sum_{x,y}  \tilde{P}(x) P(y|x)\text{log}Z_w(x) \\<br>&amp;\quad +  \sum_{i=1}^n w_i \sum_{x,y} \tilde{P}(x,y) f(x,y)- {\color{Red}{\sum_{i=1}^n w_i \sum_{x,y} P(y|x) \tilde{P}(x) f(x,y)}}  \\<br>&amp;=  \sum_{i=1}^n w_i \sum_{x,y} \tilde{P}(x,y) f(x,y) - \sum_x \tilde{P}(x) {\color{Blue}{\sum_y P(y|x)}} \text{log} Z_w(x) \\<br>&amp;= \sum_{x,y} \tilde{P}(x,y)\sum_{i=1}^n w_i f(x,y) - \sum_x \tilde{P}(x)\text{log} Z_w(x)<br> \end{align}<br>$$</p>
+<blockquote>
+<p>上面第一步的换算是借助了$\text{log} P(y|x) = \sum_{i=1}^n w_i f_i(x,y) - \text{log}Z_w(x)$，同时还有$\sum_y P(y|x)=1$</p>
+</blockquote>
+<p>现在再来对比$\varphi(w)$与$LL_{\tilde{P}}(P_w)$最终的表达式，可以惊奇的发现:<br>$$\varphi(w) = LL_{\tilde{P}}(P_w)$$<br>于是就证明了对偶函数的极大化等于模型极大似然估计这一事实，这样模型学习就可以在给定训练数据条件下进行极大化似然估计~</p>
+<h2 id="总结">总结</h2><blockquote>
+<p>关于具体的解就不再详说了，既然是可以用最大似然法解，则其常用的解法有<code>梯度下降法</code>、<code>牛顿法</code>或者还有专门的<code>GIS</code>法等，参考[2]</p>
+</blockquote>
+<p>关于最大熵模型:</p>
+<ol>
+<li>利用最大熵原理<code>熵越大事物越混乱，其分类风险越小</code></li>
+<li>为了防止其解空间太大，利用<code>特征函数</code>建立起约束</li>
+<li>在求解模型时使用对偶的方式进行求解，先解最小化的负熵，再求极大化的对偶函数</li>
+<li>解最小化负熵时可以得到最大熵模型最后的形式是指数形式，类似逻辑回归</li>
+<li>又在求极大化对偶函数时，可以发现其对偶函数与模型的极大似然法形式一致</li>
+<li>因此最终可以按极大似然法的方式去解决模型</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://www.cnblogs.com/ooon/p/5677098.html" target="_blank" rel="external">最大熵模型 Maximum Entropy Model</a></li>
+<li>《统计学习方法》.李航 第6章</li>
+<li><a href="http://blog.csdn.net/itplus/article/details/26550273" target="_blank" rel="external">最大熵学习笔记</a></li>
+<li>1996-A Maximum Entropy Approach</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="最大熵原理">最大熵原理</h2><p><code>熵</code>：其物理意义是体系混乱程度的衡量，在热力学中<code>熵</code>越大表示物质越混乱，但同时也为越稳定~<br>现假设离线随机变量$X$的概率分布为$P(X)$,则其熵为定义为:<br>$$H(P)= -\sum_x P(x) \text{log} P(x)$$</p>
+<p>当$X$为均匀分布时，熵值最大:<br>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Softmax的二三事]]></title>
@@ -1556,96 +1663,6 @@ yans-MacBook-<span class="string">Pro:</span>node_modules yanyl$ grep -r <span c
       <category term="Hexo" scheme="http://kubicode.me/tags/Hexo/"/>
     
       <category term="Hexo" scheme="http://kubicode.me/categories/Hexo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[在信息检索中Term之间的Proximity计算研究]]></title>
-    <link href="http://kubicode.me/2016/02/23/Search%20Engine/Proximity-Measures-In-Information-Retrieval/"/>
-    <id>http://kubicode.me/2016/02/23/Search Engine/Proximity-Measures-In-Information-Retrieval/</id>
-    <published>2016-02-23T12:58:43.000Z</published>
-    <updated>2016-03-23T07:28:54.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
-<ol>
-<li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
-<li>将这些<code>Term</code>灌入倒排索引中</li>
-<li>用户查询</li>
-<li>根据倒排召回命中<code>Term</code>的文档</li>
-<li>将文档根据各个<code>Term</code>算分排序</li>
-</ol>
-<p>其实可以发现这里查的<code>Term</code> 都是<code>bag-of-words</code>的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了：<br><a id="more"></a></p>
-<pre><code>如果搜索“红色连衣裙”,则可能会出现下面的文档:
-<span class="number">1.</span>xxxx红色连衣裙xxxx
-<span class="number">2.</span>红色高跟鞋配连衣裙
-很明显文档<span class="number">1</span>的相关性比<span class="number">2</span>要高，但是此时如果仅仅是bag-<span class="keyword">of</span>-<span class="property">words</span>模型就很难保证<span class="number">1</span>的相关性分要比<span class="number">2</span>高
-</code></pre><p>所以一般的搜索引擎还有一个叫做<code>Proximity Measures</code>的特征计算，可以理解为计算文档里面出现的<code>query Term</code>的相近程度，为了保证可行性，降低计算的复杂度，一般也只会计算两个<code>Term</code>之间的<code>Proximity</code>分</p>
-<h2 id="使用距离度量">使用距离度量</h2><p>这种方式主要是计算<code>Term</code>之间距离作为<code>Proximity</code>得分，主要分两大类:</p>
-<ol>
-<li><code>Span-based</code>:使用时将全部的<code>query term</code>丢进去一起算距离</li>
-<li><code>Distance aggregation</code>:先算两两之间的距离，再聚集起来</li>
-</ol>
-<p>假设现在有文档<code>D = t1, t2, t1, t3, t5, t4, t2, t3, t4</code>，基于<code>D</code>集合来讲讲各个距离的计算方式<br><strong>Span-based</strong></p>
-<ul>
-<li><code>Span</code>:在文档中可以覆盖所有term的最小距离称为<code>Span</code>，<strong>需要包含所有重复的term</strong><br>  比如$Q=t1,t2$这个查询的$Span=7$</li>
-<li><code>MinCover</code>:在文档中可以覆盖所有term的最小距离称为<code>MinCover</code>,<strong>每个term至少被包含一次</strong><br>  比如这里的$Q=t1,t2$查询的$MinCover=1$</li>
-</ul>
-<p><strong>Distance aggregation</strong></p>
-<blockquote>
-<p>这种方式计算的最近单元是计算一个term pair的最小距离，使用$Dis(t_i,t_j;D)$来表示</p>
-</blockquote>
-<ul>
-<li><code>MinDist(Minimum pair distance)</code>:计算所有pair的最小距离的最小值,<br>  <center>$MinDist=min_{q_1,q_2 \in Q \cap D,q_1 \neq q_2} Dis(q_1,q_2;D)$</center><br>比如$Q={t1,t2,t3}$，则$MinDist=min(1,2,3)=1$</li>
-<li><code>AveDist(Average pair distance)</code>:计算所有pair的最小距离的平均值，<br>  <center>$AveDist=\frac{2}{n \cdot (n+1)}min_{q_1,q_2 \in Q \cap D,q_1 \neq q_2} Dis(q_1,q_2;D)$</center><br>比如$Q={t1,t2,t3}$，则$AveDist=(1+2+3)/3=2$</li>
-<li><code>MaxDist(Maximum pair distance)</code>:与<code>MinDist</code>正好相反，它是求最大值<br>  <center>$MinDist=max_{q_1,q_2 \in Q \cap D,q_1 \neq q_2} Dis(q_1,q_2;D)$</center><br>  比如$Q={t1,t2,t3}$，则$MaxDist=max(1,2,3)=3$</li>
-</ul>
-<p>文献中实验表明:</p>
-<ol>
-<li><code>Span-based</code>为考虑到各个文档长度，以各自文档的长度最为归一化因子进行归一化之后效果要好一些</li>
-<li><code>Distance aggregation</code>系列一般比<code>Span-based</code>的效果要好</li>
-<li><code>Distance aggregation</code>中<code>MinDist</code>的效果最好</li>
-</ol>
-<p>但是在一般使用过程中不会直接将距离作为<code>Proximity</code>的值，现将$\delta(Q,D)$作为查询词在各个文档的中的距离度量，$\delta(Q,D)$最小表明查询词与文档越相关，而在使用过程中一般以这个相关性越大最好，这将这个相关性记为:$\pi(Q,D)$，则使用下面的公式来转换:<br>$$\pi(Q,D)=log(\alpha + exp(- \delta(Q,D)))$$</p>
-<blockquote>
-<p>$\alpha$可以作为调节因子</p>
-</blockquote>
-<p>使用这种方式的度量最大的优点就是方便，但是单独用起来效果可能不怎么理解，并且波动性较大.~</p>
-<h2 id="引入BM25模型">引入BM25模型</h2><p>主要对<code>bi-term</code>进行<code>BM25</code>得分的计算，这里<code>BM25</code>的计算方式可以按传统的进行，<a href="http://kubicode.me/2016/01/26/Search%20Engine/Study-BM25-For-Query-Document-Relevance/" target="_blank" rel="external">参考这个</a> </p>
-<p>关于<code>bi-term</code>的构建主要有两种方式:</p>
-<ol>
-<li>直接使用<code>B-Gram</code>:认为相邻两个<code>term</code>是有依赖的，所以可以直接使用<code>B-Gram</code>的方式来构建</li>
-<li>使用滑窗的方式:认为一个窗口里面的两两<code>term</code>有依赖，因此可以对他们进行两两组合，这个窗口大小一般会小于8</li>
-</ol>
-<blockquote>
-<p>其实更好的应该是<code>依存</code>关系来构建这个<code>bi-term</code>，不过上述的几种方式构建出来的<code>pair</code>都会很大，所以还需要其他一些方式来剪枝</p>
-</blockquote>
-<h1 id="持续研究中~~~">持续研究中~~~</h1><h2 id="参考">参考</h2><ol>
-<li>2007-An Exploration of Proximity Measures in Information Retrieval</li>
-<li>2005-A Markov random field model for term dependencies</li>
-<li>2010-How good is a span of terms?: exploiting proximity to improve web retrieval</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="为啥要做Proximity计算">为啥要做Proximity计算</h2><p>先来看下信息检索/搜索引擎 的一般架构流程:</p>
-<ol>
-<li>对<code>Doc</code>进行分词,这些分词也叫做<code>Term</code>，然后离线做各种计算</li>
-<li>将这些<code>Term</code>灌入倒排索引中</li>
-<li>用户查询</li>
-<li>根据倒排召回命中<code>Term</code>的文档</li>
-<li>将文档根据各个<code>Term</code>算分排序</li>
-</ol>
-<p>其实可以发现这里查的<code>Term</code> 都是<code>bag-of-words</code>的形式，并且第五步的算法也一般是在线的，所以基本不会做全文扫描之类的事情，那么这样的话问题就来了：<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/categories/Search-Engine/"/>
     
   </entry>
   
