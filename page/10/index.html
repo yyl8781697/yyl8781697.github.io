@@ -95,6 +95,79 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/" title="使用Spark求解大图的连通组件（百度面试题）" itemprop="url">使用Spark求解大图的连通组件（百度面试题）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-17T15:45:58.000Z" itemprop="datePublished"> 发表于 2015-06-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><p>在百度网站上有很多作弊者，现在百度已经使用某种技术将他们标记起来，比如：<br>cookieA和cookieB的标签都为1，他们是代表同一个用户，而cookieB可能又有一个标签2与cookieC相同，此时cookieB和cookieC也是同一个用户，这样其实cookieA,cookieB,cookieC就是一个用户而已，但是百度的数据量很大，现需要找出这批大量数据中的所有作弊者，请使用分布式的方法来求解此问题（可以使用<code>Hadoop</code>,<code>Spark</code>或者其他的任何一种平台）</p>
+<blockquote>
+<p>当时面试官也说了这个其实就是找连通子图问题</p>
+</blockquote>
+<h2 id="采样+多源最短路径（失败）">采样+多源最短路径（失败）</h2><p>我最初以为这个图里每个连图子图规模较大，但是个数却不是很多，所以一下子想到的就是：</p>
+<ol>
+<li>先对大图采样</li>
+<li>以采样顶点为起始顶点，利用<code>Spark</code>的<code>Pregel</code>模块来跑多源最短路径</li>
+<li>每个源跑完之后标记形成的图就是连通子图</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/06/17/Spark/Connect-Component-From-Baidu-Interview-Using-Spark/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/15/Effective Java/Common-Program-Desgin/" title="《Effective Java》第八章：通用程序设计" itemprop="url">《Effective Java》第八章：通用程序设计</a>
   </h1>
   <p class="article-author">By
@@ -733,83 +806,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/30/Effective Java/Enum-And-Annotation/" title="《Effective Java》第六章：枚举和注解" itemprop="url">《Effective Java》第六章：枚举和注解</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-30T15:57:33.000Z" itemprop="datePublished"> 发表于 2015-05-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="第30条：用枚举代替int常量">第30条：用枚举代替int常量</h2><p>在编程语言中还没有引入枚举类型之前，表示枚举类型的常用模式就是声明一组具名的<code>int</code>常量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_FUJI			=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_PIPPIN		=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> APPLE_GRANNY_SMITH	=<span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
-<p>但是它又诸多的缺点：</p>
-<ul>
-<li>在类型安全性和使用方便性方面没有任何帮助。</li>
-<li>如果关联的<code>int</code>放生了变化，客户端必须得重新编译。</li>
-<li>打印调试的时候只能打印数字</li>
-</ul>
-<p>上述<code>int</code>常量如何使用枚举类实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> APPLE&#123;FUJI,PIPPIN,GRANNY_SMITH&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>除了编码简单之外，枚举的特点还有：</p>
-<ul>
-<li>枚举是类型安全的（所有可以作为单例的泛型化来使用）。</li>
-<li>可以增加或者重新排列枚举类型中的常量，而无需重新编译它的客户端代码。</li>
-<li>可以通过<code>toString</code>方法来打印可视的字符串。</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/30/Effective Java/Enum-And-Annotation/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/30/Effective Java/Enum-And-Annotation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/30/Effective Java/Enum-And-Annotation/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/9/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/11/">Next<span></span></a>
@@ -904,7 +900,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>5</sup></a></li>
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
 		  
 		
 		  
@@ -925,7 +921,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>30</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>31</sup></a></li>
 			
 		
 			
@@ -937,7 +933,7 @@
 			
 		
 			
-				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>12</sup></a></li>
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>13</sup></a></li>
 			
 		
 			
@@ -1070,7 +1066,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		
