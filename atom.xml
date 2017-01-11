@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2017-01-09T06:23:31.000Z</updated>
+  <updated>2017-01-11T02:05:46.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://kubicode.me/2017/01/09/Search%20Engine/The-Recorder-for-some-Federated-Search-Papers/"/>
     <id>http://kubicode.me/2017/01/09/Search Engine/The-Recorder-for-some-Federated-Search-Papers/</id>
     <published>2017-01-09T01:58:31.000Z</published>
-    <updated>2017-01-09T06:23:31.000Z</updated>
+    <updated>2017-01-11T02:05:46.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Federated_Search_介绍1">Federated Search 介绍<sup>1</sup></h2><blockquote>
 <p><strong>Federated search</strong> is an information retrieval technology that allows the simultaneous search of multiple searchable resources. —from WikiPedia</p>
 </blockquote>
@@ -44,7 +44,7 @@
 <p><code>CORI</code>该算法包含了<code>Resource Selection</code>和<code>Merge Result</code></p>
 </blockquote>
 <p>在给定$Q$、观察到资源类别$C_i$,每个资源根据$P(Q|C_i)$来进行排序</p>
-<p>$$T=\frac{df}{df+50+150*cw/avg\_{cw}} \\<br>I=\frac{log(|DB|+0.5)/cf}{log(|DB|+1.0)} \\<br>p(r_k)=b+(1+b)*T*I<br>$$</p>
+<p>$$T=\frac{df}{df+50+150*cw/avg\_{cw}} \\<br>I=\frac{log(|DB|+0.5)/cf}{log(|DB|+1.0)} \\<br>p(r_k)=b+(1-b)*T*I<br>$$</p>
 <p>其中:</p>
 <ul>
 <li>$r_k$为$Q$中的第$k$个term</li>
@@ -78,7 +78,7 @@
 <li>需要额外维护一个中心引擎</li>
 <li>中心引擎出的score是同一纬度的算分，也是各个混排引擎的训练目标，但是如果他算分计算不准确，这个训练的结果将会很尴尬</li>
 </ol>
-<h2 id="[MR]REDDE4">[MR]REDDE<sup>4</sup></h2><blockquote>
+<h2 id="[RS]REDDE4">[RS]REDDE<sup>4</sup></h2><blockquote>
 <p>主要是做<code>Resource Selection</code>，但是预先先做了<code>Resource Sampling</code></p>
 </blockquote>
 <h3 id="Sample-Resample">Sample-Resample</h3><p>首先需要使用<code>sample-resample</code>对未知的垂直资源进行一个数据量大小的估计:</p>
@@ -120,6 +120,16 @@
 <h2 id="[RS]Adaptation_of_Offline_Vertical_Selection5">[RS]Adaptation of Offline Vertical Selection<sup>5</sup></h2><p>原本最常用的垂直资源选择是使用<code>one_vs_all</code>的分类分类方法，其中$k$个垂直资源，这样就需要分$k+1$个类别，训练完预测的时候选择类别概率高的来进行展现</p>
 <p>而这篇paper主要是在输入类别概率之后还将用户反馈加入了进来再计算:</p>
 <h3 id="Multiple_Beta_Prior">Multiple Beta Prior</h3><p>$p_q^v$可以用来表示某个Query下对于某个垂直资源类别v的相关概率，并且它是呈现<code>beta</code>分布的:<br>$$p_q^v \text{~} Beta(a_q^v,b_q^v)$$</p>
+<p>其中$\pi_q^v$为离线模型概率，$\mu$为控制因子<br>$$a_q^v=\mu \pi_q^v \quad \quad b_q^v=\mu (1-\pi_q^v)$$</p>
+<p>最后我们可以将相关性的后验写为<br>$$\tilde{p}_q^v = \frac{R_q^v + \mu \pi_q^v}{V_q^v + \mu}$$</p>
+<blockquote>
+<p>$R_q^v$为$q$下展现$v$同时被点击的数量,$\bar{R}_q^v$表示展现了  但是未被点击的数量,$V_q^v$则表示一共展现的数量</p>
+</blockquote>
+<h3 id="Logistic_Normal_Prior">Logistic Normal Prior</h3><p>其先验为<br>$$p_q^v = \frac{exp(W_{tv})}{exp(W_{tv}) + exp(\bar{W}_{tv})}$$</p>
+<blockquote>
+<p>$W$和$\bar{W}$是$t \times k$的随机矩阵，并且服从$W,\bar{W} ~ N_{2tk}(\eta,\sum)$,$\sum$为一个协方差矩阵</p>
+</blockquote>
+<p>则其后验可以转为:<br>$$\tilde{p}_q^v = \frac{\pi_q^v exp(a_q^v)}{\pi_q^v exp(a_q^v) + (1-\pi_q^v) exp(b_q^v)}$$</p>
 <p>最终关于$a_q^v,b_q^v$都是可以被计算出来的:<br>$$a_q^v = R_q^v+ \sum_{v’ \neq v} \frac{\sigma}{V_{q’}^{v’}} \bar{R}_q^{v’}$$<br>$$b_q^v =  \bar{R}_q^{v’}+ \sum_{v’ \neq v} \frac{\sigma}{V_{q’}^{v’}} R_q^v $$<br>其中:</p>
 <ol>
 <li>$R_q^v$表示$q$与$v$相关的对数</li>
@@ -1743,7 +1753,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
     <link href="http://kubicode.me/2016/03/26/Machine%20Learning/Bayesian-Logistic-Regression/"/>
     <id>http://kubicode.me/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/</id>
     <published>2016-03-26T03:30:54.000Z</published>
-    <updated>2016-03-29T16:55:42.000Z</updated>
+    <updated>2017-01-10T06:34:19.000Z</updated>
     <content type="html"><![CDATA[<h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
 <p><code>Logistic Regression</code>（下面简称<code>LR</code>）是一个二分类的机器学习方法，给定一个输入向量$x_i$，输出$P(y_i|x_i)$,其中$y_i \in {0,1}$。</p>
 </blockquote>
@@ -1760,7 +1770,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 <li>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$(大多数情况下，简单用的$N(\mu_k,\sigma)$)</li>
 <li>在给定$Y$下，$X_i$与$X_j$条件独立</li>
 </ol>
-<p>现在让$P(Y|X)$服从<code>GBN</code>假设，通常根据贝叶斯公式可以得到以下:<br>$$P(Y=1|X)=\frac{P(X|Y=1)P(Y=1)}{P(Y=1)P(X|Y=1)+P(Y=0)P(X|Y=0)}$$</p>
+<p>现在让$P(Y|X)$服从<code>GNB</code>假设，通常根据贝叶斯公式可以得到以下:<br>$$P(Y=1|X)=\frac{P(X|Y=1)P(Y=1)}{P(Y=1)P(X|Y=1)+P(Y=0)P(X|Y=0)}$$</p>
 <p>再对这个式子进行进一步处理:</p>
 <p>$$<br>\begin{equation}\begin{split} P(Y=1|X)&amp;=\frac{1}{1+\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}}\quad\quad &amp;(1)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}\right)}&amp;(2)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)}{P(Y=1)}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)}\quad\quad&amp;(3)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{1-\pi}{\pi}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)} &amp;(4)<br>\end{split}\end{equation}<br>$$</p>
 <p>其中:</p>
@@ -1769,7 +1779,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 <li>式子<code>(2)-&gt;(3)</code>首先将<code>ln</code>函数的相乘转为相加，同时由于$X$中的各个$x_i$相互独立，所以原本写成连乘的式子又可以写成相加求和</li>
 <li>式子<code>(3)-&gt;(4)</code>中$P(Y=1)$的概率是$\pi$，则$P(Y=0)$的概率是$1-\pi$</li>
 </ol>
-<p>在给定假设<code>3</code>情况下，对$\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}$进行进一步展开:<br>$$\begin{equation}\begin{split} \sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)} &amp;=\sum_iln\frac{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i0})^2}{2\sigma_i^2})}{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i1})^2}{2\sigma_i^2})}  &amp;(5)\\<br>&amp;= \sum_iln  exp\left(\frac{(x_i-\mu_{i1})^2-(x_i-\mu_{i0})^2}{2\sigma_i^2}\right) &amp;(6)\\<br>&amp;= \sum_i \left(\frac{(x_i^2-2x_i\mu_{i1}+\mu_{i1}^2)-(x_i^2-2x_i\mu_{i0}+\mu_{i0}^2)}{2\sigma_i^2}\right) \quad\quad &amp;(7)\\<br>&amp;= \sum_i \left(\frac{2x_i(\mu_{i0}-\mu{i1})+\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(8)\\<br>&amp;= \sum_i \left(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(9)<br>\end{split}\end{equation}$$</p>
+<p>在给定假设<code>3</code>情况下，对$\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}$进行进一步展开:<br>$$\begin{equation}\begin{split} \sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)} &amp;=\sum_iln\frac{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i0})^2}{2\sigma_i^2})}{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i1})^2}{2\sigma_i^2})}  &amp;(5)\\<br>&amp;= \sum_iln  exp\left(\frac{(x_i-\mu_{i1})^2-(x_i-\mu_{i0})^2}{2\sigma_i^2}\right) &amp;(6)\\<br>&amp;= \sum_i \left(\frac{(x_i^2-2x_i\mu_{i1}+\mu_{i1}^2)-(x_i^2-2x_i\mu_{i0}+\mu_{i0}^2)}{2\sigma_i^2}\right) \quad\quad &amp;(7)\\<br>&amp;= \sum_i \left(\frac{2x_i(\mu_{i0}-\mu_{i1})+\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(8)\\<br>&amp;= \sum_i \left(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(9)<br>\end{split}\end{equation}$$</p>
 <ol>
 <li>式子<code>(5)</code>根据假设<code>3</code>而得到，它是服从高斯分布</li>
 <li>式子<code>(5)-&gt;(6)</code>是消除了公共因此，并且将指数上的相除转为了相减</li>

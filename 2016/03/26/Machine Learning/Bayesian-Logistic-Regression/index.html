@@ -138,7 +138,7 @@ Logistic Regression（下面简称LR）是一个二分类的机器学习方法�
 <li>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$(大多数情况下，简单用的$N(\mu_k,\sigma)$)</li>
 <li>在给定$Y$下，$X_i$与$X_j$条件独立</li>
 </ol>
-<p>现在让$P(Y|X)$服从<code>GBN</code>假设，通常根据贝叶斯公式可以得到以下:<br>$$P(Y=1|X)=\frac{P(X|Y=1)P(Y=1)}{P(Y=1)P(X|Y=1)+P(Y=0)P(X|Y=0)}$$</p>
+<p>现在让$P(Y|X)$服从<code>GNB</code>假设，通常根据贝叶斯公式可以得到以下:<br>$$P(Y=1|X)=\frac{P(X|Y=1)P(Y=1)}{P(Y=1)P(X|Y=1)+P(Y=0)P(X|Y=0)}$$</p>
 <p>再对这个式子进行进一步处理:</p>
 <p>$$<br>\begin{equation}\begin{split} P(Y=1|X)&amp;=\frac{1}{1+\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}}\quad\quad &amp;(1)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}\right)}&amp;(2)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)}{P(Y=1)}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)}\quad\quad&amp;(3)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{1-\pi}{\pi}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)} &amp;(4)<br>\end{split}\end{equation}<br>$$</p>
 <p>其中:</p>
@@ -147,7 +147,7 @@ Logistic Regression（下面简称LR）是一个二分类的机器学习方法�
 <li>式子<code>(2)-&gt;(3)</code>首先将<code>ln</code>函数的相乘转为相加，同时由于$X$中的各个$x_i$相互独立，所以原本写成连乘的式子又可以写成相加求和</li>
 <li>式子<code>(3)-&gt;(4)</code>中$P(Y=1)$的概率是$\pi$，则$P(Y=0)$的概率是$1-\pi$</li>
 </ol>
-<p>在给定假设<code>3</code>情况下，对$\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}$进行进一步展开:<br>$$\begin{equation}\begin{split} \sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)} &amp;=\sum_iln\frac{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i0})^2}{2\sigma_i^2})}{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i1})^2}{2\sigma_i^2})}  &amp;(5)\\<br>&amp;= \sum_iln  exp\left(\frac{(x_i-\mu_{i1})^2-(x_i-\mu_{i0})^2}{2\sigma_i^2}\right) &amp;(6)\\<br>&amp;= \sum_i \left(\frac{(x_i^2-2x_i\mu_{i1}+\mu_{i1}^2)-(x_i^2-2x_i\mu_{i0}+\mu_{i0}^2)}{2\sigma_i^2}\right) \quad\quad &amp;(7)\\<br>&amp;= \sum_i \left(\frac{2x_i(\mu_{i0}-\mu{i1})+\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(8)\\<br>&amp;= \sum_i \left(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(9)<br>\end{split}\end{equation}$$</p>
+<p>在给定假设<code>3</code>情况下，对$\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}$进行进一步展开:<br>$$\begin{equation}\begin{split} \sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)} &amp;=\sum_iln\frac{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i0})^2}{2\sigma_i^2})}{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i1})^2}{2\sigma_i^2})}  &amp;(5)\\<br>&amp;= \sum_iln  exp\left(\frac{(x_i-\mu_{i1})^2-(x_i-\mu_{i0})^2}{2\sigma_i^2}\right) &amp;(6)\\<br>&amp;= \sum_i \left(\frac{(x_i^2-2x_i\mu_{i1}+\mu_{i1}^2)-(x_i^2-2x_i\mu_{i0}+\mu_{i0}^2)}{2\sigma_i^2}\right) \quad\quad &amp;(7)\\<br>&amp;= \sum_i \left(\frac{2x_i(\mu_{i0}-\mu_{i1})+\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(8)\\<br>&amp;= \sum_i \left(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(9)<br>\end{split}\end{equation}$$</p>
 <ol>
 <li>式子<code>(5)</code>根据假设<code>3</code>而得到，它是服从高斯分布</li>
 <li>式子<code>(5)-&gt;(6)</code>是消除了公共因此，并且将指数上的相除转为了相减</li>
