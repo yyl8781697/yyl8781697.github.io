@@ -150,7 +150,7 @@ Federated search is an information retrieval technology that allows the simultan
 <p><code>CORI</code>该算法包含了<code>Resource Selection</code>和<code>Merge Result</code></p>
 </blockquote>
 <p>在给定$Q$、观察到资源类别$C_i$,每个资源根据$P(Q|C_i)$来进行排序</p>
-<p>$$T=\frac{df}{df+50+150*cw/avg\_{cw}} \\<br>I=\frac{log(|DB|+0.5)/cf}{log(|DB|+1.0)} \\<br>p(r_k)=b+(1-b)*T*I<br>$$</p>
+<p>$$T=\frac{df}{df+50+150*cw/avg\_{cw}} \\<br>I=\frac{log(|DB|+0.5)/cf}{log(|DB|+1.0)} \\<br>p(r_k|C_i)=b+(1-b)*T*I<br>$$</p>
 <p>其中:</p>
 <ul>
 <li>$r_k$为$Q$中的第$k$个term</li>
@@ -161,7 +161,7 @@ Federated search is an information retrieval technology that allows the simultan
 <li>$avg\_cw$某个$C_i$的平均$cw$</li>
 <li>$b$默认值 一般为0.4</li>
 </ul>
-<p>在合并的时候可以使用类似这种方式进行<code>resultmerge</code>:<br>$$C_i^{*} = \frac{(C_i-C_{min})}{(C_{max}-C_{min})} \\<br>D_i^{*} = \frac{(D_i-C_{min})}{(D_{max}-D_{min})}$$<br>最终归一化的score为(其实这儿就是做了一个映射):<br>$$D^{**} = \frac{D^{*} + 0.4*D^{*}*C_i^{*}}{1.4}$$</p>
+<p>在合并的时候可以使用类似这种方式进行<code>resultmerge</code>:<br>$$C_i^{*} = \frac{(C_i-C_{min})}{(C_{max}-C_{min})} \\<br>D_i^{*} = \frac{(D_i-D_{min})}{(D_{max}-D_{min})}$$<br>最终归一化的score为(其实这儿就是做了一个映射):<br>$$D^{**} = \frac{D^{*} + 0.4*D^{*}*C_i^{*}}{1.4}$$</p>
 <h2 id="[MR]Semisupervised_Learning(SSL)3">[MR]Semisupervised Learning(SSL)<sup>3</sup></h2><blockquote>
 <p>这个算法主要用于<code>Merge Result</code>阶段</p>
 </blockquote>
@@ -176,8 +176,8 @@ Federated search is an information retrieval technology that allows the simultan
 <li>同一个query出现在<code>database-specific</code>上面的大部分也会出现在<code>database-independent</code>中</li>
 <li><code>database-specific</code>与<code>database-independent</code>两者的overlap的doc拿到的score对使用机器学习方式可计算出一个映射</li>
 </ol>
-<p>此时假设对于overlap的doc有如下score的pair对$s_{ind},s_{spe}$<br>需要做的就是使用线性回归的方式对两个score简建立一个映射<br>$$s_{spe} = w*s_{ind}+b$$<br>其需要优化的是:</p>
-<p>$$argmax_w \sum_i (f(w,s_{spe})-s_{ind})^2$$</p>
+<p>此时假设对于overlap的doc有如下score的pair对$s_{ind},s_{spe}$<br>需要做的就是使用线性回归的方式对两个score简建立一个映射<br>$$s_{ind} = w*s_{spe}+b$$<br>其需要优化的是:</p>
+<p>$$argmin_w \sum_i (f(w,s_{spe})-s_{ind})^2$$</p>
 <p>这样在各个混排引擎出来的时候就使用归一到同一纬度的score了，并且线性函数的运算很快<br>当然在训练数据不足的时候可以退化为<code>CORI</code></p>
 <p>但是他也有其他的缺点：</p>
 <ol>
