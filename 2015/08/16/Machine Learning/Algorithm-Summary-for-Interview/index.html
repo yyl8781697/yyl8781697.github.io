@@ -169,14 +169,14 @@
 <p><code>LR</code>回归是一个线性的二分类模型，主要是<code>计算在某个样本特征下事件发生的概率</code>，比如根据用户的浏览购买情况作为特征来计算它是否会购买这个商品，抑或是它是否会点击这个商品。然后<code>LR</code>的最终值是根据一个线性和函数再通过一个<code>sigmoid</code>函数来求得，这个线性和函数权重与特征值的累加以及加上偏置求出来的，所以在训练<code>LR</code>时也就是在训练线性和函数的各个权重值<code>w</code>。</p>
 <p>$$h_w(x) = \frac{1}{1+e^{-(w^Tx+b)}}$$</p>
 <p>关于这个权重值<code>w</code>一般使用最大似然法来估计,假设现在有样本$\{x_i,y_i\}$,其中$x_i$表示样本的特征，$y_i \in \{0,1\}$表示样本的分类真实值，$y_i=1$的概率是$p_i$,则$y_i=0$的概率是$1-p_i$，那么观测概率为:<br>$$p(y_i)=p_i^{y_i}*(1-p_i)^{1-y_i}$$<br>则最大似然函数为:<br>$$\prod \left(h_w(x_i)^{y_i}*(1-h_w(x_i))^{1-y_i}\right)$$</p>
-<p>对这个似然函数取对数之后就会得到的表达式<br>$$L(w)=\sum_i \left( y_i*logh_w(x_i)-(1-y_i)*log(1-h_w(x_i)) \right)=\sum_i \left(y_i*(w^Tx_i)-log(1+e^{w^Tx_i})\right)$$<br>估计这个$L(w)$的极大值就可以得到$w$的估计值。</p>
+<p>对这个似然函数取对数之后就会得到的表达式<br>$$L(w)=\sum_i \left( y_i*logh_w(x_i)+(1-y_i)*log(1-h_w(x_i)) \right)=\sum_i \left(y_i*(w^Tx_i)+log(1+e^{w^Tx_i})\right)$$<br>估计这个$L(w)$的极大值就可以得到$w$的估计值。</p>
 <blockquote>
 <p>实际操作中一般会加个负号 改为求最小</p>
 </blockquote>
 <p>所以求解问题就变成了这个最大似然函数的最优化问题，这里通常会采样随机梯度下降法和拟牛顿迭代法来进行优化</p>
 <h3 id="梯度下降法">梯度下降法</h3><p><code>LR</code>的损失函数为:<br>$$J(w)=-\frac{1}{N} \sum_{i=1}^N{\left(y_i*log(h_w(x_i))+(1-y_i)*log(1-h_w(x_i))\right)}$$<br>这样就变成了求$min(J(w))$<br>其更新w的过程为</p>
-<p>$$w:=w- \alpha * \triangledown J(w) \\<br>w:=w- \alpha * \frac{1}{N}*\sum_{i=1}^N\left(h_w(x_i)-y_i) *x_i\right)$$<br>其中$\alpha为步长$,直到$J(w)$不能再小时停止</p>
-<p>梯度下降法的最大问题就是会陷入局部最优，并且每次在对当前样本计算<code>cost</code>的时候都需要去遍历全部样本才能得到<code>cost</code>值，这样计算速度就会慢很多（虽然在计算的时候可以转为矩阵乘法去更新整个<code>w</code>值）<br>所以现在好多框架（<code>mahout</code>）中一般使用随机梯度下降法，它在计算cost的时候只计算当前的代价，最终<code>cost</code>是在全部样本迭代一遍之求和得出，还有他在更新当前的参数w的时候并不是依次遍历样本，而是从所有的样本中随机选择一条进行计算，它方法收敛速度快（一般是使用最大迭代次数），并且还可以避免局部最优，并且还很容易并行（使用参数服务器的方式进行并行）<br>$$w:=w-\alpha * \left(h_w(x_j)-y_j) *x_i\right);j \in 1~N and randomly$$</p>
+<p>$$w:=w- \alpha * \triangledown J(w) \\<br>w:=w- \alpha * \frac{1}{N}*\sum_{i=1}^N\left( (h_w(x_i)-y_i) *x_i\right)$$<br>其中$\alpha为步长$,直到$J(w)$不能再小时停止</p>
+<p>梯度下降法的最大问题就是会陷入局部最优，并且每次在对当前样本计算<code>cost</code>的时候都需要去遍历全部样本才能得到<code>cost</code>值，这样计算速度就会慢很多（虽然在计算的时候可以转为矩阵乘法去更新整个<code>w</code>值）<br>所以现在好多框架（<code>mahout</code>）中一般使用随机梯度下降法，它在计算cost的时候只计算当前的代价，最终<code>cost</code>是在全部样本迭代一遍之求和得出，还有他在更新当前的参数w的时候并不是依次遍历样本，而是从所有的样本中随机选择一条进行计算，它方法收敛速度快（一般是使用最大迭代次数），并且还可以避免局部最优，并且还很容易并行（使用参数服务器的方式进行并行）<br>$$w:=w-\alpha * \left( (h_w(x_j)-y_j) *x_i\right);j \in 1~N and randomly$$</p>
 <p>这里<code>SGD</code>可以改进的地方就是使用动态的步长<br>$$\alpha=0.04*(1.0+n+i)+r$$</p>
 <h3 id="其他优化方法">其他优化方法</h3><ul>
 <li>拟牛顿法（记得是需要使用Hessian矩阵和cholesky分解）</li>
@@ -191,8 +191,11 @@
 </blockquote>
 <ol>
 <li>减少feature个数（人工定义留多少个feature、算法选取这些feature）</li>
-<li>正则化（为了方便求解，<code>L2</code>使用较多）<br> 添加正则化之后的损失函数为:  $J(w)=-\frac{1}{N} \sum_{i=1}^N{\left(y_i*log(h_w(x_i))+(1-y_i)*log(1-h_w(x_i))\right)} + \lambda ||w||^2$<br> 同时w的更新变为$w:=w-\alpha * \left(h_w(x_j)-y_j) *x_i\right) -2\alpha*w_j$<br> 注意：这里的$w_0$不受正则化影响</li>
+<li>正则化（为了方便求解，<code>L2</code>使用较多）<br> 添加正则化之后的损失函数为:  $J(w)=-\frac{1}{N} \sum_{i=1}^N{\left(y_i*log(h_w(x_i))+(1-y_i)*log(1-h_w(x_i))\right)} + \lambda ||w||_2$<br> 同时w的更新变为$w:=w-\alpha * \left(h_w(x_j)-y_j) *x_i\right) -2\alpha*w_j$<br> 注意：这里的$w_0$不受正则化影响</li>
 </ol>
+<blockquote>
+<p><code>p</code>范数的求解:<br>$$||X||_p=\left\{<br>\begin{aligned}<br>Count(x_i \neq 0) &amp; \quad if \quad p = 0 \\<br>(\sum_i^n |x_i|^p)^{\frac{1}{p}} &amp; \quad if \quad p \neq 0 \\<br>\end{aligned}<br>\right.$$</p>
+</blockquote>
 <h3 id="关于LR的多分类：softmax">关于LR的多分类：softmax</h3><p>假设离散型随机变量Y的取值集合是{1,2,..,k},则多分类的LR为<br>$$P(Y=a|x)=\frac{exp(w_a*x)}{(\sum_{i=1}^k(wi*x))}  ;  1&lt;a&lt;k$$<br>这里会输出当前样本下属于哪一类的概率，并且满足全部概率加起来=1</p>
 <h3 id="关于softmax和k个LR的选择">关于softmax和k个LR的选择</h3><p>如果类别之间是否互斥（比如音乐只能属于古典音乐、乡村音乐、摇滚月的一种）就用softmax<br>否则类别之前有联系（比如一首歌曲可能有影视原声，也可能包含人声，或者是舞曲），这个时候使用k个LR更为合适</p>
 <p>优缺点：<br>Logistic回归优点：</p>
@@ -206,7 +209,7 @@
 <li>只能处理两分类问题（在此基础上衍生出来的softmax可以用于多分类），且必须线性可分；</li>
 </ol>
 <blockquote>
-<p>ps 另外<code>LR</code>还可以参考<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/" target="_blank" rel="external">这篇</a>以及多分类可以看<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/" target="_blank" rel="external">这篇</a></p>
+<p>ps 另外<code>LR</code>还可以参考<a href="http://kubicode.me/2015/08/21/Machine%20Learning/Logistic-Regression/" target="_blank" rel="external">这篇</a>以及多分类可以看<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/" target="_blank" rel="external">这篇</a>,softmax可以看<a href="http://kubicode.me/2016/11/27/Machine%20Learning/Something-for-Softmax/" target="_blank" rel="external">这篇</a></p>
 </blockquote>
 <h2 id="KNN算法">KNN算法</h2><p>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类</p>
 <h3 id="三要素：">三要素：</h3><ol>
@@ -267,8 +270,8 @@
 <p>$$<br>\underset{w,b}{argmax} \quad \frac{\hat{\gamma}}{||w||} \\<br>st. \quad y_i(w^Tx_i+b) \geq 1<br>$$</p>
 <p>由于$\hat{\gamma}$的成比例增减不会影响实际间距，所以这里的取$\hat{\gamma}=1$，又因为$max(\frac{1}{||w||})=min(\frac{1}{2}*||w||^2)$<br>所以最终的问题就变为了<br>$$<br>\underset{w,b}{argmin} \quad \frac{1}{2}*||w||^2 \\<br>st. \quad y_i(w^Tx_i+b) \geq 1<br>$$</p>
 <p>这样就变成了一个凸的二次规划化，可以将其转换为拉格朗日函数，然后使用对偶算法来求解</p>
-<h4 id="对偶求解">对偶求解</h4><p>引进拉格朗日乘子$\alpha=\{\alpha_1,\alpha_2..\alpha_n\}$,定义拉格朗日函数：<br>$$L(w,b,a)=\frac{1}{2}*||w||^2-\sum_{i=1}{N}(\alpha_i*y_i(w^Tx_i+b))+\sum(\alpha_i)$$</p>
-<p>根据对偶性质  原始问题就是求对偶问题的极大极小<br>$$\underset{\alpha}{max}\underset{w,b}{min}L(w,b,\alpha)$$<br>先求L对$w,b$的极小，再求对$\alpha$的极大。<br>求$\underset{w,b}{min}L(w,b,\alpha)$，也就是相当于对$w,b$求偏导并且另其等于0<br>$$<br>\triangledown_wL(w,b,\alpha)=w-\sum_{i=1}{N}(\alpha_iy_ix_i)=0 \\<br>\triangledown_bL(w,b,\alpha)=\sum_{i=1}{N}(a_iy_i)=0<br>$$<br>代入后可得<br>$$\underset{w,b}{min}L(w,b,\alpha)=-\frac{1}{2}*\sum_{i=1}^{N}\sum_{j=1}^{N}\left(\alpha_i\alpha_jy_iy_j(x_i \cdot x_j)\right)+\sum_{i=1}^{N}\alpha_i$$<br>求$\underset{w,b}{min}L(w,b,\alpha)$对$\alpha$的极大，即是对偶问题:<br>$$<br>\underset{\alpha}{max} -\frac{1}{2}*\sum_{i=1}^{N}\sum_{j=1}^{N}\left(\alpha_i\alpha_jy_iy_j(x_i \cdot x_j)\right)+\sum_{i=1}^{N}\alpha_i \\<br>st. \quad \sum_{i=1}{N}(a_iy_i)=0 \\<br>\alpha \geq 0,i=1,2,3…N<br>$$<br>将求最大转为求最小，得到等价的式子为：<br>$$<br>\underset{\alpha}{min} \frac{1}{2}*\sum_{i=1}^{N}\sum_{j=1}^{N}\left(\alpha_i\alpha_jy_iy_j(x_i \cdot x_j)\right)-\sum_{i=1}^{N}\alpha_i \\<br>st. \quad \sum_{i=1}{N}(a_iy_i)=0 \\<br>\alpha \geq 0,i=1,2,3…N<br>$$</p>
+<h4 id="对偶求解">对偶求解</h4><p>引进拉格朗日乘子$\alpha=\{\alpha_1,\alpha_2..\alpha_n\}$,定义拉格朗日函数：<br>$$L(w,b,a)=\frac{1}{2}*||w||^2-\sum_{i=1}^{N}(\alpha_i*y_i(w^Tx_i+b))+\sum(\alpha_i)$$</p>
+<p>根据对偶性质  原始问题就是求对偶问题的极大极小<br>$$\underset{\alpha}{max}\underset{w,b}{min}L(w,b,\alpha)$$<br>先求L对$w,b$的极小，再求对$\alpha$的极大。<br>求$\underset{w,b}{min}L(w,b,\alpha)$，也就是相当于对$w,b$求偏导并且另其等于0<br>$$<br>\triangledown_wL(w,b,\alpha)=w-\sum_{i=1}^{N}(\alpha_iy_ix_i)=0 \\<br>\triangledown_bL(w,b,\alpha)=\sum_{i=1}^{N}(a_iy_i)=0<br>$$<br>代入后可得<br>$$\underset{w,b}{min}L(w,b,\alpha)=-\frac{1}{2}*\sum_{i=1}^{N}\sum_{j=1}^{N}\left(\alpha_i\alpha_jy_iy_j(x_i \cdot x_j)\right)+\sum_{i=1}^{N}\alpha_i$$<br>求$\underset{w,b}{min}L(w,b,\alpha)$对$\alpha$的极大，即是对偶问题:<br>$$<br>\underset{\alpha}{max} -\frac{1}{2}*\sum_{i=1}^{N}\sum_{j=1}^{N}\left(\alpha_i\alpha_jy_iy_j(x_i \cdot x_j)\right)+\sum_{i=1}^{N}\alpha_i \\<br>st. \quad \sum_{i=1}^{N}(a_iy_i)=0 \\<br>\alpha \geq 0,i=1,2,3…N<br>$$<br>将求最大转为求最小，得到等价的式子为：<br>$$<br>\underset{\alpha}{min} \frac{1}{2}*\sum_{i=1}^{N}\sum_{j=1}^{N}\left(\alpha_i\alpha_jy_iy_j(x_i \cdot x_j)\right)-\sum_{i=1}^{N}\alpha_i \\<br>st. \quad \sum_{i=1}^{N}(a_iy_i)=0 \\<br>\alpha \geq 0,i=1,2,3…N<br>$$</p>
 <p>假如求解出来的$\alpha$为$\alpha^{*}=(\alpha_1^{*},\alpha_2^{*},…\alpha_n^{*})$<br>则得到最优的$w,b$分别为<br>$$<br>w^{*}=\sum_{i=1}^{N}(\alpha_i^{*}y_ix_i)\\<br>b^{*}=y_j-\sum_{i=1}^{N}(\alpha_i^{*}y_i(x_i \cdot x_j))<br>$$<br>所以，最终的决策分类面为<br>$$f(x)=sign\left( \sum_{i=1}^{N}(\alpha_i^{*}y_i(x \cdot x_i) +b^{*}  \right)$$<br>也就是说，分类决策函数只依赖于输入$x$与训练样本的输入的内积</p>
 <blockquote>
 <p>ps：上面介绍的是SVM的硬间距最大化，还有一种是软间距最大化，引用了松弛变量$\zeta$，则次svm问题变为:<br>$$<br>\underset{w,b}{argmin} \quad \frac{1}{2}*||w||^2 + C \sum_{i=1}^{N} \zeta_i \\<br>st. \quad y_i(w^Tx_i+b) \geq 1-\zeta_i \\<br>\zeta_i \geq 0,i=1,2…N<br>$$<br>其余解决是与硬间距的一致~</p>
@@ -348,7 +351,7 @@
 <p>回归树是以平方误差最小化的准则划分为两块区域</p>
 </blockquote>
 <ol>
-<li>遍历特征计算最优的划分点s，<br> 使其最小化的平方误差是：$min\{min(R1.sigma((y_i-c_1)^2))+min(R2.sigma((y_i-c_2)^2))\}$<br> 计算根据s划分到左侧和右侧子树的目标值与预测值之差的平方和最小，这里的预测值是两个子树上输入xi样本对应$y_i$的均值</li>
+<li>遍历特征计算最优的划分点s，<br> 使其最小化的平方误差是：$min\{min(\sum_i^{R1}((y_i-c_1)^2))+min(\sum_i^{R2}((y_i-c_2)^2))\}$<br> 计算根据s划分到左侧和右侧子树的目标值与预测值之差的平方和最小，这里的预测值是两个子树上输入xi样本对应$y_i$的均值</li>
 <li>找到最小的划分特征j以及其最优的划分点s,根据特征j以及划分点s将现有的样本划分为两个区域，一个是在特征j上小于等于s，另一个在在特征j上大于s<br> $$R1(j)=\{x|x(j) \leq s\}  \\ R2(j)=\{x|x(j) &gt; s\}$$</li>
 <li>进入两个子区域按上述方法继续划分，直到到达停止条件</li>
 </ol>
