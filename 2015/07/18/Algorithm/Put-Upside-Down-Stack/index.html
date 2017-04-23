@@ -12,17 +12,17 @@
 
     
     <meta name="description" content="题目使用递归的方法将栈颠倒
-解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归">
+解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,3 一致递归">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用递归的方法将栈颠倒">
 <meta property="og:url" content="http://kubicode.me/2015/07/18/Algorithm/Put-Upside-Down-Stack/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
 <meta property="og:description" content="题目使用递归的方法将栈颠倒
-解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归">
+解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,3 一致递归">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用递归的方法将栈颠倒">
 <meta name="twitter:description" content="题目使用递归的方法将栈颠倒
-解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归">
+解题假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,1先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,3 一致递归">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -117,7 +117,7 @@
 		</div>
 		
 		<h2 id="题目">题目</h2><pre><code>使用递归的方法将栈颠倒
-</code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,2,1<br>先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1<br>那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,2 一致递归<br><a id="more"></a><br>关于如何将元素放入栈的尾部？</p>
+</code></pre><h2 id="解题">解题</h2><p>假设当前的入栈顺序为1,2,3,4,5  那么我们的目标是将栈内的顺序改为5,4,3,2,1<br>先来看如果将数据搞成了1 和5,4,3,2  那么只需要将1放在栈的尾部即可，就可以变成了5,4,3,2,1<br>那么如何将2，3，4，5变为5,4,3,2呢，其实同理，也是分为2和5,4,3 一致递归<br><a id="more"></a><br>关于如何将元素放入栈的尾部？</p>
 <pre><code>将e放到底部
 先递归逐个将元素取出来  取至空的时候将e给<span class="keyword">push</span>进去
 然后再依次将取出来的元素也给<span class="keyword">push</span>进去
@@ -272,7 +272,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
 		  
 		
 		  
@@ -313,7 +313,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>31</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
 			
 		
 			

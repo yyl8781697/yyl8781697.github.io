@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2017-01-13T04:03:17.000Z</updated>
+  <updated>2017-04-23T13:41:45.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,87 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[学习记录一下深度语义匹配模型-DSSM]]></title>
+    <link href="http://kubicode.me/2017/04/21/Machine%20Learning/Study-With-Deep-Structured-Semantic-Model/"/>
+    <id>http://kubicode.me/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/</id>
+    <published>2017-04-21T14:53:03.000Z</published>
+    <updated>2017-04-23T13:41:45.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下</p>
+</blockquote>
+<h2 id="DSSM结构">DSSM结构</h2><p><code>DSSM</code>最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:</p>
+<ol>
+<li>字面匹配:<code>TFIDF</code>、<code>BM25</code>等</li>
+<li>使用<code>LSA</code>类模型进行语义匹配，但是效果不好</li>
+</ol>
+<p>而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。</p>
+<p>这里上图最直接:</p>
+<center><img src="/img/Study-With-Deep-Structured-Semantic-Model/dssm_arch.png"></center>
+
+<a id="more"></a>
+<p>上面是<code>DSSM</code>训练的架构图:</p>
+<ol>
+<li>输入的是一个<code>query</code>和这个query相关的<code>doc</code>，这里的输入特征可以是最简单的<code>one-hot</code>,而需要<code>train</code>的是这个query下各个doc的相关性(<code>DSSM</code>里面使用点击率来代替相关性)</li>
+<li><p>由于这种<code>one-hot</code>的输入可能会有两个问题:</p>
+<ol>
+<li>导致<code>vocabulary</code>太大</li>
+<li><p>会出现<code>oov</code>的问题</p>
+<p>因此输入特征之后的第一层是做一个叫做<code>Word Hashinging</code>的操作</p>
+</li>
+</ol>
+</li>
+<li>接下来就是传统的神经网络了<br> $$l_i=f(W_il_{i-1}+b_i),i = 2,…,N-1 \\<br> y=f(W_Nl_{N-1}+b_N) $$<blockquote>
+<p>这里的<code>f</code>是激活函数，文中使用$tanh$来计算:$f(x)=\frac{1-e^{-2x}}{1+e^{-2x}}$</p>
+</blockquote>
+</li>
+<li>得到的$y$就是语义特征了,query和doc之间的相关性就可以直接使用特想之间的相似性来度量，这里使用cosine来计算<br> $$R(Q,D)=cosine(y_Q,y_D) = \frac{y_Q^Ty_D}{||y_Q||||y_D||}$$</li>
+<li>最终得到的相似度就可以去训练query和doc的相关性了</li>
+</ol>
+<p>因此整个结构就可以看做做了一层<code>Word Hashing</code>之后去训练<code>DNN</code>网络</p>
+<h2 id="Word_Hashing">Word Hashing</h2><p><code>Word Hashing</code>是paper非常重要的一个<code>trick</code>，以英文单词来说，比如<code>good</code>，他可以写成<code>#good#</code>，然后按tri-grams来进行分解为<code>#go goo ood od#</code>，再将这个tri-grams灌入到<code>bag-of-word</code>中，这种方式可以非常有效的解决<code>vocabulary</code>太大的问题(因为在真实的web search中vocabulary就是异常的大)，另外也不会出现<code>oov</code>问题，因此英文单词才26个，3个字母的组合都是有限的，很容易枚举光。<br>那么问题就来了，这样两个不同的单词会不会产出相同的tri-grams，paper里面做了统计，说了这个冲突的概率非常的低，500K个word可以降到30k维，冲突的概率为0.0044%</p>
+<blockquote>
+<p>但是在中文场景下，这个<code>Word Hashing</code>估计没有这么有效了</p>
+</blockquote>
+<h2 id="总结">总结</h2><p><code>DSSM</code>的优势:</p>
+<ol>
+<li><code>DSSM</code>看起来在真实检索场景下可行性很高，一方面是直接使用了用户天然的点击数据，出来的结果可行度很高，另一方面文中的doc可以使用title来表示，同时这个部分都是可以离线进行语义向量计算的，然后最终query和doc的语义相似性也是相当诱人</li>
+<li><code>DSSM</code>出的结果不仅可以直接排序，还可以拿中间见过做文章:<code>semantic feature</code>可以天然的作为<code>word embedding</code>嘛</li>
+</ol>
+<p><code>DSSM</code>的劣势:</p>
+<ol>
+<li>用户信息较难加入</li>
+<li>貌似训练时间很长啊</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>Huang P S, He X, Gao J, et al. Learning deep structured semantic models for web search using clickthrough data[C]// ACM International Conference on Conference on Information &amp; Knowledge Management. ACM, 2013:2333-2338.</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下</p>
+</blockquote>
+<h2 id="DSSM结构">DSSM结构</h2><p><code>DSSM</code>最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:</p>
+<ol>
+<li>字面匹配:<code>TFIDF</code>、<code>BM25</code>等</li>
+<li>使用<code>LSA</code>类模型进行语义匹配，但是效果不好</li>
+</ol>
+<p>而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。</p>
+<p>这里上图最直接:</p>
+<center><img src="/img/Study-With-Deep-Structured-Semantic-Model/dssm_arch.png" /></center>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Federated Search Papers学习笔记]]></title>
@@ -1877,70 +1958,6 @@ import lib
       <category term="Hadoop" scheme="http://kubicode.me/tags/Hadoop/"/>
     
       <category term="Hadoop" scheme="http://kubicode.me/categories/Hadoop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[[小技巧]让Hexo在使用Mathjax时支持多行公式]]></title>
-    <link href="http://kubicode.me/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/"/>
-    <id>http://kubicode.me/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/</id>
-    <published>2016-03-18T01:46:24.000Z</published>
-    <updated>2016-03-28T15:42:26.000Z</updated>
-    <content type="html"><![CDATA[<p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
-<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span>
-<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span>
-<span class="special">&amp;</span>=g+h<span class="command">\\</span>
-<span class="special">&amp;</span> =i 
-<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
-</code></pre><p>其中:</p>
-<ol>
-<li><code>begin</code>和<code>end</code>表示公式的起始</li>
-<li><code>\\</code>符号表示换行</li>
-<li><code>&amp;</code>表示对齐</li>
-</ol>
-<a id="more"></a>
-<p>结果渲染到html页面之后结果是这样的:<br><img src="/img/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/error.png" with="500px"></p>
-<p>完全没换行啊，而且又有莫名其妙的空格，按照之前的经验，估计是<code>markdown</code>渲染的<code>html</code>的时候出了问题<br><img src="/img/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/error_code.png"></p>
-<p>发现两个问题:</p>
-<ol>
-<li><code>&amp;</code>符号被转义成了<code>&amp;amp;</code></li>
-<li>双反斜杠<code>\\</code>被转义成功了<code>\</code></li>
-</ol>
-<p>这就是公式没换行的原因，肯定是<code>marked.js</code>里面做了处理，不过仔细看<code>Mathjax</code>脚本的配置项中有一项为<code>processEscapes: true</code>，说明<code>MathJax</code>是支持转义符号的，所以类似<code>&amp;amp;</code>是不需要额外处理的。</p>
-<p>那么压力就到了解反斜杠问题，最粗暴的是讲反斜杠的转义从<code>marked.js</code>里面去掉，但是可能会影响其他功能，既然两根反斜杠是转为一根，而<code>Latex</code>是两个换行，最简单的方法就是写4个反斜杠:</p>
-<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span><span class="command">\\</span>
-<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span><span class="command">\\</span>
-<span class="special">&amp;</span>=g+h<span class="command">\\</span><span class="command">\\</span>
-<span class="special">&amp;</span> =i 
-<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
-</code></pre><p>就可以得到期待的结果了:</p>
-<center><img src="/img/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/right.png"></center>
-
-<p>这种处理就不影响<code>Hexo</code>自身的功能，又可以满足多行公式的书写^_^</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
-<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span>
-<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span>
-<span class="special">&amp;</span>=g+h<span class="command">\\</span>
-<span class="special">&amp;</span> =i 
-<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
-</code></pre><p>其中:</p>
-<ol>
-<li><code>begin</code>和<code>end</code>表示公式的起始</li>
-<li><code>\\</code>符号表示换行</li>
-<li><code>&amp;</code>表示对齐</li>
-</ol>]]>
-    
-    </summary>
-    
-      <category term="Hexo" scheme="http://kubicode.me/tags/Hexo/"/>
-    
-      <category term="Hexo" scheme="http://kubicode.me/categories/Hexo/"/>
     
   </entry>
   

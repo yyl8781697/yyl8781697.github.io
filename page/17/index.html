@@ -95,6 +95,82 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2012/12/07/Dotnet/csharp-socket-udp/" title="用c#写的一个局域网聊天客户端 类似小飞鸽" itemprop="url">用c#写的一个局域网聊天客户端 类似小飞鸽</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2012-12-07T01:35:20.000Z" itemprop="datePublished"> 发表于 2012-12-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>最紧在公司实习，新人不给活干，就自己随便看看，了解一些DevExpress控件啊，编码规范啊之类的，自己就寻思着写一点点小东西练习练习</p>
+<p>出于自己对c# socket这块不熟，就选择了这块，顺便可以进一步了解委托 代理。</p>
+<p>闲话不说，先说下这次做的东西：一个局域网聊天的小软件  主要基于udp的通信，如果读者还不知道udp or tcp  那请度娘一下。。。</p>
+<h3 id="基本思路">基本思路</h3><blockquote>
+<p>这也都是网上查的，还查了飞鸽传书的 基本原理，在此感谢网上的各位高手哈：</p>
+</blockquote>
+<ol>
+<li>软件开启的时候先新开一个线程，该线程充当服务器端，一直死循环监听</li>
+<li>开了新线程了，调用广播的方法</li>
+<li>此时如果局域网内已经有有其它主机打开了这个软件，将会监听到这个广播，收到这个广播后将返回自己的主机，并且将监听到的主机添加自己的在线列表中，当然，发起广播的软件也能收到其它软件的回信，收到他们的主机后也加入自己的在线列表，这样各自的列表就都能建立起来，并且将当前的列表加入一个静态的泛型列表中（用于以后和其它用户的通信，维护他们的状态）</li>
+<li>通信 发送消息：双击一个主机列表后  得到该主机host 传到交谈窗体 并查询出他主机的endpoint，这样就可以进行本机和向该endpoint点发送消息了</li>
+<li>下线 下线之前软件会发一个下线的广播，其它的软件接到该广播的时候将会将该主机从自己的在线列表中移除</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2012/12/07/Dotnet/csharp-socket-udp/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/CSharp/">CSharp</a><a href="/tags/socket/">socket</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2012/12/07/Dotnet/csharp-socket-udp/#comments" class="ds-thread-count comments-count-link" data-thread-key="2012/12/07/Dotnet/csharp-socket-udp/" data-count-type="comments">&nbsp;</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2012/10/09/Javascript/javascript-cookie/" title="分享javascript中方便增删改cookie的一个类" itemprop="url">分享javascript中方便增删改cookie的一个类</a>
   </h1>
   <p class="article-author">By
@@ -555,7 +631,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
 		  
 		
 		  
@@ -596,7 +672,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>31</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
 			
 		
 			
