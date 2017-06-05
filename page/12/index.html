@@ -95,6 +95,161 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/05/08/Effective Java/Class-And-Interface/" title="《Effective Java》第四章：类和接口" itemprop="url">《Effective Java》第四章：类和接口</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-08T14:39:56.000Z" itemprop="datePublished"> 发表于 2015-05-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>类和接口是Java程序设计语言的核心，它们也是Java语言的基本抽象单元。</p>
+<h2 id="第13条：使类和成员的可访问性最小化">第13条：使类和成员的可访问性最小化</h2><blockquote>
+<p>尽可能使每个类或者成员不被外界访问。</p>
+</blockquote>
+<p><code>Java</code>的4种访问级别：</p>
+<ul>
+<li>私有的<code>private</code>：只有在申明该成员的类的内部才可以访问。</li>
+<li>包级私有的<code>package-private</code>：包内的任何类都可以访问这个成员，（<strong>这个是默认的访问级别</strong>）</li>
+<li>受保护的<code>protected</code>：子类可以访问超类的<code>protected</code>成员，<strong>但是还有这个<code>protected</code>成员类的包内的任何类也可以访问</strong>。</li>
+<li>公有的<code>public</code>：任何地方都可以访问这个成员。</li>
+</ul>
+<blockquote>
+<p>如何方法覆盖了超类中的中的一个方法，子类中的访问级别就不允许低于超类的访问级别。</p>
+</blockquote>
+<p>这样可以确保使用超类的实例的地方也可以使用子类的实例。</p>
+<blockquote>
+<p>实例域是不能公有的。</p>
+</blockquote>
+<p>其实就是建议类里面只暴露<code>final</code>修饰的变量成员，其他变量一律不要暴露。</p>
+<blockquote>
+<p>长度非零的数组总是可变的。</p>
+</blockquote>
+<p>就算你使用<code>static final</code>关键字将一个数组成员暴露出来，但是这个数组成员的内容还是可以被外部给修改的。你可以使用</p>
+<ul>
+<li>创建不可变量列表</li>
+<li>克隆这个对象</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/08/Effective Java/Class-And-Interface/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/08/Effective Java/Class-And-Interface/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/05/03/Java Base/You-Donnot-Kown-About-The-Clone/" title="关于Java的Clone，你这些都知道吗？" itemprop="url">关于Java的Clone，你这些都知道吗？</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-05-03T14:59:55.000Z" itemprop="datePublished"> 发表于 2015-05-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p><br /><br /><br /><br /><br /></p>
+<h2 id="clone()_元定义">clone() 元定义</h2><p>啥都不说，先看下源码中<code>Object.clone()</code>的定义：</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/05/03/Java Base/You-Donnot-Kown-About-The-Clone/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Base/">Java Base</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/05/03/Java Base/You-Donnot-Kown-About-The-Clone/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/03/Effective Java/The-Methods-General-To-All-Object/" title="《Effective Java》第三章：对于所有对象都通用的方法" itemprop="url">《Effective Java》第三章：对于所有对象都通用的方法</a>
   </h1>
   <p class="article-author">By
@@ -151,7 +306,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/05/03/Effective Java/The-Methods-General-To-All-Object/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/05/03/Effective Java/The-Methods-General-To-All-Object/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/05/03/Effective Java/The-Methods-General-To-All-Object/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -220,7 +375,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/26/Scala/Scala-In-My-Eyes/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/26/Scala/Scala-In-My-Eyes/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/26/Scala/Scala-In-My-Eyes/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -295,7 +450,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/22/Effective Java/Create-Destory-Object/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/22/Effective Java/Create-Destory-Object/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/22/Effective Java/Create-Destory-Object/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -370,7 +525,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/21/Java Base/Enum-Override/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/21/Java Base/Enum-Override/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/21/Java Base/Enum-Override/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -444,7 +599,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/19/Food/Coke-Chicken-feet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/19/Food/Coke-Chicken-feet/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/19/Food/Coke-Chicken-feet/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -512,7 +667,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/16/Hadoop/Hadoop-LocalFileSystem-cannot-cast-DistributedFileSystem/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -579,7 +734,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/15/Java Source/Java-LinkedHashMap/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/15/Java Source/Java-LinkedHashMap/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/15/Java Source/Java-LinkedHashMap/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -646,144 +801,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/14/Java Source/Java-HashSet/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/14/Java Source/Java-HashSet/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/07/OSGi/OSGi-Services/" title="（译）OSGi-Services，OSGI-服务" itemprop="url">（译）OSGi-Services，OSGI-服务</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-07T13:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>本教程介绍了关于服务声明相关的OSGI服务用法，Eclipse Equinox作为OSGI的服务器使用，本教程使用了Eclipse4.3(Kepler)。</p>
-</blockquote>
-<h2 id="1-_准备">1. 准备</h2><p>下面的教程假定你已经熟悉OSGI的运行时以及模块层（<a href="http://www.vogella.com/tutorials/OSGiServices/article.html">原文</a>,<a href="http://kubicode.me/2015/04/04/OSGi-Modularity/">译文</a>）相关的描述。</p>
-<h2 id="2-_OSGI服务">2. OSGI服务</h2><h3 id="2-1-_什么是OSGI服务">2.1. 什么是OSGI服务</h3><p>一个OSGI的服务被定义为一个标准的Java类或者接口，通常一个Java接口被作为服务的接口来使用。一个<strong>bundle</strong>可以注册或者使用服务，为了达到此功能，OSGI提供了中心的服务注册表。<br /><br>一个服务可以被动态的启动和停止，<strong>bundle</strong>在使用服务时必需有这种操控动态行为的能力，<strong>bundle</strong>服务可以注册一个监听器来监听服务的启动和停止。</p>
-<h3 id="2-2-_定义服务的最佳实践">2.2. 定义服务的最佳实践</h3><p>定义一个服务最通常的方法就是通过一个含有接口的<strong>bundle</strong>来定义，其他的<strong>bundle</strong>将会提供这个服务的实现，这就可以允许你通过不同的<strong>bundle</strong>来改变服务的实现。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/07/OSGi/OSGi-Services/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/OSGi/">OSGi</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/07/OSGi/OSGi-Services/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/07/OSGi/OSGi-Services/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/04/04/OSGi/OSGi-Modularity/" title="（译）OSGi-Modularity，OSGi-模块化" itemprop="url">（译）OSGi-Modularity，OSGi-模块化</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-04-04T14:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-04</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="1-OSGI_概述">1.OSGI 概述</h2><h3 id="1-1-_什么是OSGI">1.1. 什么是OSGI</h3><p>OGSI是一种规范，OSGi 规范的核心定义 Java 组件和服务模型，组件和服务可以动态地安装、 激活、 取消激活、 更新以及卸载。软件中的每个组件在OSGI中称为<strong>Bundle</strong>。<br /><br>OSGi 的一个非常实用的优点是每一个<strong>Bundle</strong>都必须定义其导出的 Java 包和所需的依赖项。通过这种方式可以有效地控制提供的 API 和插件的依赖项。</p>
-<h3 id="1-2-_Bundle与插件">1.2. Bundle与插件</h3><p>插件是Eclipse中的最小模块单元，<strong>Bundle</strong>与插件几乎是可以互换的，一个插件也是一个OSGI <strong>Bundle</strong>，反之亦然。</p>
-<h3 id="1-3-_实现">1.3. 实现</h3><p>OSGI已经有很多实现，例如Equinox, Knopflerfish OSGi or Apache Felix.</p>
-<h3 id="1-4-_Eclipse的Equinox">1.4. Eclipse的Equinox</h3><p>Eclipse的Equinox是基于OSGI规范的实现，也这是Eclipse程序的运行时环境，Eclipse的扩展点是基于OSGI的<strong>Bundle</strong>和<strong>Service</strong>的概念来进行的。</p>
-<h2 id="2-_OSGI_Bundle和依赖管理">2. OSGI Bundle和依赖管理</h2><h3 id="2-1-_OSGI_Bundle">2.1. OSGI Bundle</h3><p>OSGI规范定义了OSGI <strong>Bundle</strong>为模块化的单元。<br>一个<b>Bundle</b>是一个紧密结合的、自包含的单元，它明确定义了对其他模块的依赖关系和服务，同时还定义了对外开放的API。<br /><br>从技术上讲<b>Bundle</b>是一个带有额外元数据的.jar文件，这个元数据存储在<em>META-INF/MANIFEST.MF</em>中，<i>META-INF/MANIFEST.MF</i>文件是Java规范的一部分，任何非 OSGi 得运行时将忽略 OSGi 的元数据。因此 OSGi <strong>Bundle</strong>可以不受限制的在非 OSGi Java 环境中使用。<br /></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/04/04/OSGi/OSGi-Modularity/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/OSGi/">OSGi</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/04/04/OSGi/OSGi-Modularity/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/04/OSGi/OSGi-Modularity/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/14/Java Source/Java-HashSet/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -824,6 +842,10 @@
 		
 		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 		  
 		
 		  
@@ -871,7 +893,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -912,7 +934,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
 			
 		
 			
@@ -948,15 +970,7 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
@@ -964,7 +978,15 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -980,11 +1002,11 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -1118,18 +1140,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"kubiCode"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 

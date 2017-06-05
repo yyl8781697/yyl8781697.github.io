@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2017-04-23T13:41:45.000Z</updated>
+  <updated>2017-06-05T03:47:28.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -15,11 +15,127 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[长短期记忆模型-LSTM]]></title>
+    <link href="http://kubicode.me/2017/05/22/Deep%20Learning/Long-Short-Term-Memory-Model-LSTM/"/>
+    <id>http://kubicode.me/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/</id>
+    <published>2017-05-22T01:50:40.000Z</published>
+    <updated>2017-06-05T03:47:28.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="RNN的缺点">RNN的缺点</h2><p><code>RNN</code>的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个<code>language mdoel</code>:</p>
+<pre><code><span class="operator">the</span> clouds are <span class="operator">in</span> <span class="operator">the</span> sky
+</code></pre><p>这里要预测的<code>sky</code>只需要依赖前前面几个<code>term</code>即可</p>
+<p>再看看另一个句子:    </p>
+<pre><code><span class="keyword">I</span> grew up in France… <span class="keyword">I</span> speak fluent French.
+</code></pre><p>这里在预测<code>French</code>的时候需要前面较长的信息，甚至已经跨到前面一句话了。<br>因此是可以看出就算在<code>Language Model</code>中不同样本下可能是需要不同的长度的历史信息的，而对于<code>RNN</code>而言他并不能控制历史信息的长度.</p>
+<a id="more"></a>
+<h2 id="LSTM的计算">LSTM的计算</h2><p>而<code>LSTM</code>的设计之初就是为了解决<code>RNN</code>这种长期依赖的问题，一个最标准的<code>RNN</code>中每一个单元/层他是经过过一个<code>tanh</code>，结构是长这样的:</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-SimpleRNN.png" width="450px"></center>
+
+<p>而<code>LSTM</code>的复杂很多，展开之后他是长这样的:</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-chain.png" width="450px"></center><br>&gt;<code>LSTM</code>中最核心的就是门(<code>gate</code>)结构了，每一个<code>gate</code>经过一个<code>sigmoid</code>($\sigma$)结果输出一个<code>0~1</code>的输，可以精确的控制每一股的数据流量大小.<br><br>接下来一步一步解析<code>LSTM</code>单元内的每个小组件:<br><code>第一步</code>是决定哪些历史信息需要流入到当前的单元中，<br>这里会经过<code>遗忘门</code>(<code>forget gate layer</code>)，作用对于历史信息的遗忘程度:<br><center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-f.png" width="450px"></center>
+
+<p>这个门的输入为上一层的隐含层信息($h_{t-1}$)和当前层的输入数据($x_t$),输出一个<code>0~1</code>的数字用于$C_{t-1}$，如果通过<code>遗忘门</code>之后输出1，则表示所有$C_{t-1}$的数据都保留，如果输出的0，则相当于$C_{t-1}$的数据经会被重置为0.</p>
+<p><code>第二步</code>是当前哪些信息数据需要流入到当前的组件中，首先会经过<code>输入门</code>(<code>input gate layer</code>)会决定哪些输入值需要更新，其次再经过一个$tanh$函数来生成一个新的$\tilde{C}_t$来与原先的$C_{t-1}$进行求和合并.</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-i.png" width="450px"></center>
+
+<p><code>第三步</code>是生成一个新的$C_t$值，它是综合$C_{t-1}$的遗忘信息以及当前新保留的$\tilde{C}_t$信息</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-C.png" width="450px"></center>
+
+<p><code>最后</code>就是控制输出的数据了（就是输出隐含层单元的信息）</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-o.png" width="450px"></center><br>最终的输出是依赖当前的单元信息$C_t$，它经过一个$tanh$函数之后将数据scale到<code>-1~1</code>，然后再通过一个输出门来控制需要数据的信息.<br>上述4步是每个单元内的计算步骤，实际对于train目前应该还有一步$y_t=f(h_t)$,如果是<code>Language Model</code>的话$f$就是<code>softmax</code><br><br><br><br>综合上面的图解，一个完整的<code>LSTM</code>的单元里面的计算流程是这样:<br>1. 遗忘门的计算:<br>    $$f_t=\sigma(W_f \cdot [h_{t-1},x_t],b_f)$$<br>2. 输入门的计算:<br>    $$f_i=\sigma(W_i \cdot [h_{t-1},x_t],b_i)$$<br>3. 当前单元信息的计算:<br>    $$\tilde{C}_t=tanh(W_c \cdot[h_{t-1},x_t]+b_C)$$<br>4. 根据先前的单元信息$C_{t-1}$和当前的单元信息$\tilde{C}_t$，以遗忘门$f_t$和输入门$f_i$作为因子得到新的单元信息:<br>    $$C_t = f_t \cdot C_{t-1} + f_i \cdot \tilde{C}_t$$<br>5. 输出门的计算:<br>    $$f_o=\sigma(W_o \cdot [h_{t-1},x_t],b_o)$$<br>6. 根据新的单元信息$C_t$以及输出门$f_o$计算要输出的隐含单元信息:<br>    $$h_t = o_t \cdot tanh(C_t)$$<br>7. 根据隐含单元信息计算训练/预测的目标:<br>    $$y_t = f(h_t)$$<br>8. 一个单元计算完毕，回到<code>1</code>进入下一个单元的计算<br><br><br>## LSTM变种<br><br>上面描述的<code>LSTM</code>结果其实还复杂的，比标准的<code>RNN</code>至少多了三个门单元($f_t,f_i,f_o$)以及单元信息$C$，多了这么多信息之后随之而言的就是计算量会增加许多，同时事实上很多任务中比不需要这么多信息，因此就会有较多的$LSTM$变种出现:<br>下面这个<a href="ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf" target="_blank" rel="external">变种</a>是将<code>遗忘门</code>去掉，其值改为$1-f_t$<br><center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-var-tied.png" width="450px"></center>
+
+<p>另外一个非常著名的变种就是<a href="https://arxiv.org/pdf/1406.1078v3.pdf" target="_blank" rel="external">GRU</a>了</p>
+<p><center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-var-GRU.png" width="450px"></center><br>他将:</p>
+<ol>
+<li><code>遗忘门</code>和<code>输入门</code>合并为了<code>更新门</code></li>
+<li>同时将<code>单元信息</code>(<code>cell state</code>)和<code>隐含信息</code>(<code>hidden state</code>)进行了合并</li>
+</ol>
+<p>从计算式子就可以看出整个单元的计算对比$LSTM$进行了极大的简化，但是其效果却几乎不降低。<br>当然还有很多其他的变种不再一一描述，可以参见<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="external">参考</a></p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/</a></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="RNN的缺点">RNN的缺点</h2><p><code>RNN</code>的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个<code>language mdoel</code>:</p>
+<pre><code><span class="operator">the</span> clouds are <span class="operator">in</span> <span class="operator">the</span> sky
+</code></pre><p>这里要预测的<code>sky</code>只需要依赖前前面几个<code>term</code>即可</p>
+<p>再看看另一个句子:    </p>
+<pre><code><span class="keyword">I</span> grew up in France… <span class="keyword">I</span> speak fluent French.
+</code></pre><p>这里在预测<code>French</code>的时候需要前面较长的信息，甚至已经跨到前面一句话了。<br>因此是可以看出就算在<code>Language Model</code>中不同样本下可能是需要不同的长度的历史信息的，而对于<code>RNN</code>而言他并不能控制历史信息的长度.</p>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[初识递归神经网络-RNN]]></title>
+    <link href="http://kubicode.me/2017/05/15/Deep%20Learning/Understanding-about-RNN/"/>
+    <id>http://kubicode.me/2017/05/15/Deep Learning/Understanding-about-RNN/</id>
+    <published>2017-05-15T01:17:48.000Z</published>
+    <updated>2017-06-05T01:12:31.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="RNN是啥?">RNN是啥?</h2><p>当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在<code>Language Model</code>中在给定几个单词的情况下来预测下面将会出什么单词的时候。<br>这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。<br>一图胜千言，经典的RNN结构是长这样纸的:<br><a id="more"></a></p>
+<center><img src="/img/Understanding-about-RNN/rnn.jpg"></center>
+
+<p>上图的左侧是一个未展开的RNN结构图，可以看出通过<code>W</code>来完成一个自循环，将其展开之后就很好理解了，展开后可以看做是一个横向的神经网络，每一层都有一个自己的输入，RNN的整个训练或者主要是为了计算<code>U</code>、<code>W</code>、<code>V</code>这三个矩阵，其训练时前向传播的步骤如下:</p>
+<ol>
+<li>$x_t$表示第$t$层/步的输入，输入的数据可以是一个<code>one-hot</code>的向量或者一个其他的<code>pre-train</code>的向量</li>
+<li>$s_t$表示当前$t$的隐含状态,也就是整个网络中拥有<code>记忆</code>的那一块，他是根据上一层的隐含状态$s_{t-1}$以及当前层的输入$x_t$计算得到的，$s_t=f(Ux_t+Ws_{t-1})$， 其中$f(\cdot)$为激活函数，一般可以为<code>tanh</code>或者<code>ReLu</code>，另外$s_{-1}$为初始化的隐含状态，一般来说可以都初始化为<code>0</code></li>
+<li>$o_t$就是每一步的输出了，计算公式为$o_t = f(Vs_t)$，比如在<code>Language Model</code>中每一步的输出就是预测到下一个词的概率，这输出的就是在<code>vocabulary</code>维度的一个概率向量$o_t=\text{softmax}(Vs_t)$</li>
+</ol>
+<p>另外还有几点要说的:</p>
+<ol>
+<li>$s_t$为整个网络的记忆，但是在实际中,$s_t$的记忆功能是有限的，并不能捕捉$s_t$步之前的全部信息</li>
+<li>在传统的深度神经网络中，每一层都有自己的参数，但是RNN与之不同，所有层之间都是共享<code>U</code>、<code>W</code>、<code>V</code>这三个参数的</li>
+<li>另外关于输出，上面说到的是每一层是一个输出，但是并不是非得这样，有一些其他的变种可以仅在最后一层有一个输出。</li>
+</ol>
+<h2 id="RNN的训练">RNN的训练</h2><p>将<code>RNN</code>进行展开之后可以看做一个横向的神经网络，因为<code>RNN</code>也可以按神经网络的方式进行训练和预测，这里以一个实际的语言模型来回顾一下<code>RNN</code>的前向预测:</p>
+<ol>
+<li>$s_t= \text{tanh}(Ux_t+Ws_{t-1})$</li>
+<li>$o_t = \text{softmax}(Vs_t)$</li>
+</ol>
+<p>对于<code>RNN</code>的参数我们就是需要求<code>U</code>、<code>W</code>和<code>V</code>这三个矩阵，这里可以使用<code>SGD</code>来进行模型参数的优化，同时其梯度可以用一种叫做<code>BPTT</code>的当时来求得<br>我们使用交叉熵来定义<code>RNN</code>模型每一层的损失:<br>$$E_t(o_t,\hat{o}_t) = -o_t\log \hat{o}_t$$<br>则整个模型的损失通过累加可以求得:<br>$$E=\sum_t E_t(o_t,\hat{o}_t) = -\sum_t o_t\log \hat{o}_t$$</p>
+<blockquote>
+<p>这里的$t$表示当前的步数(层数),$\hat{o}_t$为第$t$的预测值.</p>
+</blockquote>
+<p>这里的梯度使用<code>BP</code>来计算，为了计算方便，以$t=3$为例<br>$$\begin{equation}\begin{split} \frac{\partial E_3}{\partial V}&amp;= \frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial V} \\<br>&amp;= \frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial z_3} \frac{\partial z_3}{\partial V}  \\<br>&amp;= \frac{\partial E_3}{\partial z_3} \frac{\partial z_3}{\partial V}  \\<br>&amp;= (\hat{o}_3-o_3)s_3 \\<br>\end{split}\end{equation}$$</p>
+<blockquote>
+<p>辅助推导:<br>$$\begin{equation}\begin{split} \frac{\partial E}{\partial z^j}&amp;= \frac{\partial -o\text{log}\hat{o}}{\partial z^j} \\<br>&amp;= \frac{\partial -\sum_k o^k\text{log}\hat{o}^k}{\partial V^js}  \\<br>&amp;=  -\frac{1}{s} \sum_k o^k \cdot \frac{1}{\hat{o}^k} \frac{\partial \hat{o}^k}{V_j} \\<br>&amp;= \text{使用softmax推导} \\<br>&amp;=   -\frac{1}{s} \left( o^j  \frac{1}{\hat{o}^j} s \hat{o}^j(1-\hat{o}^j) + \sum_{k:k \neq j} o^k  \frac{1}{\hat{o}^k} \cdot(-s\hat{o}^j\hat{o}^k )   \right) \\<br>&amp;= -\left( o^j-o^j\hat{o}^j - \sum_{k:k \neq j} o^k \hat{o}^j \right) \\<br>&amp;= -\left( o^j - \hat{o}^j \sum_ko^k \right) \\<br>&amp;= \hat{o}^j-o^j \\<br>\end{split}\end{equation}$$<br>其中$z_3=Vs_3$,$z^j=V^js$,$V^j$为第$j$个类别的向量权重</p>
+</blockquote>
+<p>可以看到损失函数对$V$求梯度时最后式子是极其简单，只需要计算当前预测的$o$以及当前隐含层的$s$即可,<br>现在来看下对于$W$的求导，这里会有稍微的不同:<br>$$\frac{\partial E_3}{\partial W}=\frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial s_3} \frac{\partial s_3}{\partial W}$$<br>而这里$s_3$时依赖$s_2$的<br>$$s_3=tanh(W s_2 + Ux_3)$$<br>而同时$s_2$还是依赖$s_1$的,因此在对于$E_3$求$W$的导数的时候并不能将$s_2$作为一个常量进行简单的求导,这样我们再次根据链式法则将会有如下:<br>$$\frac{\partial E_3}{\partial W} = \sum_{k=0}^3 \frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial s_3} \frac{\partial s_3}{\partial s_k} \frac{\partial s_k}{\partial W}$$<br>因为这里的$W$是共享的，每一步输出都有用到，因此对于$W$的求导只需要将每一步($t=0..3$)的梯度加起来即可</p>
+<center><img src="/img/Understanding-about-RNN/rnn-bptt-with-gradients.png" width="450px"></center>
+
+<p>由于$U$的参与前向计算的式子也$W$的类似，因此关于$\frac{\partial E}{\partial U}$也可以用上述方式来求导。<br>这三个参数的梯度计算与普通的BP计算类似，最大的区别是这三个参数在每一层都是共享的。</p>
+<p>由于在求导时需要向后计算，如果层数很多就会遇到经典的梯度消失问题，所以实际的<code>RNN</code>中每一个链可能都会做一个一定长度限制的截断。另外关于梯度消失的问题可以参考<code>RNN</code>的其他变种<code>LSTM</code>和<code>GRU</code>等.</p>
+<h2 id="总结">总结</h2><p><code>RNN</code>与传统的神经网络最大的特别就是在每一层计算的时候可以拿到前面几层的信息，这样特别可以有效适用于序列相关的学习，当然在实际操作中效果可能没有这么好~-_-!!</p>
+<h2 id="参考:">参考:</h2><ol>
+<li><a href="http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/" target="_blank" rel="external">http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/</a></li>
+<li><a href="http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/</a></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="RNN是啥?">RNN是啥?</h2><p>当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在<code>Language Model</code>中在给定几个单词的情况下来预测下面将会出什么单词的时候。<br>这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。<br>一图胜千言，经典的RNN结构是长这样纸的:<br>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[学习记录一下深度语义匹配模型-DSSM]]></title>
-    <link href="http://kubicode.me/2017/04/21/Machine%20Learning/Study-With-Deep-Structured-Semantic-Model/"/>
-    <id>http://kubicode.me/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/</id>
+    <link href="http://kubicode.me/2017/04/21/Deep%20Learning/Study-With-Deep-Structured-Semantic-Model/"/>
+    <id>http://kubicode.me/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/</id>
     <published>2017-04-21T14:53:03.000Z</published>
-    <updated>2017-04-23T13:41:45.000Z</updated>
+    <updated>2017-05-15T01:24:32.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下</p>
 </blockquote>
@@ -89,9 +205,11 @@
     
     </summary>
     
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
     
   </entry>
   
@@ -1828,136 +1946,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
       <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
       <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[从Bayesion的角度来看Logistic Regression]]></title>
-    <link href="http://kubicode.me/2016/03/26/Machine%20Learning/Bayesian-Logistic-Regression/"/>
-    <id>http://kubicode.me/2016/03/26/Machine Learning/Bayesian-Logistic-Regression/</id>
-    <published>2016-03-26T03:30:54.000Z</published>
-    <updated>2017-01-10T06:34:19.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
-<p><code>Logistic Regression</code>（下面简称<code>LR</code>）是一个二分类的机器学习方法，给定一个输入向量$x_i$，输出$P(y_i|x_i)$,其中$y_i \in {0,1}$。</p>
-</blockquote>
-<p>作为一个二分类问题，$Y$的后验概率一般会写成这样:<br>$$P(Y=1|X)=\frac{1}{1+exp(- \omega - \sum_{i=1}^n {\omega_ix_i})}=\sigma(W^TX_i)$$<br>那么<br><a id="more"></a><br>$$P(Y=0|X)=1-\sigma(W^TX_i)$$</p>
-<p>其中$\sigma(\cdot)$表示激活函数,为$S$形状，<code>x</code>轴可以取值无限大，<code>y</code>轴只能取到$(-1,1)$<br>$$\sigma(a)=\frac{1}{1+exp(-a)}$$</p>
-<pre><code>由于LR表示简单，训练预测速度快，效果并不是很差<span class="comment">(加上正则化)</span>，所以深得学术和工业界的囍爱~^_^
-</code></pre><h2 id="使用GNB推导">使用GNB推导</h2><blockquote>
-<p>谈到LR的时候第一印象就是上面的公式，但是为啥是这个公式呢？这一小节就是从<code>GNB(Gaussion Navie Bayes)</code>的角度来看待这个问题~</p>
-</blockquote>
-<p>我们先对<code>GNB</code>模型做4个假设:</p>
-<ol>
-<li>$Y$是布尔值，服从伯努利分布，其中$\pi = P(Y=1)$</li>
-<li>其中$X_i$是连续随机变量</li>
-<li>对于每个$X_i$，$P(X_i|Y=y_k)$服从高斯分布$N(\mu_{ik},\sigma_i)$(大多数情况下，简单用的$N(\mu_k,\sigma)$)</li>
-<li>在给定$Y$下，$X_i$与$X_j$条件独立</li>
-</ol>
-<p>现在让$P(Y|X)$服从<code>GNB</code>假设，通常根据贝叶斯公式可以得到以下:<br>$$P(Y=1|X)=\frac{P(X|Y=1)P(Y=1)}{P(Y=1)P(X|Y=1)+P(Y=0)P(X|Y=0)}$$</p>
-<p>再对这个式子进行进一步处理:</p>
-<p>$$<br>\begin{equation}\begin{split} P(Y=1|X)&amp;=\frac{1}{1+\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}}\quad\quad &amp;(1)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)P(X|Y=0)}{P(Y=1)P(X|Y=1)}\right)}&amp;(2)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{P(Y=0)}{P(Y=1)}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)}\quad\quad&amp;(3)\\<br>&amp;=\frac{1}{1+exp \left(ln\frac{1-\pi}{\pi}+\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}\right)} &amp;(4)<br>\end{split}\end{equation}<br>$$</p>
-<p>其中:</p>
-<ol>
-<li>式子<code>(1)-&gt;(2)</code>是加了<code>exp</code>函数与<code>ln</code>函数正好相互抵消</li>
-<li>式子<code>(2)-&gt;(3)</code>首先将<code>ln</code>函数的相乘转为相加，同时由于$X$中的各个$x_i$相互独立，所以原本写成连乘的式子又可以写成相加求和</li>
-<li>式子<code>(3)-&gt;(4)</code>中$P(Y=1)$的概率是$\pi$，则$P(Y=0)$的概率是$1-\pi$</li>
-</ol>
-<p>在给定假设<code>3</code>情况下，对$\sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)}$进行进一步展开:<br>$$\begin{equation}\begin{split} \sum_iln\frac{P(x_i|Y=0)}{P(x_i|Y=1)} &amp;=\sum_iln\frac{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i0})^2}{2\sigma_i^2})}{\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(x_i-\mu_{i1})^2}{2\sigma_i^2})}  &amp;(5)\\<br>&amp;= \sum_iln  exp\left(\frac{(x_i-\mu_{i1})^2-(x_i-\mu_{i0})^2}{2\sigma_i^2}\right) &amp;(6)\\<br>&amp;= \sum_i \left(\frac{(x_i^2-2x_i\mu_{i1}+\mu_{i1}^2)-(x_i^2-2x_i\mu_{i0}+\mu_{i0}^2)}{2\sigma_i^2}\right) \quad\quad &amp;(7)\\<br>&amp;= \sum_i \left(\frac{2x_i(\mu_{i0}-\mu_{i1})+\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(8)\\<br>&amp;= \sum_i \left(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}\right) &amp;(9)<br>\end{split}\end{equation}$$</p>
-<ol>
-<li>式子<code>(5)</code>根据假设<code>3</code>而得到，它是服从高斯分布</li>
-<li>式子<code>(5)-&gt;(6)</code>是消除了公共因此，并且将指数上的相除转为了相减</li>
-<li>式子<code>(6)-&gt;(7)</code>是对<code>ln</code>和<code>exp</code>进行了相互抵消，并且对其平方公式进行了展开</li>
-<li>式子<code>(7)-&gt;(8)</code>是展开式中除去了公有的变量</li>
-<li>式子<code>(8)-&gt;(9)</code>将$x_i$显眼得提了出来</li>
-</ol>
-<p>现从新将上面的展开式丢到$P(Y=1|X)$中则可以得到<br>$$P(Y=1|X)=\frac{1}{1+exp \left(ln\frac{1-\pi}{\pi}+\sum_i(\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}x_i+\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2})\right)}$$</p>
-<p>相应地，则可以将其写为:<br>$$P(Y=1|X)=\frac{1}{1+exp (\omega_0+\sum_i\omega_ix_i)}$$</p>
-<blockquote>
-<p>可以发现这个式子就是<code>LR</code>的式子了</p>
-</blockquote>
-<p>其权重$\{\omega_1…\omega_n\}$为<br>$$\omega_i=\frac{\mu_{i0}-\mu_{i1}}{\sigma_i^2}$$<br>其偏置$\omega_0$为:<br>$$\omega_0=ln\frac{1-\pi}{\pi}+\sum_i\frac{\mu_{i1}^2-\mu_{i0}^2}{2\sigma_i^2}$$</p>
-<h2 id="总结">总结</h2><p>文本是学习了从贝叶斯角度来看<code>LR</code>式子的来源，根据大家熟知的朴素贝叶斯公式，将定其特定类别下的特征符合高斯分布，根据贝叶斯公式一步步推导出了<code>LR</code>式子的样纸，还是很神奇的。^_^</p>
-<h2 id="参考">参考</h2><p>1 <a href="http://web.cse.ohio-state.edu/~kulis/teaching/788_sp12/scribe_notes/lecture6.pdf" target="_blank" rel="external">http://web.cse.ohio-state.edu/~kulis/teaching/788_sp12/scribe_notes/lecture6.pdf</a>(基本就是看了这个，不过里面公式有不少笔误的。。)</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="Logistic_Regression公式">Logistic Regression公式</h2><blockquote>
-<p><code>Logistic Regression</code>（下面简称<code>LR</code>）是一个二分类的机器学习方法，给定一个输入向量$x_i$，输出$P(y_i|x_i)$,其中$y_i \in {0,1}$。</p>
-</blockquote>
-<p>作为一个二分类问题，$Y$的后验概率一般会写成这样:<br>$$P(Y=1|X)=\frac{1}{1+exp(- \omega - \sum_{i=1}^n {\omega_ix_i})}=\sigma(W^TX_i)$$<br>那么<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Hadoop Streaming导入自定义module]]></title>
-    <link href="http://kubicode.me/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/"/>
-    <id>http://kubicode.me/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/</id>
-    <published>2016-03-24T16:17:54.000Z</published>
-    <updated>2016-03-25T01:51:05.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" target="_blank" rel="external">reducer</a>程序:<br><a id="more"></a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding=utf8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> utils_helper</span><br><span class="line"></span><br><span class="line">lastk = <span class="keyword">None</span> <span class="comment">#这里标志最后一个k  用于控制同一个key 到一个组中</span></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> sys.stdin:</span><br><span class="line">        w,c = line.split(<span class="string">'\t'</span>)</span><br><span class="line">        c = int(c) <span class="comment">#不转成int会比较麻烦  这是是计数</span></span><br><span class="line">        <span class="keyword">if</span> lastk == <span class="keyword">None</span>: <span class="comment">#这里是判断是否过来的是第一个key</span></span><br><span class="line">                lastk=w</span><br><span class="line">                count = utils_helper.add(count,c)</span><br><span class="line">        <span class="keyword">elif</span> lastk == w:</span><br><span class="line">                count += c</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br><span class="line">                lastk=w</span><br><span class="line">                count = c <span class="comment">#这里重置计数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> lastk <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="keyword">print</span> <span class="string">"%s\t%s"</span>%(lastk,count)</span><br></pre></td></tr></table></figure></p>
-<p>故意使用一个自定义模块来测试<code>utils_helper.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x,y)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> x+y</span><br></pre></td></tr></table></figure></p>
-<p>如果本地跑起来是(就是本地DEBUG)就可以正常跑的，但是放到<code>Hadoop</code>集群上跑的时候,使用的启动命令为:</p>
-<pre><code>hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-2.7.0.jar \
--<span class="ruby">input /yyl/data/line.txt \
-</span>-<span class="ruby">output /yyl/test/ouput/streaming2 \
-</span>-<span class="ruby">mapper <span class="string">"python word_count_mapper.py"</span> \
-</span>-<span class="ruby">reducer <span class="string">"python word_count_reducer.py"</span> \
-</span>-<span class="ruby">file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_mapper.py \
-</span>-<span class="ruby">file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/word_count_reducer.py \
-</span>-<span class="ruby">file <span class="variable">$HADOOP_HOME</span>/runjar/pyscript/utils_helper.py \</span>
-</code></pre><p>可以发现跑到<code>reducer</code>阶段时会报错:</p>
-<pre><code><span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">11</span>:<span class="number">40</span> INFO mapreduce<span class="class">.Job</span>: Running job: job_1458827745768_0018
-<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">11</span>:<span class="number">53</span> INFO mapreduce<span class="class">.Job</span>: Job job_1458827745768_0018 running <span class="keyword">in</span> uber mode : false
-<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">11</span>:<span class="number">53</span> INFO mapreduce<span class="class">.Job</span>:  map <span class="number">0%</span> reduce <span class="number">0%</span>
-<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">12</span>:<span class="number">12</span> INFO mapreduce<span class="class">.Job</span>:  map <span class="number">100%</span> reduce <span class="number">0%</span>
-<span class="number">16</span>/<span class="number">03</span>/<span class="number">24</span> <span class="number">12</span>:<span class="number">12</span>:<span class="number">22</span> INFO mapreduce<span class="class">.Job</span>: Task Id : attempt_1458827745768_0018_r_000000_0, Status : FAILED
-Error: java<span class="class">.lang</span><span class="class">.RuntimeException</span>: PipeMapRed.<span class="function"><span class="title">waitOutputThreads</span><span class="params">()</span></span>: subprocess failed with <span class="tag">code</span> <span class="number">2</span>
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.streaming</span><span class="class">.PipeMapRed</span><span class="class">.waitOutputThreads</span>(PipeMapRed<span class="class">.java</span>:<span class="number">322</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.streaming</span><span class="class">.PipeMapRed</span><span class="class">.mapRedFinished</span>(PipeMapRed<span class="class">.java</span>:<span class="number">535</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.streaming</span><span class="class">.PipeReducer</span><span class="class">.close</span>(PipeReducer<span class="class">.java</span>:<span class="number">134</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.io</span><span class="class">.IOUtils</span><span class="class">.cleanup</span>(IOUtils<span class="class">.java</span>:<span class="number">244</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.ReduceTask</span><span class="class">.runOldReducer</span>(ReduceTask<span class="class">.java</span>:<span class="number">459</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.ReduceTask</span><span class="class">.run</span>(ReduceTask<span class="class">.java</span>:<span class="number">392</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.YarnChild</span>$<span class="number">2</span>.<span class="function"><span class="title">run</span><span class="params">(YarnChild.java:<span class="number">163</span>)</span></span>
-    at java<span class="class">.security</span><span class="class">.AccessController</span><span class="class">.doPrivileged</span>(Native Method)
-    at javax<span class="class">.security</span><span class="class">.auth</span><span class="class">.Subject</span><span class="class">.doAs</span>(Subject<span class="class">.java</span>:<span class="number">415</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.security</span><span class="class">.UserGroupInformation</span><span class="class">.doAs</span>(UserGroupInformation<span class="class">.java</span>:<span class="number">1657</span>)
-    at org<span class="class">.apache</span><span class="class">.hadoop</span><span class="class">.mapred</span><span class="class">.YarnChild</span><span class="class">.main</span>(YarnChild<span class="class">.java</span>:<span class="number">158</span>)
-</code></pre><p>这就疼了，代码应该没问题呀，尝试了好几遍之后还是这个错误。。。-_-!!</p>
-<h2 id="解决方案">解决方案</h2><p>后来在<code>stackoverflow</code>发现有人问了同样的问题，并且我使用其中一个方案解决了:</p>
-<pre><code>When Hadoop-Streaming starts <span class="keyword">the</span> python scripts, your python <span class="keyword">script</span>'s path <span class="keyword">is</span> <span class="keyword">where</span> <span class="keyword">the</span> <span class="keyword">script</span> <span class="type">file</span> really <span class="keyword">is</span>. However, hadoop starts them <span class="keyword">at</span> './', <span class="keyword">and</span> your lib.py(<span class="keyword">it</span>'s a symlink) <span class="keyword">is</span> <span class="keyword">at</span> './', too. So, <span class="keyword">try</span> <span class="keyword">to</span> add 'sys.path.append(<span class="string">"./"</span>)' <span class="keyword">before</span> you import lib.py like this: 
-import sys
-sys.path.append('./')
-import lib
-</code></pre><blockquote>
-<p><code>lib.py</code>表示自定义包</p>
-</blockquote>
-<p>应该就是<code>-file</code>上传到计算机器之后文件路径的问题产生的，不过感觉他的理由有点疑惑，按他说的如果我上传之后会通过软连接组织到同一目录下再使用，所以如果直接导入包可能会出问题，那我如果上传之前就是在同一目录下应该就不会出问题吧？？这里并不是很理解，但是至少是导入包的问题是解决了^_^</p>
-<h2 id="参考">参考</h2><ol>
-<li><a href="http://stackoverflow.com/questions/18150208/how-to-import-a-custom-module-in-a-mapreduce-job" target="_blank" rel="external">http://stackoverflow.com/questions/18150208/how-to-import-a-custom-module-in-a-mapreduce-job</a></li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/">reducer</a>程序:<br>]]>
-    
-    </summary>
-    
-      <category term="Hadoop" scheme="http://kubicode.me/tags/Hadoop/"/>
-    
-      <category term="Hadoop" scheme="http://kubicode.me/categories/Hadoop/"/>
     
   </entry>
   

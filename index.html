@@ -95,7 +95,140 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/" title="学习记录一下深度语义匹配模型-DSSM" itemprop="url">学习记录一下深度语义匹配模型-DSSM</a>
+      <a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/" title="长短期记忆模型-LSTM" itemprop="url">长短期记忆模型-LSTM</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-22T01:50:40.000Z" itemprop="datePublished"> 发表于 2017-05-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="RNN的缺点">RNN的缺点</h2><p><code>RNN</code>的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个<code>language mdoel</code>:</p>
+<pre><code><span class="operator">the</span> clouds are <span class="operator">in</span> <span class="operator">the</span> sky
+</code></pre><p>这里要预测的<code>sky</code>只需要依赖前前面几个<code>term</code>即可</p>
+<p>再看看另一个句子:    </p>
+<pre><code><span class="keyword">I</span> grew up in France… <span class="keyword">I</span> speak fluent French.
+</code></pre><p>这里在预测<code>French</code>的时候需要前面较长的信息，甚至已经跨到前面一句话了。<br>因此是可以看出就算在<code>Language Model</code>中不同样本下可能是需要不同的长度的历史信息的，而对于<code>RNN</code>而言他并不能控制历史信息的长度.</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/15/Deep Learning/Understanding-about-RNN/" title="初识递归神经网络-RNN" itemprop="url">初识递归神经网络-RNN</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-15T01:17:48.000Z" itemprop="datePublished"> 发表于 2017-05-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="RNN是啥?">RNN是啥?</h2><p>当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在<code>Language Model</code>中在给定几个单词的情况下来预测下面将会出什么单词的时候。<br>这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。<br>一图胜千言，经典的RNN结构是长这样纸的:<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2017/05/15/Deep Learning/Understanding-about-RNN/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/05/15/Deep Learning/Understanding-about-RNN/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/" title="学习记录一下深度语义匹配模型-DSSM" itemprop="url">学习记录一下深度语义匹配模型-DSSM</a>
   </h1>
   <p class="article-author">By
        
@@ -123,7 +256,7 @@
         
         <p class="article-more-link">
           
-            <a href="/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/#more">Read More</a>
+            <a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/#more">Read More</a>
           
        </p>
     </div>
@@ -132,13 +265,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
   </div>
 
 </div>
@@ -149,7 +282,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/" data-count-type="comments">&nbsp;</a>
+		<a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -216,7 +349,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2017/01/09/Search Engine/The-Recorder-for-some-Federated-Search-Papers/#comments" class="ds-thread-count comments-count-link" data-thread-key="2017/01/09/Search Engine/The-Recorder-for-some-Federated-Search-Papers/" data-count-type="comments">&nbsp;</a>
+		<a href="/2017/01/09/Search Engine/The-Recorder-for-some-Federated-Search-Papers/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -281,7 +414,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/12/12/Machine Learning/Maximum-Entropy-Model/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/12/12/Machine Learning/Maximum-Entropy-Model/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/12/12/Machine Learning/Maximum-Entropy-Model/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -352,7 +485,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/11/27/Machine Learning/Something-for-Softmax/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/11/27/Machine Learning/Something-for-Softmax/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/11/27/Machine Learning/Something-for-Softmax/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -423,7 +556,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -488,7 +621,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -553,7 +686,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/09/19/Machine Learning/AUC-Calculation-by-Python/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -618,152 +751,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/" title="RankNet:基于梯度下降的学习排序" itemprop="url">RankNet:基于梯度下降的学习排序</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-05-30T11:51:21.000Z" itemprop="datePublished"> 发表于 2016-05-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet</code>就是使用神经网络算法来使得这个概率最大化.last update at:2016-08-28</p>
-</blockquote>
-<h2 id="算法原理">算法原理</h2><p>假设现在有一对文档$D_i$和$D_j$,给定一个目标概率$\bar{P}_{i,j}$,以表示文档$D_i$将会排在文档$D_j$的前面.</p>
-<ol>
-<li>如果$\bar{P}_{i,j}=1$,表示$D_i$一定会排在$D_j$前面</li>
-<li>如果$\bar{P}_{i,j}=0.5$,表示$D_i$和$D_j$的前后关系将无法确定</li>
-<li>如果$\bar{P}_{i,j}=0$,表示$D_i$一定不会排在$D_j$前面</li>
-</ol>
-<p>现在有一个实值的排序函数$f$,如果$f(x_i) &gt; f(x_j)$，则会有$D_i \triangleright D_j$(表示$D_i$会排在$D_j$前面)</p>
-<blockquote>
-<p>这里$x$是为文档$D$所表示的特征向量</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" title="GBRank:一种基于回归的学习排序算法" itemprop="url">GBRank:一种基于回归的学习排序算法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-05-08T09:30:39.000Z" itemprop="datePublished"> 发表于 2016-05-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>GBRank</code>是一种<code>pairwise</code>的学习排序算法，他是基于回归来解决<code>pair</code>对的先后排序问题。在<code>GBRank</code>中，使用的回归算法是<code>GBT(Gradient Boosting Tree)</code>，可以参考<a href="http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/#Gradient_tree_boosting">这个</a>，<code>pairwise</code>相关的可以参考<a href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/">这个</a></p>
-</blockquote>
-<h2 id="算法原理">算法原理</h2><p>一般来说在搜索引擎里面，相关性越高的越应该排在前面。现在<code>query-doc</code>的特征使用向量$x$或者$y$表示，假设现在有一个文档对$\left \langle x_i,y_i \right \rangle$，当$x_i$排在$y_i$前面时，我们使用$x_i \succ y_i$来表示。</p>
-<p>我们含顺序的<code>pair</code>对用如下集合表示(也就是真的$x_i$真的排在$y_i$前面):$$S=\{ \left \langle x_i,y_i \right \rangle | x_i \succ y_i,i = 1…N \}$$</p>
-<p>现假设学习的排序函数为$h$，我们希望当$h(x_i)&gt;h(y_i)$时，满足$x_i \succ y_i$的数量越多越好.<br>现在将$h$的风险函数用如下式子表示:$$R(h) = \frac{1}{2} \sum_{i=1}^N \left( max\{0,h(y_i)-h(x_i)\} \right)^2$$<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/#comments" class="ds-thread-count comments-count-link" data-thread-key="2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" data-count-type="comments">&nbsp;</a>
+		<a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -804,6 +792,10 @@
 		
 		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 		  
 		
 		  
@@ -851,7 +843,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -892,7 +884,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
 			
 		
 			
@@ -928,15 +920,7 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
@@ -944,7 +928,15 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -960,11 +952,11 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -1098,18 +1090,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"kubiCode"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 

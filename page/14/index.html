@@ -95,6 +95,160 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/03/24/Data Struct/bitTree-traversal/" title="二叉树的遍历-递归和非递归" itemprop="url">二叉树的遍历-递归和非递归</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-24T12:08:39.000Z" itemprop="datePublished"> 发表于 2015-03-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="二叉树">二叉树</h2><p>二叉树是一种较为常见的数据结构，不了解的<a href="http://baike.baidu.com/link?url=ZqKtj1Mk_vN9Ey2QZjTih_rUgyH5JiLJ7deno8DdRff7tLr6Q0C-uzAxEGBTCkx-9zd5JiyjOmihMbuuv_tc_a">点我</a>，他在各大公司的笔试/面试中经常出现，特别是它的遍历。<br>二叉树的遍历共三种：</p>
+<ol>
+<li>前序遍历：根节点-&gt;左孩子节点-&gt;右孩子节点</li>
+<li>中序遍历：左孩子节点-&gt;根节点-&gt;右孩子节点</li>
+<li>后续遍历：左孩子节点-&gt;右孩子节点-&gt;根节点</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/03/24/Data Struct/bitTree-traversal/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Data-Struct/">Data Struct</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Data-Struct/">Data Struct</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/24/Data Struct/bitTree-traversal/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/21/Hexo/" title="Hexo博客搭建完成" itemprop="url">Hexo博客搭建完成</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-03-21T10:38:28.000Z" itemprop="datePublished"> 发表于 2015-03-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>花了接近两天终于将这个博客搭建完成，特此记录下！<br>本站在搭建时本地使用Windows系统，托管在Github上，文本只是记录本站搭建期间出现的一些情况，完整教程还请自行去百度或者Google。</p>
+<h2 id="Hexo">Hexo</h2><blockquote>
+<p>Hexo 是一个简单地、轻量地、基于Node的一个静态博客框架。通过Hexo我们可以快速创建自己的博客，仅需要几条命令就可以完成。</p>
+</blockquote>
+<ul>
+<li>Hexo的安装 <a href="http://hexo.io/" target="_blank" rel="external">http://hexo.io/</a></li>
+<li>Github个人页面的配置 <a href="https://pages.github.com/" target="_blank" rel="external">https://pages.github.com/</a></li>
+<li>Hexo的主题 <a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">https://github.com/hexojs/hexo/wiki/Themes</a></li>
+</ul>
+<h3 id="问题1">问题1</h3><pre><code>在使用<span class="tag">hexo</span> <span class="tag">deploy</span>部署时一直没反应，后来看了<span class="attr_selector">[2]</span>才知道是配置中每个冒号后面需要加一个空格，如果还是不行就尝试删除<span class="class">.deploy</span>文件试试
+</code></pre><h3 id="问题2">问题2</h3><pre><code>多说评论系统中<span class="built_in">data</span><span class="attribute">-thread</span><span class="attribute">-key</span>之类的这几个参数使用
+<span class="built_in">data</span><span class="attribute">-thread</span><span class="attribute">-key</span><span class="subst">=</span><span class="string">"&lt;%= page.path %&gt;"</span> <span class="built_in">data</span><span class="attribute">-title</span><span class="subst">=</span><span class="string">"&lt;%= page.title %&gt;"</span> <span class="built_in">data</span><span class="attribute">-url</span><span class="subst">=</span><span class="string">"&lt;%= page.permalink %&gt;"</span>
+来代替
+</code></pre><h3 id="问题3">问题3</h3><pre><code>在Windows下进行hexo deploy 时需要安装cygwin，感觉配置这个略微麻烦，就直接使用github <span class="keyword">for</span> windows的客户端，进行账号密码登录
+之后直接使用Git <span class="built_in">shell</span>就可以进行deploy操作了
+</code></pre><h3 id="问题4">问题4</h3><pre><code>在安装rss和sitemap插件时使用 npm install hexo-generator-feed -<span class="keyword">save</span> 和npm install hexo-generator-sitemap --<span class="keyword">save</span>
+注意两个<span class="keyword">save</span>，很多教程上没带这个
+</code></pre><h3 id="问题5">问题5</h3><pre><code>如果在部署到github上执行hexo deploy时报<span class="keyword">error</span> deployer <span class="keyword">not</span> found:github 的错误,请安装npm install hexo-deployer-git <span class="comment">--save</span>
+</code></pre><h2 id="感谢参考">感谢参考</h2><ol>
+<li><a href="http://yangjian.me/pacman/hello/introducing-pacman-theme/" target="_blank" rel="external">http://yangjian.me/pacman/hello/introducing-pacman-theme/</a></li>
+<li><a href="http://zipperary.com/categories/hexo/" target="_blank" rel="external">http://zipperary.com/categories/hexo/</a></li>
+<li><a href="http://www.v2ex.com/t/175940" target="_blank" rel="external">http://www.v2ex.com/t/175940</a><br>最后感谢jacman的作者大神<a href="http://wuchong.me/jacman/2014/11/20/how-to-use-jacman/" target="_blank" rel="external">Jack</a></li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hexo/">Hexo</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/03/21/Hexo/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/" title="LeetCode-Rotate Array" itemprop="url">LeetCode-Rotate Array</a>
   </h1>
   <p class="article-author">By
@@ -152,7 +306,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Rotate-Array/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/20/LeetCode/LeetCode-Rotate-Array/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -229,7 +383,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/20/LeetCode/LeetCode-Reverse Bits/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/20/LeetCode/LeetCode-Reverse Bits/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -309,7 +463,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -385,7 +539,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/12/LeetCode/LeetCode-Single-Number-II/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -462,7 +616,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/10/LeetCode/LeetCode-Single-Number/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/10/LeetCode/LeetCode-Single-Number/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/10/LeetCode/LeetCode-Single-Number/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -534,7 +688,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -609,7 +763,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -695,157 +849,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/08/LeetCode/LeetCode-Clone-Graph/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/07/LeetCode/LeetCode-Candy/" title="LeetCode-Candy" itemprop="url">LeetCode-Candy</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-07T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-07</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/candy/" target="_blank" rel="external">https://leetcode.com/problems/candy/</a></p>
-</blockquote>
-<p>Problem:<br>There are N children standing in a line. Each child is assigned a rating value.</p>
-<p>You are giving candies to these children subjected to the following requirements:</p>
-<ul>
-<li>Each child must have at least one candy.</li>
-<li>Children with a higher rating get more candies than their neighbors.</li>
-</ul>
-<p>What is the minimum candies you must give?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">candy</span><span class="params">(<span class="keyword">int</span>[] ratings)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n=ratings.length;</span><br><span class="line">        <span class="keyword">if</span>(n&lt;<span class="number">2</span>) <span class="keyword">return</span> n;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] maxseq=<span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=n-<span class="number">2</span>; i&gt;=<span class="number">0</span>; --i)</span><br><span class="line">            <span class="keyword">if</span>(ratings[i]&gt;ratings[i+<span class="number">1</span>]) maxseq[i]=<span class="number">1</span>+maxseq[i+<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] candies=<span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; ++i)&#123;</span><br><span class="line">            candies[i]=<span class="number">1</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(i!=<span class="number">0</span> &amp;&amp; ratings[i]&gt;ratings[i-<span class="number">1</span>])</span><br><span class="line">            &#123;</span><br><span class="line">                candies[i]=<span class="number">1</span>+Math.max(candies[i-<span class="number">1</span>], maxseq[i]);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                candies[i]+=maxseq[i];</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            sum+=candies[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/07/LeetCode/LeetCode-Candy/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/07/LeetCode/LeetCode-Candy/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/06/LeetCode/LeetCode-Reorder-List/" title="LeetCode-Reorder List" itemprop="url">LeetCode-Reorder List</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-06T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-06</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/reorder-list/" target="_blank" rel="external">https://leetcode.com/problems/reorder-list/</a></p>
-</blockquote>
-<p>Problem:<br>Given a singly linked list L: <em>L0→L1→…→Ln-1→Ln</em>,<br>reorder it to: <em>L0→Ln→L1→Ln-1→L2→Ln-2→…</em></p>
-<p>You must do this in-place without altering the nodes’ values.</p>
-<p>For example,<br>Given {1,2,3,4}, reorder it to {1,4,2,3}.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reorderList</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span> || head.next==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        </span><br><span class="line">        Stack&lt;ListNode&gt; stack=<span class="keyword">new</span> Stack&lt;ListNode&gt;();</span><br><span class="line">        </span><br><span class="line">        ListNode temp=head;</span><br><span class="line">        <span class="keyword">while</span>(temp!=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            stack.push(temp);</span><br><span class="line">            temp=temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> length=stack.size();</span><br><span class="line">        temp=head;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;Math.floor((length+<span class="number">1</span>)/<span class="number">2</span>)-<span class="number">1</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            ListNode node=stack.pop();</span><br><span class="line">            node.next=temp.next;</span><br><span class="line">            temp.next=node;</span><br><span class="line">            </span><br><span class="line">            temp=node.next;</span><br><span class="line">        &#125;</span><br><span class="line">        stack.pop().next=<span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/06/LeetCode/LeetCode-Reorder-List/#comments" class="ds-thread-count comments-count-link" data-thread-key="2014/07/06/LeetCode/LeetCode-Reorder-List/" data-count-type="comments">&nbsp;</a>
+		<a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -886,6 +890,10 @@
 		
 		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 		  
 		
 		  
@@ -933,7 +941,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -974,7 +982,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
 			
 		
 			
@@ -1010,15 +1018,7 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
@@ -1026,7 +1026,15 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -1042,11 +1050,11 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -1180,18 +1188,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"kubiCode"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 

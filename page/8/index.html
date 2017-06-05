@@ -95,6 +95,150 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/19/Algorithm/Longest/" title="最长递增子序列" itemprop="url">最长递增子序列</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-19T08:31:57.000Z" itemprop="datePublished"> 发表于 2015-07-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>题目</p>
+<pre><code>给定一个长度为<span class="keyword">N</span>的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。例如：给定一个长度为<span class="number">6</span>的数组A<span class="list">{5， 6， 7， 1， 2， 8}</span>，则其最长的单调递增子序列为<span class="list">{5，6，7，8}</span>，长度为<span class="number">4.</span>
+</code></pre><h2 id="解析">解析</h2><blockquote>
+<p>此题面试中非常常见，其实比较简单，一般面试中不要慌，按条理来一般都能答出 ^_^</p>
+</blockquote>
+<p>N长度的数组，关于最长递增子序列有max(l(i))=max(l(i-1)),i&gt;1, a[i]&gt;a[i-1]，这个关系式很重要<br>再来看假如N=1，那么l=1<br>如果N=2,有{16,24}，那么可以发现l=2，因为max(l(0))=1,24&gt;16,所以max(l(1))=max(l(0))+1<br>好了，其实我们可以维护一个N的辅助数组，每个值表示在当前元素下考虑后面的元素可能组成的最长递增子序列,比如刚刚为N=2，有f[0]=2,f[1]=1<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/19/Algorithm/Longest/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/19/Algorithm/Longest/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/19/Algorithm/SubCollection/" title="打印一个集合所有的子集和" itemprop="url">打印一个集合所有的子集和</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-19T07:39:20.000Z" itemprop="datePublished"> 发表于 2015-07-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>打印一个集合所有的子集和，比如<span class="list">{a,b,c}</span>的子集和有<span class="list">{a}</span>,<span class="list">{b}</span>,<span class="list">{c}</span>,<span class="list">{a,b}</span>,<span class="list">{a,c}</span>,<span class="list">{b,c}</span>,<span class="list">{a,b,c}</span>以及 空
+</code></pre><h2 id="解析">解析</h2><p>一个元素个数为n的集合所包含的所有组合的子集个数有2^n个，这样其实就可以将所以集合的情况映射到0~2^n-1个，然后按位取元素即可</p>
+<pre><code>比如<span class="list">{a,b,c}</span>这个三元素的集合按位映射
+<span class="list">{0,0,0}</span>=&gt;空
+<span class="list">{0,0,1}</span>=&gt;<span class="list">{c}</span>
+<span class="list">{0,1,0}</span>=&gt;<span class="list">{b}</span>
+<span class="list">{0,1,1}</span>=&gt;<span class="list">{b,c}</span>
+.
+.
+.
+<span class="list">{1,1,1}</span>=&gt;<span class="list">{a,b,c}</span>
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/19/Algorithm/SubCollection/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/19/Algorithm/SubCollection/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/19/Algorithm/OddEvenSplit/" title="奇数偶数分离 奇数在左侧,偶数在右侧,要求复杂度为O(N)" itemprop="url">奇数偶数分离 奇数在左侧,偶数在右侧,要求复杂度为O(N)</a>
   </h1>
   <p class="article-author">By
@@ -140,7 +284,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/19/Algorithm/OddEvenSplit/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/19/Algorithm/OddEvenSplit/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/19/Algorithm/OddEvenSplit/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -206,7 +350,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/18/Algorithm/CardStraight/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/18/Algorithm/CardStraight/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/18/Algorithm/CardStraight/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -271,7 +415,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/18/Algorithm/Put-Upside-Down-Stack/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/18/Algorithm/Put-Upside-Down-Stack/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/18/Algorithm/Put-Upside-Down-Stack/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -337,7 +481,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/17/Algorithm/DeleteNode-In-O1/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/17/Algorithm/DeleteNode-In-O1/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/17/Algorithm/DeleteNode-In-O1/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -406,7 +550,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/16/Algorithm/Print-Tail-Head/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/16/Algorithm/Print-Tail-Head/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/16/Algorithm/Print-Tail-Head/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -490,7 +634,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/16/Algorithm/LinkedList-Revert/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/16/Algorithm/LinkedList-Revert/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/16/Algorithm/LinkedList-Revert/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -558,7 +702,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/07/Spark/Graphs-Applications/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/07/Spark/Graphs-Applications/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/07/Spark/Graphs-Applications/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -627,143 +771,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/07/05/Algorithm/1-2-n/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/05/Algorithm/1-2-n/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/03/Algorithm/Single-Linked-Cycle-Y/" title="单向列表是否有环，两个链表是否相交，以及交点" itemprop="url">单向列表是否有环，两个链表是否相交，以及交点</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-02T16:49:20.000Z" itemprop="datePublished"> 发表于 2015-07-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="单向链表的结构">单向链表的结构</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Link</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> data;</span><br><span class="line">	<span class="keyword">public</span> Link next;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Link</span><span class="params">(<span class="keyword">int</span> data)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data=data;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//为了打印方便而加上去的。。</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> String.format(<span class="string">"data:%s"</span>,<span class="keyword">this</span>.data);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="单向链表是否有环">单向链表是否有环</h2><p>这题的思路很简单，先创建两个指针都指向链表的头部，一个fast指针每次走两步，另一个slow指针每次都走一步，如果fast指针能走到null的地方就说明该单链表没有环，否则fast和slow节点一定会走到同一个节点，表示有环</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/03/Algorithm/Single-Linked-Cycle-Y/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/03/Algorithm/Single-Linked-Cycle-Y/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/03/Algorithm/Single-Linked-Cycle-Y/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/02/Algorithm/MinStack/" title="定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素" itemprop="url">定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-02T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-07-02</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素。要求函数min、push以及pop的时间复杂度都是<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span></span>。
-</code></pre><h2 id="解题">解题</h2><p>这道题目的主要难点就是需要的复杂度为O(1)，也就是说在求最小值的时候无法遍历该栈。<br>正确地解法就是使用一个辅助栈（数组），为维持当前栈容量下地最小值情况</p>
-<p>比如</p>
-<pre><code>栈数据
-3,5,2,4,1
-辅助数据
-0,0,2,2,4
-</code></pre><p>将5压入栈的时候，发现上一个栈顶元素下的最小值是3，故这里无法更新最小值，仍旧将当前的最小值置为3（索引位置为0），但是当2压入栈的时候<br>，可以发展2&lt;3，所以在该类情况下会将当前栈的最小值更新为2（即索引为2）<br>这种设计在出栈的时候只需要将栈数据的栈顶出掉即可，同样在求最小值的时候只要返回当前辅助数据中索引值在栈数据中的值即可<br>这样就非常方便地实现了O（1）的要求，同时因为辅助栈是存储索引位置，索引并不会占用很大的内容空间</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/02/Algorithm/MinStack/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/02/Algorithm/MinStack/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/07/02/Algorithm/MinStack/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/07/05/Algorithm/1-2-n/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -804,6 +812,10 @@
 		
 		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 		  
 		
 		  
@@ -851,7 +863,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -892,7 +904,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
 			
 		
 			
@@ -928,15 +940,7 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
@@ -944,7 +948,15 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -960,11 +972,11 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -1098,18 +1110,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"kubiCode"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 

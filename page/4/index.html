@@ -95,6 +95,154 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/01/03/Linux/shell-line-no-tab/" title="用笨方法解决Shell中按行读取文件之后Tab键不见的问题" itemprop="url">用笨方法解决Shell中按行读取文件之后Tab键不见的问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-01-03T14:24:09.000Z" itemprop="datePublished"> 发表于 2016-01-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>Shell</code>强大灵活，但是今天在使用<code>Shell</code>处理按行读取文件时发现  读取到的行设定的<code>tab</code>分割符不见了</p>
+</blockquote>
+<p>先看一下演示的待<a href="http://kubicode.me/img/awk-study-list/score.log">处理文件</a>:<br><img src="/img/shell-line-no-tab/demo_text.png" alt=""></p>
+<p>需要做的需求就是将里面的数据使用<code>shell</code>将第一列读取出来做一些其他处理(当然如果仅仅是完成读取首列这个功能，使用<code>awk</code>是最快的，这里只是演示)</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/01/03/Linux/shell-line-no-tab/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/01/03/Linux/shell-line-no-tab/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/24/Linux/awk-study-list/" title="轻量的结构化文本处理工具-awk" itemprop="url">轻量的结构化文本处理工具-awk</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-23T16:06:41.000Z" itemprop="datePublished"> 发表于 2015-12-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code>与其说<span class="tag">awk</span>是一个强大的文本处理工具，我更加喜欢称之为轻量级的<span class="tag">C</span>语言版脚本，有了它，你就能非常自由，轻松的操作文本文件了。<span class="rule"><span class="attribute">ps</span>:<span class="value">比Excel更加方便哦,一句话：awk可以带你装b带你飞~</span></span>
+</code></pre><h2 id="初体验：九九乘法表">初体验：九九乘法表</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /bin/awk -f</span></span><br><span class="line"></span><br><span class="line">BEGIN&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"lets begins"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=NR;i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%sx%s=%s\t"</span>,NR,i,NR*i)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END&#123;</span><br><span class="line">    <span class="built_in">print</span> <span class="string">"ends"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在先看<code>awk</code>程序之前，咱先来看一下由他实现的一个九九乘法表</p>
+<pre><code>yans-MacBook-Pro:Downloads yanyl$ seq <span class="number">9</span> | awk -f chengfa.awk
+lets begins
+<span class="number">1</span><span class="variable">x1=</span><span class="number">1</span>
+<span class="number">2</span><span class="variable">x1=</span><span class="number">2</span>    <span class="number">2</span><span class="variable">x2=</span><span class="number">4</span>
+<span class="number">3</span><span class="variable">x1=</span><span class="number">3</span>    <span class="number">3</span><span class="variable">x2=</span><span class="number">6</span>    <span class="number">3</span><span class="variable">x3=</span><span class="number">9</span>
+<span class="number">4</span><span class="variable">x1=</span><span class="number">4</span>    <span class="number">4</span><span class="variable">x2=</span><span class="number">8</span>    <span class="number">4</span><span class="variable">x3=</span><span class="number">12</span>    <span class="number">4</span><span class="variable">x4=</span><span class="number">16</span>
+<span class="number">5</span><span class="variable">x1=</span><span class="number">5</span>    <span class="number">5</span><span class="variable">x2=</span><span class="number">10</span>    <span class="number">5</span><span class="variable">x3=</span><span class="number">15</span>    <span class="number">5</span><span class="variable">x4=</span><span class="number">20</span>    <span class="number">5</span><span class="variable">x5=</span><span class="number">25</span>
+<span class="number">6</span><span class="variable">x1=</span><span class="number">6</span>    <span class="number">6</span><span class="variable">x2=</span><span class="number">12</span>    <span class="number">6</span><span class="variable">x3=</span><span class="number">18</span>    <span class="number">6</span><span class="variable">x4=</span><span class="number">24</span>    <span class="number">6</span><span class="variable">x5=</span><span class="number">30</span>    <span class="number">6</span><span class="variable">x6=</span><span class="number">36</span>
+<span class="number">7</span><span class="variable">x1=</span><span class="number">7</span>    <span class="number">7</span><span class="variable">x2=</span><span class="number">14</span>    <span class="number">7</span><span class="variable">x3=</span><span class="number">21</span>    <span class="number">7</span><span class="variable">x4=</span><span class="number">28</span>    <span class="number">7</span><span class="variable">x5=</span><span class="number">35</span>    <span class="number">7</span><span class="variable">x6=</span><span class="number">42</span>    <span class="number">7</span><span class="variable">x7=</span><span class="number">49</span>
+<span class="number">8</span><span class="variable">x1=</span><span class="number">8</span>    <span class="number">8</span><span class="variable">x2=</span><span class="number">16</span>    <span class="number">8</span><span class="variable">x3=</span><span class="number">24</span>    <span class="number">8</span><span class="variable">x4=</span><span class="number">32</span>    <span class="number">8</span><span class="variable">x5=</span><span class="number">40</span>    <span class="number">8</span><span class="variable">x6=</span><span class="number">48</span>    <span class="number">8</span><span class="variable">x7=</span><span class="number">56</span>    <span class="number">8</span><span class="variable">x8=</span><span class="number">64</span>
+<span class="number">9</span><span class="variable">x1=</span><span class="number">9</span>    <span class="number">9</span><span class="variable">x2=</span><span class="number">18</span>    <span class="number">9</span><span class="variable">x3=</span><span class="number">27</span>    <span class="number">9</span><span class="variable">x4=</span><span class="number">36</span>    <span class="number">9</span><span class="variable">x5=</span><span class="number">45</span>    <span class="number">9</span><span class="variable">x6=</span><span class="number">54</span>    <span class="number">9</span><span class="variable">x7=</span><span class="number">63</span>    <span class="number">9</span><span class="variable">x8=</span><span class="number">72</span>    <span class="number">9</span><span class="variable">x9=</span><span class="number">81</span>
+ends
+yans-MacBook-Pro:Downloads yanyl$
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/12/24/Linux/awk-study-list/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/24/Linux/awk-study-list/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" title="Hadoop Streaming 实践以及Debug" itemprop="url">Hadoop Streaming 实践以及Debug</a>
   </h1>
   <p class="article-author">By
@@ -140,7 +288,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -208,7 +356,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/07/Mac/Mac-OSX-Vim-highlight/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/11/07/Mac/Mac-OSX-Vim-highlight/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -281,7 +429,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/11/04/Linux/Shell-Command-List/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/11/04/Linux/Shell-Command-List/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/11/04/Linux/Shell-Command-List/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -351,7 +499,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/10/12/Machine Learning/KDTree-In-KNN/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -419,7 +567,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/10/05/Python/Numpy-Fast-Memory/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/10/05/Python/Numpy-Fast-Memory/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/10/05/Python/Numpy-Fast-Memory/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -488,7 +636,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -612,7 +760,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/09/12/Python/python-little-memory/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/12/Python/python-little-memory/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/09/12/Python/python-little-memory/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -676,136 +824,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/09/07/Machine Learning/Validation/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/07/Machine Learning/Validation/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/05/Machine Learning/Regularization/" title="《台大机器学习基石》Regularization" itemprop="url">《台大机器学习基石》Regularization</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-05T08:36:48.000Z" itemprop="datePublished"> 发表于 2015-09-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Regularization">Regularization</h2><p>正则化(<code>Regularization</code>)是缓解<code>Overfitting</code>非常有效的一项手段，在了解正则化之前，先来看下正则化做了什么：<br><img src="/img/Regularization/reg_target.png" height="300px" width="500px" /></p>
-<p>那这种正则化过程又该如何做呢？<br>其实上面图中的右侧可以看作十次多项式拟合出来的线，而左侧是由二次多项式拟合出得线(这里不了解的<a href="http://kubicode.me/2015/09/01/Machine%20Learning/Overfitting/">点击我</a>)<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/09/05/Machine Learning/Regularization/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/05/Machine Learning/Regularization/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/05/Machine Learning/Regularization/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/01/Machine Learning/Overfitting/" title="《台大机器学习基石》Overfitting" itemprop="url">《台大机器学习基石》Overfitting</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-01T15:24:58.000Z" itemprop="datePublished"> 发表于 2015-09-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="What_is_Overfitting">What is Overfitting</h2><p>假设现在我们使用一个二次函数随机产生几个点，并且加入非常少量的噪声，然后使用一个四次函数来进行拟合<br>将得到如下的结果<br><img src="/img/Overfitting/4fit2.png" height="240px" width="240px" /><br>可以发现4次函数可以完全拟合含有噪声的2次函数产生的点，也就是拟合出来的<code>E<sub>in</sub>=0</code>，但是此时如果使用新的2次函数的点用这个4次的拟合函数来进行预测的话，可以发现<code>E<sub>out</sub></code>会很高，<br>这种低<code>E<sub>in</sub></code>高<code>E<sub>out</sub></code>就是叫做泛化能力差(<code>BAD generalization</code>)，也是往往我们在做训练预测时不希望看到的。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/09/01/Machine Learning/Overfitting/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/01/Machine Learning/Overfitting/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/09/01/Machine Learning/Overfitting/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/09/07/Machine Learning/Validation/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -846,6 +865,10 @@
 		
 		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 		  
 		
 		  
@@ -893,7 +916,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -934,7 +957,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
 			
 		
 			
@@ -970,15 +993,7 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
@@ -986,7 +1001,15 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -1002,11 +1025,11 @@
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -1140,18 +1163,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"kubiCode"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 

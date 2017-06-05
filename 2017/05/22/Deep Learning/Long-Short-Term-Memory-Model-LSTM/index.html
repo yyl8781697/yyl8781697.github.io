@@ -1,0 +1,742 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>长短期记忆模型-LSTM | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="RNN的缺点RNN的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个language mdoel:
+the clouds are in the sky
+这里要预测的sky只需要依赖前前面几个term即可
+再看看另一个句子:    
+I grew up in France… I spe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="长短期记忆模型-LSTM">
+<meta property="og:url" content="http://kubicode.me/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="RNN的缺点RNN的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个language mdoel:
+the clouds are in the sky
+这里要预测的sky只需要依赖前前面几个term即可
+再看看另一个句子:    
+I grew up in France… I spe">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-SimpleRNN.png">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-chain.png">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-f.png">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-i.png">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-C.png">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-o.png">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-var-tied.png">
+<meta property="og:image" content="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-var-GRU.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="长短期记忆模型-LSTM">
+<meta name="twitter:description" content="RNN的缺点RNN的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个language mdoel:
+the clouds are in the sky
+这里要预测的sky只需要依赖前前面几个term即可
+再看看另一个句子:    
+I grew up in France… I spe">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/" title="长短期记忆模型-LSTM" itemprop="url">长短期记忆模型-LSTM</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-22T01:50:40.000Z" itemprop="datePublished"> 发表于 2017-05-22</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RNN的缺点"><span class="toc-number">1.</span> <span class="toc-text">RNN的缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LSTM的计算"><span class="toc-number">2.</span> <span class="toc-text">LSTM的计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="RNN的缺点">RNN的缺点</h2><p><code>RNN</code>的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个<code>language mdoel</code>:</p>
+<pre><code><span class="operator">the</span> clouds are <span class="operator">in</span> <span class="operator">the</span> sky
+</code></pre><p>这里要预测的<code>sky</code>只需要依赖前前面几个<code>term</code>即可</p>
+<p>再看看另一个句子:    </p>
+<pre><code><span class="keyword">I</span> grew up in France… <span class="keyword">I</span> speak fluent French.
+</code></pre><p>这里在预测<code>French</code>的时候需要前面较长的信息，甚至已经跨到前面一句话了。<br>因此是可以看出就算在<code>Language Model</code>中不同样本下可能是需要不同的长度的历史信息的，而对于<code>RNN</code>而言他并不能控制历史信息的长度.</p>
+<a id="more"></a>
+<h2 id="LSTM的计算">LSTM的计算</h2><p>而<code>LSTM</code>的设计之初就是为了解决<code>RNN</code>这种长期依赖的问题，一个最标准的<code>RNN</code>中每一个单元/层他是经过过一个<code>tanh</code>，结构是长这样的:</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-SimpleRNN.png" width="450px"></center>
+
+<p>而<code>LSTM</code>的复杂很多，展开之后他是长这样的:</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-chain.png" width="450px"></center><br>&gt;<code>LSTM</code>中最核心的就是门(<code>gate</code>)结构了，每一个<code>gate</code>经过一个<code>sigmoid</code>($\sigma$)结果输出一个<code>0~1</code>的输，可以精确的控制每一股的数据流量大小.<br><br>接下来一步一步解析<code>LSTM</code>单元内的每个小组件:<br><code>第一步</code>是决定哪些历史信息需要流入到当前的单元中，<br>这里会经过<code>遗忘门</code>(<code>forget gate layer</code>)，作用对于历史信息的遗忘程度:<br><center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-f.png" width="450px"></center>
+
+<p>这个门的输入为上一层的隐含层信息($h_{t-1}$)和当前层的输入数据($x_t$),输出一个<code>0~1</code>的数字用于$C_{t-1}$，如果通过<code>遗忘门</code>之后输出1，则表示所有$C_{t-1}$的数据都保留，如果输出的0，则相当于$C_{t-1}$的数据经会被重置为0.</p>
+<p><code>第二步</code>是当前哪些信息数据需要流入到当前的组件中，首先会经过<code>输入门</code>(<code>input gate layer</code>)会决定哪些输入值需要更新，其次再经过一个$tanh$函数来生成一个新的$\tilde{C}_t$来与原先的$C_{t-1}$进行求和合并.</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-i.png" width="450px"></center>
+
+<p><code>第三步</code>是生成一个新的$C_t$值，它是综合$C_{t-1}$的遗忘信息以及当前新保留的$\tilde{C}_t$信息</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-C.png" width="450px"></center>
+
+<p><code>最后</code>就是控制输出的数据了（就是输出隐含层单元的信息）</p>
+<center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-focus-o.png" width="450px"></center><br>最终的输出是依赖当前的单元信息$C_t$，它经过一个$tanh$函数之后将数据scale到<code>-1~1</code>，然后再通过一个输出门来控制需要数据的信息.<br>上述4步是每个单元内的计算步骤，实际对于train目前应该还有一步$y_t=f(h_t)$,如果是<code>Language Model</code>的话$f$就是<code>softmax</code><br><br><br><br>综合上面的图解，一个完整的<code>LSTM</code>的单元里面的计算流程是这样:<br>1. 遗忘门的计算:<br>    $$f_t=\sigma(W_f \cdot [h_{t-1},x_t],b_f)$$<br>2. 输入门的计算:<br>    $$f_i=\sigma(W_i \cdot [h_{t-1},x_t],b_i)$$<br>3. 当前单元信息的计算:<br>    $$\tilde{C}_t=tanh(W_c \cdot[h_{t-1},x_t]+b_C)$$<br>4. 根据先前的单元信息$C_{t-1}$和当前的单元信息$\tilde{C}_t$，以遗忘门$f_t$和输入门$f_i$作为因子得到新的单元信息:<br>    $$C_t = f_t \cdot C_{t-1} + f_i \cdot \tilde{C}_t$$<br>5. 输出门的计算:<br>    $$f_o=\sigma(W_o \cdot [h_{t-1},x_t],b_o)$$<br>6. 根据新的单元信息$C_t$以及输出门$f_o$计算要输出的隐含单元信息:<br>    $$h_t = o_t \cdot tanh(C_t)$$<br>7. 根据隐含单元信息计算训练/预测的目标:<br>    $$y_t = f(h_t)$$<br>8. 一个单元计算完毕，回到<code>1</code>进入下一个单元的计算<br><br><br>## LSTM变种<br><br>上面描述的<code>LSTM</code>结果其实还复杂的，比标准的<code>RNN</code>至少多了三个门单元($f_t,f_i,f_o$)以及单元信息$C$，多了这么多信息之后随之而言的就是计算量会增加许多，同时事实上很多任务中比不需要这么多信息，因此就会有较多的$LSTM$变种出现:<br>下面这个<a href="ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf" target="_blank" rel="external">变种</a>是将<code>遗忘门</code>去掉，其值改为$1-f_t$<br><center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-var-tied.png" width="450px"></center>
+
+<p>另外一个非常著名的变种就是<a href="https://arxiv.org/pdf/1406.1078v3.pdf" target="_blank" rel="external">GRU</a>了</p>
+<p><center><img src="/img/Long-Short-Term-Memory-Model-LSTM/LSTM3-var-GRU.png" width="450px"></center><br>他将:</p>
+<ol>
+<li><code>遗忘门</code>和<code>输入门</code>合并为了<code>更新门</code></li>
+<li>同时将<code>单元信息</code>(<code>cell state</code>)和<code>隐含信息</code>(<code>hidden state</code>)进行了合并</li>
+</ol>
+<p>从计算式子就可以看出整个单元的计算对比$LSTM$进行了极大的简化，但是其效果却几乎不降低。<br>当然还有很多其他的变种不再一一描述，可以参见<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="external">参考</a></p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="external">http://colah.github.io/posts/2015-08-Understanding-LSTMs/</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/" data-title="长短期记忆模型-LSTM | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/05/15/Deep Learning/Understanding-about-RNN/"  title="初识递归神经网络-RNN">
+ <strong>下一篇：</strong><br/> 
+ <span>初识递归神经网络-RNN
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RNN的缺点"><span class="toc-number">1.</span> <span class="toc-text">RNN的缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LSTM的计算"><span class="toc-number">2.</span> <span class="toc-text">LSTM的计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

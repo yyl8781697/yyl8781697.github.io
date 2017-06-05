@@ -95,6 +95,143 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/07/OSGi/OSGi-Services/" title="（译）OSGi-Services，OSGI-服务" itemprop="url">（译）OSGi-Services，OSGI-服务</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-07T13:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>本教程介绍了关于服务声明相关的OSGI服务用法，Eclipse Equinox作为OSGI的服务器使用，本教程使用了Eclipse4.3(Kepler)。</p>
+</blockquote>
+<h2 id="1-_准备">1. 准备</h2><p>下面的教程假定你已经熟悉OSGI的运行时以及模块层（<a href="http://www.vogella.com/tutorials/OSGiServices/article.html">原文</a>,<a href="http://kubicode.me/2015/04/04/OSGi-Modularity/">译文</a>）相关的描述。</p>
+<h2 id="2-_OSGI服务">2. OSGI服务</h2><h3 id="2-1-_什么是OSGI服务">2.1. 什么是OSGI服务</h3><p>一个OSGI的服务被定义为一个标准的Java类或者接口，通常一个Java接口被作为服务的接口来使用。一个<strong>bundle</strong>可以注册或者使用服务，为了达到此功能，OSGI提供了中心的服务注册表。<br /><br>一个服务可以被动态的启动和停止，<strong>bundle</strong>在使用服务时必需有这种操控动态行为的能力，<strong>bundle</strong>服务可以注册一个监听器来监听服务的启动和停止。</p>
+<h3 id="2-2-_定义服务的最佳实践">2.2. 定义服务的最佳实践</h3><p>定义一个服务最通常的方法就是通过一个含有接口的<strong>bundle</strong>来定义，其他的<strong>bundle</strong>将会提供这个服务的实现，这就可以允许你通过不同的<strong>bundle</strong>来改变服务的实现。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/07/OSGi/OSGi-Services/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/OSGi/">OSGi</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/07/OSGi/OSGi-Services/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/04/OSGi/OSGi-Modularity/" title="（译）OSGi-Modularity，OSGi-模块化" itemprop="url">（译）OSGi-Modularity，OSGi-模块化</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-04T14:20:32.000Z" itemprop="datePublished"> 发表于 2015-04-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="1-OSGI_概述">1.OSGI 概述</h2><h3 id="1-1-_什么是OSGI">1.1. 什么是OSGI</h3><p>OGSI是一种规范，OSGi 规范的核心定义 Java 组件和服务模型，组件和服务可以动态地安装、 激活、 取消激活、 更新以及卸载。软件中的每个组件在OSGI中称为<strong>Bundle</strong>。<br /><br>OSGi 的一个非常实用的优点是每一个<strong>Bundle</strong>都必须定义其导出的 Java 包和所需的依赖项。通过这种方式可以有效地控制提供的 API 和插件的依赖项。</p>
+<h3 id="1-2-_Bundle与插件">1.2. Bundle与插件</h3><p>插件是Eclipse中的最小模块单元，<strong>Bundle</strong>与插件几乎是可以互换的，一个插件也是一个OSGI <strong>Bundle</strong>，反之亦然。</p>
+<h3 id="1-3-_实现">1.3. 实现</h3><p>OSGI已经有很多实现，例如Equinox, Knopflerfish OSGi or Apache Felix.</p>
+<h3 id="1-4-_Eclipse的Equinox">1.4. Eclipse的Equinox</h3><p>Eclipse的Equinox是基于OSGI规范的实现，也这是Eclipse程序的运行时环境，Eclipse的扩展点是基于OSGI的<strong>Bundle</strong>和<strong>Service</strong>的概念来进行的。</p>
+<h2 id="2-_OSGI_Bundle和依赖管理">2. OSGI Bundle和依赖管理</h2><h3 id="2-1-_OSGI_Bundle">2.1. OSGI Bundle</h3><p>OSGI规范定义了OSGI <strong>Bundle</strong>为模块化的单元。<br>一个<b>Bundle</b>是一个紧密结合的、自包含的单元，它明确定义了对其他模块的依赖关系和服务，同时还定义了对外开放的API。<br /><br>从技术上讲<b>Bundle</b>是一个带有额外元数据的.jar文件，这个元数据存储在<em>META-INF/MANIFEST.MF</em>中，<i>META-INF/MANIFEST.MF</i>文件是Java规范的一部分，任何非 OSGi 得运行时将忽略 OSGi 的元数据。因此 OSGi <strong>Bundle</strong>可以不受限制的在非 OSGi Java 环境中使用。<br /></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/04/OSGi/OSGi-Modularity/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/OSGi/">OSGi</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/OSGi/">OSGi</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/04/OSGi/OSGi-Modularity/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/02/OSGi/OSGi-HelloWorld/" title="使用OSGi进行动态加载更新模块-实现Hello world" itemprop="url">使用OSGi进行动态加载更新模块-实现Hello world</a>
   </h1>
   <p class="article-author">By
@@ -145,7 +282,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/04/02/OSGi/OSGi-HelloWorld/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/04/02/OSGi/OSGi-HelloWorld/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/04/02/OSGi/OSGi-HelloWorld/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -215,7 +352,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/03/31/Algorithm/abcSort/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/31/Algorithm/abcSort/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/03/31/Algorithm/abcSort/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -283,7 +420,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/03/30/Java Source/Java-HashTable/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/30/Java Source/Java-HashTable/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/03/30/Java Source/Java-HashTable/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -354,7 +491,7 @@ B.冒泡排序
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/03/29/Algorithm/InsertionSort/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/29/Algorithm/InsertionSort/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/03/29/Algorithm/InsertionSort/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -422,7 +559,7 @@ B.冒泡排序
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/03/27/Java Source/Java-HashMap/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/27/Java Source/Java-HashMap/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/03/27/Java Source/Java-HashMap/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -489,7 +626,7 @@ B.冒泡排序
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/03/26/Java Source/Java-LinkedList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/26/Java Source/Java-LinkedList/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/03/26/Java Source/Java-LinkedList/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -559,7 +696,7 @@ B.冒泡排序
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/03/25/Java Source/Java-Vector/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/25/Java Source/Java-Vector/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/03/25/Java Source/Java-Vector/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -627,161 +764,7 @@ B.冒泡排序
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2015/03/24/Java Source/Java-ArrayList/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/24/Java Source/Java-ArrayList/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/24/Data Struct/bitTree-traversal/" title="二叉树的遍历-递归和非递归" itemprop="url">二叉树的遍历-递归和非递归</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-24T12:08:39.000Z" itemprop="datePublished"> 发表于 2015-03-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="二叉树">二叉树</h2><p>二叉树是一种较为常见的数据结构，不了解的<a href="http://baike.baidu.com/link?url=ZqKtj1Mk_vN9Ey2QZjTih_rUgyH5JiLJ7deno8DdRff7tLr6Q0C-uzAxEGBTCkx-9zd5JiyjOmihMbuuv_tc_a">点我</a>，他在各大公司的笔试/面试中经常出现，特别是它的遍历。<br>二叉树的遍历共三种：</p>
-<ol>
-<li>前序遍历：根节点-&gt;左孩子节点-&gt;右孩子节点</li>
-<li>中序遍历：左孩子节点-&gt;根节点-&gt;右孩子节点</li>
-<li>后续遍历：左孩子节点-&gt;右孩子节点-&gt;根节点</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/24/Data Struct/bitTree-traversal/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Data-Struct/">Data Struct</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Data-Struct/">Data Struct</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/24/Data Struct/bitTree-traversal/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/24/Data Struct/bitTree-traversal/" data-count-type="comments">&nbsp;</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/21/Hexo/" title="Hexo博客搭建完成" itemprop="url">Hexo博客搭建完成</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-21T10:38:28.000Z" itemprop="datePublished"> 发表于 2015-03-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>花了接近两天终于将这个博客搭建完成，特此记录下！<br>本站在搭建时本地使用Windows系统，托管在Github上，文本只是记录本站搭建期间出现的一些情况，完整教程还请自行去百度或者Google。</p>
-<h2 id="Hexo">Hexo</h2><blockquote>
-<p>Hexo 是一个简单地、轻量地、基于Node的一个静态博客框架。通过Hexo我们可以快速创建自己的博客，仅需要几条命令就可以完成。</p>
-</blockquote>
-<ul>
-<li>Hexo的安装 <a href="http://hexo.io/" target="_blank" rel="external">http://hexo.io/</a></li>
-<li>Github个人页面的配置 <a href="https://pages.github.com/" target="_blank" rel="external">https://pages.github.com/</a></li>
-<li>Hexo的主题 <a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="external">https://github.com/hexojs/hexo/wiki/Themes</a></li>
-</ul>
-<h3 id="问题1">问题1</h3><pre><code>在使用<span class="tag">hexo</span> <span class="tag">deploy</span>部署时一直没反应，后来看了<span class="attr_selector">[2]</span>才知道是配置中每个冒号后面需要加一个空格，如果还是不行就尝试删除<span class="class">.deploy</span>文件试试
-</code></pre><h3 id="问题2">问题2</h3><pre><code>多说评论系统中<span class="built_in">data</span><span class="attribute">-thread</span><span class="attribute">-key</span>之类的这几个参数使用
-<span class="built_in">data</span><span class="attribute">-thread</span><span class="attribute">-key</span><span class="subst">=</span><span class="string">"&lt;%= page.path %&gt;"</span> <span class="built_in">data</span><span class="attribute">-title</span><span class="subst">=</span><span class="string">"&lt;%= page.title %&gt;"</span> <span class="built_in">data</span><span class="attribute">-url</span><span class="subst">=</span><span class="string">"&lt;%= page.permalink %&gt;"</span>
-来代替
-</code></pre><h3 id="问题3">问题3</h3><pre><code>在Windows下进行hexo deploy 时需要安装cygwin，感觉配置这个略微麻烦，就直接使用github <span class="keyword">for</span> windows的客户端，进行账号密码登录
-之后直接使用Git <span class="built_in">shell</span>就可以进行deploy操作了
-</code></pre><h3 id="问题4">问题4</h3><pre><code>在安装rss和sitemap插件时使用 npm install hexo-generator-feed -<span class="keyword">save</span> 和npm install hexo-generator-sitemap --<span class="keyword">save</span>
-注意两个<span class="keyword">save</span>，很多教程上没带这个
-</code></pre><h3 id="问题5">问题5</h3><pre><code>如果在部署到github上执行hexo deploy时报<span class="keyword">error</span> deployer <span class="keyword">not</span> found:github 的错误,请安装npm install hexo-deployer-git <span class="comment">--save</span>
-</code></pre><h2 id="感谢参考">感谢参考</h2><ol>
-<li><a href="http://yangjian.me/pacman/hello/introducing-pacman-theme/" target="_blank" rel="external">http://yangjian.me/pacman/hello/introducing-pacman-theme/</a></li>
-<li><a href="http://zipperary.com/categories/hexo/" target="_blank" rel="external">http://zipperary.com/categories/hexo/</a></li>
-<li><a href="http://www.v2ex.com/t/175940" target="_blank" rel="external">http://www.v2ex.com/t/175940</a><br>最后感谢jacman的作者大神<a href="http://wuchong.me/jacman/2014/11/20/how-to-use-jacman/" target="_blank" rel="external">Jack</a></li>
-</ol>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hexo/">Hexo</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/21/Hexo/#comments" class="ds-thread-count comments-count-link" data-thread-key="2015/03/21/Hexo/" data-count-type="comments">&nbsp;</a>
+		<a href="/2015/03/24/Java Source/Java-ArrayList/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -822,6 +805,10 @@ B.冒泡排序
 		
 		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 		  
 		
 		  
@@ -869,7 +856,7 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -910,7 +897,7 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
 			
 		
 			
@@ -946,15 +933,7 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
@@ -962,7 +941,15 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -978,11 +965,11 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -1116,18 +1103,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"kubiCode"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 

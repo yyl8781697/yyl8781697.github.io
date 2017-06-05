@@ -4,47 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>学习记录一下深度语义匹配模型-DSSM | Kubi Code&#39;Blog</title>
+    <title>初识递归神经网络-RNN | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下
-
-DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
-
-字面匹配:TFIDF、BM25等
-使用LSA类模型进行语义匹配，但是效果不好
-
-而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。
-这里上图最直">
+    <meta name="description" content="RNN是啥?当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在Language Model中在给定几个单词的情况下来预测下面将会出什么单词的时候。这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。一图胜千言，经典的RNN结构是长这样纸的:">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习记录一下深度语义匹配模型-DSSM">
-<meta property="og:url" content="http://kubicode.me/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/index.html">
+<meta property="og:title" content="初识递归神经网络-RNN">
+<meta property="og:url" content="http://kubicode.me/2017/05/15/Deep Learning/Understanding-about-RNN/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下
-
-DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
-
-字面匹配:TFIDF、BM25等
-使用LSA类模型进行语义匹配，但是效果不好
-
-而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。
-这里上图最直">
-<meta property="og:image" content="/img/Study-With-Deep-Structured-Semantic-Model/dssm_arch.png">
+<meta property="og:description" content="RNN是啥?当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在Language Model中在给定几个单词的情况下来预测下面将会出什么单词的时候。这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。一图胜千言，经典的RNN结构是长这样纸的:">
+<meta property="og:image" content="/img/Understanding-about-RNN/rnn.jpg">
+<meta property="og:image" content="/img/Understanding-about-RNN/rnn-bptt-with-gradients.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="学习记录一下深度语义匹配模型-DSSM">
-<meta name="twitter:description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下
-
-DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
-
-字面匹配:TFIDF、BM25等
-使用LSA类模型进行语义匹配，但是效果不好
-
-而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。
-这里上图最直">
+<meta name="twitter:title" content="初识递归神经网络-RNN">
+<meta name="twitter:description" content="RNN是啥?当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在Language Model中在给定几个单词的情况下来预测下面将会出什么单词的时候。这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。一图胜千言，经典的RNN结构是长这样纸的:">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -118,14 +95,14 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/" title="学习记录一下深度语义匹配模型-DSSM" itemprop="url">学习记录一下深度语义匹配模型-DSSM</a>
+      <a href="/2017/05/15/Deep Learning/Understanding-about-RNN/" title="初识递归神经网络-RNN" itemprop="url">初识递归神经网络-RNN</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-21T14:53:03.000Z" itemprop="datePublished"> 发表于 2017-04-21</time>
+    <time datetime="2017-05-15T01:17:48.000Z" itemprop="datePublished"> 发表于 2017-05-15</time>
     
   </p>
 </header>
@@ -134,63 +111,48 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DSSM结构"><span class="toc-number">1.</span> <span class="toc-text">DSSM结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Word_Hashing"><span class="toc-number">2.</span> <span class="toc-text">Word Hashing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RNN是啥?"><span class="toc-number">1.</span> <span class="toc-text">RNN是啥?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RNN的训练"><span class="toc-number">2.</span> <span class="toc-text">RNN的训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考:"><span class="toc-number">4.</span> <span class="toc-text">参考:</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下</p>
-</blockquote>
-<h2 id="DSSM结构">DSSM结构</h2><p><code>DSSM</code>最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:</p>
-<ol>
-<li>字面匹配:<code>TFIDF</code>、<code>BM25</code>等</li>
-<li>使用<code>LSA</code>类模型进行语义匹配，但是效果不好</li>
-</ol>
-<p>而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。</p>
-<p>这里上图最直接:</p>
-<center><img src="/img/Study-With-Deep-Structured-Semantic-Model/dssm_arch.png"></center>
+		<h2 id="RNN是啥?">RNN是啥?</h2><p>当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在<code>Language Model</code>中在给定几个单词的情况下来预测下面将会出什么单词的时候。<br>这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。<br>一图胜千言，经典的RNN结构是长这样纸的:<br><a id="more"></a></p>
+<center><img src="/img/Understanding-about-RNN/rnn.jpg"></center>
 
-<a id="more"></a>
-<p>上面是<code>DSSM</code>训练的架构图:</p>
+<p>上图的左侧是一个未展开的RNN结构图，可以看出通过<code>W</code>来完成一个自循环，将其展开之后就很好理解了，展开后可以看做是一个横向的神经网络，每一层都有一个自己的输入，RNN的整个训练或者主要是为了计算<code>U</code>、<code>W</code>、<code>V</code>这三个矩阵，其训练时前向传播的步骤如下:</p>
 <ol>
-<li>输入的是一个<code>query</code>和这个query相关的<code>doc</code>，这里的输入特征可以是最简单的<code>one-hot</code>,而需要<code>train</code>的是这个query下各个doc的相关性(<code>DSSM</code>里面使用点击率来代替相关性)</li>
-<li><p>由于这种<code>one-hot</code>的输入可能会有两个问题:</p>
+<li>$x_t$表示第$t$层/步的输入，输入的数据可以是一个<code>one-hot</code>的向量或者一个其他的<code>pre-train</code>的向量</li>
+<li>$s_t$表示当前$t$的隐含状态,也就是整个网络中拥有<code>记忆</code>的那一块，他是根据上一层的隐含状态$s_{t-1}$以及当前层的输入$x_t$计算得到的，$s_t=f(Ux_t+Ws_{t-1})$， 其中$f(\cdot)$为激活函数，一般可以为<code>tanh</code>或者<code>ReLu</code>，另外$s_{-1}$为初始化的隐含状态，一般来说可以都初始化为<code>0</code></li>
+<li>$o_t$就是每一步的输出了，计算公式为$o_t = f(Vs_t)$，比如在<code>Language Model</code>中每一步的输出就是预测到下一个词的概率，这输出的就是在<code>vocabulary</code>维度的一个概率向量$o_t=\text{softmax}(Vs_t)$</li>
+</ol>
+<p>另外还有几点要说的:</p>
 <ol>
-<li>导致<code>vocabulary</code>太大</li>
-<li><p>会出现<code>oov</code>的问题</p>
-<p>因此输入特征之后的第一层是做一个叫做<code>Word Hashinging</code>的操作</p>
-</li>
+<li>$s_t$为整个网络的记忆，但是在实际中,$s_t$的记忆功能是有限的，并不能捕捉$s_t$步之前的全部信息</li>
+<li>在传统的深度神经网络中，每一层都有自己的参数，但是RNN与之不同，所有层之间都是共享<code>U</code>、<code>W</code>、<code>V</code>这三个参数的</li>
+<li>另外关于输出，上面说到的是每一层是一个输出，但是并不是非得这样，有一些其他的变种可以仅在最后一层有一个输出。</li>
 </ol>
-</li>
-<li>接下来就是传统的神经网络了<br> $$l_i=f(W_il_{i-1}+b_i),i = 2,…,N-1 \\<br> y=f(W_Nl_{N-1}+b_N) $$<blockquote>
-<p>这里的<code>f</code>是激活函数，文中使用$tanh$来计算:$f(x)=\frac{1-e^{-2x}}{1+e^{-2x}}$</p>
-</blockquote>
-</li>
-<li>得到的$y$就是语义特征了,query和doc之间的相关性就可以直接使用特想之间的相似性来度量，这里使用cosine来计算<br> $$R(Q,D)=cosine(y_Q,y_D) = \frac{y_Q^Ty_D}{||y_Q||||y_D||}$$</li>
-<li>最终得到的相似度就可以去训练query和doc的相关性了</li>
+<h2 id="RNN的训练">RNN的训练</h2><p>将<code>RNN</code>进行展开之后可以看做一个横向的神经网络，因为<code>RNN</code>也可以按神经网络的方式进行训练和预测，这里以一个实际的语言模型来回顾一下<code>RNN</code>的前向预测:</p>
+<ol>
+<li>$s_t= \text{tanh}(Ux_t+Ws_{t-1})$</li>
+<li>$o_t = \text{softmax}(Vs_t)$</li>
 </ol>
-<p>因此整个结构就可以看做做了一层<code>Word Hashing</code>之后去训练<code>DNN</code>网络</p>
-<h2 id="Word_Hashing">Word Hashing</h2><p><code>Word Hashing</code>是paper非常重要的一个<code>trick</code>，以英文单词来说，比如<code>good</code>，他可以写成<code>#good#</code>，然后按tri-grams来进行分解为<code>#go goo ood od#</code>，再将这个tri-grams灌入到<code>bag-of-word</code>中，这种方式可以非常有效的解决<code>vocabulary</code>太大的问题(因为在真实的web search中vocabulary就是异常的大)，另外也不会出现<code>oov</code>问题，因此英文单词才26个，3个字母的组合都是有限的，很容易枚举光。<br>那么问题就来了，这样两个不同的单词会不会产出相同的tri-grams，paper里面做了统计，说了这个冲突的概率非常的低，500K个word可以降到30k维，冲突的概率为0.0044%</p>
+<p>对于<code>RNN</code>的参数我们就是需要求<code>U</code>、<code>W</code>和<code>V</code>这三个矩阵，这里可以使用<code>SGD</code>来进行模型参数的优化，同时其梯度可以用一种叫做<code>BPTT</code>的当时来求得<br>我们使用交叉熵来定义<code>RNN</code>模型每一层的损失:<br>$$E_t(o_t,\hat{o}_t) = -o_t\log \hat{o}_t$$<br>则整个模型的损失通过累加可以求得:<br>$$E=\sum_t E_t(o_t,\hat{o}_t) = -\sum_t o_t\log \hat{o}_t$$</p>
 <blockquote>
-<p>但是在中文场景下，这个<code>Word Hashing</code>估计没有这么有效了</p>
+<p>这里的$t$表示当前的步数(层数),$\hat{o}_t$为第$t$的预测值.</p>
 </blockquote>
-<h2 id="总结">总结</h2><p><code>DSSM</code>的优势:</p>
-<ol>
-<li><code>DSSM</code>看起来在真实检索场景下可行性很高，一方面是直接使用了用户天然的点击数据，出来的结果可行度很高，另一方面文中的doc可以使用title来表示，同时这个部分都是可以离线进行语义向量计算的，然后最终query和doc的语义相似性也是相当诱人</li>
-<li><code>DSSM</code>出的结果不仅可以直接排序，还可以拿中间见过做文章:<code>semantic feature</code>可以天然的作为<code>word embedding</code>嘛</li>
-</ol>
-<p><code>DSSM</code>的劣势:</p>
-<ol>
-<li>用户信息较难加入</li>
-<li>貌似训练时间很长啊</li>
-</ol>
-<h2 id="参考">参考</h2><ol>
-<li>Huang P S, He X, Gao J, et al. Learning deep structured semantic models for web search using clickthrough data[C]// ACM International Conference on Conference on Information &amp; Knowledge Management. ACM, 2013:2333-2338.</li>
-</ol>
-<hr>
+<p>这里的梯度使用<code>BP</code>来计算，为了计算方便，以$t=3$为例<br>$$\begin{equation}\begin{split} \frac{\partial E_3}{\partial V}&amp;= \frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial V} \\<br>&amp;= \frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial z_3} \frac{\partial z_3}{\partial V}  \\<br>&amp;= \frac{\partial E_3}{\partial z_3} \frac{\partial z_3}{\partial V}  \\<br>&amp;= (\hat{o}_3-o_3)s_3 \\<br>\end{split}\end{equation}$$</p>
 <blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+<p>辅助推导:<br>$$\begin{equation}\begin{split} \frac{\partial E}{\partial z^j}&amp;= \frac{\partial -o\text{log}\hat{o}}{\partial z^j} \\<br>&amp;= \frac{\partial -\sum_k o^k\text{log}\hat{o}^k}{\partial V^js}  \\<br>&amp;=  -\frac{1}{s} \sum_k o^k \cdot \frac{1}{\hat{o}^k} \frac{\partial \hat{o}^k}{V_j} \\<br>&amp;= \text{使用softmax推导} \\<br>&amp;=   -\frac{1}{s} \left( o^j  \frac{1}{\hat{o}^j} s \hat{o}^j(1-\hat{o}^j) + \sum_{k:k \neq j} o^k  \frac{1}{\hat{o}^k} \cdot(-s\hat{o}^j\hat{o}^k )   \right) \\<br>&amp;= -\left( o^j-o^j\hat{o}^j - \sum_{k:k \neq j} o^k \hat{o}^j \right) \\<br>&amp;= -\left( o^j - \hat{o}^j \sum_ko^k \right) \\<br>&amp;= \hat{o}^j-o^j \\<br>\end{split}\end{equation}$$<br>其中$z_3=Vs_3$,$z^j=V^js$,$V^j$为第$j$个类别的向量权重</p>
 </blockquote>
+<p>可以看到损失函数对$V$求梯度时最后式子是极其简单，只需要计算当前预测的$o$以及当前隐含层的$s$即可,<br>现在来看下对于$W$的求导，这里会有稍微的不同:<br>$$\frac{\partial E_3}{\partial W}=\frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial s_3} \frac{\partial s_3}{\partial W}$$<br>而这里$s_3$时依赖$s_2$的<br>$$s_3=tanh(W s_2 + Ux_3)$$<br>而同时$s_2$还是依赖$s_1$的,因此在对于$E_3$求$W$的导数的时候并不能将$s_2$作为一个常量进行简单的求导,这样我们再次根据链式法则将会有如下:<br>$$\frac{\partial E_3}{\partial W} = \sum_{k=0}^3 \frac{\partial E_3}{\partial \hat{o}_3} \frac{\partial \hat{o}_3}{\partial s_3} \frac{\partial s_3}{\partial s_k} \frac{\partial s_k}{\partial W}$$<br>因为这里的$W$是共享的，每一步输出都有用到，因此对于$W$的求导只需要将每一步($t=0..3$)的梯度加起来即可</p>
+<center><img src="/img/Understanding-about-RNN/rnn-bptt-with-gradients.png" width="450px"></center>
+
+<p>由于$U$的参与前向计算的式子也$W$的类似，因此关于$\frac{\partial E}{\partial U}$也可以用上述方式来求导。<br>这三个参数的梯度计算与普通的BP计算类似，最大的区别是这三个参数在每一层都是共享的。</p>
+<p>由于在求导时需要向后计算，如果层数很多就会遇到经典的梯度消失问题，所以实际的<code>RNN</code>中每一个链可能都会做一个一定长度限制的截断。另外关于梯度消失的问题可以参考<code>RNN</code>的其他变种<code>LSTM</code>和<code>GRU</code>等.</p>
+<h2 id="总结">总结</h2><p><code>RNN</code>与传统的神经网络最大的特别就是在每一层计算的时候可以拿到前面几层的信息，这样特别可以有效适用于序列相关的学习，当然在实际操作中效果可能没有这么好~-_-!!</p>
+<h2 id="参考:">参考:</h2><ol>
+<li><a href="http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/" target="_blank" rel="external">http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/</a></li>
+<li><a href="http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/" target="_blank" rel="external">http://www.wildml.com/2015/10/recurrent-neural-networks-tutorial-part-3-backpropagation-through-time-and-vanishing-gradients/</a></li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -198,13 +160,13 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
   </div>
 
 </div>
@@ -213,7 +175,7 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://kubicode.me/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/" data-title="学习记录一下深度语义匹配模型-DSSM | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kubicode.me/2017/05/15/Deep Learning/Understanding-about-RNN/" data-title="初识递归神经网络-RNN | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -226,11 +188,19 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/" title="长短期记忆模型-LSTM">
+  <strong>上一篇：</strong><br/>
+  <span>
+  长短期记忆模型-LSTM</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/2017/01/09/Search Engine/The-Recorder-for-some-Federated-Search-Papers/"  title="Federated Search Papers学习笔记">
+<a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/"  title="学习记录一下深度语义匹配模型-DSSM">
  <strong>下一篇：</strong><br/> 
- <span>Federated Search Papers学习笔记
+ <span>学习记录一下深度语义匹配模型-DSSM
 </span>
 </a>
 </div>
@@ -238,10 +208,12 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 </nav>
 
 	
-<section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/" data-title="学习记录一下深度语义匹配模型-DSSM" data-url="http://kubicode.me/2017/04/21/Machine Learning/Study-With-Deep-Structured-Semantic-Model/"></div>
-</section>
 
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
@@ -249,7 +221,7 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DSSM结构"><span class="toc-number">1.</span> <span class="toc-text">DSSM结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Word_Hashing"><span class="toc-number">2.</span> <span class="toc-text">Word Hashing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#RNN是啥?"><span class="toc-number">1.</span> <span class="toc-text">RNN是啥?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RNN的训练"><span class="toc-number">2.</span> <span class="toc-text">RNN的训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考:"><span class="toc-number">4.</span> <span class="toc-text">参考:</span></a></li></ol>
  
   </div>
 
@@ -272,6 +244,10 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 		
 		  
 			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 		  
 		
 		  
@@ -319,7 +295,7 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
 		  
 		
 		  
@@ -360,7 +336,7 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>32</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
 			
 		
 			
@@ -396,15 +372,7 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
@@ -412,7 +380,15 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -428,11 +404,11 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 			
 		
 			
-				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Json4s/" title="Json4s">Json4s<sup>1</sup></a></li>
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
 			
 		
 		</ul>
@@ -648,18 +624,26 @@ $(document).ready(function(){
 
 
 
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"kubiCode"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
 
 
 
