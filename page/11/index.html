@@ -95,6 +95,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" title="Spark源码中所使用的经典数据结构或者设计模式" itemprop="url">Spark源码中所使用的经典数据结构或者设计模式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-02T13:32:28.000Z" itemprop="datePublished"> 发表于 2015-06-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="位域法">位域法</h2><blockquote>
+<p>如果一个枚举类型的元素主要用于在集合中，一般就使用<code>int</code>枚举类型，将2的不同倍数赋予每个常量。<br>这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。</p>
+</blockquote>
+<p>在<code>Spark</code>源码中进入<code>SparkSubmit</code>类中就可以看到<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Cluster managers</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">YARN</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">STANDALONE</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">MESOS</span> =</span> <span class="number">4</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">LOCAL</span> =</span> <span class="number">8</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_CLUSTER_MGRS</span> =</span> <span class="type">YARN</span> | <span class="type">STANDALONE</span> | <span class="type">MESOS</span> | <span class="type">LOCAL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Deploy modes</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLIENT</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLUSTER</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_DEPLOY_MODES</span> =</span> <span class="type">CLIENT</span> | <span class="type">CLUSTER</span></span><br></pre></td></tr></table></figure></p>
+<p>将集群类型和部署模式使用位域法来存储。</p>
+<blockquote>
+<p>在《Effective Java》第32条中提到，但是都不推荐。。<code>Spark</code>都使用了，难道这种结构不好嘛？？^_^</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Spark/">Spark</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Spark/">Spark</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/05/31/Food/Braised-chicken-claw/" title="自己煮：红烧鸡爪" itemprop="url">自己煮：红烧鸡爪</a>
   </h1>
   <p class="article-author">By
@@ -750,83 +821,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/" title="记录在Hadoop2.2.0中剔除一个DataNode" itemprop="url">记录在Hadoop2.2.0中剔除一个DataNode</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-10T14:33:45.000Z" itemprop="datePublished"> 发表于 2015-05-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>最近在<code>Haddop</code>环境下跑论文里的对比试验，不过这两天在跑Job时偶然会出现<strong>Job Failed</strong>的问题，看日志就是其中一台机器<strong>Connect Timeout</strong>了，在WebUI上点击这台机器IP的各种UI界面也是开不了，<code>HDFS</code>还连不上-_-|，之前也遇到过这种问题，解决方法简单粗暴：</p>
-<ol>
-<li>重启<code>Haddop</code>集群：一般重启一下还正好了</li>
-</ol>
-<ul>
-<li>停<code>Haddop</code>集群，然后重启每台物理机，然后再开启<code>Hadoop</code>集群：这么做一般问题就可以解决-_-|</li>
-<li>还有一种就是直接去<code>Linux</code>上删除<code>dfs</code>文件目录，重新初始化<code>HDFS</code>：这么做效果虽达到了，但是。。。向<code>HDFS</code>传数据还很久一段时间。。</li>
-</ul>
-<p>今天第1、2种方法试了都不行，第三种方法也太麻烦了（集群有15台<code>DataNode</code>+1台<code>NameNode</code>，重新初始化每次都要去每个机器上删除文件夹再新建），由于时间受限，就想尝试去动态的直接把那个老是异常的节点去掉得了，赶紧查了下面一些资料：</p>
-<ul>
-<li><a href="http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527">http://blog.chinaunix.net/xmlrpc.php?r=blog/article&amp;uid=23916356&amp;id=3258527</a></li>
-<li><a href="http://www.itpub.net/thread-1866448-1-1.html">http://www.itpub.net/thread-1866448-1-1.html</a></li>
-<li><a href="http://www.programgo.com/article/9436398293/">http://www.programgo.com/article/9436398293/</a></li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/10/Hadoop/Hadoop-Remove-DataNode/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
@@ -857,7 +851,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
 		  
 		
 		  
@@ -946,7 +940,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>35</sup></a></li>
 			
 		
 			
@@ -994,11 +988,15 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
 			
 		
 			
@@ -1011,10 +1009,6 @@
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			

@@ -95,6 +95,92 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/" title="LeetCode-Clone Graph" itemprop="url">LeetCode-Clone Graph</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-08T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/clone-graph/" target="_blank" rel="external">https://leetcode.com/problems/clone-graph/</a></p>
+</blockquote>
+<p>Problem:<br>Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors.</p>
+<p><strong>OJ’s undirected graph serialization:</strong><br>Nodes are labeled uniquely.</p>
+<p>We use <code>#</code> as a separator for each node, and , as a separator for node label and each neighbor of the node.<br>As an example, consider the serialized graph {0,1,2#1,2#2,2}.</p>
+<p>The graph has a total of three nodes, and therefore contains three parts as separated by <code>#</code>.</p>
+<ol>
+<li>First node is labeled as 0. Connect node 0 to both nodes 1 and 2.</li>
+<li>Second node is labeled as 1. Connect node 1 to node 2.</li>
+<li>Third node is labeled as 2. Connect node 2 to node 2 (itself), thus forming a self-cycle.</li>
+</ol>
+<p>Visually, the graph looks like the following:</p>
+<pre><code>   <span class="number">1</span>
+  / <span class="string">\</span>
+ /   <span class="string">\</span>
+<span class="number">0</span> --- <span class="number">2</span>
+     / <span class="string">\</span>
+     <span class="string">\_/</span>
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for undirected graph.</span><br><span class="line"> * class UndirectedGraphNode &#123;</span><br><span class="line"> *     int label;</span><br><span class="line"> *     List&lt;UndirectedGraphNode&gt; neighbors;</span><br><span class="line"> *     UndirectedGraphNode(int x) &#123; label = x; neighbors = new ArrayList&lt;UndirectedGraphNode&gt;(); &#125;</span><br><span class="line"> * &#125;;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> UndirectedGraphNode <span class="title">cloneGraph</span><span class="params">(UndirectedGraphNode node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(node==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">        HashMap&lt;Integer,UndirectedGraphNode&gt; graphMap=<span class="keyword">new</span> HashMap&lt;Integer,UndirectedGraphNode&gt;();</span><br><span class="line">        Queue&lt;UndirectedGraphNode&gt; visit=<span class="keyword">new</span> LinkedList&lt;UndirectedGraphNode&gt;();</span><br><span class="line">        UndirectedGraphNode temp;</span><br><span class="line">        </span><br><span class="line">        visit.add(node);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(!visit.isEmpty())</span><br><span class="line">        &#123;</span><br><span class="line">            temp=visit.poll();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(!graphMap.containsKey(temp.label))</span><br><span class="line">            &#123;</span><br><span class="line">                UndirectedGraphNode graphNode=<span class="keyword">new</span> UndirectedGraphNode(temp.label);</span><br><span class="line">                graphMap.put(temp.label, graphNode);</span><br><span class="line">                </span><br><span class="line">                visit.addAll(temp.neighbors);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        visit.add(node);</span><br><span class="line">        <span class="keyword">while</span>(!visit.isEmpty())</span><br><span class="line">        &#123;</span><br><span class="line">            temp=visit.poll();</span><br><span class="line">            UndirectedGraphNode graphNode=graphMap.get(temp.label);</span><br><span class="line">            <span class="keyword">if</span>(graphNode.neighbors.size()==<span class="number">0</span> &amp;&amp; temp.neighbors.size()!=<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(UndirectedGraphNode neighbor:temp.neighbors)</span><br><span class="line">                &#123;</span><br><span class="line">                    graphNode.neighbors.add(graphMap.get(neighbor.label));</span><br><span class="line">                    visit.add(neighbor);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> graphMap.get(node.label);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/07/07/LeetCode/LeetCode-Candy/" title="LeetCode-Candy" itemprop="url">LeetCode-Candy</a>
   </h1>
   <p class="article-author">By
@@ -763,77 +849,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/06/30/LeetCode/LeetCode-LRU-Cache/" title="LeetCode-LRU Cache" itemprop="url">LeetCode-LRU Cache</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-06-30T13:00:04.000Z" itemprop="datePublished"> 发表于 2014-06-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Problem:<br>Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.</p>
-<p><code>get(key)</code> - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.<br><code>set(key, value)</code> - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer,Integer&gt; <span class="number">_</span>cache;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> <span class="number">_</span>capacity;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Node <span class="number">_</span>head=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Node <span class="number">_</span>end=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>head=<span class="keyword">new</span> Node();</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>end=<span class="keyword">new</span> Node();</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>head.next=<span class="keyword">this</span><span class="number">._</span>end;</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>end.next=<span class="keyword">null</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>capacity=capacity;</span><br><span class="line">		<span class="keyword">this</span><span class="number">._</span>cache=<span class="keyword">new</span> HashMap&lt;Integer,Integer&gt;(capacity);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    	<span class="keyword">int</span> ret=-<span class="number">1</span>;</span><br><span class="line">    	</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span><span class="number">._</span>cache.containsKey(key))</span><br><span class="line">        &#123;</span><br><span class="line">        	ret=<span class="keyword">this</span><span class="number">._</span>cache.get(key);</span><br><span class="line">        	<span class="keyword">this</span>.moveToFirst(key);</span><br><span class="line">        &#125;</span><br><span class="line">        	</span><br><span class="line">        	</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">this</span><span class="number">._</span>cache.containsKey(key))</span><br><span class="line">        &#123;</span><br><span class="line">        	<span class="keyword">if</span>(<span class="number">_</span>cache.size()&gt;=<span class="keyword">this</span><span class="number">._</span>capacity)</span><br><span class="line">        	&#123;</span><br><span class="line">        		<span class="keyword">this</span><span class="number">._</span>cache.remove(<span class="keyword">this</span>.popKey());</span><br><span class="line">        	&#125;</span><br><span class="line">        	</span><br><span class="line">        	<span class="keyword">this</span>.insertToFirst(key);</span><br><span class="line">         &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        	<span class="keyword">this</span>.moveToFirst(key);</span><br><span class="line">         &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">this</span><span class="number">._</span>cache.put(key, value);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">moveToFirst</span><span class="params">(Integer key)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">    	Node node=<span class="keyword">this</span><span class="number">._</span>head;</span><br><span class="line">    	Node node2=<span class="keyword">null</span>;</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">while</span>(node.next!=<span class="keyword">null</span>)</span><br><span class="line">    	&#123;</span><br><span class="line">    		</span><br><span class="line">    		<span class="keyword">if</span>(key.equals(node.key))</span><br><span class="line">    		&#123;</span><br><span class="line">    			<span class="keyword">break</span>;</span><br><span class="line">    		&#125;</span><br><span class="line">    		node2=node;</span><br><span class="line">    		node=node.next;</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	node2.next=node.next;</span><br><span class="line">    	node.next=<span class="keyword">this</span><span class="number">._</span>head.next;</span><br><span class="line">    	<span class="keyword">this</span><span class="number">._</span>head.next=node;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">insertToFirst</span><span class="params">(Integer key)</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">    	Node node=<span class="keyword">new</span> Node(key);</span><br><span class="line">    	node.next=<span class="keyword">this</span><span class="number">._</span>head.next;</span><br><span class="line">    	<span class="keyword">this</span><span class="number">._</span>head.next=node;</span><br><span class="line">    	</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> Integer <span class="title">popKey</span><span class="params">()</span></span><br><span class="line">    </span>&#123;</span><br><span class="line">    	<span class="keyword">int</span> key=-<span class="number">1</span>;</span><br><span class="line">    	Node node=<span class="keyword">this</span><span class="number">._</span>head;</span><br><span class="line">    	Node node2=<span class="keyword">null</span>;</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">while</span>(node.next!=<span class="keyword">this</span><span class="number">._</span>end)</span><br><span class="line">    	&#123;</span><br><span class="line">    		node2=node;</span><br><span class="line">    		node=node.next;</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	key=node.key;</span><br><span class="line">    	node2.next=<span class="keyword">this</span><span class="number">._</span>end;</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">return</span> key;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    	<span class="keyword">public</span> Integer key;</span><br><span class="line">    	    	</span><br><span class="line">    	<span class="keyword">public</span> Node next;</span><br><span class="line">    	</span><br><span class="line">    	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span></span><br><span class="line">    	</span>&#123;</span><br><span class="line">    		</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Integer key)</span></span><br><span class="line">    	</span>&#123;</span><br><span class="line">    		<span class="keyword">this</span>.key=key;</span><br><span class="line">    	&#125;</span><br><span class="line">    	</span><br><span class="line">    	<span class="function"><span class="keyword">public</span> Node <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">    		Node node=<span class="keyword">new</span> Node();</span><br><span class="line">    		node.key=<span class="keyword">this</span>.key;</span><br><span class="line">    		node.next=<span class="keyword">this</span>.next;</span><br><span class="line">    		</span><br><span class="line">    		<span class="keyword">return</span> node;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其实在Java中最方便实现LRUCache的方法就是使用<code>LinkedHashMap</code>，天然的集成了该功能，但是LeetCode在这题中并没有引用<code>LinkedHashMap</code>的包，-_-</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> <span class="keyword">extends</span> <span class="title">LinkedHashMap</span>&lt;<span class="title">Integer</span>,<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> maxCacheNum=<span class="number">10</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(capacity,<span class="number">0.75f</span>,<span class="keyword">true</span>);<span class="comment">//这里第三个参数一定要为true，这样就表示该LinkedHashMap是使用了访问速度来链表</span></span><br><span class="line">		<span class="keyword">this</span>.maxCacheNum=capacity;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">super</span>.containsKey(key))</span><br><span class="line">        &#123;</span><br><span class="line">        	<span class="keyword">return</span> <span class="keyword">super</span>.get(key);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        	<span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.put(key, value);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="javadoc">/**</span><br><span class="line">	 * 重写删除最少用元素的方法</span><br><span class="line">	 */</span></span><br><span class="line">	<span class="annotation">@Override</span> </span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry&lt;Integer,Integer&gt; eldest)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.size()&gt;maxCacheNum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/06/30/LeetCode/LeetCode-LRU-Cache/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/14/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/16/">Next<span></span></a>
@@ -864,7 +879,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
 		  
 		
 		  
@@ -953,7 +968,7 @@
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>34</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>35</sup></a></li>
 			
 		
 			
@@ -1001,11 +1016,15 @@
 			
 		
 			
-				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
 			
 		
 			
@@ -1018,10 +1037,6 @@
 		
 			
 				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>3</sup></a></li>
 			
 		
 			

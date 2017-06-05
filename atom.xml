@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2017-06-05T03:47:28.000Z</updated>
+  <updated>2017-06-05T15:04:39.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,70 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[深度神经网络中防止过拟合的利器-Dropout]]></title>
+    <link href="http://kubicode.me/2017/06/05/Deep%20Learning/Dropout-in-Deep-Neural-Network/"/>
+    <id>http://kubicode.me/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/</id>
+    <published>2017-06-05T13:14:36.000Z</published>
+    <updated>2017-06-05T15:04:39.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Dropout_in_Deep_Network">Dropout in Deep Network</h2><p>在机器学习任务中一提到过拟合，<code>L1</code>和<code>L2</code>正则项绝对是两大利器，但是在深度神经网络中，<code>Hiton</code>老爷子在2014年提出了一种称为<code>Dropout</code>的方法来避免过拟合，方式对比<code>L1</code>和<code>L2</code>更为灵活也是非常高效。</p>
+<p>深度神经网络中，在不限制计算的条件下，最佳的正则化方式就是将所有可能组合成的模型进行平均输出，就类似<code>stack</code>的模型融合一样，但是这种方式存在两大问题:</p>
+<ol>
+<li>在计算时需要将训练文件进行相应的分离，因为神经网络的训练本身就是需要极多的数据，这么一分离可能会导致数据不够的情况</li>
+<li>深度神经网络中的计算量本身就很大，计算多个之后其耗时将会更多</li>
+</ol>
+<p>而<code>Dropout</code>却可以完美的解决上述两个缺陷，他的思想很简单:<br><a id="more"></a></p>
+<p>在训练时对于神经网络的某些神经点击直接进行移除，包括他的入边和出边，而这个移除可以简单的根据一个概率p，这个p一般就是Dropout需要设置的参数</p>
+<blockquote>
+<p>这个参数$p$一般设置为0.5比较好，因为他这样就可能产生$2^n$中网络情况了，极大的增加的参数空间</p>
+</blockquote>
+<p>因此经过Dropout之后两个神经网络的对比如下:</p>
+<center><img src="/img/Dropout-in-Deep-Neural-Network/dropout-or-not.png" width="550px"></center><br>可以看到经过<code>Dropout</code>之后<code>(b)</code>中很多单元节点直接被进行了移除（注意这里是一次<code>min-batch</code>走一次<code>Dropout</code>），使用了<code>Dropout</code>在预测时也是极其的简单:<br>在预测时这些曾经过移除过的节点仍然正常计划，唯一的差别就是在下一次的权重中乘以概率$p$<br><br><center><img src="/img/Dropout-in-Deep-Neural-Network/dropout-layer.png" width="550px"></center>
+
+<p>因此针对一个标准深度神经网络,当前层使用$l$来表示，$w$为需要训练的权重,$y$就是各个层的输出，$b$为各个层的偏置，则每一层的标准计算为:<br>$$z_i^{l+1} = w_i^{l+1}y^l + b_i^{l+1} \\<br>y_i^{l+1} = f(z_i^{l+1})$$</p>
+<blockquote>
+<p>其中$f$为激活函数</p>
+</blockquote>
+<p>而经过了<code>Dropout</code>之后整个计算过程就会变为这样:<br>$$r_j^l \sim \text{Bernoulli}(p) \\<br>\tilde{y}^l = r_j^l y^l \\<br>z_i^{l+1} = w_i^{l+1}\tilde{y}^l + b_i^{l+1} \\<br>y_i^{l+1} = f(z_i^{l+1})$$</p>
+<p>也就是下图的样纸:</p>
+<p><center><img src="/img/Dropout-in-Deep-Neural-Network/dropout-calc.png" width="550px"></center><br>而在预测的时候，只需要在<code>Dropout</code>层输出的权重上乘$p$即可:$w_{test}^l = pw^l$</p>
+<p>关于使用了<code>Dropout</code>之后，如果使用<code>SGD</code>进行优化的话其梯度仍旧可以按照来的方式计算，不过他是在一次<code>min-batch</code>来计算一次<code>Dropout</code></p>
+<blockquote>
+<p>也就在同一次<code>min-batch</code>中，<code>Dropout</code>层中的点击移除与否的分布是一样的，不同的<code>Dropout</code>中是可能不一样的</p>
+</blockquote>
+<p>文献的实验正常传统的深度神经网络中加入了<code>Dropout</code>之后在训练集上面的误差可能会增大，但是在测试集上其误差会变小，也就是降低的过拟合的程度</p>
+<h2 id="Dropout_in_Recurrent_Network">Dropout in Recurrent Network</h2><p>虽然<code>Dropout</code>中在传统的深度网络中很好使，但是直接用于<code>RNN</code>这类递归型的神经网络却不是很好使，原因是如果直接将<code>Dropout</code>层防止在<code>Memory Cell</code>中,循环会放大噪声，扰乱它自己的学习。<br><i>Wojciech Zaremba</i>针对此问题提出的核心解决方法就是在输入和输出层加<code>Dropout</code>:<br>$$\begin{pmatrix}<br>i\\<br>f\\<br>o\\<br>g<br>\end{pmatrix}<br>=<br>\begin{pmatrix}<br>sigm\\<br>sigm\\<br>sigm\\<br>tanh<br>\end{pmatrix}<br>T_{2n,4n}<br>\begin{pmatrix}<br>D(x_t)\\<br>h_{t-1}^l<br>\end{pmatrix}<br>$$</p>
+<blockquote>
+<p>上面是一个<code>LSTM</code>的式子，计算三个门单元以及当前信息单元，$D$就是<code>Dropout</code>层,这里是加在了输入层</p>
+</blockquote>
+<h2 id="文献">文献</h2><ol>
+<li>Srivastava, Nitish, et al. “Dropout: A simple way to prevent neural networks from overfitting.” The Journal of Machine Learning Research 15.1 (2014): 1929-1958.</li>
+<li>Zaremba, Wojciech, Ilya Sutskever, and Oriol Vinyals. “Recurrent neural network regularization.” arXiv preprint arXiv:1409.2329 (2014).</li>
+</ol>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Dropout_in_Deep_Network">Dropout in Deep Network</h2><p>在机器学习任务中一提到过拟合，<code>L1</code>和<code>L2</code>正则项绝对是两大利器，但是在深度神经网络中，<code>Hiton</code>老爷子在2014年提出了一种称为<code>Dropout</code>的方法来避免过拟合，方式对比<code>L1</code>和<code>L2</code>更为灵活也是非常高效。</p>
+<p>深度神经网络中，在不限制计算的条件下，最佳的正则化方式就是将所有可能组合成的模型进行平均输出，就类似<code>stack</code>的模型融合一样，但是这种方式存在两大问题:</p>
+<ol>
+<li>在计算时需要将训练文件进行相应的分离，因为神经网络的训练本身就是需要极多的数据，这么一分离可能会导致数据不够的情况</li>
+<li>深度神经网络中的计算量本身就很大，计算多个之后其耗时将会更多</li>
+</ol>
+<p>而<code>Dropout</code>却可以完美的解决上述两个缺陷，他的思想很简单:<br>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[长短期记忆模型-LSTM]]></title>
@@ -1855,89 +1919,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 <li>诱导用户对展现的搜索结果进行反馈</li>
 </ol>
 <p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[McRank:一种基于多分类和梯度提升树的排序学习]]></title>
-    <link href="http://kubicode.me/2016/03/28/Machine%20Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/"/>
-    <id>http://kubicode.me/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/</id>
-    <published>2016-03-28T08:37:53.000Z</published>
-    <updated>2016-09-21T01:56:03.000Z</updated>
-    <content type="html"><![CDATA[<pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
-</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>McRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/" target="_blank" rel="external">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
-<h2 id="折损累积增益">折损累积增益</h2><blockquote>
-<p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG" target="_blank" rel="external">这里</a>).</p>
-</blockquote>
-<p>假设在指定的<code>query</code>下通过某个排序算法对$n$个文档进行排序，则可以得到<br>$$DCG=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1)$$<br><a id="more"></a></p>
-<p>其中:</p>
-<ol>
-<li>$i$表示原文档的索引顺序</li>
-<li>$c_{[\pi_i]}=log(i+1)$</li>
-<li>$y_i$表示对应文档与<code>query</code>相关性的程度，一般用档位$\{0,1,2,3,4\}$来表示</li>
-</ol>
-<p>最终的<code>DCG</code>值越大，表示排序效果越好,假如直接根据档位降序得到的排序结果中<code>DCG</code>是最大的，实际使用中一般根据当前可能的最大<code>DCG</code>进行归一化</p>
-<h2 id="排序思想">排序思想</h2><p>现在已经知道了文档与<code>query</code>之间一般用档位衡量，而假如按档位降序的<code>DCG</code>值最高,所以排序问题可以转为指定<code>query</code>对文档相关性类别的预测，即多分类问题。</p>
-<h3 id="DNCG误差计算">DNCG误差计算</h3><p>现在可以这么理解，我们希望的是<code>DCG</code>越大越好，也即是<code>DCG</code>误差越小越好，但如果是分类问题将直接优化的是分类误差，那如果<code>DCG</code>误差能够被分类误差给<code>bouded</code>住，就可以通过优化分类误差来间接的优化<code>DCG</code>误差了.</p>
-<p>对于一个排序的置换映射函数$\pi$,<code>DCG</code>误差为$DCG_g-DCG_{\pi}$，其中$DCG_g$表示最优排序,就是根据实际的<code>query-doc</code>相关性分档降序的排序，所以肯定有$DCG_g \geq DCG_{\pi}$</p>
-<p>现给定$n$个<code>URLS</code>的顺序为$\{1,2,3…n\}$，假设分类器分配的相关结果为$\hat{y}_i \in \{0,1,2,3,4\}$，置换映射函数$\pi$直接根据相关性进行排序，高档位的排在前面，相同档位可以随意排序，则可以有以下证明:</p>
-<blockquote>
-<p>先看变量^_^<br>$y_i$表示<code>query-doc</code>的实际相关性<br>$\hat{y}_i$表示<code>query-doc</code>的分类器预测相关性<br>$c_{[g_i]}$表示根据实际相关性得到的排序<br>$c_{[\pi_i]}$表示根据预测相关性得到的排序</p>
-</blockquote>
-<p>$$\begin{equation}\begin{split}DCG_{\pi}&amp;=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1) \\<br>&amp;=\sum_{i=1}^{n}c_{[\pi_i]}(2^{\hat{y}_i}-1)+\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp;\geq \sum_{i=1}^{n}c_{[g_i]}(2^{\hat{y}_i}-1)+\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp;=\sum_{i=1}^{n}c_{[g_i]}(2^{y_i}-1)-\sum_{i=1}^{n}c_{[g_i]}(2^{y_i}-2^{\hat{y}_i})+\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp;=DCG_g+\sum_{i=1}^{n}(c_{[\pi_i]}-c_{[g_i]})(2^{y_i}-2^{\hat{y}_i})<br>\end{split}\end{equation}$$</p>
-<p>解释下不等式$\sum_{i=1}^{n}c_{[\pi_i]}(2^{\hat{y}_i}-1) \geq \sum_{i=1}^{n}c_{[g_i]}(2^{\hat{y}_i}-1)$成立的原因:$c_{[\pi_i]}$是根据相关性$\hat{y}_i$排序得到的，也就是上面提到的最优排序，得到的$DCG$值是最大的(当然这个是分类器的预测值，不是真实值，就是假象的意思-_-)，所以换一种顺序$c_{[g_i]}$其$DCG$的值必定会小于等于最大值.</p>
-<p>根据上面的推导就可以直接得到$DCG$的误差了:<br>$$\begin{equation}\begin{split}DCG_g-DCG_{\pi} &amp;\leq \sum_{i=1}^{n}(c_{[g_i]}-c_{[\pi_i]})(2^{y_i}-2^{\hat{y}_i}) \\<br>&amp; \leq \left(\sum_{i=1}^{n}(c_{[g_i]}-c_{[\pi_i]})^2\right)^{\frac{1}{2}}\left(\sum_{i=1}^{n}(2^{y_i}-2^{\hat{y}_i})^2\right)^{\frac{1}{2}} \\<br>&amp;\leq \left(2\sum_{i+1}^{n}c_{[i]}^2-2n\prod_{i=1}^nc_{[i]}^{\frac{2}{n}}\right)^{\frac{1}{2}} 15 \left(\sum_{i=1}^{n}1_{y_i \neq \hat{y}_i}\right)^{\frac{1}{2}} \\<br>&amp;= 15\sqrt{2} \left(\sum_{i+1}^{n}c_{[i]}^2-n\prod_{i=1}^nc_{[i]}^{\frac{2}{n}}\right)^{\frac{1}{2}}\left(\sum_{i=1}^{n}1_{y_i \neq \hat{y}_i}\right)^{\frac{1}{2}}<br>\end{split}\end{equation}$$</p>
-<p>上面公式<code>1~2</code>是不等式是根据<code>柯西不等式</code>得到的，第<code>2~3行</code>平方展开的不等式成立是因为:</p>
-<ol>
-<li>$\sum_{i=1}^{n}c_{[\pi_i]}^2=\sum_{i=1}^{n}c_{[g_i]}^2=\sum_{i=1}^{n}c_{[i]}^2$,$\prod_{i=1}^{n}c_{[\pi_i]}^2=\prod_{i=1}^{n}c_{[g_i]}^2=\prod_{i=1}^{n}c_{[i]}^2$，他们虽然是顺序不一样，但是他们集合的内容是一样的，所以<code>求和</code>和<code>连乘</code>的等式是成立的。</li>
-<li>两种相关性$y_i$和$\hat{y}_i$的值在<code>0~4</code>范围内,因此有$(2^{y_i}-2^{\hat{y}_i})^2\leq 15$，因为$2^4-2^0=15$</li>
-</ol>
-<p>因此当需要最小化<code>DCG</code>误差时只需要最小化分类误差$\sum_{i=1}^{n}1_{y_i \neq \hat{y}_i}$即可，但是该误差非凸也非平滑，实际使用中使用代理损失函数进行优化:<br>$$\sum_{i=1}^{N}\sum_{k=0}^{K-1}-log(p_{i,k})1_{y_i=k}$$<br>其中$p_{i,k}$表示<code>doc</code>输入每个档位的概率，$K$是总的档位数。</p>
-<blockquote>
-<p>我感觉:上面不等式里面的排序顺序时间使用$c_{[i]}$代替了，虽然表面上和分档结果无关，因此只需要优化分档即可，但是。。。实际上$c_{[\pi_i]}$的顺序是和分档预测有关的啊….</p>
-</blockquote>
-<h3 id="分类排序">分类排序</h3><p>上面提到过有了分档结果之后可以按档位顺序降序排序，得到的<code>DCG</code>就是最优的，但是这里存在一个问题，那就是相同档位之间是可以随便排的，就是导致排序的不稳定性，为了得到一种良好的排序机制，<code>McRank</code>在实际排序中会将分类结果转为一个连续的分数，按这个分数进行排序.</p>
-<p>假设训练是$\{y_i,x_i\}_i^N$，$y_i$表示多分类的分档,则最终将会学习到的是每个类别的概率$p_{i,k}=Pr(y_i=k)$，则最后的排序分数为:<br>$$S_i=\sum_{k=0}^{K-1}p_i^kT(k)$$<br>其中$T(k)$表示随档位单调递增的函数，比如$T(k)=k$或者$T(k)=2^k$（<code>McRank</code>用的是前者）</p>
-<blockquote>
-<p>不同的单调递增函数不会对排序进行影响，同时如果对函数进行线性变换也会改变排序结果</p>
-</blockquote>
-<p>最终<code>McRank</code>是使用<code>Boosting Tree</code>进行多分类预测..</p>
-<h3 id="有序分类">有序分类</h3><blockquote>
-<p>好吧，其实上面<code>McRank</code>已经讲完了，但是Paper里面提到有序分类(<code>Ordinal Classfifcation</code>，貌似就是<code>Pointwise</code>里面的第三个分支)可以提升排序结果。</p>
-</blockquote>
-<p>这里在进行多分类时，可以发现每个类别(档位)并不是平等的，比如4档就是要比0档相关性更好，为了考虑这种的偏移，有序分类就是干这个的，多类别有序分类是学习一段区间内的累积概率$Pr(y_i&lt;k)$</p>
-<p>首先将训练数据点分类两种$\{y_i \geq 4 \}$和$\{y_i \leq 3\}$，那这样称为了一个二分类问题，这里一样使用<code>boosting Tree</code>进行分类，同样关于$\{y_i \leq 3\}$也可以分为$\{y_i \geq 3 \}$和$\{y_i \leq 2\}$，如果迭代就可以进行变相多分类.</p>
-<p>这种方式就是考虑目标类目的不均等性，带来的问题就是会增加训练开销(因为有重复计算，并且可能会带来较大的样本<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-All" target="_blank" rel="external">不均衡性</a>。。。。)</p>
-<blockquote>
-<p>还有一个坏消息。。。<code>McRank</code>的Paper实验里面这种方式并没有比普通多分类提升多少效果-_-</p>
-</blockquote>
-<h2 id="总结">总结</h2><p><code>McRank</code>是非常经典的一种<code>Pointwise</code>学习排序，将排序转为机器学习的多分类预测，并且对其排序指标<code>DCG</code>误差可以被分类误差给<code>bounded</code>住，最终将分类结果的概率转为一个连续分数进行最终的排序，在实验里面显示该方法比基于回归的<code>subRank</code>以及<code>pairwise</code>的<code>LambdaRank</code>效果更好。</p>
-<blockquote>
-<p><code>McRank</code>速度快，效果也还行，最大的问题就是<code>训练样本的构建</code>比较麻烦..</p>
-</blockquote>
-<h2 id="参考">参考</h2><ol>
-<li>Li P, Burges C J C, Wu Q. McRank: Learning to Rank Using Multiple Classification and Gradient Boosting[J]. Advances in Neural Information Processing Systems, 2007:897-904.</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
-</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>McRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
-<h2 id="折损累积增益">折损累积增益</h2><blockquote>
-<p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG">这里</a>).</p>
-</blockquote>
-<p>假设在指定的<code>query</code>下通过某个排序算法对$n$个文档进行排序，则可以得到<br>$$DCG=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1)$$<br>]]>
     
     </summary>
     
