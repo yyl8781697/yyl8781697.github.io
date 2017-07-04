@@ -11,40 +11,40 @@
     
 
     
-    <meta name="description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下
+    <meta name="description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下ps:后来跟了几篇dssm的paper，一并记录在这里
 
-DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
+DSSMDSSM的结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
 
 字面匹配:TFIDF、BM25等
 使用LSA类模型进行语义匹配，但是效果不好
 
-而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。
-这里上图最直">
+而DSSM训练出来之后，检索场景下用户输入query之后">
 <meta property="og:type" content="article">
 <meta property="og:title" content="学习记录一下深度语义匹配模型-DSSM">
 <meta property="og:url" content="http://kubicode.me/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下
+<meta property="og:description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下ps:后来跟了几篇dssm的paper，一并记录在这里
 
-DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
+DSSMDSSM的结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
 
 字面匹配:TFIDF、BM25等
 使用LSA类模型进行语义匹配，但是效果不好
 
-而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。
-这里上图最直">
+而DSSM训练出来之后，检索场景下用户输入query之后">
 <meta property="og:image" content="/img/Study-With-Deep-Structured-Semantic-Model/dssm_arch.png">
+<meta property="og:image" content="/img/Study-With-Deep-Structured-Semantic-Model/cdssm_arch.png">
+<meta property="og:image" content="/img/Study-With-Deep-Structured-Semantic-Model/dssm_lstm_arch.png">
+<meta property="og:image" content="/img/Study-With-Deep-Structured-Semantic-Model/mv_dssm_arch.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习记录一下深度语义匹配模型-DSSM">
-<meta name="twitter:description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下
+<meta name="twitter:description" content="DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下ps:后来跟了几篇dssm的paper，一并记录在这里
 
-DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
+DSSMDSSM的结构DSSM最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:
 
 字面匹配:TFIDF、BM25等
 使用LSA类模型进行语义匹配，但是效果不好
 
-而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。
-这里上图最直">
+而DSSM训练出来之后，检索场景下用户输入query之后">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -134,14 +134,14 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DSSM结构"><span class="toc-number">1.</span> <span class="toc-text">DSSM结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Word_Hashing"><span class="toc-number">2.</span> <span class="toc-text">Word Hashing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DSSM"><span class="toc-number">1.</span> <span class="toc-text">DSSM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DSSM的结构"><span class="toc-number">1.1.</span> <span class="toc-text">DSSM的结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Word_Hashing"><span class="toc-number">1.2.</span> <span class="toc-text">Word Hashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#训练DSSM"><span class="toc-number">1.3.</span> <span class="toc-text">训练DSSM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CDSSM"><span class="toc-number">2.</span> <span class="toc-text">CDSSM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MV-DSSM"><span class="toc-number">3.</span> <span class="toc-text">MV-DSSM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
 		<blockquote>
-<p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下</p>
+<p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下<br>ps:后来跟了几篇dssm的paper，一并记录在这里</p>
 </blockquote>
-<h2 id="DSSM结构">DSSM结构</h2><p><code>DSSM</code>最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:</p>
+<h2 id="DSSM">DSSM</h2><h3 id="DSSM的结构">DSSM的结构</h3><p><code>DSSM</code>最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:</p>
 <ol>
 <li>字面匹配:<code>TFIDF</code>、<code>BM25</code>等</li>
 <li>使用<code>LSA</code>类模型进行语义匹配，但是效果不好</li>
@@ -170,22 +170,37 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
 <li>最终得到的相似度就可以去训练query和doc的相关性了</li>
 </ol>
 <p>因此整个结构就可以看做做了一层<code>Word Hashing</code>之后去训练<code>DNN</code>网络</p>
-<h2 id="Word_Hashing">Word Hashing</h2><p><code>Word Hashing</code>是paper非常重要的一个<code>trick</code>，以英文单词来说，比如<code>good</code>，他可以写成<code>#good#</code>，然后按tri-grams来进行分解为<code>#go goo ood od#</code>，再将这个tri-grams灌入到<code>bag-of-word</code>中，这种方式可以非常有效的解决<code>vocabulary</code>太大的问题(因为在真实的web search中vocabulary就是异常的大)，另外也不会出现<code>oov</code>问题，因此英文单词才26个，3个字母的组合都是有限的，很容易枚举光。<br>那么问题就来了，这样两个不同的单词会不会产出相同的tri-grams，paper里面做了统计，说了这个冲突的概率非常的低，500K个word可以降到30k维，冲突的概率为0.0044%</p>
+<h3 id="Word_Hashing">Word Hashing</h3><p><code>Word Hashing</code>是paper非常重要的一个<code>trick</code>，以英文单词来说，比如<code>good</code>，他可以写成<code>#good#</code>，然后按tri-grams来进行分解为<code>#go goo ood od#</code>，再将这个tri-grams灌入到<code>bag-of-word</code>中，这种方式可以非常有效的解决<code>vocabulary</code>太大的问题(因为在真实的web search中vocabulary就是异常的大)，另外也不会出现<code>oov</code>问题，因此英文单词才26个，3个字母的组合都是有限的，很容易枚举光。<br>那么问题就来了，这样两个不同的单词会不会产出相同的tri-grams，paper里面做了统计，说了这个冲突的概率非常的低，500K个word可以降到30k维，冲突的概率为0.0044%</p>
 <blockquote>
-<p>但是在中文场景下，这个<code>Word Hashing</code>估计没有这么有效了</p>
+<p>但是在中文场景下，这个<code>Word Hashing</code>估计没有这么有效了<br>因为直接使用了word hashing，因为无法记录上下文信息</p>
 </blockquote>
-<h2 id="总结">总结</h2><p><code>DSSM</code>的优势:</p>
+<h3 id="训练DSSM">训练DSSM</h3><p>上面是前向计算过程，在进行训练的时候需要计算给定<code>Query</code>下与<code>Doc</code>的相关性:<br>    $$P(D|Q) = \frac{exp(\gamma R(Q,D))}{\sum_{d_i \in D} exp(\gamma R(Q,D))}$$</p>
+<p>最终他需要优化的损失函数为:<br>    $$L(\Lambda) = - \text{log} \prod_{(Q,D^+)} P(D^+|Q)$$</p>
+<blockquote>
+<p>$D^+$表示被点击的文档，这里就是最大化点击文档的相关性的最大似然</p>
+</blockquote>
+<h2 id="CDSSM">CDSSM</h2><p><code>CDSSM</code>(又称<code>CLSM</code>:Convolutional latent semantic model)在一定程度上他可以弥补<code>DSSM</code>会丢失上下文的问题,他的结构也很简单，主要是将<code>DNN</code>替换成了<code>CNN</code></p>
+<center><img src="/img/Study-With-Deep-Structured-Semantic-Model/cdssm_arch.png" width="400px"></center><br>他的前向步骤主要计算如下:<br>1. 使用指定滑窗大小对输入序列取窗口数据（称为<code>word-n-gram</code>）<br>2. 对于这些<code>word-n-gram</code>按<code>letter-trigram</code>进行转换构成representation vector(其实就是<code>Word Hashing</code>)<br>3. 对窗口数据进行一次卷积层的处理(窗口里面含有部分上下文)<br>4. 使用<code>max-pooling</code>层来取那些比较重要的<code>word-n-gram</code><br>5. 再过一次FC层计算语义向量<br>6. 他最终输出的还是128维<br><br>&gt; 因为使用<code>CDSSM</code>来做语义匹配的工作也是比较合适的<br><br>## DSSM-LSTM<br>既然是为了记录输入句子的上下文，这个无疑是<code>Lstm</code>这个模型更为擅长，因此又有了一种<code>Lstm</code>来构造的<code>DSSM</code>模型<br><center><img src="/img/Study-With-Deep-Structured-Semantic-Model/dssm_lstm_arch.png" width="400px"></center>
+
+<p>这篇相对于<code>CDSMM</code>来说改的更为简单，其实就是将原始<code>DSSM</code>的模型替换为了<code>LSTM</code>模型…</p>
+<h2 id="MV-DSSM">MV-DSSM</h2><p><code>MV-DSSM</code>里面的<code>MV</code>为<code>Multi-View</code>，一般可以理解为多视角的<code>DSSM</code>，在原始的DSSM中需要训练的有<code>Query</code>和<code>Doc</code>这两类的embedding,同时里面<code>DNN</code>的所有权重都是共享的，而<code>MV-DSSM</code>他可以训练不止两类的训练数据，同时里面的深度模型的参数是相互独立:</p>
+<p><center><img src="/img/Study-With-Deep-Structured-Semantic-Model/mv_dssm_arch.png" width="400px"></center><br>基于<code>Multi-View</code>的<code>DSSM</code>是的参数变多了，由于多视角的训练，输入的语料也可以变得不同，自由度也更大了，但是随之带来的问题就是训练会变得越来越困难^_^</p>
+<h2 id="总结">总结</h2><p><code>DSSM</code>类的模型其实在计算相似度的时候最后一步除了使用Cosine，可能再接入一个MLP会更加好，因为Cosine是完全无参的。</p>
+<p><code>DSSM</code>的优势:</p>
 <ol>
 <li><code>DSSM</code>看起来在真实检索场景下可行性很高，一方面是直接使用了用户天然的点击数据，出来的结果可行度很高，另一方面文中的doc可以使用title来表示，同时这个部分都是可以离线进行语义向量计算的，然后最终query和doc的语义相似性也是相当诱人</li>
 <li><code>DSSM</code>出的结果不仅可以直接排序，还可以拿中间见过做文章:<code>semantic feature</code>可以天然的作为<code>word embedding</code>嘛</li>
 </ol>
 <p><code>DSSM</code>的劣势:</p>
 <ol>
-<li>用户信息较难加入</li>
+<li>用户信息较难加入(不过可以基于<code>MVDSSM</code>改造)</li>
 <li>貌似训练时间很长啊</li>
 </ol>
 <h2 id="参考">参考</h2><ol>
 <li>Huang P S, He X, Gao J, et al. Learning deep structured semantic models for web search using clickthrough data[C]// ACM International Conference on Conference on Information &amp; Knowledge Management. ACM, 2013:2333-2338.</li>
+<li>Shen, Yelong, et al. “A latent semantic model with convolutional-pooling structure for information retrieval.” Proceedings of the 23rd ACM International Conference on Conference on Information and Knowledge Management. ACM, 2014.</li>
+<li>Palangi, Hamid, et al. “Semantic modelling with long-short-term memory for information retrieval.” arXiv preprint arXiv:1412.6629 (2014).</li>
+<li>Elkahky, Ali Mamdouh, Yang Song, and Xiaodong He. “A multi-view deep learning approach for cross domain user modeling in recommendation systems.” Proceedings of the 24th International Conference on World Wide Web. International World Wide Web Conferences Steering Committee, 2015.</li>
 </ol>
 <hr>
 <blockquote>
@@ -259,7 +274,7 @@ DSSM结构DSSM最大的卖点在检索场景下  使用点击数据来训练语�
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DSSM结构"><span class="toc-number">1.</span> <span class="toc-text">DSSM结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Word_Hashing"><span class="toc-number">2.</span> <span class="toc-text">Word Hashing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#DSSM"><span class="toc-number">1.</span> <span class="toc-text">DSSM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DSSM的结构"><span class="toc-number">1.1.</span> <span class="toc-text">DSSM的结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Word_Hashing"><span class="toc-number">1.2.</span> <span class="toc-text">Word Hashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#训练DSSM"><span class="toc-number">1.3.</span> <span class="toc-text">训练DSSM</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CDSSM"><span class="toc-number">2.</span> <span class="toc-text">CDSSM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MV-DSSM"><span class="toc-number">3.</span> <span class="toc-text">MV-DSSM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 

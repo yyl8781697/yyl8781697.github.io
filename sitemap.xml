@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2017/04/21/Deep%20Learning/Study-With-Deep-Structured-Semantic-Model/</loc>
+    <lastmod>2017-07-04T12:52:36.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2017/06/05/Deep%20Learning/Dropout-in-Deep-Neural-Network/</loc>
     <lastmod>2017-06-05T15:04:39.000Z</lastmod>
   </url>
@@ -19,11 +24,6 @@
   <url>
     <loc>http://kubicode.me/2017/05/15/Deep%20Learning/Understanding-about-RNN/</loc>
     <lastmod>2017-06-05T01:12:31.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2017/04/21/Deep%20Learning/Study-With-Deep-Structured-Semantic-Model/</loc>
-    <lastmod>2017-05-15T01:24:32.000Z</lastmod>
   </url>
   
   <url>
