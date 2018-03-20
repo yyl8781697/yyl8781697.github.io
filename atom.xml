@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2018-03-20T16:35:52.000Z</updated>
+  <updated>2018-03-20T16:42:36.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -16,10 +16,10 @@
   
   <entry>
     <title><![CDATA[聊聊CTR预估的中的深度学习]]></title>
-    <link href="http://kubicode.me/2018/03/19/Deep%20Learning/Take-about-CTR-With-Deep-Learning/"/>
-    <id>http://kubicode.me/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/</id>
+    <link href="http://kubicode.me/2018/03/19/Deep%20Learning/Talk-About-CTR-With-Deep-Learning/"/>
+    <id>http://kubicode.me/2018/03/19/Deep Learning/Talk-About-CTR-With-Deep-Learning/</id>
     <published>2018-03-19T02:59:05.000Z</published>
-    <updated>2018-03-20T16:35:52.000Z</updated>
+    <updated>2018-03-20T16:42:36.000Z</updated>
     <content type="html"><![CDATA[<h2 id="CTR预估">CTR预估</h2><p>CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。<br>但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，GBDT中的策略树将会有一定的特征选择功能，因此该方式先原先（未经过太多特征工程的特征过一把GBDT），将GBDT的叶子节点作为特征继续输入到LR模型中，最终对目标的CTR值进行预测。<br>除特征工程外，LR的另一个缺陷就是对于高阶的表达能力不足，从这两个出发点，结合公司中手头的一些工作，整了下最近比较经典的Paper来说说深度学习在CTR预估中的一些方法，主要有:<code>FNN</code>、<code>PNN</code>、<code>Wide&amp;Deep</code>、<code>Deep&amp;Cross</code>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#DeepFM" target="_blank" rel="external">DeepFm</a>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#NFM" target="_blank" rel="external">NFM</a>.</p>
 <a id="more"></a>
 <h2 id="FNN">FNN</h2><p>上海交大张伟楠老师利用<code>FM</code>做特征Embedding，然后在上面叠加nn，提出了<code>FNN</code>模型。</p>
