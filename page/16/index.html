@@ -95,6 +95,159 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/07/01/LeetCode/LeetCode-Pascal's-Triangle-II/" title="LeetCode-Pascal&#39;s Triangle II" itemprop="url">LeetCode-Pascal&#39;s Triangle II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-01T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/pascals-triangle-ii/" target="_blank" rel="external">https://leetcode.com/problems/pascals-triangle-ii/</a></p>
+</blockquote>
+<p>Problem:<br>Given an index k, return the kth row of the Pascal’s triangle.</p>
+<p>For example, given k = 3,<br>Return <code>[1,3,3,1]</code>.</p>
+<p><strong>Note</strong>:<br>Could you optimize your algorithm to use only O(k) extra space?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getRow</span><span class="params">(<span class="keyword">int</span> rowIndex)</span> </span>&#123;</span><br><span class="line">        Integer[] ret=<span class="keyword">new</span> Integer[rowIndex+<span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;ret.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            ret[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ret[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;rowIndex+<span class="number">1</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i;j&gt;<span class="number">0</span>;j--)</span><br><span class="line">            &#123;</span><br><span class="line">                ret[j]+=ret[j-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> Arrays.asList(ret);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/01/LeetCode/LeetCode-Pascal's-Triangle-II/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/01/LeetCode/LeetCode-Triangle/" title="LeetCode-Triangle" itemprop="url">LeetCode-Triangle</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-01T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>leetcode地址：<a href="https://leetcode.com/problems/triangle/" target="_blank" rel="external">https://leetcode.com/problems/triangle/</a></p>
+</blockquote>
+<p>Problem:<br>Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.</p>
+<p>For example, given the following triangle</p>
+<pre><code>[
+     [<span class="number">2</span>],
+    [<span class="number">3</span>,<span class="number">4</span>],
+   [<span class="number">6</span>,<span class="number">5</span>,<span class="number">7</span>],
+  [<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]
+]
+</code></pre><p>The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).</p>
+<p><strong>Note</strong>:<br>Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; triangle)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span>[][] sums=<span class="keyword">new</span> <span class="keyword">int</span>[triangle.size()][triangle.size()];</span><br><span class="line">		List&lt;Integer&gt; rows;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,column;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(triangle.size()&gt;<span class="number">0</span>)</span><br><span class="line">	    &#123;</span><br><span class="line">        	<span class="keyword">for</span>(<span class="keyword">int</span> i=triangle.size()-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">        	&#123;</span><br><span class="line">        		rows=triangle.get(i);</span><br><span class="line">        		</span><br><span class="line">        		<span class="keyword">if</span>(i==triangle.size()-<span class="number">1</span>)</span><br><span class="line">        		&#123;</span><br><span class="line">        			<span class="comment">//the last rows</span></span><br><span class="line">        			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rows.size();j++)</span><br><span class="line">        			&#123;</span><br><span class="line">        				sums[i][j]=rows.get(j);</span><br><span class="line">        			&#125;</span><br><span class="line">        		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        			</span><br><span class="line">        			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rows.size();j++)</span><br><span class="line">        			&#123;</span><br><span class="line">        				</span><br><span class="line">        				sums[i][j]=<span class="keyword">this</span>.getMin(rows.get(j)+sums[i+<span class="number">1</span>][j],rows.get(j)+sums[i+<span class="number">1</span>][j+<span class="number">1</span>]);</span><br><span class="line">        			&#125;</span><br><span class="line">        		&#125;</span><br><span class="line">        		</span><br><span class="line">        	&#125;</span><br><span class="line">        	</span><br><span class="line">        	ret=sums[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">	    &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getMin</span><span class="params">(Integer a,Integer b)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> a&gt;b?b:a;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/01/LeetCode/LeetCode-Triangle/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/06/30/LeetCode/LeetCode-LRU-Cache/" title="LeetCode-LRU Cache" itemprop="url">LeetCode-LRU Cache</a>
   </h1>
   <p class="article-author">By
@@ -699,149 +852,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/01/17/Search Engine/search-engine/" title="读《这就是搜索引擎：核心技术详解》有感总结" itemprop="url">读《这就是搜索引擎：核心技术详解》有感总结</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-01-17T09:10:52.000Z" itemprop="datePublished"> 发表于 2014-01-17</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>&#160; &#160; &#160; &#160;搜索引擎的使用对于我们来说不陌生，对于一个正常的搜索流程，比如用户输入查询“搜索引擎 技术”，搜索引擎需要分别将存储的磁盘上的两个单词的倒排序索引读入内存，之后进行解压缩，然后求两个单词对应倒排序列表的搅基，找到所有包含两个单词的文档集合，根据排序算法来对每个文档的相关性进行打分，按照相关度输入相关最高的搜索结果。</p>
-<p>&#160; &#160; &#160; &#160;但是对于这系列步骤中海量文档数据的来源，存储，查找的技术又是如何的呢？下面是我最近看了《这就是搜索引擎：核心技术详解》这书的大致总结：</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2014/01/17/Search Engine/search-engine/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/01/17/Search Engine/search-engine/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2013/05/09/Dotnet/ajaxframework/" title="基于.Net 写我自己的Ajax后台框架AjaxFramework" itemprop="url">基于.Net 写我自己的Ajax后台框架AjaxFramework</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2013-05-09T15:01:59.000Z" itemprop="datePublished"> 发表于 2013-05-09</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="为什么要写自己的Ajax后台框架">为什么要写自己的Ajax后台框架</h2><p>&#160; &#160; &#160; &#160;现在Ajax在web应用方面已经用的稀巴烂了，如果你做一个网站没有用到ajax都不好意思拿出手，虽然面对ajax的潮流下，在.net开放方向，微软已经做了很多工作了，比如推出了ajax的服务器端控件，但是他不够灵活，用的人多吗？不多！</p>
-<p>&#160; &#160; &#160; &#160;在.Net环境下与ajax配合的几种情况（主要是针对webform，因为.net mvc你只要写action就可以将方法给发布出来，实现ajax的调用）：</p>
-<ol>
-<li><p>用ajax访问aspx页面：直接在page_load中输出html代码并且End掉多余标签的输出，但是他还要走生命周期，一个好好的aspx页面只用这个功能怪怪的，当然还可以直接在aspx.cs上面的方法上加上[webMethod]特性来标记ajax访问，但是必须该方法为静态，用起来也不是很爽。</p>
-</li>
-<li><p>用ajax访问ashx一般处理程序：这个是在.net的ajax开发中一种常见明确推荐的方式，他输出页面少，不冗余代码，调用灵活，但是他通常一个ashx页面只提供一个功能，但是市面上有可以通过switch方法的参数或者用委托或者反射的方法来实现一个ashx页面提供多个ajax访问的功能，但是没发现这样也挺乱的吗，我之前一直用这个，慢慢的 慢慢的开始讨厌这种写好写法!</p>
-</li>
-<li><p>用ajax直接调用webservice服务：这样的好处是在一个普通的webserive类中可以使用多个对外ajax访问点的发布，用起来很灵活，但是你一般的小网站为了ajax的访问还是部署webservice还是比较烦的吧！</p>
-</li>
-<li><p>用ajax去调用wcf：微软推出了wcf，并且现在公认为他是一种可以替代webservice的新产品，并且他还支持奖wcf部署在web服务器上，以url形式发布，当然了，这样就可以用ajax来访问调用，但是同上，小网站小应用还要去弄wcf，也是挺烦的一件事情！</p>
-</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2013/05/09/Dotnet/ajaxframework/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Dotnet/">Dotnet</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Ajax/">Ajax</a><a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/CSharp/">CSharp</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2013/05/09/Dotnet/ajaxframework/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/15/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/17/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/17/">Next<span></span></a>
   </nav>
 
 </div>
@@ -869,7 +882,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
 		  
 		
 		  
@@ -954,11 +967,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>35</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
 			
 		
 			
@@ -978,6 +991,10 @@
 			
 		
 			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
 			
 		
@@ -994,11 +1011,7 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -1006,11 +1019,11 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -1103,7 +1116,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

@@ -95,6 +95,136 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" title="语言模型在信息检索中的平滑方法" itemprop="url">语言模型在信息检索中的平滑方法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-10-24T11:58:01.000Z" itemprop="datePublished"> 发表于 2016-10-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="引言">引言</h2><p>在信息检索中文本相关性计算是至关重要的一个特征，关于文本相关性计算时用的比较多的有:<code>词频/频率</code>、<code>tf/idf/tf*idf</code>、<code>bm25</code>、<code>布尔模型</code>、<code>空间向量模型</code>以及<code>语言模型</code>，本文主要是对于<code>[1]</code>的一些学习理解，虽然<code>[1]</code>历史久远，但是可行性高，同时目前也有不少搜索引擎在使用<code>[1]</code>的方法，主要介绍的是语言模型在信息检索中使用的平滑方法，主要侧重点就是性能。</p>
+<h2 id="Language_Model">Language Model</h2><p>现假设<code>query</code>是基于文档<code>d</code>进行生成的,那么给定一个<code>query</code>$q=q_1q_2..q_n$以及一个文档$d=d_1d_2…d_n$,我们比较关心的是$p(d|q)$这个条件概率，即在观察到$q$的情况下生成$d$的一个概率，假设文档中的词是相关独立的，根据贝叶斯公式，则有:<br>$$p(d|q) \propto p(q|d)p(d)$$<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/" title="使用Python画ROC曲线以及AUC值" itemprop="url">使用Python画ROC曲线以及AUC值</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-09-18T16:02:43.000Z" itemprop="datePublished"> 发表于 2016-09-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="AUC介绍">AUC介绍</h2><p><code>AUC</code>(Area Under Curve)是机器学习二分类模型中非常常用的评估指标，相比于<code>F1-Score</code>对项目的不平衡有更大的容忍性，目前常见的机器学习库中(比如<a href="http://scikit-learn.org/stable/">scikit-learn</a>)一般也都是集成该指标的计算，其计算原理可以参考这个<a href="https://www.douban.com/note/284051363/?type=like">ROC和AUC介绍以及如何计算AUC
+</a>，但是有时候模型是单独的或者自己编写的，此时想要评估训练模型的好坏就得自己搞一个<code>AUC</code>计算模块，本文在查询资料时发现<code>libsvm-tools</code><sup>1</sup>有一个非常通俗易懂的<code>auc</code>计算，因此抠出来用作日后之用。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/" title="LambdaRank-支持非平滑损失函数的学习排序算法" itemprop="url">LambdaRank-支持非平滑损失函数的学习排序算法</a>
   </h1>
   <p class="article-author">By
@@ -675,149 +805,9 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/" title="Learning To Rank中Pairwise方法的学习" itemprop="url">Learning To Rank中Pairwise方法的学习</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-10T09:05:18.000Z" itemprop="datePublished"> 发表于 2016-04-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛^_^</p>
-</blockquote>
-<h2 id="2002-RankSvm">2002-RankSvm</h2><p><code>RankSvm</code>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。<br><code>RankSvm</code>的学习记录在<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/">这里</a></p>
-<h2 id="2006-IRSVM">2006-IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
-<h3 id="问题1:位置误差">问题1:位置误差</h3>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" title="RankSvm-基于点击数据的搜索排序算法" itemprop="url">RankSvm-基于点击数据的搜索排序算法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-30T12:49:53.000Z" itemprop="datePublished"> 发表于 2016-03-30</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
-并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
-</code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
-<ol>
-<li>需要人工/专家标注</li>
-<li>诱导用户对展现的搜索结果进行反馈</li>
-</ol>
-<p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
@@ -845,7 +835,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
 		  
 		
 		  
@@ -930,11 +920,11 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>35</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
 			
 		
 			
@@ -954,6 +944,10 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
 			
 		
@@ -970,11 +964,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -982,11 +972,11 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -1079,7 +1069,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

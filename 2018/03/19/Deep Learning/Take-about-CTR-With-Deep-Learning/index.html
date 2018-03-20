@@ -1,0 +1,761 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>聊聊CTR预估的中的深度学习 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="CTR预估CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊CTR预估的中的深度学习">
+<meta property="og:url" content="http://kubicode.me/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="CTR预估CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，">
+<meta property="og:image" content="/img/Take-about-CTR-With-Deep-Learning/fnn_arch.png">
+<meta property="og:image" content="/img/Take-about-CTR-With-Deep-Learning/pnn_arch.png">
+<meta property="og:image" content="/img/Take-about-CTR-With-Deep-Learning/wdl_arch.png">
+<meta property="og:image" content="/img/Take-about-CTR-With-Deep-Learning/fnn_pnn_wdl.png">
+<meta property="og:image" content="/img/Take-about-CTR-With-Deep-Learning/dcn_arch.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊聊CTR预估的中的深度学习">
+<meta name="twitter:description" content="CTR预估CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/" title="聊聊CTR预估的中的深度学习" itemprop="url">聊聊CTR预估的中的深度学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-03-19T02:59:05.000Z" itemprop="datePublished"> 发表于 2018-03-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CTR预估"><span class="toc-number">1.</span> <span class="toc-text">CTR预估</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FNN"><span class="toc-number">2.</span> <span class="toc-text">FNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PNN"><span class="toc-number">3.</span> <span class="toc-text">PNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Wide&Deep"><span class="toc-number">4.</span> <span class="toc-text">Wide&Deep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deep&Cross"><span class="toc-number">5.</span> <span class="toc-text">Deep&Cross</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="CTR预估">CTR预估</h2><p>CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。<br>但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，GBDT中的策略树将会有一定的特征选择功能，因此该方式先原先（未经过太多特征工程的特征过一把GBDT），将GBDT的叶子节点作为特征继续输入到LR模型中，最终对目标的CTR值进行预测。<br>除特征工程外，LR的另一个缺陷就是对于高阶的表达能力不足，从这两个出发点，结合公司中手头的一些工作，整了下最近比较经典的Paper来说说深度学习在CTR预估中的一些方法，主要有:<code>FNN</code>、<code>PNN</code>、<code>Wide&amp;Deep</code>、<code>Deep&amp;Cross</code>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#DeepFM" target="_blank" rel="external">DeepFm</a>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#NFM" target="_blank" rel="external">NFM</a>.</p>
+<a id="more"></a>
+<h2 id="FNN">FNN</h2><p>上海交大张伟楠老师利用<code>FM</code>做特征Embedding，然后在上面叠加nn，提出了<code>FNN</code>模型。</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/fnn_arch.png" width="400px"></center>
+
+<p>其实模型架构图还是蛮清晰的，看懂了<code>FM</code>那一层之后就很明了了:</p>
+<ol>
+<li>输入的是各种稀疏特征（可以是最简单的各种id）</li>
+<li>接下来将会经过一个<code>已训练</code>的<code>FM</code>层，直接取到<code>FM</code>模型中对于特征的隐向量</li>
+<li>通过隐向量可以构造出<code>NN</code>的输入层<code>z</code>:$z = (w_0,z_1,z_2,…,z_n)$,而$z_i=(w_i,v_i^1,v_i^2,…v_i^K)$,其中$w_i$为<code>FM</code>中的一阶权重,$v_i$为对应特征的隐向量</li>
+<li>再接下来就是堆一个<code>NN</code>层来计算最终的目标值了。</li>
+</ol>
+<p><code>FNN</code>的最大优势就是不需要再去做特征工程了，其特征由<code>FM</code>的隐向量构建得到。同时其缺点就是需要<code>pre-train</code>才能让这个<code>FNN</code>给跑起来.</p>
+<h2 id="PNN">PNN</h2><p>2016年，张伟楠老师他们又提出了一种名为<code>PNN</code>的模型，对<code>Embedding</code>向量做<code>innner/outer product</code>（其实就是对原来的<code>FNN</code>模型进行改吧改吧）。</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/pnn_arch.png" width="400px"></center>
+
+<p>其中（<code>bottom-top</code>方向）:</p>
+<ol>
+<li>其中第一层是输入的离散特征<code>Field N</code></li>
+<li>第二层是对离散特征的<code>Embedding</code>（这儿<code>Embedding</code>的方式有很多种，最经典的就是<code>TF</code>的<code>lookup_table</code>）</li>
+<li>重点在第三层，就是模型的创新点<code>Product Layer</code>，这里分两部分，一部分是$z$，他是保持了原有<code>Embedding</code>向量的数据，另一部分是$p$,主要对上一层的向量数据进行<code>pairwise feature interaction</code>,也就是做<code>product</code>的工作</li>
+<li>接下来又是继续走一波<code>NN</code>网络</li>
+<li>最后对点击率进行预估计算</li>
+</ol>
+<p>上面的是整个<code>PNN</code>的模型架构，而根据$p$中可选<code>Inner Product</code>和<code>Outer Product</code>的两种方式提出<code>IPNN</code>和<code>OPNN</code>这两个模型，这两模型中$z$是一样的，先来看一下$z$:<br>$$l_z =(l_z^1,l_z^2,…,l_z^n,…,l_z^{D1})$$<br>而<br>$$l_z^n = W_z^n \odot z_n =  \sum_j^M (W_z^n)_{j} f_{n,j}$$</p>
+<blockquote>
+<p>这里的$f_i$为第$i$个特征的<code>Embedding</code></p>
+</blockquote>
+<p>因此可以看出$l_z$其实只是对原有的<code>Embedding</code>做了一层转换</p>
+<p>在$p$部分:<br>$$l_p =(l_p^1,l_p^2,…,l_p^n,…,l_p^{D1})$$<br>并且$$p={p_{i,j}} ,i=1…N,j=1..N$$</p>
+<blockquote>
+<p>其中$p_{i,j} = g(f_i,f_j)$<br> $g$就是可以做<code>Inner Product</code>和<code>Outer Product</code></p>
+</blockquote>
+<p>这里再细节的东西就不贴了，感觉Paper里的符号的上下标有点乱(当然也有可能是我没完全看明白-_-)，其实<code>PNN</code>里面的主要贡献就是在<code>Embedding</code>的基础上再多做一些<code>Pairwise Product</code>的操作增强高阶/非线性效果。</p>
+<h2 id="Wide&amp;Deep">Wide&amp;Deep</h2><p>相比对<code>FNN</code>和<code>PNN</code>，Google在2016年提出来的<code>Wide&amp;Deep</code>模型更加有名气和通用化一些，顾名思义，整个模型将分为<code>Wide</code>和<code>Deep</code>两个部分:</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/wdl_arch.png" width="600px"></center>
+
+
+<p>左边的<code>Wide</code>是传统的大规模特征+线性模型（也就是经典的LR模型），右边的<code>Deep</code>是一个<code>DNN</code>模型，而中间的<code>Wide&amp;Deep</code>把两个模型在最后一层做了组合。原文中其实是将两个模型的输出求和:<br>$$P(Y=1|x) = \sigma(W_{wide}^T[x,\phi(x)] + W_{deep}^T \alpha^{(lf)}+b)$$</p>
+<p>很明显是一个分治的思想，<code>Wide</code>负责处理大规模离散特征，<code>Deep</code>负责处理连续特征，各自发挥自己的优势。再按文章的意思就是:</p>
+<ol>
+<li><code>Wide</code>可以达到<code>Memorization</code>功能，从训练数据中学习已经出现过的共现和相关性。</li>
+<li><code>Deep</code>可以有Generalization：对于没有出现过的数据，需要从数据中学习到抽象的概念,也就是泛化性。</li>
+</ol>
+<p><code>Wide&amp;Deep</code>模型简单，扩展性更加强，而且运行效率上也比较可控，因此在实际业务中使用非常广泛，并且原生的TF也还提供了<code>Wide&amp;Deep</code>的接口:<a href="https://www.tensorflow.org/tutorials/wide_and_deep" target="_blank" rel="external">https://www.tensorflow.org/tutorials/wide_and_deep</a></p>
+<p>另外在<code>DeepFM</code>中有一个图对比<code>FNN</code>、<code>PNN</code>、<code>Wide&amp;Deep</code>的区别，非常的清晰:</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/fnn_pnn_wdl.png" width="600px"></center>
+
+<h2 id="Deep&amp;Cross">Deep&amp;Cross</h2><p><code>Wide&amp;Deep</code>虽然经典，但是仍旧么有解决特征组合问题，特征组合算法在<code>FM</code>系列的深度学习中也已经有不少研究:<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#DeepFM" target="_blank" rel="external">DeepFm</a>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#NFM" target="_blank" rel="external">NFM</a>.,<code>Google</code>在2017年又提出了一种名为<code>Deep&amp;Cross</code>的CTR预估算法(也简称<code>DCN</code>)，可以用级联的方式来深度的提取高阶的特征，同样先来看下模型的架构:</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/dcn_arch.png" width="400px"></center>
+
+<p>如上图:</p>
+<ol>
+<li><code>DCN</code>模型的输入基本为连续特征(<code>Dense Feature</code>)和id类的离散特征(<code>Sparse Feature</code>),同时将会离线特征处理成embedding特征，这样就可以通过理解为模型的输入是一个连续的向量$x_0$</li>
+<li>接下来模型分为两部分:<ol>
+<li>右侧部分是传统的DNN模型，其中每个全连接层都使用<code>RELU</code>激活函数, 把输入特征通过多个全连接层之后特征变得更加高阶:$$h_i=\text{ReLu}(w_{h,i}x_{i-1}+b_{h,i})$$</li>
+<li>左侧部分则是DCN的核心<code>Cross</code>层,每一层的特征都由其上一层的特征进行交叉组合，并且会吧上一层的原始特征重新加回来。这样既能做特征组合，又能保留低阶原始特征，而且还随着<code>Cross</code>层的增加，是可以生成任意高阶的交叉组合特征$$x_{l+1} = x_0x_l^Tw_l+b_l+x_l = f(x_l,w_l,b_l)+x_l$$</li>
+</ol>
+</li>
+<li>最终会将<code>DNN</code>模型和<code>Cross</code>模型输出的向量进行<code>concat</code>起来之后过一把<code>LR</code>进行点击率预测。</li>
+</ol>
+<p>其中<code>Cross</code>的特征组合层与<code>FM</code>相比，可以理解为<code>FM</code>只能做到两阶的特征组合（因为<code>FM</code>是嵌套方式的，如果是多阶的特征是指数上升的），而<code>Cross</code>里面的可以完成任意多阶的组合，阶数与<code>Cross</code>的深度一致，并且其参数复杂度与阶数是线性关系$$d \times L_c \times 2$$</p>
+<blockquote>
+<p>$d$为输入向量的大小，$L_c$为<code>Cross</code>的深度</p>
+</blockquote>
+<h2 id="总结">总结</h2><p>上面几种深度学习模型基本是在一个固有的<code>DNN</code>结构上，在输入层加东西或者在隔壁加额外层来结合。<br><code>FNN</code>和<code>PNN</code>算法在特征组合与深度学习的结合上都给出了不少启发，但是毕竟<code>Google</code>出品，必属精品，<code>Wide&amp;Deep</code>无疑是使用更加广泛,当然在目前机器资源越来越好的情况下，也将会有更多更加复杂的深度模型将会取尝试。<br>同时也有经验表明，在不断上各种复杂模型的前提下，<code>CTR</code>预估的效果还是会不断的提升。</p>
+<h2 id="参考">参考</h2><p>[1]. He, Xinran, et al. “Practical lessons from predicting clicks on ads at facebook.” Proceedings of the Eighth International Workshop on Data Mining for Online Advertising. ACM, 2014.<br>[2]. Zhang, Weinan, Tianming Du, and Jun Wang. “Deep learning over multi-field categorical data.” European conference on information retrieval. Springer, Cham, 2016.<br>[3]. Qu, Yanru, et al. “Product-based neural networks for user response prediction.” Data Mining (ICDM), 2016 IEEE 16th International Conference on. IEEE, 2016.<br>[4]. Cheng, Heng-Tze, et al. “Wide &amp; deep learning for recommender systems.” Proceedings of the 1st Workshop on Deep Learning for Recommender Systems. ACM, 2016.<br>[5]. Wang, Ruoxi, et al. “Deep &amp; Cross Network for Ad Click Predictions.” arXiv preprint arXiv:1708.05123 (2017).</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/" data-title="聊聊CTR预估的中的深度学习 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/"  title="深入浅出Factorization Machines系列">
+ <strong>下一篇：</strong><br/> 
+ <span>深入浅出Factorization Machines系列
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CTR预估"><span class="toc-number">1.</span> <span class="toc-text">CTR预估</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FNN"><span class="toc-number">2.</span> <span class="toc-text">FNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PNN"><span class="toc-number">3.</span> <span class="toc-text">PNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Wide&Deep"><span class="toc-number">4.</span> <span class="toc-text">Wide&Deep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deep&Cross"><span class="toc-number">5.</span> <span class="toc-text">Deep&Cross</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

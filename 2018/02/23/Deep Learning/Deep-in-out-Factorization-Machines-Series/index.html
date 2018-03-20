@@ -1,0 +1,816 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>深入浅出Factorization Machines系列 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="近期使用FM系列完成了一个CTR预估的任务，本文是阅读了一些paper之后对于FM、FFM、DeepFM、NFM,AFM的一个理解和记录
+
+FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系数数据下的特征组合的问题，目前该系列模型在搜索推荐领域被广泛使用。
+一个栗子先来看一个经典的电影评分问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入浅出Factorization Machines系列">
+<meta property="og:url" content="http://kubicode.me/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="近期使用FM系列完成了一个CTR预估的任务，本文是阅读了一些paper之后对于FM、FFM、DeepFM、NFM,AFM的一个理解和记录
+
+FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系数数据下的特征组合的问题，目前该系列模型在搜索推荐领域被广泛使用。
+一个栗子先来看一个经典的电影评分问题">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/fm_case.png">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/ffm_case.png">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/ffm_v_fm.png">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/deepfm_arch.png">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/nfm_arch.png">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/nfm_result.png">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/afm_arch.png">
+<meta property="og:image" content="/img/Deep-in-out-Wide-n-Deep-Series/afm_result.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入浅出Factorization Machines系列">
+<meta name="twitter:description" content="近期使用FM系列完成了一个CTR预估的任务，本文是阅读了一些paper之后对于FM、FFM、DeepFM、NFM,AFM的一个理解和记录
+
+FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系数数据下的特征组合的问题，目前该系列模型在搜索推荐领域被广泛使用。
+一个栗子先来看一个经典的电影评分问题">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/" title="深入浅出Factorization Machines系列" itemprop="url">深入浅出Factorization Machines系列</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-02-23T12:33:22.000Z" itemprop="datePublished"> 发表于 2018-02-23</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#FM"><span class="toc-number">1.</span> <span class="toc-text">FM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一个栗子"><span class="toc-number">1.1.</span> <span class="toc-text">一个栗子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FM解法"><span class="toc-number">1.2.</span> <span class="toc-text">FM解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FM学习"><span class="toc-number">1.3.</span> <span class="toc-text">FM学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#扩展"><span class="toc-number">1.4.</span> <span class="toc-text">扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FFM"><span class="toc-number">2.</span> <span class="toc-text">FFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DeepFM"><span class="toc-number">3.</span> <span class="toc-text">DeepFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFM"><span class="toc-number">4.</span> <span class="toc-text">NFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AFM"><span class="toc-number">5.</span> <span class="toc-text">AFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>近期使用<code>FM</code>系列完成了一个<code>CTR</code>预估的任务，本文是阅读了一些paper之后对于<code>FM</code>、<code>FFM</code>、<code>DeepFM</code>、<code>NFM</code>,<code>AFM</code>的一个理解和记录</p>
+</blockquote>
+<h2 id="FM">FM</h2><p><code>Factorization Machine(FM)</code>由Steffen Rendle在2010年提出，旨在解决系数数据下的特征组合的问题，目前该系列模型在搜索推荐领域被广泛使用。</p>
+<h3 id="一个栗子">一个栗子</h3><p>先来看一个经典的电影评分问题</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/fm_case.png" width="400px"></center>
+
+<a id="more"></a>
+<p>问题就是需要对电影进行评分($y$项)，而$x$都是特征,其中:</p>
+<ol>
+<li>第一部分蓝色的为当前评分的用户</li>
+<li>第二部分红色的为被评分的电影</li>
+<li>第三部分黄色的为该用户曾经对其他电影的评分情况</li>
+<li>第四部分绿色的为该用户当前评分的月数</li>
+<li>第五部分棕色为该用户最新一次评分的电影</li>
+</ol>
+<p>这是一个经典的回归问题，最简单粗暴的方法就先上一个线性回归，其中对于绿色特征处理成binary，这样计算公式就是为<br>$$y_{lr} = w_0 + \sum_i^n w_i \cdot x_i$$</p>
+<p>这样可能会过于简单粗暴，按照算法（特征）工程师的套路会对某些特征进行组合，这样为了方便，咱们就给他来一个全组合:<br>$$y_{lr-cross} = w_0 + \sum_i^n w_i \cdot x_i + \sum_i^n \sum_{j=i+1}^n w_{i,j}  x_i x_j$$</p>
+<p>看似问题解决了，但是这样会存在这么几个问题:</p>
+<ol>
+<li>参数空间过大,这里为$O(n^2)$，在处理互联网数据时，特征两级别可能是亿级别的</li>
+<li>需要人工经验，这里一般会选择某些特征来组合，此时人工/专家经验就会很重要</li>
+<li>样本量过滤稀疏，实际上那这种方式拿到的特征会是很稀疏的，对于在训练样本中未出现过的组合该模型无能为力</li>
+</ol>
+<h3 id="FM解法">FM解法</h3><blockquote>
+<p>定理:对于一个正定举证$W$，始终存在一个矩阵$V$使得$W=V \cdot V^t$成立（需要$V$的维数$k$足够大）</p>
+</blockquote>
+<p>但是在巨大稀疏矩阵的情况下，当$k$并不是很大时$V \cdot V^t$也可以很接近$W$，因此可以用<br>$$w_{i,j} = \left \langle v_i,v_j \right \rangle = \sum_f^k v_{i,f} \cdot v_{j,f}$$<br>其中这里$v$为长度$k$的一个向量,$\left \langle v_i,v_j \right \rangle$表示两个向量的点积，在<code>FM</code>中也称为隐向量,这样就有了<code>FM</code>的式子:<br>$$y := w_0 + \sum_i^n w_i \cdot x_i + \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j$$<br>到了这里<code>FM</code>的式子:</p>
+<ol>
+<li>可以解决稀疏向量问题，因为每个特征都有一个隐向量，就算是稀疏向量在训练样本没有出现过的组合在预测时也可以进行计算</li>
+<li>同时参数空间也降低到了$O(n\cdot k)$</li>
+</ol>
+<p>但是他实际的运算复杂度并没有降低，反而还到了$O(kn^2)$,但是<code>FM</code>这里的二阶项并没有依赖其他模型参数除了$v_i$，这里就可以鬼斧神工的写为:<br>$$\begin{equation}\begin{split} \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j &amp;= \frac{1}{2}\sum_{i=1}^n \sum_{j=1}^n \left \langle v_i,v_j \right \rangle x_i x_j - \frac{1}{2} \sum_{i=1}^n \left \langle v_i,v_i \right \rangle x_i x_i  \\<br>&amp;= \frac{1}{2} \left ( \sum_{i=1}^n \sum_{j=1}^n \sum_{f=1}^k v_{i,f} v_{j,f} x_i x_j - \sum_{i=1}^n \sum_{f=1}^k v_{i,f} v_{i,f} x_i x_i  \right ) \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right ) \left( \sum_{j=1}^n v_{j,f}x_j \right ) -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ] \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right )^2 -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ]<br>\end{split}\end{equation}$$</p>
+<p>经过这样的转换之后，最终的模型计算复杂度将会降低到$O(kn)$，同时由于是巨大的稀疏场景，样本实际的特征量的平均值为$\bar{m}$并且$\bar{m}&lt;&lt;n$,最终的模型复杂度将会降低到$O(k \bar{m})$</p>
+<h3 id="FM学习">FM学习</h3><p>在<code>FM</code>中模型的参数有$w_0$,$W$以及$V$，这些参数可以通过梯度下降法进行高效的计算，其中梯度为:<br>$$ \frac{\partial}{\partial  \theta}y(x)=\left\{<br>\begin{aligned}<br>1 &amp; \quad if \quad \theta = w_0 \\<br>x_i &amp; \quad if \quad \theta = w_i \\<br>x_i \sum_{j=1}^n v_{j,f}x_j-v_{i,f}x_i^2 &amp; \quad if \quad \theta = v_{i,f} \\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>其中$\sum_{j=1}^n v_{j,f}x_j$部分与$i$相互独立，可以预先计算出来,另外<code>FM</code>在过拟合方面一般推荐使用<code>L2正则项</code></p>
+</blockquote>
+<p>所以在梯度计算方面可以在$O(1)$下进行计算<br>作者也提供了一个很强大的开源工具来训练<code>FM</code>:<a href="http://www.libfm.org" target="_blank" rel="external">http://www.libfm.org</a></p>
+<h3 id="扩展">扩展</h3><p>其实对于经典的特征组合问题，也非常容易能想到使用万能的<code>SVM</code>来求解，比如一个二阶的多项式<code>SVM</code>可以写成这样:<br>$$y_{svm} = w_0 + \sqrt{2} \sum_{i=1}^n w_ix_i + \sum_{i=1}^n w_i^{(2)}x_i^2 + \sqrt{2} \sum_{i=1}^n \sum_{j=i+1}^n w_{i,j}^{(2)}x_ix_j$$</p>
+<p>这样可以发现二阶多项式的<code>svm</code>和<code>FM</code>十分相似，只多了一项$\sum_{i=1}^n w_i^{(2)}x_i^2$，但是<code>SVM</code>对于未出现在训练样本的组合特征也是无法计算，同时他需要使用对偶才能进行求解,并且他在预测的时候还需要训练样本的支持向量。</p>
+<p>另外<code>FM</code>还可以用于<code>tag</code>的推荐排序，问题描述是给定用户信息$U$，宝贝信息$I$，对于相应的标签<code>T</code>进行排序，在binary特征下面模型可以表述为:<br>$$n:= |U \cup I \cup T|, \quad x_i=\delta (j=i \vee j=u \vee j=t)$$<br>使用<code>FM</code>的计算为<br>$$y(x) = w_0 +w_u+w_i+w_t+\left \langle v_u,v_i \right \rangle + \left \langle v_u,v_t \right \rangle + \left \langle v_i,v_t \right \rangle $$<br>但是在排序问题上，当对于<code>tagA</code>,<code>tagB</code>进行排序时，他们的$w_0 +w_u+w_i+\left \langle v_u,v_i \right \rangle$分项计算其实是一样的，所以<code>FM</code>模型最终在<code>tag</code>排序的问题上可以简化为:<br>$$y(x):=w_t+ \left \langle v_u,v_t \right \rangle + \left \langle v_i,v_t \right \rangle$$<br>这样就是<a href="https://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle2010-PITF.pdf" target="_blank" rel="external">PITF</a>模型极为相似了.</p>
+<p>当然上面说的都是二阶<code>FM</code>，其实<code>FM</code>还是支持多阶的，只是由于性能/效率问题一般二阶就够了，感兴趣的同学可以去看原始paper</p>
+<h2 id="FFM">FFM</h2><p><code>FFM</code>其实是在<code>FM</code>的基础上做了一些更加细致化的工作:作者Yuchin认为相同性质的特征归于同一field，而当前特征在不同field上的表现应该是不同的.<br>比如在广告领域中性别对于广告商(Advertiser)和投放地(Publisher)的作用就是不一样的，比如:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/ffm_case.png" width="400px"></center>
+
+<p>这里的特征被分为了三类，有投放地(Publisher)，广告商(Advertiser)和性别(Gender),如果使用<code>FM</code>来预估这个点击率则是:<br>$$\left \langle v_{ESPN},v_{Nike} \right \rangle + \left \langle v_{ESPN},v_{Male} \right \rangle + \left \langle v_{Nike},v_{Male} \right \rangle$$</p>
+<p>这里可以看出<code>FM</code>中隐向量对于不同类别的特征进行组合时都是使用同一个向量，而基于<code>Field-aware</code>的<code>FFM</code>就是对这点进行修改，认为当前向量对于每一个类别都有一个不同的隐向量，比如性别和投放地进行组合的时候使用的隐向量为$v_{Male,G}$,这样推广开来之后这个问题中<code>FFM</code>的二阶项就可以表述为:<br>$$ \left \langle v_{ESPN,A},v_{Nike,P} \right \rangle + \left \langle v_{ESPN,G},v_{Male,P} \right \rangle + \left \langle v_{Nike,G},v_{Male,A} \right \rangle$$</p>
+<p>这样,<code>FFM</code>使用通用化的学习公式表达了之后为:<br>$$y_{FFM}(x) = w_0 + \sum_i^n w_i \cdot x_i + \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_{i,f_j},v_{j,f_i} \right \rangle x_ix_j$$</p>
+<p>因为<code>FFM</code>的参数空间为$nfk$,其计算复杂度为$O(\bar{n}k)$,但是<code>FFM</code>都是在特定的field的中来学习训练隐向量的，所以一般来说:<br>$$k_{FFM} &lt;&lt; k_{FM}$$</p>
+<blockquote>
+<p>其实我实际试用下来这里的$&lt;&lt;$不是很严谨，<code>FM</code>的$k$也并没有比<code>FFM</code>多太多，也许只可能是一个8和4的差别。-_-!!</p>
+</blockquote>
+<p><code>FFM</code>的改进看上去还是有挺有道理的，但是其实最终实验做出来和<code>FM</code>的效果不相上下:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/ffm_v_fm.png" width="600px"></center>
+
+<p>实验结果上<code>FFM</code>也只是在某几个数据集上略好于<code>FM</code>，但是由于<code>FFM</code>中的隐向量与field有关，无法直接转为<code>FM</code>中的$O(k\bar{n})$的运算式子，所以在工业界追求运行效率的时候<code>FM</code>还是首选，不过是比赛中<code>FFM</code>也是一个不错的选择.</p>
+<blockquote>
+<p>这里符一下<code>FFM</code>的开源工具代码:<a href="https://www.csie.ntu.edu.tw/~cjlin/libffm/" target="_blank" rel="external">https://www.csie.ntu.edu.tw/~cjlin/libffm/</a>,注意里面有有提供只含二阶项的版本和同时含线性计算的版本.</p>
+</blockquote>
+<h2 id="DeepFM">DeepFM</h2><p>受到<code>Wide&amp;Deep</code>的启发，Huifeng等人将FM和Deep深度学习结合了起来，简单的说就是将<code>Wide</code>部分使用<code>FM</code>来代替，同时FM的隐向量可以充当Feature的Embedding，非常巧妙:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/deepfm_arch.png" width="600px"></center>
+
+<p><code>DeepFM</code>的架构其实特别清晰:</p>
+<ol>
+<li>输入的是稀疏特征的id</li>
+<li>进行一层lookup 之后得到id的稠密embedding</li>
+<li>这个embedding一方面作为隐向量输入到FM层进行计算</li>
+<li>同时该embedding进行聚合之后输入到一个DNN模型(deep)</li>
+<li>然后将FM层和DNN层的输入求和之后进行co-train</li>
+</ol>
+<p>因为最终计算的式子也是非常清晰的明了:<br>Fm部分:<br>$$y_{\text{FM}} = \left \langle W,X \right \rangle + \sum_i^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j$$<br>Deep部分:<br>$$a(0) =[e ,e ,…,e ] \\<br>a(l+1) = \sigma (W^{(l)}a^{(l)} + b^{(l)}) \\<br>y_{\text{DNN}} = \sigma (W^{(H+1)}a^{H} + b^{(H+1)})$$</p>
+<blockquote>
+<p>其中$e$表示初始的embedding,$H$表示网络的深度</p>
+</blockquote>
+<p>最终DeepFM可以表示为:<br>$$y_{\text{DeepFm}} = sigmoid(y_{FM} + y_{DNN})$$</p>
+<p>这个结合非常有意思，充分将<code>FM</code>中隐向量含<code>element-wise product</code>的功能结合到了<code>DNN</code>中，公司有实测<code>DeepFM</code>的效果略好于的<code>Wide&amp;Deep</code>,因此该算法还是非常有实操性的，特别是在公司里面要出成（zhuang）果（bi）的时候。</p>
+<blockquote>
+<p><code>DeepFm</code>的非作者源码分享<a href="https://github.com/ChenglongChen/tensorflow-DeepFM" target="_blank" rel="external">https://github.com/ChenglongChen/tensorflow-DeepFM</a></p>
+</blockquote>
+<h2 id="NFM">NFM</h2><p><code>NFM(Neural Factorization Machines)</code>又是在<code>FM</code>上的一个改进工作，出发点是<code>FM</code>通过隐向量可以对完成一个很好的特征组合工作，并且还解决了稀疏的问题，但是<code>FM</code>对于它对于<code>non-linear</code>和<code>higher-order</code> 特征交叉能力不足，而<code>NFM</code>则是结合了<code>FM</code>和<code>NN</code>来弥补这个不足。模型框架如下(图里没画一阶的回归)：</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/nfm_arch.png" width="600px"></center><br>其中:<br>1. <code>Input Feature Vector</code>层是输入的稀疏向量，可以带权<br>2. <code>Embedding Layer</code>对输入的稀疏向量look up 成稠密的embedding 向量<br>3. <code>Bi-Interaction Layer</code>将每个特征embedding进行两两做element-wise product，<code>Bi-Interaction</code>的输出是一个 k维向量（就是隐向量的大小）,这层负责了特征之间second-order组合。$$f_{\text{Bi}}(V_x) = \sum_i^n \sum_{j=i+1}^n x_iv_i \odot  x_jv_j$$ 类似FM的式子转换，这里同样可以做如下转换将复杂度降低:$$f_{\text{Bi}}(V_x) = \frac{1}{2} \left [ (\sum_i^n x_iv_i)^2 - \sum_i^n(x_iv_i)^2 \right ]$$<br>4. <code>Hidden Layers</code>这里是多层学习高阶组合特征学习,其实就是一个DNN模块:$$z_1=\sigma_1(W_1 f_{\text{Bi}}(V_x) + b_1) \\ z_2 = \sigma_2(W_2z_1+b_2) \\ … \\ z_L=\sigma_L(W_L z_{L-1}+b_L)$$<br>5. <code>Prediction Score</code>层就是输出最终的结果:$$y_{\text{NFM}}(x) = w_0 + \sum_i^n w_ix_i + h^T \sigma_L(W_l(…\sigma_1(W_1 f_{\text{Bi}}(V_x) + b_1))+b_L)$$<br><br>FM可以看做是NFM模型 Hidden Layer层数为0一种特殊形式。<br>最终的实验效果看来<code>NFM</code>也还是可以带来一个不错的效果:<br><center><img src="/img/Deep-in-out-Wide-n-Deep-Series/nfm_result.png" width="600px"></center>
+
+<blockquote>
+<p><code>NFM</code>作者分享的源码<a href="https://github.com/hexiangnan/neural_factorization_machine" target="_blank" rel="external">https://github.com/hexiangnan/neural_factorization_machine</a></p>
+</blockquote>
+<h2 id="AFM">AFM</h2><p>而<code>AFM(Attentional Factorization Machines)</code>同样，是在<code>FM</code>上做了一些小<code>trick</code>,在传统的<code>FM</code>中进行特征组合时两两特征之间的组合都是等价的(只能通过隐向量的点积来区别)，这里趁着<code>Attention</code>的热度走一波,因为<code>AFM</code>的最大的贡献就是通过<code>Attention</code>建立权重矩阵来学习两两向量组合时不同的权重。下面就是<code>AFM</code>的框架图:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/afm_arch.png" width="600px"></center><br>从图中可以很清晰的看出,<code>AFM</code>比<code>FM</code>就是多了一层<code>Attention-based Pooling</code>，该层的作用是通过<code>Attention</code>机制生成一个$a_{i,j}$权重矩阵，该权重矩阵将会作用到最后的二阶项中，因此这里$a_{i,j}$的生成步骤是先通过原始的二阶点积求得各自的组合的一个score:<br>$${a}’_{i,j} = h^T \text{ReLu}(W(v_i \odot v_j)x_ix_j+b)$$<br><br>&gt; 其中$W \in \mathbb{R}^{t \times k},b \in \mathbb{R}^t , h \in \mathbb{R}^t$,这里$t$表示<code>Attention</code>网络的大小<br><br>然后对其score进行<code>softmax</code>的归一化:<br>$$a_{i,j} = \frac{exp({a}’_{i,j})}{\sum_{i,j} exp({a}’_{i,j})}$$<br>最后该权重矩阵再次用于二阶项的计算（也就是最终的<code>AFM</code>式子）:<br>$$y_{\text{AFM}}(x) = w_0+\sum_i^n w_i x_i + P^T \sum_{i=1}^n \sum_{j=i+1}^n a_{i,j} (v_i \odot v_j) x_ix_j$$<br><br>其实整个算法思路也是很简单，但是在实验上却有一个不错的效果:<br><center><img src="/img/Deep-in-out-Wide-n-Deep-Series/afm_result.png" width="400px"></center>
+
+<blockquote>
+<p>其实从实验效果来看<code>AFM</code>应该是优于<code>NFM</code><br><code>AFM</code>的作者源码分享<a href="https://github.com/hexiangnan/attentional_factorization_machine" target="_blank" rel="external">https://github.com/hexiangnan/attentional_factorization_machine</a></p>
+</blockquote>
+<h2 id="总结">总结</h2><ol>
+<li><code>FMs</code>系列算法被广泛应用于ctr预估类的问题中，并且可以取得不错的效果，他最大特征是可以帮助解决特征组合问题</li>
+<li>原始<code>FM</code>算法的运行性能最快，可以达到$O(k \bar{n})$,在工业中被适用最广最简单，其他带上神经网络的<code>FM</code>算法如果想在在线系统中使用得做很多离线计算和分解，比如<code>FFM</code>的现在复杂度是$O(k \bar{n}^2)$,将$O(\bar{n}^2)$中二阶计算的项尽可能的进行离线计算，在 在线的时候进行组合</li>
+<li><code>FM</code>的二阶项部分很容易使用<code>TensorFlow</code>进行实现，这也意味了在实验上也很容易很其他复杂算法进行组合:</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># get the summed up embeddings of features.</span></span><br><span class="line">self.nonzero_embeddings = tf.nn.embedding_lookup(self.weights[<span class="string">'feature_embeddings'</span>], self.train_features, name=<span class="string">'nonzero_embeddings'</span>)</span><br><span class="line">self.summed_features_emb = tf.reduce_sum(self.nonzero_embeddings, <span class="number">1</span>, keep_dims=<span class="keyword">True</span>) <span class="comment"># None * 1 * K</span></span><br><span class="line"><span class="comment"># get the element-multiplication</span></span><br><span class="line">self.summed_features_emb_square = tf.square(self.summed_features_emb)  <span class="comment"># None * 1 * K</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># _________ square_sum part _____________</span></span><br><span class="line">self.squared_features_emb = tf.square(self.nonzero_embeddings)</span><br><span class="line">self.squared_sum_features_emb = tf.reduce_sum(self.squared_features_emb, <span class="number">1</span>, keep_dims=<span class="keyword">True</span>)  <span class="comment"># None * 1 * K</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ________ FM __________</span></span><br><span class="line">self.FM = <span class="number">0.5</span> * tf.subtract(self.summed_features_emb_square, self.squared_sum_features_emb, name=<span class="string">"fm"</span>)  <span class="comment"># None * 1 * K</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>摘自<code>AFM</code>源码</p>
+</blockquote>
+<h2 id="参考">参考</h2><p>[1]. Rendle, Steffen. “Factorization machines with libfm.” ACM Transactions on Intelligent Systems and Technology (TIST) 3.3 (2012): 57.<br>[2]. Juan, Yuchin, et al. “Field-aware factorization machines for CTR prediction.” Proceedings of the 10th ACM Conference on Recommender Systems. ACM, 2016.<br>[3]. Guo, Huifeng, et al. “Deepfm: A factorization-machine based neural network for CTR prediction.” arXiv preprint arXiv:1703.04247 (2017).<br>[4]. He, Xiangnan, and Tat-Seng Chua. “Neural factorization machines for sparse predictive analytics.” Proceedings of the 40th International ACM SIGIR conference on Research and Development in Information Retrieval. ACM, 2017.<br>[5]. Xiao, Jun, et al. “Attentional factorization machines: Learning the weight of feature interactions via attention networks.” arXiv preprint arXiv:1708.04617 (2017).</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/" data-title="深入浅出Factorization Machines系列 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/" title="聊聊CTR预估的中的深度学习">
+  <strong>上一篇：</strong><br/>
+  <span>
+  聊聊CTR预估的中的深度学习</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/"  title="深度神经网络中防止过拟合的利器-Dropout">
+ <strong>下一篇：</strong><br/> 
+ <span>深度神经网络中防止过拟合的利器-Dropout
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#FM"><span class="toc-number">1.</span> <span class="toc-text">FM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一个栗子"><span class="toc-number">1.1.</span> <span class="toc-text">一个栗子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FM解法"><span class="toc-number">1.2.</span> <span class="toc-text">FM解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FM学习"><span class="toc-number">1.3.</span> <span class="toc-text">FM学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#扩展"><span class="toc-number">1.4.</span> <span class="toc-text">扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FFM"><span class="toc-number">2.</span> <span class="toc-text">FFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DeepFM"><span class="toc-number">3.</span> <span class="toc-text">DeepFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFM"><span class="toc-number">4.</span> <span class="toc-text">NFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AFM"><span class="toc-number">5.</span> <span class="toc-text">AFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

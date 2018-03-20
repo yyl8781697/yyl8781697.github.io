@@ -95,6 +95,139 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/" title="聊聊CTR预估的中的深度学习" itemprop="url">聊聊CTR预估的中的深度学习</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-03-19T02:59:05.000Z" itemprop="datePublished"> 发表于 2018-03-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="CTR预估">CTR预估</h2><p>CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。<br>但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，GBDT中的策略树将会有一定的特征选择功能，因此该方式先原先（未经过太多特征工程的特征过一把GBDT），将GBDT的叶子节点作为特征继续输入到LR模型中，最终对目标的CTR值进行预测。<br>除特征工程外，LR的另一个缺陷就是对于高阶的表达能力不足，从这两个出发点，结合公司中手头的一些工作，整了下最近比较经典的Paper来说说深度学习在CTR预估中的一些方法，主要有:<code>FNN</code>、<code>PNN</code>、<code>Wide&amp;Deep</code>、<code>Deep&amp;Cross</code>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#DeepFM">DeepFm</a>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#NFM">NFM</a>.</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/" title="深入浅出Factorization Machines系列" itemprop="url">深入浅出Factorization Machines系列</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-02-23T12:33:22.000Z" itemprop="datePublished"> 发表于 2018-02-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>近期使用<code>FM</code>系列完成了一个<code>CTR</code>预估的任务，本文是阅读了一些paper之后对于<code>FM</code>、<code>FFM</code>、<code>DeepFM</code>、<code>NFM</code>,<code>AFM</code>的一个理解和记录</p>
+</blockquote>
+<h2 id="FM">FM</h2><p><code>Factorization Machine(FM)</code>由Steffen Rendle在2010年提出，旨在解决系数数据下的特征组合的问题，目前该系列模型在搜索推荐领域被广泛使用。</p>
+<h3 id="一个栗子">一个栗子</h3><p>先来看一个经典的电影评分问题</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/fm_case.png" width="400px"/></center>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/" title="深度神经网络中防止过拟合的利器-Dropout" itemprop="url">深度神经网络中防止过拟合的利器-Dropout</a>
   </h1>
   <p class="article-author">By
@@ -640,139 +773,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/" title="语言模型在信息检索中的平滑方法" itemprop="url">语言模型在信息检索中的平滑方法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-10-24T11:58:01.000Z" itemprop="datePublished"> 发表于 2016-10-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="引言">引言</h2><p>在信息检索中文本相关性计算是至关重要的一个特征，关于文本相关性计算时用的比较多的有:<code>词频/频率</code>、<code>tf/idf/tf*idf</code>、<code>bm25</code>、<code>布尔模型</code>、<code>空间向量模型</code>以及<code>语言模型</code>，本文主要是对于<code>[1]</code>的一些学习理解，虽然<code>[1]</code>历史久远，但是可行性高，同时目前也有不少搜索引擎在使用<code>[1]</code>的方法，主要介绍的是语言模型在信息检索中使用的平滑方法，主要侧重点就是性能。</p>
-<h2 id="Language_Model">Language Model</h2><p>现假设<code>query</code>是基于文档<code>d</code>进行生成的,那么给定一个<code>query</code>$q=q_1q_2..q_n$以及一个文档$d=d_1d_2…d_n$,我们比较关心的是$p(d|q)$这个条件概率，即在观察到$q$的情况下生成$d$的一个概率，假设文档中的词是相关独立的，根据贝叶斯公式，则有:<br>$$p(d|q) \propto p(q|d)p(d)$$<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/10/24/Machine Learning/A-Study-of-Smoothing-Methods-for-Language-Models-Applied-to-Information-Retrieval/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/" title="使用Python画ROC曲线以及AUC值" itemprop="url">使用Python画ROC曲线以及AUC值</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-09-18T16:02:43.000Z" itemprop="datePublished"> 发表于 2016-09-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="AUC介绍">AUC介绍</h2><p><code>AUC</code>(Area Under Curve)是机器学习二分类模型中非常常用的评估指标，相比于<code>F1-Score</code>对项目的不平衡有更大的容忍性，目前常见的机器学习库中(比如<a href="http://scikit-learn.org/stable/">scikit-learn</a>)一般也都是集成该指标的计算，其计算原理可以参考这个<a href="https://www.douban.com/note/284051363/?type=like">ROC和AUC介绍以及如何计算AUC
-</a>，但是有时候模型是单独的或者自己编写的，此时想要评估训练模型的好坏就得自己搞一个<code>AUC</code>计算模块，本文在查询资料时发现<code>libsvm-tools</code><sup>1</sup>有一个非常通俗易懂的<code>auc</code>计算，因此抠出来用作日后之用。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/09/19/Machine Learning/AUC-Calculation-by-Python/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
@@ -800,7 +803,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
 		  
 		
 		  
@@ -885,11 +888,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>35</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
 			
 		
 			
@@ -909,6 +912,10 @@
 			
 		
 			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
 			
 		
@@ -925,11 +932,7 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
 			
 		
 			
@@ -937,11 +940,11 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>4</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -1034,7 +1037,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

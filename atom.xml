@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2017-06-05T15:04:39.000Z</updated>
+  <updated>2018-03-20T16:35:52.000Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,220 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[聊聊CTR预估的中的深度学习]]></title>
+    <link href="http://kubicode.me/2018/03/19/Deep%20Learning/Take-about-CTR-With-Deep-Learning/"/>
+    <id>http://kubicode.me/2018/03/19/Deep Learning/Take-about-CTR-With-Deep-Learning/</id>
+    <published>2018-03-19T02:59:05.000Z</published>
+    <updated>2018-03-20T16:35:52.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="CTR预估">CTR预估</h2><p>CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。<br>但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，GBDT中的策略树将会有一定的特征选择功能，因此该方式先原先（未经过太多特征工程的特征过一把GBDT），将GBDT的叶子节点作为特征继续输入到LR模型中，最终对目标的CTR值进行预测。<br>除特征工程外，LR的另一个缺陷就是对于高阶的表达能力不足，从这两个出发点，结合公司中手头的一些工作，整了下最近比较经典的Paper来说说深度学习在CTR预估中的一些方法，主要有:<code>FNN</code>、<code>PNN</code>、<code>Wide&amp;Deep</code>、<code>Deep&amp;Cross</code>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#DeepFM" target="_blank" rel="external">DeepFm</a>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#NFM" target="_blank" rel="external">NFM</a>.</p>
+<a id="more"></a>
+<h2 id="FNN">FNN</h2><p>上海交大张伟楠老师利用<code>FM</code>做特征Embedding，然后在上面叠加nn，提出了<code>FNN</code>模型。</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/fnn_arch.png" width="400px"></center>
+
+<p>其实模型架构图还是蛮清晰的，看懂了<code>FM</code>那一层之后就很明了了:</p>
+<ol>
+<li>输入的是各种稀疏特征（可以是最简单的各种id）</li>
+<li>接下来将会经过一个<code>已训练</code>的<code>FM</code>层，直接取到<code>FM</code>模型中对于特征的隐向量</li>
+<li>通过隐向量可以构造出<code>NN</code>的输入层<code>z</code>:$z = (w_0,z_1,z_2,…,z_n)$,而$z_i=(w_i,v_i^1,v_i^2,…v_i^K)$,其中$w_i$为<code>FM</code>中的一阶权重,$v_i$为对应特征的隐向量</li>
+<li>再接下来就是堆一个<code>NN</code>层来计算最终的目标值了。</li>
+</ol>
+<p><code>FNN</code>的最大优势就是不需要再去做特征工程了，其特征由<code>FM</code>的隐向量构建得到。同时其缺点就是需要<code>pre-train</code>才能让这个<code>FNN</code>给跑起来.</p>
+<h2 id="PNN">PNN</h2><p>2016年，张伟楠老师他们又提出了一种名为<code>PNN</code>的模型，对<code>Embedding</code>向量做<code>innner/outer product</code>（其实就是对原来的<code>FNN</code>模型进行改吧改吧）。</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/pnn_arch.png" width="400px"></center>
+
+<p>其中（<code>bottom-top</code>方向）:</p>
+<ol>
+<li>其中第一层是输入的离散特征<code>Field N</code></li>
+<li>第二层是对离散特征的<code>Embedding</code>（这儿<code>Embedding</code>的方式有很多种，最经典的就是<code>TF</code>的<code>lookup_table</code>）</li>
+<li>重点在第三层，就是模型的创新点<code>Product Layer</code>，这里分两部分，一部分是$z$，他是保持了原有<code>Embedding</code>向量的数据，另一部分是$p$,主要对上一层的向量数据进行<code>pairwise feature interaction</code>,也就是做<code>product</code>的工作</li>
+<li>接下来又是继续走一波<code>NN</code>网络</li>
+<li>最后对点击率进行预估计算</li>
+</ol>
+<p>上面的是整个<code>PNN</code>的模型架构，而根据$p$中可选<code>Inner Product</code>和<code>Outer Product</code>的两种方式提出<code>IPNN</code>和<code>OPNN</code>这两个模型，这两模型中$z$是一样的，先来看一下$z$:<br>$$l_z =(l_z^1,l_z^2,…,l_z^n,…,l_z^{D1})$$<br>而<br>$$l_z^n = W_z^n \odot z_n =  \sum_j^M (W_z^n)_{j} f_{n,j}$$</p>
+<blockquote>
+<p>这里的$f_i$为第$i$个特征的<code>Embedding</code></p>
+</blockquote>
+<p>因此可以看出$l_z$其实只是对原有的<code>Embedding</code>做了一层转换</p>
+<p>在$p$部分:<br>$$l_p =(l_p^1,l_p^2,…,l_p^n,…,l_p^{D1})$$<br>并且$$p={p_{i,j}} ,i=1…N,j=1..N$$</p>
+<blockquote>
+<p>其中$p_{i,j} = g(f_i,f_j)$<br> $g$就是可以做<code>Inner Product</code>和<code>Outer Product</code></p>
+</blockquote>
+<p>这里再细节的东西就不贴了，感觉Paper里的符号的上下标有点乱(当然也有可能是我没完全看明白-_-)，其实<code>PNN</code>里面的主要贡献就是在<code>Embedding</code>的基础上再多做一些<code>Pairwise Product</code>的操作增强高阶/非线性效果。</p>
+<h2 id="Wide&amp;Deep">Wide&amp;Deep</h2><p>相比对<code>FNN</code>和<code>PNN</code>，Google在2016年提出来的<code>Wide&amp;Deep</code>模型更加有名气和通用化一些，顾名思义，整个模型将分为<code>Wide</code>和<code>Deep</code>两个部分:</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/wdl_arch.png" width="600px"></center>
+
+
+<p>左边的<code>Wide</code>是传统的大规模特征+线性模型（也就是经典的LR模型），右边的<code>Deep</code>是一个<code>DNN</code>模型，而中间的<code>Wide&amp;Deep</code>把两个模型在最后一层做了组合。原文中其实是将两个模型的输出求和:<br>$$P(Y=1|x) = \sigma(W_{wide}^T[x,\phi(x)] + W_{deep}^T \alpha^{(lf)}+b)$$</p>
+<p>很明显是一个分治的思想，<code>Wide</code>负责处理大规模离散特征，<code>Deep</code>负责处理连续特征，各自发挥自己的优势。再按文章的意思就是:</p>
+<ol>
+<li><code>Wide</code>可以达到<code>Memorization</code>功能，从训练数据中学习已经出现过的共现和相关性。</li>
+<li><code>Deep</code>可以有Generalization：对于没有出现过的数据，需要从数据中学习到抽象的概念,也就是泛化性。</li>
+</ol>
+<p><code>Wide&amp;Deep</code>模型简单，扩展性更加强，而且运行效率上也比较可控，因此在实际业务中使用非常广泛，并且原生的TF也还提供了<code>Wide&amp;Deep</code>的接口:<a href="https://www.tensorflow.org/tutorials/wide_and_deep" target="_blank" rel="external">https://www.tensorflow.org/tutorials/wide_and_deep</a></p>
+<p>另外在<code>DeepFM</code>中有一个图对比<code>FNN</code>、<code>PNN</code>、<code>Wide&amp;Deep</code>的区别，非常的清晰:</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/fnn_pnn_wdl.png" width="600px"></center>
+
+<h2 id="Deep&amp;Cross">Deep&amp;Cross</h2><p><code>Wide&amp;Deep</code>虽然经典，但是仍旧么有解决特征组合问题，特征组合算法在<code>FM</code>系列的深度学习中也已经有不少研究:<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#DeepFM" target="_blank" rel="external">DeepFm</a>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#NFM" target="_blank" rel="external">NFM</a>.,<code>Google</code>在2017年又提出了一种名为<code>Deep&amp;Cross</code>的CTR预估算法(也简称<code>DCN</code>)，可以用级联的方式来深度的提取高阶的特征，同样先来看下模型的架构:</p>
+<center><img src="/img/Take-about-CTR-With-Deep-Learning/dcn_arch.png" width="400px"></center>
+
+<p>如上图:</p>
+<ol>
+<li><code>DCN</code>模型的输入基本为连续特征(<code>Dense Feature</code>)和id类的离散特征(<code>Sparse Feature</code>),同时将会离线特征处理成embedding特征，这样就可以通过理解为模型的输入是一个连续的向量$x_0$</li>
+<li>接下来模型分为两部分:<ol>
+<li>右侧部分是传统的DNN模型，其中每个全连接层都使用<code>RELU</code>激活函数, 把输入特征通过多个全连接层之后特征变得更加高阶:$$h_i=\text{ReLu}(w_{h,i}x_{i-1}+b_{h,i})$$</li>
+<li>左侧部分则是DCN的核心<code>Cross</code>层,每一层的特征都由其上一层的特征进行交叉组合，并且会吧上一层的原始特征重新加回来。这样既能做特征组合，又能保留低阶原始特征，而且还随着<code>Cross</code>层的增加，是可以生成任意高阶的交叉组合特征$$x_{l+1} = x_0x_l^Tw_l+b_l+x_l = f(x_l,w_l,b_l)+x_l$$</li>
+</ol>
+</li>
+<li>最终会将<code>DNN</code>模型和<code>Cross</code>模型输出的向量进行<code>concat</code>起来之后过一把<code>LR</code>进行点击率预测。</li>
+</ol>
+<p>其中<code>Cross</code>的特征组合层与<code>FM</code>相比，可以理解为<code>FM</code>只能做到两阶的特征组合（因为<code>FM</code>是嵌套方式的，如果是多阶的特征是指数上升的），而<code>Cross</code>里面的可以完成任意多阶的组合，阶数与<code>Cross</code>的深度一致，并且其参数复杂度与阶数是线性关系$$d \times L_c \times 2$$</p>
+<blockquote>
+<p>$d$为输入向量的大小，$L_c$为<code>Cross</code>的深度</p>
+</blockquote>
+<h2 id="总结">总结</h2><p>上面几种深度学习模型基本是在一个固有的<code>DNN</code>结构上，在输入层加东西或者在隔壁加额外层来结合。<br><code>FNN</code>和<code>PNN</code>算法在特征组合与深度学习的结合上都给出了不少启发，但是毕竟<code>Google</code>出品，必属精品，<code>Wide&amp;Deep</code>无疑是使用更加广泛,当然在目前机器资源越来越好的情况下，也将会有更多更加复杂的深度模型将会取尝试。<br>同时也有经验表明，在不断上各种复杂模型的前提下，<code>CTR</code>预估的效果还是会不断的提升。</p>
+<h2 id="参考">参考</h2><p>[1]. He, Xinran, et al. “Practical lessons from predicting clicks on ads at facebook.” Proceedings of the Eighth International Workshop on Data Mining for Online Advertising. ACM, 2014.<br>[2]. Zhang, Weinan, Tianming Du, and Jun Wang. “Deep learning over multi-field categorical data.” European conference on information retrieval. Springer, Cham, 2016.<br>[3]. Qu, Yanru, et al. “Product-based neural networks for user response prediction.” Data Mining (ICDM), 2016 IEEE 16th International Conference on. IEEE, 2016.<br>[4]. Cheng, Heng-Tze, et al. “Wide &amp; deep learning for recommender systems.” Proceedings of the 1st Workshop on Deep Learning for Recommender Systems. ACM, 2016.<br>[5]. Wang, Ruoxi, et al. “Deep &amp; Cross Network for Ad Click Predictions.” arXiv preprint arXiv:1708.05123 (2017).</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="CTR预估">CTR预估</h2><p>CTR预估一直以来都是工业界搜索、广告和推荐中的核心，而传统的LR模型（逻辑回归）几乎可以被称为CTR界的神算法，虽然他结构非常简单，但是他计算速度特别快，并且在加以特征工程师的修饰，一样可以拿到很好的效果。<br>但是这样的操作毕竟特征的选择会起比较重要的作用，如果遇到不同任务需要重新提取不同类型的特征。在2014年Facebook通过GBDT的生成LR特征的方式，取得了不错的效果。众所周知，GBDT中的策略树将会有一定的特征选择功能，因此该方式先原先（未经过太多特征工程的特征过一把GBDT），将GBDT的叶子节点作为特征继续输入到LR模型中，最终对目标的CTR值进行预测。<br>除特征工程外，LR的另一个缺陷就是对于高阶的表达能力不足，从这两个出发点，结合公司中手头的一些工作，整了下最近比较经典的Paper来说说深度学习在CTR预估中的一些方法，主要有:<code>FNN</code>、<code>PNN</code>、<code>Wide&amp;Deep</code>、<code>Deep&amp;Cross</code>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#DeepFM">DeepFm</a>、<a href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/#NFM">NFM</a>.</p>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[深入浅出Factorization Machines系列]]></title>
+    <link href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/"/>
+    <id>http://kubicode.me/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/</id>
+    <published>2018-02-23T12:33:22.000Z</published>
+    <updated>2018-03-19T01:58:56.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>近期使用<code>FM</code>系列完成了一个<code>CTR</code>预估的任务，本文是阅读了一些paper之后对于<code>FM</code>、<code>FFM</code>、<code>DeepFM</code>、<code>NFM</code>,<code>AFM</code>的一个理解和记录</p>
+</blockquote>
+<h2 id="FM">FM</h2><p><code>Factorization Machine(FM)</code>由Steffen Rendle在2010年提出，旨在解决系数数据下的特征组合的问题，目前该系列模型在搜索推荐领域被广泛使用。</p>
+<h3 id="一个栗子">一个栗子</h3><p>先来看一个经典的电影评分问题</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/fm_case.png" width="400px"></center>
+
+<a id="more"></a>
+<p>问题就是需要对电影进行评分($y$项)，而$x$都是特征,其中:</p>
+<ol>
+<li>第一部分蓝色的为当前评分的用户</li>
+<li>第二部分红色的为被评分的电影</li>
+<li>第三部分黄色的为该用户曾经对其他电影的评分情况</li>
+<li>第四部分绿色的为该用户当前评分的月数</li>
+<li>第五部分棕色为该用户最新一次评分的电影</li>
+</ol>
+<p>这是一个经典的回归问题，最简单粗暴的方法就先上一个线性回归，其中对于绿色特征处理成binary，这样计算公式就是为<br>$$y_{lr} = w_0 + \sum_i^n w_i \cdot x_i$$</p>
+<p>这样可能会过于简单粗暴，按照算法（特征）工程师的套路会对某些特征进行组合，这样为了方便，咱们就给他来一个全组合:<br>$$y_{lr-cross} = w_0 + \sum_i^n w_i \cdot x_i + \sum_i^n \sum_{j=i+1}^n w_{i,j}  x_i x_j$$</p>
+<p>看似问题解决了，但是这样会存在这么几个问题:</p>
+<ol>
+<li>参数空间过大,这里为$O(n^2)$，在处理互联网数据时，特征两级别可能是亿级别的</li>
+<li>需要人工经验，这里一般会选择某些特征来组合，此时人工/专家经验就会很重要</li>
+<li>样本量过滤稀疏，实际上那这种方式拿到的特征会是很稀疏的，对于在训练样本中未出现过的组合该模型无能为力</li>
+</ol>
+<h3 id="FM解法">FM解法</h3><blockquote>
+<p>定理:对于一个正定举证$W$，始终存在一个矩阵$V$使得$W=V \cdot V^t$成立（需要$V$的维数$k$足够大）</p>
+</blockquote>
+<p>但是在巨大稀疏矩阵的情况下，当$k$并不是很大时$V \cdot V^t$也可以很接近$W$，因此可以用<br>$$w_{i,j} = \left \langle v_i,v_j \right \rangle = \sum_f^k v_{i,f} \cdot v_{j,f}$$<br>其中这里$v$为长度$k$的一个向量,$\left \langle v_i,v_j \right \rangle$表示两个向量的点积，在<code>FM</code>中也称为隐向量,这样就有了<code>FM</code>的式子:<br>$$y := w_0 + \sum_i^n w_i \cdot x_i + \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j$$<br>到了这里<code>FM</code>的式子:</p>
+<ol>
+<li>可以解决稀疏向量问题，因为每个特征都有一个隐向量，就算是稀疏向量在训练样本没有出现过的组合在预测时也可以进行计算</li>
+<li>同时参数空间也降低到了$O(n\cdot k)$</li>
+</ol>
+<p>但是他实际的运算复杂度并没有降低，反而还到了$O(kn^2)$,但是<code>FM</code>这里的二阶项并没有依赖其他模型参数除了$v_i$，这里就可以鬼斧神工的写为:<br>$$\begin{equation}\begin{split} \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j &amp;= \frac{1}{2}\sum_{i=1}^n \sum_{j=1}^n \left \langle v_i,v_j \right \rangle x_i x_j - \frac{1}{2} \sum_{i=1}^n \left \langle v_i,v_i \right \rangle x_i x_i  \\<br>&amp;= \frac{1}{2} \left ( \sum_{i=1}^n \sum_{j=1}^n \sum_{f=1}^k v_{i,f} v_{j,f} x_i x_j - \sum_{i=1}^n \sum_{f=1}^k v_{i,f} v_{i,f} x_i x_i  \right ) \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right ) \left( \sum_{j=1}^n v_{j,f}x_j \right ) -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ] \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right )^2 -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ]<br>\end{split}\end{equation}$$</p>
+<p>经过这样的转换之后，最终的模型计算复杂度将会降低到$O(kn)$，同时由于是巨大的稀疏场景，样本实际的特征量的平均值为$\bar{m}$并且$\bar{m}&lt;&lt;n$,最终的模型复杂度将会降低到$O(k \bar{m})$</p>
+<h3 id="FM学习">FM学习</h3><p>在<code>FM</code>中模型的参数有$w_0$,$W$以及$V$，这些参数可以通过梯度下降法进行高效的计算，其中梯度为:<br>$$ \frac{\partial}{\partial  \theta}y(x)=\left\{<br>\begin{aligned}<br>1 &amp; \quad if \quad \theta = w_0 \\<br>x_i &amp; \quad if \quad \theta = w_i \\<br>x_i \sum_{j=1}^n v_{j,f}x_j-v_{i,f}x_i^2 &amp; \quad if \quad \theta = v_{i,f} \\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>其中$\sum_{j=1}^n v_{j,f}x_j$部分与$i$相互独立，可以预先计算出来,另外<code>FM</code>在过拟合方面一般推荐使用<code>L2正则项</code></p>
+</blockquote>
+<p>所以在梯度计算方面可以在$O(1)$下进行计算<br>作者也提供了一个很强大的开源工具来训练<code>FM</code>:<a href="http://www.libfm.org" target="_blank" rel="external">http://www.libfm.org</a></p>
+<h3 id="扩展">扩展</h3><p>其实对于经典的特征组合问题，也非常容易能想到使用万能的<code>SVM</code>来求解，比如一个二阶的多项式<code>SVM</code>可以写成这样:<br>$$y_{svm} = w_0 + \sqrt{2} \sum_{i=1}^n w_ix_i + \sum_{i=1}^n w_i^{(2)}x_i^2 + \sqrt{2} \sum_{i=1}^n \sum_{j=i+1}^n w_{i,j}^{(2)}x_ix_j$$</p>
+<p>这样可以发现二阶多项式的<code>svm</code>和<code>FM</code>十分相似，只多了一项$\sum_{i=1}^n w_i^{(2)}x_i^2$，但是<code>SVM</code>对于未出现在训练样本的组合特征也是无法计算，同时他需要使用对偶才能进行求解,并且他在预测的时候还需要训练样本的支持向量。</p>
+<p>另外<code>FM</code>还可以用于<code>tag</code>的推荐排序，问题描述是给定用户信息$U$，宝贝信息$I$，对于相应的标签<code>T</code>进行排序，在binary特征下面模型可以表述为:<br>$$n:= |U \cup I \cup T|, \quad x_i=\delta (j=i \vee j=u \vee j=t)$$<br>使用<code>FM</code>的计算为<br>$$y(x) = w_0 +w_u+w_i+w_t+\left \langle v_u,v_i \right \rangle + \left \langle v_u,v_t \right \rangle + \left \langle v_i,v_t \right \rangle $$<br>但是在排序问题上，当对于<code>tagA</code>,<code>tagB</code>进行排序时，他们的$w_0 +w_u+w_i+\left \langle v_u,v_i \right \rangle$分项计算其实是一样的，所以<code>FM</code>模型最终在<code>tag</code>排序的问题上可以简化为:<br>$$y(x):=w_t+ \left \langle v_u,v_t \right \rangle + \left \langle v_i,v_t \right \rangle$$<br>这样就是<a href="https://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle2010-PITF.pdf" target="_blank" rel="external">PITF</a>模型极为相似了.</p>
+<p>当然上面说的都是二阶<code>FM</code>，其实<code>FM</code>还是支持多阶的，只是由于性能/效率问题一般二阶就够了，感兴趣的同学可以去看原始paper</p>
+<h2 id="FFM">FFM</h2><p><code>FFM</code>其实是在<code>FM</code>的基础上做了一些更加细致化的工作:作者Yuchin认为相同性质的特征归于同一field，而当前特征在不同field上的表现应该是不同的.<br>比如在广告领域中性别对于广告商(Advertiser)和投放地(Publisher)的作用就是不一样的，比如:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/ffm_case.png" width="400px"></center>
+
+<p>这里的特征被分为了三类，有投放地(Publisher)，广告商(Advertiser)和性别(Gender),如果使用<code>FM</code>来预估这个点击率则是:<br>$$\left \langle v_{ESPN},v_{Nike} \right \rangle + \left \langle v_{ESPN},v_{Male} \right \rangle + \left \langle v_{Nike},v_{Male} \right \rangle$$</p>
+<p>这里可以看出<code>FM</code>中隐向量对于不同类别的特征进行组合时都是使用同一个向量，而基于<code>Field-aware</code>的<code>FFM</code>就是对这点进行修改，认为当前向量对于每一个类别都有一个不同的隐向量，比如性别和投放地进行组合的时候使用的隐向量为$v_{Male,G}$,这样推广开来之后这个问题中<code>FFM</code>的二阶项就可以表述为:<br>$$ \left \langle v_{ESPN,A},v_{Nike,P} \right \rangle + \left \langle v_{ESPN,G},v_{Male,P} \right \rangle + \left \langle v_{Nike,G},v_{Male,A} \right \rangle$$</p>
+<p>这样,<code>FFM</code>使用通用化的学习公式表达了之后为:<br>$$y_{FFM}(x) = w_0 + \sum_i^n w_i \cdot x_i + \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_{i,f_j},v_{j,f_i} \right \rangle x_ix_j$$</p>
+<p>因为<code>FFM</code>的参数空间为$nfk$,其计算复杂度为$O(\bar{n}k)$,但是<code>FFM</code>都是在特定的field的中来学习训练隐向量的，所以一般来说:<br>$$k_{FFM} &lt;&lt; k_{FM}$$</p>
+<blockquote>
+<p>其实我实际试用下来这里的$&lt;&lt;$不是很严谨，<code>FM</code>的$k$也并没有比<code>FFM</code>多太多，也许只可能是一个8和4的差别。-_-!!</p>
+</blockquote>
+<p><code>FFM</code>的改进看上去还是有挺有道理的，但是其实最终实验做出来和<code>FM</code>的效果不相上下:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/ffm_v_fm.png" width="600px"></center>
+
+<p>实验结果上<code>FFM</code>也只是在某几个数据集上略好于<code>FM</code>，但是由于<code>FFM</code>中的隐向量与field有关，无法直接转为<code>FM</code>中的$O(k\bar{n})$的运算式子，所以在工业界追求运行效率的时候<code>FM</code>还是首选，不过是比赛中<code>FFM</code>也是一个不错的选择.</p>
+<blockquote>
+<p>这里符一下<code>FFM</code>的开源工具代码:<a href="https://www.csie.ntu.edu.tw/~cjlin/libffm/" target="_blank" rel="external">https://www.csie.ntu.edu.tw/~cjlin/libffm/</a>,注意里面有有提供只含二阶项的版本和同时含线性计算的版本.</p>
+</blockquote>
+<h2 id="DeepFM">DeepFM</h2><p>受到<code>Wide&amp;Deep</code>的启发，Huifeng等人将FM和Deep深度学习结合了起来，简单的说就是将<code>Wide</code>部分使用<code>FM</code>来代替，同时FM的隐向量可以充当Feature的Embedding，非常巧妙:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/deepfm_arch.png" width="600px"></center>
+
+<p><code>DeepFM</code>的架构其实特别清晰:</p>
+<ol>
+<li>输入的是稀疏特征的id</li>
+<li>进行一层lookup 之后得到id的稠密embedding</li>
+<li>这个embedding一方面作为隐向量输入到FM层进行计算</li>
+<li>同时该embedding进行聚合之后输入到一个DNN模型(deep)</li>
+<li>然后将FM层和DNN层的输入求和之后进行co-train</li>
+</ol>
+<p>因为最终计算的式子也是非常清晰的明了:<br>Fm部分:<br>$$y_{\text{FM}} = \left \langle W,X \right \rangle + \sum_i^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j$$<br>Deep部分:<br>$$a(0) =[e ,e ,…,e ] \\<br>a(l+1) = \sigma (W^{(l)}a^{(l)} + b^{(l)}) \\<br>y_{\text{DNN}} = \sigma (W^{(H+1)}a^{H} + b^{(H+1)})$$</p>
+<blockquote>
+<p>其中$e$表示初始的embedding,$H$表示网络的深度</p>
+</blockquote>
+<p>最终DeepFM可以表示为:<br>$$y_{\text{DeepFm}} = sigmoid(y_{FM} + y_{DNN})$$</p>
+<p>这个结合非常有意思，充分将<code>FM</code>中隐向量含<code>element-wise product</code>的功能结合到了<code>DNN</code>中，公司有实测<code>DeepFM</code>的效果略好于的<code>Wide&amp;Deep</code>,因此该算法还是非常有实操性的，特别是在公司里面要出成（zhuang）果（bi）的时候。</p>
+<blockquote>
+<p><code>DeepFm</code>的非作者源码分享<a href="https://github.com/ChenglongChen/tensorflow-DeepFM" target="_blank" rel="external">https://github.com/ChenglongChen/tensorflow-DeepFM</a></p>
+</blockquote>
+<h2 id="NFM">NFM</h2><p><code>NFM(Neural Factorization Machines)</code>又是在<code>FM</code>上的一个改进工作，出发点是<code>FM</code>通过隐向量可以对完成一个很好的特征组合工作，并且还解决了稀疏的问题，但是<code>FM</code>对于它对于<code>non-linear</code>和<code>higher-order</code> 特征交叉能力不足，而<code>NFM</code>则是结合了<code>FM</code>和<code>NN</code>来弥补这个不足。模型框架如下(图里没画一阶的回归)：</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/nfm_arch.png" width="600px"></center><br>其中:<br>1. <code>Input Feature Vector</code>层是输入的稀疏向量，可以带权<br>2. <code>Embedding Layer</code>对输入的稀疏向量look up 成稠密的embedding 向量<br>3. <code>Bi-Interaction Layer</code>将每个特征embedding进行两两做element-wise product，<code>Bi-Interaction</code>的输出是一个 k维向量（就是隐向量的大小）,这层负责了特征之间second-order组合。$$f_{\text{Bi}}(V_x) = \sum_i^n \sum_{j=i+1}^n x_iv_i \odot  x_jv_j$$ 类似FM的式子转换，这里同样可以做如下转换将复杂度降低:$$f_{\text{Bi}}(V_x) = \frac{1}{2} \left [ (\sum_i^n x_iv_i)^2 - \sum_i^n(x_iv_i)^2 \right ]$$<br>4. <code>Hidden Layers</code>这里是多层学习高阶组合特征学习,其实就是一个DNN模块:$$z_1=\sigma_1(W_1 f_{\text{Bi}}(V_x) + b_1) \\ z_2 = \sigma_2(W_2z_1+b_2) \\ … \\ z_L=\sigma_L(W_L z_{L-1}+b_L)$$<br>5. <code>Prediction Score</code>层就是输出最终的结果:$$y_{\text{NFM}}(x) = w_0 + \sum_i^n w_ix_i + h^T \sigma_L(W_l(…\sigma_1(W_1 f_{\text{Bi}}(V_x) + b_1))+b_L)$$<br><br>FM可以看做是NFM模型 Hidden Layer层数为0一种特殊形式。<br>最终的实验效果看来<code>NFM</code>也还是可以带来一个不错的效果:<br><center><img src="/img/Deep-in-out-Wide-n-Deep-Series/nfm_result.png" width="600px"></center>
+
+<blockquote>
+<p><code>NFM</code>作者分享的源码<a href="https://github.com/hexiangnan/neural_factorization_machine" target="_blank" rel="external">https://github.com/hexiangnan/neural_factorization_machine</a></p>
+</blockquote>
+<h2 id="AFM">AFM</h2><p>而<code>AFM(Attentional Factorization Machines)</code>同样，是在<code>FM</code>上做了一些小<code>trick</code>,在传统的<code>FM</code>中进行特征组合时两两特征之间的组合都是等价的(只能通过隐向量的点积来区别)，这里趁着<code>Attention</code>的热度走一波,因为<code>AFM</code>的最大的贡献就是通过<code>Attention</code>建立权重矩阵来学习两两向量组合时不同的权重。下面就是<code>AFM</code>的框架图:</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/afm_arch.png" width="600px"></center><br>从图中可以很清晰的看出,<code>AFM</code>比<code>FM</code>就是多了一层<code>Attention-based Pooling</code>，该层的作用是通过<code>Attention</code>机制生成一个$a_{i,j}$权重矩阵，该权重矩阵将会作用到最后的二阶项中，因此这里$a_{i,j}$的生成步骤是先通过原始的二阶点积求得各自的组合的一个score:<br>$${a}’_{i,j} = h^T \text{ReLu}(W(v_i \odot v_j)x_ix_j+b)$$<br><br>&gt; 其中$W \in \mathbb{R}^{t \times k},b \in \mathbb{R}^t , h \in \mathbb{R}^t$,这里$t$表示<code>Attention</code>网络的大小<br><br>然后对其score进行<code>softmax</code>的归一化:<br>$$a_{i,j} = \frac{exp({a}’_{i,j})}{\sum_{i,j} exp({a}’_{i,j})}$$<br>最后该权重矩阵再次用于二阶项的计算（也就是最终的<code>AFM</code>式子）:<br>$$y_{\text{AFM}}(x) = w_0+\sum_i^n w_i x_i + P^T \sum_{i=1}^n \sum_{j=i+1}^n a_{i,j} (v_i \odot v_j) x_ix_j$$<br><br>其实整个算法思路也是很简单，但是在实验上却有一个不错的效果:<br><center><img src="/img/Deep-in-out-Wide-n-Deep-Series/afm_result.png" width="400px"></center>
+
+<blockquote>
+<p>其实从实验效果来看<code>AFM</code>应该是优于<code>NFM</code><br><code>AFM</code>的作者源码分享<a href="https://github.com/hexiangnan/attentional_factorization_machine" target="_blank" rel="external">https://github.com/hexiangnan/attentional_factorization_machine</a></p>
+</blockquote>
+<h2 id="总结">总结</h2><ol>
+<li><code>FMs</code>系列算法被广泛应用于ctr预估类的问题中，并且可以取得不错的效果，他最大特征是可以帮助解决特征组合问题</li>
+<li>原始<code>FM</code>算法的运行性能最快，可以达到$O(k \bar{n})$,在工业中被适用最广最简单，其他带上神经网络的<code>FM</code>算法如果想在在线系统中使用得做很多离线计算和分解，比如<code>FFM</code>的现在复杂度是$O(k \bar{n}^2)$,将$O(\bar{n}^2)$中二阶计算的项尽可能的进行离线计算，在 在线的时候进行组合</li>
+<li><code>FM</code>的二阶项部分很容易使用<code>TensorFlow</code>进行实现，这也意味了在实验上也很容易很其他复杂算法进行组合:</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># get the summed up embeddings of features.</span></span><br><span class="line">self.nonzero_embeddings = tf.nn.embedding_lookup(self.weights[<span class="string">'feature_embeddings'</span>], self.train_features, name=<span class="string">'nonzero_embeddings'</span>)</span><br><span class="line">self.summed_features_emb = tf.reduce_sum(self.nonzero_embeddings, <span class="number">1</span>, keep_dims=<span class="keyword">True</span>) <span class="comment"># None * 1 * K</span></span><br><span class="line"><span class="comment"># get the element-multiplication</span></span><br><span class="line">self.summed_features_emb_square = tf.square(self.summed_features_emb)  <span class="comment"># None * 1 * K</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># _________ square_sum part _____________</span></span><br><span class="line">self.squared_features_emb = tf.square(self.nonzero_embeddings)</span><br><span class="line">self.squared_sum_features_emb = tf.reduce_sum(self.squared_features_emb, <span class="number">1</span>, keep_dims=<span class="keyword">True</span>)  <span class="comment"># None * 1 * K</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ________ FM __________</span></span><br><span class="line">self.FM = <span class="number">0.5</span> * tf.subtract(self.summed_features_emb_square, self.squared_sum_features_emb, name=<span class="string">"fm"</span>)  <span class="comment"># None * 1 * K</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>摘自<code>AFM</code>源码</p>
+</blockquote>
+<h2 id="参考">参考</h2><p>[1]. Rendle, Steffen. “Factorization machines with libfm.” ACM Transactions on Intelligent Systems and Technology (TIST) 3.3 (2012): 57.<br>[2]. Juan, Yuchin, et al. “Field-aware factorization machines for CTR prediction.” Proceedings of the 10th ACM Conference on Recommender Systems. ACM, 2016.<br>[3]. Guo, Huifeng, et al. “Deepfm: A factorization-machine based neural network for CTR prediction.” arXiv preprint arXiv:1703.04247 (2017).<br>[4]. He, Xiangnan, and Tat-Seng Chua. “Neural factorization machines for sparse predictive analytics.” Proceedings of the 40th International ACM SIGIR conference on Research and Development in Information Retrieval. ACM, 2017.<br>[5]. Xiao, Jun, et al. “Attentional factorization machines: Learning the weight of feature interactions via attention networks.” arXiv preprint arXiv:1708.04617 (2017).</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<blockquote>
+<p>近期使用<code>FM</code>系列完成了一个<code>CTR</code>预估的任务，本文是阅读了一些paper之后对于<code>FM</code>、<code>FFM</code>、<code>DeepFM</code>、<code>NFM</code>,<code>AFM</code>的一个理解和记录</p>
+</blockquote>
+<h2 id="FM">FM</h2><p><code>Factorization Machine(FM)</code>由Steffen Rendle在2010年提出，旨在解决系数数据下的特征组合的问题，目前该系列模型在搜索推荐领域被广泛使用。</p>
+<h3 id="一个栗子">一个栗子</h3><p>先来看一个经典的电影评分问题</p>
+<center><img src="/img/Deep-in-out-Wide-n-Deep-Series/fm_case.png" width="400px"/></center>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[深度神经网络中防止过拟合的利器-Dropout]]></title>
@@ -199,7 +413,7 @@
     <link href="http://kubicode.me/2017/04/21/Deep%20Learning/Study-With-Deep-Structured-Semantic-Model/"/>
     <id>http://kubicode.me/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/</id>
     <published>2017-04-21T14:53:03.000Z</published>
-    <updated>2017-07-04T12:52:36.000Z</updated>
+    <updated>2018-01-22T02:41:35.000Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下<br>ps:后来跟了几篇dssm的paper，一并记录在这里</p>
 </blockquote>
@@ -1799,147 +2013,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
     </summary>
     
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Learning To Rank中Pairwise方法的学习]]></title>
-    <link href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/"/>
-    <id>http://kubicode.me/2016/04/10/Machine Learning/LTR-Pairwise-Study/</id>
-    <published>2016-04-10T09:05:18.000Z</published>
-    <updated>2016-07-28T13:12:39.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛^_^</p>
-</blockquote>
-<h2 id="2002-RankSvm">2002-RankSvm</h2><p><code>RankSvm</code>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。<br><code>RankSvm</code>的学习记录在<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/" target="_blank" rel="external">这里</a></p>
-<h2 id="2006-IRSVM">2006-IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
-<h3 id="问题1:位置误差">问题1:位置误差</h3><a id="more"></a>
-<pre><code><span class="tag">Example1</span>:
-档位<span class="pseudo">:3</span>,2,1
-排序1<span class="pseudo">:2</span> 3 2 1 1 1 1
-排序2<span class="pseudo">:3</span> 2 1 2 1 1 1
-</code></pre><p>从样例1中可以看到如果是按$\tau$最大化进行优化的话，<code>排序1</code>中<code>2 3</code>为不一致pair,排序2中<code>1 2</code>为不一致pair，因此他们的$\tau$得分是一致的，但是明显可以看到排序2的应该为更优，因为越<code>top</code>级别的重要性越大<br>因此<code>IRSVM</code>考虑了计算$\tau$时将位置顺序纳入误差</p>
-<h3 id="问题2:长度误差">问题2:长度误差</h3><pre><code><span class="tag">Example2</span>:
-档位<span class="pseudo">:3</span>,2,1
-排序3<span class="pseudo">:3</span> 2 2 1 1 1 1
-排序4<span class="pseudo">:3</span> 3 2 2 2 1 1 1 1 1
-</code></pre><p>现观察样例2，可以发现<code>排序3</code>和<code>排序4</code>中均未出现<code>不一致pair</code>的文档对，因此他们的$\tau$得分是一样的，并且均为1，但是<code>排序3</code>中存在<code>28</code>个文档对，而<code>排序4</code>中存在<code>45</code>个文档对，所以<code>排序4</code>存在更多的训练数据，因此<code>排序4</code>的数据相当于<code>RankSvm</code>来说更加重要。<br>因此<code>IRSVM</code>将召回的文档个数纳入了排序</p>
-<blockquote>
-<p>其实这点比较纠结，实际使用中会进行数据过滤，而且最终训练的时候也一般都是取<code>top10</code>进行训练，所以这个问题并不会很明显</p>
-</blockquote>
-<h3 id="优化学习方法">优化学习方法</h3><p>所以<code>IRSVM</code>考虑了不同排序位置的不同重要性，以及各个<code>query</code>召回的数量，对原始的<code>RankSVM</code>损失函数进行修改得到如下:<br>$$\underset{w}{min} \sum_{i=1}^N \tau_{k(i)} \mu_{q(i))} [1-y_i(w,x_i^{(1)}-x_i^{(2)})]_+ + \lambda||w||^2$$</p>
-<p>其实重要是添加了位置得分因子$\tau_{k(i)}$，使用<code>NDCG@1</code>中的方法进行折损，以及添加了<code>query</code>召回的文档长度因子$\mu_{q(i)}$，使用的是最简单粗暴的$\frac{1}{n_q}$进行计算，其中$n_q$表示召回的文档数量。</p>
-<p>[2]中提出<code>IRSVM</code>的时候还使用了<code>SGD</code>和<code>线性规划</code>进行了优化</p>
-<h2 id="2005-RankNet">2005-RankNet</h2><p><code>RankNet</code>的相关学习记录<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/" target="_blank" rel="external">在这里</a></p>
-<h2 id="2007-GBRank">2007-GBRank</h2><p><code>GBRank</code>的相关学习记录<a href="http://kubicode.me/2016/05/08/Machine%20Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" target="_blank" rel="external">在这里</a></p>
-<h2 id="参考">参考</h2><ol>
-<li>《Learning to Rank for Information Retrieval and Natural Language Processing》.Hang Li</li>
-<li>Cao Y, Xu J, Liu T Y, et al. Adapting ranking SVM to document retrieval[C]// SIGIR 2006: Proceedings of the International ACM SIGIR Conference on Research and Development in Information Retrieval, Seattle, Washington, Usa, August. 2006:186-193.</li>
-</ol>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>由于<code>Pairwise</code>方式的排序学习方法 训练样本构建方便、速度快同时效果也还可以，因此在工业界和学术的应用非常广泛^_^</p>
-</blockquote>
-<h2 id="2002-RankSvm">2002-RankSvm</h2><p><code>RankSvm</code>是最经典的一种，将其余的相关实现方法学习总结简单的记录到本文中。<br><code>RankSvm</code>的学习记录在<a href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/">这里</a></p>
-<h2 id="2006-IRSVM">2006-IRSVM</h2><p><code>IRSVM</code>直接是<code>RankSvm</code>的改进，<code>RankSvm</code>的训练目标是让序列pair的<code>不一致pair对</code>对最少，其优化函数为：<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$<br>因此直接暴露了两大问题:</p>
-<h3 id="问题1:位置误差">问题1:位置误差</h3>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[RankSvm-基于点击数据的搜索排序算法]]></title>
-    <link href="http://kubicode.me/2016/03/30/Machine%20Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/"/>
-    <id>http://kubicode.me/2016/03/30/Machine Learning/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/</id>
-    <published>2016-03-30T12:49:53.000Z</published>
-    <updated>2016-07-26T17:22:22.000Z</updated>
-    <content type="html"><![CDATA[<pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
-并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
-</code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
-<ol>
-<li>需要人工/专家标注</li>
-<li>诱导用户对展现的搜索结果进行反馈</li>
-</ol>
-<p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。<br><a id="more"></a></p>
-<p>而RankSvm只需要根据搜索引擎的点击日志构建<code>Pair</code>对即可，相对于先前的工作在算法的实用性上有了非常大的改善。</p>
-<h2 id="训练样本设计">训练样本设计</h2><p>一般搜索引擎都会记录用户搜索后展现的结果以及用户的点击情况，这种日志成本较低，并且改造系统也较为方便，而RankSvm的训练样本就是从这种点击日志中进行提取。</p>
-<p>由于用户点击的<code>doc</code>概率和排序的位置影响很大，虽然一般都是偏爱相关性较大的<code>doc</code>，但是如果这种<code>doc</code>排在很后面的话其实用户也几乎不会点，所有<code>rankSvm</code>就只考虑top级别的点击日志，一般为<code>top 10</code></p>
-<p>另外在构建训练数据时同一<code>query</code>下认为用户被点击<code>doc</code>相关性要高于没有被点击的<code>doc</code>，但是由于用户是从上往下浏览网页的，所以排在前面的<code>doc</code>被点击的概率会大于后面的<code>doc</code>，因此<code>RankSvm</code>使用的最终策略为:</p>
-<blockquote>
-<p><code>pair</code>构建策略:给定一组排序情况($doc_1,doc_2,doc_3,…$),以及$C$记录了用户点击<code>doc</code>的情况,则有<br>$$doc_i{\overset{r^*}{&lt;}} doc_j$$对于所有<code>pair</code>对$1 \leq i$,同时$i \in C$ ,$j \notin C$</p>
-</blockquote>
-<p>$r^*$表示应有的优化排序，也就是<code>被点击文档</code>的相关性要大于<code>排在该文档前面</code>并且<code>未被点击的文档</code>，看上去很绕口，看个栗子：</p>
-<p>假如某个用户搜索某个<code>query</code>得到首页10个<code>doc</code>，按顺序使用$doc_i$进行表示,如果该用户点击了$1,3,7$三个文档，则认为有:<br>$$doc_3 {\overset{r^*}{&lt;}} doc_2 \\<br>doc_7 {\overset{r^*}{&lt;}} doc_2    \\<br>doc_7 {\overset{r^*}{&lt;}} doc_4    \\<br>doc_7 {\overset{r^*}{&lt;}} doc_5    \\<br>doc_7 {\overset{r^*}{&lt;}} doc_6$$</p>
-<p>表示该<code>query</code>下$doc_3$的相关性要高于$doc_2$，理应排在前面，而$doc7$的相关性也应该要高于$doc_{2,4,5,6}$，但是可以发现未见$doc_1$的相关性鉴定，这是由于$doc_1$已经是排在了第一位，本身位置点击概率就就是最高的，所以无法判断与其他文档相关性的高低，同理，$doc_{8,9,10}$也未纳入相关性的排序中。</p>
-<p>训练样本可以通过这样方式进行构建，但是遗憾的是并没有一种机器学习算法能直接使用这种数据进行训练学习-_-</p>
-<h2 id="基本思想">基本思想</h2><p>在上面的栗子中，我们希望用新算法完成$doc_{1,3,7}$排在<code>top 3</code>，那这样的文档的真实相关性高的将会排到前面，<code>RankSvm</code>采用$Kendall’s \quad \tau$来统计实际排序与算法排序的度量，先看下面两个变量:</p>
-<ol>
-<li>$P$表示排序序列中保持一致性的<code>Pair</code>对数量，也就是真实相关性高的排在第的前面。</li>
-<li>$Q$表示排序序列中保持不一致的<code>Pair</code>对数量（就是为逆序了），也就是由于算法的误差导致真实相关性低的排在了高的前面</li>
-<li>同时$P+Q=\binom{m}{2}$，$m$表示序列中文档的数量，因为长度为$m$的序列可能组成的<code>pair</code>对为$m$的2组合</li>
-</ol>
-<p>则$\tau$的计算方式为:<br>$$\tau(r_a,r_b)=\frac{P-Q}{P+Q}=1-\frac{2Q}{\binom{m}{2}}$$</p>
-<blockquote>
-<p>$r_a$为真实排序，$r_b$为算法排序</p>
-</blockquote>
-<p>比如实际文档中的顺序为:<br>$$d_1{\overset{r^*}{&lt;}}d_2{\overset{r^*}{&lt;}}d_3{\overset{r^*}{&lt;}}d_4{\overset{r^*}{&lt;}}d_5$$<br>但是算法的排序顺序为:<br>$$d_3{\overset{\hat{r}}{&lt;}}d_1{\overset{\hat{r}}{&lt;}}d_2{\overset{\hat{r}}{&lt;}}d_4{\overset{\hat{r}}{&lt;}}d_5$$</p>
-<p>因此可以发现算法排序中有3对<code>pair</code>不一致了($\{d_2,d_3\}$,$\{d_1,d_2\}$,$\{d_1,d_3\}$)，所以$Q=3$，$P=7$，最终的$\tau(r,\hat{r})=\frac{7-3}{10}=4$<br>$\tau$的值越大，表示排序效果越接近真实，比如上面的$\tau(r,r)=\frac{10-0}{10}=1$</p>
-<blockquote>
-<p><code>RankSvm</code>还证明了由$Q$的倒数正相关的一个式子为平均准确率指标的下界(具体证明看原文附录):<br>$$AvgPrec(\hat{r}) \geq \frac{1}{R} \left[Q+\binom{R+1}{2}\right]^{-1} \left(\sum_{i=1}^{R} \sqrt{i}\right)^2$$<br>$R$为排序出现的文档中与query相关文档数量(这个是<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#MAP" target="_blank" rel="external">Mean Average Precision</a>中的标注，与<code>Pair</code>对的样本稍微有点差别)<br>从这个角度也可以看到$\tau$来衡量排序效果好坏的合理性.</p>
-</blockquote>
-<p>假设现在有$n$个$q_i$作为训练样本，他们各自的目标排序为$r_i^*$，也就是:<br>$$(q_1,r_1^*),(q_2,r_2^*),(q_3,r_3^*),…(q_n,r_n^*)$$</p>
-<p>其中算法排序为$\hat{r}_i$，则排序算法的优化目标是将下列式子<br>$$\tau_{s}=\frac{1}{n} \sum_{i=1}^{n}\tau(r_i^*，\hat{t}_i)$$<br>进行最大化.</p>
-<h2 id="RankSvm排序">RankSvm排序</h2><p>假设能找到一个排序算法能使得上面的$\tau_s$得到最大化，对于一个指定的查询$q$，每个文档$d_i$使用特征向量映射方法$\Phi(q,d_i)$，如果是直接使用线性排序方法:<br>$$(d_i,d_j) \in \hat{r} \Leftrightarrow \vec{w} \Phi(q,d_i)&gt;\vec{w} \Phi(q,d_j)$$<br>$\vec{w}$表示权重向量，线性排序下，排序分数为<code>权重 x 特征向量</code></p>
-<p><center><img src="/img/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/linear_example.png" width="400px"></center><br>上图表示一个二维的<code>权重</code>与<code>特征</code>图，在排序的顺序的就是特征在权重上的映射位置顺序，比如单从$W_1$维度进行观察可以看到的排序顺序为<code>{1,2,3,4}</code>，而如果按$W_2$维度则是<code>{2,3,1,4}</code>。</p>
-<p>为了最大化$\tau_s$，可以最小化$    Q$来代替，也就是说对于线性的排序，$Q=0$就是表示下面的等式全成立(也就是最大化)<br>$$<br>\forall (d_i,d_j) \in r_1^* : \vec{w} \Phi(q,d_i)&gt;\vec{w} \Phi(q,d_j) \\<br>… \\<br>\forall (d_i,d_j) \in r_n^* : \vec{w} \Phi(q,d_i)&gt;\vec{w} \Phi(q,d_j)<br>$$</p>
-<p>不幸的是，优化这个是一个<code>NP难题</code>。<br>然而<code>SVM</code>在由于软间距最大时可以看到熟悉的身影：<br>minimize:<br>$$\frac{1}{2} \vec{w} \cdot \vec{w} + C \sum \xi_{i,j,k}$$<br>subject to:<br>$$<br>\forall (d_i,d_j) \in r_1^* : \vec{w} \Phi(q,d_i) \geq \vec{w} \Phi(q,d_j) + 1 - \xi_{i,j,1} \\<br>… \\<br>\forall (d_i,d_j) \in r_n^* : \vec{w} \Phi(q,d_i) \geq \vec{w} \Phi(q,d_j) +1 - \xi_{i,j,n} \\<br>\forall_i \forall_j \forall_k:\xi_{i,j,k} \geq 0<br>$$</p>
-<blockquote>
-<p>$\xi$为松弛项，$C$表示平衡项</p>
-</blockquote>
-<p>因此优化该问题时可以将约束转为:<br>$$\vec{w} \Phi(q,d_i)-\vec{w} \Phi(q,d_j) \geq 1 - \xi_{i,j,1}$$<br>并且由于是线性排序，可以进一步精简为:<br>$$\vec{w} \left(\Phi(q,d_i)-\Phi(q,d_j)\right) \geq 1 - \xi_{i,j,1}$$</p>
-<p>在<code>Pair</code>对中只可能$d_i$是否排在$d_j$前面是一个二值结果，所以我们可以将$d_i$排在$d_j$前面的<code>Pair</code>为正标签，否则为负标签:</p>
-<p>$$ y=\left\{<br>\begin{aligned}<br>+1 &amp; \quad if \quad \vec{w} \Phi(q,d_i)&gt;\vec{w} \Phi(q,d_j) \\<br>-1 &amp; \quad otherwise\\<br>\end{aligned}<br>\right.$$</p>
-<p>则最终可以将约束可以写成:<br>$$y_i \cdot \vec{w} \left(\Phi(q,d_i)-\Phi(q,d_j)\right) \geq 1 - \xi_{i,j,1}$$</p>
-<blockquote>
-<p>其中传统的偏置项在<code>RankSvm</code>是不需要的，以为正好<code>Pair</code>相减时就消掉了</p>
-</blockquote>
-<p>这样就可以完全将上面构建的样本转为一个分类问题，使用<code>SVM</code>的对偶形式进行求解，并且还可以使用核函数进行非线性的分类^_^</p>
-<p>训练完<code>Svm</code>之后，在正真排序时只需要将原始$doc$的特征向量输入<code>Svm</code>模型即可:<br>$$resv(q,d_i)= \vec{w} \Phi(q,d_i) = \sum_l^n a_{l}^*y_i(\Phi(q,d_i) \cdot \Phi(q,d_l)) $$</p>
-<p><center><img src="/img/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/binary_classifiy.png" width="400px"></center><br>上面是表示两个不同的<code>query</code>所表示的特征空间，不同的形状表示文档与对应<code>query</code>的相关性档位,三角形$x_1$表示相关性档位高，圆圈$x_2$表示相关性档位一般，叉叉$x_3$表示相关性档位差。<br>将这些样本转为<code>Pair</code>对之后可以有：</p>
-<p><center><img src="/img/RankSvm-Optimizing-Search-Engines-using-Clickthrough-Data/pair_wise_result.png" width="400px"></center><br>可以发现$x_1-x_3$和$x_1-x_2$为正样本，而$x_2-x_1$和$x_3-x_1$为负样本，因此可以形成对应的训练数据进行训练,其实这样形成的样本是对称的，因此在实际使用中一般只保留一侧即可。</p>
-<h2 id="总结">总结</h2><p><code>RankSvm</code>很好的解决原始训练样本构建难的问题，根据点击日志构建样本，既考虑了<code>doc</code>之间的顺序，又保证了可持续性，并且其<code>Pair</code>对的训练正好可以使用<code>Svm</code>进行求最优化，而<code>Svm</code>分类器已经是非常成熟并且广泛使用的一种机器学习算法。<br>因此<code>RankSvm</code>虽然在2002年就提出，但是至今在工业界还是广泛使用，但是现在的主要难点是样本<code>Pair</code>对的构建，针对不同的场景也不同的策略，不一定只是根据点击顺序，实际使用中还要考虑新样本数据。</p>
-<h2 id="参考">参考</h2><ol>
-<li>Joachims T. Optimizing search engines using clickthrough data[C]// Proceedings of the eighth ACM SIGKDD international conference on Knowledge discovery and data mining. ACM, 2002:133-142.</li>
-<li>《Learning to Rank for Information Retrieval and Natural Language Processing》.Hang Li</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<pre><code>RankSvm是Pairwise的学习排序中最早也是非常著名的一种算法，主要解决了传统PontWise构建训练样本难的问题，
-并且基于<span class="built_in">Pair</span>的构建的训练样本也更为接近排序概念
-</code></pre><h2 id="基本介绍">基本介绍</h2><p>RankSvm是在2002年提出的，之前工作关于LTR的工作貌似只有Pointwise相关的,比如PRanking,这样的排序学习算法Work需要含有档位标注的训练样本，一般有以下几种获取方式：</p>
-<ol>
-<li>需要人工/专家标注</li>
-<li>诱导用户对展现的搜索结果进行反馈</li>
-</ol>
-<p>这样就会存在会成本高、可持续性低、受标准者影响大等缺点。<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
       <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
