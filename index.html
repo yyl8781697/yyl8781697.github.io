@@ -95,6 +95,75 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/09/17/Deep Learning/eXtreme-Deep-Factorization-Machine/" title="据说有RNN和CNN结合的xDeepFM" itemprop="url">据说有RNN和CNN结合的xDeepFM</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-09-17T12:29:14.000Z" itemprop="datePublished"> 发表于 2018-09-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="介绍">介绍</h2><p>也是一篇在CTR预估中堆Deep层数的轮子文，先来了解一下：</p>
+<ol>
+<li><a href="Deep-in-out-Factorization-Machines-Series">DeepFM</a>：使用<code>FM</code>的特征组合能力灌给DNN进行joint-train</li>
+<li><a href="Talk-About-CTR-With-Deep-Learning">Deep&amp;Cross</a>：根据首层和次层的依赖可以解决多阶特征组合的问题</li>
+</ol>
+<p>不过xDeepFM所提出的点是结合RNN和CNN的特性完成多阶特征的抽取，并且最终和和DNN以及Linear整合到一起完成显性特征的使用。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2018/09/17/Deep Learning/eXtreme-Deep-Factorization-Machine/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/09/17/Deep Learning/eXtreme-Deep-Factorization-Machine/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/03/19/Deep Learning/Talk-About-CTR-With-Deep-Learning/" title="聊聊CTR预估的中的深度学习" itemprop="url">聊聊CTR预估的中的深度学习</a>
   </h1>
   <p class="article-author">By
@@ -702,77 +771,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/" title="使用点击图来计算Query-Doc的文本相关性" itemprop="url">使用点击图来计算Query-Doc的文本相关性</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-11-03T12:07:18.000Z" itemprop="datePublished"> 发表于 2016-11-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="文本相关性">文本相关性</h2><p>在信息检索中文本相关性是排序因子中非常重要的一个特征，大部分的文本相关性特征是直接根据<code>query</code>和<code>doc</code>上的<code>term</code>进行各种匹配、各种计算得到的， 比如<code>词频/频率</code>、<code>tf/idf/tf*idf</code>、<code>bm25</code>、<code>布尔模型</code>、<code>空间向量模型</code>以及<code>语言模型</code>,今天看到参考[1]这篇paper，提到了可以将点击日志构成二部图,根据二部分进行向量传播，最终收敛之后进行文本相关性的计算，也算是比较新颖了，下文就主要是对该paper的一个学习以及自己理解的记录。<br>该paper提出的三个贡献:</p>
-<ol>
-<li>可以使<code>query</code>和<code>doc</code>在同一空间上生成词向量考虑</li>
-<li>对于未曾有点击行为的<code>query</code>和<code>doc</code>也可以进行该空间词向量的估计</li>
-<li>最终计算的效率较高，可以用于商业的搜索引擎</li>
-</ol>
-<blockquote>
-<p>如果已知了<code>query</code>和<code>doc</code>在同一空间上的向量表示，这样文本相关性就可以直接使用相似度的计算方式来得到了~<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Search-Engine/">Search Engine</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/11/03/Search Engine/Learning-Query-And-Document-Relevanec-from-a-Web-scale-Click-Graph/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -803,7 +801,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
 		  
 		
 		  
@@ -888,7 +886,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>38</sup></a></li>
 			
 		
 			
@@ -908,11 +906,11 @@
 			
 		
 			
-				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
 			
 		
 			

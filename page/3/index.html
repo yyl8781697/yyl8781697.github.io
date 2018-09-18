@@ -95,6 +95,78 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/11/Machine Learning/Say-About-Loss-Function/" title="聊聊机器学习中的损失函数" itemprop="url">聊聊机器学习中的损失函数</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-11T13:06:23.000Z" itemprop="datePublished"> 发表于 2016-04-11</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>机器学习算法一般都是对损失函数(<code>Loss Function</code>)求最优，大部分损失函数都是包含两项：<code>损失误差项(loss term)</code>以及<code>正则项(regularization term)</code>:<br>$$J(w)=\sum_iL(m_i(w))+\lambda R(w)$$</p>
+<h2 id="损失误差项">损失误差项</h2><p>常用的损失误差项有5种:</p>
+<ol>
+<li><code>Gold Standard</code></li>
+<li><code>Hinge</code>:Svm</li>
+<li><code>log</code>:logistic regression(cross entropy error)</li>
+<li><code>squared</code>:linear regression</li>
+<li><code>Exponential</code>:Boosting</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/04/11/Machine Learning/Say-About-Loss-Function/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/11/Machine Learning/Say-About-Loss-Function/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/10/Machine Learning/LTR-Pairwise-Study/" title="Learning To Rank中Pairwise方法的学习" itemprop="url">Learning To Rank中Pairwise方法的学习</a>
   </h1>
   <p class="article-author">By
@@ -713,82 +785,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/" title="Learning to rank学习基础" itemprop="url">Learning to rank学习基础</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-02-15T02:31:43.000Z" itemprop="datePublished"> 发表于 2016-02-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>Learning to <span class="function"><span class="title">rank</span><span class="params">(简写 LTR、L2R)</span></span> 也叫排序学习，指的是机器学习中任何用于排序的技术。
-</code></pre><h2 id="为什么要用LTR">为什么要用LTR</h2><p>传统的检索模型靠人工拟合排序公式，并通过不断的实验确定最佳的参数组合，以此来形成相关性打分。这种方式非常简单高效，应该范围也很广，比如简单的博客排序、论坛的<code>QA</code>排序等.但是也同时存在较大的问题:</p>
-<ol>
-<li>手动调参工作量太大</li>
-<li>可能会过拟合</li>
-<li>如果模型参数很多，手动调参的可用性就很低了~</li>
-</ol>
-<p>LTR与此思路不同，最合理的排序公式由机器学习算法来确定，而人则需要给机器学习提供训练数据,他的优势有:</p>
-<ol>
-<li>可以自动调节参数</li>
-<li>可以融合多方面观点的(evidences)的数据</li>
-<li>避免过拟合(通过正则项)</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/02/15/Machine Learning/Learning-To-Rank-Base-Knowledge/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -819,7 +815,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
 		  
 		
 		  
@@ -904,7 +900,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>38</sup></a></li>
 			
 		
 			
@@ -924,11 +920,11 @@
 			
 		
 			
-				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
 			
 		
 			

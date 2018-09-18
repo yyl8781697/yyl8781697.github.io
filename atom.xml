@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2018-03-20T16:42:36.000Z</updated>
+  <updated>2018-09-18T02:41:25.767Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,82 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[据说有RNN和CNN结合的xDeepFM]]></title>
+    <link href="http://kubicode.me/2018/09/17/Deep%20Learning/eXtreme-Deep-Factorization-Machine/"/>
+    <id>http://kubicode.me/2018/09/17/Deep Learning/eXtreme-Deep-Factorization-Machine/</id>
+    <published>2018-09-17T12:29:14.000Z</published>
+    <updated>2018-09-18T02:41:25.767Z</updated>
+    <content type="html"><![CDATA[<h2 id="介绍">介绍</h2><p>也是一篇在CTR预估中堆Deep层数的轮子文，先来了解一下：</p>
+<ol>
+<li><a href="Deep-in-out-Factorization-Machines-Series">DeepFM</a>：使用<code>FM</code>的特征组合能力灌给DNN进行joint-train</li>
+<li><a href="Talk-About-CTR-With-Deep-Learning">Deep&amp;Cross</a>：根据首层和次层的依赖可以解决多阶特征组合的问题</li>
+</ol>
+<p>不过xDeepFM所提出的点是结合RNN和CNN的特性完成多阶特征的抽取，并且最终和和DNN以及Linear整合到一起完成显性特征的使用。<br><a id="more"></a></p>
+<h2 id="CIN">CIN</h2><p>据说有RNN和CNN结合的xDeepFM中最重要的核心元素是<code>CIN</code>（Compressed Interaction Network）<br>一个图来解释<code>CIN</code>:<br><img src="/img/eXtreme-Deep-Factorization-Machine/CIN-Network.png" alt=""><br>这里：</p>
+<ol>
+<li>我们输入的是一个m个特征的D维Embedding数据，简称$X^0 \in R^{m \times D}$,这个作为第一层</li>
+<li>然后CIN有设计一种计算下一层的式子：$$X_{h,*}^k = \sum_{i=1}^{H_{k-1}} \sum_{j=1}^m W_{i,j}^{k,h}(X_{i,*}^{k-1} \circ X_{j,*}^0)$$<ol>
+<li>这里的$\circ$符号表示点击，$(a_1,a_2,a_3) \circ (b_1,b_2,b_3) = (a_1b_1,a_2b_2,a_3b_3)$</li>
+<li>整个式子可以分解为两份，类RNN和CNN</li>
+<li>在计算$X^k$时是依赖$X^{k-1}$的，所以类似RNN那种是依赖上一个状态，同时里面还引入了$X^0$，其实是参考了<code>Deep&amp;Cross</code>的做法，这一步形象的画出来就是上图(a)</li>
+<li>他们一步完成之后会产生一个中间状态$z^{k+1}$，是一个三维的张量，其实基于$W$矩阵的投射可以重新转为一个二维的$X^{k+1}$，其实是类似一个CNN的卷积过程，就是图中$b$</li>
+<li>这些深层级的$X$计算完毕之后，使用一个<code>sum pooling</code>将各个feature map进行聚合$$p_i^k = \sum_{j=1}^D X_{i,j}^k$$</li>
+<li>将所有的聚合层concat之后得到$p^+ = [p^1,p^2…p^T]$</li>
+<li>再通过激活函数得到最终的结果$$y=\frac{1}{1+exp(p^+W)}$$</li>
+</ol>
+</li>
+</ol>
+<p>这儿<code>CIN</code>各种复杂度：</p>
+<ol>
+<li>他的参数复杂度是:$\sum_{k=1}^T H_k \times (1+H_{k-1} \times m)$<ul>
+<li>$T$表示<code>CIN</code>的总层数</li>
+<li>每一层的W参数是$H_k \times H_{k−1} \times m$</li>
+<li>顶部线性成的参数量是$H_k$</li>
+</ul>
+</li>
+<li>他的计算复杂度是:$O(mH^2DT)$<ul>
+<li>他单层的$Z^{k+1}$的计算复杂度是$O(mHD)$</li>
+<li>并且额外的我们还需要将feature maps汇聚到$H$个隐藏节点</li>
+</ul>
+</li>
+</ol>
+<h2 id="xDeepFM">xDeepFM</h2><p>最终的<code>xDeepFM</code>的大结构是参考了<code>Wide&amp;Deep</code>的方式:<br><img src="/img/eXtreme-Deep-Factorization-Machine/eDeepFM-arch.png" align="center" width="600px"></p>
+<ol>
+<li>最左侧是一个线性模型（其实这儿是一个稀疏层）</li>
+<li>中间是上面刚刚描述的<code>CIN</code>模型</li>
+<li>最右侧其实就是一个传统的<code>DNN</code>模型了</li>
+<li>最终将所有的隐藏层的值合并进行了计算：$$y=\sigma(W_{\text{linear}}^T a + W_{\text{dnn}}^T  x_{\text{dnn}} + W_{\text{cin}}^Tp^+ + b)$$</li>
+</ol>
+<p>他和<code>DeepFM</code>的关系：如果将<code>CIN</code>这一层里面的层数改为1，他其实就是一个FM</p>
+<h2 id="实验结果">实验结果</h2><p>里面描述的实验结果中，<br><img src="/img/eXtreme-Deep-Factorization-Machine/exp.png" width="600px"><br>看起来<code>xDeepFM</code>还是有一些提升的，不过主要提升是在<code>DianPing</code>数据集上，另外两个数据集提升的还是很微弱，在这种复杂度下，计算性能和带来的效果回报的受益就比较低了。</p>
+<h2 id="总结">总结</h2><ol>
+<li>感觉<code>xDeepFM</code>主要引入了<code>Deep&amp;Cross</code>里面的<code>Cross</code>机制，就是在做堆叠</li>
+<li>另外其实看到堆叠和交叉还是能带来一定效果的，但是受益越来越不明显了，如果运行性能和算法性能的性价比，<code>FM</code>无疑是最高，但是Deep模型可以说故事（chui）啊</li>
+<li>作者开放了<a href="https://github.com/Leavingseason/xDeepFM" target="_blank" rel="external">源码</a>，赞一个</li>
+</ol>
+<h2 id="文献">文献</h2><ol>
+<li>Lian, Jianxun, et al. “xDeepFM: Combining Explicit and Implicit Feature Interactions for Recommender Systems.” arXiv preprint arXiv:1803.05170 (2018).</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="介绍">介绍</h2><p>也是一篇在CTR预估中堆Deep层数的轮子文，先来了解一下：</p>
+<ol>
+<li><a href="Deep-in-out-Factorization-Machines-Series">DeepFM</a>：使用<code>FM</code>的特征组合能力灌给DNN进行joint-train</li>
+<li><a href="Talk-About-CTR-With-Deep-Learning">Deep&amp;Cross</a>：根据首层和次层的依赖可以解决多阶特征组合的问题</li>
+</ol>
+<p>不过xDeepFM所提出的点是结合RNN和CNN的特性完成多阶特征的抽取，并且最终和和DNN以及Linear整合到一起完成显性特征的使用。<br>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[聊聊CTR预估的中的深度学习]]></title>
@@ -106,7 +182,7 @@
     <link href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/"/>
     <id>http://kubicode.me/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/</id>
     <published>2018-02-23T12:33:22.000Z</published>
-    <updated>2018-03-19T01:58:56.000Z</updated>
+    <updated>2018-09-17T12:26:00.689Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>近期使用<code>FM</code>系列完成了一个<code>CTR</code>预估的任务，本文是阅读了一些paper之后对于<code>FM</code>、<code>FFM</code>、<code>DeepFM</code>、<code>NFM</code>,<code>AFM</code>的一个理解和记录</p>
 </blockquote>
@@ -1928,86 +2004,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 <ol>
 <li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
 <li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
-</ol>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[聊聊机器学习中的损失函数]]></title>
-    <link href="http://kubicode.me/2016/04/11/Machine%20Learning/Say-About-Loss-Function/"/>
-    <id>http://kubicode.me/2016/04/11/Machine Learning/Say-About-Loss-Function/</id>
-    <published>2016-04-11T13:06:23.000Z</published>
-    <updated>2016-04-17T12:25:41.000Z</updated>
-    <content type="html"><![CDATA[<p>机器学习算法一般都是对损失函数(<code>Loss Function</code>)求最优，大部分损失函数都是包含两项：<code>损失误差项(loss term)</code>以及<code>正则项(regularization term)</code>:<br>$$J(w)=\sum_iL(m_i(w))+\lambda R(w)$$</p>
-<h2 id="损失误差项">损失误差项</h2><p>常用的损失误差项有5种:</p>
-<ol>
-<li><code>Gold Standard</code></li>
-<li><code>Hinge</code>:Svm</li>
-<li><code>log</code>:logistic regression(cross entropy error)</li>
-<li><code>squared</code>:linear regression</li>
-<li><code>Exponential</code>:Boosting</li>
-</ol>
-<a id="more"></a>
-<h3 id="Gold_Standard_Loss">Gold Standard Loss</h3><p><code>Gold Standard</code>又称<code>0-1</code>误差，其结果又称为<code>犯错</code>与<code>不犯错</code>,用途比较广(比如<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/" target="_blank" rel="external">PLA</a>模型)，其损失函数也是相当的简单:<br>$$ y=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad m \geq 0 \\<br>1 &amp; \quad if \quad m \le 0\\<br>\end{aligned}<br>\right.$$</p>
-<h3 id="Hinge_Loss">Hinge Loss</h3><p><code>Hinge</code>的叫法来源于其损失函数的图形，为一个折线，通用函数方式为:<br>$$L(m_i) = max(0,1-m_i(w))$$</p>
-<p><code>Hinge</code>可以解 间距最大化 问题，带有代表性的就是<code>svm</code>,最初的<code>svm</code>优化函数如下:<br>$$\underset{w,\zeta}{argmin} \frac{1}{2}||w||^2+ C\sum_i \zeta_i \\<br>st.\quad \forall y_iw^Tx_i \geq 1- \zeta_i \\<br>\zeta_i \geq 0 $$</p>
-<p>将约束项进行变形则为:<br>$$\zeta_i \geq 1-y_iw^Tx_i$$<br>则可以将损失函数进一步写为:<br>$$\begin{equation}\begin{split}J(w)&amp;=\frac{1}{2}||w||^2 + C\sum_i max(0,1-y_iw^Tx_i) \\<br>&amp;= \frac{1}{2}||w||^2 + C\sum_i max(0,1-m_i(w)) \\<br>&amp;= \frac{1}{2}||w||^2 + C\sum_i L_{Linge}(m_i)<br>\end{split}\end{equation}$$</p>
-<p>因此<code>svm</code>的损失函数可以看成<code>L2-Norm</code>和<code>Hinge</code>损失误差之和.</p>
-<h3 id="Log_Loss">Log Loss</h3><p><code>log</code>类型损失函数的优势可以将连乘转为求和，由于是单调函数，不会改变原结果，并且还很方面求最优，因此<code>log</code>类型的损失函数函数也非常常用，比较著名的一种就是交叉熵(<code>cross entropy</code>)，也就是<code>logistic regression</code>用的损失函数:<br>$$J(w)=\lambda||w||^2+\sum_i y_i log g_w(x_i)+(1-y_i)(log 1-g_w(x_i),y_i \in\{0,1\}$$<br>其中:<br>$$g_w(x_i)=\frac{1}{1+e^{-f_w(x_i)}} \\<br>f_w(x_i) = w^Tx_i<br>$$</p>
-<h3 id="Squared_Loss">Squared Loss</h3><p>平方误差，线性回归中最常用:<br>$$L_2(m)=(f_w(x)-y)^2=(m-1)^2$$</p>
-<h3 id="Exponential_Loss">Exponential Loss</h3><p>指数误差，在<code>boosting</code>算法中比较常见:<br>$$J(w)=\lambda R(w)+\sum_i exp(-y_if_w(x_i)) \\<br>L_{exp}(m_i) = exp(-m_i(w))<br>$$</p>
-<h3 id="误差项对比">误差项对比</h3><p>上面5种误差项的函数为:</p>
-<center><img src="/img/Say-About-Loss-Function/error_function.png" width="400px"></center>
-
-<blockquote>
-<p>黑色为<code>Squared Loss</code>,<span style="color:red">红色</span>为<code>Hinge Loss</code>,<span style="color:yellow">黄色</span>为:<code>Log Loss</code>,<span style="color:green">绿色</span>为:<code>Exponential Loss</code>,<span style="color:blue">蓝色</span>为:<code>Gold Standard</code></p>
-</blockquote>
-<p>观察图中:</p>
-<ol>
-<li><code>Hinge Loss</code>中当$m_i(w) &gt; 1$ 时，其损失项始终未0，当$m_i(w) &lt; 1$时，其损失项的值呈线性增长（正好符合<code>svm</code>的需求）.</li>
-<li><code>Squared、Log、Exponential</code>三种损失函数已经<code>Hinge</code>的左侧都是凸函数，并且<code>Gold Stantard</code>损失为他们的下界:<br> $$\zeta_{01} \leq  \hat{\zeta}_{01}(h)+fudge$$</li>
-<li>当需要求最大似然时(也就是概率最大化)，使用<code>Log Loss</code>最合适，但是一般会加上一个负号将其转换为求最小</li>
-<li>损失函数和的<code>凸特征</code>以及有<code>界</code>是非常重要的，可以防止在一些可以求得无穷的工作上白白浪费时间。有时候为了让函数有界和凸特征，一般会使用一些代理函数来进行替换。</li>
-</ol>
-<h2 id="正则项">正则项</h2><blockquote>
-<p>加入正在项是为了降低模型复杂度，在一定程度上可以有效防止模型过拟合</p>
-</blockquote>
-<p>常用的正则项有:<br>$$<br>R_2 = \frac{1}{2}||w||^2 \\<br>R_1 = \sum_i |w_i| \\<br>R_0 = |\{i:w_i \neq 0 \}|<br>$$<br>这些正则项可以通用的写成:<br>$$R_p =(\sum_i |w_i|^p)^{\frac{1}{p}}$$</p>
-<p>其中：</p>
-<ol>
-<li>$R_2$最常用，因为它是凸函数，非常方便可以用<code>梯度下降法</code>最优化</li>
-<li>$R_1$含有特征选择功能，因此经过$R_1$计算之后会有大量的0权重出现，这样的话我们在实际计算中只需要计算有值特征即可，可以加快速算法的运行速度</li>
-<li>$R_0$，额~这个暂时不知道哪里用-_-</li>
-</ol>
-<p>当$p \leqslant 1$时其正则项就为非凸函数了</p>
-<center><img src="/img/Say-About-Loss-Function/reg.png" width="600px"></center>
-
-
-<h2 id="参考">参考</h2><ol>
-<li><a href="http://www.ics.uci.edu/~dramanan/teaching/ics273a_winter08/lectures/lecture14.pdf" target="_blank" rel="external">http://www.ics.uci.edu/~dramanan/teaching/ics273a_winter08/lectures/lecture14.pdf</a></li>
-<li><a href="https://www.wikiwand.com/en/Hinge_loss" target="_blank" rel="external">https://www.wikiwand.com/en/Hinge_loss</a></li>
-<li><a href="http://www.cnblogs.com/rocketfan/p/4081585.html" target="_blank" rel="external">http://www.cnblogs.com/rocketfan/p/4081585.html</a></li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>机器学习算法一般都是对损失函数(<code>Loss Function</code>)求最优，大部分损失函数都是包含两项：<code>损失误差项(loss term)</code>以及<code>正则项(regularization term)</code>:<br>$$J(w)=\sum_iL(m_i(w))+\lambda R(w)$$</p>
-<h2 id="损失误差项">损失误差项</h2><p>常用的损失误差项有5种:</p>
-<ol>
-<li><code>Gold Standard</code></li>
-<li><code>Hinge</code>:Svm</li>
-<li><code>log</code>:logistic regression(cross entropy error)</li>
-<li><code>squared</code>:linear regression</li>
-<li><code>Exponential</code>:Boosting</li>
 </ol>]]>
     
     </summary>

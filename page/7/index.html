@@ -95,6 +95,78 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/03/Algorithm/Max-Min-in-Array/" title="对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？" itemprop="url">对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-03T14:59:25.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>对于一个由<span class="keyword">N</span>个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？
+</code></pre><h2 id="解析">解析</h2><p>普通的遍历是需要O(2n)时间，那有没有其他更好的办法呢？<br>其实可以使用分而治之的思想，将N分为两段  分别取到每一段中的最大和最小值  ，然后最大与最大比即可 最小与最小比即可，这样就可以避免最小与最大的比较</p>
+<pre><code>比如：
+<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>
+正常对比的话得到<span class="built_in">min</span>=<span class="number">1</span>,<span class="built_in">max</span>=<span class="number">4</span>需要<span class="number">6</span>次
+那如果先求的<span class="built_in">min1</span>=<span class="number">1</span>,<span class="built_in">max1</span>=<span class="number">2</span>,min2=<span class="number">3</span>,max2=<span class="number">4</span>（需要<span class="number">2</span>次比较）
+然后<span class="built_in">min1</span>&lt;min2 得到<span class="built_in">min</span>=<span class="number">1</span>,<span class="built_in">max1</span>&lt;max2可得<span class="built_in">max</span>=<span class="number">4</span> （又是需要<span class="number">2</span>次）
+所以这种方法只需要<span class="number">4</span>次
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/03/Algorithm/Max-Min-in-Array/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/03/Algorithm/Max-Min-in-Array/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/02/Algorithm/Permutation-and-Combination/" title="全排列以及全组合" itemprop="url">全排列以及全组合</a>
   </h1>
   <p class="article-author">By
@@ -715,71 +787,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/" title="左边的数都小于等 于它,右边的数都大于等于它" itemprop="url">左边的数都小于等 于它,右边的数都大于等于它</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-25T00:52:50.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/6/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/8/">Next<span></span></a>
@@ -810,7 +817,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
 		  
 		
 		  
@@ -895,7 +902,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>37</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>38</sup></a></li>
 			
 		
 			
@@ -915,11 +922,11 @@
 			
 		
 			
-				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>6</sup></a></li>
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
 			
 		
 			
