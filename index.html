@@ -95,6 +95,70 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/" title="深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展" itemprop="url">深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-09-19T09:39:51.000Z" itemprop="datePublished"> 发表于 2018-09-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="前言">前言</h2><p>用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&gt; x_{N+1}$$<br>因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的<code>GRU4REC</code>利用<code>RNN-Based</code>对用户序列进行建模并且取得了不错的效果，同时也会有一些研究对于<code>GRU4REC</code>做了不少改进和扩展，本文主要对<code>GRU4REC</code>以及扩展做一些简答的自我了解和记录。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/09/17/Deep Learning/eXtreme-Deep-Factorization-Machine/" title="据说有RNN和CNN结合的xDeepFM" itemprop="url">据说有RNN和CNN结合的xDeepFM</a>
   </h1>
   <p class="article-author">By
@@ -700,77 +764,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/11/27/Machine Learning/Something-for-Softmax/" title="Softmax的二三事" itemprop="url">Softmax的二三事</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-11-27T08:24:28.000Z" itemprop="datePublished"> 发表于 2016-11-27</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Softmax_介绍">Softmax 介绍</h2><p>多分类是机器学习中一类非常常见的任务，比如将0~9某个字写到图片上，使用多分类的方法来识别这个图片上写的到底是几(<code>MNIST手写体识别</code>)，对于多分类任务常用的机器学习方法有:</p>
-<ol>
-<li>借助<code>二分类</code>，使用<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-All">One vs All</a>或者<a href="http://kubicode.me/2015/08/30/Machine%20Learning/Multiclass-Classification/#One-Vs-One">One vs One</a>来完成多分类</li>
-<li>使用<a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#朴素贝叶斯">朴素贝叶斯</a>来完成多分类</li>
-<li>决策树类模型~</li>
-<li><a href="http://kubicode.me/2016/12/12/Machine%20Learning/Maximum-Entropy-Model/">最大熵模型</a></li>
-<li>。。。</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/11/27/Machine Learning/Something-for-Softmax/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/11/27/Machine Learning/Something-for-Softmax/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -801,7 +794,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>8</sup></a></li>
 		  
 		
 		  
@@ -886,7 +879,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>38</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>39</sup></a></li>
 			
 		
 			
@@ -906,7 +899,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>8</sup></a></li>
 			
 		
 			

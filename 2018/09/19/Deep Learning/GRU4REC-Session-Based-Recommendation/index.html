@@ -1,0 +1,780 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="前言用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&amp;gt; x_{N+1}$$因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的GRU4REC利用RNN-Based对用户序列进行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展">
+<meta property="og:url" content="http://kubicode.me/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="前言用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&amp;gt; x_{N+1}$$因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的GRU4REC利用RNN-Based对用户序列进行">
+<meta property="og:image" content="/img/Session-Based-Recommendation/gru4rec_arch.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/gru4rec_minibatch.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/gru4rec_sampling.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/gru4rec_exp.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/gru4rec_sampling_exp.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/gru4rec_dwell.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/gru4rec_dwell_exp.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/hrnn_arch.png">
+<meta property="og:image" content="/img/Session-Based-Recommendation/hrnn_exp.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展">
+<meta name="twitter:description" content="前言用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&amp;gt; x_{N+1}$$因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的GRU4REC利用RNN-Based对用户序列进行">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/" title="深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展" itemprop="url">深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-09-19T09:39:51.000Z" itemprop="datePublished"> 发表于 2018-09-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GRU4REC"><span class="toc-number">2.</span> <span class="toc-text">GRU4REC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GRU4REC-Sampling"><span class="toc-number">3.</span> <span class="toc-text">GRU4REC-Sampling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GRU4REC-DWell"><span class="toc-number">4.</span> <span class="toc-text">GRU4REC-DWell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HRNN"><span class="toc-number">5.</span> <span class="toc-text">HRNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言">前言</h2><p>用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&gt; x_{N+1}$$<br>因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的<code>GRU4REC</code>利用<code>RNN-Based</code>对用户序列进行建模并且取得了不错的效果，同时也会有一些研究对于<code>GRU4REC</code>做了不少改进和扩展，本文主要对<code>GRU4REC</code>以及扩展做一些简答的自我了解和记录。</p>
+<a id="more"></a>
+<h2 id="GRU4REC">GRU4REC</h2><p><code>GRU4REC</code>是Session信息和GRU结合起来完成了推荐，他给定的场景是：</p>
+<blockquote>
+<p>用户在我们的应用上有一段行为<code>Session</code>（比如说点击item的需求），然后在于该Session信息来预测接下来可能会发生点击的item，而这笔的Session信息主要使用<code>GRU</code>模型来进行刻画：</p>
+</blockquote>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_arch.png" width="400px"></p>
+<ol>
+<li>这边第一步的输入是用户的行为序列: $[x_1,x_2,x_3,..,x_N]$</li>
+<li>这些行为序列可以接下来使用两种Embedidng表示，一种是<code>One-Hot</code>方式,另一种是在<code>One-Hot</code>接下来过一个Embedding层</li>
+<li>将所有的输入进行向量化表示之后，会过若干层的GRU(就是比较核心的序列化建模了)</li>
+<li>完成序列化建模之后再进行一个<code>Feedforward</code>的网络转换</li>
+<li><p>最终对下一个目标进行预测,这边的目标其实就是$x_{N+1}$</p>
+<blockquote>
+<p>(作者说这种方式性能好，但是我到觉得这种场景下<code>One-Hot</code>不是很合适，<code>One-Hot</code>在这边他的DIM会巨大，并且会特别的稀疏,可能还是查表的来的好)</p>
+</blockquote>
+</li>
+</ol>
+<p>其实<code>GRU4REC</code>的整个思路还是很清晰，模型也很简单，但是该算法中比较重要的应该是他的加速优化和LOSS的选择可能会有比较大的参考价值意义:</p>
+<p>为了能提高训练的效率，采用两种策略来进行训练的优化:</p>
+<ol>
+<li><p>使用<code>Mini-Batch</code>来进行训练:<br> <img src="/img/Session-Based-Recommendation/gru4rec_minibatch.png" width="400px"><br> 因为用户行为的Session有长有短，并且他的差异性很大，传统的滑窗方式来构建训练数据并不适用，他这里用的策略是将不同的<code>Session</code>给拼接了起来，在同一个序列中如果遇到下一次Session时，会将GRU中的向量参数给重新初始化掉，因为这边GRU是对Step进行预测，所以在序列中间直接初始化掉问题也不大，这样还可以提升数据的利用率，会比简单<code>PADDING</code>的方式更加的合适。</p>
+</li>
+<li><p>取巧的训练数据采样:<br> 原始的模型中是需要过softmax对于每个item都计算才能对目标的item进行训练，因为item的维度非常高，所以这里的计算量是超级大的。作者在这里比较机智的在目标的样本中根据<code>热门</code>程度进行了采样，采样完成之后将同一个<code>mini-batch</code>中但是是其他<code>Session</code>的next-item作为负样本。用这些正负样本来训练整个神经网络。下面这个图对于采样非常形象了：</p>
+</li>
+</ol>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_sampling.png" width="600px"></p>
+<p>因此这个模型现在已经转为对正负样本的一个<code>0-1</code>分类的问题,而且推荐里面，并不存在绝对的正负样本，用户也可能会对多个item存在偏好，所以这边比较合适<code>Loss Function</code>就是用<code>Pair-Wise</code>的模式了(只需要   正样本的score大于负样本即可):</p>
+<ol>
+<li><code>BPR(Bayesian Personalized Ranking)</code>:这是一种基于矩阵分解的损失函数，他的式子是:$$L_s = - \frac{1}{N_s} \cdot \sum_{j=1}^{N_s} \text{log}(\sigma(\hat{r}_{s,i} - \hat{r}_{s,j}))$$ $N_s$是样本量的大小，$\hat{r}_{s,i}$表示正样本的分数，$\hat{r}_{s,j}$表示负样本的分数</li>
+<li><code>TOP1</code>:这是种基于正则化方式的损失函数$$L_s = \frac{1}{N_s} \cdot \sum_{j=1}^{N_s} (\sigma(\hat{r}_{s,j} - \hat{r}_{s,i})) +\sigma(\hat{r^2_j})$$ 这种方式可以将$\hat{r}_{s,i}$的分数计算的更高，但是他同是也会是负样本，所以这边加了二范数来压制$\hat{r}$作为负样本时的分数</li>
+</ol>
+<p><code>GRU4REC</code>的实验结果也是蛮简单的,Baseline的实验不在这个表中，数据后面跟着的涨幅就是和Baseline的对比:<br><img src="/img/Session-Based-Recommendation/gru4rec_exp.png"><br>这边显示的也是<code>BPR</code>和<code>TOP1</code>这两种LOSS的效果会明显好于传统的交叉熵.</p>
+<p><code>GRU4REC</code>是较早的将序列行为和GRU进行结合，其中<code>LOSS</code>这块的构建还是非常值得借鉴的。</p>
+<blockquote>
+<p>该作者还开放了源码<a href="https://github.com/hidasib/GRU4Rec" target="_blank" rel="external">https://github.com/hidasib/GRU4Rec</a></p>
+</blockquote>
+<h2 id="GRU4REC-Sampling">GRU4REC-Sampling</h2><blockquote>
+<p>其中<code>GRU4REC-Sampling</code>和<code>GRU4REC</code>是同一个作者 ^_^</p>
+</blockquote>
+<p><code>GRU4REC-Sampling</code>也是在基于<code>GRU4REC</code>上的缺陷提出了额外的<code>Sampling</code>和新的<code>Loss Function</code><br>作者认为<code>GRU4REC</code>存在下面三种局限:</p>
+<ol>
+<li><code>BatchSize</code>一般都是比较小的，在总样本较多时，如果采样少的话，分数比较高的负样本被采样进来的概率就偏少了（这里高分数要用于下面的Loss） </li>
+<li><code>BatchSize</code>会影响运行速度，但是由于设计的是<code>Mini-Batch</code>并行的方式，所以增加<code>BatchSize</code>也不会对速度有多大的影响</li>
+<li>虽然<code>GRU4REC</code>用的是根据热度采样，但是实际中全根据热度也不一定适应所有数据集</li>
+</ol>
+<p>所以在<code>GRU4REC-Sampling</code>中又进行了额外的采样:同样是在<code>Mini-Batch</code>中进行采样，采样时根据这个公式$supp_i^\alpha$,而这边的$\alpha$是一个<code>0~1</code>的值，如果$\alpha=0$表示均匀采样，如果$\alpha=1$为完全的热门采样。</p>
+<p>另外<code>GRU4REC</code>中的<code>BPR</code>和<code>TOP1</code>会存在梯度的消失问题，因此作者设计了一种新的损失函数希望来最大化正样本的分数:$$L_{pairwise-max}(r_i,{r_j}_{j=1}^{N_s}) = L_{pairwise}(r_i,max_jr^j)$$<br>从这儿可以看出，新的损失函数是对<code>Max-Score</code>的负样本做pair，但是这种是不可求导了，所以作者用了一种近似的方式来实现,刚刚对<code>Max-Score</code>做负样本的方式可以转为<code>Score</code>越大，则<code>Loss</code>中的权重也越大，而这个权重可以用归一化的<code>softmax</code>来表示:$$s_i = \frac{e^{r_i}}{\sum_{j=1}^N e^{r_j}}$$<br>有了每个样本的权重表示之后，原先的<code>Loss Function</code>可以更改为:</p>
+<ol>
+<li><code>TOP1-MAX</code>:$$L_{top1-max} = \sum_{j=1}^{N_S}s_j(\sigma(r_j-r_i) + sigma(r_j^2))$$</li>
+<li><code>BPR-max</code>:$$L_{bpr-max} = -\text{log} \sum_{j=1}^{N_s} s_j \sigma(r_i,r_j)$$</li>
+</ol>
+<blockquote>
+<p>对比一下<code>GRU4REC</code>中的<code>Loss Function</code>，其实就是额外增加了一个$s_j$的权重值。</p>
+</blockquote>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_sampling_exp.png"><br>看下实验对比，额外的<code>Sampling</code>和新的<code>Loss Function</code>都还是有极大的提升的,惊呆。</p>
+<blockquote>
+<p>我个人感觉<code>Sampling</code>起这么大的作用应该是采样之后样本不足了，这是一个训练时间和模型性能上的权衡，那么我如果不采样是不是效果就更好了-_-!!</p>
+</blockquote>
+<h2 id="GRU4REC-DWell">GRU4REC-DWell</h2><p><code>GRU4REC-DWell</code>也是基于<code>GRU4REC</code>的一个简单的改进，其中<code>GRU4REC</code>已经证明在时序的推荐中序列化的建模非常有用。<br>另外作者认为在用户行为序列中，每个item的停留时间是非常重要的一个特征，而之前的<code>GRU4REC</code>算法只是用于简单的交互行为来构建样本，所以<code>GRU4REC-DWell</code>主要是很巧妙将用户在序列item上的停留时间和GRU4REC<code>结合了起来:</code></p>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_dwell.png" width="400px"><br>这里主要的Idea就是在原始的用户行为中，作者根据item上面的停留时间根据阈值进行切片，如果停留时间长的可能会有很多个切片，每个切片都作为一个新的行为项:<br>给定一个行为序列的集合$X=\{x_1,x_2,…,x_n\}$,每一个$x_i$对应的停留时间为$dt_i$,其中$t$为切片的阈值，则$x_i$可以分割的切片为$d_t/t + 1$。 也就是如上图所示，$i_{2,1}$就由于停留时间较久，所以分割成了三个切片。<br>然后其他的就如原始的<code>GRU4REC</code>一样了，但是作者在做对比实验室加入了<code>GRU4REC-SAMPLING</code>进行了一起对比：<br><img src="/img/Session-Based-Recommendation/gru4rec_dwell_exp.png" width="400px"><br>实验中显示，停留时间信息的加入对于模型的作用是非常巨大的。</p>
+<h2 id="HRNN">HRNN</h2><p>用户往往会存在多段不连续的Session（比如逛淘宝时，早上公交逛一次，中午午睡时逛一次，晚上睡前逛一次，这样就有三段Session序列，每一段内部是连续的），而之前的模型都是将这些Session行为都是独立训练的，文本中作者认为同一用户的不同Session间是有关联的，建模每一段Session可以发现用户的衍化。<br>所以作者提出了一种层次化的RNN序列建模，在每一段的<code>Session-Level</code>内部使用RNN建模的同时，会有一个<code>User-Level</code>的RNN来建模当前用户跨Session的行为，而<code>User-Level</code>的RNN的输入就是每一段<code>Session-Level</code>的final state。</p>
+<p>用户的所用行为表示为$$C^u = \{ S_1^u,S_2^u,…S_{M_u}^u \}$$ $S_m^u$代表一次完整的Session，其中$s_m^u$代表对应<code>Session</code>的<code>Representations</code>(也就是最终一个final state),则<code>User</code>级别的<code>Representations</code>为$$c_m = GRU_{usr}(s_m,c_{m-1}),m = 1,…,M_u$$</p>
+<p>所以这边<code>HRNN</code>的整个层次结构如图所示:<br><img src="/img/Session-Based-Recommendation/hrnn_arch.png"></p>
+<ul>
+<li>上面一层代表<code>Session-Level</code>的RNN，输入的是item，会对<code>next basket</code>进行预测，同时输出<code>final state</code></li>
+<li>下面一层代表<code>User-Level</code>的RNN，输入的是<code>Session-Level</code>的<code>final state</code>，用户维护当前用户在整个应用的行为建模，并且会将当前Session的state输出作为下一次Session的<code>init state</code></li>
+</ul>
+<p><img src="/img/Session-Based-Recommendation/hrnn_exp.png" width="600px"><br>主要对比的是原生的<code>GRU4REC</code>，性能大约有10%左右的提升，但是用的数据和<code>GRU4REC-Sampling</code>以及<code>GRU4REC-DWell</code>的不一样，感觉没有他们的提升多，并且在现实过程中，对于<code>Session</code>的划分也是需要很多的<code>trick</code>啊。</p>
+<h2 id="总结">总结</h2><p>其实<code>GRU4REC</code>在DL中是一个非常<code>straight-forward</code>的框架，但是他的厉害之处就是设计了<code>Mini-Batch</code>和<code>Sampling</code>将整个模型跑了起来并且起到了一定的效果,另外后面的几个改进中停留时间的改进以及层次的<code>Session</code>还是比较不错，并且可实用性高一些。</p>
+<h2 id="参考">参考</h2><ol>
+<li>Hidasi, Balázs, et al. “Session-based recommendations with recurrent neural networks.” arXiv preprint arXiv:1511.06939 (2015).</li>
+<li>Hidasi, Balázs, and Alexandros Karatzoglou. “Recurrent neural networks with top-k gains for session-based recommendations.” arXiv preprint arXiv:1706.03847 (2017).</li>
+<li>Bogina, Veronika, and Tsvi Kuflik. “Incorporating dwell time in session-based recommendations with recurrent Neural networks.” CEUR Workshop Proceedings. Vol. 1922. 2017.</li>
+<li>Quadrana, Massimo, et al. “Personalizing session-based recommendations with hierarchical recurrent neural networks.” Proceedings of the Eleventh ACM Conference on Recommender Systems. ACM, 2017.</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/" data-title="深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018/09/17/Deep Learning/eXtreme-Deep-Factorization-Machine/"  title="据说有RNN和CNN结合的xDeepFM">
+ <strong>下一篇：</strong><br/> 
+ <span>据说有RNN和CNN结合的xDeepFM
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GRU4REC"><span class="toc-number">2.</span> <span class="toc-text">GRU4REC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GRU4REC-Sampling"><span class="toc-number">3.</span> <span class="toc-text">GRU4REC-Sampling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GRU4REC-DWell"><span class="toc-number">4.</span> <span class="toc-text">GRU4REC-DWell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HRNN"><span class="toc-number">5.</span> <span class="toc-text">HRNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">7.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>8</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>39</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinfagang.gitlab.io" target="_blank" title="jinfagang&#39;s Blog">jinfagang&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

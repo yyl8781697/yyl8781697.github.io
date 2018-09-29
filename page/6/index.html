@@ -95,6 +95,87 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" title="机器学习常见算法个人总结（面试用）" itemprop="url">机器学习常见算法个人总结（面试用）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-15T23:40:29.000Z" itemprop="datePublished"> 发表于 2015-08-16</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><s>这个总结最初是写在本地的MacDown中的，他的markdown语法解析与hexo的略微有点差异，懒得改了-_-，忍着点看..</s><br>对排版看不下去了，将本文的公式使用<code>Latex</code>重写了^_^ .on 2016-04-15</p>
+</blockquote>
+<h2 id="朴素贝叶斯">朴素贝叶斯</h2><blockquote>
+<p>参考[1]</p>
+</blockquote>
+<p>事件<code>A</code>和<code>B</code>同时发生的概率为<code>在A发生的情况下发生B</code>或者<code>在B发生的情况下发生A</code><br>$$P(A \cap B) = P(A)*P(B|A) = P(B)*P(A|B)$$<br>所以有：<br>$$P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$$</p>
+<p>对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别</p>
+<h3 id="工作原理">工作原理</h3><ol>
+<li>假设现在有样本$x=(a_1,a_2,a_3,…a_n)$这个待分类项(并认为$x$里面的特征独立)</li>
+<li>再假设现在有分类目标$Y=\{y_1,y_2,y_3,y_4..y_n\}$</li>
+<li>那么$max(P(y_1|x),P(y_2|x),P(y_3|x)..P(y_n|x))$就是最终的分类类别</li>
+<li>而$P(y_i|x)=\frac{p(x|y_i)*P(yi)}{P(x)}$</li>
+<li>因为$x$对于每个分类目标来说都一样，所以就是求$max(P(x|y_i)*p(y_i))$</li>
+<li>$P(x|y_i)*p(y_i)=p(y_i)*\prod_i(P(a_i|y_i))$ </li>
+<li>而具体的$p(a_i|y_i)$和$p(y_i)$都是能从训练样本中统计出来<br> $p(a_i|y_i)$表示该类别下该特征出现的概率<br> $p(y_i)$表示全部类别中这个这个类别出现的概率</li>
+<li>好的，就是这么工作的^_^</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/08/16/Machine Learning/Common-Interview/" title="机器学习常见面试题整理" itemprop="url">机器学习常见面试题整理</a>
   </h1>
   <p class="article-author">By
@@ -693,78 +774,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/" title="找一个数组中绝对值和最小的三个元素" itemprop="url">找一个数组中绝对值和最小的三个元素</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-03T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>找一个数组中绝对值和最小的三个元素
-</code></pre><h2 id="解析">解析</h2><p>暴力的方法是O(n^3)，肯定还存在其他更加优的方法</p>
-<ol>
-<li>将数组升序排序</li>
-<li>固定一个数字，然后从两端开始找，如果sum&lt;0 则left++ 否则right—  同时记录最小的minSum<blockquote>
-<p>注意，两端向中间找的时候如果遇到当前固定的数字需要跳过</p>
-</blockquote>
-</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
@@ -795,7 +804,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>8</sup></a></li>
 		  
 		
 		  
@@ -880,7 +889,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>38</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>39</sup></a></li>
 			
 		
 			
@@ -900,7 +909,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>7</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>8</sup></a></li>
 			
 		
 			

@@ -2,8 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/</loc>
+    <lastmod>2018-09-29T06:06:49.583Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2017/06/05/Deep%20Learning/Dropout-in-Deep-Neural-Network/</loc>
+    <lastmod>2018-09-19T02:41:22.035Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/about/index.html</loc>
-    <lastmod>2018-09-18T03:49:30.881Z</lastmod>
+    <lastmod>2018-09-19T02:41:20.745Z</lastmod>
   </url>
   
   <url>
@@ -29,11 +39,6 @@
   <url>
     <loc>http://kubicode.me/2017/04/21/Deep%20Learning/Study-With-Deep-Structured-Semantic-Model/</loc>
     <lastmod>2018-01-22T02:41:35.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2017/06/05/Deep%20Learning/Dropout-in-Deep-Neural-Network/</loc>
-    <lastmod>2017-06-05T15:04:39.000Z</lastmod>
   </url>
   
   <url>

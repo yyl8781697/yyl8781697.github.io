@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2018-09-18T02:41:25.767Z</updated>
+  <updated>2018-09-29T06:06:49.583Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,102 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展]]></title>
+    <link href="http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/"/>
+    <id>http://kubicode.me/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/</id>
+    <published>2018-09-19T09:39:51.000Z</published>
+    <updated>2018-09-29T06:06:49.583Z</updated>
+    <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&gt; x_{N+1}$$<br>因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的<code>GRU4REC</code>利用<code>RNN-Based</code>对用户序列进行建模并且取得了不错的效果，同时也会有一些研究对于<code>GRU4REC</code>做了不少改进和扩展，本文主要对<code>GRU4REC</code>以及扩展做一些简答的自我了解和记录。</p>
+<a id="more"></a>
+<h2 id="GRU4REC">GRU4REC</h2><p><code>GRU4REC</code>是Session信息和GRU结合起来完成了推荐，他给定的场景是：</p>
+<blockquote>
+<p>用户在我们的应用上有一段行为<code>Session</code>（比如说点击item的需求），然后在于该Session信息来预测接下来可能会发生点击的item，而这笔的Session信息主要使用<code>GRU</code>模型来进行刻画：</p>
+</blockquote>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_arch.png" width="400px"></p>
+<ol>
+<li>这边第一步的输入是用户的行为序列: $[x_1,x_2,x_3,..,x_N]$</li>
+<li>这些行为序列可以接下来使用两种Embedidng表示，一种是<code>One-Hot</code>方式,另一种是在<code>One-Hot</code>接下来过一个Embedding层</li>
+<li>将所有的输入进行向量化表示之后，会过若干层的GRU(就是比较核心的序列化建模了)</li>
+<li>完成序列化建模之后再进行一个<code>Feedforward</code>的网络转换</li>
+<li><p>最终对下一个目标进行预测,这边的目标其实就是$x_{N+1}$</p>
+<blockquote>
+<p>(作者说这种方式性能好，但是我到觉得这种场景下<code>One-Hot</code>不是很合适，<code>One-Hot</code>在这边他的DIM会巨大，并且会特别的稀疏,可能还是查表的来的好)</p>
+</blockquote>
+</li>
+</ol>
+<p>其实<code>GRU4REC</code>的整个思路还是很清晰，模型也很简单，但是该算法中比较重要的应该是他的加速优化和LOSS的选择可能会有比较大的参考价值意义:</p>
+<p>为了能提高训练的效率，采用两种策略来进行训练的优化:</p>
+<ol>
+<li><p>使用<code>Mini-Batch</code>来进行训练:<br> <img src="/img/Session-Based-Recommendation/gru4rec_minibatch.png" width="400px"><br> 因为用户行为的Session有长有短，并且他的差异性很大，传统的滑窗方式来构建训练数据并不适用，他这里用的策略是将不同的<code>Session</code>给拼接了起来，在同一个序列中如果遇到下一次Session时，会将GRU中的向量参数给重新初始化掉，因为这边GRU是对Step进行预测，所以在序列中间直接初始化掉问题也不大，这样还可以提升数据的利用率，会比简单<code>PADDING</code>的方式更加的合适。</p>
+</li>
+<li><p>取巧的训练数据采样:<br> 原始的模型中是需要过softmax对于每个item都计算才能对目标的item进行训练，因为item的维度非常高，所以这里的计算量是超级大的。作者在这里比较机智的在目标的样本中根据<code>热门</code>程度进行了采样，采样完成之后将同一个<code>mini-batch</code>中但是是其他<code>Session</code>的next-item作为负样本。用这些正负样本来训练整个神经网络。下面这个图对于采样非常形象了：</p>
+</li>
+</ol>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_sampling.png" width="600px"></p>
+<p>因此这个模型现在已经转为对正负样本的一个<code>0-1</code>分类的问题,而且推荐里面，并不存在绝对的正负样本，用户也可能会对多个item存在偏好，所以这边比较合适<code>Loss Function</code>就是用<code>Pair-Wise</code>的模式了(只需要   正样本的score大于负样本即可):</p>
+<ol>
+<li><code>BPR(Bayesian Personalized Ranking)</code>:这是一种基于矩阵分解的损失函数，他的式子是:$$L_s = - \frac{1}{N_s} \cdot \sum_{j=1}^{N_s} \text{log}(\sigma(\hat{r}_{s,i} - \hat{r}_{s,j}))$$ $N_s$是样本量的大小，$\hat{r}_{s,i}$表示正样本的分数，$\hat{r}_{s,j}$表示负样本的分数</li>
+<li><code>TOP1</code>:这是种基于正则化方式的损失函数$$L_s = \frac{1}{N_s} \cdot \sum_{j=1}^{N_s} (\sigma(\hat{r}_{s,j} - \hat{r}_{s,i})) +\sigma(\hat{r^2_j})$$ 这种方式可以将$\hat{r}_{s,i}$的分数计算的更高，但是他同是也会是负样本，所以这边加了二范数来压制$\hat{r}$作为负样本时的分数</li>
+</ol>
+<p><code>GRU4REC</code>的实验结果也是蛮简单的,Baseline的实验不在这个表中，数据后面跟着的涨幅就是和Baseline的对比:<br><img src="/img/Session-Based-Recommendation/gru4rec_exp.png"><br>这边显示的也是<code>BPR</code>和<code>TOP1</code>这两种LOSS的效果会明显好于传统的交叉熵.</p>
+<p><code>GRU4REC</code>是较早的将序列行为和GRU进行结合，其中<code>LOSS</code>这块的构建还是非常值得借鉴的。</p>
+<blockquote>
+<p>该作者还开放了源码<a href="https://github.com/hidasib/GRU4Rec" target="_blank" rel="external">https://github.com/hidasib/GRU4Rec</a></p>
+</blockquote>
+<h2 id="GRU4REC-Sampling">GRU4REC-Sampling</h2><blockquote>
+<p>其中<code>GRU4REC-Sampling</code>和<code>GRU4REC</code>是同一个作者 ^_^</p>
+</blockquote>
+<p><code>GRU4REC-Sampling</code>也是在基于<code>GRU4REC</code>上的缺陷提出了额外的<code>Sampling</code>和新的<code>Loss Function</code><br>作者认为<code>GRU4REC</code>存在下面三种局限:</p>
+<ol>
+<li><code>BatchSize</code>一般都是比较小的，在总样本较多时，如果采样少的话，分数比较高的负样本被采样进来的概率就偏少了（这里高分数要用于下面的Loss） </li>
+<li><code>BatchSize</code>会影响运行速度，但是由于设计的是<code>Mini-Batch</code>并行的方式，所以增加<code>BatchSize</code>也不会对速度有多大的影响</li>
+<li>虽然<code>GRU4REC</code>用的是根据热度采样，但是实际中全根据热度也不一定适应所有数据集</li>
+</ol>
+<p>所以在<code>GRU4REC-Sampling</code>中又进行了额外的采样:同样是在<code>Mini-Batch</code>中进行采样，采样时根据这个公式$supp_i^\alpha$,而这边的$\alpha$是一个<code>0~1</code>的值，如果$\alpha=0$表示均匀采样，如果$\alpha=1$为完全的热门采样。</p>
+<p>另外<code>GRU4REC</code>中的<code>BPR</code>和<code>TOP1</code>会存在梯度的消失问题，因此作者设计了一种新的损失函数希望来最大化正样本的分数:$$L_{pairwise-max}(r_i,{r_j}_{j=1}^{N_s}) = L_{pairwise}(r_i,max_jr^j)$$<br>从这儿可以看出，新的损失函数是对<code>Max-Score</code>的负样本做pair，但是这种是不可求导了，所以作者用了一种近似的方式来实现,刚刚对<code>Max-Score</code>做负样本的方式可以转为<code>Score</code>越大，则<code>Loss</code>中的权重也越大，而这个权重可以用归一化的<code>softmax</code>来表示:$$s_i = \frac{e^{r_i}}{\sum_{j=1}^N e^{r_j}}$$<br>有了每个样本的权重表示之后，原先的<code>Loss Function</code>可以更改为:</p>
+<ol>
+<li><code>TOP1-MAX</code>:$$L_{top1-max} = \sum_{j=1}^{N_S}s_j(\sigma(r_j-r_i) + sigma(r_j^2))$$</li>
+<li><code>BPR-max</code>:$$L_{bpr-max} = -\text{log} \sum_{j=1}^{N_s} s_j \sigma(r_i,r_j)$$</li>
+</ol>
+<blockquote>
+<p>对比一下<code>GRU4REC</code>中的<code>Loss Function</code>，其实就是额外增加了一个$s_j$的权重值。</p>
+</blockquote>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_sampling_exp.png"><br>看下实验对比，额外的<code>Sampling</code>和新的<code>Loss Function</code>都还是有极大的提升的,惊呆。</p>
+<blockquote>
+<p>我个人感觉<code>Sampling</code>起这么大的作用应该是采样之后样本不足了，这是一个训练时间和模型性能上的权衡，那么我如果不采样是不是效果就更好了-_-!!</p>
+</blockquote>
+<h2 id="GRU4REC-DWell">GRU4REC-DWell</h2><p><code>GRU4REC-DWell</code>也是基于<code>GRU4REC</code>的一个简单的改进，其中<code>GRU4REC</code>已经证明在时序的推荐中序列化的建模非常有用。<br>另外作者认为在用户行为序列中，每个item的停留时间是非常重要的一个特征，而之前的<code>GRU4REC</code>算法只是用于简单的交互行为来构建样本，所以<code>GRU4REC-DWell</code>主要是很巧妙将用户在序列item上的停留时间和GRU4REC<code>结合了起来:</code></p>
+<p><img src="/img/Session-Based-Recommendation/gru4rec_dwell.png" width="400px"><br>这里主要的Idea就是在原始的用户行为中，作者根据item上面的停留时间根据阈值进行切片，如果停留时间长的可能会有很多个切片，每个切片都作为一个新的行为项:<br>给定一个行为序列的集合$X=\{x_1,x_2,…,x_n\}$,每一个$x_i$对应的停留时间为$dt_i$,其中$t$为切片的阈值，则$x_i$可以分割的切片为$d_t/t + 1$。 也就是如上图所示，$i_{2,1}$就由于停留时间较久，所以分割成了三个切片。<br>然后其他的就如原始的<code>GRU4REC</code>一样了，但是作者在做对比实验室加入了<code>GRU4REC-SAMPLING</code>进行了一起对比：<br><img src="/img/Session-Based-Recommendation/gru4rec_dwell_exp.png" width="400px"><br>实验中显示，停留时间信息的加入对于模型的作用是非常巨大的。</p>
+<h2 id="HRNN">HRNN</h2><p>用户往往会存在多段不连续的Session（比如逛淘宝时，早上公交逛一次，中午午睡时逛一次，晚上睡前逛一次，这样就有三段Session序列，每一段内部是连续的），而之前的模型都是将这些Session行为都是独立训练的，文本中作者认为同一用户的不同Session间是有关联的，建模每一段Session可以发现用户的衍化。<br>所以作者提出了一种层次化的RNN序列建模，在每一段的<code>Session-Level</code>内部使用RNN建模的同时，会有一个<code>User-Level</code>的RNN来建模当前用户跨Session的行为，而<code>User-Level</code>的RNN的输入就是每一段<code>Session-Level</code>的final state。</p>
+<p>用户的所用行为表示为$$C^u = \{ S_1^u,S_2^u,…S_{M_u}^u \}$$ $S_m^u$代表一次完整的Session，其中$s_m^u$代表对应<code>Session</code>的<code>Representations</code>(也就是最终一个final state),则<code>User</code>级别的<code>Representations</code>为$$c_m = GRU_{usr}(s_m,c_{m-1}),m = 1,…,M_u$$</p>
+<p>所以这边<code>HRNN</code>的整个层次结构如图所示:<br><img src="/img/Session-Based-Recommendation/hrnn_arch.png"></p>
+<ul>
+<li>上面一层代表<code>Session-Level</code>的RNN，输入的是item，会对<code>next basket</code>进行预测，同时输出<code>final state</code></li>
+<li>下面一层代表<code>User-Level</code>的RNN，输入的是<code>Session-Level</code>的<code>final state</code>，用户维护当前用户在整个应用的行为建模，并且会将当前Session的state输出作为下一次Session的<code>init state</code></li>
+</ul>
+<p><img src="/img/Session-Based-Recommendation/hrnn_exp.png" width="600px"><br>主要对比的是原生的<code>GRU4REC</code>，性能大约有10%左右的提升，但是用的数据和<code>GRU4REC-Sampling</code>以及<code>GRU4REC-DWell</code>的不一样，感觉没有他们的提升多，并且在现实过程中，对于<code>Session</code>的划分也是需要很多的<code>trick</code>啊。</p>
+<h2 id="总结">总结</h2><p>其实<code>GRU4REC</code>在DL中是一个非常<code>straight-forward</code>的框架，但是他的厉害之处就是设计了<code>Mini-Batch</code>和<code>Sampling</code>将整个模型跑了起来并且起到了一定的效果,另外后面的几个改进中停留时间的改进以及层次的<code>Session</code>还是比较不错，并且可实用性高一些。</p>
+<h2 id="参考">参考</h2><ol>
+<li>Hidasi, Balázs, et al. “Session-based recommendations with recurrent neural networks.” arXiv preprint arXiv:1511.06939 (2015).</li>
+<li>Hidasi, Balázs, and Alexandros Karatzoglou. “Recurrent neural networks with top-k gains for session-based recommendations.” arXiv preprint arXiv:1706.03847 (2017).</li>
+<li>Bogina, Veronika, and Tsvi Kuflik. “Incorporating dwell time in session-based recommendations with recurrent Neural networks.” CEUR Workshop Proceedings. Vol. 1922. 2017.</li>
+<li>Quadrana, Massimo, et al. “Personalizing session-based recommendations with hierarchical recurrent neural networks.” Proceedings of the Eleventh ACM Conference on Recommender Systems. ACM, 2017.</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="前言">前言</h2><p>用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&gt; x_{N+1}$$<br>因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的<code>GRU4REC</code>利用<code>RNN-Based</code>对用户序列进行建模并且取得了不错的效果，同时也会有一些研究对于<code>GRU4REC</code>做了不少改进和扩展，本文主要对<code>GRU4REC</code>以及扩展做一些简答的自我了解和记录。</p>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[据说有RNN和CNN结合的xDeepFM]]></title>
@@ -309,7 +405,7 @@
     <link href="http://kubicode.me/2017/06/05/Deep%20Learning/Dropout-in-Deep-Neural-Network/"/>
     <id>http://kubicode.me/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/</id>
     <published>2017-06-05T13:14:36.000Z</published>
-    <updated>2017-06-05T15:04:39.000Z</updated>
+    <updated>2018-09-19T02:41:22.035Z</updated>
     <content type="html"><![CDATA[<h2 id="Dropout_in_Deep_Network">Dropout in Deep Network</h2><p>在机器学习任务中一提到过拟合，<code>L1</code>和<code>L2</code>正则项绝对是两大利器，但是在深度神经网络中，<code>Hiton</code>老爷子在2014年提出了一种称为<code>Dropout</code>的方法来避免过拟合，方式对比<code>L1</code>和<code>L2</code>更为灵活也是非常高效。</p>
 <p>深度神经网络中，在不限制计算的条件下，最佳的正则化方式就是将所有可能组合成的模型进行平均输出，就类似<code>stack</code>的模型融合一样，但是这种方式存在两大问题:</p>
 <ol>
@@ -1809,208 +1905,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
       <category term="Python" scheme="http://kubicode.me/tags/Python/"/>
     
       <category term="Python" scheme="http://kubicode.me/categories/Python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[AdaBoost学习总结]]></title>
-    <link href="http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/"/>
-    <id>http://kubicode.me/2016/04/18/Machine Learning/AdaBoost-Study-Summary/</id>
-    <published>2016-04-18T12:30:55.000Z</published>
-    <updated>2016-09-08T03:58:57.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
-</blockquote>
-<h2 id="简介">简介</h2><p>痛点:大部分强分类器(<code>LR</code>，<code>svm</code>)分类效果还不错，但是可能会遇到过拟合问题，并且训练相对复杂，耗时~<br>另外大部分弱分类器(<code>阈值分类器</code>,<code>单桩决策树(decision stump)</code>等)，他们分类的效果差，可能是极差，只会出现欠拟合，但是他们训练预测快，很快~</p>
-<blockquote>
-<p><code>天下武功，唯快不破</code>，<code>做减法不易，但是做加法就相对简单了</code>^_^ 这就是<code>提升方法</code>.</p>
-</blockquote>
-<p><code>提升方法</code>需要解决的两个问题:</p>
-<ol>
-<li>在每一轮训练时如何改变数据的权值或概率分布?</li>
-<li>如何将弱分类器组合成一个强分类器?</li>
-</ol>
-<p><code>AdaBoost</code>对此进行了很好的解决:</p>
-<ol>
-<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
-<li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
-</ol>
-<a id="more"></a>
-<h2 id="前向分步算法">前向分步算法</h2><p>讲<code>AdaBoost</code>之前，就不得不提到<code>前向分步算法</code>,先来看一个加法模型:<br>$$f(x)=\sum_{m=1}^M \beta_m b(x;\gamma_m)$$其中:</p>
-<ul>
-<li>$b(x;\gamma_m)$表示基函数</li>
-<li>$\gamma_m$表示基函数的参数</li>
-<li>$\beta_m$表示基函数的系数</li>
-<li>最终加权求和之后形成最终的函数(强模型)</li>
-</ul>
-<p>假设损失函数为$L(y,f(x))$,则在训练$f(x)$时就是优化损失函数到最小化的问题:<br>$$\underset{\beta,\gamma}{min} \sum_{i=1}^N L\left( y_i,\sum_{m=1}^M \beta_m b(x;\gamma_m) \right)$$</p>
-<p>如果直接优化这个损失函数无疑是一个相当复杂的问题:里面嵌入有太多了函数了…，而<code>前向分步算法</code>的策略是:</p>
-<pre><code>如果从前往后每一步都是学习一个基函数以及系数，令其逐步逼近优化目标函数，那么复杂度就可以大大简化了<span class="attr_selector">[分而治之]</span>
-</code></pre><p>因此每一步只需要如下的损失函数即可:<br>$$\underset{\beta,\gamma}{min} \sum_{i=1}^N L \left( y_i,\beta b(x;\gamma) \right)$$</p>
-<p>下面就是<code>前向分步算法</code>的具体步骤:<br><strong>Input</strong>:</p>
-<ul>
-<li>训练数据集$T=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$，其中$y_i \in \{+1,-1\}$</li>
-<li>损失函数:$L(y,f(x))$</li>
-<li>基函数数量:$M$</li>
-<li>基函数集合$\{b(x;\gamma_m)\}$</li>
-</ul>
-<p><strong>Output</strong>:</p>
-<ul>
-<li>加法模型$f(x)$</li>
-</ul>
-<p><strong>procedure</strong>:</p>
-<ol>
-<li>初始化$f_0(x)=0$</li>
-<li>循环$m \in \{1….M\}$<ol>
-<li>最小化基函数损失函数:$$\underset{\beta_m,\gamma_m}{argmin} \sum_{i=1}^N L\left( y_i,\beta_m b(x;\gamma_m) \right)$$</li>
-<li>更新加法模型:$$f_m(x)=f_{m-1}(x)+\beta_m b(x;\gamma_m)$$</li>
-</ol>
-</li>
-<li>最终得到加法模型:$$f(x)=f_M(x)=\sum_{m=1}^M \beta_m b(x;\gamma_m)$$</li>
-</ol>
-<p><code>前向分步算法</code>通过分而治之的方式求得了损失函数值最小的<code>加法函数</code></p>
-<blockquote>
-<p>整个算法的学习过程可以有很大的想象空间^_^</p>
-</blockquote>
-<h2 id="AdaBoost算法逻辑">AdaBoost算法逻辑</h2><p>上面一小节介绍了<code>前向分步算法</code>，但是留下来三个问题:</p>
-<ol>
-<li>对其损失函数$L(y,f(x))$有啥要求?</li>
-<li>基函数的系数$\beta$又是怎么计算的?</li>
-<li>基函数$b(x;\gamma)$如何设计比较合理?</li>
-</ol>
-<p><code>AdaBoost</code>正是对此进行一一填坑，它使用<code>指数损失函数</code>、<code>根据分类错误类来计算基函数系数</code>和  。。  基函数到没有指定，不过一般使用<code>阈值函数</code>或者<code>单桩决策树</code>来作为基函数</p>
-<blockquote>
-<p>因此也可认为<code>AdaBoost</code>是模型为加法模型、损失函数为指数函数、学习算法为前向分步算法的二分类学习方法.</p>
-</blockquote>
-<p>先来看下<code>AdaBoost</code>的算法逻辑图:</p>
-<p><center><img src="/img/AdaBoost-Study-Summary/exec.png" width="400px"></center></p>
-<blockquote>
-<p>说明:此图来自<code>PRML Fig14.1</code>[2]，本文的数学符号主要采用[1]的风格，因此有:$y_m(x)\rightarrow G_m(x)$、$Y_M(x) \rightarrow G(x)$</p>
-</blockquote>
-<p>从图中大致可以发现<code>AdaBoost</code>依次训练多个弱分类器，每个分类器训练完成之后产出一个权重给予下个分类器，下个分类器在此权重上继续进行训练，全部训练完成之后根据弱分类器的系数组合成强分类器，也就是最终的分类模型~</p>
-<p>下面就是<code>AdaBoost</code>的具体步骤:<br><strong>Input</strong>:</p>
-<ul>
-<li>训练数据集$T=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$，其中$y_i \in \{+1,-1\}$</li>
-<li>弱分类器数量:$M$</li>
-<li>弱分类器集合$\{G_m(x)\}$</li>
-</ul>
-<p><strong>Output</strong>:</p>
-<ul>
-<li>最终模型$G(x)$  （注意：<code>产出的最终模型并不直接是加法模型哦</code>~）</li>
-</ul>
-<p><strong>procedure</strong>:</p>
-<ol>
-<li>初始化训练权值的分布:$$D_1=(w_{1,1},\cdot \cdot \cdot , w_{1,i},\cdot \cdot \cdot ,w_{1,N}),w_{1,i}=\frac{1}{N}$$<blockquote>
-<p>ps.其实初始化还有其他方式的 such as:初始化为$\frac{0.5}{N_+}$和$\frac{0.5}{N_-}$，其中$N_+$和$N_-$分别代表正负样本的数量，有$N=N_++N_-$</p>
-</blockquote>
-</li>
-<li>循环$m \in \{1….M\}$<ol>
-<li>使用带权重分布$D_m$的训练集进行训练，得到基本的弱分类器:$G_m(x)$</li>
-<li>计算$G_m(x)$在训练数据集上的分类误差率:$$e_m=P(G_x(x) \neq y_i) = \sum_{i=1}^N w_{m,i} I(G_m(x_i) \neq y_i)$$其中$$ I(G_m(x_i) \neq y_i)=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad G_m(x_i) = y_i \\<br>1 &amp; \quad if \quad G_m(x_i) \neq y_i\\<br>\end{aligned}<br>\right.$$<blockquote>
-<p>其实就是<code>错误率</code>:分错样本数量占总样本量的比例.</p>
-</blockquote>
-</li>
-<li>计算$G_m(x)$的系数:$$\alpha_m = \frac{1}{2} ln \frac{1-e_m}{e_m}$$</li>
-<li><strong>更新训练数据集的权值分布(这点是核心)</strong>:$D_{m+1}=(w_{m+1,1},\cdot \cdot \cdot , w_{m+1,i},\cdot \cdot \cdot ,w_{m+1,N})$<br>其中:$$w_{m+1,i} = \frac{w_{m,i}}{Z_m} e^{-\alpha_m y_i G_m(x_i)}$$ 这里$Z_m$为规范化因子:$$Z_m = \sum_{i=1}^{N} w_{m,i} e^{-\alpha_m y_i G_m(x_i)}$$</li>
-</ol>
-</li>
-<li>构建加法模型:$$f(x)=\sum_{m=1}^M \alpha_m G_m(x)$$产出最终的分类器:$$G(x)=sign(f(x))=sign\left( \sum_{m=1}^M \alpha_m G_m(x) \right)$$其中:$$sign(f(x))=\left\{<br>\begin{aligned}<br>-1 &amp; \quad if \quad f(x) &lt; 0 \\<br>1 &amp; \quad if \quad f(x) \geq 0\\<br>\end{aligned}<br>\right.$$</li>
-</ol>
-<p>对算法过程中几个重要的点进行一个简单的解释:</p>
-<ul>
-<li><p>分类器误差率$e_m$对其权重$\alpha_m$的影响:<br><center><img src="/img/AdaBoost-Study-Summary/alpha.png" width="400px"></center><br>从图中可以发现:</p>
-<ol>
-<li>$e_m$为0.5时其权重$\alpha_m$为0，表示此分类器在最终模型中不起任何作用</li>
-<li>$e_m &lt; 0.5$时其$\alpha_m &gt; 0$，表示对最终模型起正向作用,$e_m$的值越小，起到的作用越大</li>
-<li>$e_m &gt; 0.5$时其$\alpha_m &lt; 0$，表示对最终模型起父向作用，$e_m$的值越大,起到的负作用也越大</li>
-<li>$e_m$不会出现等于0 的情况，因为到了0的时候弱分类器已经全部分正确，也不需要继续更新权重再次训练了</li>
-<li>$e_m$也不会出现等于1的情况，因为1表示弱分类器全错，除了程序出问题，应该任何一个弱分类器不会训练到全错的情况吧^_^</li>
-</ol>
-</li>
-<li><p>数据权重的更新策略:<br>原始的更新策略是这样的:$$w_{m+1,i} = \frac{w_{m,i}}{Z_m} e^{-\alpha_m y_i G_m(x_i)}$$原始标签$y_i$和弱分类器结果的输出$G_m(x)$都是$\{+1,-1\}$二值，因此可以将上述更新方式写成:$$w_{m+1,i}=  \left\{<br>\begin{aligned}<br>\frac{w_{m,i}}{Z_m} \times e^{\alpha_m} &amp; \quad if \quad y_i \neq G_m(x)\\<br>\frac{w_{m,i}}{Z_m} \times \frac{1}{e^{\alpha_m}} &amp; \quad if \quad y_i = G_m(x)\\<br>\end{aligned}<br>\right.$$</p>
-<blockquote>
-<p>观察$w_{m+1,i}$更新时三个元素均恒大于0（$w_{m,i}$可以从$w_1$开始推），因此$w_{m+1,i}$也是恒大于0 ，并且$\sum_{i=1}^N w_{m,i}=1$<br>我们将分类错误率小于0.5的弱分类器称为好分类器，其系数$\alpha_{good}&gt;0$，同时将分类错误率小于0.5的弱分类器称为坏分类器，则其系数$\alpha_{had}&lt;0$，则再观察变形了的权重更新:</p>
-</blockquote>
-</li>
-</ul>
-<ol>
-<li>如果当前分类器是好分类器，样本$(x_i,y_i)$被错误分类时,$e^{\alpha_m} &gt; 1$,其$w_{m+1,i}$将会被放大，反之正确分类样本的权值将会被缩小</li>
-<li>如果当前分类器为坏分类器，样本$(x_i,y_i)$被错误分类时,$e^{\alpha_m} &lt; 1$,其$w_{m+1,i}$将会被缩小，反之正确分类样本的权值将会被放大<blockquote>
-<p>这其实应该与误分类样本的权值被放大$e^{2\alpha_m}=\frac{e_m}{1-e_m}$倍一个道理，因为$\frac{e_m}{1-e_m}$不一定恒大于1啊~^_^</p>
-</blockquote>
-</li>
-</ol>
-<ul>
-<li>弱分类器的权重系数$\alpha_m$:<br>这个权重系数表示了弱分类器$G_m(x)$的重要性，但是$a_m$之和并不为1，另外$G_m(x)$输出的是-1或者1的分类，所以最终模型可以看做一个加权的投票系统^_^</li>
-</ul>
-<h2 id="AdaBoost-最小化指数误差">AdaBoost-最小化指数误差</h2><p>假如<code>AdaBoost</code>使用的是指数损失函数，则其损失函数为:$$L(y,f(x))=\sum_{i=1}^N e^{-y_if(x)}$$为了优化其损失函数，<code>AdaBoost</code>采用了前向分步算法进行逐步优化,第<code>m</code>轮的迭代需要得到的$\alpha_m$,$G_m$和$f_m(x)$，其中有$$f_m(x)=f_{m-1}(x)+\alpha_m G_m(x)$$，假设前面的$f_{m-1}(x)$已经为最优，则当前需要优化的是:<br>$$L(y,f_m(x))=\sum_{i=1}^N e^{-y_i(f_{m-1}(x)+\alpha_m G_m(x))}$$因为有$\bar{w}_{m,i}=e^{-y_if(x)}$（关于这个式子的成立并不是很理解-_-）所以上述优化目标可以写为$$L(y,f_m(x))= \sum_{i=1}^N \bar{w}_{m,i} e^{-y_i\alpha_m G_m(x)}$$<br>因为我们求的是关于$\alpha_m$和$G_m(x)$的最优化，所以$\bar{w}_{m,i}$相对来说就是常量了.现在假设第$m$轮迭代中有$T_m$个样本分类正确，有$M_m$个样本分类错误，则其优化目标又可以写为:<br>$$\begin{equation}\begin{split} L(y,f_m(x))&amp;=e^{-\alpha_m} \sum_{n \in T_m} w_{m,n}+e^{\alpha_m} \sum_{n \in M_m} w_{m,n}\\<br>&amp;= \left( e^{-\alpha_m} \sum_{n \in T_m} w_{m,n} + e^{-\alpha_m} \sum_{n \in M_m} w_{m,n} \right)+ \left( e^{\alpha_m} \sum_{n \in M_m} w_{m,n} - e^{-\alpha_m} \sum_{n \in M_m} w_{m,n} \right) \\<br>&amp;= e^{-\alpha_m} \sum_{i=1}^N w_{m,i} + (e^{\alpha_m}-e^{-\alpha_m}) \sum_{n=1}^N w_{m,i}I(y_i \neq G_m(x_i))<br>\end{split}\end{equation}$$</p>
-<p>接下来惯例的方法就是对$L(y,f_m(x))$求$\alpha$和$G_m(x)$的偏导数，其实在求$G_m(x)$最优时可以发现可以发现第一项和第二项前面的系数并不影响最优化，所以需要求的就是上面步骤中<code>误差率</code>的最优化:$$e_m=P(G_x(x) \neq y_i) = \sum_{i=1}^N w_{m,i} I(G_m(x_i) \neq y_i)$$<br>而得到了最优的$G_m(x)$之后代入$L(y,f_m(x))$求偏导又可以得到最小的$\alpha_m$为:$$\alpha_m = \frac{1}{2} ln \frac{1-e_m}{e_m}$$<br>又是一面熟悉的场景^_^<br>所以可以说<code>AdaBoost</code>整个过程是一直在优化最新函数的指数误差，只是在实际训练时按<code>前向分步算法</code>只需优化当前的误差率即可.</p>
-<h2 id="AdaBoost训练误差分析">AdaBoost训练误差分析</h2><pre><code>这里的边界是我自己的理解，与<span class="attr_selector">[1]</span>稍有区别
-</code></pre><p>上一小节我们知道在每一步求$\sum_{i=1}^N w_{m,i} I(G_m(x_i) \neq y_i)$的最小化时，其实是在优化最终模型的损失函数$\sum_{i=1}^N e^{-y_if(x)}$,关于模型最终的损失函数有这样一个界限:<br>$$\frac{1}{N} \sum_{i=1}^N I(f(x) \neq y_i) \leq \frac{1}{N} \sum_{i=1}^N e^{-y_if(x)} =  \prod_m Z_m$$<br>因为$e^{-y_if(x)}$一定不会小于0，并且当$f(x) \neq y_i$时，$e^{-y_if(x)}$恒大于1，因此第一、二项的不等式是成立的。接下来看后面的那个等式：</p>
-<blockquote>
-<p>这里的推导需要用到$Z_m$的变形:$w_{m,i}e^{-\alpha_my_iG_m(x)} = Z_mw_{m+1,i}$</p>
-</blockquote>
-<p>$$\begin{equation}\begin{split} \frac{1}{N} \sum_{i=1}^N e^{-y_if(x)} &amp;= \frac{1}{N} \sum_{i=1}^N e^{-\sum_{m=1}^M \alpha_my_iG_m(x_i)} \\<br>&amp;= \sum_{i=1}^N w_{1,i} \prod_{m=1}^M e^{-\alpha_m y_i G_m(x_i)} \\<br>&amp;= Z_1 \sum_{i=1}^N w_{2,i} \prod_{m=2}^M e^{-\alpha_my_iG_m(x_i)} \\<br>&amp;= Z_1 Z_2 \sum_{i=1}^N w_{3,i} \prod_{m=2}^M e^{-\alpha_my_iG_m(x_i)} \\<br>&amp;… \\<br>&amp;= Z_1 Z_2 … Z_{m-1}\sum_{i=1}^N w_{M,i}  e^{-\alpha_My_iG_M(x_i)} \\<br>&amp;= \prod_{m=1}^M Z_m<br>\end{split}\end{equation}$$</p>
-<p>因此可以发现最优化(最小化)损失函数可以降低最终模型的错误率，同时其错误率与$Z_m$也是有关系的.</p>
-<h2 id="AdaBoost黑科技">AdaBoost黑科技</h2><h3 id="Real_AdaBoost">Real AdaBoost</h3><p>上面的<code>AdaBoost</code>的介绍中可以发现$G_m(x)$返回的是-1 或者1 （也就是直接离散值），其实这种方式的返回始终会有一定的<code>gap</code>，那么假如$G_m(x)$输出的是$p(x)=P(y=1|x)$,也就是$x$特征下输出值为1的概率.此时我们最优化的函数为:$$e^{-y \left(f_{m-1}(x)+G_m(p(x) \right)}$$而$G_m(x)=\frac{1}{2} ln \frac{x}{1-x}$<br>这种方式将会修复一定的<code>gap</code>，并且在某些实验中效果也是要好于直接离散的<code>AdaBoost</code></p>
-<h3 id="提前终止">提前终止</h3><p>一般情况下是弱分类器训练$M$个才停止，而提前终止只是在训练多个层之后组成的最终分类器的结果已经小于一个置信度的误差，有一种方法可以加快这种判断:</p>
-<ol>
-<li>一般训练数据里面负样本会远多于正样本</li>
-<li>在多个级联的弱分类器在被训练之后，如果正样本被误分为负样本了，则人工将这样正样本进行标记并去去除（质量差的）</li>
-<li>那么如果每一轮都是有50%的负样本被监测去重，那么久可以大大减小计算量</li>
-<li>最终看假阳性和假阴性来判断是否终止</li>
-</ol>
-<blockquote>
-<p>这种方式靠谱吗？要不就是我理解/翻译错了</p>
-</blockquote>
-<p>这种提前终止的方法可以降低过拟合的可能性^_^</p>
-<h3 id="剪枝">剪枝</h3><p>剪枝指的是去除性能较差的弱分类器，提升效率。最简单的方法是:每个弱分类器都自己的系数和测试误差率极其分布，<code>margineantu</code>则提出的建议为:</p>
-<ol>
-<li>弱分类器的选择应该分类多样性</li>
-<li>如果两个弱分类器很相似，则可以将其中一个给去掉,同时增加相似弱分类器的系数(这里其实就是相当于剪枝了)</li>
-</ol>
-<h2 id="总结">总结</h2><p><code>AdaBoost</code>秉承<code>三个凑皮匠，顶个诸葛亮</code>的原则，与其说<code>AdaBoost</code>是一个机器学习算法，我更觉得他应该是一个经典的机器学习框架，其优点有:</p>
-<ol>
-<li>可以较为方便的控制过拟合(不能说避免过拟合，在弱分类器很强的情况下还真会过拟合的吧？看$GBRT$)</li>
-<li>有非常强的自适应性</li>
-<li>如果弱分类器很简单，则训练预测速度将会很快，毕竟最终复杂度是在弱分类器上乘以$M$</li>
-<li>分类效果好，实现简单</li>
-<li>可扩展性强~弱分类器可以随意换，甚至损失函数也可以换(比如换最小平方误差)</li>
-</ol>
-<p>当然也有缺点:</p>
-<ol>
-<li>相邻两个分类器训练有依赖关系，所以在并行实现下还是需要精心设计。</li>
-</ol>
-<h2 id="参考:">参考:</h2><p>[1] 《统计学习方法》.李航.第八章<br>[2] 《Pattern Recognition And Machine Learning》.Christopher Bishop.chapter 14<br>[3]  <a href="https://en.wikipedia.org/wiki/AdaBoost" target="_blank" rel="external">https://en.wikipedia.org/wiki/AdaBoost</a></p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>三个凑皮匠，顶一个诸葛亮</code>，打一算法:<code>AdaBoost</code><br>本文是自己对<code>AdaBoost</code>的理解，健忘-_-!! 故记录在此.</p>
-</blockquote>
-<h2 id="简介">简介</h2><p>痛点:大部分强分类器(<code>LR</code>，<code>svm</code>)分类效果还不错，但是可能会遇到过拟合问题，并且训练相对复杂，耗时~<br>另外大部分弱分类器(<code>阈值分类器</code>,<code>单桩决策树(decision stump)</code>等)，他们分类的效果差，可能是极差，只会出现欠拟合，但是他们训练预测快，很快~</p>
-<blockquote>
-<p><code>天下武功，唯快不破</code>，<code>做减法不易，但是做加法就相对简单了</code>^_^ 这就是<code>提升方法</code>.</p>
-</blockquote>
-<p><code>提升方法</code>需要解决的两个问题:</p>
-<ol>
-<li>在每一轮训练时如何改变数据的权值或概率分布?</li>
-<li>如何将弱分类器组合成一个强分类器?</li>
-</ol>
-<p><code>AdaBoost</code>对此进行了很好的解决:</p>
-<ol>
-<li><code>分而治之</code>:将前一轮分错的样本加大权重，迫使在第二轮中对这些样本尽量分对，同时减少分对样本的权重.</li>
-<li><code>加权多数表决</code>:加大错误率小的弱分类器的权重，使其在最终表决中占较大作用，同时减少错误率较大的弱分类器的权重.</li>
-</ol>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
   </entry>
   
