@@ -2,8 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/</loc>
+    <lastmod>2019-01-24T11:54:58.576Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/</loc>
-    <lastmod>2018-09-29T06:06:49.583Z</lastmod>
+    <lastmod>2019-01-24T11:05:16.328Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2019/01/16/Deep%20Learning/Collaborative-Filtering-Meet-to-Deep-Learning/</loc>
+    <lastmod>2019-01-24T11:05:14.124Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/</loc>
+    <lastmod>2018-10-23T02:31:25.873Z</lastmod>
   </url>
   
   <url>
@@ -179,11 +194,6 @@
   <url>
     <loc>http://kubicode.me/2015/05/31/Mac/My-Tools-Used-In-Mac/</loc>
     <lastmod>2016-04-16T12:15:58.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2016/02/12/Algorithm/The-One-Occur-in-Bitnum/</loc>
-    <lastmod>2016-04-12T15:20:11.000Z</lastmod>
   </url>
   
   <url>

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2018-09-29T06:06:49.583Z</updated>
+  <updated>2019-01-24T11:05:14.124Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -15,11 +15,253 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[当协同过滤(Collaborative Filtering)遇上深度学习]]></title>
+    <link href="http://kubicode.me/2019/01/16/Deep%20Learning/Collaborative-Filtering-Meet-to-Deep-Learning/"/>
+    <id>http://kubicode.me/2019/01/16/Deep Learning/Collaborative-Filtering-Meet-to-Deep-Learning/</id>
+    <published>2019-01-16T10:13:46.000Z</published>
+    <updated>2019-01-24T11:05:14.124Z</updated>
+    <content type="html"><![CDATA[<h2 id="介绍">介绍</h2><p>协同过滤(Collaborative Filtering,简称<code>CF</code>)是Amazon在2001年提出的应用于推荐领域的一个算法，至今各大家的推荐系统中都能见到协同过滤的影子，是推荐领域最经典的算法之一<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/cf.png" width="600px"></p>
+<p>在实际场景中可以将用户对于<code>Item</code>的评分/购买/点击等行为 形成一张user-item的矩阵，单个的<code>User</code>或者<code>Item</code>可以通过对于有交互的<code>Item</code>和<code>User</code>来表示(最简单的就是<code>One-Hot</code>向量)，通过各种相似度算法可以计算到<code>User2User</code>、<code>Item2Item</code>以及<code>User2Item</code>的最近邻，先就假设按<code>User2Item</code>来说:<br><a id="more"></a></p>
+<ol>
+<li>和你购买相似宝贝的用户,其实和你相近的，也同时认为你们的习惯是相似的，</li>
+<li>因此他们买的其他的宝贝你也是可能会去够买的，这批宝贝就可以认为和你相似的</li>
+</ol>
+<p>这种场景就非常使用与推荐系统非常匹配了，并且可解释性<code>极强</code>。<br>但是传统的<code>CF</code>会存在这两个问题:</p>
+<ol>
+<li>往往这个矩阵会非常<code>稀疏</code>，大部分稀疏程度在95%以上，甚至会超时99%，这样在计算相似度时就非常不准确了（置信度很低）</li>
+<li>整个求最近邻过程中会引入很多<code>Trick</code>，比如平滑、各种阈值等,最终将<code>CF</code>拿到效果还是比较难的。</li>
+<li>另外还有一个就是<code>冷启动</code>的问题，新用户或者新的item没法直接使用这种方式来计算</li>
+</ol>
+<p>因此后来针对<code>CF</code>提出了不少的优化，主要是对于<code>User/Item</code>的表示从<code>one-Hot</code>的方式想办法转为稠密的方式，假设原生的矩阵我们称之为$R$，如果存在<br>$$\tilde{R} = UV^T$$</p>
+<blockquote>
+<p>$R=[M,N],U=[M,K],V=[N,K]$,其中$M$为用户量，$N$为Item量</p>
+</blockquote>
+<p>并且使得$\tilde{R} \approx  R$,那么我们可以使用$U$来代表用户矩阵，$V$来代表item矩阵，此时每个用户或者item都可以使用一个$K$维来表示，也就是隐向量，他是一个稠密向量，对于one-hot有不少的优势，同时在整个模型中还可以加入其它特征信息，这就是景点的矩阵分解方式(<a href="https://en.wikipedia.org/wiki/Matrix_factorization_(recommender_systems" target="_blank" rel="external">Matrix Factorization</a>，简称<code>MF</code>)，同时对于<code>MF</code>也有不少优化,比如<a href="https://arxiv.org/pdf/1205.2618.pdf" target="_blank" rel="external">BPR</a>以及最新的MF算法<a href="https://arxiv.org/pdf/1708.05024.pdf" target="_blank" rel="external">ELAS</a></p>
+<p>一般来说，<code>MF</code>模型得到<code>User</code>和<code>Item</code>的向量之后就可以对这两个向量计算相似度来得到最终的结果，比如我们使用内积的方式:<br>$$y = f(u,i|U_u,V_i) = U_uV_i^T = \sum_{k=1}^K U_{u,k}V_{i,k}$$<br>但是其实由于参数空间和隐向量长度$K$限制的问题，对于<code>MF</code>隐向量之间相似度的结果和原生<code>User-Item</code>具体的相似度可能会出现不一致的情况，因此现在的DL盛行的时代，都想在这两个向量上再做一波<code>猛如虎</code>的操作再计算最终的结果，就是本文接下来要说的那些个模型，权当对于<code>CF</code>的最新进展进行一个同步学习:<br>他们的Task都是可以简化为，给定一个<code>User-Item</code>交互矩阵:<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/user_item.png" width="200px"></p>
+<p>当特定的<code>User</code>和<code>Item</code>输入下计算他们的得分.<br>$$s = f(u,i|R,\theta) $$</p>
+<h2 id="NeuCF">NeuCF</h2><p>针对MF算法最后通过内积聚合来得到算分的方式，这篇文章的作者认为<code>User</code>和<code>Item</code>的隐向量是相互独立的并且最后是等权重求和，因此他可以使用线性模型来表示，这样支持继续使用神经网络模型来进行加工，所以作者提出了基于神经网络的协同过滤（Neural Collaborative Filtering），说白了就是在隐向量上架MLP层和其他的聚合算子，其中隐向量是通过DL模型自己训练出来的：<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/neucf_arch.png" width="600px"><br>模型主要分两个子模块：GMF（左侧）和 NCF（右侧）:</p>
+<ol>
+<li><code>GMF</code>：<code>User</code>和<code>Item</code>的隐向量直接通过element-wise的相乘来进行聚合：$$h_{GMF} = \phi(p_u,q_i) = p_u \odot q_i$$</li>
+<li><code>NCF</code>:<code>User</code>和<code>Item</code>的隐向量先进行concat操作，然后过多层的MLP，得到聚合的向量：$$h_{NCF} = \text{mlp}([p_u,q_i],\theta)$$</li>
+<li>最后使用concat的方式将两个子模块进行融合$$\hat{y} = \sigma(W^T[h_{GMF},h_{NCF}])$$</li>
+</ol>
+<p>由于模型是有两部分组成，因此作者在先使用<code>GMF</code>和<code>NCF</code>分别训练模型，作为pre-train，然后再合并起来将<code>NeuCF</code>模型一起训练，来提升模型的性能<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/neucf_exp.png"></p>
+<blockquote>
+<p><code>Factor</code>表示模型预测的数量</p>
+</blockquote>
+<p>这里<code>GMF</code>和<code>MLP</code>(NCF)是他的两个子模型，实验结果也可以看到合并起来之后的模型效果要好于子模型，通过也要好于最新的<code>eALS</code>算法。同时作者还，对比了pre-train的效果，确实有不少的提升，具体细节尅看paper。</p>
+<p>评一下：整个模型架构简单易懂，使用DL将隐向量做深度的交叉操作，可以继续压榨模型的性能，同时对于该模型用于线上也有很大的可行性。另外关于pre-train部分是否可以使用MF矩阵分解来作为初始化向量会不会更加来的直观一点。</p>
+<h2 id="DMF">DMF</h2><p><code>DMF</code>(Deep Matrix Factorization)的作者受到了<a href="http://kubicode.me/2017/04/21/Deep%20Learning/Study-With-Deep-Structured-Semantic-Model/" target="_blank" rel="external">DSSM</a>模型的启发:<br><code>DSSM</code>中是通过Query对多个Item经过NN网络之间他们的Embedding来计算相似度，作为他们的语义相似，那么这推荐场景下可以迁移为User对于多个Item来计算行为相似度?<br>因此可以看图:<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/deepmf_arch.png" width="600px"></p>
+<p>其实这个模型已经很清楚了:</p>
+<ol>
+<li>需要训练的数据就是这个用户评分矩阵，这里的训练目标是训练用户的评分</li>
+<li>用$Y_{i*}$来表示用户的向量，用$Y_{j*}$来表示item的向量</li>
+<li>他们分别过两个不同的<code>MLP</code>层:$$p_i = f_{\theta_N^U}(…f_{\theta_3^U}(W_{U2}f_{\theta_2^U}(Y_{i*W_{U1}}))…) \\ q_i = f_{\theta_N^I}(…f_{\theta_3^I}(W_{I2}f_{\theta_2^I}(Y_{i*W_{I1}}))…)$$</li>
+<li>然后对于$p_i$和$p_j$就是用户和item的向量表示，对这两个向量通过cosine求相似度:$$\hat{Y}_{i,j} = F^{DMF}(u_i,v_j|\Theta) = cosine(p_i,q_j) = \frac{p_i^Tq_j}{||p_i|| ||q_j||}$$</li>
+<li>最终是使用了一个带权重偏置的交叉熵来优化目标:$$L=-\sum \frac{Y_{i,j}}{\max{R}} \log{\hat{Y}_{_i,j}} + (1-\frac{Y_{i,j}}{\max{R}}) \log(1-{\hat{Y}_{_i,j}}) $$</li>
+</ol>
+<p>先来说说这个<code>Loss</code>，里面的$R$为评分的最大值（如果标准的1~5分中$R=5$），因为刚刚说了他其实是要预测分数，分数会有1~5，但同时会有0分，所以这个Loss下当$Y={1~5}$时，他其实是一个将回归问题归一化到0~1的分类问题，当$Y=0$时，他就是一个不折不扣的二分类问题，所以说这个任务下选择这个Loss其实是是挺合适的。</p>
+<p>整个模型其实还是很好理解的，看下他的实验结果:<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/deepmf_exp.png"><br>主要对于<code>NeuMF</code>算法，还是有一些些提升的，但是从模型的架构来看，<code>DMF</code>出来除了使用两个单独的MLP，其他与<code>NeuMF</code>的差异并没有很大，模型还是<code>NeuMF</code>更加复杂嘞，个人感觉如果<code>NeuMF</code>使用了pre-train，<code>DMF</code>说不定还无法超过…，同时看了loss改进的提升并不是很多（不过比较符合正常情况-_-）</p>
+<p>这里再对比一下DSSM：</p>
+<ol>
+<li>一个比较大的区别是DSSM的query和title都是word，都是他的网络是共享的，但是DMF里面其实并不是共享的（我之前的经验，不共享的情况下效果大大折扣。。。)</li>
+<li>我觉得DSSM里面最重要的一个点是<code>Pair-Wise</code>的loss学习，但是<code>DMF</code>里面作者也说了，本文用的是<code>PointWise</code>的Loss，对于<code>Pair-Wise</code>的Loss在feature work中使用-_-!!</li>
+</ol>
+<!-- Personalized Neural Embeddings for Collaborative Filtering with Unstructured Text  这篇paper好像根本没发表  暂时不写了  晦涩
+## CoMem
+上文有也提到，这边`CF`最终希望解决的是在给定`User`和`Item`的情况下来计算一个score，当然除了之前`User-Item`矩阵，其实我们还可以引入其他信息。
+因此这篇的作者将`User`和`Item`互动的非结构化文本引入到了模型里面，比如评价评分场景,既有评价的分数，也有评价的文本，所以作者在`CF`模型里面结合近两年比较热门的`Memory Network`。
+
+对于`Memory Network`最经典的QA应用中，这里的推荐系统也可以进行类似的映射：
+1. `Question`是用户会采用哪一个推荐的Item
+2. 而非结构化的文本就是对应的`Story`
+3. 其`query`就是User和Item的交互情况
+-->
+<h2 id="CMN">CMN</h2><p>传统的矩阵分解和基于DL-embedding的CF方法都是从全局的<code>User-Item</code>矩阵出发，都是只考虑的全局的矩阵。<br>而CMN（<code>Collaborative Memory Network</code>）的作者针对给定<code>User</code>和<code>Item</code>在算法时，根据<code>Item</code>得到<code>User</code>的最近邻出发，使用最近邻的Embedding来作为局部信息用于<code>CF</code>中，而这里求最近邻的Embedding使用了<code>Memory Network</code>来解。<br>模型结构还是挺漂亮的：<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/cmn_arch.png"><br>模型主要是分为<code>Glolab</code>信息和<code>Local</code>信息，<code>Glolab</code>和上面两篇文章说的大同小异，上面的结构图主要是通过<code>Memory Network</code>结构来说明<code>Local</code>信息的使用：<br>整个网络中有三个矩阵:</p>
+<ol>
+<li>用户矩阵$M \in R^{P \times d}$，其中$P$为用户量，$m_u$表示单个用户的向量</li>
+<li>Item矩阵:$E \in R^{Q \times d}$，其中$Q$表示Item数量,$e_i$表示Item的向量</li>
+<li>最近邻的Embedding矩阵$C$,大小与$M$一样，用于<code>Memory Network</code>外部矩阵,使用$c_v$来表示单个邻居的向量的</li>
+</ol>
+<p>在给定用户$u$和item  $i$的情况下，计算$u$和$i$发生交互的用户$v$的距离为：$$q_{uiv} = m_u^T m_v + e_i^T m_v \quad \quad \quad \forall v \in N(i)$$</p>
+<blockquote>
+<p>$N(i)$表示和$i$发生过交互的用户</p>
+</blockquote>
+<p>$q_{uiv}$是内积之后的结果，也就是一个值了，然后使用softmax可以求得各个近邻用户的权重<br>$$p_{uiv} = \frac{exp(q_{uiv})}{\sum_{k \in N(i)} exp(q_{uik})} \quad \quad \quad \forall v \in N(i)$$</p>
+<p>该权重乘以对应的外部矩阵的向量就可以得到当前用户与item最近邻用户的向量了，作为$User$和$Item$的局部信息:<br>$$o_{ui} = \sum_{v \in N(i)} p_{uiv} c_v$$</p>
+<p>最终在输出模型的时候与<code>Glolab</code>信息一起结合进去:<br>$$\hat{r}_{ui} = v^T \phi (U(m_u \cdot e_i) + W o_{ui} + b)$$</p>
+<blockquote>
+<p>这里CF的距离使用点积的方式，也就是$NumMF$的其中一个子模型版本</p>
+</blockquote>
+<p>刚刚描述的过程就是上图的<code>(a)</code>部分，<code>Memory Network</code>(<code>MN</code>)最大的优势就是可以使用叠加的方式来进行<code>Attention</code>，这样可以使用在后面的<code>MN</code>时会重新调整前面基层的<code>MN</code>，也就是<code>(b)</code>图所示，<br>这里第一层时$m_u$和$e_i$整合到了一起:$$z^0_{ui} = m_u + e_i$$</p>
+<blockquote>
+<p>邻居用户的算分就可以表示为:$$q_{uiv}^h = (z_{ui}^h)^Tm_v \forall v \in N(i)$$</p>
+</blockquote>
+<p>而其他层的$z$计算为:$$z_{ui}^h = \phi(Wz_{ui}^{h-1} + o_{ui}^h)$$</p>
+<p>这种迭代机制正好可以将<code>MN</code>层正好可以堆叠起来，而实验中也是证明了多层的堆叠效果要优于单层的</p>
+<p><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/cmn_exp.png"><br>实验结果中主要来对比一下<code>NeuMF</code>，有明显提升同时觉得他的提升比<code>DMF</code>更加合理哈哈，如果在<code>Gbobal</code>这块再做一些细节的处理应该能提升更多。</p>
+<p>整个模型的复杂度为:$O(n(d|N(i)| + d^2)+d)$   而$n$就是<code>MN</code>的层数，因此就模型的工业化而言可行性其实是非常高的，不过需要对$|N(i)|$进行一些剪枝之类的trick处理</p>
+<h2 id="DeepCF">DeepCF</h2><p>这篇paper的作者从<code>CF</code>的<code>Representation</code>和<code>Match</code>两个角度出发：<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/deepcf_arch.png" width="400px"><br>我细看了每天和<code>NeuMF</code>架构没啥差别，除了在<code>GMF</code>那里多了几层<code>MLP</code> -_-，因此细节就不说了。。。</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://www.ra.ethz.ch/cdstore/www10/papers/pdf/p519.pdf" target="_blank" rel="external">Item-Based Collaborative Filtering Recommendation Algorithms</a></li>
+<li><a href="https://arxiv.org/pdf/1205.2618.pdf" target="_blank" rel="external">BPR: Bayesian Personalized Ranking from Implicit Feedback</a></li>
+<li><a href="https://pdfs.semanticscholar.org/49be/f668aff3cc3d470339479dd3cee0b4c9cf4f.pdf" target="_blank" rel="external">Deep Matrix Factorization Models for Recommender Systems∗</a></li>
+<li><a href="https://arxiv.org/pdf/1708.05031.pdf" target="_blank" rel="external">Neural Collaborative Filtering∗</a></li>
+<li><a href="https://arxiv.org/pdf/1804.10862.pdf" target="_blank" rel="external">Collaborative Memory Network for Recommendation Systems</a></li>
+<li>DeepCF -A Unified Framework of Representation Learning and Matching Function Learning in Recommender System</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="介绍">介绍</h2><p>协同过滤(Collaborative Filtering,简称<code>CF</code>)是Amazon在2001年提出的应用于推荐领域的一个算法，至今各大家的推荐系统中都能见到协同过滤的影子，是推荐领域最经典的算法之一<br><img src="/img/Collaborative-Filtering-Meet-to-Deep-Learning/cf.png" width="600px" /></p>
+<p>在实际场景中可以将用户对于<code>Item</code>的评分/购买/点击等行为 形成一张user-item的矩阵，单个的<code>User</code>或者<code>Item</code>可以通过对于有交互的<code>Item</code>和<code>User</code>来表示(最简单的就是<code>One-Hot</code>向量)，通过各种相似度算法可以计算到<code>User2User</code>、<code>Item2Item</code>以及<code>User2Item</code>的最近邻，先就假设按<code>User2Item</code>来说:<br>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[深度学习在序列化推荐中的应用(2)]]></title>
+    <link href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/"/>
+    <id>http://kubicode.me/2018/10/25/Deep Learning/More-Session-Based-Recommendation/</id>
+    <published>2018-10-25T09:39:51.000Z</published>
+    <updated>2019-01-24T11:54:58.576Z</updated>
+    <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>基于上一篇<code>GRU4REC</code>的继续聊聊深度学习在推荐系统中的应用</p>
+<h2 id="NARM">NARM</h2><p>作者提出了一种混合Encoder的方式：全局(<code>Global</code>)所有的序列信息的Encoder和当前(<code>Local</code>)Session序列的Encoder</p>
+<p>所以他的模型是：<br><img src="/img/More-Session-Based-Recommendation/narm_arch.png"></p>
+<a id="more"></a>
+<ol>
+<li>在Global序列信息的Encoder中，取了用户之前的所有行为（应该会卡一段阈值）来过了GRU之后取到的Final State作为Encoder的Embedding $c_t^g = h_t $</li>
+<li>在Local中Session序列中的Encoder中，向全局信息的Encoder一样，只是最后输出之后取了一层Attention操作，希望突出当前序列中的一些重要行为。$$c_t^l = \sum_{j=1}^t \alpha_{i,j} h_j , \alpha_{i,j} = q(h_t,h_j)$$</li>
+<li>然后最终Local和Global给Concat起来作为Encoder的输出$$c_t = [c_t^g;c_t^l]$$</li>
+<li>接下来所有候选的Item按Embedding的方式来输入，称为$emb_i$</li>
+<li>将Encoder的Embedding和候选集的Embedding进行<code>Bilinear</code>操作：$$S_i=emb_i^T B c_t$$</li>
+<li>这一步过后其实就会得到了各个候选项的一个score，进行softmax归一化之后可以作为各个候选项的概率$q_i$</li>
+<li>最终的loss是$L(p,q) = -\sum_{i=1}^m p_i log(q_i)$</li>
+</ol>
+<p><img src="/img/More-Session-Based-Recommendation/narm_exp.png"><br>他的实验对比中，较于其他Baseline算法还是有不少的提升的，不过对于<code>Improved GRU-Rec</code>并没有太大优势</p>
+<p>其实也可以理解,最大的贡献应该是在流推荐中同时考虑了<code>Global</code>和<code>Local</code>的结合，整个模型的思路还是很清晰简洁的，<code>Encoder-&gt;Attention-&gt;Bilinear-&gt;Cross Entropy</code>，但是也没有特别大的改进<br>特别是在<code>Local</code>中的<code>Attention</code>那一层，说的不明不白，他的$h_t$变量没有描述清楚，感觉就是一个非常普通的<code>Self-Attention</code>,也许在这一层的Attenion可以和<code>Global</code>中的信息结合起来。</p>
+<h2 id="RepeatNet">RepeatNet</h2><p>在购物场景中，因为有一些商品属性的原因，经常会去重复购买一些商品，比如纸巾-_-!!,因此用户其实存在着一些复购需求，类似这种场景的还有<code>音乐</code>、<code>视频</code>。<br>而实际的推荐系统中，我们经常在进行实时推荐时会根据用户历史记录直接去重，就算是缩短去重窗口也很少会刻意去推荐已经推荐过的item。<code>RepeatNet</code>非常机制的结合了类似copynet的idea，在模型的设计上给人一种眼前一亮的赶脚,他在进行推荐(<code>Explore</code>)中同时会有一定概率来推荐出历史行为(<code>Repeat</code>)。<br>该模型是在序列推荐的技术上加入了重推的概率进行<code>Joint-Learning</code>，以一种非常巧妙的方式来进行重推（类似point-generator的copy机制）:<br>整个模型的优化目标是这样的:<br>$$P(i|I_s) = P(r|I_s) P(i|r,I_s) + P(e|I_s) P(i|e,I_s)$$</p>
+<ul>
+<li>其中$I_s$表示用户的session行为记录</li>
+<li>而$P(r|I_s)$表示需要进行重推的概率，这样$P(e|I_s)=1-P(r|I_s)$表示正常推荐的概率，</li>
+<li>$P(i|r,I_s)$则表示历史session中各个item被重推的概率，$P(i|e,I_s)$为候选item被推荐的概率了</li>
+</ul>
+<p>因此整个<code>RepeatNet</code>其实是在做是否重推情况下各个候选item的联合概率最大化.<br>整个模型的结构是这样:<br><img src="/img/More-Session-Based-Recommendation/repeatnet_arch.png"></p>
+<ol>
+<li>模型的输入一个一串序列:$I_s=i_1,i_2,i_3,…,i_t$</li>
+<li>输入的序列$I_s$经过单向GRU之后得到每一步的状态$ST=[h_1,h_2,h_3,…,h_t]$</li>
+<li><code>Repeat-Explore Mechanism</code>：这里将$ST$过一个<code>Self-Attention</code>之后进行一个二分类，来计算<code>Repeat</code>和<code>Explore</code>的概率</li>
+<li><p><code>Repeat Model</code>:这里需要走到重推的计算逻辑，重推是表示从$I_s$里面推荐出一个概率最高的，这里对于$I_s$序列的item对于每个$ST$都进行一次Attention的前置公式，直接使用<code>Sofatmax</code>的结果，可以理解为$\alpha$因子，具体的公式是这样的:<br>$$e^r_{\tau}=v^T_r tanh (W_rh_t+U_rh_{\tau}) \\<br>P(i|r,I_s)=\left\{<br>\begin{aligned}<br>\frac{exp(e^r_i)}{\sum_{\tau=1}^t exp(e^r_\tau)}  &amp; \quad i \in i_s \\<br>0 &amp; \quad i \in I-I_s\\<br>\end{aligned}<br>\right.$$</p>
+</li>
+<li><p><code>Explore Mode</code>:在正常推荐时，会过一个<code>Self Attention</code>，然后时$h_t$进行concat,之后就是过一个正常的MLP层以及求softmax了</p>
+</li>
+</ol>
+<p>因此该模型在这里的损失函数有两个:</p>
+<ol>
+<li>是否执行<code>Repeat</code>还是<code>Explore</code>的损失函数:<br> $$L_{model} = -(\mathbb{I}(i \in I_s)\text{log}P(r|I_s) + (1-\mathbb{I}(i \in I_s))\text{log}P(e|I_s))$$</li>
+<li>候选item概率分布的损失函数:<br> $$L_{rec} = \text{log}P(i_\tau|I_s)$$</li>
+</ol>
+<p>最终该作者用了求和的方式来进行最终的优化:<br>$$L(\theta) = L_{model}+L_{rec}  $$</p>
+<p>在实验结果里面显示，该目前也取得了不少的提升:<br><img src="/img/More-Session-Based-Recommendation/repeatnet_exp.png"></p>
+<p>其实我到是可以理解为$RepeatNet$是一个更加贴合推荐实际的模型，结合了重推，但是其实在实际使用中可能还存在不少问题：</p>
+<ol>
+<li>比如在最近topK个已经展现过的再重推是否合适，是否应该有一个阈值来控制。</li>
+<li>另外还有一个其实短<code>Session</code>内重复的量不会很高，那意味这个这个Train的Session会比较长，而在实际的场景中很少会用长session来做Inference，因为<code>RNN-based</code>的模型的预测速度和session长度成正比，并且<code>Session</code>太长也意味了效果会变差。</li>
+</ol>
+<h2 id="User-Based_GRU">User-Based GRU</h2><p>这个paper是在序列推荐模型的GRU模块里面加入用户信息，作者认为在序列建模时加入了用户特征之后能够更好的刻画整个行为序列，具体做法主要是针对<code>GRU</code>模块中加入<code>User</code>向量$v$进行倒腾，主要有三种集成的方式:</p>
+<ol>
+<li>Linear User Integration:线性方式的集成</li>
+<li>Rectified Linear User Integration:比线性更加柔和的一种方式</li>
+<li>Attentional User Integration: 以Attention的方式集成</li>
+</ol>
+<h3 id="Linear_User_Integration">Linear User Integration</h3><p>针对给定<code>GRU</code>的Cell和用户向量下，这种集成是将用户向量加入到更<code>gate</code>的计算以及更新的state中，看下Cell图（其实这个图画的并不是很清晰-_-）:<br><img src="/img/More-Session-Based-Recommendation/linear_gru.png" width="250px"><br>不过再配合一下公式就很清晰了:<br>$$\begin{bmatrix}<br>u \\<br>r<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\sigma \\<br>\sigma<br>\end{bmatrix}<br>T<br>\begin{bmatrix}<br>h^{t-1} \\<br>E_i^t \\<br>E_v^t<br>\end{bmatrix}$$<br>这是<code>GRU</code>两个门的输出，在计算门的时候加入了用户向量$E_v^t$,其余操作就是和正常的<code>GRU</code>一样了</p>
+<h3 id="Rectified_Linear_User_Integration">Rectified Linear User Integration</h3><p>但是针对线性的集成，可以发现用户向量在每一个step都是一样，并且是重复的，这样会增加整个训练的计算量，因此作者又想了一种更加柔和的方式来接入:<br><img src="/img/More-Session-Based-Recommendation/rect_gru.png" width="250px"></p>
+<blockquote>
+<p>其实改图还是看不大清楚要表达的-_-</p>
+</blockquote>
+<p>主要思想是 在每一个step时：</p>
+<ol>
+<li>将输入向量和用户向量concat之后之后过两个MLP得到两个对比向量$\kappa_1 , \kappa_2$</li>
+<li>当用户向量$E_v^t$的每个元素都小于$\kappa_1$时，将当前的step的用户向量直接置0（丢弃的意思）</li>
+<li>当用户向量有部分小于$\kappa_2$时，对于用户向量的每个元素都乘以一个因子$\omega$</li>
+<li>否则，正常使用当前step的用户向量</li>
+</ol>
+<p>用公式来代替就是:<br>$$ E_v^t=\left\{<br>\begin{aligned}<br>0  &amp; \quad \quad  E_v^t&lt; \kappa_1 \\<br>\omega \cdot E_v^t &amp;\quad \quad  \kappa_1 &lt; E_v^t&lt; \kappa_2 \\<br>E_v^t &amp;\quad \quad  \text{else} \\<br>\end{aligned}<br>\right.$$</p>
+<p>然后其余步骤就是和线性的集成一样了</p>
+<h3 id="Attentional_User_Integration">Attentional User Integration</h3><p>先对普通线性集成的问题，作者又提了一个新的方式，他认为同一个用户向量在不同step下应该权重是不一样的，比如在t=0的时候，用户向量影响的作用应该是比较低（因为没有多少用户行为）</p>
+<blockquote>
+<p>哈哈，其实我觉得要看用户向量怎么选了，如果该用户向量可以较为精准的表示用户向量了，这个时候t=0的时候用户的向量应该也是还蛮重要的。</p>
+</blockquote>
+<p>因此不同的step下用户向量的权重应该是不同的，也就是类似<code>Attention</code>的方式了,但是其实感觉他paper里面和attention的思想还是有一些差异的，先看图<br><img src="/img/More-Session-Based-Recommendation/att_gru.png" width="250px"></p>
+<p>该集成方式会根据三个输入来计算一个门(<code>gate</code>:$\xi$)<br>$$ \xi = \sigma(T h^{t-1} + TE_i^t + TE_v^t)$$<br>这个$\xi$用来做每个step的输入向量和用户向量的一个平衡，因此<code>GRU</code>的门计算就是这样了:<br>$$\begin{bmatrix}<br>u \\<br>r<br>\end{bmatrix}<br>=<br>\begin{bmatrix}<br>\sigma \\<br>\sigma<br>\end{bmatrix}<br>T<br>\begin{bmatrix}<br>h^{t-1} \\<br>(1-\xi) E_i^t \\<br>\xi E_v^t<br>\end{bmatrix}$$<br>那再接下来的就是和线性集成一样了</p>
+<p>所以后面两种集成的方式主要是针对线性集成每一步用同一个用户向量再改进的，他的实验效果是这样的:<br><img src="/img/More-Session-Based-Recommendation/userbase_exp.png"></p>
+<p>可以看到针对改进过的gru的效果还是有不少提升的.<br>其实在实际工业界里面有不少很成熟的算法框架中也会尝试将一些用户的全局信息/兴趣点通过<code>gate</code>机制来融入到gru中进行训练，能得到一些微弱提升，但是性价比而言相对比较低，当然有富余人员配置时还是值得尝试的。</p>
+<h2 id="SR-GNN">SR-GNN</h2><p>作者觉得用户的行为序列可以用图来表示，因此在传统的序列建模时改为使用$GNN^5$对来图进行建模，也就有了这个<code>SR-GNN</code>:<br>直接看架构图吧：<br><img src="/img/More-Session-Based-Recommendation/sr_rnn_arch.png"></p>
+<blockquote>
+<p>虽然图的头部画的session之间的item是有关联的，其实在model里面各个session其实是独立的-_-!!</p>
+</blockquote>
+<p>最重要的是他的GNN那块，以$[v_1,v_2,v_3,v_2,v_4]$这个用户的session为例，可以将session用图表示为:<br><img src="/img/More-Session-Based-Recommendation/sr_adj.png" width="250px"></p>
+<ul>
+<li>他使用邻接矩阵来表示</li>
+<li>边之间的权重分为出度权重和入度权重</li>
+<li>最终一个图可以用 一个带出度权重的矩阵和 带入度权重的矩阵来表示，他们的shape都是$[N,N]$</li>
+</ul>
+<p>对于整个序列使用GNN来进行表达：<br>$$a_{s,i}^t = A_{s,i}^T [v_1^{t-1},…,v_n^{t-1}] + b \\<br>z_{s,i}^t = \sigma(W_z)a_{s,i}^t + U_z v_i^{t-1} \\<br>r_{s,i}^t = \sigma(W_r)a_{s,i}^t + U_r v_i^{t-1} \\<br>\tilde{v_i^t} = \text{tanh}(Wa_{s,i}^t + U(r_{s,i}^t \odot v_i^{t-1} )) \\<br>v_i^t = (1-z_{s,i}^t) \odot v_i^{t-1} + z_{s,i}^t \odot \tilde{v_i^t}$$</p>
+<p>其中</p>
+<ol>
+<li>$z$和$r$分布表示重置门和更新门,$\odot$ 表示<code>element-wise</code>的相乘</li>
+<li>$A$矩阵其实就是session图的邻接矩阵，$a$向量用户表示相当step下图相关的向量，用于接下来模块的初始化 </li>
+<li>眼熟的一眼就看出来了，其实就是<code>GRU</code>单元的公式，最大的差别就是初始化使用的是$a$，状态的维持使用的是$v$向量</li>
+</ol>
+<blockquote>
+<p>额 其实就是<code>GATED GRAPH SEQUENCE NEURAL NETWORKS</code>这篇中的式子</p>
+</blockquote>
+<p>经过GNN之后可以得到每个节点的embdding，接下来将整个session用<code>local</code>和<code>global</code>两个节点别表示，其中：</p>
+<ol>
+<li><code>local</code>级别的embedding可以直接使用最后一个item的向量来表示，也就是$s_l = v_n$</li>
+<li><code>global</code>级别的embedding使用$soft-attention$来表示$$a_i = q^T \sigma(W_1v_n + W_2v_i+c) \\ s_g = \sum_i^n \alpha_iv_i$$</li>
+</ol>
+<p>最终的embedding是两个级别向量的合并转换:$$s_h = W_3[s_l;s_g]$$</p>
+<blockquote>
+<p>其实可以看到最终的embedding里面其实是极大的加强的最后一个item的权重，之前做过相关实验，确实是最后一个item的embedding的最重要的</p>
+</blockquote>
+<p>其训练时loss采用了经典的交叉熵。<br>实验效果再过一下：<br><img src="/img/More-Session-Based-Recommendation/sr_rnn_exp.png" width="600px"><br>对比本文里面提到了<code>NARM</code>算法效果有提升，但是效果不是提升的很明显。</p>
+<p>其实整个<code>SR-GNN</code>模型就是将序列模型是将GRU改成了GNN建模，感觉实用性并不是很高，因为单用户的常规单session中并没有太多可以形成图。-_-</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="https://arxiv.org/pdf/1711.04725.pdf" target="_blank" rel="external">Neural Attentive Session-based Recommendation - arXiv</a></li>
+<li><a href="https://arxiv.org/pdf/1812.02646.pdf" target="_blank" rel="external">RepeatNet: A Repeat Aware Neural Recommendation Machine for Session-based Recommendation</a></li>
+<li><a href="https://cseweb.ucsd.edu/classes/fa17/cse291-b/reading/p152-donkers.pdf" target="_blank" rel="external">Sequential User-based Recurrent Neural Network Recommendations</a></li>
+<li><a href="https://arxiv.org/pdf/1811.00855.pdf" target="_blank" rel="external">Session-based Recommendation with Graph Neural Networks</a></li>
+<li><a href="https://arxiv.org/pdf/1511.05493.pdf" target="_blank" rel="external">GATED GRAPH SEQUENCE NEURAL NETWORKS</a></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="前言">前言</h2><p>基于上一篇<code>GRU4REC</code>的继续聊聊深度学习在推荐系统中的应用</p>
+<h2 id="NARM">NARM</h2><p>作者提出了一种混合Encoder的方式：全局(<code>Global</code>)所有的序列信息的Encoder和当前(<code>Local</code>)Session序列的Encoder</p>
+<p>所以他的模型是：<br><img src="/img/More-Session-Based-Recommendation/narm_arch.png" /></p>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[深度学习在序列化推荐中的应用(1)-GRU4REC以及扩展]]></title>
     <link href="http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/"/>
     <id>http://kubicode.me/2018/09/19/Deep Learning/GRU4REC-Session-Based-Recommendation/</id>
     <published>2018-09-19T09:39:51.000Z</published>
-    <updated>2018-09-29T06:06:49.583Z</updated>
+    <updated>2019-01-24T11:05:16.328Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>用户在互联网应用上的绝大部分的行为都是可以用一个序列来表示，比如购物、听音乐、看feed流等，用式子来表示就是$${x_1,x_2,x_3,..,x_N} -&gt; x_{N+1}$$<br>因此对于这个序列如何建模来获取整个用户的意图行为至关重要，而之前传统的ML只能基于统计或者经验的方式来尽量抽取这些序列信息，并无法hold整个序列，16年提出的<code>GRU4REC</code>利用<code>RNN-Based</code>对用户序列进行建模并且取得了不错的效果，同时也会有一些研究对于<code>GRU4REC</code>做了不少改进和扩展，本文主要对<code>GRU4REC</code>以及扩展做一些简答的自我了解和记录。</p>
 <a id="more"></a>
 <h2 id="GRU4REC">GRU4REC</h2><p><code>GRU4REC</code>是Session信息和GRU结合起来完成了推荐，他给定的场景是：</p>
@@ -1757,149 +1999,6 @@ Python <span class="number">2.6</span>.<span class="number">5</span>
 <p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
 </blockquote>
 <h3 id=]]>
-    </summary>
-    
-      <category term="Python" scheme="http://kubicode.me/tags/Python/"/>
-    
-      <category term="Python" scheme="http://kubicode.me/categories/Python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[从Gradient Boosting 到GBT]]></title>
-    <link href="http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/"/>
-    <id>http://kubicode.me/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/</id>
-    <published>2016-04-24T15:51:08.000Z</published>
-    <updated>2016-05-02T15:48:21.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>本文大部分参考(译)自wiki[1]<br>如果说<code>Gradient Boosting</code>是一种机器学习算法框架的话，我想<code>GBT(Gradient Boosting Tree)</code>看做它的实现更为合适</p>
-</blockquote>
-<h2 id="Gradient_Boosting原理">Gradient Boosting原理</h2><blockquote>
-<p>与其他<code>Boosting</code>方法一样，<code>Gradient Boosting</code>通过迭代将弱分类器合并成一个强分类器的方法。</p>
-</blockquote>
-<p>对于标准的$(x_i,y_i)$训练集，<code>Gradient Boosting</code>在迭代到第$m$次时，可能会得到一个分类能力不是很强的$f_m$模型，但是他下次迭代并不改变$f_m$，而是生成一个这样的新模型:$$f_{m+1} = f_m+G_{m+1}$$使得$f_{m+1}$较$f_m$而言拥有更为强大的分类能力，那么问题来了,这个$G_{m+1}$该如何训练呢?<br><a id="more"></a></p>
-<p>现在假如训练完$G_{m+1}$可以得到完美的$f_{m+1}$，那么也就是有:$$f_{m+1} = f_m+G_{m+1}=y$$<br>这个式子可以写成$$G_{m+1}=y-f_m$$ 其中$y-f_m$表示上一次迭代得到分类器预测结果与真实结果的差值，我们一般称之为的<code>残差</code>(residual)，因此也可以理解为<code>Gradient Boosting</code>在每一轮训练新的分类器将会拟合<code>残差</code>进行最优化</p>
-<h2 id="Gradient_Boosting算法">Gradient Boosting算法</h2><p>假设现有训练集$\left\{ (x_1,y_1),(x_2,y_2)…(x_n,y_n)  \right\}$，其中$x$是特征向量，$y$是相应的训练目标，在给定相应的损失函数$L(y,f(x))$,我们的目标是找到一个近似的函数$f(x)$使得与真实函数$f^*(x)$的损失最小期望值最接近:$$f^* = \underset{f}{argmin} E_{x,y} \left[ L(y,f(x)) \right]$$</p>
-<p><code>Gradient Boosting</code>方法假设$y$是一个实值，而$f(x)$近似目标函数是一个弱分类器$G_m(x)$加权求和的形式$$f(x)=\sum_{m=1}^M \gamma_mG_m(x)+const$$ 根据经验风险最小化的原则，近似函数$f(x)$将会尝试对训练集上的平均损失函数进行最小化，它从一个常量函数进行起步，并且通过贪心的方式进行逐步优化<br>$$<br>f_0(x) = \underset{\gamma}{argmin} \sum_{i=1}^n L(y_i,\gamma) \\<br>f_m(x) = f_{m-1}(x) + \underset{G \in H}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+G_m(x_i) \right)<br>$$<br>然而，对于$L$为任意的损失函数时,在选择每一步最佳的$G_m(x_i)$时将会很难优化。<br>这里使用最速下降法(<a href="https://en.wikipedia.org/wiki/Gradient_descent" target="_blank" rel="external">steepest descent</a>)来解决这个问题<br>,在使用这种方法时，对于损失函数$L(y,G)$不要将其看做一个函数，而是将其看做通过函数得到的值的向量$G(x_1),G(x_2)…G(x_n)$,那么这样的话我们就可以将模型的式子写成如下的等式:<br>$$<br>f_m(x) = f_{m-1}(x) - \gamma_m \sum_{i=1}^n \triangledown_G L \left( y_i,f_{m-1}(x_i) \right) \\<br>\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left ( y_i,f_{m-1}(x_i)-\gamma \frac{\partial L(y_i,f_{m-1}(x_i))}{\partial G(x_i)}  \right )<br>$$<br>上面第一个式子表示根据梯度的负方向进行更新,第二个式子表明了$\gamma$使用线性搜索进行计算。</p>
-<p>下面就是具体的<code>gradient boosting</code>步骤:<br><strong>Input</strong>:</p>
-<ul>
-<li>训练数据集$T=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$</li>
-<li>可导的损失函数:$L(y,f(x))$</li>
-<li>迭代的次数:$M$</li>
-</ul>
-<p><strong>Output</strong>:</p>
-<ul>
-<li>最终模型$f(x)$</li>
-</ul>
-<p><strong>Procedure</strong>:</p>
-<ol>
-<li>使用一个常量进行模型的初始化$$f_0(x) = \underset{\gamma}{argmin} \sum_{i=1}^n L(y_i,\gamma) $$</li>
-<li>循环$m \in \{1….M\}$<ol>
-<li>计算残差$$r_{im}=-\left[ \frac{\partial L(y_i,f(x_i))}{\partial f(x_i)}  \right]_{f(x_i)=f_{m-1}(x_i)} \quad i=1…n$$</li>
-<li>使用训练集$\{ (x_i,r_{im}) \}$对弱分类器$G_m(x)$进行拟合</li>
-<li>通过线性搜索进行乘子$\gamma_m$的计算$$\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+\gamma_m G_m(x_i) \right)$$</li>
-<li>进行模型的更新:$$f_m(x) = f_{m-1}(x)+\gamma_m G_m(x)$$</li>
-</ol>
-</li>
-<li>输出最终的模型$f_M(x)$</li>
-</ol>
-<p>下面是来自[2]中的对于不同损失函数下不同残差的计算<br><img src="/img/From-Gradient-Boosting-to-GBT/loss_functions.png" width="500px"><br>可以发现当损失函数为最小平方差时残差就是真实值与预测值的差值</p>
-<h2 id="Gradient_tree_boosting">Gradient tree boosting</h2><p>提升树(Gradient tree boosting)故名思议就是使用决策树(一般使用<code>CART</code>树)来作为弱分类器.<br>提升树在第$m$步迭代时将会使用决策树$G_m(x)$来集合残差，现在假设这棵树有$J$个叶子节点，则决策树将会将空间划分为$J$个不相交的区域$R_{1m},R_{2m}…R_{3m}$，以及每个区域都是预测一个常量值，则树模型$G_m(x)$对于特征$x$的输入将可以写成$$G_m(x)=\sum_{j=1}^J b_{jm}I(x \in R_{jm})$$，其中$b_{jm}$表示每个区域的预测值，上面的介绍可以用下图来表示:</p>
-<center><img src="/img/From-Gradient-Boosting-to-GBT/cart.png" width="400px"></center>
-
-<p>在实际使用时，$b_{jm}$也会与一个乘子$\gamma_m$相乘,最终模型的训练与上面一小节的介绍一致:<br>$$<br>f_m(x)=f_{m-1}(x)+\gamma_mG_m(x) \\<br>\gamma_m = \underset{\gamma}{argmin} \sum_{i=1}^n L \left(y_i,f_{m-1}(x_i)+\gamma_m G_m(x_i) \right)<br>$$</p>
-<blockquote>
-<p>可以发现树的模型是关键，一般来时$4 \leq J \leq 8$比较合适，有时候$J=2$就足够了，并且$j &gt; 10$比较少用</p>
-</blockquote>
-<h2 id="正则化">正则化</h2><blockquote>
-<p>其实用过<code>Gradient Boosting</code>的同学应该有同感，<code>Gradient Boosting</code>类型的模型(<code>GBDT</code>)调参很重要-_-，大致可以发现这些参数就是正则化的关键</p>
-</blockquote>
-<h3 id="调整树的个数">调整树的个数</h3><p>树的个数$M$越多，过拟合的情况可能越为严重，这里树的个数一般使用交叉验证的误差来调整确定</p>
-<h3 id="Shrinkage">Shrinkage</h3><p><code>Shrinkage</code>又称学习率，是指在<code>Gradient Boosting</code>训练时不训练全部的残差，而是:$$f_m(x)=f_{m-1}(x)+v \cdot \gamma_mG_m(x) \quad 0 &lt; v \leq 1$$<br>经验表明较小的学习率($v &lt; 0.1$)将会取得较为明显的正则化效果，但是学习率太小会导致训练次数增加..</p>
-<blockquote>
-<p>感觉这个大致可以这么理解，如果$v=1$，弱分类器犯错一次真的就错了，但是如果$v &lt; 1$时，如果某个分类器犯错了，其他的的弱分类器可能还可以补救^_^</p>
-</blockquote>
-<h3 id="Stochastic_gradient_boosting">Stochastic gradient boosting</h3><p>随机梯度提升法，表示每一轮迭代时并不是拿所有的数据进行训练，所以按无放回的随机取一定的比率$\eta$进行训练，这里的$ 0.5 &lt; \eta &lt; 0.8$将会取得较为不错的正则化效果，同时随机取样本进行训练还能加快模型的训练速度，并且每次迭代中未被抽中的样本还可以作为(out of bag)[<a href="https://en.wikipedia.org/wiki/Out-of-bag_error]进行估计" target="_blank" rel="external">https://en.wikipedia.org/wiki/Out-of-bag_error]进行估计</a></p>
-<h3 id="叶子节点的数量">叶子节点的数量</h3><p>一般这个叶子节点的数量不宜太多（其实可以理解为节点数越多，模型复杂度越高…）</p>
-<h3 id="使用惩罚项">使用惩罚项</h3><p>额~貌似<code>L2</code>之类的惩罚项也是可以被加入进去</p>
-<h2 id="总结">总结</h2><p><code>Gradient Boosting</code>是非常金典而又重要的提升方法，他与<a href="http://kubicode.me/2016/04/18/Machine%20Learning/AdaBoost-Study-Summary/" target="_blank" rel="external">AdaBoost</a>一样都是讲弱分类器合成强分类，但是其大致区别有:</p>
-<ol>
-<li><code>Gradient Boosting</code>通过残差来变量的改变错误分类的权重,而<code>AdaBoost</code>就真的直接去修改分类错误的训练权重了</li>
-<li><code>Gradient Boosting</code>接入的分类器一般完整的决策树居多，但是<code>AdaBoost</code>一般使用二层决策树</li>
-</ol>
-<p><code>Gradient Boosting</code>中最有代表性的就是<code>GBDT</code>,该模型虽好，可不要贪杯~使用时理解数据以及正确调参才是王道</p>
-<h2 id="参考">参考</h2><p>[1]. <a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="external">wiki Gradient boosting</a><br>[2]. The Elements of Statistical Learning<br>[3]. 《统计学习方法》.李航.第八章</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p>本文大部分参考(译)自wiki[1]<br>如果说<code>Gradient Boosting</code>是一种机器学习算法框架的话，我想<code>GBT(Gradient Boosting Tree)</code>看做它的实现更为合适</p>
-</blockquote>
-<h2 id="Gradient_Boosting原理">Gradient Boosting原理</h2><blockquote>
-<p>与其他<code>Boosting</code>方法一样，<code>Gradient Boosting</code>通过迭代将弱分类器合并成一个强分类器的方法。</p>
-</blockquote>
-<p>对于标准的$(x_i,y_i)$训练集，<code>Gradient Boosting</code>在迭代到第$m$次时，可能会得到一个分类能力不是很强的$f_m$模型，但是他下次迭代并不改变$f_m$，而是生成一个这样的新模型:$$f_{m+1} = f_m+G_{m+1}$$使得$f_{m+1}$较$f_m$而言拥有更为强大的分类能力，那么问题来了,这个$G_{m+1}$该如何训练呢?<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[解决在使用scikit-learn时出现ValueError: numpy.dtype has the wrong size的错误]]></title>
-    <link href="http://kubicode.me/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/"/>
-    <id>http://kubicode.me/2016/04/22/Python/Solve-numpy-dtype-In-ValueError-when-using-scikit-learn/</id>
-    <published>2016-04-22T01:33:55.000Z</published>
-    <updated>2016-04-22T01:51:20.000Z</updated>
-    <content type="html"><![CDATA[<p>今天在尝试使用scikit-learn的<code>AdaBoost</code>模型时一直报错，</p>
-<pre><code>Traceback (most recent call last):
-File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/__init__.py"</span>, line <span class="number">57</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.base</span> import clone
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/base.py"</span>, line <span class="number">11</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.utils</span><span class="class">.fixes</span> import signature
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/utils/__init__.py"</span>, line <span class="number">10</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.murmurhash</span> import murmurhash3_32
-File <span class="string">"numpy.pxd"</span>, line <span class="number">155</span>, <span class="keyword">in</span> init sklearn<span class="class">.utils</span><span class="class">.murmurhash</span> (sklearn/utils/murmurhash<span class="class">.c</span>:<span class="number">5029</span>)
-ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recompiling
-</code></pre><p>以为是<code>numpy</code>包的问题:卸载重装之后还是照样有问题-_-<br><a id="more"></a><br>网上给的建议大都是直接卸载再全部重装，将<code>numpy</code>、<code>scipy</code>和<code>scikit-learn</code>全部卸载了，然后</p>
-<pre><code>pip <span class="keyword">install</span> -U numpy scipy scikit-learn
-</code></pre><p>装起来。结果一样有问题-_-</p>
-<p>继续查资料时终于发现有用的方法了:<br><a href="http://scikit-learn-general.narkive.com/kMA6mRCk/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling" target="_blank" rel="external">http://scikit-learn-general.narkive.com/kMA6mRCk/valueerror-numpy-dtype-has-the-wrong-size-try-recompiling</a></p>
-<p>就是不用使用<code>pip install scikit-learn</code>安装，卸载之后直接使用git上<code>https://github.com/scikit-learn/scikit-learn</code>的自己安装</p>
-<pre><code>git clone http<span class="variable">s:</span>//github.<span class="keyword">com</span>/scikit-learn/scikit-learn
-<span class="keyword">make</span>
-sudo <span class="keyword">python</span> setup.<span class="keyword">py</span> install
-</code></pre><p>ps：这个时候直接安装可能会出</p>
-<pre><code><span class="attribute">RuntimeError</span>: <span class="string">Running cythonize failed!</span>
-</code></pre><p>Error提示,这时候安装一下<code>cpython</code>即可</p>
-<pre><code>pip <span class="keyword">install</span> cython
-</code></pre><p>最后全部安装完之后就可以正常使用了^_^</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>今天在尝试使用scikit-learn的<code>AdaBoost</code>模型时一直报错，</p>
-<pre><code>Traceback (most recent call last):
-File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/__init__.py"</span>, line <span class="number">57</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.base</span> import clone
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/base.py"</span>, line <span class="number">11</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.utils</span><span class="class">.fixes</span> import signature
-File <span class="string">"/Library/Python/2.7/site-packages/sklearn/utils/__init__.py"</span>, line <span class="number">10</span>, <span class="keyword">in</span> &lt;module&gt;
-from <span class="class">.murmurhash</span> import murmurhash3_32
-File <span class="string">"numpy.pxd"</span>, line <span class="number">155</span>, <span class="keyword">in</span> init sklearn<span class="class">.utils</span><span class="class">.murmurhash</span> (sklearn/utils/murmurhash<span class="class">.c</span>:<span class="number">5029</span>)
-ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recompiling
-</code></pre><p>以为是<code>numpy</code>包的问题:卸载重装之后还是照样有问题-_-<br>]]>
-    
     </summary>
     
       <category term="Python" scheme="http://kubicode.me/tags/Python/"/>
