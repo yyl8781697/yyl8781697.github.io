@@ -95,6 +95,85 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/04/29/Python/Python-Install-on-CentOS/" title="在CentOS上自己安装python" itemprop="url">在CentOS上自己安装python</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-29T07:50:41.000Z" itemprop="datePublished"> 发表于 2016-04-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
+</blockquote>
+<h3 id="下载python2-6-5">下载python2.6.5</h3><p>直接在这个地址进行下载即可<a href="https://www.python.org/download/releases/2.6.5/" target="_blank" rel="external">https://www.python.org/download/releases/2.6.5/</a></p>
+<h3 id="进行解压">进行解压</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">tar</span> xvf Python-<span class="number">2</span>.<span class="number">6</span>.<span class="number">5</span>.tgz</span><br></pre></td></tr></table></figure>
+<h3 id="编译安装">编译安装</h3><p>先配置安装的前缀<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/configure --prefix=/u</span>sr<span class="regexp">/local/</span>python2.<span class="number">6.5</span></span><br></pre></td></tr></table></figure></p>
+<p>然后真正的执行编译安装<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意如果是非管理员用户 请在两个<code>make</code>前面都加上<code>sudo</code></p>
+</blockquote>
+<h3 id="添加快捷方式">添加快捷方式</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>local<span class="regexp">/python2.6.5/</span>bin<span class="regexp">/python /u</span>sr<span class="regexp">/bin/</span>python</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果原来快捷方式存在  那么先删除，再添加</p>
+</blockquote>
+<h3 id="完工">完工</h3><pre><code><span class="keyword">python</span> --<span class="keyword">version</span>
+Python <span class="number">2.6</span>.<span class="number">5</span> 
+</code></pre><h3 id="参考">参考</h3><p><a href="http://blog.csdn.net/jationxiaozi/article/details/7665691" target="_blank" rel="external">CentOS5.5下安装python2.6</a>   实用，但是排版太难看了-_-</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/04/29/Python/Python-Install-on-CentOS/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/24/Machine Learning/From-Gradient-Boosting-to-GBT/" title="从Gradient Boosting 到GBT" itemprop="url">从Gradient Boosting 到GBT</a>
   </h1>
   <p class="article-author">By
@@ -726,81 +805,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/" title="[小技巧]让Hexo在使用Mathjax时支持多行公式" itemprop="url">[小技巧]让Hexo在使用Mathjax时支持多行公式</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-18T01:46:24.000Z" itemprop="datePublished"> 发表于 2016-03-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>还是在<code>Hexo</code>中使用<code>Mathjax</code>写<code>Latex</code>公式的问题，在需要些多行的公式的时候，<br>例如:</p>
-<pre><code><span class="command">\begin</span><span class="special">{</span>equation<span class="special">}</span><span class="command">\begin</span><span class="special">{</span>split<span class="special">}</span> a<span class="special">&amp;</span>=b+c-d<span class="command">\\</span>
-<span class="special">&amp;</span><span class="command">\quad</span> +e-f<span class="command">\\</span>
-<span class="special">&amp;</span>=g+h<span class="command">\\</span>
-<span class="special">&amp;</span> =i 
-<span class="command">\end</span><span class="special">{</span>split<span class="special">}</span><span class="command">\end</span><span class="special">{</span>equation<span class="special">}</span>
-</code></pre><p>其中:</p>
-<ol>
-<li><code>begin</code>和<code>end</code>表示公式的起始</li>
-<li><code>\\</code>符号表示换行</li>
-<li><code>&amp;</code>表示对齐</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hexo/">Hexo</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/18/Hexo/The-Trick-about-Hexo-Support-MutliLine-Equation-using-Mathjax/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -879,7 +883,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
 		  
 		
 		  
@@ -916,7 +920,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>41</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>42</sup></a></li>
 			
 		
 			

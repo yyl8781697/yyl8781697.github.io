@@ -95,6 +95,80 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/" title="学习记录一下深度语义匹配模型-DSSM" itemprop="url">学习记录一下深度语义匹配模型-DSSM</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-21T14:53:03.000Z" itemprop="datePublished"> 发表于 2017-04-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下<br>ps:后来跟了几篇dssm的paper，一并记录在这里</p>
+</blockquote>
+<h2 id="DSSM">DSSM</h2><h3 id="DSSM的结构">DSSM的结构</h3><p><code>DSSM</code>最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:</p>
+<ol>
+<li>字面匹配:<code>TFIDF</code>、<code>BM25</code>等</li>
+<li>使用<code>LSA</code>类模型进行语义匹配，但是效果不好</li>
+</ol>
+<p>而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。</p>
+<p>这里上图最直接:</p>
+<center><img src="/img/Study-With-Deep-Structured-Semantic-Model/dssm_arch.png" /></center>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/01/09/Search Engine/The-Recorder-for-some-Federated-Search-Papers/" title="Federated Search Papers学习笔记" itemprop="url">Federated Search Papers学习笔记</a>
   </h1>
   <p class="article-author">By
@@ -703,85 +777,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/04/29/Python/Python-Install-on-CentOS/" title="在CentOS上自己安装python" itemprop="url">在CentOS上自己安装python</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-04-29T07:50:41.000Z" itemprop="datePublished"> 发表于 2016-04-29</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
-</blockquote>
-<h3 id="下载python2-6-5">下载python2.6.5</h3><p>直接在这个地址进行下载即可<a href="https://www.python.org/download/releases/2.6.5/" target="_blank" rel="external">https://www.python.org/download/releases/2.6.5/</a></p>
-<h3 id="进行解压">进行解压</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">tar</span> xvf Python-<span class="number">2</span>.<span class="number">6</span>.<span class="number">5</span>.tgz</span><br></pre></td></tr></table></figure>
-<h3 id="编译安装">编译安装</h3><p>先配置安装的前缀<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/configure --prefix=/u</span>sr<span class="regexp">/local/</span>python2.<span class="number">6.5</span></span><br></pre></td></tr></table></figure></p>
-<p>然后真正的执行编译安装<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意如果是非管理员用户 请在两个<code>make</code>前面都加上<code>sudo</code></p>
-</blockquote>
-<h3 id="添加快捷方式">添加快捷方式</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>local<span class="regexp">/python2.6.5/</span>bin<span class="regexp">/python /u</span>sr<span class="regexp">/bin/</span>python</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果原来快捷方式存在  那么先删除，再添加</p>
-</blockquote>
-<h3 id="完工">完工</h3><pre><code><span class="keyword">python</span> --<span class="keyword">version</span>
-Python <span class="number">2.6</span>.<span class="number">5</span> 
-</code></pre><h3 id="参考">参考</h3><p><a href="http://blog.csdn.net/jationxiaozi/article/details/7665691" target="_blank" rel="external">CentOS5.5下安装python2.6</a>   实用，但是排版太难看了-_-</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Python/">Python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/04/29/Python/Python-Install-on-CentOS/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -860,7 +855,7 @@ Python <span class="number">2.6</span>.<span class="number">5</span>
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
 		  
 		
 		  
@@ -897,7 +892,7 @@ Python <span class="number">2.6</span>.<span class="number">5</span>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>41</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>42</sup></a></li>
 			
 		
 			

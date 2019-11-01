@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2018/12/27/Machine%20Learning/Study-Gradient-Descent-Optimization/</loc>
+    <lastmod>2019-01-28T03:26:45.039Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/</loc>
     <lastmod>2019-01-24T11:54:58.576Z</lastmod>
   </url>

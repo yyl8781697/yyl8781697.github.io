@@ -160,6 +160,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/" title="记一记梯度下降极其优化算法" itemprop="url">记一记梯度下降极其优化算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-12-27T11:38:58.000Z" itemprop="datePublished"> 发表于 2018-12-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到达谷底。</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png" width="200px"></center>
+
+<p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>
+<h2 id="梯度下降极其变种">梯度下降极其变种</h2><h3 id="Batch_gradient_descent">Batch gradient descent</h3><p>批量梯度下降法是原始的方法，他需要对整个数据集进行计算之后才更新梯度:<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta)$$</p>
+<p>用代码来表示就是这样的:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  params_grad = evaluate_gradient(loss_function, data, params)</span><br><span class="line">  params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<p>批量梯度下降法可以保证模型达到全局最优，但是他的缺点多了又多:</p>
+<ol>
+<li>梯度需要遍历整个数据集才能计算，并且只有一次参数更新</li>
+<li>整个梯度更新很慢，同时数据量大到放不下内存时就不再适用该方法了</li>
+<li>批量梯度下降法不使用online在更新</li>
+</ol>
+<h3 id="Stochastic_gradient_descent">Stochastic gradient descent</h3><p>随机梯度下降法的式子长这样子：<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^i;y^i)$$<br>该方法每次计算一次样本就会更新一次梯度，所以运行速度要比批量梯度下降法快很多<br>用代码来表示是这样的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, example, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<h3 id="Mini-batch_gradient_descent">Mini-batch gradient descent</h3><h2 id="梯度下降优化算法">梯度下降优化算法</h2>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/10/25/Deep Learning/More-Session-Based-Recommendation/" title="深度学习在序列化推荐中的应用(2)" itemprop="url">深度学习在序列化推荐中的应用(2)</a>
   </h1>
   <p class="article-author">By
@@ -689,80 +764,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/" title="学习记录一下深度语义匹配模型-DSSM" itemprop="url">学习记录一下深度语义匹配模型-DSSM</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2017-04-21T14:53:03.000Z" itemprop="datePublished"> 发表于 2017-04-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>DSSM这篇paper发表在cikm2013，短小但是精炼，值得记录一下<br>ps:后来跟了几篇dssm的paper，一并记录在这里</p>
-</blockquote>
-<h2 id="DSSM">DSSM</h2><h3 id="DSSM的结构">DSSM的结构</h3><p><code>DSSM</code>最大的卖点在检索场景下  使用点击数据来训练语义层次的匹配，简单的来说，传统检索场景下的匹配主要有:</p>
-<ol>
-<li>字面匹配:<code>TFIDF</code>、<code>BM25</code>等</li>
-<li>使用<code>LSA</code>类模型进行语义匹配，但是效果不好</li>
-</ol>
-<p>而DSSM训练出来之后，检索场景下用户输入query之后，可以根据该query计算各个doc的语义相似度。</p>
-<p>这里上图最直接:</p>
-<center><img src="/img/Study-With-Deep-Structured-Semantic-Model/dssm_arch.png" /></center>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/04/21/Deep Learning/Study-With-Deep-Structured-Semantic-Model/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -841,7 +842,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>27</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
 		  
 		
 		  
@@ -878,7 +879,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>41</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>42</sup></a></li>
 			
 		
 			

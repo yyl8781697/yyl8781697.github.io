@@ -126,6 +126,36 @@
   </entry>
   
   <entry>
+    <title><![CDATA[记一记梯度下降极其优化算法]]></title>
+    <link href="http://kubicode.me/2018/12/27/Machine%20Learning/Study-Gradient-Descent-Optimization/"/>
+    <id>http://kubicode.me/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/</id>
+    <published>2018-12-27T11:38:58.000Z</published>
+    <updated>2019-01-28T03:26:45.039Z</updated>
+    <content type="html"><![CDATA[<h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到达谷底。</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png" width="200px"></center>
+
+<p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>
+<h2 id="梯度下降极其变种">梯度下降极其变种</h2><h3 id="Batch_gradient_descent">Batch gradient descent</h3><p>批量梯度下降法是原始的方法，他需要对整个数据集进行计算之后才更新梯度:<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta)$$</p>
+<p>用代码来表示就是这样的:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  params_grad = evaluate_gradient(loss_function, data, params)</span><br><span class="line">  params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<p>批量梯度下降法可以保证模型达到全局最优，但是他的缺点多了又多:</p>
+<ol>
+<li>梯度需要遍历整个数据集才能计算，并且只有一次参数更新</li>
+<li>整个梯度更新很慢，同时数据量大到放不下内存时就不再适用该方法了</li>
+<li>批量梯度下降法不使用online在更新</li>
+</ol>
+<h3 id="Stochastic_gradient_descent">Stochastic gradient descent</h3><p>随机梯度下降法的式子长这样子：<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^i;y^i)$$<br>该方法每次计算一次样本就会更新一次梯度，所以运行速度要比批量梯度下降法快很多<br>用代码来表示是这样的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, example, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<h3 id="Mini-batch_gradient_descent">Mini-batch gradient descent</h3><h2 id="梯度下降优化算法">梯度下降优化算法</h2>]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到]]>
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[深度学习在序列化推荐中的应用(2)]]></title>
     <link href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/"/>
     <id>http://kubicode.me/2018/10/25/Deep Learning/More-Session-Based-Recommendation/</id>
@@ -1967,43 +1997,6 @@
       <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
       <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[在CentOS上自己安装python]]></title>
-    <link href="http://kubicode.me/2016/04/29/Python/Python-Install-on-CentOS/"/>
-    <id>http://kubicode.me/2016/04/29/Python/Python-Install-on-CentOS/</id>
-    <published>2016-04-29T07:50:41.000Z</published>
-    <updated>2016-08-29T08:22:44.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
-</blockquote>
-<h3 id="下载python2-6-5">下载python2.6.5</h3><p>直接在这个地址进行下载即可<a href="https://www.python.org/download/releases/2.6.5/" target="_blank" rel="external">https://www.python.org/download/releases/2.6.5/</a></p>
-<h3 id="进行解压">进行解压</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">tar</span> xvf Python-<span class="number">2</span>.<span class="number">6</span>.<span class="number">5</span>.tgz</span><br></pre></td></tr></table></figure>
-<h3 id="编译安装">编译安装</h3><p>先配置安装的前缀<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="regexp">/configure --prefix=/u</span>sr<span class="regexp">/local/</span>python2.<span class="number">6.5</span></span><br></pre></td></tr></table></figure></p>
-<p>然后真正的执行编译安装<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span></span><br><span class="line"><span class="built_in">make</span> install</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意如果是非管理员用户 请在两个<code>make</code>前面都加上<code>sudo</code></p>
-</blockquote>
-<h3 id="添加快捷方式">添加快捷方式</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -sf <span class="regexp">/usr/</span>local<span class="regexp">/python2.6.5/</span>bin<span class="regexp">/python /u</span>sr<span class="regexp">/bin/</span>python</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果原来快捷方式存在  那么先删除，再添加</p>
-</blockquote>
-<h3 id="完工">完工</h3><pre><code><span class="keyword">python</span> --<span class="keyword">version</span>
-Python <span class="number">2.6</span>.<span class="number">5</span> 
-</code></pre><h3 id="参考">参考</h3><p><a href="http://blog.csdn.net/jationxiaozi/article/details/7665691" target="_blank" rel="external">CentOS5.5下安装python2.6</a>   实用，但是排版太难看了-_-</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>CentOS</code>自带的<code>python</code>一般都是<code>2.4.3</code>，因为某些特殊的需求需要将其升级到<code>2.6.2</code></p>
-</blockquote>
-<h3 id=]]>
-    </summary>
-    
-      <category term="Python" scheme="http://kubicode.me/tags/Python/"/>
-    
-      <category term="Python" scheme="http://kubicode.me/categories/Python/"/>
     
   </entry>
   
