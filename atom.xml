@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2019-01-24T11:05:14.124Z</updated>
+  <updated>2019-11-01T10:02:41.669Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,162 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[可解释性推荐系统]]></title>
+    <link href="http://kubicode.me/2019/10/15/Deep%20Learning/Explainable-Recommendation/"/>
+    <id>http://kubicode.me/2019/10/15/Deep Learning/Explainable-Recommendation/</id>
+    <published>2019-10-15T03:15:05.000Z</published>
+    <updated>2019-11-01T10:02:41.669Z</updated>
+    <content type="html"><![CDATA[<h2 id="背景">背景</h2><p>在出推荐结果的同时产出一个理由，告诉用户这个item为啥要推荐给你~</p>
+<center><img src="/img/Explainable-Recommendation/why_rec.jpg" width="450px"></center><br><a id="more"></a><br>大致的概念总结起来是这么一个图：<br><center><img src="/img/Explainable-Recommendation/arch.png" width="650px"></center>
+
+<p>下面列举了一些最近自己调研的方法和理解</p>
+<h2 id="矩阵分解方法">矩阵分解方法</h2><h3 id="EFM">EFM</h3><p>经典的矩阵分解方法可以根据 <code>User-Item</code> 的行为矩阵进行分解，然后得到<code>User</code>向量和<code>Item</code>向量之后进行推荐，而<code>EFM</code>在矩阵分解的基础上加入了 <code>User/Item</code>的显式特征矩阵，使得在推荐结果上可以拿到对应的显式特征，从而进行推荐的可解释性，当然，这里的特征一般指的是<code>Aspect</code>的属性。</p>
+<p>EFM在关键idea时推荐的同时给到用户比较关心的特征，在paper的场景中，给到用户评分行为，同时评分时会得到相应的评价文本，</p>
+<center><img src="/img/Explainable-Recommendation/rating.png" width="450px"></center>
+
+<p>这样就是这样的一个评分矩阵，其中左侧是用户的评分行为，左侧有对应的评价文本，作者对该评价文本进行情感分析，比如可以得到<code>(screen,1),(earphone,-1)</code>的情感，这里的<code>screen</code>和<code>earphone</code>这些属性就可以作为对应的”特征”，因为根据评论情况，用户对于”特征”会有偏好，同时<code>Item</code>方面也会对不同的”特征”差异。</p>
+<p>因此借助用户的评论对其情感分析，可以构建<code>User-Feature</code>和<code>Item-Feature</code>的显示特征矩阵，<br>其中对于<code>User-Feature</code>的填充值为:</p>
+<p>$$ X_{i,j}=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad u_i \quad not \quad mention \quad feature \quad F_j \\<br>1+(N-1)(\frac{2}{1+e^{-t_{i,j}}}-1) &amp; \quad else \\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>其中N表示$t_{i,j} \in [1,N]$ 为实际评分分数，为$N$为最大评分分数</p>
+</blockquote>
+<p>同时对于<code>Item-Feature</code>的填充值为:</p>
+<p>$$ Y_{i,j}=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad p_i \quad not \quad reviewed \quad feature \quad F_j \\<br>1+\frac{N-1}{1+e^{-k \cdot s_{i,j}}} &amp; \quad else \\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>其中$k$为该$F_j$在$p_i$上出现的次数，同时$s_{i,j}$就是对应的平均评分数</p>
+</blockquote>
+<p>因此可以用<code>X</code>来表示用户的显式特征矩阵，<code>Y</code>来表示<code>Item</code>的显式特征矩阵,利用矩阵分解，可以有</p>
+<p>$X = U_1 V ^T \quad Y = U_2 V^T$</p>
+<p>这样$U_1,U_2$分别为用户和item对应的显式向量矩阵，而$V$为特征的显示向量矩阵，如果根据这两个矩阵直接进行推荐，其优化函数为:</p>
+<p>$$ \underset{U_1,U_2,V}{minimize} \left \{ \lambda_x \parallel U_1V^T - X \parallel _F^2 + \lambda_y \parallel  U_2V -Y \parallel _F^2  \right \} , st. U_1 \in R^{m \times r},U_2 \in R^{n \times r},V \in R^{p \times r}$$</p>
+<p>这边的$\lambda_x$和$\lambda_y$是正则项因子，同时$r$就是为显示特征的向量大小.</p>
+<p>而上面的式子仅为用户行为在显式特征部分的表示，这些显式特征并无法全部表示用户的行为（至少丢掉了用户对应<code>item</code>的偏好），因此还需要再加入用户的隐式偏好。<br>这边使用${r}’$来表示隐式特征向量的大小，,其中使用$H_1$和$H_2$分别来表示用户和<code>Item</code>的隐式偏好矩阵，其中<code>A</code>为用户对于<code>Item</code>的评分矩阵，这里另$P=[U1,H1]$和$Q = [U2,H2]$,他们以拼接的方式来表示用户和<code>Item</code>的全部信息，则希望$$PQ^T \approx A$$。</p>
+<center><img src="/img/Explainable-Recommendation/efm_integr.png" width="450px"></center>
+
+
+<p>因此最终的优化函数为<br>$$ \underset{U_1,U_2,V,H_1,H_2}{minimize} \left \{ \parallel PQ^T - A \parallel _F^2 + \lambda_x \parallel U_1V^T - X \parallel _F^2 + \lambda_y \parallel  U_2V -Y \parallel _F^2 + \\ \lambda_u (\parallel U_1 \parallel^2 + \parallel U_2 \parallel^2  ) + \lambda_h (\parallel H_1 \parallel^2 + \parallel H_2 \parallel^2 ) + \lambda_v \parallel V \parallel^2  \right \} $$</p>
+<blockquote>
+<p>由于该式子无法直接优化，作者是通过每个矩阵依次迭代进行优化的，具体可以参考paper</p>
+</blockquote>
+<p>这边当$r=0$的时候，其实就是回归到了普通的用户行为矩阵推荐。</p>
+<p>考虑到用户的显式特征信息，在实际推荐时，会选取用户最关心的$k$个显式特征$C = { c_1,..,c_k }$然后进行item的得分计算:<br>$$R_{i,j} = \alpha \cdot \frac{\sum_{c \in C} \tilde{X}_{ic} \cdot \tilde{Y}_jc }{kN} + (1-\alpha) \tilde{A}_{i,j}$$</p>
+<blockquote>
+<p>这边的$\alpha$就是取显式特征还是考虑综合行为的一个平衡因子</p>
+</blockquote>
+<p>再记得得到top的<code>Item</code>列表之后，再选取最关心的显式特征，套用预定好的模块即可展现推荐理由：</p>
+<center><img src="/img/Explainable-Recommendation/efm_explain.png" width="450px"></center>
+
+<h3 id="LRPPM">LRPPM</h3><p>LRPPM模型其实是EFM的一个泛化或者增强版本，主要做了下面两个方面的改进：</p>
+<ol>
+<li>从<code>User-Feature</code>和<code>Item-Feature</code>的显示特征矩阵直接衍化到了<code>User-Item-Feature</code>的立体</li>
+<li>使用learning-to-rank的方式从<code>Pointwise</code>到<code>PairWise</code>的变更</li>
+</ol>
+<p>另外为了解决单个<code>item</code>上用户评论的稀疏性，LRPPM还提供到了类目测的模型</p>
+<center><img src="/img/Explainable-Recommendation/lrppm_example.png" width="450px"></center>
+
+<p>该三元立体的式子表示为:<br>$$\hat{T}_{uif} = \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{fk}^{UF} + \sum_{k=0}^{K-1} R_{ik}^I \cdot R_{fk}^{iF} + \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{ik}^I$$</p>
+<p>该式子的含义就是用户$u$对于物品$i$在某个特征上$f$的感兴趣得分，值得注意的时候，对于特征$f$的向量，作者将$U$和$I$上面的特征给分来表示了。在进行优化的时候，作者参考了$BPR$的损失函数，他认为这个可以理解是一个pairwise的排序场景，也就是用户对于$ui$上的感兴趣特征分数比不感兴趣的高即可，所以可以有得到<br>$$\hat{T}_{uif_Af_B} = \hat{T}_{uif_A} - \hat{T}_{uif_B}$$</p>
+<blockquote>
+<p>其中$f_A$表示用户感兴趣的特征,而$f_B$则一般可以用 用户 没观察到的特征</p>
+</blockquote>
+<p>这样则其优化函数为<br>$$\hat{\theta} = \underset{\theta}{argmax} \sum_{u \in U} \sum_{i \in I} \sum_{f_A \in F^+} \sum_{f_B \in F^-} \text{log} \sigma (\hat{T}_{uif_Af_B}) -\lambda_{\theta} \parallel \theta \parallel_F^2$$</p>
+<p>其实就是一个表示的    <code>BPR</code>的损失函数</p>
+<p>与EFM一样，LRPPM模型也会集成CF进行排序，这样其最小化目标就为:<br>$$ \underset{\theta}{min} \sum_{u \in U} \sum_{ i \in I} (A_{ui}- R_u \cdot R_i)^2 -\lambda \sum_{u \in U} \sum_{i \in I} \sum_{f_A \in F^+} \sum_{f_B \in F^-} \text{log} \sigma (\hat{T}_{uif_Af_B}) + \lambda_{\theta} \parallel \theta \parallel_F^2$$</p>
+<p>同时刚刚有提到，其实单个用户对于某个物品的评论是很稀疏的，这样导致整个特征立方体非常稀疏，为了解决这个问题，上述的公式可以很方便的转为基于”类目”的理论，因为往往在同一个类目下的不同物品都会有项目的特征，所以转为”类目”级别之后这个立方体为”User-Categroy-Feature”,式子更改为这样：<br>$$\hat{T}_{ucf}^* = \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{fk}^{UF} + \sum_{k=0}^{K-1} R_{ck}^C \cdot R_{fk}^{cF} + \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{ck}^C$$</p>
+<p>在最小化目标函数上做相应的替换和变更即可.</p>
+<h3 id="MTER">MTER</h3><p>MTER这篇paper最大的idea就是在之前三元立体的基础上新增了一位 关键词(Opinionated word),类似于 <code>价格-高</code>,<code>颜色-鲜艳</code></p>
+<center><img src="/img/Explainable-Recommendation/mter_arch.png" width="450px"></center>
+
+<p>因此整个场景就可以模型化为一个四维的矩阵(<code>U</code>:用户，<code>I</code>:物品，<code>F</code>:特征,<code>O</code>:Opinion)<br>这里考虑到四维矩阵的相乘复杂度太高，所以作者将其分成了三个三维的矩阵:</p>
+<ol>
+<li>$\hat{X}$:<code>U-I-F</code></li>
+<li>$\hat{Y}^U$:<code>U-F-O</code></li>
+<li>$\hat{Y}^I$:<code>I-F-O</code></li>
+</ol>
+<p>最终的优化公式为:<br>$$\underset{\hat{X},\hat{Y}^U,\hat{Y}^I}{min} \parallel \hat{X} - \tilde{X} \parallel_F + \parallel \hat{Y}^U - \tilde{Y}^U \parallel_F + \parallel \hat{Y}^I - \tilde{Y}^I \parallel_F$$</p>
+<h2 id="深度学习方法">深度学习方法</h2><h3 id="NARRE">NARRE</h3><p>这边的思想其实很简单，将用户和Item的评论文本特征灌入的算分模型，同时借助<code>Attention</code>机制来获取权重最高的评论来作为推荐</p>
+<center><img src="/img/Explainable-Recommendation/narre_arch.png" width="450px"></center>
+
+<p>这边单个评论经过<code>CNN</code>进行embedding之后，与发表评论的user或者承载评论的item进行<code>Attention</code>是该paper的核心:<br>$$\hat{a}_{il} = h^T \text{ReLu}(W_oO_{il} + W_u u_{il} + b_1) + b_2$$<br>这样每条评论的权重可以经过softmax<br>$$ a_{il} = \frac{\hat{a}_{il}}{\sum exp(\hat{a}_{il})} $$</p>
+<p>其中$O_{il}$表示评论的文本向量,$u_{il}$表示发表该评论用户，根据他们进行<code>Attention</code>之后按权重聚合得到$Y_i$作为整个<code>Item</code>的整体评论Embedding<br>同时用户产生的评论用类似的方式产生$X_u$,<br>最终使用$(q_u+X_u) \odot (p_i+Y_i)$点积的方式进行计算用户评分，其中$q_u$和$p_i$分别代表使用评论矩阵MF分解得到的用户和<code>Item</code>的向量</p>
+<p>根据模型中$a_{il}$的权重即可来代表该<code>Item</code>最重要的评论进行推荐时展现</p>
+<center><img src="/img/Explainable-Recommendation/narre_example.png" width="450px"></center>
+
+<p>不过我觉得这部的<code>Attention</code>中并没有加入当前待排序用户的特征，所以$a_il$在不同的用户下应该都是同一个，因此评论并没有做到用户级别的个性化 -_-</p>
+<h3 id="NRT">NRT</h3><p><code>NRT</code>的作者在使用普通矩阵分解评分的时候，利用隐向量的来进行tips文本序列的生成</p>
+<center><img src="/img/Explainable-Recommendation/nrt_arch.png" width="450px"></center>
+
+<p>而在序列生成时使用了比较经典的GRU架构，而生成最关键的就是初始化的输入，<code>NRT</code>他是这么构造的</p>
+<ol>
+<li>$u$:用户的隐向量</li>
+<li>$v$:<code>Item</code>的隐向量</li>
+<li>$\hat{r}$: 计算得分的onehot向量，比如总分5分，当前计算4.3分，则为$\{0,0,0,1,0\}$</li>
+<li>$h_L^c$: 可以使用非常简易的生成方法：通过多层感知机之后得到最后一层$h_L^c$，该层映射之后的softmax的值$\hat{c}$来拟合真实评论文本的词分布$\sum c^k \text{log} \hat{c}^k$，该数据在训练时有groundtruth，在预测时只需要inference即可</li>
+</ol>
+<p>因此最终的初始化向向量输入为：$$h_0^s = tanh( W_uu + W_vv + W_r \hat{r} + W_c h_L^c + b)$$</p>
+<p>该初始化向量其实含有信息量还是太少了，应该实际生成的效果相对来说还是比较差的</p>
+<h3 id="CAML">CAML</h3><p><code>CAML</code>在解释生成时的关键是要对用户和item之间进行深层次的交互并进行显式的建模，因此他是在序列生成的初始输入上针对<code>NRT</code>做了很大的改进，<code>CAML</code>的核心是根据用户和<code>Item</code>的评论进行多层的<code>Co-Attention</code>，包含评论级别和评论的属性级别，因此最终的生成还能进行属性进行控制</p>
+<center><img src="/img/Explainable-Recommendation/caml_arch.png" width="650px"></center>
+
+<p>多层的<code>Co-Attention</code>是这样的：</p>
+<ol>
+<li>根据用户和<code>Item</code>的评论文本向量进行Co-Attention:$$\phi_{i,j} = F(d_{u,i})^T W_d F(d_{v,j})$$</li>
+<li>同时取得用户和<code>Item</code>测各条评论最重要的得分$$a_i = \underset{j=1…l_d}{max} \phi_{i,j} , b_j = \underset{i=1…i_d}{max} \phi_{i,j}$$</li>
+<li>这边然后使用<code>Gumbel-Softmax</code>函数得到最终的评论$$q_i = \frac{exp(\frac{a_i+g_i}{\tau})}{\sum exp(\frac{a_i+g_i}{\tau})}$$</li>
+<li>然后可以得到用户和<code>Item</code>的重要评论${d}’_u$和${d}’_v$</li>
+<li>这些评论自身都有他们对应的属性(Concept) $c$，这些$c$按照类似<code>1-4</code>的步骤记得最终这两条评论各自最重要的属性${c}’_u$和${c}’_v$</li>
+<li>此时将他们向量进行拼接起来即可代表用户和<code>Item</code>的评论偏好$e_u = [{d}’_u,{c}’_u]$和$e_v = [{d}’_v,{c}’_v]$</li>
+<li>由于用户或者<code>Item</code>可能不止对意向评论进行偏好，所以可以将<code>Gumbel-Softmax</code>变换随机值进行多次<code>Co-Attention</code>就可以得到他们的综合偏好</li>
+<li>最终和自身的id特征进行拼接就是最终的<code>User</code>和<code>Item</code>向量了$$X_u = [h_u,e^0_u,e^1_u,..,e^n_u],X_v = [h_v,e^0_v,e^1_v,..,e^n_v]$$</li>
+<li>这些向量将会作为评分矩阵FM的输入以及文本序列生成GRU的初始化向量（可能会做一些MLP变换）</li>
+<li>在最终的loss上有一个比较有意思的，除了传统词的NLL损失函数，还有一个属性的损失函数:$$L_c = \frac{1}{\Omega} \sum \sum (max (-\tau_k \text{log}o_{t,k}))$$  这里$\tau$是用户和item偏好的评论属性向量，他们生成该文本总包含不评论属性，则做惩罚</li>
+</ol>
+<p>总体上来说这边的初始化向量构造对比<code>NRT</code>合理了很多：</p>
+<ol>
+<li>加入了用户信息的影响</li>
+<li>同时引入了评论属性，这样生成文本时不容易偏移方向</li>
+</ol>
+<h3 id="还未细看">还未细看</h3><ol>
+<li>进行在线的解释生成：Dynamic Explainable Recommendation based on Neural Attentive Models</li>
+<li>对抗学习进行解释生成：Why I like it: multi-task learning for recommendation and explanation.</li>
+<li>根据多视角来进行解释生成:Explainable Recommendation Through Attentive Multi-View Learning</li>
+<li>利用图像进行解释推荐:Visually-aware fashion recommendation and design with generative image models</li>
+<li>使用bandit方法进行解释模板选择：Explore, Exploit, and Explain- Personalizing Explainable Recommendations with Bandits</li>
+</ol>
+<h2 id="总结">总结</h2><p>总体来说可解释方面的方向在学术上还是比较火热的，也有不少看上去比较可行的方案，但是实际迁移到工业界其实还是有不少的难度：</p>
+<ol>
+<li>没有相应的训练数据</li>
+<li>paper:单个模型，实际业务:多个模型的融合/结合</li>
+<li>透出的文本就算做到99%的相关性/准确性，剩下的1%都是要命的</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>Zhang, Yongfeng, et al. “Explicit factor models for explainable recommendation based on phrase-level sentiment analysis.” Proceedings of the 37th international ACM SIGIR conference on Research &amp; development in information retrieval. ACM, 2014.</li>
+<li>Chen, Xu, et al. “Learning to rank features for recommendation over multiple categories.” Proceedings of the 39th International ACM SIGIR conference on Research and Development in Information Retrieval. ACM, 2016.</li>
+<li>Wang, Nan, et al. “Explainable recommendation via multi-task learning in opinionated text data.” The 41st International ACM SIGIR Conference on Research &amp; Development in Information Retrieval. ACM, 2018.</li>
+<li>Chen, Chong, et al. “Neural attentional rating regression with review-level explanations.” Proceedings of the 2018 World Wide Web Conference. International World Wide Web Conferences Steering Committee, 2018.</li>
+<li>Li, Piji, et al. “Neural rating regression with abstractive tips generation for recommendation.” Proceedings of the 40th International ACM SIGIR conference on Research and Development in Information Retrieval. ACM, 2017.</li>
+<li>Chen, Zhongxia, et al. “Co-attentive multi-task learning for explainable recommendation.” Proceedings of the 28th International Joint Conference on Artificial Intelligence. Vol. 10. AAAI Press, 2019.</li>
+<li>ExplainAble Recommendation and Search</li>
+<li><a href="https://blog.csdn.net/Y2c8YpZC15p/article/details/84801200" target="_blank" rel="external">https://blog.csdn.net/Y2c8YpZC15p/article/details/84801200</a></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="背景">背景</h2><p>在出推荐结果的同时产出一个理由，告诉用户这个item为啥要推荐给你~</p>
+<center><img src="/img/Explainable-Recommendation/why_rec.jpg" width="450px" /></center><br>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Recommendation" scheme="http://kubicode.me/tags/Recommendation/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[当协同过滤(Collaborative Filtering)遇上深度学习]]></title>
@@ -130,8 +286,11 @@
     <link href="http://kubicode.me/2018/12/27/Machine%20Learning/Study-Gradient-Descent-Optimization/"/>
     <id>http://kubicode.me/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/</id>
     <published>2018-12-27T11:38:58.000Z</published>
-    <updated>2019-01-28T03:26:45.039Z</updated>
-    <content type="html"><![CDATA[<h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到达谷底。</p>
+    <updated>2019-01-30T03:33:36.693Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a>的学习和理解，方便记忆</p>
+</blockquote>
+<h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到达谷底。</p>
 <center><img src="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png" width="200px"></center>
 
 <p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>
@@ -143,10 +302,62 @@
 <li>整个梯度更新很慢，同时数据量大到放不下内存时就不再适用该方法了</li>
 <li>批量梯度下降法不使用online在更新</li>
 </ol>
-<h3 id="Stochastic_gradient_descent">Stochastic gradient descent</h3><p>随机梯度下降法的式子长这样子：<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^i;y^i)$$<br>该方法每次计算一次样本就会更新一次梯度，所以运行速度要比批量梯度下降法快很多<br>用代码来表示是这样的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, example, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
-<h3 id="Mini-batch_gradient_descent">Mini-batch gradient descent</h3><h2 id="梯度下降优化算法">梯度下降优化算法</h2>]]></content>
+<h3 id="Stochastic_gradient_descent">Stochastic gradient descent</h3><p>随机梯度下降法的式子长这样子：<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^i;y^i)$$<br>该方法每次计算一次样本就会更新一次梯度，用代码来表示是这样的（各个epoch之间需要对样本进行打散）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, example, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<p><code>SGD</code>的特性(优势和劣势结合一起了-_-)是:</p>
+<ol>
+<li>运行速度要比批量梯度下降法快很多</li>
+<li>可以适用于在线学习</li>
+<li>每次都是以高方差的方式在更新梯度，会导致损失函数的波动很大,因为波动很大，因此这个波动性使得<code>SGD</code>能进入局部最优，但同时想达到最终收敛相对批量梯度下降法会更得更加复杂</li>
+<li>当然有研究证明如果以一个足够小的学习率进行更新时最终也都能到达局部最优和全局最最优。</li>
+</ol>
+<h3 id="Mini-batch_gradient_descent">Mini-batch gradient descent</h3><p>而<code>批量梯度下降法</code>是<code>梯度下降法</code>和<code>随机梯度下降法</code>，他每次都是对一批样本进行梯度计算之后再更新参数，</p>
+<p>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^{i:i+n};y^{i:i+n})$$</p>
+<p>用代码来表示则是:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> batch <span class="keyword">in</span> get_batches(data, batch_size=<span class="number">50</span>):</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, batch, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>代码是以<code>batch_size=50</code>为例，每次都是50个样本一次更新,其他和<code>SGD</code>都是一样的</p>
+</blockquote>
+<p>这种方式的好处有：</p>
+<ol>
+<li>在更新参数时可以减少异常点的参数更新，使得收敛会更加稳定（对于<code>SGD</code>而言）</li>
+<li>他可以充分的利用矩阵计算的优化加速（<code>梯度下降法</code>样本量太多，<code>随机梯度下降法</code>单个样本没法使用矩阵计算），因此现在的<code>DeepLearning</code>算法中大部分都采用这种方式来学习</li>
+</ol>
+<p>然后<code>批量梯度下降法</code>仍旧会存在以下问题：</p>
+<ol>
+<li>学习率大小的问题：太小收敛会很慢，太大会很难到达最优</li>
+<li>并不是所有特征的学习都是一样的，特别在稀疏数据下，每个特征的学习能力和到达最优的时间都是不一致的</li>
+</ol>
+<p>因此才有了下面的各种优化算法</p>
+<h2 id="梯度下降优化算法">梯度下降优化算法</h2><h3 id="Momentum">Momentum</h3><p>动量优化算法可以理解为在<code>SGD</code>的基础上加了一个相关方向，使得<code>SGD</code>可以更快的到达最优点，如下图所示：</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/moment.png" width="600px"></center>
+
+<p>动量法主要是将历史步长的更新向量增加到当前的更新向量中:<br>$$v_t = \gamma v_{t-1} + \eta \nabla_\theta J(\theta) \\ \theta = \theta - v_t $$</p>
+<blockquote>
+<p>这里$v_t$就是历史梯度方向的累积，也称为方向动量，而$\gamma$称为动量项，一般都是设置为<code>0.9</code></p>
+</blockquote>
+<p>通俗得来将，比如一个小球从小山坡上滚下来的时候，越滚会越积累动能，速度也更快的到坡低。同样在进行参数更新时：</p>
+<ol>
+<li>与目标梯度方向相同的维度增加动量，参数更新更快，加快收敛</li>
+<li>与目标梯度方向不一致的维度减少动量，降低参数更新速度，减少振荡；<blockquote>
+<p>而$\gamma$就像小山坡上的风阻系数，非常形象</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="Nesterov_accelerated_gradient">Nesterov accelerated gradient</h3><p><code>Momentum</code>方法虽然在参数更新时考虑了历史梯度方向，但是他在自身的梯度计算时仍为原来的方法（有波动的方向），因此<code>Nesterov加速法</code>提出了在计算梯度时也加上历史的动量方向，这样每次更新的梯度也会考虑历史方向，也就是到终点就更加快了。<br>这里参考<code>Momentum</code>方法，<code>Nesterov</code>加速法的公式是这样的：<br>$$v_t = \gamma v_{t-1} + \eta \nabla_\theta J(\theta-\gamma v_{t-1}) \\ \theta = \theta - v_t $$</p>
+<blockquote>
+<p>这里和<code>Momentum</code>的区别就在梯度那里的参数变成了$\theta-\gamma v_{t-1}$,而这一项正好可以让梯度朝着目标的方向计算</p>
+</blockquote>
+<p>用图来说明应该就是这样纸了：</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/nesterov_update_vector.png" width="400px"></center>
+
+
+<ol>
+<li>蓝色代表<code>Momentum</code>法，他可以快速更新并且方向沿着历史梯度方向</li>
+<li>而棕色和红色是代表<code>Nesterov</code>方法，在后续的更新中，他的梯度会朝着最优的方向去更新（也就是红色），所以他会更快的达到最优点</li>
+</ol>
+]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到]]>
+    <![CDATA[<blockquote>
+<p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent]]>
     </summary>
     
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
@@ -160,7 +371,7 @@
     <link href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/"/>
     <id>http://kubicode.me/2018/10/25/Deep Learning/More-Session-Based-Recommendation/</id>
     <published>2018-10-25T09:39:51.000Z</published>
-    <updated>2019-01-24T11:54:58.576Z</updated>
+    <updated>2019-03-25T14:43:49.139Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>基于上一篇<code>GRU4REC</code>的继续聊聊深度学习在推荐系统中的应用</p>
 <h2 id="NARM">NARM</h2><p>作者提出了一种混合Encoder的方式：全局(<code>Global</code>)所有的序列信息的Encoder和当前(<code>Local</code>)Session序列的Encoder</p>
 <p>所以他的模型是：<br><img src="/img/More-Session-Based-Recommendation/narm_arch.png"></p>
@@ -242,7 +453,7 @@
 <li>边之间的权重分为出度权重和入度权重</li>
 <li>最终一个图可以用 一个带出度权重的矩阵和 带入度权重的矩阵来表示，他们的shape都是$[N,N]$</li>
 </ul>
-<p>对于整个序列使用GNN来进行表达：<br>$$a_{s,i}^t = A_{s,i}^T [v_1^{t-1},…,v_n^{t-1}] + b \\<br>z_{s,i}^t = \sigma(W_z)a_{s,i}^t + U_z v_i^{t-1} \\<br>r_{s,i}^t = \sigma(W_r)a_{s,i}^t + U_r v_i^{t-1} \\<br>\tilde{v_i^t} = \text{tanh}(Wa_{s,i}^t + U(r_{s,i}^t \odot v_i^{t-1} )) \\<br>v_i^t = (1-z_{s,i}^t) \odot v_i^{t-1} + z_{s,i}^t \odot \tilde{v_i^t}$$</p>
+<p>对于整个序列使用GNN来进行表达：<br>$$a_{s,i}^t = A_{s,i}^T [v_1^{t-1},…,v_n^{t-1}]^T H + b \\<br>z_{s,i}^t = \sigma(W_z a_{s,i}^t + U_z v_i^{t-1}) \\<br>r_{s,i}^t = \sigma(W_r a_{s,i}^t + U_r v_i^{t-1}） \\<br>\tilde{v_i^t} = \text{tanh}(Wa_{s,i}^t + U(r_{s,i}^t \odot v_i^{t-1} )) \\<br>v_i^t = (1-z_{s,i}^t) \odot v_i^{t-1} + z_{s,i}^t \odot \tilde{v_i^t}$$</p>
 <p>其中</p>
 <ol>
 <li>$z$和$r$分布表示重置门和更新门,$\odot$ 表示<code>element-wise</code>的相乘</li>
@@ -550,7 +761,7 @@
     <link href="http://kubicode.me/2018/02/23/Deep%20Learning/Deep-in-out-Factorization-Machines-Series/"/>
     <id>http://kubicode.me/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/</id>
     <published>2018-02-23T12:33:22.000Z</published>
-    <updated>2018-09-17T12:26:00.689Z</updated>
+    <updated>2019-10-17T11:26:37.476Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>近期使用<code>FM</code>系列完成了一个<code>CTR</code>预估的任务，本文是阅读了一些paper之后对于<code>FM</code>、<code>FFM</code>、<code>DeepFM</code>、<code>NFM</code>,<code>AFM</code>的一个理解和记录</p>
 </blockquote>
@@ -583,7 +794,7 @@
 <li>可以解决稀疏向量问题，因为每个特征都有一个隐向量，就算是稀疏向量在训练样本没有出现过的组合在预测时也可以进行计算</li>
 <li>同时参数空间也降低到了$O(n\cdot k)$</li>
 </ol>
-<p>但是他实际的运算复杂度并没有降低，反而还到了$O(kn^2)$,但是<code>FM</code>这里的二阶项并没有依赖其他模型参数除了$v_i$，这里就可以鬼斧神工的写为:<br>$$\begin{equation}\begin{split} \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j &amp;= \frac{1}{2}\sum_{i=1}^n \sum_{j=1}^n \left \langle v_i,v_j \right \rangle x_i x_j - \frac{1}{2} \sum_{i=1}^n \left \langle v_i,v_i \right \rangle x_i x_i  \\<br>&amp;= \frac{1}{2} \left ( \sum_{i=1}^n \sum_{j=1}^n \sum_{f=1}^k v_{i,f} v_{j,f} x_i x_j - \sum_{i=1}^n \sum_{f=1}^k v_{i,f} v_{i,f} x_i x_i  \right ) \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right ) \left( \sum_{j=1}^n v_{j,f}x_j \right ) -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ] \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right )^2 -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ]<br>\end{split}\end{equation}$$</p>
+<p>但是他实际的运算复杂度并没有降低，反而还到了$O(kn^2)$,但是<code>FM</code>这里的二阶项并没有依赖其他模型参数除了$v_i$，这里就可以鬼斧神工的写为:<br>$$\begin{equation}\begin{split} \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j &amp;= \frac{1}{2}\sum_{i=1}^n \sum_{j=1}^n \left \langle v_i,v_j \right \rangle x_i x_j - \frac{1}{2} \sum_{i=1}^n \left \langle v_i,v_i \right \rangle x_i x_i  \\<br>&amp;= \frac{1}{2} \left ( \sum_{i=1}^n \sum_{j=1}^n \sum_{f=1}^k v_{i,f} v_{j,f} x_i x_j - \sum_{i=1}^n \sum_{f=1}^k v_{i,f} v_{i,f} x_i x_i  \right ) \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right ) \left( \sum_{j=1}^n v_{j,f}x_j \right ) -\sum_{i=1}^n v_{i,f}^2 x_i^2 \right ] \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right )^2 -\sum_{i=1}^n v_{i,f}^2 x_i^2 \right ]<br>\end{split}\end{equation}$$</p>
 <p>经过这样的转换之后，最终的模型计算复杂度将会降低到$O(kn)$，同时由于是巨大的稀疏场景，样本实际的特征量的平均值为$\bar{m}$并且$\bar{m}&lt;&lt;n$,最终的模型复杂度将会降低到$O(k \bar{m})$</p>
 <h3 id="FM学习">FM学习</h3><p>在<code>FM</code>中模型的参数有$w_0$,$W$以及$V$，这些参数可以通过梯度下降法进行高效的计算，其中梯度为:<br>$$ \frac{\partial}{\partial  \theta}y(x)=\left\{<br>\begin{aligned}<br>1 &amp; \quad if \quad \theta = w_0 \\<br>x_i &amp; \quad if \quad \theta = w_i \\<br>x_i \sum_{j=1}^n v_{j,f}x_j-v_{i,f}x_i^2 &amp; \quad if \quad \theta = v_{i,f} \\<br>\end{aligned}<br>\right.$$</p>
 <blockquote>
@@ -741,7 +952,7 @@
     <link href="http://kubicode.me/2017/05/22/Deep%20Learning/Long-Short-Term-Memory-Model-LSTM/"/>
     <id>http://kubicode.me/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/</id>
     <published>2017-05-22T01:50:40.000Z</published>
-    <updated>2017-06-05T03:47:28.000Z</updated>
+    <updated>2019-10-15T02:14:53.950Z</updated>
     <content type="html"><![CDATA[<h2 id="RNN的缺点">RNN的缺点</h2><p><code>RNN</code>的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个<code>language mdoel</code>:</p>
 <pre><code><span class="operator">the</span> clouds are <span class="operator">in</span> <span class="operator">the</span> sky
 </code></pre><p>这里要预测的<code>sky</code>只需要依赖前前面几个<code>term</code>即可</p>
@@ -1913,82 +2124,6 @@
 <blockquote>
 <p>这里$x$是为文档$D$所表示的特征向量</p>
 </blockquote>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[GBRank:一种基于回归的学习排序算法]]></title>
-    <link href="http://kubicode.me/2016/05/08/Machine%20Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/"/>
-    <id>http://kubicode.me/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/</id>
-    <published>2016-05-08T09:30:39.000Z</published>
-    <updated>2016-05-08T15:27:47.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>GBRank</code>是一种<code>pairwise</code>的学习排序算法，他是基于回归来解决<code>pair</code>对的先后排序问题。在<code>GBRank</code>中，使用的回归算法是<code>GBT(Gradient Boosting Tree)</code>，可以参考<a href="http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/#Gradient_tree_boosting" target="_blank" rel="external">这个</a>，<code>pairwise</code>相关的可以参考<a href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/" target="_blank" rel="external">这个</a></p>
-</blockquote>
-<h2 id="算法原理">算法原理</h2><p>一般来说在搜索引擎里面，相关性越高的越应该排在前面。现在<code>query-doc</code>的特征使用向量$x$或者$y$表示，假设现在有一个文档对$\left \langle x_i,y_i \right \rangle$，当$x_i$排在$y_i$前面时，我们使用$x_i \succ y_i$来表示。</p>
-<p>我们含顺序的<code>pair</code>对用如下集合表示(也就是真的$x_i$真的排在$y_i$前面):$$S=\{ \left \langle x_i,y_i \right \rangle | x_i \succ y_i,i = 1…N \}$$</p>
-<p>现假设学习的排序函数为$h$，我们希望当$h(x_i)&gt;h(y_i)$时，满足$x_i \succ y_i$的数量越多越好.<br>现在将$h$的风险函数用如下式子表示:$$R(h) = \frac{1}{2} \sum_{i=1}^N \left( max\{0,h(y_i)-h(x_i)\} \right)^2$$<br><a id="more"></a></p>
-<p>从$R(h)$可以知道知道每个<code>pair</code>对$\left \langle x_i,y_i \right \rangle$的cost为:</p>
-<p><center><img src="/img/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/cost_function.png" width="400px"></center><br>可以发现当:</p>
-<ol>
-<li>$h(x_i) \geq h(y_i)$，cost代价为0，也就是并不会对最终的风险函数的值产生影响</li>
-<li>$h(x_i) &lt; h(y_i)$，cost代价为其差值的平方</li>
-</ol>
-<p>上述风险函数直接优化比较困难，这里一个巧妙的解决方案时使用回归的方法，也就是$x_i$或者$y_i$去拟合他们另个预测值目标。<br>为了避免优化函数$h$是一个常量，风险函数一般情况下会加上一个平滑项$\tau$($0 &lt; \tau \leq 1$)：$$R(h,\tau ) = \frac{1}{2} \sum_{i=1}^N \left( max\{0,h(y_i)-h(x_i)+\tau \} \right)^2 -\lambda \tau^2 $$</p>
-<blockquote>
-<p>因为当$h$为常量函数时，先前的$R(h)=0$就没有再优化的空间了<br>其实加了平滑项就变相的转为:如果希望$x_i \succ y_i$，就得有$h(x_i) &gt; h(y_i)+\tau$，也就是更为严格了，多了一个<code>gap</code></p>
-</blockquote>
-<p>对于$R(h)$计算$h(x_i)$和$h(y_i)$的负梯度为:$$max\{0,h(y_i)-h(x_i)\} \quad,\quad -max\{0,h(y_i)-h(x_i)\}$$<br>可以发现当<code>pair</code>对符合$\left \langle x_i,y_i \right \rangle$的顺序时，上述的梯度均为0，对于这类<code>case</code>就没有必要在去优化了(以为已经满足目标了)，但是对于另一类，如果$h$不满足<code>pair</code>$\left \langle x_i,y_i \right \rangle$，他们对应的梯度为:$$h(y_i)-h(x_i) \quad,\quad h(x_i)-h(y_i)$$</p>
-<blockquote>
-<p>因为此时$h(y_i)&gt;h(x_i)$<br>还有对于上面两个梯度的后面那个式子存在的意义不是很理解-_-</p>
-</blockquote>
-<p>到了这儿，我们知道所谓的训练样本就是对于$x_i \succ y_i$但是$h(y_i) &gt; h(x_i)$，并且使用的是回归方法，<code>GBRank</code>为其巧妙的找了训练的目标:$x_i$的目标为$h(y_i)+ \tau$以及$y_i$的目标为$h(x_i)- \tau$，也就是在每次迭代是将会构建以下训练集:$$\{(x_i,h(y_i)+\tau),(y_i,h(x_i)-\tau)\}$$</p>
-<h2 id="算法步骤">算法步骤</h2><p><code>GBRank</code>使用<code>GBT</code>为回归函数，所以整个<code>GBRank</code>的算法过程为:<br><strong>Input</strong>:</p>
-<ul>
-<li>训练数据集,真实的排序pair对$S=\{(x_1,y_1),(x_2,y_2)…(x_N,y_N)\}$</li>
-<li>迭代的次数:$K$</li>
-</ul>
-<p><strong>Output</strong>:</p>
-<ul>
-<li>最终模型$h(x)$</li>
-</ul>
-<p><strong>Procedure</strong>:</p>
-<ol>
-<li>随机初始化为一个函数$h_o$</li>
-<li>循环$k \in \{1….K\}$<ol>
-<li>使用$h_{k-1}$作为近似的$h$函数,我们将对样本的计算结果分到两个不相交的集合:$$S^+=\{\left \langle x_i,y_i \right \rangle \in S | h_{k-1}(x_i) \geq h_{k-1}(y_i)+\tau \}$$和$$S^-=\{\left \langle x_i,y_i \right \rangle \in S | h_{k-1}(x_i) &lt; h_{k-1}(y_i)+\tau \}$$</li>
-<li>使用<code>GBT</code>对下面的数据集拟合一个回归函数$g(x)$:$$\{(x_i,h_{k-1}(y_i)+\tau),(y_i,h_{k-1}(x_i)-\tau) | (x_i,y_i) \in S^- \}$$</li>
-<li>进行模型的更新:$$h_k(x) = \frac{kh_{k-1}(x)+\eta g_k(x)}{k+1}$$其中$\eta$为收缩因子</li>
-</ol>
-</li>
-<li>输出最终的模型$h_k(x)$</li>
-</ol>
-<blockquote>
-<p>注意了，其实这里的回归函数还可以使用其他的回归函数来代替，比如$Linear Regression$之类的</p>
-</blockquote>
-<h2 id="总结">总结</h2><p>$h(x)$为最终的排序函数，<code>GBRank</code>在训练时每次迭代中将$h_k(x)$的排序结果与真实结果不一样的样本（就是分错的样本）单独拿出来做训练样本，并且其训练目标为<code>pair</code>的另一个预测值作为回归目标，非常巧妙。<br>此时重新看这个<code>GBRank</code>模型与<code>AdaBoost</code>、<code>GBT</code>其实很大同小异，都是将上一次训练中分错的样本再拿来训练，也是一个提升的模型</p>
-<p>在其paper中的实验结果也是要略好于$RankSvm$，但是其比较疼的时其训练还是比较复杂的，或者说比较耗时,其预测也会比较麻烦一点，所以使用时得慎重~</p>
-<h2 id="参考">参考</h2><p>[1]. 2007-GBRank-A Regression Framework for Learning Ranking Functions Using Relative Relevance Judgments</p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>GBRank</code>是一种<code>pairwise</code>的学习排序算法，他是基于回归来解决<code>pair</code>对的先后排序问题。在<code>GBRank</code>中，使用的回归算法是<code>GBT(Gradient Boosting Tree)</code>，可以参考<a href="http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/#Gradient_tree_boosting">这个</a>，<code>pairwise</code>相关的可以参考<a href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/">这个</a></p>
-</blockquote>
-<h2 id="算法原理">算法原理</h2><p>一般来说在搜索引擎里面，相关性越高的越应该排在前面。现在<code>query-doc</code>的特征使用向量$x$或者$y$表示，假设现在有一个文档对$\left \langle x_i,y_i \right \rangle$，当$x_i$排在$y_i$前面时，我们使用$x_i \succ y_i$来表示。</p>
-<p>我们含顺序的<code>pair</code>对用如下集合表示(也就是真的$x_i$真的排在$y_i$前面):$$S=\{ \left \langle x_i,y_i \right \rangle | x_i \succ y_i,i = 1…N \}$$</p>
-<p>现假设学习的排序函数为$h$，我们希望当$h(x_i)&gt;h(y_i)$时，满足$x_i \succ y_i$的数量越多越好.<br>现在将$h$的风险函数用如下式子表示:$$R(h) = \frac{1}{2} \sum_{i=1}^N \left( max\{0,h(y_i)-h(x_i)\} \right)^2$$<br>]]>
     
     </summary>
     

@@ -162,7 +162,7 @@ FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系�
 <li>可以解决稀疏向量问题，因为每个特征都有一个隐向量，就算是稀疏向量在训练样本没有出现过的组合在预测时也可以进行计算</li>
 <li>同时参数空间也降低到了$O(n\cdot k)$</li>
 </ol>
-<p>但是他实际的运算复杂度并没有降低，反而还到了$O(kn^2)$,但是<code>FM</code>这里的二阶项并没有依赖其他模型参数除了$v_i$，这里就可以鬼斧神工的写为:<br>$$\begin{equation}\begin{split} \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j &amp;= \frac{1}{2}\sum_{i=1}^n \sum_{j=1}^n \left \langle v_i,v_j \right \rangle x_i x_j - \frac{1}{2} \sum_{i=1}^n \left \langle v_i,v_i \right \rangle x_i x_i  \\<br>&amp;= \frac{1}{2} \left ( \sum_{i=1}^n \sum_{j=1}^n \sum_{f=1}^k v_{i,f} v_{j,f} x_i x_j - \sum_{i=1}^n \sum_{f=1}^k v_{i,f} v_{i,f} x_i x_i  \right ) \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right ) \left( \sum_{j=1}^n v_{j,f}x_j \right ) -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ] \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right )^2 -\sum_{i=1}^n v_{i,f}^2 v_i^2 \right ]<br>\end{split}\end{equation}$$</p>
+<p>但是他实际的运算复杂度并没有降低，反而还到了$O(kn^2)$,但是<code>FM</code>这里的二阶项并没有依赖其他模型参数除了$v_i$，这里就可以鬼斧神工的写为:<br>$$\begin{equation}\begin{split} \sum_{i=1}^n \sum_{j=i+1}^n \left \langle v_i,v_j \right \rangle x_i x_j &amp;= \frac{1}{2}\sum_{i=1}^n \sum_{j=1}^n \left \langle v_i,v_j \right \rangle x_i x_j - \frac{1}{2} \sum_{i=1}^n \left \langle v_i,v_i \right \rangle x_i x_i  \\<br>&amp;= \frac{1}{2} \left ( \sum_{i=1}^n \sum_{j=1}^n \sum_{f=1}^k v_{i,f} v_{j,f} x_i x_j - \sum_{i=1}^n \sum_{f=1}^k v_{i,f} v_{i,f} x_i x_i  \right ) \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right ) \left( \sum_{j=1}^n v_{j,f}x_j \right ) -\sum_{i=1}^n v_{i,f}^2 x_i^2 \right ] \\<br>&amp;= \frac{1}{2} \sum_{f=1}^k \left[ \left ( \sum_{i=1}^n v_{i,f}x_i \right )^2 -\sum_{i=1}^n v_{i,f}^2 x_i^2 \right ]<br>\end{split}\end{equation}$$</p>
 <p>经过这样的转换之后，最终的模型计算复杂度将会降低到$O(kn)$，同时由于是巨大的稀疏场景，样本实际的特征量的平均值为$\bar{m}$并且$\bar{m}&lt;&lt;n$,最终的模型复杂度将会降低到$O(k \bar{m})$</p>
 <h3 id="FM学习">FM学习</h3><p>在<code>FM</code>中模型的参数有$w_0$,$W$以及$V$，这些参数可以通过梯度下降法进行高效的计算，其中梯度为:<br>$$ \frac{\partial}{\partial  \theta}y(x)=\left\{<br>\begin{aligned}<br>1 &amp; \quad if \quad \theta = w_0 \\<br>x_i &amp; \quad if \quad \theta = w_i \\<br>x_i \sum_{j=1}^n v_{j,f}x_j-v_{i,f}x_i^2 &amp; \quad if \quad \theta = v_{i,f} \\<br>\end{aligned}<br>\right.$$</p>
 <blockquote>
@@ -326,7 +326,7 @@ FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系�
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 		  
 		
 		  
@@ -411,7 +411,7 @@ FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系�
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>42</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>43</sup></a></li>
 			
 		
 			
@@ -431,7 +431,7 @@ FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系�
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 			
 		
 			
@@ -455,19 +455,7 @@ FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系�
 			
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -475,7 +463,19 @@ FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系�
 			
 		
 			
-				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
@@ -483,7 +483,7 @@ FMFactorization Machine(FM)由Steffen Rendle在2010年提出，旨在解决系�
 			
 		
 			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
 			

@@ -1,0 +1,845 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>可解释性推荐系统 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="背景在出推荐结果的同时产出一个理由，告诉用户这个item为啥要推荐给你~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可解释性推荐系统">
+<meta property="og:url" content="http://kubicode.me/2019/10/15/Deep Learning/Explainable-Recommendation/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="背景在出推荐结果的同时产出一个理由，告诉用户这个item为啥要推荐给你~">
+<meta property="og:image" content="/img/Explainable-Recommendation/why_rec.jpg">
+<meta property="og:image" content="/img/Explainable-Recommendation/arch.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/rating.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/efm_integr.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/efm_explain.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/lrppm_example.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/mter_arch.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/narre_arch.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/narre_example.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/nrt_arch.png">
+<meta property="og:image" content="/img/Explainable-Recommendation/caml_arch.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="可解释性推荐系统">
+<meta name="twitter:description" content="背景在出推荐结果的同时产出一个理由，告诉用户这个item为啥要推荐给你~">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2019/10/15/Deep Learning/Explainable-Recommendation/" title="可解释性推荐系统" itemprop="url">可解释性推荐系统</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2019-10-15T03:15:05.000Z" itemprop="datePublished"> 发表于 2019-10-15</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#矩阵分解方法"><span class="toc-number">2.</span> <span class="toc-text">矩阵分解方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EFM"><span class="toc-number">2.1.</span> <span class="toc-text">EFM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LRPPM"><span class="toc-number">2.2.</span> <span class="toc-text">LRPPM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MTER"><span class="toc-number">2.3.</span> <span class="toc-text">MTER</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习方法"><span class="toc-number">3.</span> <span class="toc-text">深度学习方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NARRE"><span class="toc-number">3.1.</span> <span class="toc-text">NARRE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NRT"><span class="toc-number">3.2.</span> <span class="toc-text">NRT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CAML"><span class="toc-number">3.3.</span> <span class="toc-text">CAML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#还未细看"><span class="toc-number">3.4.</span> <span class="toc-text">还未细看</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="背景">背景</h2><p>在出推荐结果的同时产出一个理由，告诉用户这个item为啥要推荐给你~</p>
+<center><img src="/img/Explainable-Recommendation/why_rec.jpg" width="450px"></center><br><a id="more"></a><br>大致的概念总结起来是这么一个图：<br><center><img src="/img/Explainable-Recommendation/arch.png" width="650px"></center>
+
+<p>下面列举了一些最近自己调研的方法和理解</p>
+<h2 id="矩阵分解方法">矩阵分解方法</h2><h3 id="EFM">EFM</h3><p>经典的矩阵分解方法可以根据 <code>User-Item</code> 的行为矩阵进行分解，然后得到<code>User</code>向量和<code>Item</code>向量之后进行推荐，而<code>EFM</code>在矩阵分解的基础上加入了 <code>User/Item</code>的显式特征矩阵，使得在推荐结果上可以拿到对应的显式特征，从而进行推荐的可解释性，当然，这里的特征一般指的是<code>Aspect</code>的属性。</p>
+<p>EFM在关键idea时推荐的同时给到用户比较关心的特征，在paper的场景中，给到用户评分行为，同时评分时会得到相应的评价文本，</p>
+<center><img src="/img/Explainable-Recommendation/rating.png" width="450px"></center>
+
+<p>这样就是这样的一个评分矩阵，其中左侧是用户的评分行为，左侧有对应的评价文本，作者对该评价文本进行情感分析，比如可以得到<code>(screen,1),(earphone,-1)</code>的情感，这里的<code>screen</code>和<code>earphone</code>这些属性就可以作为对应的”特征”，因为根据评论情况，用户对于”特征”会有偏好，同时<code>Item</code>方面也会对不同的”特征”差异。</p>
+<p>因此借助用户的评论对其情感分析，可以构建<code>User-Feature</code>和<code>Item-Feature</code>的显示特征矩阵，<br>其中对于<code>User-Feature</code>的填充值为:</p>
+<p>$$ X_{i,j}=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad u_i \quad not \quad mention \quad feature \quad F_j \\<br>1+(N-1)(\frac{2}{1+e^{-t_{i,j}}}-1) &amp; \quad else \\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>其中N表示$t_{i,j} \in [1,N]$ 为实际评分分数，为$N$为最大评分分数</p>
+</blockquote>
+<p>同时对于<code>Item-Feature</code>的填充值为:</p>
+<p>$$ Y_{i,j}=\left\{<br>\begin{aligned}<br>0 &amp; \quad if \quad p_i \quad not \quad reviewed \quad feature \quad F_j \\<br>1+\frac{N-1}{1+e^{-k \cdot s_{i,j}}} &amp; \quad else \\<br>\end{aligned}<br>\right.$$</p>
+<blockquote>
+<p>其中$k$为该$F_j$在$p_i$上出现的次数，同时$s_{i,j}$就是对应的平均评分数</p>
+</blockquote>
+<p>因此可以用<code>X</code>来表示用户的显式特征矩阵，<code>Y</code>来表示<code>Item</code>的显式特征矩阵,利用矩阵分解，可以有</p>
+<p>$X = U_1 V ^T \quad Y = U_2 V^T$</p>
+<p>这样$U_1,U_2$分别为用户和item对应的显式向量矩阵，而$V$为特征的显示向量矩阵，如果根据这两个矩阵直接进行推荐，其优化函数为:</p>
+<p>$$ \underset{U_1,U_2,V}{minimize} \left \{ \lambda_x \parallel U_1V^T - X \parallel _F^2 + \lambda_y \parallel  U_2V -Y \parallel _F^2  \right \} , st. U_1 \in R^{m \times r},U_2 \in R^{n \times r},V \in R^{p \times r}$$</p>
+<p>这边的$\lambda_x$和$\lambda_y$是正则项因子，同时$r$就是为显示特征的向量大小.</p>
+<p>而上面的式子仅为用户行为在显式特征部分的表示，这些显式特征并无法全部表示用户的行为（至少丢掉了用户对应<code>item</code>的偏好），因此还需要再加入用户的隐式偏好。<br>这边使用${r}’$来表示隐式特征向量的大小，,其中使用$H_1$和$H_2$分别来表示用户和<code>Item</code>的隐式偏好矩阵，其中<code>A</code>为用户对于<code>Item</code>的评分矩阵，这里另$P=[U1,H1]$和$Q = [U2,H2]$,他们以拼接的方式来表示用户和<code>Item</code>的全部信息，则希望$$PQ^T \approx A$$。</p>
+<center><img src="/img/Explainable-Recommendation/efm_integr.png" width="450px"></center>
+
+
+<p>因此最终的优化函数为<br>$$ \underset{U_1,U_2,V,H_1,H_2}{minimize} \left \{ \parallel PQ^T - A \parallel _F^2 + \lambda_x \parallel U_1V^T - X \parallel _F^2 + \lambda_y \parallel  U_2V -Y \parallel _F^2 + \\ \lambda_u (\parallel U_1 \parallel^2 + \parallel U_2 \parallel^2  ) + \lambda_h (\parallel H_1 \parallel^2 + \parallel H_2 \parallel^2 ) + \lambda_v \parallel V \parallel^2  \right \} $$</p>
+<blockquote>
+<p>由于该式子无法直接优化，作者是通过每个矩阵依次迭代进行优化的，具体可以参考paper</p>
+</blockquote>
+<p>这边当$r=0$的时候，其实就是回归到了普通的用户行为矩阵推荐。</p>
+<p>考虑到用户的显式特征信息，在实际推荐时，会选取用户最关心的$k$个显式特征$C = { c_1,..,c_k }$然后进行item的得分计算:<br>$$R_{i,j} = \alpha \cdot \frac{\sum_{c \in C} \tilde{X}_{ic} \cdot \tilde{Y}_jc }{kN} + (1-\alpha) \tilde{A}_{i,j}$$</p>
+<blockquote>
+<p>这边的$\alpha$就是取显式特征还是考虑综合行为的一个平衡因子</p>
+</blockquote>
+<p>再记得得到top的<code>Item</code>列表之后，再选取最关心的显式特征，套用预定好的模块即可展现推荐理由：</p>
+<center><img src="/img/Explainable-Recommendation/efm_explain.png" width="450px"></center>
+
+<h3 id="LRPPM">LRPPM</h3><p>LRPPM模型其实是EFM的一个泛化或者增强版本，主要做了下面两个方面的改进：</p>
+<ol>
+<li>从<code>User-Feature</code>和<code>Item-Feature</code>的显示特征矩阵直接衍化到了<code>User-Item-Feature</code>的立体</li>
+<li>使用learning-to-rank的方式从<code>Pointwise</code>到<code>PairWise</code>的变更</li>
+</ol>
+<p>另外为了解决单个<code>item</code>上用户评论的稀疏性，LRPPM还提供到了类目测的模型</p>
+<center><img src="/img/Explainable-Recommendation/lrppm_example.png" width="450px"></center>
+
+<p>该三元立体的式子表示为:<br>$$\hat{T}_{uif} = \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{fk}^{UF} + \sum_{k=0}^{K-1} R_{ik}^I \cdot R_{fk}^{iF} + \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{ik}^I$$</p>
+<p>该式子的含义就是用户$u$对于物品$i$在某个特征上$f$的感兴趣得分，值得注意的时候，对于特征$f$的向量，作者将$U$和$I$上面的特征给分来表示了。在进行优化的时候，作者参考了$BPR$的损失函数，他认为这个可以理解是一个pairwise的排序场景，也就是用户对于$ui$上的感兴趣特征分数比不感兴趣的高即可，所以可以有得到<br>$$\hat{T}_{uif_Af_B} = \hat{T}_{uif_A} - \hat{T}_{uif_B}$$</p>
+<blockquote>
+<p>其中$f_A$表示用户感兴趣的特征,而$f_B$则一般可以用 用户 没观察到的特征</p>
+</blockquote>
+<p>这样则其优化函数为<br>$$\hat{\theta} = \underset{\theta}{argmax} \sum_{u \in U} \sum_{i \in I} \sum_{f_A \in F^+} \sum_{f_B \in F^-} \text{log} \sigma (\hat{T}_{uif_Af_B}) -\lambda_{\theta} \parallel \theta \parallel_F^2$$</p>
+<p>其实就是一个表示的    <code>BPR</code>的损失函数</p>
+<p>与EFM一样，LRPPM模型也会集成CF进行排序，这样其最小化目标就为:<br>$$ \underset{\theta}{min} \sum_{u \in U} \sum_{ i \in I} (A_{ui}- R_u \cdot R_i)^2 -\lambda \sum_{u \in U} \sum_{i \in I} \sum_{f_A \in F^+} \sum_{f_B \in F^-} \text{log} \sigma (\hat{T}_{uif_Af_B}) + \lambda_{\theta} \parallel \theta \parallel_F^2$$</p>
+<p>同时刚刚有提到，其实单个用户对于某个物品的评论是很稀疏的，这样导致整个特征立方体非常稀疏，为了解决这个问题，上述的公式可以很方便的转为基于”类目”的理论，因为往往在同一个类目下的不同物品都会有项目的特征，所以转为”类目”级别之后这个立方体为”User-Categroy-Feature”,式子更改为这样：<br>$$\hat{T}_{ucf}^* = \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{fk}^{UF} + \sum_{k=0}^{K-1} R_{ck}^C \cdot R_{fk}^{cF} + \sum_{k=0}^{K-1} R_{uk}^U \cdot R_{ck}^C$$</p>
+<p>在最小化目标函数上做相应的替换和变更即可.</p>
+<h3 id="MTER">MTER</h3><p>MTER这篇paper最大的idea就是在之前三元立体的基础上新增了一位 关键词(Opinionated word),类似于 <code>价格-高</code>,<code>颜色-鲜艳</code></p>
+<center><img src="/img/Explainable-Recommendation/mter_arch.png" width="450px"></center>
+
+<p>因此整个场景就可以模型化为一个四维的矩阵(<code>U</code>:用户，<code>I</code>:物品，<code>F</code>:特征,<code>O</code>:Opinion)<br>这里考虑到四维矩阵的相乘复杂度太高，所以作者将其分成了三个三维的矩阵:</p>
+<ol>
+<li>$\hat{X}$:<code>U-I-F</code></li>
+<li>$\hat{Y}^U$:<code>U-F-O</code></li>
+<li>$\hat{Y}^I$:<code>I-F-O</code></li>
+</ol>
+<p>最终的优化公式为:<br>$$\underset{\hat{X},\hat{Y}^U,\hat{Y}^I}{min} \parallel \hat{X} - \tilde{X} \parallel_F + \parallel \hat{Y}^U - \tilde{Y}^U \parallel_F + \parallel \hat{Y}^I - \tilde{Y}^I \parallel_F$$</p>
+<h2 id="深度学习方法">深度学习方法</h2><h3 id="NARRE">NARRE</h3><p>这边的思想其实很简单，将用户和Item的评论文本特征灌入的算分模型，同时借助<code>Attention</code>机制来获取权重最高的评论来作为推荐</p>
+<center><img src="/img/Explainable-Recommendation/narre_arch.png" width="450px"></center>
+
+<p>这边单个评论经过<code>CNN</code>进行embedding之后，与发表评论的user或者承载评论的item进行<code>Attention</code>是该paper的核心:<br>$$\hat{a}_{il} = h^T \text{ReLu}(W_oO_{il} + W_u u_{il} + b_1) + b_2$$<br>这样每条评论的权重可以经过softmax<br>$$ a_{il} = \frac{\hat{a}_{il}}{\sum exp(\hat{a}_{il})} $$</p>
+<p>其中$O_{il}$表示评论的文本向量,$u_{il}$表示发表该评论用户，根据他们进行<code>Attention</code>之后按权重聚合得到$Y_i$作为整个<code>Item</code>的整体评论Embedding<br>同时用户产生的评论用类似的方式产生$X_u$,<br>最终使用$(q_u+X_u) \odot (p_i+Y_i)$点积的方式进行计算用户评分，其中$q_u$和$p_i$分别代表使用评论矩阵MF分解得到的用户和<code>Item</code>的向量</p>
+<p>根据模型中$a_{il}$的权重即可来代表该<code>Item</code>最重要的评论进行推荐时展现</p>
+<center><img src="/img/Explainable-Recommendation/narre_example.png" width="450px"></center>
+
+<p>不过我觉得这部的<code>Attention</code>中并没有加入当前待排序用户的特征，所以$a_il$在不同的用户下应该都是同一个，因此评论并没有做到用户级别的个性化 -_-</p>
+<h3 id="NRT">NRT</h3><p><code>NRT</code>的作者在使用普通矩阵分解评分的时候，利用隐向量的来进行tips文本序列的生成</p>
+<center><img src="/img/Explainable-Recommendation/nrt_arch.png" width="450px"></center>
+
+<p>而在序列生成时使用了比较经典的GRU架构，而生成最关键的就是初始化的输入，<code>NRT</code>他是这么构造的</p>
+<ol>
+<li>$u$:用户的隐向量</li>
+<li>$v$:<code>Item</code>的隐向量</li>
+<li>$\hat{r}$: 计算得分的onehot向量，比如总分5分，当前计算4.3分，则为$\{0,0,0,1,0\}$</li>
+<li>$h_L^c$: 可以使用非常简易的生成方法：通过多层感知机之后得到最后一层$h_L^c$，该层映射之后的softmax的值$\hat{c}$来拟合真实评论文本的词分布$\sum c^k \text{log} \hat{c}^k$，该数据在训练时有groundtruth，在预测时只需要inference即可</li>
+</ol>
+<p>因此最终的初始化向向量输入为：$$h_0^s = tanh( W_uu + W_vv + W_r \hat{r} + W_c h_L^c + b)$$</p>
+<p>该初始化向量其实含有信息量还是太少了，应该实际生成的效果相对来说还是比较差的</p>
+<h3 id="CAML">CAML</h3><p><code>CAML</code>在解释生成时的关键是要对用户和item之间进行深层次的交互并进行显式的建模，因此他是在序列生成的初始输入上针对<code>NRT</code>做了很大的改进，<code>CAML</code>的核心是根据用户和<code>Item</code>的评论进行多层的<code>Co-Attention</code>，包含评论级别和评论的属性级别，因此最终的生成还能进行属性进行控制</p>
+<center><img src="/img/Explainable-Recommendation/caml_arch.png" width="650px"></center>
+
+<p>多层的<code>Co-Attention</code>是这样的：</p>
+<ol>
+<li>根据用户和<code>Item</code>的评论文本向量进行Co-Attention:$$\phi_{i,j} = F(d_{u,i})^T W_d F(d_{v,j})$$</li>
+<li>同时取得用户和<code>Item</code>测各条评论最重要的得分$$a_i = \underset{j=1…l_d}{max} \phi_{i,j} , b_j = \underset{i=1…i_d}{max} \phi_{i,j}$$</li>
+<li>这边然后使用<code>Gumbel-Softmax</code>函数得到最终的评论$$q_i = \frac{exp(\frac{a_i+g_i}{\tau})}{\sum exp(\frac{a_i+g_i}{\tau})}$$</li>
+<li>然后可以得到用户和<code>Item</code>的重要评论${d}’_u$和${d}’_v$</li>
+<li>这些评论自身都有他们对应的属性(Concept) $c$，这些$c$按照类似<code>1-4</code>的步骤记得最终这两条评论各自最重要的属性${c}’_u$和${c}’_v$</li>
+<li>此时将他们向量进行拼接起来即可代表用户和<code>Item</code>的评论偏好$e_u = [{d}’_u,{c}’_u]$和$e_v = [{d}’_v,{c}’_v]$</li>
+<li>由于用户或者<code>Item</code>可能不止对意向评论进行偏好，所以可以将<code>Gumbel-Softmax</code>变换随机值进行多次<code>Co-Attention</code>就可以得到他们的综合偏好</li>
+<li>最终和自身的id特征进行拼接就是最终的<code>User</code>和<code>Item</code>向量了$$X_u = [h_u,e^0_u,e^1_u,..,e^n_u],X_v = [h_v,e^0_v,e^1_v,..,e^n_v]$$</li>
+<li>这些向量将会作为评分矩阵FM的输入以及文本序列生成GRU的初始化向量（可能会做一些MLP变换）</li>
+<li>在最终的loss上有一个比较有意思的，除了传统词的NLL损失函数，还有一个属性的损失函数:$$L_c = \frac{1}{\Omega} \sum \sum (max (-\tau_k \text{log}o_{t,k}))$$  这里$\tau$是用户和item偏好的评论属性向量，他们生成该文本总包含不评论属性，则做惩罚</li>
+</ol>
+<p>总体上来说这边的初始化向量构造对比<code>NRT</code>合理了很多：</p>
+<ol>
+<li>加入了用户信息的影响</li>
+<li>同时引入了评论属性，这样生成文本时不容易偏移方向</li>
+</ol>
+<h3 id="还未细看">还未细看</h3><ol>
+<li>进行在线的解释生成：Dynamic Explainable Recommendation based on Neural Attentive Models</li>
+<li>对抗学习进行解释生成：Why I like it: multi-task learning for recommendation and explanation.</li>
+<li>根据多视角来进行解释生成:Explainable Recommendation Through Attentive Multi-View Learning</li>
+<li>利用图像进行解释推荐:Visually-aware fashion recommendation and design with generative image models</li>
+<li>使用bandit方法进行解释模板选择：Explore, Exploit, and Explain- Personalizing Explainable Recommendations with Bandits</li>
+</ol>
+<h2 id="总结">总结</h2><p>总体来说可解释方面的方向在学术上还是比较火热的，也有不少看上去比较可行的方案，但是实际迁移到工业界其实还是有不少的难度：</p>
+<ol>
+<li>没有相应的训练数据</li>
+<li>paper:单个模型，实际业务:多个模型的融合/结合</li>
+<li>透出的文本就算做到99%的相关性/准确性，剩下的1%都是要命的</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>Zhang, Yongfeng, et al. “Explicit factor models for explainable recommendation based on phrase-level sentiment analysis.” Proceedings of the 37th international ACM SIGIR conference on Research &amp; development in information retrieval. ACM, 2014.</li>
+<li>Chen, Xu, et al. “Learning to rank features for recommendation over multiple categories.” Proceedings of the 39th International ACM SIGIR conference on Research and Development in Information Retrieval. ACM, 2016.</li>
+<li>Wang, Nan, et al. “Explainable recommendation via multi-task learning in opinionated text data.” The 41st International ACM SIGIR Conference on Research &amp; Development in Information Retrieval. ACM, 2018.</li>
+<li>Chen, Chong, et al. “Neural attentional rating regression with review-level explanations.” Proceedings of the 2018 World Wide Web Conference. International World Wide Web Conferences Steering Committee, 2018.</li>
+<li>Li, Piji, et al. “Neural rating regression with abstractive tips generation for recommendation.” Proceedings of the 40th International ACM SIGIR conference on Research and Development in Information Retrieval. ACM, 2017.</li>
+<li>Chen, Zhongxia, et al. “Co-attentive multi-task learning for explainable recommendation.” Proceedings of the 28th International Joint Conference on Artificial Intelligence. Vol. 10. AAAI Press, 2019.</li>
+<li>ExplainAble Recommendation and Search</li>
+<li><a href="https://blog.csdn.net/Y2c8YpZC15p/article/details/84801200" target="_blank" rel="external">https://blog.csdn.net/Y2c8YpZC15p/article/details/84801200</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Recommendation/">Recommendation</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2019/10/15/Deep Learning/Explainable-Recommendation/" data-title="可解释性推荐系统 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2019/01/16/Deep Learning/Collaborative-Filtering-Meet-to-Deep-Learning/"  title="当协同过滤(Collaborative Filtering)遇上深度学习">
+ <strong>下一篇：</strong><br/> 
+ <span>当协同过滤(Collaborative Filtering)遇上深度学习
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#矩阵分解方法"><span class="toc-number">2.</span> <span class="toc-text">矩阵分解方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EFM"><span class="toc-number">2.1.</span> <span class="toc-text">EFM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LRPPM"><span class="toc-number">2.2.</span> <span class="toc-text">LRPPM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MTER"><span class="toc-number">2.3.</span> <span class="toc-text">MTER</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#深度学习方法"><span class="toc-number">3.</span> <span class="toc-text">深度学习方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NARRE"><span class="toc-number">3.1.</span> <span class="toc-text">NARRE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NRT"><span class="toc-number">3.2.</span> <span class="toc-text">NRT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CAML"><span class="toc-number">3.3.</span> <span class="toc-text">CAML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#还未细看"><span class="toc-number">3.4.</span> <span class="toc-text">还未细看</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>43</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinfagang.gitlab.io" target="_blank" title="jinfagang&#39;s Blog">jinfagang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.yifanguo.top/" target="_blank" title="yifanguo&#39;s Blog">yifanguo&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

@@ -95,6 +95,75 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/" title="GBRank:一种基于回归的学习排序算法" itemprop="url">GBRank:一种基于回归的学习排序算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-05-08T09:30:39.000Z" itemprop="datePublished"> 发表于 2016-05-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>GBRank</code>是一种<code>pairwise</code>的学习排序算法，他是基于回归来解决<code>pair</code>对的先后排序问题。在<code>GBRank</code>中，使用的回归算法是<code>GBT(Gradient Boosting Tree)</code>，可以参考<a href="http://kubicode.me/2016/04/24/Machine%20Learning/From-Gradient-Boosting-to-GBT/#Gradient_tree_boosting">这个</a>，<code>pairwise</code>相关的可以参考<a href="http://kubicode.me/2016/04/10/Machine%20Learning/LTR-Pairwise-Study/">这个</a></p>
+</blockquote>
+<h2 id="算法原理">算法原理</h2><p>一般来说在搜索引擎里面，相关性越高的越应该排在前面。现在<code>query-doc</code>的特征使用向量$x$或者$y$表示，假设现在有一个文档对$\left \langle x_i,y_i \right \rangle$，当$x_i$排在$y_i$前面时，我们使用$x_i \succ y_i$来表示。</p>
+<p>我们含顺序的<code>pair</code>对用如下集合表示(也就是真的$x_i$真的排在$y_i$前面):$$S=\{ \left \langle x_i,y_i \right \rangle | x_i \succ y_i,i = 1…N \}$$</p>
+<p>现假设学习的排序函数为$h$，我们希望当$h(x_i)&gt;h(y_i)$时，满足$x_i \succ y_i$的数量越多越好.<br>现在将$h$的风险函数用如下式子表示:$$R(h) = \frac{1}{2} \sum_{i=1}^N \left( max\{0,h(y_i)-h(x_i)\} \right)^2$$<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/05/08/Machine Learning/GBRank-A-PairWsie-LTR-Base-on-Regression-Framework/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/04/29/Python/Python-Install-on-CentOS/" title="在CentOS上自己安装python" itemprop="url">在CentOS上自己安装python</a>
   </h1>
   <p class="article-author">By
@@ -741,70 +810,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/" title="Hadoop Streaming导入自定义module" itemprop="url">Hadoop Streaming导入自定义module</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-24T16:17:54.000Z" itemprop="datePublished"> 发表于 2016-03-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="问题">问题</h2><p>今天发现用<code>Python</code>编写<code>Hadoop Streaming</code>脚本时，如果自己导入自定义的模块会报错-_-<br>列如<code>word count</code>中的<a href="http://kubicode.me/2015/11/08/Hadoop/Hadoop-Streaming-Primary-Learning-And-Debug/">reducer</a>程序:<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Hadoop/">Hadoop</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hadoop/">Hadoop</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/25/Hadoop/Hadoop-Streaming-Import-custom-module/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -835,7 +840,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 		  
 		
 		  
@@ -920,7 +925,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>42</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>43</sup></a></li>
 			
 		
 			
@@ -940,7 +945,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 			
 		
 			
@@ -964,19 +969,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -984,7 +977,19 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
@@ -992,7 +997,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
 			

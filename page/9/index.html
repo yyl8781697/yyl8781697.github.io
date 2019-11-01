@@ -95,6 +95,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/19/Algorithm/SubCollection/" title="打印一个集合所有的子集和" itemprop="url">打印一个集合所有的子集和</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-19T07:39:20.000Z" itemprop="datePublished"> 发表于 2015-07-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>打印一个集合所有的子集和，比如<span class="list">{a,b,c}</span>的子集和有<span class="list">{a}</span>,<span class="list">{b}</span>,<span class="list">{c}</span>,<span class="list">{a,b}</span>,<span class="list">{a,c}</span>,<span class="list">{b,c}</span>,<span class="list">{a,b,c}</span>以及 空
+</code></pre><h2 id="解析">解析</h2><p>一个元素个数为n的集合所包含的所有组合的子集个数有2^n个，这样其实就可以将所以集合的情况映射到0~2^n-1个，然后按位取元素即可</p>
+<pre><code>比如<span class="list">{a,b,c}</span>这个三元素的集合按位映射
+<span class="list">{0,0,0}</span>=&gt;空
+<span class="list">{0,0,1}</span>=&gt;<span class="list">{c}</span>
+<span class="list">{0,1,0}</span>=&gt;<span class="list">{b}</span>
+<span class="list">{0,1,1}</span>=&gt;<span class="list">{b,c}</span>
+.
+.
+.
+<span class="list">{1,1,1}</span>=&gt;<span class="list">{a,b,c}</span>
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/19/Algorithm/SubCollection/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/19/Algorithm/SubCollection/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/19/Algorithm/OddEvenSplit/" title="奇数偶数分离 奇数在左侧,偶数在右侧,要求复杂度为O(N)" itemprop="url">奇数偶数分离 奇数在左侧,偶数在右侧,要求复杂度为O(N)</a>
   </h1>
   <p class="article-author">By
@@ -706,77 +781,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/02/Algorithm/MinStack/" title="定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素" itemprop="url">定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-02T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-07-02</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>定义栈的数据结构，要求添加一个min函数，能够得到栈的最小元素。要求函数min、push以及pop的时间复杂度都是<span class="function"><span class="title">O</span><span class="params">(<span class="number">1</span>)</span></span>。
-</code></pre><h2 id="解题">解题</h2><p>这道题目的主要难点就是需要的复杂度为O(1)，也就是说在求最小值的时候无法遍历该栈。<br>正确地解法就是使用一个辅助栈（数组），为维持当前栈容量下地最小值情况</p>
-<p>比如</p>
-<pre><code>栈数据
-3,5,2,4,1
-辅助数据
-0,0,2,2,4
-</code></pre><p>将5压入栈的时候，发现上一个栈顶元素下的最小值是3，故这里无法更新最小值，仍旧将当前的最小值置为3（索引位置为0），但是当2压入栈的时候<br>，可以发展2&lt;3，所以在该类情况下会将当前栈的最小值更新为2（即索引为2）<br>这种设计在出栈的时候只需要将栈数据的栈顶出掉即可，同样在求最小值的时候只要返回当前辅助数据中索引值在栈数据中的值即可<br>这样就非常方便地实现了O（1）的要求，同时因为辅助栈是存储索引位置，索引并不会占用很大的内容空间</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/02/Algorithm/MinStack/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/02/Algorithm/MinStack/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
@@ -807,7 +811,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 		  
 		
 		  
@@ -892,7 +896,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>42</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>43</sup></a></li>
 			
 		
 			
@@ -912,7 +916,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 			
 		
 			
@@ -936,19 +940,7 @@
 			
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -956,7 +948,19 @@
 			
 		
 			
-				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
@@ -964,7 +968,7 @@
 			
 		
 			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
 			

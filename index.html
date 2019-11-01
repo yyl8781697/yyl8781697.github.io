@@ -95,6 +95,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2019/10/15/Deep Learning/Explainable-Recommendation/" title="可解释性推荐系统" itemprop="url">可解释性推荐系统</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2019-10-15T03:15:05.000Z" itemprop="datePublished"> 发表于 2019-10-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="背景">背景</h2><p>在出推荐结果的同时产出一个理由，告诉用户这个item为啥要推荐给你~</p>
+<center><img src="/img/Explainable-Recommendation/why_rec.jpg" width="450px" /></center><br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2019/10/15/Deep Learning/Explainable-Recommendation/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Recommendation/">Recommendation</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2019/10/15/Deep Learning/Explainable-Recommendation/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2019/01/16/Deep Learning/Collaborative-Filtering-Meet-to-Deep-Learning/" title="当协同过滤(Collaborative Filtering)遇上深度学习" itemprop="url">当协同过滤(Collaborative Filtering)遇上深度学习</a>
   </h1>
   <p class="article-author">By
@@ -173,7 +238,10 @@
 </header>
     <div class="article-content">
         
-        <h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到达谷底。</p>
+        <blockquote>
+<p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a>的学习和理解，方便记忆</p>
+</blockquote>
+<h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到达谷底。</p>
 <center><img src="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png" width="200px"></center>
 
 <p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>
@@ -185,8 +253,59 @@
 <li>整个梯度更新很慢，同时数据量大到放不下内存时就不再适用该方法了</li>
 <li>批量梯度下降法不使用online在更新</li>
 </ol>
-<h3 id="Stochastic_gradient_descent">Stochastic gradient descent</h3><p>随机梯度下降法的式子长这样子：<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^i;y^i)$$<br>该方法每次计算一次样本就会更新一次梯度，所以运行速度要比批量梯度下降法快很多<br>用代码来表示是这样的：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, example, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
-<h3 id="Mini-batch_gradient_descent">Mini-batch gradient descent</h3><h2 id="梯度下降优化算法">梯度下降优化算法</h2>
+<h3 id="Stochastic_gradient_descent">Stochastic gradient descent</h3><p>随机梯度下降法的式子长这样子：<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^i;y^i)$$<br>该方法每次计算一次样本就会更新一次梯度，用代码来表示是这样的（各个epoch之间需要对样本进行打散）<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, example, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<p><code>SGD</code>的特性(优势和劣势结合一起了-_-)是:</p>
+<ol>
+<li>运行速度要比批量梯度下降法快很多</li>
+<li>可以适用于在线学习</li>
+<li>每次都是以高方差的方式在更新梯度，会导致损失函数的波动很大,因为波动很大，因此这个波动性使得<code>SGD</code>能进入局部最优，但同时想达到最终收敛相对批量梯度下降法会更得更加复杂</li>
+<li>当然有研究证明如果以一个足够小的学习率进行更新时最终也都能到达局部最优和全局最最优。</li>
+</ol>
+<h3 id="Mini-batch_gradient_descent">Mini-batch gradient descent</h3><p>而<code>批量梯度下降法</code>是<code>梯度下降法</code>和<code>随机梯度下降法</code>，他每次都是对一批样本进行梯度计算之后再更新参数，</p>
+<p>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta;x^{i:i+n};y^{i:i+n})$$</p>
+<p>用代码来表示则是:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> batch <span class="keyword">in</span> get_batches(data, batch_size=<span class="number">50</span>):</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, batch, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>代码是以<code>batch_size=50</code>为例，每次都是50个样本一次更新,其他和<code>SGD</code>都是一样的</p>
+</blockquote>
+<p>这种方式的好处有：</p>
+<ol>
+<li>在更新参数时可以减少异常点的参数更新，使得收敛会更加稳定（对于<code>SGD</code>而言）</li>
+<li>他可以充分的利用矩阵计算的优化加速（<code>梯度下降法</code>样本量太多，<code>随机梯度下降法</code>单个样本没法使用矩阵计算），因此现在的<code>DeepLearning</code>算法中大部分都采用这种方式来学习</li>
+</ol>
+<p>然后<code>批量梯度下降法</code>仍旧会存在以下问题：</p>
+<ol>
+<li>学习率大小的问题：太小收敛会很慢，太大会很难到达最优</li>
+<li>并不是所有特征的学习都是一样的，特别在稀疏数据下，每个特征的学习能力和到达最优的时间都是不一致的</li>
+</ol>
+<p>因此才有了下面的各种优化算法</p>
+<h2 id="梯度下降优化算法">梯度下降优化算法</h2><h3 id="Momentum">Momentum</h3><p>动量优化算法可以理解为在<code>SGD</code>的基础上加了一个相关方向，使得<code>SGD</code>可以更快的到达最优点，如下图所示：</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/moment.png" width="600px"></center>
+
+<p>动量法主要是将历史步长的更新向量增加到当前的更新向量中:<br>$$v_t = \gamma v_{t-1} + \eta \nabla_\theta J(\theta) \\ \theta = \theta - v_t $$</p>
+<blockquote>
+<p>这里$v_t$就是历史梯度方向的累积，也称为方向动量，而$\gamma$称为动量项，一般都是设置为<code>0.9</code></p>
+</blockquote>
+<p>通俗得来将，比如一个小球从小山坡上滚下来的时候，越滚会越积累动能，速度也更快的到坡低。同样在进行参数更新时：</p>
+<ol>
+<li>与目标梯度方向相同的维度增加动量，参数更新更快，加快收敛</li>
+<li>与目标梯度方向不一致的维度减少动量，降低参数更新速度，减少振荡；<blockquote>
+<p>而$\gamma$就像小山坡上的风阻系数，非常形象</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="Nesterov_accelerated_gradient">Nesterov accelerated gradient</h3><p><code>Momentum</code>方法虽然在参数更新时考虑了历史梯度方向，但是他在自身的梯度计算时仍为原来的方法（有波动的方向），因此<code>Nesterov加速法</code>提出了在计算梯度时也加上历史的动量方向，这样每次更新的梯度也会考虑历史方向，也就是到终点就更加快了。<br>这里参考<code>Momentum</code>方法，<code>Nesterov</code>加速法的公式是这样的：<br>$$v_t = \gamma v_{t-1} + \eta \nabla_\theta J(\theta-\gamma v_{t-1}) \\ \theta = \theta - v_t $$</p>
+<blockquote>
+<p>这里和<code>Momentum</code>的区别就在梯度那里的参数变成了$\theta-\gamma v_{t-1}$,而这一项正好可以让梯度朝着目标的方向计算</p>
+</blockquote>
+<p>用图来说明应该就是这样纸了：</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/nesterov_update_vector.png" width="400px"></center>
+
+
+<ol>
+<li>蓝色代表<code>Momentum</code>法，他可以快速更新并且方向沿着历史梯度方向</li>
+<li>而棕色和红色是代表<code>Nesterov</code>方法，在后续的更新中，他的梯度会朝着最优的方向去更新（也就是红色），所以他会更快的达到最优点</li>
+</ol>
+
         
         
         <p class="article-more-link">
@@ -700,70 +819,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/05/15/Deep Learning/Understanding-about-RNN/" title="初识递归神经网络-RNN" itemprop="url">初识递归神经网络-RNN</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2017-05-15T01:17:48.000Z" itemprop="datePublished"> 发表于 2017-05-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="RNN是啥?">RNN是啥?</h2><p>当需要处理一些输入或者输出有相互依赖的任务时，传统的神经网络已经不再适用，比如在<code>Language Model</code>中在给定几个单词的情况下来预测下面将会出什么单词的时候。<br>这时候RNN就有用武之地了，RNN在预测/训练当前节点的时候可以获取前面节点的记忆（memory）信息，这样就可以很自然的完成序列任务的学习了。<br>一图胜千言，经典的RNN结构是长这样纸的:<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2017/05/15/Deep Learning/Understanding-about-RNN/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/05/15/Deep Learning/Understanding-about-RNN/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -794,7 +849,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 		  
 		
 		  
@@ -879,7 +934,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>42</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>43</sup></a></li>
 			
 		
 			
@@ -899,7 +954,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>10</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
 			
 		
 			
@@ -923,19 +978,7 @@
 			
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
 			
 		
 			
@@ -943,7 +986,19 @@
 			
 		
 			
-				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
 			
 		
 			
@@ -951,7 +1006,7 @@
 			
 		
 			
-				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
 			
 		
 			
