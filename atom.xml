@@ -286,7 +286,7 @@
     <link href="http://kubicode.me/2018/12/27/Machine%20Learning/Study-Gradient-Descent-Optimization/"/>
     <id>http://kubicode.me/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/</id>
     <published>2018-12-27T11:38:58.000Z</published>
-    <updated>2019-01-30T03:33:36.693Z</updated>
+    <updated>2019-11-03T13:20:53.573Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a>的学习和理解，方便记忆</p>
 </blockquote>
@@ -294,6 +294,9 @@
 <center><img src="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png" width="200px"></center>
 
 <p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/rel_graph.png" width="650px"></center>
+
+<a id="more"></a>
 <h2 id="梯度下降极其变种">梯度下降极其变种</h2><h3 id="Batch_gradient_descent">Batch gradient descent</h3><p>批量梯度下降法是原始的方法，他需要对整个数据集进行计算之后才更新梯度:<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta)$$</p>
 <p>用代码来表示就是这样的:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  params_grad = evaluate_gradient(loss_function, data, params)</span><br><span class="line">  params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
 <p>批量梯度下降法可以保证模型达到全局最优，但是他的缺点多了又多:</p>
@@ -342,7 +345,7 @@
 </blockquote>
 </li>
 </ol>
-<h3 id="Nesterov_accelerated_gradient">Nesterov accelerated gradient</h3><p><code>Momentum</code>方法虽然在参数更新时考虑了历史梯度方向，但是他在自身的梯度计算时仍为原来的方法（有波动的方向），因此<code>Nesterov加速法</code>提出了在计算梯度时也加上历史的动量方向，这样每次更新的梯度也会考虑历史方向，也就是到终点就更加快了。<br>这里参考<code>Momentum</code>方法，<code>Nesterov</code>加速法的公式是这样的：<br>$$v_t = \gamma v_{t-1} + \eta \nabla_\theta J(\theta-\gamma v_{t-1}) \\ \theta = \theta - v_t $$</p>
+<h3 id="NAG">NAG</h3><p><code>Momentum</code>方法虽然在参数更新时考虑了历史梯度方向，但是他在自身的梯度计算时仍为原来的方法（有波动的方向），因此<code>Nesterov加速法</code>(Nesterov accelerated gradient NAG)提出了在计算梯度时也加上历史的动量方向，这样每次更新的梯度也会考虑历史方向，也就是到终点就更加快了。<br>这里参考<code>Momentum</code>方法，<code>Nesterov</code>加速法的公式是这样的：<br>$$v_t = \gamma v_{t-1} + \eta \nabla_\theta J(\theta-\gamma v_{t-1}) \\ \theta = \theta - v_t $$</p>
 <blockquote>
 <p>这里和<code>Momentum</code>的区别就在梯度那里的参数变成了$\theta-\gamma v_{t-1}$,而这一项正好可以让梯度朝着目标的方向计算</p>
 </blockquote>
@@ -354,10 +357,65 @@
 <li>蓝色代表<code>Momentum</code>法，他可以快速更新并且方向沿着历史梯度方向</li>
 <li>而棕色和红色是代表<code>Nesterov</code>方法，在后续的更新中，他的梯度会朝着最优的方向去更新（也就是红色），所以他会更快的达到最优点</li>
 </ol>
+<h3 id="AdaGrad">AdaGrad</h3><p><code>AdaGrad</code>是一个可以自适应学习率的优化算法：</p>
+<ol>
+<li>对于出现次数<code>较多</code>的特征，使用<code>小</code>的学习率去学习</li>
+<li>对于出现次数<code>较少</code>的特征，使用<code>大</code>的学习率去学习</li>
+</ol>
+<p>因此它在每一次迭代更新参数时不同的特征的参数学习率都是不一样的，在<code>t</code>时刻，基于对$\theta_i$计算过的历史梯度，Adagrad 修正了对每个参数对于$\theta_i$的学习率：</p>
+<p>$$ \theta_{t+1,i} = \theta_{t,i} - \frac{\eta}{\sqrt{G_{t,ii} +\epsilon }}  g_{t,i} $$</p>
+<blockquote>
+<p>这边$G_{t,ii}$是一个对角矩阵，对角线上每个位置就是截止到$t$时刻的所有梯度的平方累加,$\epsilon$是为了防止除0，一般取<code>1e-8</code></p>
+</blockquote>
+<p>用向量相乘方式可以写为<br>$$\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{G_t+\epsilon}} \odot g_t $$</p>
+<p><code>Adagrad</code>最大的好处就是无需手动调参，一般设置一个0.01的学习率让他自己run就行了额<br>不过由于$G$矩阵是平方和计算得到，所以随着训练次数的增加，$G$中的值会越来越大，导致实际的学习率会越来越小，这样当学习率逼近无限小的时候，模型的学习能力会明显不足</p>
+<h3 id="Adadelta">Adadelta</h3><p><code>Adadelta</code>是<code>Adagrad</code>的一个改进版本，他可以处理<code>Adagrad</code>的学习率单调递减的问题，<br>它将梯度的平方递归地表示替换为所有历史梯度平方的均值<br>$$E[g^2]_t = \gamma E[g^2]_{t-1} + (1-\gamma) g^2_t$$</p>
+<blockquote>
+<p>这边的$\gamma$类似Momentum的动量参数，一般默认为0.9</p>
+</blockquote>
+<p>则替换了<code>Adagrad</code>的对角矩阵$G$之后为,梯度的表示为<br>$$\nabla \theta_t = - \frac{\eta}{ \sqrt{E[g^2]_t + \epsilon}} g_t$$</p>
+<p>同时为了保持参数的一致性（黑人问号点），这边定义了另一个指数衰减均值，该值不是梯度平方，而是参数的平方的更新<br>$$E[\nabla \theta^2]_t = \gamma E[\nabla \theta^2]_{t-1} + (1-\gamma) \nabla \theta^2_t$$</p>
+<p>他的更新式子为:<br>$$\nabla \theta_{t+1} = \theta_t - \frac{RMS[\nabla \theta]_{t-1}}{RMS[g]_t} g_t \\ \theta_t = \theta_{t-1} + \nabla \theta_{t+1}$$</p>
+<blockquote>
+<p>这边的$RMS$是平方根的简写形式,$RMS(x) = \sqrt{(x+\epsilon)}$</p>
+</blockquote>
+<p>因此最终<code>Adadelta</code>不仅解决了<code>Adagrad</code>的学习率消失问题，而且还不需要设置初始化的学习率</p>
+<h3 id="RMSProp">RMSProp</h3><p><code>RMSProp</code>是<code>Hinton</code>提出但是未发表的一个优化算法，他与<code>Adadelta</code>几乎同时发现，可以理解为它是一个<code>Adadelta</code>的缩减版的特例:<br>$$E[g^2]_t = 0.9 E[g^2]_{t-1} + 0.1 g^2_t \\ \theta_t = \theta_{t-1} - \frac{\eta}{ \sqrt{E[g^2]_t + \epsilon}} g_t$$</p>
+<blockquote>
+<p>其实就是恢复了<code>Adadelta</code>的初始化学习率的问题</p>
+</blockquote>
+<h3 id="Adam">Adam</h3><p><code>Adam</code>(Adaptive Moment Estimation) 是另一个比较重要学习率自适应的算法，他同时结合了<code>Momentum</code>的动量来快速找到梯度更新方向，同时采用<code>RMSProp</code>的方式来找到每个特征不同的学习率。<code>Adam</code>中类似动量的指数衰减均值为$m_t$，另外历史平方梯度的平均为$v_t$：<br>$$ m_t = \beta m_{t-1} + (1- \beta_1^t) g_t \\ v_t = \beta_2 v_{t-1} + (1- \beta_2^t) g^2_t$$</p>
+<p>$m_t$和$v_t$分别是对梯度的一阶矩（均值）和二阶矩（非确定的方差）的估计，由于他们的初始化为0向量，作者发现$\beta_1$和$\beta_2$的参数值接近于1的时候，$m_t$和$v_t$始终偏向于0 ，因此针对此问题做了矫正:</p>
+<p>$$\hat{m}_t = \frac{m_t}{1-\beta_1} \\ \hat{v}_t = \frac{v_t}{1-\beta_2}$$</p>
+<p>最终<code>Adam</code>的实际参数更新为:</p>
+<p>$$\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{\hat{v}_t}+\epsilon} \hat{m}_t $$</p>
+<blockquote>
+<p>作者建议的参数为:$\beta_1 = 0.9$,$\beta_2 = 0.999$ , $\epsilon = 10e-8$ ,这个优化算法也是目前比较Work的一个，在DL里面非常的适用</p>
+</blockquote>
+<h3 id="AdaMax">AdaMax</h3><p>针对<code>Adam</code>中的二阶矩的泛化形式可以表述为:$$v_t = \beta_2^p v_{t-1} + (1-\beta_2^p) |g_t|^p $$</p>
+<p>由于$p in \{1,2\}$一般是我们认为的一范数和二范数，通过实践证明都是比较稳定的，但是当$p$变大的时这个的规范化会出现不稳定的情况。不过如果将$p$趋向于无穷大的时候，该矩的表现也是很稳定的，也就是用$u_t$来表示<br>$$u_t = \beta_2^\infty  u_{t-1} + (1-\beta_2^\infty ) |g_t|^\infty  = max(\beta_2 \cdot u_{t-1},|g_t|) $$<br>最后的参数更新为:<br>$$\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{u_t}+\epsilon} \hat{m}_t $$</p>
+<blockquote>
+<p>这边的$u$矩不再会出现趋近于0 的情况，所以不需要再做矫正，同时建议的参数可以设置为$\beta_1 = 0.9$,$\beta_2 = 0.999$ , $\epsilon = 0.002$</p>
+</blockquote>
+<h3 id="Nadam">Nadam</h3><p>如果将<code>Adam</code>看做<code>Momentum</code>和<code>RMSProp</code>的组合，那其实<code>Nadam</code>就是<code>NAG</code>和<code>RMSProp</code>的组合的，最终眼熟的更新式子为:<br>$$\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{v_t}+\epsilon} ( \beta_1 \hat{m}_t + \frac{(1-\beta_1)g_t}{1-\beta_1^t}) $$</p>
+<h3 id="AMSGrad">AMSGrad</h3><p><code>Adam</code>由于是通过累加平均二阶矩来进行参数学习率的自适应，当某些minbatch提供的信息量很大并且梯度很大时，他们会被平均掉，影响整体的训练，最终会陷入局部最优。<br>为了避免这种局部最优的情况，AMSGrad这个优化算法将二阶矩的矫正阶段替换为求$max$，用于增强高信息量的minbatch信息：</p>
+<p>$$ m_t = \beta m_{t-1} + (1- \beta_1^t) g_t<br>\\ v_t = \beta_2 v_{t-1} + (1- \beta_2^t) g^2_t<br>\\ \hat{v}_t = max(\hat{v}_{t-1} , v_t)<br>\\ \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} m_t $$</p>
+<p>虽然作者有实验证明在一些小数据集上<code>AMSGrad</code>的优化效果要好于<code>Adam</code>，但是也有好多人也实验了<code>AMSGrad</code>的性能比<code>Adam</code>更加差 -_-</p>
+<h2 id="总结">总结</h2><p>比较有创新性的应该还是<code>Momentum</code>和<code>RMSProp</code>，但是他们的结合<code>Adam</code>将更加普适应，他目前是各位普通炼金术士的首选</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="https://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">https://ruder.io/optimizing-gradient-descent/</a></li>
+</ol>
 ]]></content>
     <summary type="html">
     <![CDATA[<blockquote>
-<p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent]]>
+<p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/">An overview of gradient descent optimization algorithms</a>的学习和理解，方便记忆</p>
+</blockquote>
+<h2 id="引言">引言</h2><p>梯度下降法是非常著名的优化算法之一，思想简单高效，被各种深度框架(Tensorflow、Pytorch)用做默认优化器。<br>梯度下降法是最小化目标函数的一种方法，利用目标函数梯度的反方向更新参数，沿着目标函数的斜面下降的方向，直到到达谷底。</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png" width="200px" /></center>
+
+<p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/rel_graph.png" width="650px" /></center>]]>
+    
     </summary>
     
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
