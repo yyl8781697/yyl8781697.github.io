@@ -286,7 +286,7 @@
     <link href="http://kubicode.me/2018/12/27/Machine%20Learning/Study-Gradient-Descent-Optimization/"/>
     <id>http://kubicode.me/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/</id>
     <published>2018-12-27T11:38:58.000Z</published>
-    <updated>2019-11-04T01:24:56.073Z</updated>
+    <updated>2019-11-04T14:18:05.332Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a>的学习和理解，方便记忆</p>
 </blockquote>
@@ -382,9 +382,9 @@
 <blockquote>
 <p>其实就是恢复了<code>Adadelta</code>的初始化学习率的问题</p>
 </blockquote>
-<h3 id="Adam">Adam</h3><p><code>Adam</code>(Adaptive Moment Estimation) 是另一个比较重要学习率自适应的算法，他同时结合了<code>Momentum</code>的动量来快速找到梯度更新方向，同时采用<code>RMSProp</code>的方式来找到每个特征不同的学习率。<code>Adam</code>中类似动量的指数衰减均值为$m_t$，另外历史平方梯度的平均为$v_t$：<br>$$ m_t = \beta m_{t-1} + (1- \beta_1^t) g_t \\ v_t = \beta_2 v_{t-1} + (1- \beta_2^t) g^2_t$$</p>
+<h3 id="Adam">Adam</h3><p><code>Adam</code>(Adaptive Moment Estimation) 是另一个比较重要学习率自适应的算法，他同时结合了<code>Momentum</code>的动量来快速找到梯度更新方向，同时采用<code>RMSProp</code>的方式来找到每个特征不同的学习率。<code>Adam</code>中类似动量的指数衰减均值为$m_t$，另外历史平方梯度的平均为$v_t$：<br>$$ m_t = \beta_1 m_{t-1} + (1- \beta_1) g_t \\ v_t = \beta_2 v_{t-1} + (1- \beta_2) g^2_t$$</p>
 <p>$m_t$和$v_t$分别是对梯度的一阶矩（均值）和二阶矩（非确定的方差）的估计，由于他们的初始化为0向量，作者发现$\beta_1$和$\beta_2$的参数值接近于1的时候，$m_t$和$v_t$始终偏向于0 ，因此针对此问题做了矫正:</p>
-<p>$$\hat{m}_t = \frac{m_t}{1-\beta_1} \\ \hat{v}_t = \frac{v_t}{1-\beta_2}$$</p>
+<p>$$\hat{m}_t = \frac{m_t}{1-\beta_1^t} \\ \hat{v}_t = \frac{v_t}{1-\beta_2^t}$$</p>
 <p>最终<code>Adam</code>的实际参数更新为:</p>
 <p>$$\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{\hat{v}_t}+\epsilon} \hat{m}_t $$</p>
 <blockquote>
@@ -397,7 +397,7 @@
 </blockquote>
 <h3 id="Nadam">Nadam</h3><p>如果将<code>Adam</code>看做<code>Momentum</code>和<code>RMSProp</code>的组合，那其实<code>Nadam</code>就是<code>NAG</code>和<code>RMSProp</code>的组合的，最终眼熟的更新式子为:<br>$$\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{v_t}+\epsilon} ( \beta_1 \hat{m}_t + \frac{(1-\beta_1)g_t}{1-\beta_1^t}) $$</p>
 <h3 id="AMSGrad">AMSGrad</h3><p><code>Adam</code>由于是通过累加平均二阶矩来进行参数学习率的自适应，当某些minbatch提供的信息量很大并且梯度很大时，他们会被平均掉，影响整体的训练，最终会陷入局部最优。<br>为了避免这种局部最优的情况，AMSGrad这个优化算法将二阶矩的矫正阶段替换为求$max$，用于增强高信息量的minbatch信息：</p>
-<p>$$ m_t = \beta m_{t-1} + (1- \beta_1^t) g_t<br>\\ v_t = \beta_2 v_{t-1} + (1- \beta_2^t) g^2_t<br>\\ \hat{v}_t = max(\hat{v}_{t-1} , v_t)<br>\\ \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} m_t $$</p>
+<p>$$ m_t = \beta_1 m_{t-1} + (1- \beta_1) g_t<br>\\ v_t = \beta_2 v_{t-1} + (1- \beta_2) g^2_t<br>\\ \hat{v}_t = max(\hat{v}_{t-1} , v_t)<br>\\ \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} m_t $$</p>
 <p>虽然作者有实验证明在一些小数据集上<code>AMSGrad</code>的优化效果要好于<code>Adam</code>，但是也有好多人也实验了<code>AMSGrad</code>的性能比<code>Adam</code>更加差 -_-</p>
 <h2 id="总结">总结</h2><p>其实上面几个优化算法的迭代都是循序渐进并且有不少联系，归纳起来就是：</p>
 <center><img src="/img/Study-Gradient-Descent-Optimization/rel_graph.png" width="650px"></center>
