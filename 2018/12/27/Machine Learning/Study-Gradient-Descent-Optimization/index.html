@@ -28,9 +28,9 @@
 
 由于">
 <meta property="og:image" content="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png">
-<meta property="og:image" content="/img/Study-Gradient-Descent-Optimization/rel_graph.png">
 <meta property="og:image" content="/img/Study-Gradient-Descent-Optimization/moment.png">
 <meta property="og:image" content="/img/Study-Gradient-Descent-Optimization/nesterov_update_vector.png">
+<meta property="og:image" content="/img/Study-Gradient-Descent-Optimization/rel_graph.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一记梯度下降极其优化算法">
 <meta name="twitter:description" content="本文主要是对于An overview of gradient descent optimization algorithms的学习和理解，方便记忆
@@ -139,8 +139,6 @@
 <center><img src="/img/Study-Gradient-Descent-Optimization/Gradient_descent.png" width="200px"></center>
 
 <p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>
-<center><img src="/img/Study-Gradient-Descent-Optimization/rel_graph.png" width="650px"></center>
-
 <a id="more"></a>
 <h2 id="梯度下降极其变种">梯度下降极其变种</h2><h3 id="Batch_gradient_descent">Batch gradient descent</h3><p>批量梯度下降法是原始的方法，他需要对整个数据集进行计算之后才更新梯度:<br>$$\theta = \theta - \eta \cdot \nabla_{\eta} J(\theta)$$</p>
 <p>用代码来表示就是这样的:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  params_grad = evaluate_gradient(loss_function, data, params)</span><br><span class="line">  params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
@@ -246,7 +244,10 @@
 <h3 id="AMSGrad">AMSGrad</h3><p><code>Adam</code>由于是通过累加平均二阶矩来进行参数学习率的自适应，当某些minbatch提供的信息量很大并且梯度很大时，他们会被平均掉，影响整体的训练，最终会陷入局部最优。<br>为了避免这种局部最优的情况，AMSGrad这个优化算法将二阶矩的矫正阶段替换为求$max$，用于增强高信息量的minbatch信息：</p>
 <p>$$ m_t = \beta m_{t-1} + (1- \beta_1^t) g_t<br>\\ v_t = \beta_2 v_{t-1} + (1- \beta_2^t) g^2_t<br>\\ \hat{v}_t = max(\hat{v}_{t-1} , v_t)<br>\\ \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} m_t $$</p>
 <p>虽然作者有实验证明在一些小数据集上<code>AMSGrad</code>的优化效果要好于<code>Adam</code>，但是也有好多人也实验了<code>AMSGrad</code>的性能比<code>Adam</code>更加差 -_-</p>
-<h2 id="总结">总结</h2><p>比较有创新性的应该还是<code>Momentum</code>和<code>RMSProp</code>，但是他们的结合<code>Adam</code>将更加普适应，他目前是各位普通炼金术士的首选</p>
+<h2 id="总结">总结</h2><p>其实上面几个优化算法的迭代都是循序渐进并且有不少联系，归纳起来就是：</p>
+<center><img src="/img/Study-Gradient-Descent-Optimization/rel_graph.png" width="650px"></center>
+
+<p>比较有创新性的应该还是<code>Momentum</code>和<code>RMSProp</code>，但是他们的结合<code>Adam</code>将更加普适应，他目前是各位普通炼金术士的首选</p>
 <h2 id="参考">参考</h2><ol>
 <li><a href="https://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">https://ruder.io/optimizing-gradient-descent/</a></li>
 </ol>
