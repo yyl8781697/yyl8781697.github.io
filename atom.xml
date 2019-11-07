@@ -425,6 +425,57 @@
   </entry>
   
   <entry>
+    <title><![CDATA[理解HMM与CRF的相同于差异]]></title>
+    <link href="http://kubicode.me/2018/11/04/Machine%20Learning/Understanding-HMM-and-CRF/"/>
+    <id>http://kubicode.me/2018/11/04/Machine Learning/Understanding-HMM-and-CRF/</id>
+    <published>2018-11-04T14:36:16.000Z</published>
+    <updated>2019-11-05T14:58:44.051Z</updated>
+    <content type="html"><![CDATA[<h2 id="HMM">HMM</h2><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
+<p><code>HMM</code>描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：</p>
+<ol>
+<li>隐藏马尔科夫链随机生成的状态随机序列，称为<code>状态序列</code></li>
+<li>每个状态生成一个观测，由此产生的观测的随机序列，称为<code>观测序列</code></li>
+<li>序列的每个位置可以看做一个时刻</li>
+</ol>
+<p><code>HMM</code>由初始概率分布、状态转移概率分布以及观测关于分布构成，定义如下：<br>$$ Q = \{q_1,q_2,…,q_n \} , V = \{v_1,v_2,…,v_m\}$$</p>
+<blockquote>
+<p>其中$Q$可能是所有可能状态的集合，长度为$N$；$V$是所有可能观测的集合,长度为$M$</p>
+</blockquote>
+<p>$I$对长度为$T$的状态序列，则$O$为对应的观测序列:<br>$$ I = (i_1,i_2,…,i_T) , O = (o_1,o_2,…,o_T)$$</p>
+<ul>
+<li><p>$A$是状态转移概率矩阵：$$ A = [a_{i,j}]_{N \times N}$$ 其中$ a_{i,j} = P{i_{t+1} = q_j | i_{t} = q_i}$,表示$t$时刻下为状态$q_i$转移到$t+1$时刻$q_j$状态的概率</p>
+</li>
+<li><p>$B$是观测概率矩阵：$$B = [b_j(k)]_{M \times M}$$ 其中$b_j(k) = P(o_t = v_k | i_t = q_j )$，表示$t$时刻$q_j$状态生成观测$v_k$的概率</p>
+</li>
+</ul>
+<ul>
+<li>$\pi$是初始状态概率向量：$$ \pi = (\pi_i)$$ 其中$\pi_i = P(i_t = q_i)$，表示$t=1$时状态$q_i$的概率</li>
+</ul>
+<p>因此<code>HMM</code>由$A$、$B$和$\pi$构成（这三个矩阵/向量称为<code>HMM</code>三要素），同时$\pi$和$A$决定$B$，而$B$决定观测概率，即$$ \lambda = (A,B,\pi) $$</p>
+<p>从定义可知，<code>HMM</code>模型有两个基本假设：</p>
+<ol>
+<li><code>齐次马尔科夫性假设</code>：隐藏的马尔科夫链在任意时刻的状态只依赖于他上一时刻的状态，与其他时刻的状态以及观测无关，也与时刻$t$无关$$P(i_t | i_{t-1},o_{t-1},…,i_1,o_1) = P(i_t|i_{t-1})$$</li>
+<li><code>观测独立性假设</code>：任意时刻的观测只依赖于他当前时刻的状态，与其他时刻状态无关 $$P(o_t | i_T,o_T,…,i_{t-1},o_{t-1},…,i_1,o_1) = P(o_t|i_t)$$</li>
+</ol>
+<p><code>HMM</code>的三个基本问题:</p>
+<ol>
+<li>概率计算问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，计算在给定模型$\lambda$下输出观测序列$O$的概率</li>
+<li>学习问题：已经观测序列$O = (o_1,o_2,…,o_T)$,用来估计模型$ \lambda = (A,B,\pi) $的参数，使得该模型下观测序列的概率$P(O|\lambda)$最大</li>
+<li>预测问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I = (i_1,i_2,…,i_T)$，即给定观测序列，求最有可能的状态序列</li>
+</ol>
+<h2 id="CRF">CRF</h2>]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="HMM">HMM</h2><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
+<p><code>HMM</code>描述了一个]]>
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[深度学习在序列化推荐中的应用(2)]]></title>
     <link href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/"/>
     <id>http://kubicode.me/2018/10/25/Deep Learning/More-Session-Based-Recommendation/</id>
@@ -2065,123 +2116,6 @@
     <summary type="html">
     <![CDATA[<h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
 <p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[RankNet:基于梯度下降的学习排序]]></title>
-    <link href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/"/>
-    <id>http://kubicode.me/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/</id>
-    <published>2016-05-30T11:51:21.000Z</published>
-    <updated>2016-09-22T17:33:19.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet</code>就是使用神经网络算法来使得这个概率最大化.last update at:2016-08-28</p>
-</blockquote>
-<h2 id="算法原理">算法原理</h2><p>假设现在有一对文档$D_i$和$D_j$,给定一个目标概率$\bar{P}_{i,j}$,以表示文档$D_i$将会排在文档$D_j$的前面.</p>
-<ol>
-<li>如果$\bar{P}_{i,j}=1$,表示$D_i$一定会排在$D_j$前面</li>
-<li>如果$\bar{P}_{i,j}=0.5$,表示$D_i$和$D_j$的前后关系将无法确定</li>
-<li>如果$\bar{P}_{i,j}=0$,表示$D_i$一定不会排在$D_j$前面</li>
-</ol>
-<p>现在有一个实值的排序函数$f$,如果$f(x_i) &gt; f(x_j)$，则会有$D_i \triangleright D_j$(表示$D_i$会排在$D_j$前面)</p>
-<blockquote>
-<p>这里$x$是为文档$D$所表示的特征向量</p>
-</blockquote>
-<a id="more"></a>
-<p>我们现在将$P(D_i \triangleright D_j)$前后顺序的预测概率表示为$P_{i,j}$,同时定义$o_i \equiv f(x_i)$ 以及 $o_{i,j}=f(x_i)-f(x_j)$，则我们可以<code>logistic</code>函数来表示$P_{i,j}$:<br>$$P_{i,j} \equiv \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} \equiv \frac{1}{1+e^{-o_{i,j}}}$$</p>
-<p>为了衡量预测概率$P_{i,j}$与期望/目标概率$\bar{P}_{i,j}$的接近程度，这里使用<code>Cross Entropy</code>作为损失函数:<br>$$C_{i,j} = -\bar{P}_{i,j} log P_{i,j} - (1-\bar{P}_{i,j}) log (1-P_{i,j})$$</p>
-<p>将$P_{i,j}$代入损失函数$C_{i,j}$之后即可得到:<br>$$\begin{equation}\begin{split}C_{i,j}&amp;=-\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (1-\frac{e^{o_{i,j}}}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - (1-\bar{P}_{i,j}) log (\frac{1}{1+e^{o_{i,j}}}) \\<br>&amp;= -\bar{P}_{i,j} \left( log \frac{e^{o_{i,j}}}{1+e^{o_{i,j}}} - log (\frac{1}{1+e^{o_{i,j}}}) \right) - log (\frac{1}{1+e^{o_{i,j}}})  \\<br>&amp;= -\bar{P}_{i,j}  o_{i,j} + log(1+e^{o_{i,j}})<br>\end{split}\end{equation}$$</p>
-<p>下面的图是当$\bar{P}_{i,j} \in \{0,0.5,1\}$时的损失函数情况:<br><img src="/img/RankNet-Learning-to-Rank-using-Gradient-Descent/lossfunction.png" style="align:center;margin:0 auto" width="400px"></p>
-<p>当$\bar{P}_{i,j} = 1$的时候，<code>Cross Entropy</code>的损失函数将会变为:$$C_{i,j}=log(1+e^{-o_{i,j}})$$<br>直接会变为一个<code>log</code>型的损失函数，其中$o_i-o_j$越大，损失函数的值也就会越小，这也是我们所期望训练的结果(表示我们的样本全部成立)</p>
-<p>现我们损失函数$C_{i,j}$求$o$的偏导:<br>$$\frac{ \partial{C}}{ \partial{o_i}} = \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) =\left( -\bar{P}_{i,j}+P_{i,j} \right) = -\frac{ \partial{C}}{ \partial{o_j}}$$</p>
-<blockquote>
-<p>其实可以发现就是在$-\bar{P}_{i,j}+P_{i,j}=0 $时就是我们的目标<br>另外请注意这里的$P_{i,j}$其实就是<code>文献2</code>中的$S_{i,j}$，但是由于他们的取值范围不一致 $P_{i,j} \in \{0,0.5,1\}$,$S_{i,j} \in \{-1,0,1\}$，因此导致了<code>文献2</code>中对于<code>C</code>的偏导与本文的有微小的偏差</p>
-</blockquote>
-<p>现我们认为$w$为$o=f(x:w)$的一个权重,也就是我们最终希望求解的值，而这个参数我们就可以使用<code>随机梯度下降法来求解</code>:<br>$$w_k \rightarrow  w_k - \eta \frac{\partial{C}}{\partial{w_k}} = w_k - \eta \left( \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}} \right)$$</p>
-<p>其中$\eta$表示学习率，一般取一个比较小的数（比如:$1e-3$,$1e-5$）<br>另外我们可以求得$C$的增量变化:<br>$$\Delta C = \sum_k \frac{\partial{C}}{\partial{w_k}} \Delta w_k = \sum_k \frac{\partial{C}}{\partial{w_k}} \left( - \eta \frac{\partial{C}}{\partial{w_k}} \right) = - \eta \sum_k \left( \frac{\partial{C}}{\partial{w_k}} \right)^2  &lt; 0 $$</p>
-<ol>
-<li>$\Delta C &lt; 0 $表示随着权重参数$w$的沿着负梯度的变化，损失函数$C$会越来越小</li>
-<li>另外当梯度$\frac{\partial{C}}{\partial{w_k}} = 0$时，才会让损失函数达到最小值</li>
-</ol>
-<p>上面的式子告诉我们通过梯度下降法求解<code>RankNet</code>时，就算<code>算分</code>函数没有好的梯度或者不可求导时任可以进行权重的更新（直接对$o$进行梯度下降，但是其梯度方向需要自己指定，并且要求权重$w$与最终的算法$o$是相关的）。</p>
-<h2 id="合并概率">合并概率</h2><p>理想的情况下，$\bar{o}$的输出得到的模型应该是这样纸的:$$\bar{P}_{i,j}=\frac{e^{\bar{o}_{i,j}}}{1+e^{\bar{o}_{i,j}}}$$</p>
-<blockquote>
-<p>其中$\bar{o}_{i,j}=\bar{o}_i-\bar{o}_j$</p>
-</blockquote>
-<p>上面的模型需要$\bar{P}_{i,j}$保持一致性，也就是如果$D_i$的相关性要高于$D_j$,$D_j$的相关性同时也是要高于$D_k$，则$D_i$的相关性也是一定要高于$D_j$，如果没有保持一致性，其实上面的理论就不好使了。。。<br>现给定$\bar{P}_{i,j}$和$\bar{P}_{j,k}$时会有:</p>
-<p>$$\begin{equation}\begin{split} \bar{P}_{i,k}&amp;= \frac{e^{\bar{o}_{i,k}}}{1+e^{\bar{o}_{i,k}}}\\<br>&amp;= \frac{e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{1+e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}} \\<br>&amp;= \frac{ \frac{e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})} }{ \frac{1+e^{\bar{o}_{i,j}e^\bar{o}_{j,k}}}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})}} \\<br>&amp;= \frac{\bar{P}_{i,j} \bar{P}_{j,k}}{\frac{(1+e^{\bar{o}_{i,j}}+e^{\bar{o}_{j,k}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})+(2e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})-(e^{\bar{o}_{i,j}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})-(e^{\bar{o}_{j,k}}+e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}})}{(1+e^{\bar{o}_{i,j}})(1+e^{\bar{o}_{j,k}})}} \\<br>&amp;= \frac{\bar{P}_{i,j} \bar{P}_{j,k}}{1+2\bar{P}_{i,j}\bar{P}_{j,k}-\bar{P}_{i,j}-\bar{P}_{j,k}}<br>\end{split}\end{equation}$$</p>
-<blockquote>
-<p>其中第一步是基于这个来的:$$\begin{equation}\begin{split}e^{\bar{o}_{i,k}}&amp;=e^{\bar{o}_i-\bar{o}_k} \\<br>&amp;= e^{\bar{o}_i-\bar{o}_j+\bar{o}_j-\bar{o}_k}\\<br>&amp;= e^{\bar{o}_{i,j}+\bar{o}_{j,k}}  \\<br>&amp;= e^{\bar{o}_{i,j}}e^{\bar{o}_{j,k}}<br>\end{split}\end{equation}$$</p>
-</blockquote>
-<p>当$\bar{P}_{i,j}=\bar{P}_{i,k}=P$时，其$\bar{P}_{i,k}$的取值情况为:<br><img src="/img/RankNet-Learning-to-Rank-using-Gradient-Descent/pik.png" width="400px"></p>
-<ol>
-<li>$P=0$时，有$\bar{P}_{i,k}=P=0$ 表示:$D_i$排$D_j$后面,$D_j$排$D_j$的后面，则$D_i$也一定排$D_j$的后面</li>
-<li>$0 &lt; P &lt; 0.5$时，$\bar{P}_{i,k} &lt; P$</li>
-<li>$P=0.5$时，有$\bar{P}_{i,k}=P=0.5$ 表示:$D_i$有一般概率排$D_j$前面,$D_j$也有一半的概率排$D_j$的前面，则$D_i$同样也是一半的概率排$D_j$的前面</li>
-<li>$0.5 &lt; P &lt; 1$时，$\bar{P}_{i,k} &gt; P$</li>
-<li>$P=1$时，有$\bar{P}_{i,k}=P=1$ 表示:$D_i$排$D_j$前面,$D_j$排$D_j$的前面，则$D_i$也一定排$D_j$的前面</li>
-</ol>
-<blockquote>
-<p>从上面的图中可以看到，其实目标概率是都可以保持一致性的.</p>
-</blockquote>
-<h2 id="神经网络训练">神经网络训练</h2><p><code>RankNet</code>使用的是一个2层的神经网络作为算分模型$f(x:w,b)$,他在排序分数的公式是:<br>$$o = f(x:w,b) = f^{(2)}  \left( \sum_l w_l^{(2)} \cdot f^{(1)}  \left( \sum_k w_{lk}^{(1)}x_k +b^{(1)} \right) +b^{(2)} \right)$$</p>
-<p>其中:</p>
-<ol>
-<li>$x_k$表示输入的$k$个特征元素</li>
-<li>$w$表示每一层的权重,$b$表示每一层的偏置，上标$(\cdot)$表示当前所属的神经网络的层数</li>
-<li>下标$l$表示第一层的单元数量</li>
-<li>$f$使用<code>sigmoid</code>作为激活函数</li>
-</ol>
-<p>在对于上面的二层神经网络求解时:<br>$$\frac{\partial{C}}{\partial{b^{(2)}}} = \lambda_{i,j}({f’}_i^{(2)}-{f’}_i^{(2)}) = \Delta_i^{(2)} - \Delta_j^{(2)} \\<br>\frac{\partial{C}}{\partial{w^{(2)}}} = \Delta_i^{(2)}f_i^{(1)}  - \Delta_j^{(2)}f_j^{(1)} \\<br>\frac{\partial{C}}{\partial{b^{(1)}}} = \Delta_i^{(2)}f_i^{(1)}w^{(2)}   - \Delta_j^{(2)}f_j^{(1)}w^{(2)} \\<br>\frac{\partial{C}}{\partial{w_k^{(1)}}} = \Delta_i^{(2)} x_{i,k} - \Delta_j^{(2)} x_{j,k}<br>$$<br>这样神经网络就可以使用<code>前向预测</code>和<code>后向反馈</code>来进行训练了,只是其后向反馈阶段是需要通过<code>pair</code>进行计算的。</p>
-<h2 id="神经网络加速">神经网络加速</h2><p>这里我们输入的样本是<code>pair</code>对$\{(x_i,x_j),\bar{P}_{i,j}\}$,其中$\bar{P}_{i,j}$就是我们的目标概率,根据第一小节(算法原理)中指到的，使用梯度下降法进行求解:<br>$$\begin{equation}\begin{split} \frac{\partial{C}}{\partial{w_k}} &amp;= \frac{\partial{C}}{\partial{o_i}} \frac{\partial{o_i}}{\partial{w_k}} + \frac{\partial{C}}{\partial{o_j}} \frac{\partial{o_j}}{\partial{w_k}}  \\<br>&amp;=  \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right)\\<br>&amp;=  \lambda_{i,j} \left( \frac{\partial{o_i}}{\partial{w_k}} - \frac{\partial{o_j}}{\partial{w_k}}\right) \\<br>\end{split}\end{equation}$$</p>
-<blockquote>
-<p>记$\lambda_{i,j} =  \frac{\partial{C}}{\partial{o_i}}  = -\frac{\partial{C}}{\partial{o_j}} = \left( -\bar{P}_{i,j}+\frac{e^{o_i-o_j}}{1+e^{o_i-o_j}} \right) $</p>
-</blockquote>
-<p>上面的是对于每一对<code>pair</code>都会进行一次权重的更新，其实是可以对同一个query下的所有文档<code>pair</code>全部带入神经网络进行前向预测，然后计算总差分并进行误差后向反馈，这样将大大减少误差反向传播的次数，其更新的公式为:</p>
-<p>$$\Delta w_k = -\eta \sum_{\{i,j\}\in I}  \left(\lambda_{i,j} \frac{\partial{o_i}}{\partial{w_k}} - \lambda_{i,j} \frac{\partial{o_j}}{\partial{w_k}}\right) = -\eta \sum_i \lambda_i \frac{\partial{o_i}}{\partial{w_k}} $$</p>
-<blockquote>
-<p>$I$表示某个<code>query</code>下所有不同排序的<code>pair</code>出现一次的集合，$\{i,j\}$表示两个文档满足$D_i \triangleright D_j$,也就是$\bar{P}_{i,j}=1$</p>
-</blockquote>
-<p>这里要着重介绍一下$\lambda_i$:</p>
-<p>$\lambda$可以理解为某个给定query（给定排序）下第$i$个文档$D_i$的一个<code>值</code>,为了计算$\lambda_i$，需要找到这个排序下所有排在$D_i$前面的文档$D_j$（此时有$\{i,j\} \in I$），以及所有排在$D_i$后面的文档$D_k$（有$\{k,i\} \in I$）,同时针对$\lambda_{i,j}$的文档进行累加，对于$\lambda_{k,i}$的文档进行累减.</p>
-<blockquote>
-<p>比如  当前排序下只有一个pair,有$I=\{\{1,2\}\}$，则有$\lambda_1 = \lambda_{1,2} = -\lambda_2$<br>又比如，当前排序下有三个pair，有$I=\{\{1,2\},\{1,3\},\{2,3\}\}$,则有$\lambda_1 = \lambda_{1,2}+\lambda_{1,3}$、$\lambda_2 = \lambda_{2,3}-\lambda_{1,2}$、$\lambda_3 = -\lambda_{1,3}-\lambda_{2,3}$</p>
-</blockquote>
-<p>对于表示成式子为:<br>$$\lambda_i = \sum_{j:\{i,j\} \in I} \lambda_{i,j} - \sum_{j:\{j,i\} \in I} \lambda_{i,j}$$</p>
-<p>因此，我们可以认为$\lambda_i$为在某个给定<code>query</code>的$D_i$需要移动的方向以及移动的强度,另外这种方式可以看做是一种mini-batch的梯度下降算法，不要将全部的<code>pair</code>进行反向传播,其复杂度可以降到$O(n_q)$可以大大加快原始的神经网络训练.这也为<code>LambdaRank</code>奠定了基础（其实很多在<code>LambdaRank</code>的paper提出来的）</p>
-<h2 id="总结">总结</h2><p><code>RankNet</code>训练希望文档<code>pair</code>对的前后排序概率与目标概率一致，用交叉熵作为损失函数，在实际排序中使用了神经网络作为算分排序函数，同时可以有<code>min-batch</code>的批量训练方法。据说微软的<code>Bing</code>之前使用着他.</p>
-<h2 id="参考">参考</h2><ol>
-<li>Burges, Chris, et al. “Learning to rank using gradient descent.” Proceedings of the 22nd international conference on Machine learning. ACM, 2005.</li>
-<li>Burges, Christopher JC. “From ranknet to lambdarank to lambdamart: An overview.” Learning 11 (2010): 23-581.</li>
-<li>Li, Hang. “Learning to rank for information retrieval and natural language processing.” Synthesis Lectures on Human Language Technologies 7.3 (2014): 1-121.</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<blockquote>
-<p><code>RankNet</code>是一种基于<code>pairwise</code>的学习排序,假设文档<code>A</code>以<code>P</code>的概率排在文档<code>B</code>的前面，则<code>RankNet</code>就是使用神经网络算法来使得这个概率最大化.last update at:2016-08-28</p>
-</blockquote>
-<h2 id="算法原理">算法原理</h2><p>假设现在有一对文档$D_i$和$D_j$,给定一个目标概率$\bar{P}_{i,j}$,以表示文档$D_i$将会排在文档$D_j$的前面.</p>
-<ol>
-<li>如果$\bar{P}_{i,j}=1$,表示$D_i$一定会排在$D_j$前面</li>
-<li>如果$\bar{P}_{i,j}=0.5$,表示$D_i$和$D_j$的前后关系将无法确定</li>
-<li>如果$\bar{P}_{i,j}=0$,表示$D_i$一定不会排在$D_j$前面</li>
-</ol>
-<p>现在有一个实值的排序函数$f$,如果$f(x_i) &gt; f(x_j)$，则会有$D_i \triangleright D_j$(表示$D_i$会排在$D_j$前面)</p>
-<blockquote>
-<p>这里$x$是为文档$D$所表示的特征向量</p>
-</blockquote>]]>
     
     </summary>
     

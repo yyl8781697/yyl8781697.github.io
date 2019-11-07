@@ -295,6 +295,101 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2018/11/04/Machine Learning/Understanding-HMM-and-CRF/" title="理解HMM与CRF的相同于差异" itemprop="url">理解HMM与CRF的相同于差异</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2018-11-04T14:36:16.000Z" itemprop="datePublished"> 发表于 2018-11-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="HMM">HMM</h2><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
+<p><code>HMM</code>描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：</p>
+<ol>
+<li>隐藏马尔科夫链随机生成的状态随机序列，称为<code>状态序列</code></li>
+<li>每个状态生成一个观测，由此产生的观测的随机序列，称为<code>观测序列</code></li>
+<li>序列的每个位置可以看做一个时刻</li>
+</ol>
+<p><code>HMM</code>由初始概率分布、状态转移概率分布以及观测关于分布构成，定义如下：<br>$$ Q = \{q_1,q_2,…,q_n \} , V = \{v_1,v_2,…,v_m\}$$</p>
+<blockquote>
+<p>其中$Q$可能是所有可能状态的集合，长度为$N$；$V$是所有可能观测的集合,长度为$M$</p>
+</blockquote>
+<p>$I$对长度为$T$的状态序列，则$O$为对应的观测序列:<br>$$ I = (i_1,i_2,…,i_T) , O = (o_1,o_2,…,o_T)$$</p>
+<ul>
+<li><p>$A$是状态转移概率矩阵：$$ A = [a_{i,j}]_{N \times N}$$ 其中$ a_{i,j} = P{i_{t+1} = q_j | i_{t} = q_i}$,表示$t$时刻下为状态$q_i$转移到$t+1$时刻$q_j$状态的概率</p>
+</li>
+<li><p>$B$是观测概率矩阵：$$B = [b_j(k)]_{M \times M}$$ 其中$b_j(k) = P(o_t = v_k | i_t = q_j )$，表示$t$时刻$q_j$状态生成观测$v_k$的概率</p>
+</li>
+</ul>
+<ul>
+<li>$\pi$是初始状态概率向量：$$ \pi = (\pi_i)$$ 其中$\pi_i = P(i_t = q_i)$，表示$t=1$时状态$q_i$的概率</li>
+</ul>
+<p>因此<code>HMM</code>由$A$、$B$和$\pi$构成（这三个矩阵/向量称为<code>HMM</code>三要素），同时$\pi$和$A$决定$B$，而$B$决定观测概率，即$$ \lambda = (A,B,\pi) $$</p>
+<p>从定义可知，<code>HMM</code>模型有两个基本假设：</p>
+<ol>
+<li><code>齐次马尔科夫性假设</code>：隐藏的马尔科夫链在任意时刻的状态只依赖于他上一时刻的状态，与其他时刻的状态以及观测无关，也与时刻$t$无关$$P(i_t | i_{t-1},o_{t-1},…,i_1,o_1) = P(i_t|i_{t-1})$$</li>
+<li><code>观测独立性假设</code>：任意时刻的观测只依赖于他当前时刻的状态，与其他时刻状态无关 $$P(o_t | i_T,o_T,…,i_{t-1},o_{t-1},…,i_1,o_1) = P(o_t|i_t)$$</li>
+</ol>
+<p><code>HMM</code>的三个基本问题:</p>
+<ol>
+<li>概率计算问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，计算在给定模型$\lambda$下输出观测序列$O$的概率</li>
+<li>学习问题：已经观测序列$O = (o_1,o_2,…,o_T)$,用来估计模型$ \lambda = (A,B,\pi) $的参数，使得该模型下观测序列的概率$P(O|\lambda)$最大</li>
+<li>预测问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I = (i_1,i_2,…,i_T)$，即给定观测序列，求最有可能的状态序列</li>
+</ol>
+<h2 id="CRF">CRF</h2>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2018/11/04/Machine Learning/Understanding-HMM-and-CRF/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2018/10/25/Deep Learning/More-Session-Based-Recommendation/" title="深度学习在序列化推荐中的应用(2)" itemprop="url">深度学习在序列化推荐中的应用(2)</a>
   </h1>
   <p class="article-author">By
@@ -691,75 +786,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/" title="长短期记忆模型-LSTM" itemprop="url">长短期记忆模型-LSTM</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2017-05-22T01:50:40.000Z" itemprop="datePublished"> 发表于 2017-05-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="RNN的缺点">RNN的缺点</h2><p><code>RNN</code>的特点毋庸置疑就是在训练/预测当前层节点时可以拿到先前层的数据来进行辅助计算，因此对于序列的学习非常有效。但事实上这个利用前面全部的信息并不是非常有效。比如看下面两个<code>language mdoel</code>:</p>
-<pre><code><span class="operator">the</span> clouds are <span class="operator">in</span> <span class="operator">the</span> sky
-</code></pre><p>这里要预测的<code>sky</code>只需要依赖前前面几个<code>term</code>即可</p>
-<p>再看看另一个句子:    </p>
-<pre><code><span class="keyword">I</span> grew up in France… <span class="keyword">I</span> speak fluent French.
-</code></pre><p>这里在预测<code>French</code>的时候需要前面较长的信息，甚至已经跨到前面一句话了。<br>因此是可以看出就算在<code>Language Model</code>中不同样本下可能是需要不同的长度的历史信息的，而对于<code>RNN</code>而言他并不能控制历史信息的长度.</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -838,7 +864,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>28</sup></a></li>
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
 		  
 		
 		  
@@ -875,7 +901,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>43</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
 			
 		
 			
