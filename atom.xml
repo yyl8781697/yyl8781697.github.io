@@ -286,7 +286,7 @@
     <link href="http://kubicode.me/2018/12/27/Machine%20Learning/Study-Gradient-Descent-Optimization/"/>
     <id>http://kubicode.me/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/</id>
     <published>2018-12-27T11:38:58.000Z</published>
-    <updated>2019-11-04T14:18:05.332Z</updated>
+    <updated>2019-11-08T07:29:55.307Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a>的学习和理解，方便记忆</p>
 </blockquote>
@@ -371,9 +371,9 @@
 <blockquote>
 <p>这边的$\gamma$类似Momentum的动量参数，一般默认为0.9</p>
 </blockquote>
-<p>则替换了<code>Adagrad</code>的对角矩阵$G$之后为,梯度的表示为<br>$$\nabla \theta_t = - \frac{\eta}{ \sqrt{E[g^2]_t + \epsilon}} g_t$$</p>
-<p>同时为了保持参数的一致性（黑人问号点），这边定义了另一个指数衰减均值，该值不是梯度平方，而是参数的平方的更新<br>$$E[\nabla \theta^2]_t = \gamma E[\nabla \theta^2]_{t-1} + (1-\gamma) \nabla \theta^2_t$$</p>
-<p>他的更新式子为:<br>$$\nabla \theta_{t+1} = \theta_t - \frac{RMS[\nabla \theta]_{t-1}}{RMS[g]_t} g_t \\ \theta_t = \theta_{t-1} + \nabla \theta_{t+1}$$</p>
+<p>则替换了<code>Adagrad</code>的对角矩阵$G$之后为,梯度的表示为<br>$$\Delta \theta_t = - \frac{\eta}{ \sqrt{E[g^2]_t + \epsilon}} g_t$$</p>
+<p>同时为了保持参数的一致性（黑人问号点），这边定义了另一个指数衰减均值，该值不是梯度平方，而是参数的平方的更新<br>$$E[\Delta \theta^2]_t = \gamma E[\Delta \theta^2]_{t-1} + (1-\gamma) \Delta \theta^2_t$$</p>
+<p>他的更新式子为:<br>$$\Delta \theta_{t+1} = \theta_t - \frac{RMS[\Delta \theta]_{t-1}}{RMS[g]_t} g_t \\ \theta_t = \theta_{t-1} + \nabla \theta_{t+1}$$</p>
 <blockquote>
 <p>这边的$RMS$是平方根的简写形式,$RMS(x) = \sqrt{(x+\epsilon)}$</p>
 </blockquote>
