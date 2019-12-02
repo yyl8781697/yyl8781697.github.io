@@ -4,43 +4,36 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>理解HMM与CRF的相同于差异 | Kubi Code&#39;Blog</title>
+    <title>深度学习在序列化推荐中的应用(3) | Kubi Code&#39;Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Kubi Code">
     
 
     
-    <meta name="description" content="HMM隐马儿可夫模型（hidden Markov model,HMM）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。
-HMM描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：
+    <meta name="description" content="前言这篇是继 深度学习在序列化推荐中的应用 和 深度学习在序列化推荐中的应用(2)  的补充理解
+DINbase idea:设计了一个local activation unit来学习用户行为历史的兴趣点
 
-隐藏马尔科夫链随机生成的状态随机序列，称为状态序列
-每个状态生成一个观测，由此产生的观测的随机序列，称为观测序列
-序列的每个位置可以看做一个时刻
-
-HM">
+一般传统的深度模型是将各类的用户信息（包括用户行为）查询到Embeddings之后通过各种MLP层来灌入到最后隐层，而上图（右）的DIN模型中  根据当前Item的信息与 用户的行为历史进行交互">
 <meta property="og:type" content="article">
-<meta property="og:title" content="理解HMM与CRF的相同于差异">
-<meta property="og:url" content="http://kubicode.me/2018/11/04/Machine Learning/Understanding-HMM-and-CRF/index.html">
+<meta property="og:title" content="深度学习在序列化推荐中的应用(3)">
+<meta property="og:url" content="http://kubicode.me/2019/11/14/Deep Learning/More-Additional-Session-Based-Recommendation/index.html">
 <meta property="og:site_name" content="Kubi Code'Blog">
-<meta property="og:description" content="HMM隐马儿可夫模型（hidden Markov model,HMM）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。
-HMM描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：
+<meta property="og:description" content="前言这篇是继 深度学习在序列化推荐中的应用 和 深度学习在序列化推荐中的应用(2)  的补充理解
+DINbase idea:设计了一个local activation unit来学习用户行为历史的兴趣点
 
-隐藏马尔科夫链随机生成的状态随机序列，称为状态序列
-每个状态生成一个观测，由此产生的观测的随机序列，称为观测序列
-序列的每个位置可以看做一个时刻
-
-HM">
+一般传统的深度模型是将各类的用户信息（包括用户行为）查询到Embeddings之后通过各种MLP层来灌入到最后隐层，而上图（右）的DIN模型中  根据当前Item的信息与 用户的行为历史进行交互">
+<meta property="og:image" content="/img/More-Additional-Session-Based-Recommendation/din_arch.png">
+<meta property="og:image" content="/img/More-Additional-Session-Based-Recommendation/dien_arch.png">
+<meta property="og:image" content="/img/More-Additional-Session-Based-Recommendation/dsin_arch.png">
+<meta property="og:image" content="/img/More-Additional-Session-Based-Recommendation/seq_fm_arch.png">
+<meta property="og:image" content="/img/More-Additional-Session-Based-Recommendation/seq_fm_exp.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="理解HMM与CRF的相同于差异">
-<meta name="twitter:description" content="HMM隐马儿可夫模型（hidden Markov model,HMM）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。
-HMM描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：
+<meta name="twitter:title" content="深度学习在序列化推荐中的应用(3)">
+<meta name="twitter:description" content="前言这篇是继 深度学习在序列化推荐中的应用 和 深度学习在序列化推荐中的应用(2)  的补充理解
+DINbase idea:设计了一个local activation unit来学习用户行为历史的兴趣点
 
-隐藏马尔科夫链随机生成的状态随机序列，称为状态序列
-每个状态生成一个观测，由此产生的观测的随机序列，称为观测序列
-序列的每个位置可以看做一个时刻
-
-HM">
+一般传统的深度模型是将各类的用户信息（包括用户行为）查询到Embeddings之后通过各种MLP层来灌入到最后隐层，而上图（右）的DIN模型中  根据当前Item的信息与 用户的行为历史进行交互">
 
     
     <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
@@ -114,14 +107,14 @@ HM">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2018/11/04/Machine Learning/Understanding-HMM-and-CRF/" title="理解HMM与CRF的相同于差异" itemprop="url">理解HMM与CRF的相同于差异</a>
+      <a href="/2019/11/14/Deep Learning/More-Additional-Session-Based-Recommendation/" title="深度学习在序列化推荐中的应用(3)" itemprop="url">深度学习在序列化推荐中的应用(3)</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2018-11-04T14:36:16.000Z" itemprop="datePublished"> 发表于 2018-11-04</time>
+    <time datetime="2019-11-14T02:56:18.000Z" itemprop="datePublished"> 发表于 2019-11-14</time>
     
   </p>
 </header>
@@ -130,57 +123,87 @@ HM">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HMM"><span class="toc-number">1.</span> <span class="toc-text">HMM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRF"><span class="toc-number">2.</span> <span class="toc-text">CRF</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DIN"><span class="toc-number">2.</span> <span class="toc-text">DIN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DIEN"><span class="toc-number">3.</span> <span class="toc-text">DIEN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DSIN"><span class="toc-number">4.</span> <span class="toc-text">DSIN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#seqFM"><span class="toc-number">5.</span> <span class="toc-text">seqFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
 		
 		</div>
 		
-		<h2 id="HMM">HMM</h2><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
-<p><code>HMM</code>描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：</p>
+		<h2 id="前言">前言</h2><p>这篇是继 <a href="http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/" target="_blank" rel="external">深度学习在序列化推荐中的应用</a> 和 <a href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/" target="_blank" rel="external">深度学习在序列化推荐中的应用(2)</a>  的补充理解</p>
+<h2 id="DIN">DIN</h2><p>base idea:设计了一个<code>local activation unit</code>来学习用户行为历史的兴趣点</p>
+<p><img src="/img/More-Additional-Session-Based-Recommendation/din_arch.png" width="800px"></p>
+<p>一般传统的深度模型是将各类的用户信息（包括用户行为）查询到<code>Embeddings</code>之后通过各种<code>MLP</code>层来灌入到最后隐层，而上图（右）的<code>DIN</code>模型中  根据当前<code>Item</code>的信息与 用户的行为历史进行交互获取其历史中的兴趣，其核心就是<code>local activation unit</code>：</p>
+<a id="more"></a>
 <ol>
-<li>隐藏马尔科夫链随机生成的状态随机序列，称为<code>状态序列</code></li>
-<li>每个状态生成一个观测，由此产生的观测的随机序列，称为<code>观测序列</code></li>
-<li>序列的每个位置可以看做一个时刻</li>
+<li>一般item和行为历史的信息都会包括多个维度信息，比如paper中包含<code>id</code>,<code>cateid</code>,<code>shopid</code>等，item和单个历史行为信息的<code>Embeddings</code>用$E^q$和$E^f_i$来表示</li>
+<li>构建他们两综合输入信息，一般是拼接、外积、差集等，$v_i = [E^q,E^f_i,E^q-E^f_i,E^q \odot E^f_i]$</li>
+<li>然后经过若干层<code>MLP</code>层，记得最后一层不带激活函数并且输出单元为1，该值就是item与当前历史行为的权重$w_i$</li>
+<li>则最终用户的兴趣向量为带权重的求和$v_u =\sum_i w_i v_i$</li>
+<li>拿到该向量之后，其余操作与普通的传统模型一致了</li>
 </ol>
-<p><code>HMM</code>由初始概率分布、状态转移概率分布以及观测关于分布构成，定义如下：<br>$$ Q = \{q_1,q_2,…,q_n \} , V = \{v_1,v_2,…,v_m\}$$</p>
+<p>其实细致一点可以发现，<code>local activation unit</code>与<code>attention</code>其实很像，最大的差别就是<code>attention</code>在聚合前会使用<code>Softmax</code>进行归一化，而<code>Din</code>不会，作者的解释是不用 归一化是为了<code>更加凸显用户兴趣</code>，他可以得到一个更大的向量值</p>
+<p>同时在DIN里面还提到了在训练时使用<code>Mini-batch Aware</code>正则项可以较为明显的提升效果，针对<code>L2</code>正则项，在<code>Mini-batch</code>中的公式是$$L_2(W) = \sum_j^K \sum_{m=1}^B \frac{\alpha_{mj}}{n_j} \parallel w_j \parallel ^2 $$</p>
 <blockquote>
-<p>其中$Q$可能是所有可能状态的集合，长度为$N$；$V$是所有可能观测的集合,长度为$M$</p>
+<p>其中$\alpha_{mj}$表示在当前batch $m$中含有特征$j$，则为1，否则为0 另外$n_j$为特征$j$在总样本中出现的次数</p>
 </blockquote>
-<p>$I$对长度为$T$的状态序列，则$O$为对应的观测序列:<br>$$ I = (i_1,i_2,…,i_T) , O = (o_1,o_2,…,o_T)$$</p>
-<ul>
-<li><p>$A$是状态转移概率矩阵：$$ A = [a_{i,j}]_{N \times N}$$ 其中$ a_{i,j} = P{i_{t+1} = q_j | i_{t} = q_i}$,表示$t$时刻下为状态$q_i$转移到$t+1$时刻$q_j$状态的概率</p>
-</li>
-<li><p>$B$是观测概率矩阵：$$B = [b_j(k)]_{M \times M}$$ 其中$b_j(k) = P(o_t = v_k | i_t = q_j )$，表示$t$时刻$q_j$状态生成观测$v_k$的概率</p>
-</li>
-</ul>
-<ul>
-<li>$\pi$是初始状态概率向量：$$ \pi = (\pi_i)$$ 其中$\pi_i = P(i_t = q_i)$，表示$t=1$时状态$q_i$的概率</li>
-</ul>
-<p>因此<code>HMM</code>由$A$、$B$和$\pi$构成（这三个矩阵/向量称为<code>HMM</code>三要素），同时$\pi$和$A$决定$B$，而$B$决定观测概率，即$$ \lambda = (A,B,\pi) $$</p>
-<p>从定义可知，<code>HMM</code>模型有两个基本假设：</p>
+<p>这种方式在<code>Mini-batch</code>下使用是几乎等价于<code>Full-batch</code>，其物理意义是特征频次高的的不怎么需要正则化，而低频的需要正则化</p>
+<h2 id="DIEN">DIEN</h2><p>实际上用户的行为序列一般是一个长期行为，而他在整个序列中他的兴趣点是在变化的，所以<code>DIEN</code>的作者就是希望能提取用户的兴趣变化行为来提升模型。</p>
+<p><img src="/img/More-Additional-Session-Based-Recommendation/dien_arch.png" width="800px"></p>
+<p><code>DIEN</code>模型主要的差别是他有一个抓住用户兴趣衍化的模块，其余与传统的排序模型差不多，关于兴趣提取模块:</p>
 <ol>
-<li><code>齐次马尔科夫性假设</code>：隐藏的马尔科夫链在任意时刻的状态只依赖于他上一时刻的状态，与其他时刻的状态以及观测无关，也与时刻$t$无关$$P(i_t | i_{t-1},o_{t-1},…,i_1,o_1) = P(i_t|i_{t-1})$$</li>
-<li><code>观测独立性假设</code>：任意时刻的观测只依赖于他当前时刻的状态，与其他时刻状态无关 $$P(o_t | i_T,o_T,…,i_{t-1},o_{t-1},…,i_1,o_1) = P(o_t|i_t)$$</li>
+<li><code>Behavior</code>：根据行为itemid作为序列输入，查表之后得到向量$e_t$</li>
+<li><code>Interest Extractor Layer</code>:这层需要是为了提取用户的兴趣，使用经典的<code>GRU</code>进行建模，但是作者同时引入了一个辅助loss：根据上一个step的输出$h_t$来预测当前的item是否会点击(类似<code>GRU4REC</code>):$$L_{aux} = -\frac{1}{N} \sum_{i=1}^N \sum_t \text{log} \sigma(h_t,e_{t+1}) + log(1-\sigma(h_t,e_{t+1}))$$</li>
+<li><code>Ienerest Evolving Layer</code>:这里用<code>Attention</code>来更新<code>GRU</code>中gate的方式来捕获用户兴趣的变化$$\alpha_t = \frac{exp(h_t We_a)}{\sum_{j=1}^T exp(h_j W e_a)} \\ \tilde{u_t} = \alpha_t \cdot u_t \\ h_t = (1-\tilde{u_t}) \cdot h_{t-1} + \tilde{u_t} \cdot \tilde{h_t}$$</li>
+<li>最终<code>DIEN</code>模型的loss为:$$L = L_{target} + \alpha L_{aux}$$</li>
 </ol>
-<p><code>HMM</code>的三个基本问题:</p>
+<p><code>DIEN</code>相对<code>DIN</code>是考虑了序列中的时序问题，在建模时用<code>Attention</code>来捕获用户兴趣的变化</p>
+<h2 id="DSIN">DSIN</h2><p>按照<code>DIEN</code>,用户的行为序列中的兴趣其实会变化的，而<code>DSIN</code>观察发现一整个序列往往可以被分为多个不同的Session，同一个Session中的用户兴趣很相似，而不同Session之间的用户兴趣其实差异很大，因此<code>DSIN</code>提取了一个基于Session的用户兴趣神经网络:<br><img src="/img/More-Additional-Session-Based-Recommendation/dsin_arch.png" width="800px"></p>
+<p>这边的用户兴趣主要分为4个层：</p>
 <ol>
-<li>概率计算问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，计算在给定模型$\lambda$下输出观测序列$O$的概率</li>
-<li>学习问题：已经观测序列$O = (o_1,o_2,…,o_T)$,用来估计模型$ \lambda = (A,B,\pi) $的参数，使得该模型下观测序列的概率$P(O|\lambda)$最大</li>
-<li>预测问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I = (i_1,i_2,…,i_T)$，即给定观测序列，求最有可能的状态序列</li>
+<li><code>Session Divsion Layer</code>：将用户序列$S$分为$k$个Session $Q$，这边$Q_k = [b_1,..,b_i,…,b_T]$,$T$则为单个Session的长度</li>
+<li><code>Session Interest Extractor Layer</code>：针对每个Session始终<code>Multi-head Attention</code>来提取Session特征，同时还设计了一种新的<code>Position Encoding</code>:$$BE(k,t,c) = w_k^K + w_t^T + w_c^C$$，则输入到<code>Multi-head Attention</code>的为$Q = Q+BE$,过完Attention之后再过正常的FFN层，最终单个Session用average来表示 $$I_k = Avg(I_k^Q)$$</li>
+<li><code>Session Interest Interacting Layer</code>:这些Session将会重新构建成一个新的序列，这个序列接下来输入到BiLstm,这里单个Session的前向/后向  向量进行外积之后得到 交互后的向量 $$H_k = h_{fk} \odot h_{bk}$$</li>
+<li><code>Session Interest Activating Layer</code>:在用户兴趣激活层，针对$I_k$和$H_k$分别在过一层Attention,这里这里过Attention的时候会加上目标id的信息，然后得到$U^I$和$U^H$,Attention的样例式子为：$$\alpha_k^I = \frac{exp(I_k W ^I X^I)}{\sum_k^K exp(I_k W ^I X^I)} \\ U^I = \sum_k^K \alpha_k^I I_k$$ </li>
+<li>最终将$U^I$和$U^H$以及用户和Item的embedding信息拼接之后输入到NN模型</li>
 </ol>
-<h2 id="CRF">CRF</h2>  
+<p>该模型给我的最大感受就是：哇，这计算量真大！！！</p>
+<h2 id="seqFM">seqFM</h2><p>传统的FM模型可以很好的处理模型中的稀疏特征，但是实际中的动态序列特征对于FM模型而言无法处理，因此SeqFM就使用带mask的Self-Attention结合FM来处理实际的稀疏和动态输入的模型<br><img src="/img/More-Additional-Session-Based-Recommendation/seq_fm_arch.png" width="400px"></p>
+<p>模型的特征分为静态特征$G^{\circ}$ 和动态序列特征 $G^{\triangleright }$,他们对应的Embedding分别称为$E^{\circ}$  和 $E^{\triangleright }$接下来会用三种<code>Self-Attention</code>来提取三个不同视角的特征：</p>
+<ol>
+<li><p><code>静态视角特征</code>:直接将稀疏离散特征过<code>Self-Attention</code>:$$G^{\circ} = \text{softmax} (\frac{E^{\circ}W_Q^{\circ} \cdot (E^{\circ}W_K^{\circ})}{\sqrt{d}})E^{\circ}W_V^{\circ}$$</p>
+</li>
+<li><p><code>动态视角特征</code>:由于动态特征是带有先后序列关系，所以这里发生交互是有方向性的，paper中用<code>Mask Self-Attention</code>来提取特征:$$G^{\triangleright} = \text{softmax} (\frac{E^{\triangleright}W_Q^{\triangleright} \cdot (E^{\triangleright}W_K^{\triangleright})}{\sqrt{d}} + M^{\triangleright})E^{\triangleright}W_V^{\triangleright}$$  这里的$M^{\triangleright}$是一个mask功能的常量矩阵<br>$$m_{i,j} = \left\{\begin{matrix} 0 &amp; if i \geq  j &amp; \\ - \infty   &amp;  otherwise&amp; \\  \end{matrix}\right.$$</p>
+</li>
+<li><p><code>交叉视角特征</code>:同时将静态特征和动态特征放在一起进行<code>Mask Self-Attention</code>来提取交叉特征:$$G^{*} = \text{softmax} (\frac{E^{*}W_Q^{*} \cdot (E^{*}W_K^{*})}{\sqrt{d}} + M^{*})E^{*}W_V^{*}$$  而 $E^{*} = [E^{\circ},E^{\triangleright }]$，这里这里在进行交互式 静态特征只能与动态特征交互，不能进行内部交互，所以mask矩阵为:$$m_{i,j} = \left\{\begin{matrix} 0 &amp; if \quad i \leq  n^{\circ}  \leq j \quad or \quad  j  \leq  n^{\circ} \leq i &amp; \\ - \infty   &amp;  otherwise&amp; \\  \end{matrix}\right.$$</p>
+</li>
+</ol>
+<p>在得到三个视角的特征之后，经过<code>Intra-View</code>层进行特征压缩聚合（就是加权求和）,然后再过残差以及映射层，输出最终的目标</p>
+<p>这个实验结果必须贴一下，提升太多了：<br><img src="/img/More-Additional-Session-Based-Recommendation/seq_fm_exp.png" width="800px"></p>
+<p>说一下我的理解：</p>
+<ol>
+<li>整个结构非常灵活可控，静态特征那块可以换其他静态的离散特征提取器</li>
+<li>其实<code>SeqFM</code>并没有太多的序列考虑（除了masked那），没有和RNN系列的模型做对于，也没怎么和专门<code>Self-Attention</code>的作对比</li>
+<li>同时静态特征那边的<code>Self-Attention</code>我实际业务使用了，并没有太多特征</li>
+<li>作者源码目前还没法下载到 不好做过多的判断，毕竟提升太多了</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>Zhou, Guorui, et al. “Deep interest network for click-through rate prediction.” Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining. ACM, 2018.</li>
+<li>Zhou, Guorui, et al. “Deep interest evolution network for click-through rate prediction.” Proceedings of the AAAI Conference on Artificial Intelligence. Vol. 33. 2019.</li>
+<li>Feng, Yufei, et al. “Deep Session Interest Network for Click-Through Rate Prediction.” arXiv preprint arXiv:1905.06482 (2019).</li>
+<li>Chen, Tong, et al. “Sequence-Aware Factorization Machines for Temporal Predictive Analytics.” (2020).</li>
+</ol>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
   </div>
 
 </div>
@@ -189,7 +212,7 @@ HM">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://kubicode.me/2018/11/04/Machine Learning/Understanding-HMM-and-CRF/" data-title="理解HMM与CRF的相同于差异 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kubicode.me/2019/11/14/Deep Learning/More-Additional-Session-Based-Recommendation/" data-title="深度学习在序列化推荐中的应用(3) | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -202,19 +225,11 @@ HM">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/" title="记一记梯度下降极其优化算法">
-  <strong>上一篇：</strong><br/>
-  <span>
-  记一记梯度下降极其优化算法</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2018/10/25/Deep Learning/More-Session-Based-Recommendation/"  title="深度学习在序列化推荐中的应用(2)">
+<a href="/2019/10/15/Deep Learning/Explainable-Recommendation/"  title="可解释性推荐系统">
  <strong>下一篇：</strong><br/> 
- <span>深度学习在序列化推荐中的应用(2)
+ <span>可解释性推荐系统
 </span>
 </a>
 </div>
@@ -235,7 +250,7 @@ HM">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HMM"><span class="toc-number">1.</span> <span class="toc-text">HMM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRF"><span class="toc-number">2.</span> <span class="toc-text">CRF</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DIN"><span class="toc-number">2.</span> <span class="toc-text">DIN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DIEN"><span class="toc-number">3.</span> <span class="toc-text">DIEN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DSIN"><span class="toc-number">4.</span> <span class="toc-text">DSIN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#seqFM"><span class="toc-number">5.</span> <span class="toc-text">seqFM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
  
   </div>
 
@@ -261,7 +276,7 @@ HM">
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -346,7 +361,7 @@ HM">
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
 			
 		
 			
@@ -366,7 +381,7 @@ HM">
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 			
 		
 			

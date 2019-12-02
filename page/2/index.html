@@ -95,6 +95,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/" title="深度神经网络中防止过拟合的利器-Dropout" itemprop="url">深度神经网络中防止过拟合的利器-Dropout</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-05T13:14:36.000Z" itemprop="datePublished"> 发表于 2017-06-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="Dropout_in_Deep_Network">Dropout in Deep Network</h2><p>在机器学习任务中一提到过拟合，<code>L1</code>和<code>L2</code>正则项绝对是两大利器，但是在深度神经网络中，<code>Hiton</code>老爷子在2014年提出了一种称为<code>Dropout</code>的方法来避免过拟合，方式对比<code>L1</code>和<code>L2</code>更为灵活也是非常高效。</p>
+<p>深度神经网络中，在不限制计算的条件下，最佳的正则化方式就是将所有可能组合成的模型进行平均输出，就类似<code>stack</code>的模型融合一样，但是这种方式存在两大问题:</p>
+<ol>
+<li>在计算时需要将训练文件进行相应的分离，因为神经网络的训练本身就是需要极多的数据，这么一分离可能会导致数据不够的情况</li>
+<li>深度神经网络中的计算量本身就很大，计算多个之后其耗时将会更多</li>
+</ol>
+<p>而<code>Dropout</code>却可以完美的解决上述两个缺陷，他的思想很简单:<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/05/22/Deep Learning/Long-Short-Term-Memory-Model-LSTM/" title="长短期记忆模型-LSTM" itemprop="url">长短期记忆模型-LSTM</a>
   </h1>
   <p class="article-author">By
@@ -700,71 +770,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/" title="LambdaRank-支持非平滑损失函数的学习排序算法" itemprop="url">LambdaRank-支持非平滑损失函数的学习排序算法</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-08-28T14:44:59.000Z" itemprop="datePublished"> 发表于 2016-08-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
-<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -795,7 +800,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -880,7 +885,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
 			
 		
 			
@@ -900,7 +905,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 			
 		
 			

@@ -95,6 +95,71 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/" title="LambdaRank-支持非平滑损失函数的学习排序算法" itemprop="url">LambdaRank-支持非平滑损失函数的学习排序算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-28T14:44:59.000Z" itemprop="datePublished"> 发表于 2016-08-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
+<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/05/30/Machine Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/" title="RankNet:基于梯度下降的学习排序" itemprop="url">RankNet:基于梯度下降的学习排序</a>
   </h1>
   <p class="article-author">By
@@ -750,75 +815,6 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/" title="McRank:一种基于多分类和梯度提升树的排序学习" itemprop="url">McRank:一种基于多分类和梯度提升树的排序学习</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2016-03-28T08:37:53.000Z" itemprop="datePublished"> 发表于 2016-03-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code><span class="name">McRank</span>是学习排序(<span class="name">Learning</span> <span class="atom">to</span> <span class="name">Rank</span>)的单文档排序分支(<span class="name">Pointwise</span>)中较为经典的一种，本文是读原<span class="name">Paper</span>[<span class="number">1</span>]之后自己的一个理解.
-</code></pre><h2 id="基本介绍">基本介绍</h2><p><code>McRank</code>的全称是<code>Multiple Classification Rank</code>,可以理解为将<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/">学习排序</a>转为机器学习中的一个多分类问题.<br><code>McRank</code>对<code>DCG</code>指标进行优化，并且可以证明<code>DCG</code>的误差可以被分类误差给<code>bounded</code>住.</p>
-<h2 id="折损累积增益">折损累积增益</h2><blockquote>
-<p><code>DCG</code>(Discounted Cumulative Gain)是在信息检索领域评估一个<code>rank</code>好坏的常用指标。(在实际使用中一般会进行归一化，称为<code>NDCG</code>，可以看<a href="http://kubicode.me/2016/02/15/Machine%20Learning/Learning-To-Rank-Base-Knowledge/#NDCG">这里</a>).</p>
-</blockquote>
-<p>假设在指定的<code>query</code>下通过某个排序算法对$n$个文档进行排序，则可以得到<br>$$DCG=\sum_{i=1}^{n}c_{[\pi_i]}(2^{y_i}-1)$$<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Search-Engine/">Search Engine</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2016/03/28/Machine Learning/McRank-Learning-to-Rank-Multiple-Classification-and-Gradient-Boosting/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -849,7 +845,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -934,7 +930,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
 			
 		
 			
@@ -954,7 +950,7 @@ ValueError: numpy<span class="class">.dtype</span> has the wrong size, try recom
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 			
 		
 			

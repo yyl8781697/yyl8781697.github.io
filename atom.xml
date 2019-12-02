@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2019-11-01T10:02:41.669Z</updated>
+  <updated>2019-12-02T12:31:17.371Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -13,6 +13,92 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[深度学习在序列化推荐中的应用(3)]]></title>
+    <link href="http://kubicode.me/2019/11/14/Deep%20Learning/More-Additional-Session-Based-Recommendation/"/>
+    <id>http://kubicode.me/2019/11/14/Deep Learning/More-Additional-Session-Based-Recommendation/</id>
+    <published>2019-11-14T02:56:18.000Z</published>
+    <updated>2019-12-02T12:31:17.371Z</updated>
+    <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>这篇是继 <a href="http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/" target="_blank" rel="external">深度学习在序列化推荐中的应用</a> 和 <a href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/" target="_blank" rel="external">深度学习在序列化推荐中的应用(2)</a>  的补充理解</p>
+<h2 id="DIN">DIN</h2><p>base idea:设计了一个<code>local activation unit</code>来学习用户行为历史的兴趣点</p>
+<p><img src="/img/More-Additional-Session-Based-Recommendation/din_arch.png" width="800px"></p>
+<p>一般传统的深度模型是将各类的用户信息（包括用户行为）查询到<code>Embeddings</code>之后通过各种<code>MLP</code>层来灌入到最后隐层，而上图（右）的<code>DIN</code>模型中  根据当前<code>Item</code>的信息与 用户的行为历史进行交互获取其历史中的兴趣，其核心就是<code>local activation unit</code>：</p>
+<a id="more"></a>
+<ol>
+<li>一般item和行为历史的信息都会包括多个维度信息，比如paper中包含<code>id</code>,<code>cateid</code>,<code>shopid</code>等，item和单个历史行为信息的<code>Embeddings</code>用$E^q$和$E^f_i$来表示</li>
+<li>构建他们两综合输入信息，一般是拼接、外积、差集等，$v_i = [E^q,E^f_i,E^q-E^f_i,E^q \odot E^f_i]$</li>
+<li>然后经过若干层<code>MLP</code>层，记得最后一层不带激活函数并且输出单元为1，该值就是item与当前历史行为的权重$w_i$</li>
+<li>则最终用户的兴趣向量为带权重的求和$v_u =\sum_i w_i v_i$</li>
+<li>拿到该向量之后，其余操作与普通的传统模型一致了</li>
+</ol>
+<p>其实细致一点可以发现，<code>local activation unit</code>与<code>attention</code>其实很像，最大的差别就是<code>attention</code>在聚合前会使用<code>Softmax</code>进行归一化，而<code>Din</code>不会，作者的解释是不用 归一化是为了<code>更加凸显用户兴趣</code>，他可以得到一个更大的向量值</p>
+<p>同时在DIN里面还提到了在训练时使用<code>Mini-batch Aware</code>正则项可以较为明显的提升效果，针对<code>L2</code>正则项，在<code>Mini-batch</code>中的公式是$$L_2(W) = \sum_j^K \sum_{m=1}^B \frac{\alpha_{mj}}{n_j} \parallel w_j \parallel ^2 $$</p>
+<blockquote>
+<p>其中$\alpha_{mj}$表示在当前batch $m$中含有特征$j$，则为1，否则为0 另外$n_j$为特征$j$在总样本中出现的次数</p>
+</blockquote>
+<p>这种方式在<code>Mini-batch</code>下使用是几乎等价于<code>Full-batch</code>，其物理意义是特征频次高的的不怎么需要正则化，而低频的需要正则化</p>
+<h2 id="DIEN">DIEN</h2><p>实际上用户的行为序列一般是一个长期行为，而他在整个序列中他的兴趣点是在变化的，所以<code>DIEN</code>的作者就是希望能提取用户的兴趣变化行为来提升模型。</p>
+<p><img src="/img/More-Additional-Session-Based-Recommendation/dien_arch.png" width="800px"></p>
+<p><code>DIEN</code>模型主要的差别是他有一个抓住用户兴趣衍化的模块，其余与传统的排序模型差不多，关于兴趣提取模块:</p>
+<ol>
+<li><code>Behavior</code>：根据行为itemid作为序列输入，查表之后得到向量$e_t$</li>
+<li><code>Interest Extractor Layer</code>:这层需要是为了提取用户的兴趣，使用经典的<code>GRU</code>进行建模，但是作者同时引入了一个辅助loss：根据上一个step的输出$h_t$来预测当前的item是否会点击(类似<code>GRU4REC</code>):$$L_{aux} = -\frac{1}{N} \sum_{i=1}^N \sum_t \text{log} \sigma(h_t,e_{t+1}) + log(1-\sigma(h_t,e_{t+1}))$$</li>
+<li><code>Ienerest Evolving Layer</code>:这里用<code>Attention</code>来更新<code>GRU</code>中gate的方式来捕获用户兴趣的变化$$\alpha_t = \frac{exp(h_t We_a)}{\sum_{j=1}^T exp(h_j W e_a)} \\ \tilde{u_t} = \alpha_t \cdot u_t \\ h_t = (1-\tilde{u_t}) \cdot h_{t-1} + \tilde{u_t} \cdot \tilde{h_t}$$</li>
+<li>最终<code>DIEN</code>模型的loss为:$$L = L_{target} + \alpha L_{aux}$$</li>
+</ol>
+<p><code>DIEN</code>相对<code>DIN</code>是考虑了序列中的时序问题，在建模时用<code>Attention</code>来捕获用户兴趣的变化</p>
+<h2 id="DSIN">DSIN</h2><p>按照<code>DIEN</code>,用户的行为序列中的兴趣其实会变化的，而<code>DSIN</code>观察发现一整个序列往往可以被分为多个不同的Session，同一个Session中的用户兴趣很相似，而不同Session之间的用户兴趣其实差异很大，因此<code>DSIN</code>提取了一个基于Session的用户兴趣神经网络:<br><img src="/img/More-Additional-Session-Based-Recommendation/dsin_arch.png" width="800px"></p>
+<p>这边的用户兴趣主要分为4个层：</p>
+<ol>
+<li><code>Session Divsion Layer</code>：将用户序列$S$分为$k$个Session $Q$，这边$Q_k = [b_1,..,b_i,…,b_T]$,$T$则为单个Session的长度</li>
+<li><code>Session Interest Extractor Layer</code>：针对每个Session始终<code>Multi-head Attention</code>来提取Session特征，同时还设计了一种新的<code>Position Encoding</code>:$$BE(k,t,c) = w_k^K + w_t^T + w_c^C$$，则输入到<code>Multi-head Attention</code>的为$Q = Q+BE$,过完Attention之后再过正常的FFN层，最终单个Session用average来表示 $$I_k = Avg(I_k^Q)$$</li>
+<li><code>Session Interest Interacting Layer</code>:这些Session将会重新构建成一个新的序列，这个序列接下来输入到BiLstm,这里单个Session的前向/后向  向量进行外积之后得到 交互后的向量 $$H_k = h_{fk} \odot h_{bk}$$</li>
+<li><code>Session Interest Activating Layer</code>:在用户兴趣激活层，针对$I_k$和$H_k$分别在过一层Attention,这里这里过Attention的时候会加上目标id的信息，然后得到$U^I$和$U^H$,Attention的样例式子为：$$\alpha_k^I = \frac{exp(I_k W ^I X^I)}{\sum_k^K exp(I_k W ^I X^I)} \\ U^I = \sum_k^K \alpha_k^I I_k$$ </li>
+<li>最终将$U^I$和$U^H$以及用户和Item的embedding信息拼接之后输入到NN模型</li>
+</ol>
+<p>该模型给我的最大感受就是：哇，这计算量真大！！！</p>
+<h2 id="seqFM">seqFM</h2><p>传统的FM模型可以很好的处理模型中的稀疏特征，但是实际中的动态序列特征对于FM模型而言无法处理，因此SeqFM就使用带mask的Self-Attention结合FM来处理实际的稀疏和动态输入的模型<br><img src="/img/More-Additional-Session-Based-Recommendation/seq_fm_arch.png" width="400px"></p>
+<p>模型的特征分为静态特征$G^{\circ}$ 和动态序列特征 $G^{\triangleright }$,他们对应的Embedding分别称为$E^{\circ}$  和 $E^{\triangleright }$接下来会用三种<code>Self-Attention</code>来提取三个不同视角的特征：</p>
+<ol>
+<li><p><code>静态视角特征</code>:直接将稀疏离散特征过<code>Self-Attention</code>:$$G^{\circ} = \text{softmax} (\frac{E^{\circ}W_Q^{\circ} \cdot (E^{\circ}W_K^{\circ})}{\sqrt{d}})E^{\circ}W_V^{\circ}$$</p>
+</li>
+<li><p><code>动态视角特征</code>:由于动态特征是带有先后序列关系，所以这里发生交互是有方向性的，paper中用<code>Mask Self-Attention</code>来提取特征:$$G^{\triangleright} = \text{softmax} (\frac{E^{\triangleright}W_Q^{\triangleright} \cdot (E^{\triangleright}W_K^{\triangleright})}{\sqrt{d}} + M^{\triangleright})E^{\triangleright}W_V^{\triangleright}$$  这里的$M^{\triangleright}$是一个mask功能的常量矩阵<br>$$m_{i,j} = \left\{\begin{matrix} 0 &amp; if i \geq  j &amp; \\ - \infty   &amp;  otherwise&amp; \\  \end{matrix}\right.$$</p>
+</li>
+<li><p><code>交叉视角特征</code>:同时将静态特征和动态特征放在一起进行<code>Mask Self-Attention</code>来提取交叉特征:$$G^{*} = \text{softmax} (\frac{E^{*}W_Q^{*} \cdot (E^{*}W_K^{*})}{\sqrt{d}} + M^{*})E^{*}W_V^{*}$$  而 $E^{*} = [E^{\circ},E^{\triangleright }]$，这里这里在进行交互式 静态特征只能与动态特征交互，不能进行内部交互，所以mask矩阵为:$$m_{i,j} = \left\{\begin{matrix} 0 &amp; if \quad i \leq  n^{\circ}  \leq j \quad or \quad  j  \leq  n^{\circ} \leq i &amp; \\ - \infty   &amp;  otherwise&amp; \\  \end{matrix}\right.$$</p>
+</li>
+</ol>
+<p>在得到三个视角的特征之后，经过<code>Intra-View</code>层进行特征压缩聚合（就是加权求和）,然后再过残差以及映射层，输出最终的目标</p>
+<p>这个实验结果必须贴一下，提升太多了：<br><img src="/img/More-Additional-Session-Based-Recommendation/seq_fm_exp.png" width="800px"></p>
+<p>说一下我的理解：</p>
+<ol>
+<li>整个结构非常灵活可控，静态特征那块可以换其他静态的离散特征提取器</li>
+<li>其实<code>SeqFM</code>并没有太多的序列考虑（除了masked那），没有和RNN系列的模型做对于，也没怎么和专门<code>Self-Attention</code>的作对比</li>
+<li>同时静态特征那边的<code>Self-Attention</code>我实际业务使用了，并没有太多特征</li>
+<li>作者源码目前还没法下载到 不好做过多的判断，毕竟提升太多了</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>Zhou, Guorui, et al. “Deep interest network for click-through rate prediction.” Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery &amp; Data Mining. ACM, 2018.</li>
+<li>Zhou, Guorui, et al. “Deep interest evolution network for click-through rate prediction.” Proceedings of the AAAI Conference on Artificial Intelligence. Vol. 33. 2019.</li>
+<li>Feng, Yufei, et al. “Deep Session Interest Network for Click-Through Rate Prediction.” arXiv preprint arXiv:1905.06482 (2019).</li>
+<li>Chen, Tong, et al. “Sequence-Aware Factorization Machines for Temporal Predictive Analytics.” (2020).</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="前言">前言</h2><p>这篇是继 <a href="http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/">深度学习在序列化推荐中的应用</a> 和 <a href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/">深度学习在序列化推荐中的应用(2)</a>  的补充理解</p>
+<h2 id="DIN">DIN</h2><p>base idea:设计了一个<code>local activation unit</code>来学习用户行为历史的兴趣点</p>
+<p><img src="/img/More-Additional-Session-Based-Recommendation/din_arch.png" width="800px" /></p>
+<p>一般传统的深度模型是将各类的用户信息（包括用户行为）查询到<code>Embeddings</code>之后通过各种<code>MLP</code>层来灌入到最后隐层，而上图（右）的<code>DIN</code>模型中  根据当前<code>Item</code>的信息与 用户的行为历史进行交互获取其历史中的兴趣，其核心就是<code>local activation unit</code>：</p>]]>
+    
+    </summary>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/tags/Deep-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[可解释性推荐系统]]></title>
@@ -286,7 +372,7 @@
     <link href="http://kubicode.me/2018/12/27/Machine%20Learning/Study-Gradient-Descent-Optimization/"/>
     <id>http://kubicode.me/2018/12/27/Machine Learning/Study-Gradient-Descent-Optimization/</id>
     <published>2018-12-27T11:38:58.000Z</published>
-    <updated>2019-11-08T07:29:55.307Z</updated>
+    <updated>2019-11-20T11:23:16.487Z</updated>
     <content type="html"><![CDATA[<blockquote>
 <p>本文主要是对于<a href="http://ruder.io/optimizing-gradient-descent/" target="_blank" rel="external">An overview of gradient descent optimization algorithms</a>的学习和理解，方便记忆</p>
 </blockquote>
@@ -416,57 +502,6 @@
 
 <p>由于被广泛使用，因此在梯度下降法出了很多变种以及许多优化算法，并且他们同时都是朝着加速收敛的方向进行优化。</p>]]>
     
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[理解HMM与CRF的相同于差异]]></title>
-    <link href="http://kubicode.me/2018/11/04/Machine%20Learning/Understanding-HMM-and-CRF/"/>
-    <id>http://kubicode.me/2018/11/04/Machine Learning/Understanding-HMM-and-CRF/</id>
-    <published>2018-11-04T14:36:16.000Z</published>
-    <updated>2019-11-05T14:58:44.051Z</updated>
-    <content type="html"><![CDATA[<h2 id="HMM">HMM</h2><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
-<p><code>HMM</code>描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：</p>
-<ol>
-<li>隐藏马尔科夫链随机生成的状态随机序列，称为<code>状态序列</code></li>
-<li>每个状态生成一个观测，由此产生的观测的随机序列，称为<code>观测序列</code></li>
-<li>序列的每个位置可以看做一个时刻</li>
-</ol>
-<p><code>HMM</code>由初始概率分布、状态转移概率分布以及观测关于分布构成，定义如下：<br>$$ Q = \{q_1,q_2,…,q_n \} , V = \{v_1,v_2,…,v_m\}$$</p>
-<blockquote>
-<p>其中$Q$可能是所有可能状态的集合，长度为$N$；$V$是所有可能观测的集合,长度为$M$</p>
-</blockquote>
-<p>$I$对长度为$T$的状态序列，则$O$为对应的观测序列:<br>$$ I = (i_1,i_2,…,i_T) , O = (o_1,o_2,…,o_T)$$</p>
-<ul>
-<li><p>$A$是状态转移概率矩阵：$$ A = [a_{i,j}]_{N \times N}$$ 其中$ a_{i,j} = P{i_{t+1} = q_j | i_{t} = q_i}$,表示$t$时刻下为状态$q_i$转移到$t+1$时刻$q_j$状态的概率</p>
-</li>
-<li><p>$B$是观测概率矩阵：$$B = [b_j(k)]_{M \times M}$$ 其中$b_j(k) = P(o_t = v_k | i_t = q_j )$，表示$t$时刻$q_j$状态生成观测$v_k$的概率</p>
-</li>
-</ul>
-<ul>
-<li>$\pi$是初始状态概率向量：$$ \pi = (\pi_i)$$ 其中$\pi_i = P(i_t = q_i)$，表示$t=1$时状态$q_i$的概率</li>
-</ul>
-<p>因此<code>HMM</code>由$A$、$B$和$\pi$构成（这三个矩阵/向量称为<code>HMM</code>三要素），同时$\pi$和$A$决定$B$，而$B$决定观测概率，即$$ \lambda = (A,B,\pi) $$</p>
-<p>从定义可知，<code>HMM</code>模型有两个基本假设：</p>
-<ol>
-<li><code>齐次马尔科夫性假设</code>：隐藏的马尔科夫链在任意时刻的状态只依赖于他上一时刻的状态，与其他时刻的状态以及观测无关，也与时刻$t$无关$$P(i_t | i_{t-1},o_{t-1},…,i_1,o_1) = P(i_t|i_{t-1})$$</li>
-<li><code>观测独立性假设</code>：任意时刻的观测只依赖于他当前时刻的状态，与其他时刻状态无关 $$P(o_t | i_T,o_T,…,i_{t-1},o_{t-1},…,i_1,o_1) = P(o_t|i_t)$$</li>
-</ol>
-<p><code>HMM</code>的三个基本问题:</p>
-<ol>
-<li>概率计算问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，计算在给定模型$\lambda$下输出观测序列$O$的概率</li>
-<li>学习问题：已经观测序列$O = (o_1,o_2,…,o_T)$,用来估计模型$ \lambda = (A,B,\pi) $的参数，使得该模型下观测序列的概率$P(O|\lambda)$最大</li>
-<li>预测问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I = (i_1,i_2,…,i_T)$，即给定观测序列，求最有可能的状态序列</li>
-</ol>
-<h2 id="CRF">CRF</h2>]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="HMM">HMM</h2><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
-<p><code>HMM</code>描述了一个]]>
     </summary>
     
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
@@ -989,6 +1024,130 @@
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
     
       <category term="Deep Learning" scheme="http://kubicode.me/categories/Deep-Learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[理解HMM与CRF的相同于差异]]></title>
+    <link href="http://kubicode.me/2017/11/04/Machine%20Learning/Understanding-HMM-and-CRF/"/>
+    <id>http://kubicode.me/2017/11/04/Machine Learning/Understanding-HMM-and-CRF/</id>
+    <published>2017-11-04T14:36:16.000Z</published>
+    <updated>2019-11-29T05:46:11.326Z</updated>
+    <content type="html"><![CDATA[<h2 id="HMM">HMM</h2><h3 id="定义">定义</h3><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
+<p><code>HMM</code>描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：</p>
+<ol>
+<li>隐藏马尔科夫链随机生成的状态随机序列，称为<code>状态序列</code></li>
+<li>每个状态生成一个观测，由此产生的观测的随机序列，称为<code>观测序列</code></li>
+<li>序列的每个位置可以看做一个时刻</li>
+</ol>
+<a id="more"></a>
+<p><code>HMM</code>由初始概率分布、状态转移概率分布以及观测关于分布构成，定义如下：<br>$$ Q = \{q_1,q_2,…,q_n \} , V = \{v_1,v_2,…,v_m\}$$</p>
+<blockquote>
+<p>其中$Q$可能是所有可能状态的集合，长度为$N$；$V$是所有可能观测的集合,长度为$M$</p>
+</blockquote>
+<p>$I$对长度为$T$的状态序列，则$O$为对应的观测序列:<br>$$ I = (i_1,i_2,…,i_T) , O = (o_1,o_2,…,o_T)$$</p>
+<ul>
+<li><p>$A$是状态转移概率矩阵：$$ A = [a_{i,j}]_{N \times N}$$ 其中$ a_{i,j} = P{i_{t+1} = q_j | i_{t} = q_i}$,表示$t$时刻下为状态$q_i$转移到$t+1$时刻$q_j$状态的概率</p>
+</li>
+<li><p>$B$是观测概率矩阵：$$B = [b_j(k)]_{M \times M}$$ 其中$b_j(k) = P(o_t = v_k | i_t = q_j )$，表示$t$时刻$q_j$状态生成观测$v_k$的概率</p>
+</li>
+</ul>
+<ul>
+<li>$\pi$是初始状态概率向量：$$ \pi = (\pi_i)$$ 其中$\pi_i = P(i_t = q_i)$，表示$t=1$时状态$q_i$的概率</li>
+</ul>
+<p>因此<code>HMM</code>由$A$、$B$和$\pi$构成（这三个矩阵/向量称为<code>HMM</code>三要素），同时$\pi$和$A$决定$B$，而$B$决定观测概率，即$$ \lambda = (A,B,\pi) $$</p>
+<h3 id="两个基本假设">两个基本假设</h3><p>从定义可知，<code>HMM</code>模型有两个基本假设：</p>
+<ol>
+<li><code>齐次马尔科夫性假设</code>：隐藏的马尔科夫链在任意时刻的状态只依赖于他上一时刻的状态，与其他时刻的状态以及观测无关，也与时刻$t$无关$$P(i_t | i_{t-1},o_{t-1},…,i_1,o_1) = P(i_t|i_{t-1})$$</li>
+<li><code>观测独立性假设</code>：任意时刻的观测只依赖于他当前时刻的状态，与其他时刻状态无关 $$P(o_t | i_T,o_T,…,i_{t-1},o_{t-1},…,i_1,o_1) = P(o_t|i_t)$$</li>
+</ol>
+<h3 id="三个基本问题">三个基本问题</h3><p><code>HMM</code>的三个基本问题:</p>
+<ol>
+<li>概率计算问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，计算在给定模型$\lambda$下输出观测序列$O$的概率</li>
+<li>学习问题：已经观测序列$O = (o_1,o_2,…,o_T)$,用来估计模型$ \lambda = (A,B,\pi) $的参数，使得该模型下观测序列的概率$P(O|\lambda)$最大</li>
+<li>预测问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I = (i_1,i_2,…,i_T)$，即给定观测序列，求最有可能的状态序列</li>
+</ol>
+<h2 id="CRF">CRF</h2><p><code>CRF</code>（条件随机场）是在给定一组随机变量的条件下输出另一组随机变量的条件概率分布模型，其特点是<code>输出的随机变量构成马尔科夫随机场</code></p>
+<h3 id="概率无向图模型">概率无向图模型</h3><p><code>概率图模型</code>:给定一个无向图$G=(V,E)$，节点$v \in V$表示一个随机变量$Y_v$，$Y = (Y_v)_{v \in V}$，而边$e \in E$则表示两个随机变量直接的依赖关系，则他的联合概率分布为$P(Y)$</p>
+<p>概率图的随机变量$v$之间存在三种马尔可夫性：</p>
+<ol>
+<li><code>成对马尔可夫性</code>:$u$和$v$是两个任意不相连的节点，对应的随机变量分别是$Y_u$和$Y_v$，而$O$为其他所有的节点以及他的随机变量组为$Y_O$,则在给定随机变量组$Y_O$的条件下$Y_u$和$Y_v$是相互独立的，即$$ P(Y_u,Y_v | Y_O) = P(Y_u | Y_O) P(Y_v | Y_O)$$</li>
+<li><code>局部马尔可夫性性</code>：$v$是$G$中的任意一个节点，$W$是与$v$的所有邻居节点，而$O$为其他所有的节点，他们三个的随机变量(组)分别为$Y_v,Y_W,Y_O$,则在给定随机变量组$Y_W$的条件下$Y_v$与$Y_O$是相互独立的，即$$P(Y_v,Y_O | Y_W) = P(Y_v | Y_W) P(Y_O | Y_W)$$</li>
+<li><code>全局马尔可夫性</code>：节点集合$A$和$B$在无向图$G$中被节点集合$C$完美隔离开了,而$A,B,C$三组即可对应的随机变量组分别为$Y_A,Y_B,Y_C$,则在给定随机变量组$Y_C$的条件下$Y_A$和$Y_B$时候相互独立的,即$$ P(Y_A,Y_B |Y_C) = P(Y_A | Y_C) P(Y_B | Y_C) $$</li>
+</ol>
+<blockquote>
+<p>注意，上述<code>成对的</code>、<code>局部的</code>和<code>全局的</code>马尔可夫性定义是等价的</p>
+</blockquote>
+<p><code>概率无向图模型</code>定义：在<code>概率图模型</code>的基础上，满足成对的、局部的或全局的马尔可夫性时，其联合概率分布$P(Y)$则称之为<code>概率无向图模型</code>或者是<code>马尔科夫随机场</code></p>
+<p>同时<code>概率无向图模型</code>的联合概率分布可以表示为其最大团$C$上随机变量函数的乘积形式操作.即$$P(Y) = \frac{1}{Z} \prod_c \psi_c(Y_c)$$</p>
+<h3 id="线性链条件随机场">线性链条件随机场</h3><p>当无向图为线性链表示的时候，该无向图$G$为：$$G = (V = \{1,2,…n\},E = \{(i,i+1)\})$$</p>
+<center><img src="/img/Understanding-HMM-and-CRF/linear_crf.png" width="400px"></center>
+
+
+<p>设$X=(X_1,X_2,..,X_n)$，$Y=(Y_1,Y_2,…,Y_n)$线性连表示的随机序列，若给定随机变量序列$X$的条件下，随机序列$Y$的条件概率分布构成条件随机场，则称$P(Y|X)$为<code>线性条件随机场</code></p>
+<blockquote>
+<p>在标注问题中，$X$为输入的<code>观测序列</code>，$Y$表示输出的标记序列或者<code>状态序列</code></p>
+</blockquote>
+<p><code>线性条件随机场</code>具有如下的参数形式:<br>$$P(y|x) = \frac{1}{Z(x)} exp (\sum_{i,k} \lambda_k t_k (y_{i-1},y_i,x,i) + \sum_{i,l} \mu_l s_l (y_i,x,i) )$$ 其中<br>$$Z(x) = \sum_y exp (\sum_{i,k} \lambda_k t_k (y_{i-1},y_i,x,i) + \sum_{i,l} \mu_l s_l (y_i,x,i) )$$</p>
+<ol>
+<li>$t_k$为定义在边上的特征函数，称为转移特征，主要依赖当前和前一个位置</li>
+<li>$s_l$为定义在节点上的特征函数，称为状态特征，依赖与当前位置</li>
+<li>这两特征函数一般取值为0或者1</li>
+</ol>
+<p>同时将转移特征和状态特征按位置进行合并之后，其式子可以改为简化特征：<br>$$P(y|x) = \frac{exp(w \cdot F(y,x))}{Z_w(x)}$$</p>
+<p>另外如果改写为矩阵形式，给序列引入额外的起始和终点的标记状态$y_0 = \text{start},y_{n+1} = \text{stop}$,则针对每个位置$i$都可以定义一个$M$阶矩阵:$$M_i(x) = \text{exp}(\sum_i^k w_kf_k(y_{i-1},y_i,x,i))$$<br>$y$的非规范化概率为可以写成$n+1$个矩阵的相乘形式 $\prod_{i=1}^{n+1} M_i(y_{i-1},y_i|x)$，于是，最终的条件概率为$$P_w(y|x) = \frac{1}{Z_w(x)} \prod_{i=1}^{n+1} M_i(y_{i-1},y_i|x)$$</p>
+<h3 id="三个基本问题-1">三个基本问题</h3><p><code>CRF</code>的三个基本问题为:</p>
+<ol>
+<li>概率计算问题：给定条件随机场$P(Y|X)$,输入序列是$x$和输出序列$y$，计算条件概率$P(Y_i=y_i|x)$，$P(Y_{i-1}=y_{i-1},Y_i=y_i|x)$以及相应的数据期望问题</li>
+<li>学习问题：已知经验概率分布，来计算条件随机场的模型参数</li>
+<li>预测问题：给定条件随机场$P(Y|X)$和输入序列$x$，求条件概率最大的输出序列$y$，其实就是序列标注问题</li>
+</ol>
+<p>针对预测问题，其实就是求非规范化概率最大的最优路问题：$$\underset{y}{max}(w \cdot F(y,x))$$</p>
+<blockquote>
+<p>其中$F(y,x) = \{F_i(y_{i-1},y_i,x)\}$为局部特征向量</p>
+</blockquote>
+<p>一般使用动态规划的维特比算法来求解</p>
+<ol>
+<li>初始化:$$\delta_1 (j) = w \cdot F_1 (y_0=\text{start},y_1=j,x), j = 1,2,…m$$</li>
+<li>递推:对于$i=2,3,..n$ <br> $$\delta_i (l) =\underset{j \in 1,..m}{max} \{ \delta_{i-1}(j) + w \cdot F_i(y_{i-1}(j),y_i(l),x)\},l = 1,…m \\ \varphi_i (l) = \underset{j \in 1,..m}{max} \{ \delta_{i-1}(j) + w \cdot F_i(y_{i-1}(j),y_i(l),x) \},l = 1,…m $$</li>
+<li>终止 $$\underset{y}{max}(w \cdot F(y,x)) = \underset{j \in 1,..m}{max} \delta_n(j) \\ y^* = \underset{j \in 1,..m}{argmax} \delta_n(j)$$</li>
+<li>返回路径 $$y^* = \varphi_{i+1} (y_{i+1}^*), i = n-1,n-2,…1$$</li>
+</ol>
+<p>最终维特比算法的最终复杂度为:$O(nm^2)$</p>
+<h3 id="BILSTM-CRF">BILSTM-CRF</h3><p>上面提到的特征其实是模块特征，CRF模型的效果非常依赖于提取特征的模板，而通过<code>BILSTM</code>则可以借助神经网络自动的提取上下文的特征</p>
+<center><img src="/img/Understanding-HMM-and-CRF/bilstm-crf.png" width="400px"></center>
+
+<p>则最终的打分为:$$score(x,y) = \sum_{i=1}^n P_{i,y_i} + \sum_{i=1}^n A(y_{i-1},y_i)$$</p>
+<p>这里：</p>
+<ol>
+<li>$P_{i,y_i} $表示当前输入词在各个输出tag位置的分数，一般是bilstm之后过一层softmax得到，注意这里的分数已经含有整句话的上下文信息了</li>
+<li>$A(y_{i-1},y_i)$是表示标签$y_{i-1}$转移到$y_i$的概率</li>
+</ol>
+<h2 id="HMM与CRF的差异">HMM与CRF的差异</h2><ol>
+<li><code>HMM</code>是生成式模型，<code>CRF</code>是判别式模型</li>
+<li><code>HMM</code>是有向图，<code>CRF</code>是无向图</li>
+<li><code>HMM</code>有独立性假设，容易陷入局部最优，而<code>CRF</code>考虑了全局特征函数，可以全局最优解</li>
+<li><code>HMM</code>是先生成不可观测状态概率，再生成观测概率，而<code>CRF</code>是根据观测结果来生成状态概率</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>《统计学习方法》.第10、11章</li>
+<li><a href="https://guillaumegenthial.github.io/sequence-tagging-with-tensorflow.html" target="_blank" rel="external">https://guillaumegenthial.github.io/sequence-tagging-with-tensorflow.html</a></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="HMM">HMM</h2><h3 id="定义">定义</h3><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
+<p><code>HMM</code>描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：</p>
+<ol>
+<li>隐藏马尔科夫链随机生成的状态随机序列，称为<code>状态序列</code></li>
+<li>每个状态生成一个观测，由此产生的观测的随机序列，称为<code>观测序列</code></li>
+<li>序列的每个位置可以看做一个时刻</li>
+</ol>]]>
+    
+    </summary>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
+    
+      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     
   </entry>
   
@@ -2063,65 +2222,6 @@
     </summary>
     
       <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[LambdaRank-支持非平滑损失函数的学习排序算法]]></title>
-    <link href="http://kubicode.me/2016/08/28/Machine%20Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/"/>
-    <id>http://kubicode.me/2016/08/28/Machine Learning/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/</id>
-    <published>2016-08-28T14:44:59.000Z</published>
-    <updated>2016-09-06T15:59:12.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
-<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速" target="_blank" rel="external">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br><a id="more"></a></p>
-<p><center><img src="/img/LambdaRank-Learning-to-Rank-with-Nonsmooth-Cost-Functions/rank.png" alt=""><br>图1</center><br>如图1，每个线条表示一个文档，位置越上面表示排序越靠前，其中蓝色线条表示相关的文档，灰色则是不相关的文档，计算左侧得到的<code>Pairwise Error</code>为13，此时将最上面的蓝色线条下移3个位置，将下面的蓝色线条上移5个位置，则其<code>Pairwise Error</code>下降到了11。然而传统的排序评估指标<code>NDCG</code>或者<code>ERR</code>都是比较关心靠前的位置，类似刚刚右侧的变化并不希望出现。<br>而<code>LambdaRank</code>可以支持对这种非平滑的评估指标(比如<code>NDCG</code>)进行直接的优化.</p>
-<h2 id="LambdaRank原理">LambdaRank原理</h2><p>在图1右侧中，我们用$D_i$和$D_j$分别表示上下两个相关的文档，对于训练时下一次的移动中，我们更加愿意看到红色箭头的变化，因为此时$D_i$移动头部比$D_j$移动到头部明显代价更小，并且同样能减少损失函数.<br>对于$i &lt;&lt; j$这种情况($D_i$排在前面)，<code>LambdaRank</code>将会有:<br>$$|\frac{\partial C}{\partial o_i}| &gt;&gt; |\frac{\partial C}{\partial o_j}|$$</p>
-<p>同时，<code>LambdaRank</code>并不是显示对的优化函数进行求导在求最优，而是<br>$$\frac{\partial C}{\partial o_i} = -\lambda_i(o_1,l_1…o_n,l_n)$$，</p>
-<blockquote>
-<p>$o_i$表示给定query下文档的打分值,$l_i$表示该文档对应的标签</p>
-</blockquote>
-<p>可以看到这个梯度是依赖<code>query</code>下全部文档的分数以及其标签,这也应该是算一个<code>ListWise</code>的学习方法了,其中式子中带了符号表示$\lambda_i$为正数时将会在排序列表中向上移动同时会降低损失函数的值.<br>那么问题来了，这个$\lambda$函数该如何选呢?</p>
-<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速" target="_blank" rel="external">RankNet</a>的神经网络加速算法中，其<br>$$\lambda_{i,j} =  \frac{\partial{C}}{\partial{o_i}}  = -\frac{\partial{C}}{\partial{o_j}} =  -\frac{1}{1+e^{o_i-o_j}} $$</p>
-<blockquote>
-<p>这里目标概率$\overline{P}_{i,j}=1$</p>
-</blockquote>
-<p><code>LambdaRank</code>的机智之处就是在计算$\lambda_{i,j}$的时候引入了优化指标的梯度,变成了<br>$$\lambda_{i,j} =  -\frac{1}{1+e^{o_i-o_j}} |\Delta Z|$$<br>其中$\Delta Z$表示将文档$D_i$和$D_j$的位置相关调换之后重新计算得到的评估指标的差值（此时其他的文档顺序是不变的）<br>即可从新计算得到$\lambda_i$为:<br>$$\lambda_i = \sum_{j:\{i,j\} \in I} \lambda_{i,j} - \sum_{j:\{j,i\} \in I} \lambda_{i,j}$$<br>这个$\lambda$可以理解为上面图中的箭头<code>方向和强度</code></p>
-<ol>
-<li>符号表示方向，正好为向上移动</li>
-<li>大小表示强度，绝对值越大，表示移动的距离越大</li>
-</ol>
-<p>接下来<code>LambdaRank</code>具体的训练和使用方式就即可和<code>RankNet</code>一致了.</p>
-<p>这个的$\Delta Z$可以替换成任何评估指标(比如<code>NDCG</code>、<code>ERR</code>)了，这样的话其实$LambdaRank$就可以变相的直接对学习排序的评估指标进行优化了，解决了之前评估指标由于是非凸无法进行优化的问题</p>
-<blockquote>
-<p>这个具体的证明要看去原始paper了[1],是一个不是很容易理解的东西 -_-||</p>
-</blockquote>
-<h2 id="总结">总结</h2><p>$LambdaRank$其实是做了两个大贡献:</p>
-<ol>
-<li>一是对传统的<code>RankNet</code>提出了一个加速算法（我直接将其丢了<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速" target="_blank" rel="external">RankNet</a>的学习中）</li>
-<li>二是在<code>RankNet</code>的优化目标的基础上添加了一个基于评估指标的梯度$\Delta Z$因子，可以变相的直接对学习排序的评估指标进行优化</li>
-</ol>
-<p>虽然貌似没有见一些其他工业上说明使用了该算法，但是该算法对于鼎鼎大名的<code>LambdaMart</code>的启发无疑是最大的。</p>
-<h2 id="参考">参考</h2><ol>
-<li>Schölkopf, B, Platt, J, Hofmann, T. Learning to Rank with Nonsmooth Cost Functions[C]// MIT Press, 2007:193 - 200.</li>
-<li>Burges, Christopher JC. “From ranknet to lambdarank to lambdamart: An overview.” Learning 11 (2010): 23-581.</li>
-<li>Li, Hang. “Learning to rank for information retrieval and natural language processing.” Synthesis Lectures on Human Language Technologies 7.3 (2014): 1-121.</li>
-</ol>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="为啥要有LambdaRank">为啥要有LambdaRank</h2><p>首先来看这么一个问题，机器学习一般都会有两个指标，一个叫做优化指标(Optimization Cost)，另一个叫做评测指标(Target Cost)，其中优化指标是训练时一直优化的目标，他一般都是需要连续可导（否则优化难度很大），另一个评测指标就是模型训练完了之后来评估这个模型的好坏。比如<code>SVM</code>模型的优化指标就是样本点距离分类面的距离最大化($\underset{w,b}{max} \quad \gamma$),而其评测指标一般都是准确率、F1值或者AUC等。<br>在信息检索领域其实也是这样，其排序的评测指标一般是NDCG、MAP、ERR等，但是这类指标都是非凸或者不连续，并无法直接进行优化，所以很多排序学习算法的优化一般都是都是<code>Corss Entropy</code>或者<code>MSE</code>。</p>
-<p>在<a href="http://kubicode.me/2016/05/30/Machine%20Learning/RankNet-Learning-to-Rank-using-Gradient-Descent/#神经网络加速">RankNet</a>中优化的目标是<code>Corss Entropy</code>，他们是近似于<code>Pairwise Error</code>,但是这个评估指标并没有考虑排在靠前的文档。<br>]]>
-    
-    </summary>
-    
-      <category term="Machine Learning" scheme="http://kubicode.me/tags/Machine-Learning/"/>
-    
-      <category term="Search Engine" scheme="http://kubicode.me/tags/Search-Engine/"/>
     
       <category term="Machine Learning" scheme="http://kubicode.me/categories/Machine-Learning/"/>
     

@@ -95,6 +95,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/19/Algorithm/TrainTickets/" title="火车票 查询问题  针对12306设计一个快速的查询系统" itemprop="url">火车票 查询问题  针对12306设计一个快速的查询系统</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-19T14:22:31.000Z" itemprop="datePublished"> 发表于 2015-07-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>火车票 查询问题  针对12306设计一个快速的查询系统
+</code></pre><blockquote>
+<p>这个网上看到的，好像是百度的一道面试题</p>
+</blockquote>
+<h2 id="解析">解析</h2><blockquote>
+<p>思想就是将火车票区间的每个站按位映射，然后通过位操作法来查询，这种方式应该比较快，并且存储比较小</p>
+</blockquote>
+<p>比如宁波到上海的高铁G7518有7个站：宁波-&gt;余姚北-&gt;绍兴北-&gt;杭州东-&gt;桐乡-&gt;嘉善南-&gt;上海虹桥<br>那么这趟车的一张票可以用0X7F来存储：01111111，低位表示出发，高位表示终止<br>那么我如果需要查询的话：查宁波到杭州东就为:00000111（第4站杭州东站只作为达到之用，不会占用其他票，所以置0即可），然后这两个数做一个与操作就可以，如果与操作之后的值还是00000111的话，就表示有票<br>还有购买的话 只需要做抑或操作即可,01111111^00000111=01111000，这样就表示余票就只有杭州东到上海虹桥的票了</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/19/Algorithm/TrainTickets/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Java-Base/">Java Base</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/19/Algorithm/TrainTickets/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/19/Algorithm/Longest/" title="最长递增子序列" itemprop="url">最长递增子序列</a>
   </h1>
   <p class="article-author">By
@@ -716,75 +787,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/05/Algorithm/1-2-n/" title="假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的" itemprop="url">假设你有一个用 1001 个整数组成的数组,这些整数是任意排列的</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-05T15:41:26.000Z" itemprop="datePublished"> 发表于 2015-07-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>假设你有一个用 <span class="number">1001</span> 个整数组成的数组,这些整数是任意排列的,但是你知道所有的整 数都在 <span class="number">1</span> 到 <span class="number">1000</span><span class="comment">(包括 1000)</span>之间。此外,除一个数字出现两次外,其他所有数字只出现一 次。假设你只能对这个数组做一次处理,用一种算法找出重复的那个数字。如果你在运算中 使用了辅助的存储方式,那么你能找到不用这种方式的算法吗?
-</code></pre><h2 id="方法1">方法1</h2><p>这里都说1~1000都至少包含一遍了，所以求和在减去1~1000的和即可<br>假设遍历数组之后的求和为sum，则那个数字就是sum-(1000*10001/2)</p>
-<blockquote>
-<p>但是如果这里不是1000，而是这个数字非常的大，求和就可能出现溢出</p>
-</blockquote>
-<h2 id="方法2">方法2</h2><p>还记得有一道经典的<a href="https://leetcode.com/problems/single-number/">leetcode题目</a>就是一个数组中每个数出现2次，只有一个数字出现了3次，找出这个数字。<br>该题目的思路是A^A=0,A^0=A</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/05/Algorithm/1-2-n/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/05/Algorithm/1-2-n/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/8/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/10/">Next<span></span></a>
@@ -815,7 +817,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -900,7 +902,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
 			
 		
 			
@@ -920,7 +922,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 			
 		
 			

@@ -1,0 +1,826 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>理解HMM与CRF的相同于差异 | Kubi Code&#39;Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kubi Code">
+    
+
+    
+    <meta name="description" content="HMM定义隐马儿可夫模型（hidden Markov model,HMM）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。
+HMM描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：
+
+隐藏马尔科夫链随机生成的状态随机序列，称为状态序列
+每个状态生成一个观测，由此产生的观测的随机序列，称为观测序列
+序列的每个位置可以看做一个时刻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解HMM与CRF的相同于差异">
+<meta property="og:url" content="http://kubicode.me/2017/11/04/Machine Learning/Understanding-HMM-and-CRF/index.html">
+<meta property="og:site_name" content="Kubi Code'Blog">
+<meta property="og:description" content="HMM定义隐马儿可夫模型（hidden Markov model,HMM）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。
+HMM描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：
+
+隐藏马尔科夫链随机生成的状态随机序列，称为状态序列
+每个状态生成一个观测，由此产生的观测的随机序列，称为观测序列
+序列的每个位置可以看做一个时刻">
+<meta property="og:image" content="/img/Understanding-HMM-and-CRF/linear_crf.png">
+<meta property="og:image" content="/img/Understanding-HMM-and-CRF/bilstm-crf.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解HMM与CRF的相同于差异">
+<meta name="twitter:description" content="HMM定义隐马儿可夫模型（hidden Markov model,HMM）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。
+HMM描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：
+
+隐藏马尔科夫链随机生成的状态随机序列，称为状态序列
+每个状态生成一个观测，由此产生的观测的随机序列，称为观测序列
+序列的每个位置可以看做一个时刻">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kubi Code&#39;Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/simpson.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?439f8b724bc712e367d66b5e348997bd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/bart-simpson-09.png" alt="Kubi Code&#39;Blog" title="Kubi Code&#39;Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kubi Code&#39;Blog">Kubi Code&#39;Blog</a></h1>
+				<h2 class="blog-motto">The palest ink is better than the best memory.</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/books">Books</a></li>
+					
+						<li><a href="/favorites">Favorites</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//bing.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kubicode.me">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/11/04/Machine Learning/Understanding-HMM-and-CRF/" title="理解HMM与CRF的相同于差异" itemprop="url">理解HMM与CRF的相同于差异</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-04T14:36:16.000Z" itemprop="datePublished"> 发表于 2017-11-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HMM"><span class="toc-number">1.</span> <span class="toc-text">HMM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两个基本假设"><span class="toc-number">1.2.</span> <span class="toc-text">两个基本假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三个基本问题"><span class="toc-number">1.3.</span> <span class="toc-text">三个基本问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRF"><span class="toc-number">2.</span> <span class="toc-text">CRF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概率无向图模型"><span class="toc-number">2.1.</span> <span class="toc-text">概率无向图模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线性链条件随机场"><span class="toc-number">2.2.</span> <span class="toc-text">线性链条件随机场</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三个基本问题-1"><span class="toc-number">2.3.</span> <span class="toc-text">三个基本问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BILSTM-CRF"><span class="toc-number">2.4.</span> <span class="toc-text">BILSTM-CRF</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HMM与CRF的差异"><span class="toc-number">3.</span> <span class="toc-text">HMM与CRF的差异</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="HMM">HMM</h2><h3 id="定义">定义</h3><p>隐马儿可夫模型（<code>hidden Markov model</code>,<code>HMM</code>）是描述隐藏的马尔科夫链随机生成观测序列问题，属于生成模型。</p>
+<p><code>HMM</code>描述了一个隐藏马尔科夫链随机生成不可观测的状态随机序列，再由各个状态生成一个观测而产生的观测随机序列的过程：</p>
+<ol>
+<li>隐藏马尔科夫链随机生成的状态随机序列，称为<code>状态序列</code></li>
+<li>每个状态生成一个观测，由此产生的观测的随机序列，称为<code>观测序列</code></li>
+<li>序列的每个位置可以看做一个时刻</li>
+</ol>
+<a id="more"></a>
+<p><code>HMM</code>由初始概率分布、状态转移概率分布以及观测关于分布构成，定义如下：<br>$$ Q = \{q_1,q_2,…,q_n \} , V = \{v_1,v_2,…,v_m\}$$</p>
+<blockquote>
+<p>其中$Q$可能是所有可能状态的集合，长度为$N$；$V$是所有可能观测的集合,长度为$M$</p>
+</blockquote>
+<p>$I$对长度为$T$的状态序列，则$O$为对应的观测序列:<br>$$ I = (i_1,i_2,…,i_T) , O = (o_1,o_2,…,o_T)$$</p>
+<ul>
+<li><p>$A$是状态转移概率矩阵：$$ A = [a_{i,j}]_{N \times N}$$ 其中$ a_{i,j} = P{i_{t+1} = q_j | i_{t} = q_i}$,表示$t$时刻下为状态$q_i$转移到$t+1$时刻$q_j$状态的概率</p>
+</li>
+<li><p>$B$是观测概率矩阵：$$B = [b_j(k)]_{M \times M}$$ 其中$b_j(k) = P(o_t = v_k | i_t = q_j )$，表示$t$时刻$q_j$状态生成观测$v_k$的概率</p>
+</li>
+</ul>
+<ul>
+<li>$\pi$是初始状态概率向量：$$ \pi = (\pi_i)$$ 其中$\pi_i = P(i_t = q_i)$，表示$t=1$时状态$q_i$的概率</li>
+</ul>
+<p>因此<code>HMM</code>由$A$、$B$和$\pi$构成（这三个矩阵/向量称为<code>HMM</code>三要素），同时$\pi$和$A$决定$B$，而$B$决定观测概率，即$$ \lambda = (A,B,\pi) $$</p>
+<h3 id="两个基本假设">两个基本假设</h3><p>从定义可知，<code>HMM</code>模型有两个基本假设：</p>
+<ol>
+<li><code>齐次马尔科夫性假设</code>：隐藏的马尔科夫链在任意时刻的状态只依赖于他上一时刻的状态，与其他时刻的状态以及观测无关，也与时刻$t$无关$$P(i_t | i_{t-1},o_{t-1},…,i_1,o_1) = P(i_t|i_{t-1})$$</li>
+<li><code>观测独立性假设</code>：任意时刻的观测只依赖于他当前时刻的状态，与其他时刻状态无关 $$P(o_t | i_T,o_T,…,i_{t-1},o_{t-1},…,i_1,o_1) = P(o_t|i_t)$$</li>
+</ol>
+<h3 id="三个基本问题">三个基本问题</h3><p><code>HMM</code>的三个基本问题:</p>
+<ol>
+<li>概率计算问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，计算在给定模型$\lambda$下输出观测序列$O$的概率</li>
+<li>学习问题：已经观测序列$O = (o_1,o_2,…,o_T)$,用来估计模型$ \lambda = (A,B,\pi) $的参数，使得该模型下观测序列的概率$P(O|\lambda)$最大</li>
+<li>预测问题：给定模型$ \lambda = (A,B,\pi) $和观测序列$O = (o_1,o_2,…,o_T)$，求对给定观测序列条件概率$P(I|O)$最大的状态序列$I = (i_1,i_2,…,i_T)$，即给定观测序列，求最有可能的状态序列</li>
+</ol>
+<h2 id="CRF">CRF</h2><p><code>CRF</code>（条件随机场）是在给定一组随机变量的条件下输出另一组随机变量的条件概率分布模型，其特点是<code>输出的随机变量构成马尔科夫随机场</code></p>
+<h3 id="概率无向图模型">概率无向图模型</h3><p><code>概率图模型</code>:给定一个无向图$G=(V,E)$，节点$v \in V$表示一个随机变量$Y_v$，$Y = (Y_v)_{v \in V}$，而边$e \in E$则表示两个随机变量直接的依赖关系，则他的联合概率分布为$P(Y)$</p>
+<p>概率图的随机变量$v$之间存在三种马尔可夫性：</p>
+<ol>
+<li><code>成对马尔可夫性</code>:$u$和$v$是两个任意不相连的节点，对应的随机变量分别是$Y_u$和$Y_v$，而$O$为其他所有的节点以及他的随机变量组为$Y_O$,则在给定随机变量组$Y_O$的条件下$Y_u$和$Y_v$是相互独立的，即$$ P(Y_u,Y_v | Y_O) = P(Y_u | Y_O) P(Y_v | Y_O)$$</li>
+<li><code>局部马尔可夫性性</code>：$v$是$G$中的任意一个节点，$W$是与$v$的所有邻居节点，而$O$为其他所有的节点，他们三个的随机变量(组)分别为$Y_v,Y_W,Y_O$,则在给定随机变量组$Y_W$的条件下$Y_v$与$Y_O$是相互独立的，即$$P(Y_v,Y_O | Y_W) = P(Y_v | Y_W) P(Y_O | Y_W)$$</li>
+<li><code>全局马尔可夫性</code>：节点集合$A$和$B$在无向图$G$中被节点集合$C$完美隔离开了,而$A,B,C$三组即可对应的随机变量组分别为$Y_A,Y_B,Y_C$,则在给定随机变量组$Y_C$的条件下$Y_A$和$Y_B$时候相互独立的,即$$ P(Y_A,Y_B |Y_C) = P(Y_A | Y_C) P(Y_B | Y_C) $$</li>
+</ol>
+<blockquote>
+<p>注意，上述<code>成对的</code>、<code>局部的</code>和<code>全局的</code>马尔可夫性定义是等价的</p>
+</blockquote>
+<p><code>概率无向图模型</code>定义：在<code>概率图模型</code>的基础上，满足成对的、局部的或全局的马尔可夫性时，其联合概率分布$P(Y)$则称之为<code>概率无向图模型</code>或者是<code>马尔科夫随机场</code></p>
+<p>同时<code>概率无向图模型</code>的联合概率分布可以表示为其最大团$C$上随机变量函数的乘积形式操作.即$$P(Y) = \frac{1}{Z} \prod_c \psi_c(Y_c)$$</p>
+<h3 id="线性链条件随机场">线性链条件随机场</h3><p>当无向图为线性链表示的时候，该无向图$G$为：$$G = (V = \{1,2,…n\},E = \{(i,i+1)\})$$</p>
+<center><img src="/img/Understanding-HMM-and-CRF/linear_crf.png" width="400px"></center>
+
+
+<p>设$X=(X_1,X_2,..,X_n)$，$Y=(Y_1,Y_2,…,Y_n)$线性连表示的随机序列，若给定随机变量序列$X$的条件下，随机序列$Y$的条件概率分布构成条件随机场，则称$P(Y|X)$为<code>线性条件随机场</code></p>
+<blockquote>
+<p>在标注问题中，$X$为输入的<code>观测序列</code>，$Y$表示输出的标记序列或者<code>状态序列</code></p>
+</blockquote>
+<p><code>线性条件随机场</code>具有如下的参数形式:<br>$$P(y|x) = \frac{1}{Z(x)} exp (\sum_{i,k} \lambda_k t_k (y_{i-1},y_i,x,i) + \sum_{i,l} \mu_l s_l (y_i,x,i) )$$ 其中<br>$$Z(x) = \sum_y exp (\sum_{i,k} \lambda_k t_k (y_{i-1},y_i,x,i) + \sum_{i,l} \mu_l s_l (y_i,x,i) )$$</p>
+<ol>
+<li>$t_k$为定义在边上的特征函数，称为转移特征，主要依赖当前和前一个位置</li>
+<li>$s_l$为定义在节点上的特征函数，称为状态特征，依赖与当前位置</li>
+<li>这两特征函数一般取值为0或者1</li>
+</ol>
+<p>同时将转移特征和状态特征按位置进行合并之后，其式子可以改为简化特征：<br>$$P(y|x) = \frac{exp(w \cdot F(y,x))}{Z_w(x)}$$</p>
+<p>另外如果改写为矩阵形式，给序列引入额外的起始和终点的标记状态$y_0 = \text{start},y_{n+1} = \text{stop}$,则针对每个位置$i$都可以定义一个$M$阶矩阵:$$M_i(x) = \text{exp}(\sum_i^k w_kf_k(y_{i-1},y_i,x,i))$$<br>$y$的非规范化概率为可以写成$n+1$个矩阵的相乘形式 $\prod_{i=1}^{n+1} M_i(y_{i-1},y_i|x)$，于是，最终的条件概率为$$P_w(y|x) = \frac{1}{Z_w(x)} \prod_{i=1}^{n+1} M_i(y_{i-1},y_i|x)$$</p>
+<h3 id="三个基本问题-1">三个基本问题</h3><p><code>CRF</code>的三个基本问题为:</p>
+<ol>
+<li>概率计算问题：给定条件随机场$P(Y|X)$,输入序列是$x$和输出序列$y$，计算条件概率$P(Y_i=y_i|x)$，$P(Y_{i-1}=y_{i-1},Y_i=y_i|x)$以及相应的数据期望问题</li>
+<li>学习问题：已知经验概率分布，来计算条件随机场的模型参数</li>
+<li>预测问题：给定条件随机场$P(Y|X)$和输入序列$x$，求条件概率最大的输出序列$y$，其实就是序列标注问题</li>
+</ol>
+<p>针对预测问题，其实就是求非规范化概率最大的最优路问题：$$\underset{y}{max}(w \cdot F(y,x))$$</p>
+<blockquote>
+<p>其中$F(y,x) = \{F_i(y_{i-1},y_i,x)\}$为局部特征向量</p>
+</blockquote>
+<p>一般使用动态规划的维特比算法来求解</p>
+<ol>
+<li>初始化:$$\delta_1 (j) = w \cdot F_1 (y_0=\text{start},y_1=j,x), j = 1,2,…m$$</li>
+<li>递推:对于$i=2,3,..n$ <br> $$\delta_i (l) =\underset{j \in 1,..m}{max} \{ \delta_{i-1}(j) + w \cdot F_i(y_{i-1}(j),y_i(l),x)\},l = 1,…m \\ \varphi_i (l) = \underset{j \in 1,..m}{max} \{ \delta_{i-1}(j) + w \cdot F_i(y_{i-1}(j),y_i(l),x) \},l = 1,…m $$</li>
+<li>终止 $$\underset{y}{max}(w \cdot F(y,x)) = \underset{j \in 1,..m}{max} \delta_n(j) \\ y^* = \underset{j \in 1,..m}{argmax} \delta_n(j)$$</li>
+<li>返回路径 $$y^* = \varphi_{i+1} (y_{i+1}^*), i = n-1,n-2,…1$$</li>
+</ol>
+<p>最终维特比算法的最终复杂度为:$O(nm^2)$</p>
+<h3 id="BILSTM-CRF">BILSTM-CRF</h3><p>上面提到的特征其实是模块特征，CRF模型的效果非常依赖于提取特征的模板，而通过<code>BILSTM</code>则可以借助神经网络自动的提取上下文的特征</p>
+<center><img src="/img/Understanding-HMM-and-CRF/bilstm-crf.png" width="400px"></center>
+
+<p>则最终的打分为:$$score(x,y) = \sum_{i=1}^n P_{i,y_i} + \sum_{i=1}^n A(y_{i-1},y_i)$$</p>
+<p>这里：</p>
+<ol>
+<li>$P_{i,y_i} $表示当前输入词在各个输出tag位置的分数，一般是bilstm之后过一层softmax得到，注意这里的分数已经含有整句话的上下文信息了</li>
+<li>$A(y_{i-1},y_i)$是表示标签$y_{i-1}$转移到$y_i$的概率</li>
+</ol>
+<h2 id="HMM与CRF的差异">HMM与CRF的差异</h2><ol>
+<li><code>HMM</code>是生成式模型，<code>CRF</code>是判别式模型</li>
+<li><code>HMM</code>是有向图，<code>CRF</code>是无向图</li>
+<li><code>HMM</code>有独立性假设，容易陷入局部最优，而<code>CRF</code>考虑了全局特征函数，可以全局最优解</li>
+<li><code>HMM</code>是先生成不可观测状态概率，再生成观测概率，而<code>CRF</code>是根据观测结果来生成状态概率</li>
+</ol>
+<h2 id="参考">参考</h2><ol>
+<li>《统计学习方法》.第10、11章</li>
+<li><a href="https://guillaumegenthial.github.io/sequence-tagging-with-tensorflow.html" target="_blank" rel="external">https://guillaumegenthial.github.io/sequence-tagging-with-tensorflow.html</a></li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kubicode.me/2017/11/04/Machine Learning/Understanding-HMM-and-CRF/" data-title="理解HMM与CRF的相同于差异 | Kubi Code&#39;Blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/02/23/Deep Learning/Deep-in-out-Factorization-Machines-Series/" title="深入浅出Factorization Machines系列">
+  <strong>上一篇：</strong><br/>
+  <span>
+  深入浅出Factorization Machines系列</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/06/05/Deep Learning/Dropout-in-Deep-Neural-Network/"  title="深度神经网络中防止过拟合的利器-Dropout">
+ <strong>下一篇：</strong><br/> 
+ <span>深度神经网络中防止过拟合的利器-Dropout
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HMM"><span class="toc-number">1.</span> <span class="toc-text">HMM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义"><span class="toc-number">1.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两个基本假设"><span class="toc-number">1.2.</span> <span class="toc-text">两个基本假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三个基本问题"><span class="toc-number">1.3.</span> <span class="toc-text">三个基本问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRF"><span class="toc-number">2.</span> <span class="toc-text">CRF</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概率无向图模型"><span class="toc-number">2.1.</span> <span class="toc-text">概率无向图模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线性链条件随机场"><span class="toc-number">2.2.</span> <span class="toc-text">线性链条件随机场</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三个基本问题-1"><span class="toc-number">2.3.</span> <span class="toc-text">三个基本问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BILSTM-CRF"><span class="toc-number">2.4.</span> <span class="toc-text">BILSTM-CRF</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HMM与CRF的差异"><span class="toc-number">3.</span> <span class="toc-text">HMM与CRF的差异</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Data-Struct/" title="Data Struct">Data Struct<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Dotnet/" title="Dotnet">Dotnet<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Effective-Java/" title="Effective Java">Effective Java<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Food/" title="Food">Food<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Base/" title="Java Base">Java Base<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java-Source/" title="Java Source">Java Source<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Machine-Learning/" title="Machine Learning">Machine Learning<sup>29</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Search-Engine/" title="Search Engine">Search Engine<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LeetCode/" title="LeetCode">LeetCode<sup>25</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>21</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Search-Engine/" title="Search Engine">Search Engine<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CSharp/" title="CSharp">CSharp<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Food/" title="Food">Food<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spark/" title="Spark">Spark<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Vim/" title="Vim">Vim<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Scala/" title="Scala">Scala<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/pager/" title="pager">pager<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OSGi/" title="OSGi">OSGi<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Data-Struct/" title="Data Struct">Data Struct<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mac/" title="Mac">Mac<sup>2</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://wuchong.me" target="_blank" title="Jark&#39;s Blog">Jark&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://quanru.github.io/" target="_blank" title="quanru&#39;s Blog">quanru&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://qcl6355.github.io/" target="_blank" title="Sheng Li&#39;s Blog">Sheng Li&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://youngyoungkang.github.io/" target="_blank" title="Young Young Kang&#39;s Blog">Young Young Kang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://nlpnoob.com/" target="_blank" title="DataKingdom&#39;s Blog">DataKingdom&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://jinfagang.gitlab.io" target="_blank" title="jinfagang&#39;s Blog">jinfagang&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.yifanguo.top/" target="_blank" title="yifanguo&#39;s Blog">yifanguo&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		
+		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+        getSize();
+        if (myWidth >= 1024) {
+          c.click();
+        }
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'kubiCode';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['\$','\$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+      processEscapes: true
+    },
+    displayAlign: "center"
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="/js/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
+

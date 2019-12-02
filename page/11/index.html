@@ -95,6 +95,81 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/24/Effective Java/Exception/" title="《Effective Java》第九章：异常" itemprop="url">《Effective Java》第九章：异常</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-23T23:30:23.000Z" itemprop="datePublished"> 发表于 2015-06-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>充分发挥异常的优点，可以提高程序的可读性、可靠性和可维护性。如果使用不当，它们也会带来负面影响。</p>
+<h2 id="第57条：只针对异常的情况下使用异常">第57条：只针对异常的情况下使用异常</h2><p>先看下如下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>(<span class="keyword">true</span>)</span><br><span class="line">		range[i++].climd();</span><br><span class="line">&#125;<span class="keyword">catch</span>(ArrayIndexOutOfBoundsException e)</span><br><span class="line">&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此代码看的如此蛋疼，使用异常来跳过数组越界，其实完全可以用下面的代码代替<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Mountain m:range)</span><br><span class="line">			m.climb();</span><br></pre></td></tr></table></figure></p>
+<p>简单明了（我想上面的例子大家都能看出孰优孰劣）<br>不推荐第一种写法的原因是：</p>
+<ol>
+<li>因为异常机制的设计初衷是用于不正常情形，所以很少会有<code>JVM</code>实现试图对它们进行优化，使得与显示的测试一样快速</li>
+<li>把代码放在<code>try-catch</code>块中反而阻止了现代<code>JVM</code>实现本来可能要执行的某些特征优化</li>
+<li>对数组进行遍历的标准模式并不会导致冗余检查。有些现代的<code>JVM</code>实现会将它们优化掉</li>
+</ol>
+<blockquote>
+<p>所以，异常应该只用于异常的情况下，它们永远不应该用于正常的控制流</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/24/Effective Java/Exception/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/24/Effective Java/Exception/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/23/Algorithm/Max-Sum-in-SubMatrix/" title="最大子矩阵和的问题" itemprop="url">最大子矩阵和的问题</a>
   </h1>
   <p class="article-author">By
@@ -758,77 +833,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" title="Spark源码中所使用的经典数据结构或者设计模式" itemprop="url">Spark源码中所使用的经典数据结构或者设计模式</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-06-02T13:32:28.000Z" itemprop="datePublished"> 发表于 2015-06-02</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="位域法">位域法</h2><blockquote>
-<p>如果一个枚举类型的元素主要用于在集合中，一般就使用<code>int</code>枚举类型，将2的不同倍数赋予每个常量。<br>这种表示方法让你用OR位运算将几个常量合并到一个集合中，称作位域。</p>
-</blockquote>
-<p>在<code>Spark</code>源码中进入<code>SparkSubmit</code>类中就可以看到<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Cluster managers</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">YARN</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">STANDALONE</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">MESOS</span> =</span> <span class="number">4</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">LOCAL</span> =</span> <span class="number">8</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_CLUSTER_MGRS</span> =</span> <span class="type">YARN</span> | <span class="type">STANDALONE</span> | <span class="type">MESOS</span> | <span class="type">LOCAL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Deploy modes</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLIENT</span> =</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">CLUSTER</span> =</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">val</span> <span class="title">ALL_DEPLOY_MODES</span> =</span> <span class="type">CLIENT</span> | <span class="type">CLUSTER</span></span><br></pre></td></tr></table></figure></p>
-<p>将集群类型和部署模式使用位域法来存储。</p>
-<blockquote>
-<p>在《Effective Java》第32条中提到，但是都不推荐。。<code>Spark</code>都使用了，难道这种结构不好嘛？？^_^</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Spark/">Spark</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Spark/">Spark</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/10/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/12/">Next<span></span></a>
@@ -859,7 +863,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -944,7 +948,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
 			
 		
 			
@@ -964,7 +968,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 			
 		
 			

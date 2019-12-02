@@ -95,6 +95,73 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/04/14/Java Source/Java-HashSet/" title="Java 源码学习之java.util.HashSet" itemprop="url">Java 源码学习之java.util.HashSet</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-04-14T08:06:15.000Z" itemprop="datePublished"> 发表于 2015-04-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>HashSet</code>在针对单个项的增删改几乎具有O(1)的性能，也常常被用于快速查找需要下的集合存储，相信各位这些特性很容易联想到<code>HashMap</code>，那么各位了解这两者的区别和联系不？</p>
+</blockquote>
+<p>看了源代码估计大家会大吃一惊，这，这<code>HashSet</code>不就是<code>HashMap</code>的简化无<code>value</code>版本嘛？对，<code>HashSet</code>就是基于<code>HashMap</code>实现的(通过组合的方式)，并且几乎所有方法都是调用了<code>HashMap</code>的<code>api</code>，最大的区别是将<code>HashMap</code>的<code>value</code>直接用<code>new Object()</code>对象来替换了。所以你可以这么认为：<br /><br><code>HashSet&lt;T&gt; hashSet=new HashMap&lt;T,Object&gt;()</code></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/04/14/Java Source/Java-HashSet/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/04/14/Java Source/Java-HashSet/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/04/07/OSGi/OSGi-Services/" title="（译）OSGi-Services，OSGI-服务" itemprop="url">（译）OSGi-Services，OSGI-服务</a>
   </h1>
   <p class="article-author">By
@@ -710,74 +777,6 @@ B.冒泡排序
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/03/24/Java Source/Java-ArrayList/" title="Java 源码学习之java.util.ArrayList" itemprop="url">Java 源码学习之java.util.ArrayList</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-03-24T12:50:40.000Z" itemprop="datePublished"> 发表于 2015-03-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>ArrayList</code>是Java编程中最常用的容器类之一，它是基于动态的数组实现的，在面试时常常被与<code>Vector</code>、<code>LikedList</code>作比较！</p>
-</blockquote>
-<p>&#160; &#160; &#160; &#160;本文将主要从<code>ArrayList</code>的构造函数、<code>add</code>、<code>remove</code>,<code>iterator</code>为入口进行源码分析</p>
-<h2 id="构造函数">构造函数</h2><p>&#160; &#160; &#160; &#160;在看构造函数之后先看下一下<code>ArrayList</code>类的三个重要私有变量</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/03/24/Java Source/Java-ArrayList/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Java-Source/">Java Source</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/03/24/Java Source/Java-ArrayList/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/13/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/15/">Next<span></span></a>
@@ -808,7 +807,7 @@ B.冒泡排序
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -893,7 +892,7 @@ B.冒泡排序
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
 			
 		
 			
@@ -913,7 +912,7 @@ B.冒泡排序
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 			
 		
 			

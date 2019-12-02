@@ -95,6 +95,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/07/30/Algorithm/Queue-Stack/" title="使用两个队列实现栈、两个栈实现队列" itemprop="url">使用两个队列实现栈、两个栈实现队列</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-29T23:43:30.000Z" itemprop="datePublished"> 发表于 2015-07-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="介绍">介绍</h2><p>队列和栈是编程中非常经典并且使用的两个数据结构：</p>
+<ul>
+<li>队列：先入先出</li>
+<li>栈：先入后出</li>
+</ul>
+<p>队列和栈的互操作主要考察对两个数据结构的认识</p>
+<h2 id="使用两个队列实现栈">使用两个队列实现栈</h2><p>假设现有队列q1和q2，要通过q1,q2来构建数据的先入后出<br>栈每次pop的都是最后一次push的值，所以可以在pop的时候将原有值都压入另一个队列，<br>直到最后一个元素时直接弹出<br>所以这样的话在push的时候就必须将元素进队到有值的那个队列，大致的逻辑图就是这样：<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/30/Algorithm/Queue-Stack/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/30/Algorithm/Queue-Stack/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/30/Algorithm/Put-x-To-Head/" title="函数将字符串中的字符&#39;*&#39;移到串的前部分" itemprop="url">函数将字符串中的字符&#39;*&#39;移到串的前部分</a>
   </h1>
   <p class="article-author">By
@@ -706,77 +776,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/19/Algorithm/TrainTickets/" title="火车票 查询问题  针对12306设计一个快速的查询系统" itemprop="url">火车票 查询问题  针对12306设计一个快速的查询系统</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-19T14:22:31.000Z" itemprop="datePublished"> 发表于 2015-07-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>火车票 查询问题  针对12306设计一个快速的查询系统
-</code></pre><blockquote>
-<p>这个网上看到的，好像是百度的一道面试题</p>
-</blockquote>
-<h2 id="解析">解析</h2><blockquote>
-<p>思想就是将火车票区间的每个站按位映射，然后通过位操作法来查询，这种方式应该比较快，并且存储比较小</p>
-</blockquote>
-<p>比如宁波到上海的高铁G7518有7个站：宁波-&gt;余姚北-&gt;绍兴北-&gt;杭州东-&gt;桐乡-&gt;嘉善南-&gt;上海虹桥<br>那么这趟车的一张票可以用0X7F来存储：01111111，低位表示出发，高位表示终止<br>那么我如果需要查询的话：查宁波到杭州东就为:00000111（第4站杭州东站只作为达到之用，不会占用其他票，所以置0即可），然后这两个数做一个与操作就可以，如果与操作之后的值还是00000111的话，就表示有票<br>还有购买的话 只需要做抑或操作即可,01111111^00000111=01111000，这样就表示余票就只有杭州东到上海虹桥的票了</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/19/Algorithm/TrainTickets/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a><a href="/tags/Java-Base/">Java Base</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/19/Algorithm/TrainTickets/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
@@ -807,7 +806,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+			<li><a href="/categories/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 		  
 		
 		  
@@ -892,7 +891,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>44</sup></a></li>
+				<li><a href="/tags/Machine-Learning/" title="Machine Learning">Machine Learning<sup>45</sup></a></li>
 			
 		
 			
@@ -912,7 +911,7 @@
 			
 		
 			
-				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>11</sup></a></li>
+				<li><a href="/tags/Deep-Learning/" title="Deep Learning">Deep Learning<sup>12</sup></a></li>
 			
 		
 			
