@@ -2,8 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/2015/12/27/Algorithm/trapping-rain-water/</loc>
+    <lastmod>2020-01-07T15:48:56.647Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2015/12/28/Algorithm/container-with-most-water/</loc>
+    <lastmod>2020-01-02T08:45:08.785Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2015/12/27/Algorithm/Max-Product-In-array/</loc>
+    <lastmod>2019-12-26T16:22:43.164Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2015/12/26/Algorithm/Min-Edit-Distance/</loc>
+    <lastmod>2019-12-26T15:37:23.598Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2015/12/26/Algorithm/Find-Big-k-in-Two-Sorted-Arrays/</loc>
+    <lastmod>2019-12-26T14:33:23.981Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2019/11/14/Deep%20Learning/More-Additional-Session-Based-Recommendation/</loc>
-    <lastmod>2019-12-02T12:31:17.371Z</lastmod>
+    <lastmod>2019-12-05T11:41:34.923Z</lastmod>
   </url>
   
   <url>

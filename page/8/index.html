@@ -95,6 +95,358 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/08/03/Algorithm/Short-Abstract/" title="最短摘要生成" itemprop="url">最短摘要生成</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-03T15:21:15.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>最短摘要生成
+给定一个字符串，以及一系列查询词，在这个字符串中找到一个子串，该子串包含全部的查询词，求这个最短子串
+</code></pre><h2 id="解析">解析</h2><p>两个指针，begin和end<br>首先使用end往右边移动一直移动到全部包含查询字符集q的位置<br>然后将begin也向右边移动，直达再移动一次begin-end区间里面的数据将不再包含q<br>此时记录begin和end以及其最小的间距<br>然后begin右移一位，end继续右边移动直至全部包含，周而复始<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/03/Algorithm/Short-Abstract/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/03/Algorithm/Short-Abstract/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/" title="找一个数组中绝对值和最小的三个元素" itemprop="url">找一个数组中绝对值和最小的三个元素</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-03T15:11:04.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>找一个数组中绝对值和最小的三个元素
+</code></pre><h2 id="解析">解析</h2><p>暴力的方法是O(n^3)，肯定还存在其他更加优的方法</p>
+<ol>
+<li>将数组升序排序</li>
+<li>固定一个数字，然后从两端开始找，如果sum&lt;0 则left++ 否则right—  同时记录最小的minSum<blockquote>
+<p>注意，两端向中间找的时候如果遇到当前固定的数字需要跳过</p>
+</blockquote>
+</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/03/Algorithm/Min-Abs-ThreeNumber/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/03/Algorithm/Max-Min-in-Array/" title="对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？" itemprop="url">对于一个由N个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-03T14:59:25.000Z" itemprop="datePublished"> 发表于 2015-08-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>对于一个由<span class="keyword">N</span>个整数组成的数组，需要比较多少次才能把最大和最小的数找出来呢？
+</code></pre><h2 id="解析">解析</h2><p>普通的遍历是需要O(2n)时间，那有没有其他更好的办法呢？<br>其实可以使用分而治之的思想，将N分为两段  分别取到每一段中的最大和最小值  ，然后最大与最大比即可 最小与最小比即可，这样就可以避免最小与最大的比较</p>
+<pre><code>比如：
+<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>
+正常对比的话得到<span class="built_in">min</span>=<span class="number">1</span>,<span class="built_in">max</span>=<span class="number">4</span>需要<span class="number">6</span>次
+那如果先求的<span class="built_in">min1</span>=<span class="number">1</span>,<span class="built_in">max1</span>=<span class="number">2</span>,min2=<span class="number">3</span>,max2=<span class="number">4</span>（需要<span class="number">2</span>次比较）
+然后<span class="built_in">min1</span>&lt;min2 得到<span class="built_in">min</span>=<span class="number">1</span>,<span class="built_in">max1</span>&lt;max2可得<span class="built_in">max</span>=<span class="number">4</span> （又是需要<span class="number">2</span>次）
+所以这种方法只需要<span class="number">4</span>次
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/03/Algorithm/Max-Min-in-Array/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/03/Algorithm/Max-Min-in-Array/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/08/02/Algorithm/Permutation-and-Combination/" title="全排列以及全组合" itemprop="url">全排列以及全组合</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-08-02T14:44:33.000Z" itemprop="datePublished"> 发表于 2015-08-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="全排列">全排列</h2><blockquote>
+<p>这里主要使用递归来实现，也就是考察递归的熟练使用与否</p>
+</blockquote>
+<p>全排列的递归生成规则为：</p>
+<ol>
+<li>n个数的全排列=(其中一个数的前缀)+n-1个树的全排列</li>
+<li>当前只剩下一个待选前缀的时候，停止迭代</li>
+<li>关于前缀的设立，是逐个迭代剩余的候选元素通过两两交换完成的，在进行输出之后还需要还得将两个数字重新交换回去</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/08/02/Algorithm/Permutation-and-Combination/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/08/02/Algorithm/Permutation-and-Combination/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/07/30/Java Base/Java-AOP-Study/" title="学习Java AOP的实现" itemprop="url">学习Java AOP的实现</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-07-30T15:49:09.000Z" itemprop="datePublished"> 发表于 2015-07-30</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="AOP介绍">AOP介绍</h2><pre><code>在软件业，AOP为Aspect Oriented Programming的缩写，意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。
+<span class="comment">--摘自百度百科</span>
+</code></pre><p>通过这个介绍还不是很理解怎么办？什么是切面呀？</p>
+<blockquote>
+<p>我的理解哈：你现在有一系列普通的执行方法，但是想在方法执行的前后加点东西，比如记录日志，那你不可能去再每个方法上都去加记录日志的语句，那这个时候AOP就来了，将这个记录日志作为切面切入到这些方法中，在平常自然调用这些方法时候同时执行这些切面。</p>
+</blockquote>
+<p>那该怎么切入呢？<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/07/30/Java Base/Java-AOP-Study/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java-Base/">Java Base</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/07/30/Java Base/Java-AOP-Study/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/07/30/Algorithm/Queue-Stack/" title="使用两个队列实现栈、两个栈实现队列" itemprop="url">使用两个队列实现栈、两个栈实现队列</a>
   </h1>
   <p class="article-author">By
@@ -430,355 +782,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/25/Algorithm/The-Longest-Palindrome/" title="对策字符串的最大长度" itemprop="url">对策字符串的最大长度</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-25T07:03:19.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>输入一个字符串,输出该字符串中对称的子字符串的最大长度。比如输入字符串 “google”,由于该字符串里最长的对称子字符串是“goog”,因此输出 4。
-</code></pre><h2 id="解析">解析</h2><p>该题目比较直观的解法有：</p>
-<ol>
-<li>暴力法：遍历所有可能的子串，然后判断子串是否为回文，故总得复杂度为O(n^3)</li>
-<li>遍历字符串，以当前遍历为中心点，然后向两边扩展，直至扩展到不是回文，总复杂度为O(n^2)</li>
-</ol>
-<p>还有后缀树也可以解，不过需要较大的空间，本文使用的是manacher算法：</p>
-<pre><code>Manacher最早发现了可以用<span class="function"><span class="title">O</span><span class="params">(n)</span></span>的时间复杂度来解决该问题，所以这种方法称之为Manacher算法。
-</code></pre><p>现在以查询字符串”abaab”为例，该算法为了将”aba”和”baab” 奇偶形式统一考虑，做了一个很精妙的预处理：每每两个字符串以及两端都加一个标志符号#，就形成了<br>“#a#b#a#a#b#”新字符串，那么”aba”则可以看做”#a#b#a#”，同时”baab”转为#b#a#a#b#”，就都为奇数形式了<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/25/Algorithm/The-Longest-Palindrome/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/25/Algorithm/The-Longest-Palindrome/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/" title="求旋转数组中的最小值" itemprop="url">求旋转数组中的最小值</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-25T02:42:58.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>题目:把一个数组最开始的若干个元素搬到数组的末尾,我们称之为数组的旋转。输入一个 排好序的数组的一个旋转,
-输出旋转数组的最小元素。例如数组<span class="list">{3, 4, 5, 1, 2}</span>为<span class="list">{1, 2, 3, 4, 5}</span>的一个旋转,该数 组的最小值为 <span class="number">1</span>。
-</code></pre><h2 id="解析">解析</h2><blockquote>
-<p>该题最容易想到的就是遍历，但是他的复杂度是O(n)，而作为面试题肯定是需要我们找出一种更优的方法</p>
-</blockquote>
-<p>这里使用可以二分法来解决该问题,假设数组a的长度为n，现在使用二分法过程中左端索引s,右端索引t，则中间位置为m=s+(t-s)/2<br>首先可以知道旋转数组在旋转之后a[0]&gt;a[n-1]是肯定成立的，</p>
-<p>当a[s]&lt;=a[m]的时候，我们应该进去右侧继续查找，比如a[0]<a[2] 接下来我们只需要找a[3~4]即可（注意a[m]都已经大于a[s]了，所以这里取右侧的时候m舍去的）
-同理，当a[s]>a[m]的时候 进入左侧继续搜索，直到<br>可以发现当a[s]&lt;=a[t]的时候  a[s]肯定就是最小值了。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/25/Algorithm/Min-Value-In-Ratate-Array/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/" title="左边的数都小于等 于它,右边的数都大于等于它" itemprop="url">左边的数都小于等 于它,右边的数都大于等于它</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-25T00:52:50.000Z" itemprop="datePublished"> 发表于 2015-07-25</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>一个 int 数组,里面数据无任何限制,要求求出所有这样的数 <span class="tag">a</span>[i],其左边的数都小于等 于它,右边的数都大于等于它。能否只用一个额外数组和少量其它空间实现
-</code></pre><h2 id="解析">解析</h2><p>想其他的都是泪（递归、分治）<br>最妙的方法就是将原数组排序得到b，如果b[i]=a[i]，则a[i]就是满足该条件的数<br>这样正好满足只使用了一个额外数组^_^<br>最终的复杂度为<code>O(nlogn)</code><br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/25/Algorithm/Left-Lte-Right-Gte/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/24/Algorithm/x-exponent/" title="数值的整数次方" itemprop="url">数值的整数次方</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-24T12:05:12.000Z" itemprop="datePublished"> 发表于 2015-07-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>实现函数<span class="function"><span class="keyword">double</span> <span class="title">Power</span><span class="params">(<span class="keyword">double</span> <span class="keyword">base</span>,<span class="keyword">int</span> exponent)</span>，求<span class="keyword">base</span>的exponent次方。不得使用库函数，同时不需要考虑大树问题。</span>
-</code></pre><h2 id="解析">解析</h2><p>这题看似简单，但是请别这么写-_-<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base,<span class="keyword">int</span> exp)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">double</span> result=<span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=exp;i++)</span><br><span class="line">		result*=result;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>还需要考虑：</p>
-<ol>
-<li>exp是负数怎么办？？  恩，那就是需要求倒数了</li>
-<li>exp是负数 但是base是0怎么办？？ 恩，那就是无穷大了</li>
-<li>复杂度能否小于O(exp)吗？  a^5=a*a^4=a*(a*a)^2 所以可以使用递归法来做</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/24/Algorithm/x-exponent/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/24/Algorithm/x-exponent/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/" title="把数组排成最小的数" itemprop="url">把数组排成最小的数</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-07-20T12:31:43.000Z" itemprop="datePublished"> 发表于 2015-07-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="题目">题目</h2><pre><code>输入一个正整数数组，将它们连接起来排成一个数，输出能排出的所有数字中最小的一个。例如输入数组<span class="list">{32,  321}</span>，则输出这两个能排成的最小数字<span class="number">32132</span>。请给出解决问题的算法，并证明该算法。
-</code></pre><h2 id="解析">解析</h2><p>假如有两个数字a,b，其关键思路不是比较a,b，而是比较ab和ba。。。<br>如果ab&lt;ba,则会有a&lt;b，所以这题的关键就是构建a,b的比较器</p>
-<blockquote>
-<p>不得不说，这个思路太妙了^_^<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/07/20/Algorithm/Minimum-Combination-in-Array/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/9/">Next<span></span></a>
   </nav>
 
 </div>
@@ -798,7 +804,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>39</sup></a></li>
 		  
 		
 		  
@@ -895,7 +901,7 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>42</sup></a></li>
 			
 		
 			
@@ -1052,7 +1058,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

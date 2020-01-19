@@ -95,6 +95,386 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/" title="LeetCode-Number of 1 Bits" itemprop="url">LeetCode-Number of 1 Bits</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-14T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/number-of-1-bits/" target="_blank" rel="external">https://leetcode.com/problems/number-of-1-bits/</a></p>
+</blockquote>
+<p>Problem:<br>Write a function that takes an unsigned integer and returns the number of ’1’ bits it has (also known as the Hamming weight).</p>
+<p>For example, the 32-bit integer ’11’ has binary representation <code>00000000000000000000000000001011</code>, so the function should return 3.</p>
+<p>思路</p>
+<ul>
+<li>使用移位操作，每次将最后的最低位累加</li>
+<li>我想说一模一样的代码，<code>Java</code>和<code>C++</code>的执行效率真的相差挺大</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Solution &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">uint32_t</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>the Runetime is <code>10ms</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">// you need to treat n as an unsigned value</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hammingWeight</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(;i&lt;<span class="number">32</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            sum+=n&amp;<span class="number">0x1</span>;</span><br><span class="line">            n=n&gt;&gt;<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>the Runtime is <code>239ms</code><br></p>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/14/LeetCode/LeetCode-Number-of-1-Bits/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/" title="LeetCode-Single Number II" itemprop="url">LeetCode-Single Number II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-12T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/single-number-ii/" target="_blank" rel="external">https://leetcode.com/problems/single-number-ii/</a></p>
+</blockquote>
+<p>Problem:<br>Given an array of integers, every element appears three times except for one. Find that single one.</p>
+<p><strong>Note:</strong><br>Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?</p>
+<p>思路</p>
+<ul>
+<li>将数组A中每个整形的二进制 分散到一个32位数组A上求和，出现3次的在该位上的和肯定是3的倍数</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="keyword">int</span>[] A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,index=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] binarySum=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">32</span>];</span><br><span class="line">        <span class="keyword">if</span>(A==<span class="keyword">null</span> || A.length==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            index=<span class="number">0</span>;</span><br><span class="line">            do</span><br><span class="line">            &#123;</span><br><span class="line">                binarySum[index++]+=A[i]%<span class="number">2</span>;</span><br><span class="line">                A[i]/=<span class="number">2</span>;</span><br><span class="line">            &#125;<span class="keyword">while</span>(A[i]!=<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;binarySum.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            index=binarySum[i]%<span class="number">3</span>;</span><br><span class="line">            <span class="keyword">if</span>(Math.abs(index)&gt;<span class="number">1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                index=(index+<span class="number">3</span>)%<span class="number">3</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            ret+=Math.pow(<span class="number">2</span>, i)*(index);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/12/LeetCode/LeetCode-Single-Number-II/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/" title="LeetCode-Linked List Cycle II" itemprop="url">LeetCode-Linked List Cycle II</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-10T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/linked-list-cycle-ii/" target="_blank" rel="external">https://leetcode.com/problems/linked-list-cycle-ii/</a></p>
+</blockquote>
+<p>Problem:<br>Given a linked list, return the node where the cycle begins. If there is no cycle, return null.</p>
+<p>Follow up:<br>Can you solve it without using extra space?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">detectCycle</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        ListNode cycleStart=<span class="keyword">null</span>,</span><br><span class="line">                singleStepNode=<span class="keyword">null</span>,</span><br><span class="line">                doubleStepNode=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> isCycle=<span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> cycleStart;</span><br><span class="line">        </span><br><span class="line">        singleStepNode =head;</span><br><span class="line">        doubleStepNode=head;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(singleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode!=<span class="keyword">null</span> &amp;&amp; doubleStepNode.next!=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=singleStepNode.next;</span><br><span class="line"></span><br><span class="line">            doubleStepNode=doubleStepNode.next.next;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(singleStepNode==doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                isCycle=<span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(isCycle)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=head;</span><br><span class="line">            <span class="keyword">while</span>(singleStepNode != doubleStepNode)</span><br><span class="line">            &#123;</span><br><span class="line">                singleStepNode=singleStepNode.next;</span><br><span class="line">                doubleStepNode=doubleStepNode.next;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            cycleStart=singleStepNode;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> cycleStart;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/10/LeetCode/LeetCode-Linked-List-Cycle-II/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/10/LeetCode/LeetCode-Single-Number/" title="LeetCode-Single Number" itemprop="url">LeetCode-Single Number</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-10T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-10</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/single-number/" target="_blank" rel="external">https://leetcode.com/problems/single-number/</a></p>
+</blockquote>
+<p>Problem:<br>Given an array of integers, every element appears twice except for one. Find that single one.</p>
+<p><strong>Note:</strong><br>Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?</p>
+<p>思路：</p>
+<ul>
+<li>两个相同数据进行异或操作之后为0</li>
+<li>一个数字与0进行异或操作之后还是自己</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="keyword">int</span>[] A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(A==<span class="keyword">null</span> || A.length==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        ret=A[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;A.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            ret=ret^A[i];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/10/LeetCode/LeetCode-Single-Number/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/" title="LeetCode-Evaluate Reverse Polish Notation" itemprop="url">LeetCode-Evaluate Reverse Polish Notation</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2014-07-08T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/evaluate-reverse-polish-notation/" target="_blank" rel="external">https://leetcode.com/problems/evaluate-reverse-polish-notation/</a></p>
+</blockquote>
+<p>Problem:<br>Evaluate the value of an arithmetic expression in Reverse Polish Notation.</p>
+<p>Valid operators are <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>. Each operand may be an integer or another expression.</p>
+<p>Some examples:</p>
+<pre><code>[<span class="string">"2"</span>, <span class="string">"1"</span>, <span class="string">"+"</span>, <span class="string">"3"</span>, <span class="string">"*"</span>]<span class="function"> -&gt;</span> <span class="function"><span class="params">((<span class="number">2</span> + <span class="number">1</span>) * <span class="number">3</span>)</span> -&gt;</span> <span class="number">9</span>
+[<span class="string">"4"</span>, <span class="string">"13"</span>, <span class="string">"5"</span>, <span class="string">"/"</span>, <span class="string">"+"</span>]<span class="function"> -&gt;</span> <span class="function"><span class="params">(<span class="number">4</span> + (<span class="number">13</span> / <span class="number">5</span>))</span> -&gt;</span> <span class="number">6</span>
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">evalRPN</span><span class="params">(String[] tokens)</span> </span>&#123;</span><br><span class="line">        Stack&lt;Integer&gt; numStack=<span class="keyword">new</span> Stack&lt;Integer&gt;();</span><br><span class="line">        Integer ret=Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">for</span>(String str:tokens)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(str.matches(<span class="string">"-?\\d+"</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                numStack.push(Integer.parseInt(str));</span><br><span class="line">                </span><br><span class="line">                </span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                </span><br><span class="line">                ret=numStack.pop();</span><br><span class="line">                <span class="keyword">switch</span>(str)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"+"</span>:ret=numStack.pop()+ret;<span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"-"</span>:ret=numStack.pop()-ret;<span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"*"</span>:ret=numStack.pop()*ret;<span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> <span class="string">"/"</span>:ret=numStack.pop()/ret;<span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                numStack.push(ret);</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> numStack.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<blockquote>
+<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2014/07/08/LeetCode/LeetCode-Evaluate-Reverse-Polish-Notation/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2014/07/08/LeetCode/LeetCode-Clone-Graph/" title="LeetCode-Clone Graph" itemprop="url">LeetCode-Clone Graph</a>
   </h1>
   <p class="article-author">By
@@ -331,78 +711,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/05/LeetCode/LeetCode-Linked-List-Cycle/" title="LeetCode-Linked List Cycle" itemprop="url">LeetCode-Linked List Cycle</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-05T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/linked-list-cycle/" target="_blank" rel="external">https://leetcode.com/problems/linked-list-cycle/</a></p>
-</blockquote>
-<p>Problem:<br>Given a linked list, determine if it has a cycle in it.</p>
-<p>Follow up:<br>Can you solve it without using extra space?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasCycle</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> ret=<span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        ListNode singleStepNode=head,</span><br><span class="line">                doubleStepNode=head;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(singleStepNode.next !=<span class="keyword">null</span> &amp;&amp; </span><br><span class="line">                doubleStepNode.next!=<span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                doubleStepNode.next.next !=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=singleStepNode.next;</span><br><span class="line">            doubleStepNode=doubleStepNode.next.next;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(singleStepNode.next==doubleStepNode.next)</span><br><span class="line">            &#123;</span><br><span class="line">                ret=<span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/05/LeetCode/LeetCode-Linked-List-Cycle/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2014/07/05/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-III/" title="LeetCode-Best Time to Buy and Sell Stock III" itemprop="url">LeetCode-Best Time to Buy and Sell Stock III</a>
   </h1>
   <p class="article-author">By
@@ -476,25 +784,25 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/" title="LeetCode-Best Time to Buy and Sell Stock II" itemprop="url">LeetCode-Best Time to Buy and Sell Stock II</a>
+      <a href="/2014/07/05/LeetCode/LeetCode-Linked-List-Cycle/" title="LeetCode-Linked List Cycle" itemprop="url">LeetCode-Linked List Cycle</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
 		
   <p class="article-time">
-    <time datetime="2014-07-04T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-04</time>
+    <time datetime="2014-07-05T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-05</time>
     
   </p>
 </header>
     <div class="article-content">
         
         <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" rel="external">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
+<p>LeetCode地址：<a href="https://leetcode.com/problems/linked-list-cycle/" target="_blank" rel="external">https://leetcode.com/problems/linked-list-cycle/</a></p>
 </blockquote>
-<p>Problem:<br>Say you have an array for which the <em>i</em><sup>th</sup> element is the price of a given stock on day <em>i</em>.</p>
-<p>Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,</span><br><span class="line">            leftValue=<span class="number">0</span>,</span><br><span class="line">            length=prices.length,</span><br><span class="line">            state=-<span class="number">1</span>;<span class="comment">//-1=buy,1=sale</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(state==-<span class="number">1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(i+<span class="number">1</span>&lt;length &amp;&amp; prices[i]&lt;prices[i+<span class="number">1</span>])</span><br><span class="line">                &#123;</span><br><span class="line">                    leftValue=prices[i];</span><br><span class="line">                    state=<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>((i==length-<span class="number">1</span> &amp;&amp; prices[i]&gt;leftValue) || prices[i]&gt;prices[i+<span class="number">1</span>])</span><br><span class="line">                &#123;</span><br><span class="line">                    ret+=prices[i]-leftValue;</span><br><span class="line">                    state=-<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Problem:<br>Given a linked list, determine if it has a cycle in it.</p>
+<p>Follow up:<br>Can you solve it without using extra space?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123;</span><br><span class="line"> *         val = x;</span><br><span class="line"> *         next = null;</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasCycle</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> ret=<span class="keyword">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(head==<span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        ListNode singleStepNode=head,</span><br><span class="line">                doubleStepNode=head;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(singleStepNode.next !=<span class="keyword">null</span> &amp;&amp; </span><br><span class="line">                doubleStepNode.next!=<span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                doubleStepNode.next.next !=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            singleStepNode=singleStepNode.next;</span><br><span class="line">            doubleStepNode=doubleStepNode.next.next;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(singleStepNode.next==doubleStepNode.next)</span><br><span class="line">            &#123;</span><br><span class="line">                ret=<span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
 <blockquote>
 <p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
@@ -528,314 +836,7 @@
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/2014/07/04/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock-II/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/" title="LeetCode-Best Time to Buy and Sell Stock" itemprop="url">LeetCode-Best Time to Buy and Sell Stock</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-03T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-03</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="external">https://leetcode.com/problems/best-time-to-buy-and-sell-stock/</a></p>
-</blockquote>
-<p>Problem:<br>Say you have an array for which the <em>i</em><sup>th</sup> element is the price of a given stock on day <em>i</em>.</p>
-<p>If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">int</span> ret=<span class="number">0</span>,</span><br><span class="line">            leftValue=Integer.MAX_VALUE,</span><br><span class="line">            rightPos=<span class="number">0</span>,</span><br><span class="line">            length=prices.length;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;length-<span class="number">1</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(prices[i]&gt;leftValue)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;length;j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(prices[j]-prices[i]&gt;ret)</span><br><span class="line">                &#123;</span><br><span class="line">                    ret=prices[j]-prices[i];</span><br><span class="line">                    leftValue=prices[i];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>thr runtime is <code>1548ms</code>  -_-!</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,</span><br><span class="line">            buy=<span class="number">0</span>,</span><br><span class="line">            length=prices.length;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(prices.length&lt;<span class="number">2</span>)</span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">        buy=prices[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(prices[i]-buy&gt;ret)</span><br><span class="line">            &#123;</span><br><span class="line">                ret=prices[i]-buy;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(prices[i]&lt;buy)</span><br><span class="line">            &#123;</span><br><span class="line">                buy=prices[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>thr runtime is <code>376ms</code></p>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/03/LeetCode/LeetCode-Best-Time-to-Buy-and-Sell-Stock/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/02/LeetCode/LeetCode-Pascal's Triangle/" title="LeetCode-Pascal&#39;s Triangle" itemprop="url">LeetCode-Pascal&#39;s Triangle</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-02T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-02</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/pascals-triangle/" target="_blank" rel="external">https://leetcode.com/problems/pascals-triangle/</a></p>
-</blockquote>
-<p>Problem:<br>Given numRows, generate the first numRows of Pascal’s triangle.</p>
-<p>For example, given numRows = 5,<br>Return</p>
-<pre><code>[
-     [<span class="number">1</span>],
-    [<span class="number">1</span>,<span class="number">1</span>],
-   [<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>],
-  [<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">1</span>],
- [<span class="number">1</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">4</span>,<span class="number">1</span>]
-]
-</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; generate(<span class="keyword">int</span> numRows) &#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; list=<span class="keyword">new</span> ArrayList&lt;List&lt;Integer&gt;&gt;();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(numRows==<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> list;</span><br><span class="line">        </span><br><span class="line">        list.add(Arrays.asList(<span class="number">1</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;numRows;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            List&lt;Integer&gt; rows=<span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">            rows.add(<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;i;j++)</span><br><span class="line">            &#123;</span><br><span class="line">                rows.add(list.get(i-<span class="number">1</span>).get(j-<span class="number">1</span>)+list.get(i-<span class="number">1</span>).get(j));</span><br><span class="line">            </span><br><span class="line">            &#125;</span><br><span class="line">            rows.add(<span class="number">1</span>);</span><br><span class="line">            list.add(rows);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/02/LeetCode/LeetCode-Pascal's Triangle/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/01/LeetCode/LeetCode-Pascal's-Triangle-II/" title="LeetCode-Pascal&#39;s Triangle II" itemprop="url">LeetCode-Pascal&#39;s Triangle II</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-01T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>LeetCode地址：<a href="https://leetcode.com/problems/pascals-triangle-ii/" target="_blank" rel="external">https://leetcode.com/problems/pascals-triangle-ii/</a></p>
-</blockquote>
-<p>Problem:<br>Given an index k, return the kth row of the Pascal’s triangle.</p>
-<p>For example, given k = 3,<br>Return <code>[1,3,3,1]</code>.</p>
-<p><strong>Note</strong>:<br>Could you optimize your algorithm to use only O(k) extra space?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getRow</span><span class="params">(<span class="keyword">int</span> rowIndex)</span> </span>&#123;</span><br><span class="line">        Integer[] ret=<span class="keyword">new</span> Integer[rowIndex+<span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;ret.length;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            ret[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ret[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;rowIndex+<span class="number">1</span>;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i;j&gt;<span class="number">0</span>;j--)</span><br><span class="line">            &#123;</span><br><span class="line">                ret[j]+=ret[j-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> Arrays.asList(ret);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/01/LeetCode/LeetCode-Pascal's-Triangle-II/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2014/07/01/LeetCode/LeetCode-Triangle/" title="LeetCode-Triangle" itemprop="url">LeetCode-Triangle</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2014-07-01T08:48:54.000Z" itemprop="datePublished"> 发表于 2014-07-01</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>leetcode地址：<a href="https://leetcode.com/problems/triangle/" target="_blank" rel="external">https://leetcode.com/problems/triangle/</a></p>
-</blockquote>
-<p>Problem:<br>Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.</p>
-<p>For example, given the following triangle</p>
-<pre><code>[
-     [<span class="number">2</span>],
-    [<span class="number">3</span>,<span class="number">4</span>],
-   [<span class="number">6</span>,<span class="number">5</span>,<span class="number">7</span>],
-  [<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]
-]
-</code></pre><p>The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).</p>
-<p><strong>Note</strong>:<br>Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; triangle)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span>[][] sums=<span class="keyword">new</span> <span class="keyword">int</span>[triangle.size()][triangle.size()];</span><br><span class="line">		List&lt;Integer&gt; rows;</span><br><span class="line">        <span class="keyword">int</span> ret=<span class="number">0</span>,column;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(triangle.size()&gt;<span class="number">0</span>)</span><br><span class="line">	    &#123;</span><br><span class="line">        	<span class="keyword">for</span>(<span class="keyword">int</span> i=triangle.size()-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)</span><br><span class="line">        	&#123;</span><br><span class="line">        		rows=triangle.get(i);</span><br><span class="line">        		</span><br><span class="line">        		<span class="keyword">if</span>(i==triangle.size()-<span class="number">1</span>)</span><br><span class="line">        		&#123;</span><br><span class="line">        			<span class="comment">//the last rows</span></span><br><span class="line">        			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rows.size();j++)</span><br><span class="line">        			&#123;</span><br><span class="line">        				sums[i][j]=rows.get(j);</span><br><span class="line">        			&#125;</span><br><span class="line">        		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        			</span><br><span class="line">        			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;rows.size();j++)</span><br><span class="line">        			&#123;</span><br><span class="line">        				</span><br><span class="line">        				sums[i][j]=<span class="keyword">this</span>.getMin(rows.get(j)+sums[i+<span class="number">1</span>][j],rows.get(j)+sums[i+<span class="number">1</span>][j+<span class="number">1</span>]);</span><br><span class="line">        			&#125;</span><br><span class="line">        		&#125;</span><br><span class="line">        		</span><br><span class="line">        	&#125;</span><br><span class="line">        	</span><br><span class="line">        	ret=sums[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">	    &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getMin</span><span class="params">(Integer a,Integer b)</span></span><br><span class="line">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> a&gt;b?b:a;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<blockquote>
-<p>本作品采用<a href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/" target="_blank">[知识共享署名-非商业性使用-相同方式共享 2.5]</a>中国大陆许可协议进行许可，我的博客欢迎复制共享，但在同时，希望保留我的署名权<a href="http://kubicode.me/" target="_blank" rel="external">kubiCode</a>，并且，不得用于商业用途。如您有任何疑问或者授权方面的协商，请给<a href="http://kubicode.me/about/" target="_blank" rel="external">我留言</a>。</p>
-</blockquote>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/LeetCode/">LeetCode</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/LeetCode/">LeetCode</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2014/07/01/LeetCode/LeetCode-Triangle/#disqus_thread" class="comments-count-link">Comments</a>
+		<a href="/2014/07/05/LeetCode/LeetCode-Linked-List-Cycle/#disqus_thread" class="comments-count-link">Comments</a>
 	
 </div>
 
@@ -851,7 +852,7 @@
 
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/15/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/17/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/17/">Next<span></span></a>
   </nav>
 
 </div>
@@ -871,7 +872,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>39</sup></a></li>
 		  
 		
 		  
@@ -968,7 +969,7 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>42</sup></a></li>
 			
 		
 			
@@ -1125,7 +1126,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

@@ -95,6 +95,410 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/11/04/Linux/Shell-Command-List/" title="来来来，学习Shell的命令" itemprop="url">来来来，学习Shell的命令</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-11-04T14:34:28.000Z" itemprop="datePublished"> 发表于 2015-11-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>Shell脚本是非常强的大一个脚本语言，但是不用会手生，所以在此记录Shell脚本的相应关键点，也做查字典用^_^</p>
+</blockquote>
+<h2 id="变量">变量</h2><h3 id="变量定义">变量定义</h3><p>先来简单的看一下变量定义的规则</p>
+<ol>
+<li>在<code>Shell</code>中，使用变量之前不需要事先声明，只是通过使用它们来创建它们；</li>
+<li>在默认情况下，所有变量都被看做是字符串，并以字符串来存储；</li>
+<li><code>Shell</code>变量是区分大小写的；</li>
+<li>在赋值变量的时候等号两端不能有空格-_-</li>
+</ol>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/11/04/Linux/Shell-Command-List/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux/">Linux</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/11/04/Linux/Shell-Command-List/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/" title="KNN算法中KD树的应用" itemprop="url">KNN算法中KD树的应用</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-10-12T03:57:39.000Z" itemprop="datePublished"> 发表于 2015-10-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
+</code></pre><p><a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#KNN算法">点我查看详情</a></p>
+<blockquote>
+<p>但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对<code>KNN</code>算法实现一个简单的<code>KD</code>树</p>
+</blockquote>
+<h2 id="KD树">KD树</h2><pre><code>KD树是一个二叉树，表示对<span class="keyword">K</span>维空间的一个划分，可以进行快速检索（那KNN计算的时候不需要对全样本进行距离的计算了）
+</code></pre><p>比如针对6个二维数据点{（2,3），（5,4），（9,6），（4,7），（8,1），（7,2）}，可以形成以下树形结构以及空间划分<br><img src="/img/KDTree-In-KNN/example.png" alt=""></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Data-Struct/">Data Struct</a><a href="/tags/Java/">Java</a><a href="/tags/Machine-Learning/">Machine Learning</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/10/05/Python/Numpy-Fast-Memory/" title="numpy工具包常用快速记" itemprop="url">numpy工具包常用快速记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-10-05T14:54:26.000Z" itemprop="datePublished"> 发表于 2015-10-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>numpy</code>这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看<a href="http://docs.scipy.org/doc/">scipy api</a></p>
+</blockquote>
+<p>使用之前首先得引入包<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure></p>
+<h2 id="array">array</h2><p><code>np.array</code>实现了真正的数组，在<code>numpy</code>中其实就是矩阵啦，同时提供了丰富的矩阵计算方法<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/10/05/Python/Numpy-Fast-Memory/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/10/05/Python/Numpy-Fast-Memory/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" title="关于Scala中Iterator中size/length的一个坑" itemprop="url">关于Scala中Iterator中size/length的一个坑</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-19T02:36:42.000Z" itemprop="datePublished"> 发表于 2015-09-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p><code>Scala</code>语言是出了名的语法诡异，功能强大-_-，他的<code>Iterator</code>也是如此，还提供了亲民心的<code>size/length</code>方法，但是，但是，但是慎用!!</p>
+</blockquote>
+<p>事情是这样的</p>
+<pre><code>今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量<span class="keyword">N</span>（使用size方法来做），然后计算出一个需要采样的量<span class="keyword">n</span>,然后遍历(直接<span class="keyword">for</span>来做)这个迭代器，按自己的业务采样<span class="keyword">n</span>个记录！
+</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。<br>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/12/Python/python-little-memory/" title="python里面的一些小记（方便自己查询）" itemprop="url">python里面的一些小记（方便自己查询）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-12T01:37:18.000Z" itemprop="datePublished"> 发表于 2015-09-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
+</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些东西</h2><blockquote>
+<p>当然下面的判断完全可以自己使用正则表达式来些，但是有一句话是<code>杀鸡焉用牛刀</code>,下面的api使用起来就会非常便捷</p>
+</blockquote>
+<p><code>s</code>为字符串</p>
+<ol>
+<li><code>s.isalnum()</code> 所有字符都是数字或者字母</li>
+<li><code>s.isalpha()</code> 所有字符都是字母</li>
+<li><code>s.isdigit()</code> 所有字符都是数字</li>
+<li><code>s.islower()</code> 所有字符都是小写</li>
+<li><code>s.isupper()</code> 所有字符都是大写</li>
+<li><code>s.istitle()</code> 所有单词都是首字母大写，像标题</li>
+<li><code>s.isspace()</code> 所有字符都是空白字符、<code>\t</code>、<code>\n</code>、<code>\r</code></li>
+</ol>
+<h2 id="自带的排序函数">自带的排序函数</h2><p><code>python</code>中有两种排序方式:</p>
+<ol>
+<li><code>list.sort(func=None, key=None, reverse=False)</code>:这种排序会改变<code>list</code>自身的数据</li>
+<li><code>sorted(list,func=None, key=None, reverse=False)</code>:这种会重新生成一个新的<code>list</code></li>
+</ol>
+<p>最简单的栗子:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort()</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
+<p>会输出</p>
+<pre><code>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">7</span>]
+</code></pre><p>反向排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort(reverse=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
+<p>会输出</p>
+<pre><code>[<span class="number">7</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]
+</code></pre><p>对指定关键字进行排序:</p>
+<pre><code><span class="keyword">list</span>=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">50</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">3</span>)]
+<span class="keyword">list</span>.sort(key=lambda x:x[<span class="number">1</span>])
+<span class="keyword">print</span> <span class="keyword">list</span>
+</code></pre><p>可以看到结果:</p>
+<pre><code><span class="collection">[<span class="list">(<span class="keyword">'e'</span>, <span class="number">3</span>)</span>, <span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">50</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
+</code></pre><blockquote>
+<p>若不指定，貌似是按第一个关键词排序</p>
+</blockquote>
+<p>还有两种方式均可以完成指定关键词方式:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.sort(<span class="keyword">lambda</span> x,y:cmp(x[<span class="number">1</span>],y[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>按多关键字排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=<span class="keyword">lambda</span> x:(x[<span class="number">1</span>],x[<span class="number">0</span>]))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>,<span class="number">0</span>))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure>
+<pre><code><span class="collection">[<span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'e'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
+</code></pre><blockquote>
+<p><code>sorted</code>传参一样，只是会返回一个新的实例而已</p>
+</blockquote>
+<h2 id="异常处理">异常处理</h2><p>语法结构<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	block</span><br><span class="line"><span class="keyword">except</span> [Exception <span class="keyword">as</span> e]:</span><br><span class="line">	do...</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	do...</span><br></pre></td></tr></table></figure></p>
+<p>for Example:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	<span class="number">1</span>/<span class="number">0</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'err'</span></span><br><span class="line">	<span class="keyword">raise</span> e</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'end'</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="动态载入库">动态载入库</h2><blockquote>
+<p>有时候需要载入的库是动态的，类似Java的反射</p>
+</blockquote>
+<p><code>const_en.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="string">"xiaoming"</span></span><br></pre></td></tr></table></figure></p>
+<p><code>const_ch.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">name=<span class="string">"小明"</span></span><br></pre></td></tr></table></figure></p>
+<p><code>test.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_en'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_ch'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br></pre></td></tr></table></figure></p>
+<p>可以看到输出结果:</p>
+<pre><code><span class="title">xiaoming</span>
+小明
+</code></pre><h2 id="参数中*和**的使用">参数中*和**的使用</h2><p>在<code>Python</code>函数的入参列表中经常会看到*和**,他们其实并不是代表指针或者引擎，其中<br><code>*</code>表示传递任意个无名字参数，放置在一个元组中，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">array_para_test</span><span class="params">(a,b,*c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">array_para_test(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
+<p>它的最终输出将会是</p>
+<pre><code><span class="number">1</span> <span class="number">2</span>
+<span class="list">(<span class="keyword">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span>
+</code></pre><p><code>**</code>表示任意个有名字的参数，用于存放在字典中进行访问，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dict_para_test</span><span class="params">(a,b,**c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">dict_para_test(<span class="number">1</span>,<span class="number">2</span>,name=<span class="string">"tome"</span>,age=<span class="number">23</span>)</span><br></pre></td></tr></table></figure></p>
+<p>他的最终输出是</p>
+<pre><code><span class="number">1</span> <span class="number">2</span>
+{<span class="string">'age'</span>: <span class="number">23</span>, <span class="string">'name'</span>: <span class="string">'tome'</span>}
+</code></pre><h1 id="下面应该回持续更新">下面应该回持续更新</h1>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/09/12/Python/python-little-memory/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/09/07/Machine Learning/Validation/" title="《台大机器学习基石》Validation" itemprop="url">《台大机器学习基石》Validation</a>
   </h1>
   <p class="article-author">By
@@ -411,359 +815,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/19/Machine Learning/Linear-Regression/" title="《台大机器学习基石》Linear Regression" itemprop="url">《台大机器学习基石》Linear Regression</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-19T15:15:46.000Z" itemprop="datePublished"> 发表于 2015-08-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="Linear_Regression">Linear Regression</h2><p>现在相对比于之前的<a href="http://kubicode.me/2015/08/06/Machine%20Learning/Perceptron-Learning-Algorithm/">Perceptron Learning Algorithm</a>算法，假如我们现在时的问题不是解决是否发行用卡，而是该发<strong>多少额度</strong>的问题<br><img src="/img/Linear-Regression/ed.png" width="300px" height="300px" /><br>也就是输出空间属于一个实数，那么就需要一个回归算法来解决该问题！<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/19/Machine Learning/Linear-Regression/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/19/Machine Learning/Linear-Regression/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/" title="机器学习常见算法个人总结（面试用）" itemprop="url">机器学习常见算法个人总结（面试用）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-15T23:40:29.000Z" itemprop="datePublished"> 发表于 2015-08-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><s>这个总结最初是写在本地的MacDown中的，他的markdown语法解析与hexo的略微有点差异，懒得改了-_-，忍着点看..</s><br>对排版看不下去了，将本文的公式使用<code>Latex</code>重写了^_^ .on 2016-04-15</p>
-</blockquote>
-<h2 id="朴素贝叶斯">朴素贝叶斯</h2><blockquote>
-<p>参考[1]</p>
-</blockquote>
-<p>事件<code>A</code>和<code>B</code>同时发生的概率为<code>在A发生的情况下发生B</code>或者<code>在B发生的情况下发生A</code><br>$$P(A \cap B) = P(A)*P(B|A) = P(B)*P(A|B)$$<br>所以有：<br>$$P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$$</p>
-<p>对于给出的待分类项，求解在此项出现的条件下各个目标类别出现的概率，哪个最大，就认为此待分类项属于哪个类别</p>
-<h3 id="工作原理">工作原理</h3><ol>
-<li>假设现在有样本$x=(a_1,a_2,a_3,…a_n)$这个待分类项(并认为$x$里面的特征独立)</li>
-<li>再假设现在有分类目标$Y=\{y_1,y_2,y_3,y_4..y_n\}$</li>
-<li>那么$max(P(y_1|x),P(y_2|x),P(y_3|x)..P(y_n|x))$就是最终的分类类别</li>
-<li>而$P(y_i|x)=\frac{p(x|y_i)*P(yi)}{P(x)}$</li>
-<li>因为$x$对于每个分类目标来说都一样，所以就是求$max(P(x|y_i)*p(y_i))$</li>
-<li>$P(x|y_i)*p(y_i)=p(y_i)*\prod_i(P(a_i|y_i))$ </li>
-<li>而具体的$p(a_i|y_i)$和$p(y_i)$都是能从训练样本中统计出来<br> $p(a_i|y_i)$表示该类别下该特征出现的概率<br> $p(y_i)$表示全部类别中这个这个类别出现的概率</li>
-<li>好的，就是这么工作的^_^</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/16/Machine Learning/Algorithm-Summary-for-Interview/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/16/Machine Learning/Common-Interview/" title="机器学习常见面试题整理" itemprop="url">机器学习常见面试题整理</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-15T23:39:47.000Z" itemprop="datePublished"> 发表于 2015-08-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="有监督学习和无监督学习的区别">有监督学习和无监督学习的区别</h2><ul>
-<li>有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBRT）</li>
-<li>无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)</li>
-</ul>
-<h2 id="正则化">正则化</h2><p>正则化是针对过拟合而提出的，以为在求解模型最优的是一般优化最小的经验风险，现在在该经验风险上加入模型复杂度这一项（正则化项是模型参数向量的范数），并使用一个rate比率来权衡模型复杂度与以往经验风险的权重，如果模型复杂度越高，结构化的经验风险会越大，现在的目标就变为了结构经验风险的最优化，可以防止模型训练过度复杂，有效的降低过拟合的风险。</p>
-<blockquote>
-<p>奥卡姆剃刀原理，能够很好的解释已知数据并且十分简单才是最好的模型。</p>
-</blockquote>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/16/Machine Learning/Common-Interview/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/16/Machine Learning/Common-Interview/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/15/Machine Learning/VC-Dimension/" title="《台大机器学习基石》VC Dimension" itemprop="url">《台大机器学习基石》VC Dimension</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-15T07:45:20.000Z" itemprop="datePublished"> 发表于 2015-08-15</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="VC_Bound">VC Bound</h2><p>我们通过上一篇文章中了解到了<code>break point</code>以及<code>Growth Function</code>之后，<br>我们将<code>Growth Function</code>的上界设为<code>B(N,k)</code>（maximum possible m_H(N) when break point = k），表示在<code>break point</code>的<code>k</code>的情况下，其<code>m<sub>H</sub>(N)</code>的最大值，用通俗的话来说，在<code>N</code>个点中，任意取<code>k</code>个点不能<code>shatter</code>。</p>
-<blockquote>
-<p>这种方式定义的好处就是以后在计算不需要计较具体的成长函数是怎么样的，形成的<code>hypothesis</code>究竟是如何的。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/15/Machine Learning/VC-Dimension/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/15/Machine Learning/VC-Dimension/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/08/11/Algorithm/Intelligence-Problems/" title="一些面试常见的智力题啦" itemprop="url">一些面试常见的智力题啦</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-08-11T15:10:06.000Z" itemprop="datePublished"> 发表于 2015-08-11</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>考智力，脑子不好使咋办？？只有记下来^_^</p>
-</blockquote>
-<h2 id="烧香/绳子计时1小时15分钟">烧香/绳子计时1小时15分钟</h2><pre><code>烧一根不均匀的绳,从头烧到尾总共需要 1 个小时。现在有若干条材质相同的绳子,问 如何用烧绳的方法来计时一个小时十五分钟呢?
-</code></pre><p>假设现在有三根绳子A和B和C，现在将A的两端都点着，B的一端都点着<br>半小时过去后，A就烧没了，此时B应该还有半小时的时长可以烧，但是现在把B的另一端也点着<br>又过了十五分钟，B也烧没了，这个时候把C的两端也都点着<br>又过了半小时，C也烧没了<br>好了，一小时十五分钟就这么烧到了^_^<br>其实主要思路还是两端  一端 烧得搭配</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/08/11/Algorithm/Intelligence-Problems/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/08/11/Algorithm/Intelligence-Problems/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/7/">Next<span></span></a>
   </nav>
 
 </div>
@@ -783,7 +837,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>39</sup></a></li>
 		  
 		
 		  
@@ -880,7 +934,7 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>42</sup></a></li>
 			
 		
 			
@@ -1037,7 +1091,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

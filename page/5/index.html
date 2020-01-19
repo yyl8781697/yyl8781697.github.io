@@ -229,6 +229,375 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/12/28/Algorithm/container-with-most-water/" title="盛最多水的容器" itemprop="url">盛最多水的容器</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-27T16:08:37.000Z" itemprop="datePublished"> 发表于 2015-12-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>来源：<a href="https://leetcode-cn.com/problems/container-with-most-water" target="_blank" rel="external">https://leetcode-cn.com/problems/container-with-most-water</a></p>
+</blockquote>
+<h2 id="题目">题目</h2><p>给定 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</p>
+<p>输入: [1,8,6,2,5,4,8,3,7]<br>输出: 49</p>
+<h2 id="解">解</h2><p>指针移动规则与证明： 初始化头和尾两个指针，每次选定围成水槽两板高度 h[i]h[i],h[j]h[j] 中的短板，向中间收窄 11 格</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">0</span>,j=height.size()-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(i&lt;j)&#123;</span><br><span class="line">    	<span class="keyword">if</span>(height[i]&lt;height[j])&#123;</span><br><span class="line">    		ret = max(ret,(j-i)*height[i]);</span><br><span class="line">    		i++;</span><br><span class="line">    	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    		ret = max(ret,(j-i)*height[j]);</span><br><span class="line">    		j--;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2><p><a href="https://leetcode-cn.com/problems/container-with-most-water/solution/container-with-most-water-shuang-zhi-zhen-fa-yi-do/" target="_blank" rel="external">https://leetcode-cn.com/problems/container-with-most-water/solution/container-with-most-water-shuang-zhi-zhen-fa-yi-do/</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/28/Algorithm/container-with-most-water/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/27/Algorithm/trapping-rain-water/" title="接雨水" itemprop="url">接雨水</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-26T16:16:25.000Z" itemprop="datePublished"> 发表于 2015-12-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><p>给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）</p>
+<p><img src="/img/trapping-rain-water/rainwatertrap.png" width="600px"><br><img src="rainwatertrap.png" alt=""></p>
+<h2 id="解法">解法</h2><p>双指针法：<br>如果一端有更高的条形块（例如右端），积水的高度依赖于当前方向的高度（从左到右）。当我们发现另一侧（右侧）的条形块高度不是最高的，我们则开始从相反的方向遍历（从右到左）。<br>我们必须在遍历时维护 $\text{leftMax}$ 和 $\text{rightMax}$，但是我们现在可以使用两个指针交替进行，实现 1 次遍历即可完成。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>&lt;iostream&gt;</span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span>&lt;vector&gt;</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(height.size()&lt;=<span class="number">2</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> left_max = height[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> right_max = height[height.size()-<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>,j = height.size()-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(i&lt;=j)&#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"i:"</span>&lt;&lt;i &lt;&lt; <span class="string">" j:"</span>&lt;&lt;j&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">if</span>(left_max &lt;= right_max)&#123;</span><br><span class="line">            <span class="keyword">if</span>(height[i]&gt;=left_max)&#123;</span><br><span class="line">                left_max = height[i];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line"></span><br><span class="line">                <span class="built_in">cout</span> &lt;&lt; <span class="string">"left: "</span> &lt;&lt; left_max &lt;&lt; <span class="string">":"</span> &lt;&lt; height[i] &lt;&lt; endl;</span><br><span class="line">                sum += left_max-height[i];</span><br><span class="line">            &#125;</span><br><span class="line">            ++i;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(height[j] &gt;= right_max)&#123;</span><br><span class="line">                right_max = height[j];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="built_in">cout</span> &lt;&lt; <span class="string">"right: "</span> &lt;&lt; right_max &lt;&lt; <span class="string">":"</span> &lt;&lt; height[j] &lt;&lt; endl;</span><br><span class="line">                sum += right_max - height[j];</span><br><span class="line">            &#125;</span><br><span class="line">            --j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//int num1[] = &#123;0,1,0,2,1,0,1,3,2,1,2,1&#125;;</span></span><br><span class="line">    <span class="keyword">int</span> num1[] = &#123;<span class="number">5</span>,<span class="number">5</span>,<span class="number">1</span>,<span class="number">7</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">6</span>&#125;;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec1(num1,num1+<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; trap(vec1) &lt;&lt; endl;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2><ol>
+<li><a href="https://leetcode-cn.com/problems/trapping-rain-water/" target="_blank" rel="external">https://leetcode-cn.com/problems/trapping-rain-water/</a></li>
+<li><a href="https://leetcode-cn.com/problems/trapping-rain-water/solution/jie-yu-shui-by-leetcode/" target="_blank" rel="external">https://leetcode-cn.com/problems/trapping-rain-water/solution/jie-yu-shui-by-leetcode/</a></li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/27/Algorithm/trapping-rain-water/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/27/Algorithm/Max-Product-In-array/" title="最大乘积的子序列" itemprop="url">最大乘积的子序列</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-26T16:16:25.000Z" itemprop="datePublished"> 发表于 2015-12-27</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><p>给定一个整数数组 nums ，找出一个序列中乘积最大的连续子序列（该序列至少包含一个数）。</p>
+<h2 id="思路">思路</h2><p>标签：动态规划<br>遍历数组时计算当前最大值，不断更新</p>
+<ul>
+<li>令imax为当前最大值，则当前最大值为 imax = max(imax * nums[i], nums[i])</li>
+<li>由于存在负数，那么会导致最大的变最小的，最小的变最大的。因此还需要维护当前最小值imin，imin = min(imin * nums[i], nums[i])</li>
+<li>当负数出现时则imax与imin进行交换再进行下一步计算</li>
+<li>时间复杂度：O(n)</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxProduct</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.size()&lt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> ret = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> imax = <span class="number">1</span>,imin = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums.size();++i)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i]&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">int</span> temp = imax;</span><br><span class="line">                imax = imin;</span><br><span class="line">                imin = temp;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            imax = max(imax*nums[i],nums[i]);</span><br><span class="line">            imin = min(imin*nums[i],nums[i]);</span><br><span class="line"></span><br><span class="line">            ret = max(ret,imax);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2><p><a href="https://leetcode-cn.com/problems/maximum-product-subarray/solution/hua-jie-suan-fa-152-cheng-ji-zui-da-zi-xu-lie-by-g/" target="_blank" rel="external">https://leetcode-cn.com/problems/maximum-product-subarray/solution/hua-jie-suan-fa-152-cheng-ji-zui-da-zi-xu-lie-by-g/</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/27/Algorithm/Max-Product-In-array/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/26/Algorithm/Min-Edit-Distance/" title="求最小编辑距离" itemprop="url">求最小编辑距离</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-26T15:15:27.000Z" itemprop="datePublished"> 发表于 2015-12-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>问题链接：<a href="https://leetcode-cn.com/problems/edit-distance" target="_blank" rel="external">https://leetcode-cn.com/problems/edit-distance</a></p>
+</blockquote>
+<p>给定两个单词 word1 和 word2，计算出将 word1 转换成 word2 所使用的最少操作数 。</p>
+<p>你可以对一个单词进行如下三种操作：</p>
+<ul>
+<li>插入一个字符</li>
+<li>删除一个字符</li>
+<li>替换一个字符</li>
+</ul>
+<pre><code>输入<span class="symbol">:</span> word1 = <span class="string">"horse"</span>, word2 = <span class="string">"ros"</span>
+输出<span class="symbol">:</span> <span class="number">3</span>
+解释<span class="symbol">:</span> 
+horse -&gt; rorse (将 <span class="string">'h'</span> 替换为 <span class="string">'r'</span>)
+rorse -&gt; rose (删除 <span class="string">'r'</span>)
+rose -&gt; ros (删除 <span class="string">'e'</span>)
+</code></pre><p>则需要维护一个二维的最小编辑距离表：</p>
+<center><img src="/img/Min-Edit-Distance/min_dist.png" width="600px"></center>
+
+
+<p>则右下角则为最小的编辑距离，核心代码为:<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(<span class="built_in">string</span> word1, <span class="built_in">string</span> word2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> M = word1.length();</span><br><span class="line">        <span class="keyword">int</span> N = word2.length();</span><br><span class="line">        <span class="keyword">int</span> A[M+<span class="number">1</span>][N+<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=M;++i)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=N;++j)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i==<span class="number">0</span>)&#123;</span><br><span class="line">                    A[i][j] = j;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(j==<span class="number">0</span>)&#123;</span><br><span class="line">                    A[i][j] = i;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    A[i][j] = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=M;++i)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=N;++j)&#123;</span><br><span class="line">                <span class="keyword">if</span>(word1[i-<span class="number">1</span>] == word2[j-<span class="number">1</span>])&#123;</span><br><span class="line">                    A[i][j] = A[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    A[i][j] = min(A[i-<span class="number">1</span>][j-<span class="number">1</span>],min(A[i-<span class="number">1</span>][j],A[i][j-<span class="number">1</span>]))+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> A[M][N];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/26/Algorithm/Min-Edit-Distance/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/26/Algorithm/Find-Big-k-in-Two-Sorted-Arrays/" title="找两个数组中第K个大的数字" itemprop="url">找两个数组中第K个大的数字</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-12-26T14:24:46.000Z" itemprop="datePublished"> 发表于 2015-12-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="题目">题目</h2><pre><code>在两个有序数组中，找到第k大的数字，要求复杂度为O(<span class="literal">log</span>(<span class="keyword">m</span>+<span class="keyword">n</span>))
+</code></pre><h2 id="解析">解析</h2><p>因为题目是要求复杂度O(log(m+n))，则无法直接使用遍历，重排的方式了，基本一下子就能想到类似二分查找的方法</p>
+<p>假设这两个数组分别为A和B</p>
+<ol>
+<li>假如两个数组分别取k/2位置的值，如果A[k/2-1]等于B[k/2-1]，则这个值就是第k大的数</li>
+<li>但是如果A[k/2-1]大于B[k/2-1]，则B[0:k/2-1]范围内的值都将会小于第k大，这里的值可以直接过滤，从B[k/2]再开始查找</li>
+<li>如果A[k/2-1]小于B[k/2-1]同理2的方式</li>
+<li>因此可以根据k/2部分值大的大小比较进行递归</li>
+</ol>
+<p>同时在递归时会预见某个子数组会0长度或者k到1的边界，此时直接取值返回即可，因此对应的代码为:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor">#<span class="keyword">include</span>&lt;iostream&gt;</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">binary_find_k</span><span class="params">(<span class="keyword">int</span>* A,<span class="keyword">int</span> len1,<span class="keyword">int</span>* B,<span class="keyword">int</span> len2,<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(len1&gt;len2)</span><br><span class="line">		<span class="comment">// 需要保证A数组比B短</span></span><br><span class="line">		<span class="keyword">return</span> binary_find_k(B,len2,A,len1,k);</span><br><span class="line">	<span class="keyword">if</span>(len1 == <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> B[k-<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">if</span>(k==<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">return</span> min(A[<span class="number">0</span>],B[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> k1 = min(k/<span class="number">2</span>,len1);</span><br><span class="line">	<span class="keyword">int</span> k2 = k-k1;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; k1 &lt;&lt; <span class="string">" , "</span> &lt;&lt; k2 &lt;&lt; <span class="string">":"</span> &lt;&lt;  A[k1-<span class="number">1</span>] &lt;&lt; <span class="string">" , "</span>&lt;&lt;B[k2-<span class="number">1</span>] &lt;&lt;endl;</span><br><span class="line">	<span class="keyword">if</span>(A[k1-<span class="number">1</span>] &gt; B[k2-<span class="number">1</span>])&#123;</span><br><span class="line">		<span class="comment">// 说明B[0:k2-1]部分都会比   第k大 数字要小，这部分抛弃，继续递归</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"keep k1"</span> &lt;&lt; endl;</span><br><span class="line">		<span class="keyword">return</span> binary_find_k(A,len1,B+k2,len2-k2,k1);</span><br><span class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(A[k1-<span class="number">1</span>] &lt; B[k2-<span class="number">1</span>])&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"keep k2"</span> &lt;&lt; endl;</span><br><span class="line">		<span class="keyword">return</span> binary_find_k(A+k1,len1-k1,B,len2,k2);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="comment">// 这个就是k大</span></span><br><span class="line">		<span class="keyword">return</span> B[k2-<span class="number">1</span>];</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> A[] = &#123;<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">12</span>&#125;;</span><br><span class="line">	<span class="keyword">int</span> B[] = &#123;<span class="number">1</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">11</span>&#125;;</span><br><span class="line">	<span class="keyword">int</span> len1 = <span class="number">6</span>;</span><br><span class="line">	<span class="keyword">int</span> len2 = <span class="number">7</span>;</span><br><span class="line">	<span class="keyword">int</span> k = <span class="number">5</span>;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; binary_find_k(A,len1,B,len2,k)&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里正好也输出为5</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Algorithm/">Algorithm</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/12/26/Algorithm/Find-Big-k-in-Two-Sorted-Arrays/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/12/24/Linux/awk-study-list/" title="轻量的结构化文本处理工具-awk" itemprop="url">轻量的结构化文本处理工具-awk</a>
   </h1>
   <p class="article-author">By
@@ -436,413 +805,9 @@ yans-MacBook-Pro:Downloads yanyl$
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/11/04/Linux/Shell-Command-List/" title="来来来，学习Shell的命令" itemprop="url">来来来，学习Shell的命令</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-11-04T14:34:28.000Z" itemprop="datePublished"> 发表于 2015-11-04</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p>Shell脚本是非常强的大一个脚本语言，但是不用会手生，所以在此记录Shell脚本的相应关键点，也做查字典用^_^</p>
-</blockquote>
-<h2 id="变量">变量</h2><h3 id="变量定义">变量定义</h3><p>先来简单的看一下变量定义的规则</p>
-<ol>
-<li>在<code>Shell</code>中，使用变量之前不需要事先声明，只是通过使用它们来创建它们；</li>
-<li>在默认情况下，所有变量都被看做是字符串，并以字符串来存储；</li>
-<li><code>Shell</code>变量是区分大小写的；</li>
-<li>在赋值变量的时候等号两端不能有空格-_-</li>
-</ol>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/11/04/Linux/Shell-Command-List/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/11/04/Linux/Shell-Command-List/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/" title="KNN算法中KD树的应用" itemprop="url">KNN算法中KD树的应用</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-12T03:57:39.000Z" itemprop="datePublished"> 发表于 2015-10-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="KNN算法">KNN算法</h2><pre><code>给一个训练数据集和一个新的实例，在训练数据集中找出与这个新实例最近的k个训练实例，然后统计最近的k个训练实例中所属类别计数最多的那个类，就是新实例的类。
-</code></pre><p><a href="http://kubicode.me/2015/08/16/Machine%20Learning/Algorithm-Summary-for-Interview/#KNN算法">点我查看详情</a></p>
-<blockquote>
-<p>但是该算法每次在查询k个最近邻的时候都需要遍历全集  才能计算出来，可想而且如果训练样本很大的话，代价还是很大的，那有没有啥方法可以优化呢？本文就针对<code>KNN</code>算法实现一个简单的<code>KD</code>树</p>
-</blockquote>
-<h2 id="KD树">KD树</h2><pre><code>KD树是一个二叉树，表示对<span class="keyword">K</span>维空间的一个划分，可以进行快速检索（那KNN计算的时候不需要对全样本进行距离的计算了）
-</code></pre><p>比如针对6个二维数据点{（2,3），（5,4），（9,6），（4,7），（8,1），（7,2）}，可以形成以下树形结构以及空间划分<br><img src="/img/KDTree-In-KNN/example.png" alt=""></p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Data-Struct/">Data Struct</a><a href="/tags/Java/">Java</a><a href="/tags/Machine-Learning/">Machine Learning</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/10/12/Machine Learning/KDTree-In-KNN/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/10/05/Python/Numpy-Fast-Memory/" title="numpy工具包常用快速记" itemprop="url">numpy工具包常用快速记</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-05T14:54:26.000Z" itemprop="datePublished"> 发表于 2015-10-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>numpy</code>这个科学计算工具大法好，但是里面的东西不用老是会忘，所以在此记录常用的一些语法，以备之后查询之用（也叫懒人模式）^_^,不过详细的使用方法还是得看<a href="http://docs.scipy.org/doc/">scipy api</a></p>
-</blockquote>
-<p>使用之前首先得引入包<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure></p>
-<h2 id="array">array</h2><p><code>np.array</code>实现了真正的数组，在<code>numpy</code>中其实就是矩阵啦，同时提供了丰富的矩阵计算方法<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/10/05/Python/Numpy-Fast-Memory/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Python/">Python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/10/05/Python/Numpy-Fast-Memory/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/" title="关于Scala中Iterator中size/length的一个坑" itemprop="url">关于Scala中Iterator中size/length的一个坑</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-19T02:36:42.000Z" itemprop="datePublished"> 发表于 2015-09-19</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <blockquote>
-<p><code>Scala</code>语言是出了名的语法诡异，功能强大-_-，他的<code>Iterator</code>也是如此，还提供了亲民心的<code>size/length</code>方法，但是，但是，但是慎用!!</p>
-</blockquote>
-<p>事情是这样的</p>
-<pre><code>今天在做这个：进行采样，在mapPartitions中操作，会传来一个Iterator迭代器，里面存着原始数据，我需要做的大概是先统计迭代器中的数量<span class="keyword">N</span>（使用size方法来做），然后计算出一个需要采样的量<span class="keyword">n</span>,然后遍历(直接<span class="keyword">for</span>来做)这个迭代器，按自己的业务采样<span class="keyword">n</span>个记录！
-</code></pre><p>清晰明了的一个程序,这尼玛最终采样的变量一直是空，一直是空，一直是空。<br>起初还以为是概率那块算错了，导致采不出来，但是单独把程序剥离出来<code>debuge</code>发现这个<code>for</code>压根没数据，但是明明这个迭代器的里面的<code>size</code>是有值的啊，奇了怪了。。。<br>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Scala/">Scala</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Scala/">Scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/19/Scala/Scala-Iterator-Size-Length-Keng/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/09/12/Python/python-little-memory/" title="python里面的一些小记（方便自己查询）" itemprop="url">python里面的一些小记（方便自己查询）</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-09-12T01:37:18.000Z" itemprop="datePublished"> 发表于 2015-09-12</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code><span class="keyword">python</span>相当方便，有问题可以直接查Doc，但是Doc略有繁琐，所以在词记下常用的一些技巧以及bug解决方案^_^
-</code></pre><h2 id="判断字符串的一些东西">判断字符串的一些东西</h2><blockquote>
-<p>当然下面的判断完全可以自己使用正则表达式来些，但是有一句话是<code>杀鸡焉用牛刀</code>,下面的api使用起来就会非常便捷</p>
-</blockquote>
-<p><code>s</code>为字符串</p>
-<ol>
-<li><code>s.isalnum()</code> 所有字符都是数字或者字母</li>
-<li><code>s.isalpha()</code> 所有字符都是字母</li>
-<li><code>s.isdigit()</code> 所有字符都是数字</li>
-<li><code>s.islower()</code> 所有字符都是小写</li>
-<li><code>s.isupper()</code> 所有字符都是大写</li>
-<li><code>s.istitle()</code> 所有单词都是首字母大写，像标题</li>
-<li><code>s.isspace()</code> 所有字符都是空白字符、<code>\t</code>、<code>\n</code>、<code>\r</code></li>
-</ol>
-<h2 id="自带的排序函数">自带的排序函数</h2><p><code>python</code>中有两种排序方式:</p>
-<ol>
-<li><code>list.sort(func=None, key=None, reverse=False)</code>:这种排序会改变<code>list</code>自身的数据</li>
-<li><code>sorted(list,func=None, key=None, reverse=False)</code>:这种会重新生成一个新的<code>list</code></li>
-</ol>
-<p>最简单的栗子:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort()</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
-<p>会输出</p>
-<pre><code>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">7</span>]
-</code></pre><p>反向排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>]</span><br><span class="line">list.sort(reverse=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
-<p>会输出</p>
-<pre><code>[<span class="number">7</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]
-</code></pre><p>对指定关键字进行排序:</p>
-<pre><code><span class="keyword">list</span>=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">50</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">3</span>)]
-<span class="keyword">list</span>.sort(key=lambda x:x[<span class="number">1</span>])
-<span class="keyword">print</span> <span class="keyword">list</span>
-</code></pre><p>可以看到结果:</p>
-<pre><code><span class="collection">[<span class="list">(<span class="keyword">'e'</span>, <span class="number">3</span>)</span>, <span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">50</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
-</code></pre><blockquote>
-<p>若不指定，貌似是按第一个关键词排序</p>
-</blockquote>
-<p>还有两种方式均可以完成指定关键词方式:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list.sort(<span class="keyword">lambda</span> x,y:cmp(x[<span class="number">1</span>],y[<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
-<p>按多关键字排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=<span class="keyword">lambda</span> x:(x[<span class="number">1</span>],x[<span class="number">0</span>]))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line">list=[(<span class="string">'a'</span>,<span class="number">100</span>),(<span class="string">'b'</span>,<span class="number">10</span>),(<span class="string">'c'</span>,<span class="number">100</span>),(<span class="string">'d'</span>,<span class="number">1000</span>),(<span class="string">'e'</span>,<span class="number">100</span>)]</span><br><span class="line">list.sort(key=operator.itemgetter(<span class="number">1</span>,<span class="number">0</span>))</span><br><span class="line"><span class="keyword">print</span> list</span><br></pre></td></tr></table></figure>
-<pre><code><span class="collection">[<span class="list">(<span class="keyword">'b'</span>, <span class="number">10</span>)</span>, <span class="list">(<span class="keyword">'a'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'c'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'e'</span>, <span class="number">100</span>)</span>, <span class="list">(<span class="keyword">'d'</span>, <span class="number">1000</span>)</span>]</span>
-</code></pre><blockquote>
-<p><code>sorted</code>传参一样，只是会返回一个新的实例而已</p>
-</blockquote>
-<h2 id="异常处理">异常处理</h2><p>语法结构<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	block</span><br><span class="line"><span class="keyword">except</span> [Exception <span class="keyword">as</span> e]:</span><br><span class="line">	do...</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	do...</span><br></pre></td></tr></table></figure></p>
-<p>for Example:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">	<span class="number">1</span>/<span class="number">0</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'err'</span></span><br><span class="line">	<span class="keyword">raise</span> e</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'end'</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="动态载入库">动态载入库</h2><blockquote>
-<p>有时候需要载入的库是动态的，类似Java的反射</p>
-</blockquote>
-<p><code>const_en.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="string">"xiaoming"</span></span><br></pre></td></tr></table></figure></p>
-<p><code>const_ch.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"></span><br><span class="line">name=<span class="string">"小明"</span></span><br></pre></td></tr></table></figure></p>
-<p><code>test.py</code><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! -*- coding=utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_en'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br><span class="line"></span><br><span class="line">const = __import__(<span class="string">'const_ch'</span>)</span><br><span class="line"><span class="keyword">print</span> const.name</span><br></pre></td></tr></table></figure></p>
-<p>可以看到输出结果:</p>
-<pre><code><span class="title">xiaoming</span>
-小明
-</code></pre><h2 id="参数中*和**的使用">参数中*和**的使用</h2><p>在<code>Python</code>函数的入参列表中经常会看到*和**,他们其实并不是代表指针或者引擎，其中<br><code>*</code>表示传递任意个无名字参数，放置在一个元组中，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">array_para_test</span><span class="params">(a,b,*c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">array_para_test(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
-<p>它的最终输出将会是</p>
-<pre><code><span class="number">1</span> <span class="number">2</span>
-<span class="list">(<span class="keyword">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span>
-</code></pre><p><code>**</code>表示任意个有名字的参数，用于存放在字典中进行访问，比如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dict_para_test</span><span class="params">(a,b,**c)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a,b</span><br><span class="line">    <span class="keyword">print</span> c</span><br><span class="line"></span><br><span class="line">dict_para_test(<span class="number">1</span>,<span class="number">2</span>,name=<span class="string">"tome"</span>,age=<span class="number">23</span>)</span><br></pre></td></tr></table></figure></p>
-<p>他的最终输出是</p>
-<pre><code><span class="number">1</span> <span class="number">2</span>
-{<span class="string">'age'</span>: <span class="number">23</span>, <span class="string">'name'</span>: <span class="string">'tome'</span>}
-</code></pre><h1 id="下面应该回持续更新">下面应该回持续更新</h1>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Python/">Python</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Python/">Python</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/09/12/Python/python-little-memory/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
   </nav>
 
 </div>
@@ -862,7 +827,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>39</sup></a></li>
 		  
 		
 		  
@@ -959,7 +924,7 @@ yans-MacBook-Pro:Downloads yanyl$
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>42</sup></a></li>
 			
 		
 			
@@ -1116,7 +1081,7 @@ yans-MacBook-Pro:Downloads yanyl$
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

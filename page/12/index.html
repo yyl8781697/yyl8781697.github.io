@@ -95,6 +95,379 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2015/06/15/Effective Java/Common-Program-Desgin/" title="《Effective Java》第八章：通用程序设计" itemprop="url">《Effective Java》第八章：通用程序设计</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-15T14:56:25.000Z" itemprop="datePublished"> 发表于 2015-06-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="第45条：将局部变量的作用域最小化">第45条：将局部变量的作用域最小化</h2><blockquote>
+<p>将局部变量的作用域最小化，可以增强代码的可读性和可维护性，并降低出错的可能性。</p>
+</blockquote>
+<p>这一条看字面意思应该已经非常明了了，就是教我们在申明局部变量的时候注意其作用域，将其作用域最小化：</p>
+<ul>
+<li>比如有些判断的变量在<code>if</code>语句里面完成就好</li>
+<li>还有循环里面<code>for</code>优于<code>while</code>，因为<code>for</code>往往不需要其他的额外局部变量</li>
+<li>另一种就是使方法小而集中</li>
+</ul>
+<h2 id="第46条：for-each循环优先于传统的for循环">第46条：for-each循环优先于传统的for循环</h2><p>利用<code>for-each</code>循环不会有性能损失，甚至用于数组也是一样的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;Integer&gt; c=Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line"><span class="comment">//普通的for循环</span></span><br><span class="line"><span class="keyword">for</span>(Iterator iter=c.iterator();iter.hasNext())</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(iter.next());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用for-each的版本</span></span><br><span class="line"><span class="keyword">for</span>(Integer v:c)</span><br><span class="line">&#123;</span><br><span class="line">	doSomething(v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有一点是如果你使用普通的<code>for</code>，那么它的<code>next</code>会走光所有的元素，也就无法再利用。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/15/Effective Java/Common-Program-Desgin/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/15/Effective Java/Common-Program-Desgin/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/09/Effective Java/Method/" title="《Effective Java》第七章：方法" itemprop="url">《Effective Java》第七章：方法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-09T15:44:24.000Z" itemprop="datePublished"> 发表于 2015-06-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>本章主要讨论方法设计的几个方面：</p>
+<ul>
+<li>如何处理参数和返回值</li>
+<li>如何设计方法签名</li>
+<li>如何为方法编写文档</li>
+</ul>
+<h2 id="第38条：检查参数的有效性">第38条：检查参数的有效性</h2><p>这条就是教我们对于公有方法，最好在方法体上的开头处加上参数检查，并且在文档中清楚地指出这些限制，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="javadoc">/**</span><br><span class="line"> * 求模</span><br><span class="line"> *<span class="javadoctag"> @param</span> m</span><br><span class="line"> *<span class="javadoctag"> @return</span></span><br><span class="line"> *<span class="javadoctag"> @throws</span> ArithmeticException 如何m小于等于0时抛出异常</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> BigInteger <span class="title">mod</span><span class="params">(BigInteger m)</span> <span class="keyword">throws</span> ArithmeticException</span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(m.signum()&lt;=<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArithmeticException(<span class="string">"Moduls &lt;= 0:"</span>+m);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//do something</span></span><br><span class="line">	<span class="keyword">return</span> ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/09/Effective Java/Method/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/09/Effective Java/Method/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/06/Food/Spicy-fish/" title="自己煮：麻辣鱼" itemprop="url">自己煮：麻辣鱼</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-06T12:46:54.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>麻辣鱼简直就是大餐啊，油而不腻，并且鱼的腥味直接被重口味的油辣给冲掉了-_-，可惜我做的还不到火候。<br>又是一个周五，所以要给自己一个大餐，哈哈！</p>
+<h2 id="食材">食材</h2><ul>
+<li>鱼：最好是黑鱼，并且要切片（自己切麻烦，可以在买菜的时候直接叫师傅给切了）</li>
+<li>油、料酒~~~~</li>
+<li>生姜、大蒜：适量，再来一点点葱</li>
+<li>大量大量的辣椒</li>
+</ul>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/06/Food/Spicy-fish/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Food/">Food</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Food/">Food</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/06/Food/Spicy-fish/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/06/Scala/Enum-in-Scala/" title="谈谈Scala中的枚举" itemprop="url">谈谈Scala中的枚举</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-06T01:56:03.000Z" itemprop="datePublished"> 发表于 2015-06-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="先谈Java中的枚举">先谈Java中的枚举</h2><p>将<code>Scala</code>的枚举之前，我们先来讲讲关于<code>Java</code>里面的枚举（相信对于广大程序猿来说都是很熟悉）：</p>
+<ul>
+<li><p>使用<code>enum</code>关键词定义</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;...&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无法再继承其他类或者枚举（但是可以实现接口），因为它默认继承了<code>java.lang.Enum</code></p>
+</li>
+<li>无法在外部调用枚举的构造函数（因为枚举的构造函数都是私有的，只有内部才能调用）</li>
+<li>枚举其实是一组<code>int</code>常量（当初它就是因为使用<code>int</code>常量的需求很大才又了枚举），它还可以在<code>swtich</code>中很方便的使用</li>
+<li><p>每个枚举变量还可以重写枚举类或者实现接口中的方法（这个蛮好用）</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> WeekDay&#123;</span><br><span class="line">Mon&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"monday"</span>;&#125;</span><br><span class="line">&#125;,</span><br><span class="line">Tue&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">"tuesday"</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span></span>&#123;<span class="keyword">return</span> <span class="string">""</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>…（我也不知道了-_-）</p>
+</li>
+</ul>
+<h2 id="再看Scala中的枚举">再看Scala中的枚举</h2><blockquote>
+<p>你会发现，上面说的一切在<code>Scala</code>中其实并没有甚么卵用-_-，因为在<code>Scala</code>中压根就么有<code>enum</code>这个关键词，但是当初发明<code>Scala</code>大神兼<code>Java</code>的创始人并没有落下枚举。</p>
+</blockquote>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/06/Scala/Enum-in-Scala/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Scala/">Scala</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Scala/">Scala</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/06/Scala/Enum-in-Scala/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/06/04/Akka/Study-Akka-First/" title="初识Akka" itemprop="url">初识Akka</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
+		
+  <p class="article-time">
+    <time datetime="2015-06-04T15:45:36.000Z" itemprop="datePublished"> 发表于 2015-06-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <blockquote>
+<p>这两天<a href="http://www.csdn.net/article/2015-06-03/2824843">微软的分布式系统开发框架rDSN开源</a>出来了，必须要<a href="http://akka.io/">Akka</a>压压惊，当然在<code>Spark</code>中大量的使用了<code>AKKA</code>是主要原因^_^</p>
+</blockquote>
+<h2 id="AKKA介绍">AKKA介绍</h2><p><a href="http://akka.io/">Akka</a>是一个基于<code>JVM</code>的用于构建高并发、分布式、弹性的消息驱动系统，它有以下5个特点：</p>
+<ol>
+<li>并发和分布式</li>
+<li>弹性设计</li>
+<li>高性能</li>
+<li>去中心化</li>
+<li>高扩展性</li>
+</ol>
+<p>可以基于<code>AKKA</code>构建高并发的web框架，也可以构建分布式系统（<code>Spark</code>）</p>
+<h2 id="AKKA的引用">AKKA的引用</h2><p>如果你是<code>Maven</code>用户，你可以这么添加依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.typesafe.akka<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>akka-actor_2.10<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">version</span>&gt;</span>2.3.11<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>如果你是<code>SBT</code>用户，你的<code>build.sbt</code>可以这么写<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name := &#34;My Project&#34;&#10;version := &#34;1.0&#34;&#10;scalaVersion := &#34;2.10.4&#34;&#10;libraryDependencies +=&#10;  &#34;com.typesafe.akka&#34; %% &#34;akka-actor&#34; % &#34;2.3.11&#34;</span><br></pre></td></tr></table></figure></p>
+<p>它还提供了好多其他的其他用法，但是由于天朝连国外网速也是在是太慢了，我直接去<a href="http://akka.io/downloads/">http://akka.io/downloads/</a>将压缩包给download下来，然后将已编译的<code>jar</code>添加到IDEA中，简单、粗暴、高效。</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/2015/06/04/Akka/Study-Akka-First/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Akka/">Akka</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Akka/">Akka</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/2015/06/04/Akka/Study-Akka-First/#disqus_thread" class="comments-count-link">Comments</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2015/06/02/Spark/The-Struct-or-Pattern-In-Spark-Source/" title="Spark源码中所使用的经典数据结构或者设计模式" itemprop="url">Spark源码中所使用的经典数据结构或者设计模式</a>
   </h1>
   <p class="article-author">By
@@ -437,393 +810,9 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/24/Scala/Study-And-User-JSON4S/" title="学习和使用Scala的Json解析类库-JSON4S" itemprop="url">学习和使用Scala的Json解析类库-JSON4S</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-24T02:12:14.000Z" itemprop="datePublished"> 发表于 2015-05-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="介绍">介绍</h2><p>在<code>Scala</code>环境下已经至少有6种Json解析的类库很用了很相似的抽象语法树(<em>AST</em>),而<code>JSON4S</code>这个项目的目标就是提供一个单一的<em>AST</em>树供其他<code>Scala</code>类库来使用。</p>
-<p><img src="https://camo.githubusercontent.com/67e5a0a48c91139ac30d2ecbfd6d6b020e8688a2/68747470733a2f2f7261772e6769746875622e636f6d2f6a736f6e34732f6a736f6e34732f332e332f636f72652f6a736f6e2e706e67" alt="JSON4S工作原理"></p>
-<p><code>JSON4S</code>的features：</p>
-<ul>
-<li>快速的<code>JSON</code>解析</li>
-<li><code>LINQ</code> 风格的查询</li>
-<li>可以紧密结合样例类</li>
-<li>差别比较和合并</li>
-<li>使用<code>DSL</code>来生成有效格式的<code>JSON</code></li>
-<li>支持<code>XPATH</code></li>
-<li>优雅的打印</li>
-<li>支持<code>XML</code>的转换</li>
-<li>序列化</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/24/Scala/Study-And-User-JSON4S/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Scala/">Scala</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Json4s/">Json4s</a><a href="/tags/Scala/">Scala</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/24/Scala/Study-And-User-JSON4S/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/23/Effective Java/Generic/" title="《Effective Java》第五章：泛型" itemprop="url">《Effective Java》第五章：泛型</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-23T15:05:33.000Z" itemprop="datePublished"> 发表于 2015-05-23</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>泛型，可以告诉编译器每个集合中接受哪些对象类型，编译器会自动地为你的插入进行转化，并在编译时告知是否插入了类型错误的对象。(貌似<code>Java</code>里面的泛型都是<strong>伪泛型</strong>吧-_-|)</p>
-<h2 id="第23条：请不要再新代码中使用原生态类型">第23条：请不要再新代码中使用原生态类型</h2><blockquote>
-<p>什么是原生态类型？</p>
-</blockquote>
-<p>类似<code>List&lt;E&gt;</code>,<code>Collection&lt;E&gt;</code>泛型的定义都有一个原生态类型，那就是<code>List</code>,<code>Collection</code>，用他们定义类型也不会出错.</p>
-<blockquote>
-<p>为什么不要使用原生态类型</p>
-</blockquote>
-<p>使用原生态类型的集合类可以插入各种不同的类型，他们在编译时不会进行类型检查，但是运行时遇到错误就会抛出，这样是很不安全的。</p>
-<blockquote>
-<p>我在不确定或者不在乎集合类型的情况下，是不是用原生态类型最好？</p>
-</blockquote>
-<p>还是不要用，可以使用无限制的通配符来替代，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numElementsInCommon</span><span class="params">(Set&lt;?&gt; s1,Set&lt;?&gt; s2)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(Object o:s1)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(s2.contains(o))</span><br><span class="line">			count++;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>它是类型安全的，但是无法猜测放入了哪些对象，此时可以使用<strong>泛型</strong>或者<strong>有限制的通配符类型</strong>（下文会描述）。</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/23/Effective Java/Generic/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Effective-Java/">Effective Java</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Java/">Java</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/23/Effective Java/Generic/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/" title="自己煮：泡椒牛蛙" itemprop="url">自己煮：泡椒牛蛙</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-16T14:38:59.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <pre><code>泡椒牛蛙是一道色香味俱全的汉族名菜，属于川菜系。最常见又易烹制，成菜后味咸鲜，肉细嫩，色红亮，泡菜香气浓郁。
-</code></pre><h2 id="食材">食材</h2><ul>
-<li>牛蛙：2只</li>
-<li>油、料酒~~~~</li>
-<li>生姜、大蒜：适量</li>
-<li>莴笋：适量（炒到牛蛙里面的莴笋特别好吃）</li>
-<li>小米椒：一点点就好了（最好还有红灯笼椒，但是没买到-_-）</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Food/">Food</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Food/">Food</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/16/Food/Sauteed-Bullfrog-with-Pickled-Peppers/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/" title="Mac通过ssh连接到Centos时一些问题的解决" itemprop="url">Mac通过ssh连接到Centos时一些问题的解决</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-16T02:26:53.000Z" itemprop="datePublished"> 发表于 2015-05-16</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Linux版本：Centos6.5<br>Mac版本：OS X Yosemite 10.10.2</p>
-<h2 id="LC_CTYPE:_cannot_change_locale_(UTF-8)">LC_CTYPE: cannot change locale (UTF-8)</h2><p>通过ssh连接到linux，会出现如下警告：</p>
-<pre><code>-<span class="string">bash:</span> <span class="string">warning:</span> <span class="string">setlocale:</span> <span class="string">LC_CTYPE:</span> cannot change locale (UTF-<span class="number">8</span>): No such file or directory
-</code></pre><p>这是由于没有找到对应的语言环境导致的：<br>按一下命令步骤操作即可修复：<br>首先</p>
-<pre><code>sudo vi <span class="regexp">/etc/</span>ssh_cofig
-</code></pre><p>然后将该文件中的SendEnv LANG LC_*这一行用#进行注释</p>
-<pre><code><span class="id">#SendEnv</span> LANG LC_*
-</code></pre><p>参考:<a href="http://www.cyberciti.biz/faq/os-x-terminal-bash-warning-setlocale-lc_ctype-cannot-change-locale/" target="_blank" rel="external">OS X Terminal: -bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory Fix</a></p>
-<h2 id="Write_failed:_Broken_pipe">Write failed: Broken pipe</h2><p>通过ssh连接到linux，有时候会莫名其妙的出现错误：</p>
-<pre><code><span class="tag">Write</span> <span class="rule"><span class="attribute">failed</span>:<span class="value"> Broken pipe</span></span>
-</code></pre><p>看资料说的是由于长时间未操作造成的，解决方法为在Mac端的~/.ssh/config文件中添加：</p>
-<pre><code><span class="title">ServerAliveInterval</span> <span class="number">60</span>
-</code></pre><p>参考：<a href="http://www.cnblogs.com/dudu/archive/2013/02/07/ssh-write-failed-broken-pipe.html" target="_blank" rel="external">解决ssh的”Write failed: Broken pipe”问题</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/ssh/">ssh</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/16/Linux/Mac-ssh-Centos-Problem-List/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2015/05/14/Linux/Vim-Command-List/" title="Vim命令合集(转载)" itemprop="url">Vim命令合集(转载)</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Kubi Code" target="_blank" itemprop="author">Kubi Code</a>
-		
-  <p class="article-time">
-    <time datetime="2015-05-14T13:32:08.000Z" itemprop="datePublished"> 发表于 2015-05-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h2 id="命令历史">命令历史</h2><p>以<code>:</code>和<code>/</code>开头的命令都有历史纪录，可以首先键入<code>:</code>或<code>/</code>然后按上下箭头来选择某个历史命令。</p>
-<h2 id="启动vim">启动vim</h2><p>在命令行窗口中输入以下命令即可</p>
-<ul>
-<li><code>vim</code> 直接启动vim</li>
-<li><code>vim filename</code> 打开vim并创建名为filename的文件</li>
-</ul>
-<h2 id="文件命令">文件命令</h2><ul>
-<li><code>vim file</code>  打开单个文件</li>
-<li><code>vim file1 file2 file3 …</code>  同时打开多个文件</li>
-<li><code>:open file</code>  在vim窗口中打开一个新文件</li>
-<li><code>:split file</code>  在新窗口中打开文件</li>
-<li><code>:bn</code>  切换到下一个文件</li>
-<li><code>:bp</code>  切换到上一个文件</li>
-<li><code>:args</code>  查看当前打开的文件列表，当前正在编辑的文件会用[]括起来。</li>
-<li>打开远程文件，比如ftp或者share folder<br><code>:e ftp://192.168.10.76/abc.txt</code><br><code>:e \qadrive\test\1.txt</code></li>
-</ul>
-<h2 id="vim的模式">vim的模式</h2><ul>
-<li>正常模式（按<code>Esc</code>或<code>Ctrl+[</code>进入） 左下角显示文件名或为空</li>
-<li>插入模式（按<code>i</code>键进入） 左下角显示—INSERT—</li>
-<li>可视模式（不知道如何进入） 左下角显示—VISUAL—</li>
-</ul>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/2015/05/14/Linux/Vim-Command-List/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Linux/">Linux</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Vim/">Vim</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/2015/05/14/Linux/Vim-Command-List/#disqus_thread" class="comments-count-link">Comments</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/11/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/13/">Next<span></span></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/13/">Next<span></span></a>
   </nav>
 
 </div>
@@ -843,7 +832,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>34</sup></a></li>
+			<li><a href="/categories/Algorithm/" title="Algorithm">Algorithm<sup>39</sup></a></li>
 		  
 		
 		  
@@ -940,7 +929,7 @@
 			
 		
 			
-				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>37</sup></a></li>
+				<li><a href="/tags/Algorithm/" title="Algorithm">Algorithm<sup>42</sup></a></li>
 			
 		
 			
@@ -1097,7 +1086,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2019 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
 		
 		<a href="/about" target="_blank" title="Kubi Code">Kubi Code</a>
 		

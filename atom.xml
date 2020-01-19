@@ -4,7 +4,7 @@
   <subtitle><![CDATA[The palest ink is better than the best memory.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://kubicode.me/"/>
-  <updated>2019-12-02T12:31:17.371Z</updated>
+  <updated>2019-12-05T11:41:34.923Z</updated>
   <id>http://kubicode.me/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://kubicode.me/2019/11/14/Deep%20Learning/More-Additional-Session-Based-Recommendation/"/>
     <id>http://kubicode.me/2019/11/14/Deep Learning/More-Additional-Session-Based-Recommendation/</id>
     <published>2019-11-14T02:56:18.000Z</published>
-    <updated>2019-12-02T12:31:17.371Z</updated>
+    <updated>2019-12-05T11:41:34.923Z</updated>
     <content type="html"><![CDATA[<h2 id="前言">前言</h2><p>这篇是继 <a href="http://kubicode.me/2018/09/19/Deep%20Learning/GRU4REC-Session-Based-Recommendation/" target="_blank" rel="external">深度学习在序列化推荐中的应用</a> 和 <a href="http://kubicode.me/2018/10/25/Deep%20Learning/More-Session-Based-Recommendation/" target="_blank" rel="external">深度学习在序列化推荐中的应用(2)</a>  的补充理解</p>
 <h2 id="DIN">DIN</h2><p>base idea:设计了一个<code>local activation unit</code>来学习用户行为历史的兴趣点</p>
 <p><img src="/img/More-Additional-Session-Based-Recommendation/din_arch.png" width="800px"></p>
