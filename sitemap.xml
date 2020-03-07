@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://kubicode.me/about/index.html</loc>
+    <lastmod>2020-03-07T12:03:57.682Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kubicode.me/2015/05/31/Mac/My-Tools-Used-In-Mac/</loc>
+    <lastmod>2020-03-03T01:55:56.871Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://kubicode.me/2015/12/27/Algorithm/trapping-rain-water/</loc>
     <lastmod>2020-01-07T15:48:56.647Z</lastmod>
   </url>
@@ -79,11 +89,6 @@
   <url>
     <loc>http://kubicode.me/2017/06/05/Deep%20Learning/Dropout-in-Deep-Neural-Network/</loc>
     <lastmod>2018-09-19T02:41:22.035Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/about/index.html</loc>
-    <lastmod>2018-09-19T02:41:20.745Z</lastmod>
   </url>
   
   <url>
@@ -234,11 +239,6 @@
   <url>
     <loc>http://kubicode.me/2016/04/11/Machine%20Learning/Say-About-Loss-Function/</loc>
     <lastmod>2016-04-17T12:25:41.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://kubicode.me/2015/05/31/Mac/My-Tools-Used-In-Mac/</loc>
-    <lastmod>2016-04-16T12:15:58.000Z</lastmod>
   </url>
   
   <url>
